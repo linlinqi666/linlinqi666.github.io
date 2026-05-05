@@ -1118,13 +1118,118 @@
 }
 
 @media (max-width: 768px) {
-  .hp-flow {
-    padding: var(--hp-space-lg) var(--hp-space-sm);
+  /* 全局设置 */
+  html {
+    scroll-padding-top: 80px;
   }
 
+  /* 禁止横向滚动 */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* 页面容器 */
+  .hp-container {
+    padding: var(--hp-space-sm);
+    gap: var(--hp-space-md);
+  }
+
+  /* 侧边栏移动端适配 */
+  .hp-sidebar {
+    padding: var(--hp-space-sm);
+    border-radius: var(--hp-radius-md);
+    top: 70px;
+  }
+
+  .hp-sidebar .sidebar-header {
+    padding: var(--hp-space-xs) 0 var(--hp-space-sm);
+    margin-bottom: var(--hp-space-xs);
+  }
+
+  .hp-sidebar .calendar-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--hp-space-xs);
+  }
+
+  .hp-sidebar .calendar-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hp-sidebar .sidebar-header h3 {
+    font-size: var(--hp-font-size-lg);
+  }
+
+  .hp-sidebar .log-badge {
+    font-size: var(--hp-font-size-xs);
+    padding: 4px 10px;
+  }
+
+  /* 导航列表适配 */
+  .hp-nav-item a {
+    padding: var(--hp-space-xs) var(--hp-space-sm);
+    font-size: var(--hp-font-size-sm);
+    gap: var(--hp-space-xs);
+  }
+
+  .hp-nav-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* 团队信息适配 */
+  .hp-sidebar .team-info {
+    gap: var(--hp-space-xs);
+  }
+
+  .hp-sidebar .avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6rem;
+  }
+
+  .hp-sidebar .team-label {
+    font-size: 0.7rem;
+  }
+
+  /* 最后更新适配 */
+  .hp-sidebar .last-updated {
+    padding: 6px;
+  }
+
+  .hp-sidebar .last-updated svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .hp-sidebar .last-updated span {
+    font-size: 0.6rem;
+  }
+
+  /* 内容区域适配 */
+  .hp-content {
+    width: 100%;
+  }
+
+  .hp-flow {
+    padding: var(--hp-space-md) var(--hp-space-sm);
+  }
+
+  /* Hero区域适配 */
   .hp-hero {
     height: 50vh;
     min-height: 350px;
+  }
+
+  .hp-hero-content {
+    padding: 0 var(--hp-space-sm);
+  }
+
+  .hp-hero-tag {
+    font-size: var(--hp-font-size-xs);
+    padding: 6px 12px;
   }
 
   .hp-hero-title {
@@ -1133,6 +1238,42 @@
 
   .hero-subtitle {
     font-size: 0.95rem;
+    margin-bottom: var(--hp-space-md);
+  }
+
+  .hp-cta-button {
+    padding: var(--hp-space-xs) var(--hp-space-md);
+    font-size: 0.9rem;
+  }
+
+  .hp-cta-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* 执行摘要条适配 */
+  .hp-exec-bar {
+    top: 60px;
+    padding: var(--hp-space-xs) 0;
+  }
+
+  .hp-exec-bar-inner {
+    padding: 0 var(--hp-space-sm);
+    gap: var(--hp-space-xs);
+  }
+
+  .hp-exec-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hp-exec-bar-inner p {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  /* 章节标题适配 */
+  .hp-chapter {
+    margin-bottom: var(--hp-space-xl);
   }
 
   .hp-chapter-number {
@@ -1143,28 +1284,361 @@
     font-size: 1.4rem;
   }
 
+  .hp-chapter-subtitle {
+    font-size: var(--hp-font-size-sm);
+  }
+
+  /* 哲学卡片适配 */
   .hp-philosophy-cards {
     grid-template-columns: 1fr;
+    gap: var(--hp-space-sm);
   }
 
+  .hp-phil-card {
+    padding: var(--hp-space-md);
+    border-radius: var(--hp-radius-sm);
+  }
+
+  .hp-phil-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: var(--hp-space-xs);
+  }
+
+  .hp-phil-card h3 {
+    font-size: var(--hp-font-size-md);
+  }
+
+  .hp-phil-card p {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  /* DBTL路径适配 */
+  .hp-dbtl-path {
+    gap: var(--hp-space-sm);
+  }
+
+  .hp-dbtl-node {
+    padding: var(--hp-space-md);
+    border-radius: var(--hp-radius-sm);
+  }
+
+  .hp-dbtl-node-inner {
+    flex-direction: column;
+    gap: var(--hp-space-sm);
+  }
+
+  .hp-dbtl-node-icon {
+    width: 52px;
+    height: 52px;
+    align-self: center;
+  }
+
+  .hp-dbtl-node-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .hp-dbtl-node-content h3 {
+    font-size: var(--hp-font-size-md);
+  }
+
+  .hp-dbtl-node-content>p {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  .hp-dbtl-quote {
+    padding: var(--hp-space-xs) var(--hp-space-sm);
+  }
+
+  .hp-quote-label {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+
+  .hp-dbtl-quote p {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  .hp-connector-arrow {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hp-connector-arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* 对话流适配 */
   .hp-dialogue-stream {
     grid-template-columns: 1fr;
+    gap: var(--hp-space-sm);
   }
 
+  .hp-dialogue-card {
+    padding: var(--hp-space-sm);
+    border-radius: var(--hp-radius-sm);
+    gap: var(--hp-space-sm);
+  }
+
+  .hp-dialogue-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .hp-avatar-emoji {
+    font-size: 1.5rem;
+  }
+
+  .hp-dialogue-header h3 {
+    font-size: var(--hp-font-size-sm);
+  }
+
+  .hp-dialogue-role {
+    font-size: 0.7rem;
+  }
+
+  .hp-dialogue-quote {
+    font-size: var(--hp-font-size-xs);
+    margin-bottom: var(--hp-space-xs);
+  }
+
+  .hp-dialogue-impact {
+    padding: 6px 8px;
+  }
+
+  .hp-impact-badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+
+  .hp-dialogue-impact p {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  /* 教育马赛克适配 */
   .hp-education-mosaic {
     grid-template-columns: 1fr;
+    gap: var(--hp-space-sm);
   }
 
   .hp-edu-tile-large {
     grid-column: span 1;
   }
 
-  .hp-impact-balance {
-    grid-template-columns: 1fr;
+  .hp-edu-tile {
+    padding: var(--hp-space-md);
+    border-radius: var(--hp-radius-sm);
   }
 
-  .hp-dbtl-node-inner {
+  .hp-edu-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--hp-space-xs);
+  }
+
+  .hp-edu-tile h3 {
+    font-size: var(--hp-font-size-md);
+  }
+
+  .hp-edu-tile p {
+    font-size: var(--hp-font-size-xs);
+    margin-bottom: var(--hp-space-sm);
+  }
+
+  .hp-edu-metrics {
+    gap: var(--hp-space-md);
+    padding-top: var(--hp-space-xs);
+  }
+
+  .hp-metric-value {
+    font-size: 1.5rem;
+  }
+
+  .hp-metric-label {
+    font-size: 0.65rem;
+  }
+
+  /* 影响平衡适配 */
+  .hp-impact-balance {
+    grid-template-columns: 1fr;
+    gap: var(--hp-space-md);
+  }
+
+  .hp-impact-side {
+    padding: var(--hp-space-md);
+    border-radius: var(--hp-radius-sm);
+  }
+
+  .hp-impact-side-header {
+    gap: var(--hp-space-xs);
+    margin-bottom: var(--hp-space-sm);
+  }
+
+  .hp-impact-side-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hp-impact-side-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .hp-impact-side-header h3 {
+    font-size: var(--hp-font-size-md);
+  }
+
+  .hp-impact-items li {
+    padding: var(--hp-space-xs) 0;
+    gap: var(--hp-space-xs);
+  }
+
+  .hp-impact-item-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+
+  .hp-impact-items li strong {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  .hp-impact-items li p {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  /* 合作河流适配 */
+  .hp-collab-river {
+    padding-left: 32px;
+  }
+
+  /* 页脚适配 */
+  .footer-content {
     flex-direction: column;
+    padding: 0 var(--hp-space-sm);
+  }
+
+  .footer-left,
+  .footer-right {
+    width: 100%;
+  }
+
+  .footer-nav {
+    columns: 1;
+    line-height: 1.6;
+  }
+
+  .footer-nav a {
+    font-size: 0.85rem;
+    padding: 8px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* 导航栏进一步缩小 */
+  nav {
+    height: 50px;
+    padding: 4px 8px;
+  }
+
+  nav.scrolled {
+    height: 44px;
+  }
+
+  nav .logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  nav ul li a {
+    padding: 4px;
+    font-size: 0.8rem;
+  }
+
+  nav ul li .dropdown-content {
+    min-width: 120px;
+  }
+
+  .dropdown-content a {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Hero区域进一步缩小 */
+  .hp-hero {
+    height: 45vh;
+    min-height: 300px;
+  }
+
+  .hp-hero-tag {
+    font-size: 0.7rem;
+    padding: 6px 14px;
+  }
+
+  .hp-hero-title {
+    font-size: 1.75rem;
+  }
+
+  /* 内容卡片进一步缩小 */
+  .hp-phil-card,
+  .hp-dialogue-card,
+  .hp-edu-tile,
+  .hp-impact-side {
+    padding: var(--hp-space-sm);
+  }
+
+  .hp-edu-metrics {
+    gap: var(--hp-space-xs);
+  }
+
+  .hp-metric-value {
+    font-size: 1.5rem;
+  }
+
+  /* 章节标题进一步缩小 */
+  .hp-chapter-number {
+    font-size: 2rem;
+  }
+
+  .hp-chapter-title {
+    font-size: 1.2rem;
+  }
+
+  .hp-chapter-subtitle {
+    font-size: var(--hp-font-size-xs);
+  }
+
+  /* DBTL节点进一步缩小 */
+  .hp-dbtl-node {
+    padding: var(--hp-space-sm);
+  }
+
+  .hp-dbtl-node-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hp-dbtl-node-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .hp-dbtl-node-content h3 {
+    font-size: var(--hp-font-size-sm);
+  }
+
+  /* 页脚 */
+  .footer-nav a {
+    font-size: 0.9rem;
+    min-height: 48px;
   }
 }
 

@@ -1,11 +1,20 @@
 /* ===== 长页面全屏区块 ===== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
 .long-page {
   width: 100%;
-  scroll-snap-type: y mandatory;
-  scroll-snap-stop: always;
-  overflow-y: scroll;
-  height: 100vh;
-  scroll-behavior: smooth;
 }
 
 .fullscreen-section {
@@ -30,52 +39,6 @@
   background-position: center;
   background-repeat: no-repeat;
   z-index: 1;
-  /* 背景图片边缘模糊：上下各 60px 渐变透明，与过渡带自然融合 */
-  /* -webkit-mask-image: linear-gradient(to bottom,
-      transparent 0%,
-      black 60px,
-      black calc(100% - 60px),
-      transparent 100%);
-  mask-image: linear-gradient(to bottom,
-      transparent 0%,
-      black 60px,
-      black calc(100% - 60px),
-      transparent 100%); */
-}
-
-/* ===== 独立渐变过渡区域 ===== */
-/* 在两张完整图片之间插入的渐变桥接带 */
-.section-transition {
-  position: relative;
-  width: 100%;
-  height: 100px;
-  z-index: 1;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  /* 边缘模糊效果：使用 mask 让上下边缘逐渐透明，与背景图片的模糊边缘重叠融合 */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 25%,
-    black 75%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 25%,
-    black 75%,
-    transparent 100%
-  );
-}
-
-/* 淡黄 → 淡蓝 双色水彩过渡 */
-.section-transition {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 245, 210, 0.9) 0%,
-    rgba(200, 225, 245, 0.9) 100%
-  );
 }
 
 /* 各区块背景色（替换为图片前的占位色） */
@@ -786,24 +749,255 @@ footer {
   padding-left: 0.3rem;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
+/* ===== 移动端响应式设计 ===== */
+
+/* 平板端适配 (768px - 1024px) */
+@media (max-width: 1024px) {
+  nav {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  nav ul li a {
+    min-width: 80px;
+    font-size: 1rem;
+  }
+
+  .section-content h1 {
+    font-size: 3rem;
+  }
+
+  .section-content h2 {
+    font-size: 2.2rem;
+  }
+
   .footer-content {
-    /* 布局相关 */
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+/* 手机端适配 (max-width: 768px) */
+@media (max-width: 768px) {
+
+  /* 禁止横向滚动 */
+  html,
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* 导航栏移动端适配 */
+  nav {
+    height: 60px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  nav.scrolled {
+    height: 50px;
+  }
+
+  nav .logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  nav ul {
+    padding: 0;
+    gap: 0;
+  }
+
+  nav ul li {
+    margin: 0 2px;
+  }
+
+  nav ul li a {
+    min-width: auto;
+    padding: var(--spacing-xs) 6px;
+    font-size: 0.85rem;
+  }
+
+  nav ul li a .iconfont {
+    margin-right: 2px;
+    font-size: 0.9rem;
+  }
+
+  nav ul li a span:not(.iconfont) {
+    display: none;
+  }
+
+  nav ul li .dropdown-content {
+    min-width: 140px;
+    top: calc(100% + 4px);
+  }
+
+  .dropdown-content a {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9rem;
+  }
+
+  /* 全屏区块移动端适配 */
+  .fullscreen-section {
+    min-height: 500px;
+  }
+
+  .section-content {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .section-content h1 {
+    font-size: 2rem;
+  }
+
+  .section-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-content p {
+    font-size: 0.9rem;
+  }
+
+  /* 页脚移动端适配 */
+  .footer-content {
     flex-direction: column;
-    align-items: stretch;
+    padding: 0 var(--spacing-md);
+    gap: var(--spacing-md);
   }
 
   .footer-left,
   .footer-right {
-    /* 盒模型 */
     width: 100%;
   }
 
+  .footer-left {
+    min-height: 80px;
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .footer-left::before,
+  .footer-left::after {
+    width: 40px;
+  }
+
+  .scroller-track1,
+  .scroller-track2 {
+    gap: var(--spacing-xl);
+  }
+
+  .scroll-image {
+    max-height: 40px;
+    max-width: 160px;
+  }
+
   .footer-right {
-    /* 布局相关 */
     max-height: none;
-    columns: 3;
+    padding: var(--spacing-md);
+  }
+
+  .footer-right h3 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .footer-nav {
+    columns: 2;
+    column-gap: var(--spacing-md);
+    line-height: 1.8;
+  }
+
+  .footer-nav a {
+    font-size: 0.85rem;
+    padding: 6px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-size: 0.8rem;
+    padding: var(--spacing-sm) 0;
+  }
+
+  .footer-bottom p a {
+    font-size: 0.8rem;
+    margin: 0 var(--spacing-xs);
+  }
+
+  /* 内容区域移动端适配 */
+  .content-section {
+    margin-top: 10%;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .content-section section {
+    width: 95%;
+    padding: var(--spacing-md);
+  }
+
+  /* Last Updated 移动端适配 */
+  .last-updated {
+    padding: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+  }
+
+  .last-updated span {
+    font-size: 0.65rem;
+  }
+}
+
+/* 小屏手机适配 (max-width: 480px) */
+@media (max-width: 480px) {
+  nav {
+    height: 50px;
+    padding: 4px 8px;
+  }
+
+  nav.scrolled {
+    height: 44px;
+  }
+
+  nav .logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  nav ul li a {
+    padding: 4px;
+    font-size: 0.8rem;
+  }
+
+  nav ul li .dropdown-content {
+    min-width: 120px;
+  }
+
+  .dropdown-content a {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .fullscreen-section {
+    min-height: 400px;
+  }
+
+  .section-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .section-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .section-content p {
+    font-size: 0.8rem;
+  }
+
+  .footer-nav {
+    columns: 1;
+  }
+
+  .footer-nav a {
+    font-size: 0.9rem;
+    min-height: 48px;
   }
 }
 

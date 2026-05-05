@@ -1,0 +1,303 @@
+/* ===== 通用移动端响应式样式 ===== */
+/* iGEM Layout Strategy: Shared mobile responsive styles for all pages. Ensures consistent mobile experience across the entire wiki. */
+
+/* ===== 平板端适配 (max-width: 1024px) ===== */
+@media (max-width: 1024px) {
+  /* 禁止横向滚动 */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* 通用容器适配 */
+  .container,
+  .main-content {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  /* 导航栏移动端适配 */
+  nav {
+    height: 60px;
+    padding: 0.5rem 1rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  nav.scrolled {
+    height: 50px;
+  }
+
+  nav .logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  nav ul li a {
+    min-width: auto;
+    padding: 0.5rem 6px;
+    font-size: 0.85rem;
+  }
+
+  nav ul li a .iconfont {
+    margin-right: 2px;
+  }
+
+  nav ul li a span:not(.iconfont) {
+    display: none;
+  }
+
+  nav ul li .dropdown-content {
+    min-width: 140px;
+  }
+
+  .dropdown-content a {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* 侧边栏适配 */
+  .sidebar,
+  .hp-sidebar,
+  .log-sidebar,
+  .description-sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    position: static !important;
+    max-height: none !important;
+  }
+
+  /* 两列网格变单列 */
+  .grid-2-cols,
+  .two-column-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 页脚适配 */
+  .footer-content {
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+
+  .footer-left,
+  .footer-right {
+    width: 100%;
+  }
+
+  .footer-nav {
+    columns: 2;
+  }
+}
+
+/* ===== 手机端适配 (max-width: 768px) ===== */
+@media (max-width: 768px) {
+  /* 全局设置 */
+  html {
+    scroll-padding-top: 80px;
+  }
+
+  /* 禁止横向滚动 */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* 通用容器 */
+  .container,
+  .main-content {
+    padding: 1rem;
+  }
+
+  /* 标题字体缩小 */
+  h1 {
+    font-size: 1.8rem !important;
+  }
+
+  h2 {
+    font-size: 1.4rem !important;
+  }
+
+  h3 {
+    font-size: 1.1rem !important;
+  }
+
+  /* 正文字体适配 */
+  p, li, span, div {
+    font-size: 0.9rem !important;
+  }
+
+  /* 图片自动缩放 */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 横向排列模块变纵向 */
+  .flex-row,
+  .horizontal-layout {
+    flex-direction: column !important;
+  }
+
+  /* 网格布局变单列 */
+  .grid,
+  .grid-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 加大按钮和链接点击区域 */
+  a, button, .btn {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+
+  /* 隐藏电脑端装饰元素 */
+  .desktop-only,
+  .decorative-element,
+  .bg-decoration {
+    display: none !important;
+  }
+
+  /* 页脚移动端适配 */
+  .footer-content {
+    flex-direction: column;
+    padding: 0 0.75rem;
+  }
+
+  .footer-nav {
+    columns: 1;
+    line-height: 1.6;
+  }
+
+  .footer-nav a {
+    font-size: 0.85rem;
+    padding: 8px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-size: 0.75rem;
+  }
+
+  /* Last Updated 适配 */
+  .last-updated {
+    padding: 0.25rem;
+    margin-top: 1rem;
+  }
+
+  .last-updated svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .last-updated span {
+    font-size: 0.6rem;
+  }
+}
+
+/* ===== 小屏手机适配 (max-width: 480px) ===== */
+@media (max-width: 480px) {
+  /* 导航栏进一步缩小 */
+  nav {
+    height: 50px;
+    padding: 4px 8px;
+  }
+
+  nav.scrolled {
+    height: 44px;
+  }
+
+  nav .logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  nav ul li a {
+    padding: 4px;
+    font-size: 0.8rem;
+  }
+
+  nav ul li .dropdown-content {
+    min-width: 120px;
+  }
+
+  .dropdown-content a {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* 标题进一步缩小 */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.2rem !important;
+  }
+
+  h3 {
+    font-size: 1rem !important;
+  }
+
+  /* 正文进一步缩小 */
+  p, li, span, div {
+    font-size: 0.85rem !important;
+  }
+
+  /* 容器内边距缩小 */
+  .container,
+  .main-content {
+    padding: 0.75rem;
+  }
+
+  /* 按钮点击区域加大 */
+  a, button, .btn {
+    min-height: 48px;
+    padding: 14px 18px;
+  }
+}
+
+/* ===== 触摸设备优化 ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* 移除hover效果，改用active */
+  .card:hover,
+  .item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .card:active,
+  .item:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 加大触摸目标 */
+  a, button, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ===== 横屏模式适配 ===== */
+@media (max-width: 896px) and (orientation: landscape) {
+  /* 横屏时调整布局 */
+  .hero-section {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  nav {
+    position: static;
+  }
+
+  /* 减少垂直方向的内边距 */
+  .container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+/* iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined [ ] Color Universal Design Verified [ ] High Contrast Mode Tested */
