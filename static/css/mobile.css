@@ -3,8 +3,10 @@
 
 /* ===== 平板端适配 (max-width: 1024px) ===== */
 @media (max-width: 1024px) {
+
   /* 禁止横向滚动 */
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
     width: 100%;
   }
@@ -22,6 +24,7 @@
     padding: 0.5rem 1rem;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
   }
 
   nav.scrolled {
@@ -91,13 +94,15 @@
 
 /* ===== 手机端适配 (max-width: 768px) ===== */
 @media (max-width: 768px) {
+
   /* 全局设置 */
   html {
     scroll-padding-top: 80px;
   }
 
   /* 禁止横向滚动 */
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
     width: 100%;
     -webkit-text-size-adjust: 100%;
@@ -123,7 +128,10 @@
   }
 
   /* 正文字体适配 */
-  p, li, span, div {
+  p,
+  li,
+  span,
+  div {
     font-size: 0.9rem !important;
   }
 
@@ -146,7 +154,9 @@
   }
 
   /* 加大按钮和链接点击区域 */
-  a, button, .btn {
+  a,
+  button,
+  .btn {
     min-height: 44px;
     padding: 12px 16px;
   }
@@ -195,10 +205,196 @@
   .last-updated span {
     font-size: 0.6rem;
   }
+
+  /* ===== 汉堡菜单按钮 ===== */
+  .hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    margin: 0;
+    background: transparent;
+    border: 2px solid rgba(135, 206, 235, 0.6);
+    border-radius: 8px;
+    cursor: pointer;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 999999;
+    pointer-events: auto;
+    box-sizing: border-box;
+  }
+
+  .hamburger-menu span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #87CEEB;
+    border-radius: 1px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .hamburger-menu.active span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  .hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
+  /* ===== 移动端全屏菜单遮罩层 ===== */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(135, 206, 235, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 999998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* ===== 移动端菜单内容 ===== */
+  .mobile-menu {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    max-height: 80vh;
+    pointer-events: auto;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .mobile-menu-overlay.active .mobile-menu {
+    transform: translateY(0);
+  }
+
+  .mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .mobile-menu ul li {
+    margin: 0.5rem 0;
+    border: none;
+    display: block;
+  }
+
+  .mobile-menu ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  .mobile-menu ul li a:hover,
+  .mobile-menu ul li a:active {
+    color: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .mobile-menu ul li a .iconfont {
+    margin-right: 0.8rem;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.9);
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .mobile-menu ul li a span:not(.iconfont) {
+    display: inline;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .mobile-menu .dropdown-content {
+    display: none;
+    background: rgba(74, 144, 226, 0.2);
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+  }
+
+  .mobile-menu .dropdown-open .dropdown-content {
+    display: block;
+  }
+
+  .mobile-menu .dropdown-content a {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .mobile-menu .dropdown-content a:hover,
+  .mobile-menu .dropdown-content a:active {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .mobile-menu .dropdown-content .iconfont {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .mobile-menu .dropdown-toggle::after {
+    content: '▾';
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-menu .dropdown-open .dropdown-toggle::after {
+    transform: rotate(180deg);
+  }
+
+  /* 隐藏桌面端导航菜单 */
+  .nav-items,
+  #nav-items,
+  #nav-menu-desktop {
+    display: none !important;
+  }
 }
 
 /* ===== 小屏手机适配 (max-width: 480px) ===== */
 @media (max-width: 480px) {
+
   /* 导航栏进一步缩小 */
   nav {
     height: 50px;
@@ -242,7 +438,10 @@
   }
 
   /* 正文进一步缩小 */
-  p, li, span, div {
+  p,
+  li,
+  span,
+  div {
     font-size: 0.85rem !important;
   }
 
@@ -253,7 +452,9 @@
   }
 
   /* 按钮点击区域加大 */
-  a, button, .btn {
+  a,
+  button,
+  .btn {
     min-height: 48px;
     padding: 14px 18px;
   }
@@ -261,6 +462,7 @@
 
 /* ===== 触摸设备优化 ===== */
 @media (hover: none) and (pointer: coarse) {
+
   /* 移除hover效果，改用active */
   .card:hover,
   .item:hover {
@@ -275,7 +477,11 @@
   }
 
   /* 加大触摸目标 */
-  a, button, input, select, textarea {
+  a,
+  button,
+  input,
+  select,
+  textarea {
     min-height: 44px;
     min-width: 44px;
   }
@@ -283,6 +489,7 @@
 
 /* ===== 横屏模式适配 ===== */
 @media (max-width: 896px) and (orientation: landscape) {
+
   /* 横屏时调整布局 */
   .hero-section {
     height: auto;

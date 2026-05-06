@@ -10,13 +10,10 @@
   --desc-color-primary-darker: #4A3728;
   --desc-color-primary-lightest: #6B5B45;
 
-  /* 背景色系�?*/
-  --bg-sidebar: #FFF8E7;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: rgba(139, 90, 43, 0.08);
-  --bg-card-active: rgba(139, 90, 43, 0.12);
-  --bg-highlight: rgba(245, 238, 225, 0.7);
-  --bg-highlight-light: rgba(245, 238, 225, 0.6);
+  --desc-bg-card-hover: rgba(139, 90, 43, 0.08);
+  --desc-bg-card-active: rgba(139, 90, 43, 0.12);
+  --desc-bg-highlight: rgba(245, 238, 225, 0.7);
+  --desc-bg-highlight-light: rgba(245, 238, 225, 0.6);
 
   /* 边框系统 */
   --desc-border-color: rgba(212, 165, 116, 0.2);
@@ -30,12 +27,7 @@
   --desc-shadow-sm: 0 2px 8px rgba(139, 90, 43, 0.05);
   --desc-shadow-xs: 0 1px 4px rgba(139, 90, 43, 0.04);
 
-  /* 圆角系统 */
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 10px;
-  --radius-xs: 8px;
-  --radius-pill: 16px;
+  --desc-radius-pill: 16px;
 
   /* 间距系统 - 页面专用 */
   --desc-spacing-xs: 0.25rem;
@@ -88,17 +80,11 @@ html {
 
 /* ===== 左侧导航�?===== */
 .description-sidebar {
-  width: 260px;
-  min-width: 260px;
-  position: sticky;
-  top: 120px;
-  max-height: calc(100vh - 140px);
   background: var(--bg-sidebar);
   border-radius: var(--radius-lg);
   padding: var(--desc-spacing-2xl);
   box-shadow: var(--desc-shadow-sidebar);
   border: 1px solid var(--desc-border-color);
-  overflow: hidden;
 }
 
 /* 酵母细胞装饰 */
@@ -249,8 +235,8 @@ html {
 .yeast-badge {
   display: inline-block;
   padding: var(--desc-spacing-xs) 0.6rem;
-  background: var(--bg-card-hover);
-  border-radius: var(--radius-pill);
+  background: var(--desc-bg-card-hover);
+  border-radius: var(--desc-radius-pill);
   font-size: var(--desc-font-size-xs);
   color: var(--desc-color-primary);
   font-weight: 500;
@@ -301,11 +287,11 @@ html {
 }
 
 .level1>a:hover {
-  background: var(--bg-card-hover);
+  background: var(--desc-bg-card-hover);
 }
 
 .level1>a.active {
-  background: var(--bg-card-active);
+  background: var(--desc-bg-card-active);
 }
 
 /* 有子菜单的一级项 */
@@ -346,7 +332,7 @@ html {
 }
 
 .level3>a:hover {
-  background: var(--bg-card-hover);
+  background: var(--desc-bg-card-hover);
 }
 
 .level3>a.active {
@@ -406,6 +392,7 @@ html {
   border-radius: 0;
   border: 2px solid rgba(139, 90, 43, 0.18);
   border-top: none;
+  z-index: 0;
 }
 
 .flask-liquid {
@@ -413,11 +400,12 @@ html {
   bottom: 2px;
   left: 2px;
   right: 2px;
-  height: calc(var(--progress, 10%) * 0.85);
+  height: calc(var(--progress, 10) * 0.85%);
   min-height: 8%;
   max-height: 85%;
   border-radius: 0;
   overflow: hidden;
+  z-index: 1;
   background: linear-gradient(180deg,
       rgba(180, 160, 130, 0.6) 0%,
       rgba(160, 120, 70, 0.7) 30%,
@@ -445,7 +433,8 @@ html {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  height: calc(var(--bubble-height, 100) * 1%);
+  transition: height 0.3s ease-out;
 }
 
 .ferment-bubble {
@@ -815,7 +804,7 @@ html {
 }
 
 .knockout-card {
-  background: var(--bg-highlight);
+  background: var(--desc-bg-highlight);
   border-radius: var(--radius-sm);
   padding: 0.9rem;
   border: 1px solid var(--desc-border-color-card);
@@ -853,7 +842,7 @@ html {
 }
 
 .reporter-card {
-  background: var(--bg-highlight);
+  background: var(--desc-bg-highlight);
   border-radius: var(--radius-sm);
   padding: var(--desc-spacing-lg);
   border: 1px solid var(--desc-border-color-card);
@@ -953,7 +942,7 @@ html {
   gap: 3px;
   flex-wrap: wrap;
   padding: var(--desc-spacing-sm-md);
-  background: var(--bg-highlight);
+  background: var(--desc-bg-highlight);
   border-radius: var(--radius-sm);
   border: 1px solid var(--desc-border-color-card);
   margin-bottom: 0.6rem;
@@ -1008,7 +997,7 @@ html {
 }
 
 .validation-step {
-  background: var(--bg-highlight);
+  background: var(--desc-bg-highlight);
   border-radius: var(--radius-sm);
   padding: var(--desc-spacing-sm-md) var(--desc-spacing-lg);
   border: 1px solid var(--desc-border-color-card);
@@ -1022,7 +1011,7 @@ html {
 .step-badge {
   display: inline-block;
   padding: var(--desc-spacing-xs) 0.5rem;
-  background: var(--bg-card-hover);
+  background: var(--desc-bg-card-hover);
   border-radius: var(--radius-xs);
   font-size: var(--desc-font-size-xs);
   font-weight: 600;
@@ -1125,7 +1114,7 @@ html {
 }
 
 .concept-box {
-  background: var(--bg-highlight-light);
+  background: var(--desc-bg-highlight-light);
   border-radius: var(--radius-sm);
   padding: 0.9rem;
   border: 1px solid var(--desc-border-color-light);
@@ -1151,15 +1140,9 @@ html {
     padding: var(--desc-spacing-xl);
   }
 
-  .description-sidebar,
   .description-content {
     width: 100%;
     min-width: 100%;
-  }
-
-  .description-sidebar {
-    position: static;
-    max-height: none;
   }
 }
 

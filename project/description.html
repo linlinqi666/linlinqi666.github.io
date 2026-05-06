@@ -8,19 +8,23 @@
   <link rel="stylesheet" href="../iconfont/iconfont.css">
   <link rel="stylesheet" href="../static/css/index.css">
   <link rel="stylesheet" href="../static/css/description.css">
-  <link rel="stylesheet" href="../static/css/mobile.css">
+  <!-- <link rel="stylesheet" href="../static/css/mobile.css"> -->
 </head>
 
 <body>
   <header>
   </header>
 
-  <nav>
-    <div class="container">
-      <div class="logo">
-      </div>
-    </div>
-    <div class="nav-items">
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于nav之外） -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- 移动端全屏菜单（独立于nav之外） -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <div class="mobile-menu" id="mobile-menu">
       <ul id="nav-menu">
         <li>
           <a href="../index.html">
@@ -29,7 +33,7 @@
           </a>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-xiangmu"></span>
             <span>项目</span>
           </a>
@@ -53,7 +57,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-tuandui"></span>
             <span>团队</span>
           </a>
@@ -73,7 +77,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-cplus"></span>
             <span>干实验组</span>
           </a>
@@ -89,7 +93,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-shiyan-L"></span>
             <span>湿实验组</span>
           </a>
@@ -104,25 +108,111 @@
             </a>
           </div>
         </li>
-        <li class="dropdown">
+        <li>
           <a href="../human-practices/human-practices.html">
             <span class="iconfont icon-shehuishijian"></span>
             <span>人类实践</span>
           </a>
-          <!-- <div class="dropdown-content">
-            <a href="../human-practices/education.html">
-              <span class="iconfont icon-jiaoyu"></span>
-              <span>教育意义</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <div class="logo">
+      </div>
+    </div>
+
+    <div class="nav-items" id="nav-items">
+      <ul id="nav-menu-desktop">
+        <li>
+          <a href="../index.html">
+            <span class="iconfont icon-home"></span>
+            <span>首页</span>
+          </a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-xiangmu"></span>
+            <span>项目</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="description.html">
+              <span class="iconfont icon-jianjie"></span>
+              <span>简介</span>
             </a>
-            <a href="../human-practices/social-groups.html">
-              <span class="iconfont icon-shehuituanti"></span>
-              <span>社会群体</span>
+            <a href="design.html">
+              <span class="iconfont icon-sheji"></span>
+              <span>设计</span>
             </a>
-            <a href="../human-practices/human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>人类实践</span>
+            <a href="safety.html">
+              <span class="iconfont icon-anquan"></span>
+              <span>安全性</span>
             </a>
-          </div> -->
+            <a href="log.html">
+              <span class="iconfont icon-rizhi"></span>
+              <span>日志</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-tuandui"></span>
+            <span>团队</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="../team/members.html">
+              <span class="iconfont icon-tuanduichengyuan"></span>
+              <span>团队成员</span>
+            </a>
+            <a href="../team/affiliation.html">
+              <span class="iconfont icon-guishu"></span>
+              <span>归属</span>
+            </a>
+            <a href="../team/collaboration.html">
+              <span class="iconfont icon-cooperation"></span>
+              <span>合作</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-cplus"></span>
+            <span>干实验组</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="../dry-lab/model.html">
+              <span class="iconfont icon-wumoxing"></span>
+              <span>模型</span>
+            </a>
+            <a href="../dry-lab/hardware.html">
+              <span class="iconfont icon-yingjian"></span>
+              <span>硬件</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-shiyan-L"></span>
+            <span>湿实验组</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="../wet-lab/experiment-record.html">
+              <span class="iconfont icon-shiyanjilu"></span>
+              <span>实验记录</span>
+            </a>
+            <a href="../wet-lab/experiment-result.html">
+              <span class="iconfont icon-shiyanjieguo"></span>
+              <span>实验结果</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="../human-practices/human-practices.html">
+            <span class="iconfont icon-shehuishijian"></span>
+            <span>人类实践</span>
+          </a>
         </li>
       </ul>
     </div>
@@ -538,17 +628,19 @@
 
       </div>
       <p>&copy; 2026 iGEM SZPU Team.</p>
+    </div>
   </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // 所有 DOM 元素在 DOMContentLoaded 后获取
       const level1Items = document.querySelectorAll('.level1');
       const navLinks = document.querySelectorAll('.description-nav a');
       const progressPercentage = document.getElementById('progress-percentage');
       const flaskLiquid = document.querySelector('.flask-liquid');
-      const sections = document.querySelectorAll('.content-card');
+      const bubbling = document.querySelector('.bubbling');
 
-      // 目录展开 - 点击时展开/折叠，同时允许跳转
+      // 目录展开
       level1Items.forEach(item => {
         const link = item.querySelector('a');
         const level2 = item.querySelector('.level2');
@@ -559,118 +651,139 @@
         }
       });
 
+      // 智能检测滚动容器（加入 document.body 判断）
+      function detectScrollContainer() {
+        // 先检查 .description-content 是否有滚动能力
+        const descContent = document.querySelector('.description-content');
+        if (descContent) {
+          const style = window.getComputedStyle(descContent);
+          if ((style.height !== 'auto' || style.maxHeight !== 'none') &&
+            (style.overflowY === 'scroll' || style.overflowY === 'auto')) {
+            console.log('检测到滚动容器: .description-content');
+            return { element: descContent, isWindow: false };
+          }
+        }
+
+        // 检查 document.body 是否有滚动能力
+        const bodyStyle = window.getComputedStyle(document.body);
+        if ((bodyStyle.height !== 'auto' || bodyStyle.maxHeight !== 'none') &&
+          (bodyStyle.overflowY === 'scroll' || bodyStyle.overflowY === 'auto')) {
+          console.log('检测到滚动容器: document.body');
+          return { element: document.body, isWindow: false };
+        }
+
+        // 默认使用 window
+        console.log('检测到滚动容器: window');
+        return { element: window, isWindow: true };
+      }
+
+      const scrollInfo = detectScrollContainer();
+      const scrollElement = scrollInfo.element;
+      const isWindowScroll = scrollInfo.isWindow;
+
       // 滚动处理
-      let ticking = false;
-      const handleScroll = () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const scrollTop = window.scrollY;
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-          const windowHeight = window.innerHeight;
+      function updateScrollProgress() {
+        // 获取滚动位置（根据不同容器）
+        const scrollTop = isWindowScroll
+          ? (window.scrollY || window.pageYOffset)
+          : scrollElement.scrollTop;
 
-          // 更新发酵进度条
-          const progressPercent = Math.round(scrollPercent);
-          progressPercentage.textContent = progressPercent + '%';
-          if (flaskLiquid) {
-            flaskLiquid.style.setProperty('--progress', progressPercent + '%');
+        // 获取容器高度和总高度
+        let containerHeight, totalHeight;
+        if (isWindowScroll) {
+          containerHeight = window.innerHeight;
+          totalHeight = document.documentElement.scrollHeight;
+        } else {
+          containerHeight = scrollElement.clientHeight;
+          totalHeight = scrollElement.scrollHeight;
+        }
+
+        const maxScroll = Math.max(1, totalHeight - containerHeight);
+        const scrollPercent = (scrollTop / maxScroll) * 100;
+        const progressPercent = Math.round(Math.min(100, Math.max(0, scrollPercent)));
+
+        console.log('滚动位置:', scrollTop, '容器高度:', containerHeight, '总高度:', totalHeight, '进度:', progressPercent);
+
+        // 更新发酵进度条
+        progressPercentage.textContent = progressPercent + '%';
+        // CSS 变量只传纯数字，去掉 %
+        if (flaskLiquid) {
+          flaskLiquid.style.setProperty('--progress', progressPercent);
+        }
+        if (bubbling) {
+          bubbling.style.setProperty('--bubble-height', progressPercent);
+        }
+
+        // 导航高亮逻辑
+        const windowHeight = window.innerHeight;
+        const allSections = document.querySelectorAll('[id^="section-"], [id^="module-"], [id^="the-"]');
+        let currentSection = '';
+        let maxVisibleRatio = 0;
+
+        for (let i = 0; i < allSections.length; i++) {
+          const s = allSections[i];
+          const rect = s.getBoundingClientRect();
+          const sectionHeight = rect.height;
+          const visibleTop = Math.max(0, rect.top);
+          const visibleBottom = Math.min(windowHeight, rect.bottom);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+          const visibleRatio = sectionHeight > 0 ? visibleHeight / sectionHeight : 0;
+
+          if (visibleRatio > 0.1 && visibleRatio > maxVisibleRatio) {
+            maxVisibleRatio = visibleRatio;
+            currentSection = s.id;
           }
+        }
 
-          // 获取所有带有id的section元素（包括content-card和内部子section）
-          const allSections = document.querySelectorAll('[id^="section-"], [id^="module-"], [id^="the-"]');
+        if (!currentSection && allSections.length > 0) {
+          currentSection = scrollTop === 0 ? allSections[0].id : allSections[allSections.length - 1].id;
+        }
 
-          // 计算每个section在视口中的可见比例，选择可见比例最高的
-          let currentSection = '';
-          let maxVisibleRatio = 0;
+        navLinks.forEach(link => link.classList.remove('active'));
+        level1Items.forEach(item => item.classList.remove('active'));
 
-          for (let i = 0; i < allSections.length; i++) {
-            const s = allSections[i];
-            const rect = s.getBoundingClientRect();
-            const sectionHeight = rect.height;
-
-            // 计算可见区域
-            const visibleTop = Math.max(0, rect.top);
-            const visibleBottom = Math.min(windowHeight, rect.bottom);
-            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-
-            // 计算可见比例
-            const visibleRatio = sectionHeight > 0 ? visibleHeight / sectionHeight : 0;
-
-            // 只有当section可见超过一定比例时才考虑
-            if (visibleRatio > 0.1 && visibleRatio > maxVisibleRatio) {
-              maxVisibleRatio = visibleRatio;
-              currentSection = s.id;
-            }
+        let matched = false;
+        for (let i = 0; i < navLinks.length; i++) {
+          if (navLinks[i].getAttribute('href') === '#' + currentSection) {
+            navLinks[i].classList.add('active');
+            const l1 = navLinks[i].closest('.level1');
+            if (l1) l1.classList.add('active');
+            matched = true;
+            break;
           }
+        }
 
-          // 兜底处理：如果没有找到任何可见section
-          if (!currentSection && allSections.length > 0) {
-            if (scrollTop === 0) {
-              // 在页面顶部，选择第一个section
-              currentSection = allSections[0].id;
-            } else {
-              // 滚动到底部，选择最后一个section
-              currentSection = allSections[allSections.length - 1].id;
-            }
-          }
-
-          navLinks.forEach(link => link.classList.remove('active'));
-          level1Items.forEach(item => item.classList.remove('active'));
-
-          // 找到匹配的导航链接并高亮
-          let matched = false;
-          for (let i = 0; i < navLinks.length; i++) {
-            if (navLinks[i].getAttribute('href') === '#' + currentSection) {
-              navLinks[i].classList.add('active');
-              const l3 = navLinks[i].closest('.level3');
-              if (l3) {
-                const l1 = l3.closest('.level1');
-                if (l1) l1.classList.add('active');
-              } else {
-                const l1 = navLinks[i].closest('.level1');
-                if (l1) l1.classList.add('active');
-              }
-              matched = true;
-              break;
-            }
-          }
-
-          // 如果没有精确匹配到小目录，尝试匹配其父级大目录
-          if (!matched && currentSection) {
-            const currentElement = document.getElementById(currentSection);
-            if (currentElement) {
-              const parentCard = currentElement.closest('.content-card');
-              if (parentCard && parentCard.id) {
-                for (let i = 0; i < navLinks.length; i++) {
-                  if (navLinks[i].getAttribute('href') === '#' + parentCard.id) {
-                    navLinks[i].classList.add('active');
-                    const l1 = navLinks[i].closest('.level1');
-                    if (l1) l1.classList.add('active');
-                    break;
-                  }
+        if (!matched && currentSection) {
+          const currentElement = document.getElementById(currentSection);
+          if (currentElement) {
+            const parentCard = currentElement.closest('.content-card');
+            if (parentCard && parentCard.id) {
+              for (let i = 0; i < navLinks.length; i++) {
+                if (navLinks[i].getAttribute('href') === '#' + parentCard.id) {
+                  navLinks[i].classList.add('active');
+                  const l1 = navLinks[i].closest('.level1');
+                  if (l1) l1.classList.add('active');
+                  break;
                 }
               }
             }
           }
+        }
+      }
 
-          ticking = false;
-        });
-      };
-
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll();
+      // 务必加上滚动事件绑定（绑定对象与读取对象一致）
+      scrollElement.addEventListener('scroll', updateScrollProgress, { passive: true });
+      window.addEventListener('resize', updateScrollProgress, { passive: true });
+      updateScrollProgress(); // 初始化
 
       // 点击一级目录链接时展开/折叠
       const level1Links = document.querySelectorAll('.level1.has-submenu > a');
       level1Links.forEach(link => {
         link.addEventListener('click', function (e) {
-          e.preventDefault(); // 阻止跳转
+          e.preventDefault();
           const level1 = this.closest('.level1');
           const level2 = level1.querySelector('.level2');
-
           if (level2) {
-            // 切换展开/折叠状态
             level2.classList.toggle('expanded');
             level1.classList.toggle('expanded');
           }
@@ -678,6 +791,7 @@
       });
     });
   </script>
+  <script src="../static/js/mobile-menu.js"></script>
 </body>
 
 </html>

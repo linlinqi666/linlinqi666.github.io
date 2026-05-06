@@ -15,12 +15,16 @@
   <header>
   </header>
 
-  <nav>
-    <div class="container">
-      <div class="logo">
-      </div>
-    </div>
-    <div class="nav-items">
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于nav之外） -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- 移动端全屏菜单（独立于nav之外） -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <div class="mobile-menu" id="mobile-menu">
       <ul id="nav-menu">
         <li>
           <a href="../index.html">
@@ -29,7 +33,7 @@
           </a>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-xiangmu"></span>
             <span>项目</span>
           </a>
@@ -53,7 +57,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-tuandui"></span>
             <span>团队</span>
           </a>
@@ -73,7 +77,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-cplus"></span>
             <span>干实验组</span>
           </a>
@@ -89,7 +93,107 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-shiyan-L"></span>
+            <span>湿实验组</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="../wet-lab/experiment-record.html">
+              <span class="iconfont icon-shiyanjilu"></span>
+              <span>实验记录</span>
+            </a>
+            <a href="../wet-lab/experiment-result.html">
+              <span class="iconfont icon-shiyanjieguo"></span>
+              <span>实验结果</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="../human-practices/human-practices.html">
+            <span class="iconfont icon-shehuishijian"></span>
+            <span>人类实践</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <div class="logo">
+      </div>
+    </div>
+
+    <div class="nav-items" id="nav-items">
+      <ul id="nav-menu-desktop">
+        <li>
+          <a href="../index.html">
+            <span class="iconfont icon-home"></span>
+            <span>首页</span>
+          </a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-xiangmu"></span>
+            <span>项目</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="description.html">
+              <span class="iconfont icon-jianjie"></span>
+              <span>简介</span>
+            </a>
+            <a href="design.html">
+              <span class="iconfont icon-sheji"></span>
+              <span>设计</span>
+            </a>
+            <a href="safety.html">
+              <span class="iconfont icon-anquan"></span>
+              <span>安全性</span>
+            </a>
+            <a href="log.html">
+              <span class="iconfont icon-rizhi"></span>
+              <span>日志</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-tuandui"></span>
+            <span>团队</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="../team/members.html">
+              <span class="iconfont icon-tuanduichengyuan"></span>
+              <span>团队成员</span>
+            </a>
+            <a href="../team/affiliation.html">
+              <span class="iconfont icon-guishu"></span>
+              <span>归属</span>
+            </a>
+            <a href="../team/collaboration.html">
+              <span class="iconfont icon-cooperation"></span>
+              <span>合作</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-cplus"></span>
+            <span>干实验组</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="../dry-lab/model.html">
+              <span class="iconfont icon-wumoxing"></span>
+              <span>模型</span>
+            </a>
+            <a href="../dry-lab/hardware.html">
+              <span class="iconfont icon-yingjian"></span>
+              <span>硬件</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-shiyan-L"></span>
             <span>湿实验组</span>
           </a>
@@ -109,20 +213,6 @@
             <span class="iconfont icon-shehuishijian"></span>
             <span>人类实践</span>
           </a>
-          <!-- <div class="dropdown-content">
-            <a href="../human-practices/education.html">
-              <span class="iconfont icon-jiaoyu"></span>
-              <span>教育意义</span>
-            </a>
-            <a href="../human-practices/social-groups.html">
-              <span class="iconfont icon-shehuituanti"></span>
-              <span>社会群体</span>
-            </a>
-            <a href="../human-practices/human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>人类实践</span>
-            </a>
-          </div> -->
         </li>
       </ul>
     </div>
@@ -495,6 +585,47 @@
                     <div class="image-item">
                       <img src="../static/image/team-photo/w5/4.24/17.jpg"
                         alt="Single colony selection and liquid culture inoculation">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="log-card has-images">
+              <div class="log-date">
+                <!-- 开始日期 -->
+                <div class="date-start">
+                  <div class="date-day">22</div>
+                  <div class="date-month">April</div>
+                </div>
+                <!-- 分隔符 -->
+                <div class="date-divider">~</div>
+                <!-- 结束日期 -->
+                <div class="date-end">
+                  <div class="date-day">29</div>
+                  <div class="date-month">April</div>
+                </div>
+              </div>
+              <div class="log-body">
+                <div class="log-header">
+                  <!-- 每个的小标题 -->
+                  <h3>PAGER Plasmid Validation & Yeast Transformation Success</h3>
+                  <!-- 操作人 -->
+                  <span class="log-author">Aishi Zeng</span>
+                  <!-- 图片展开按钮 -->
+                  <button class="image-toggle" aria-label="展开图片">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M3 10l7-7 7 7M3 10h14" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <!-- 内容填写区域 -->
+                <p>We completed the full workflow of PAGER plasmid-related experiments, including the transformation of the PAGER plasmid into E. coli Top10, single colony picking and scale-up culture. 4 groups of plasmids were extracted with concentrations of 297.15–408.45 ng/μL and A260/A280 purity of 1.890–1.927, which were verified by BamHI and NdeI double digestion with bands fully matching expectations. Meanwhile, we finished the scale-up culture of BY4741 yeast, and completed plasmid transformation and spread plating after the OD600 reached the required standard. The negative and blank controls were free of contamination, and the 2 test plates showed good growth, meaning the transformation experiment initially met our expectations.</p>
+                <!-- 图片展示区域 -->
+                <div class="log-images">
+                  <div class="image-grid">
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/w6/4.29/1.jpg" alt="LB solid medium preparation (100 mL)">
                     </div>
                   </div>
                 </div>
@@ -940,14 +1071,14 @@
               <div class="log-date">
                 <!-- 开始日期 -->
                 <div class="date-start">
-                  <div class="date-day">9</div>
+                  <div class="date-day">15</div>
                   <div class="date-month">April</div>
                 </div>
                 <!-- 分隔符 -->
                 <div class="date-divider">~</div>
                 <!-- 结束日期 -->
                 <div class="date-end">
-                  <div class="date-day">14</div>
+                  <div class="date-day">22</div>
                   <div class="date-month">April</div>
                 </div>
               </div>
@@ -970,6 +1101,60 @@
                   facilitate the recording of every bit of work done by each member of our team. Finally, I redesigned
                   the
                   layout of the Team Members page to enhance its visual presentation.</p>
+                <!-- 图片展示区域 -->
+                <div class="log-images">
+                  <div class="image-grid">
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/wiki/w4-1.png"
+                        alt="Exclusive team poster integrated into wiki homepage">
+                    </div>
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/wiki/w4-2.png"
+                        alt="Custom sidebar navigation for description section">
+                    </div>
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/wiki/w4-3.png" alt="New log page for team work recording">
+                    </div>
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/wiki/w4-4.png" alt="Redesigned Team Members page layout">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="log-card has-images">
+              <div class="log-date">
+                <!-- 开始日期 -->
+                <div class="date-start">
+                  <div class="date-day">23</div>
+                  <div class="date-month">April</div>
+                </div>
+                <!-- 分隔符 -->
+                <div class="date-divider">~</div>
+                <!-- 结束日期 -->
+                <div class="date-end">
+                  <div class="date-day">5</div>
+                  <div class="date-month">May</div>
+                </div>
+              </div>
+              <div class="log-body">
+                <div class="log-header">
+                  <!-- 每个的小标题 -->
+                  <h3>Wiki Mobile Adaptation for Exchange Meeting</h3>
+                  <!-- 操作人 -->
+                  <span class="log-author">Qi Xu</span>
+                  <button class="image-toggle" aria-label="展开图片">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M3 10l7-7 7 7M3 10h14" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <!-- 内容填写区域 -->
+                <p>With the upcoming exchange meeting drawing near, I recognised the urgent need to build a
+                  mobile-friendly version of our wiki webpage for easier on-the-go browsing. For this reason, I have
+                  completed modifications and adaptations to ensure the webpage is fully optimised for seamless mobile
+                  access over this period.</p>
                 <!-- 图片展示区域 -->
                 <div class="log-images">
                   <div class="image-grid">
@@ -1245,6 +1430,55 @@
                 </div>
               </div>
             </article>
+
+            <article class="log-card has-images">
+              <div class="log-date">
+                <!-- 日期 -->
+                <div class="date-day">28</div>
+                <div class="date-month">April</div>
+              </div>
+              <div class="log-body">
+                <div class="log-header">
+                  <!-- 每个的小标题 -->
+                  <h3>PPT Revision Specification, Wiki Benchmarking & Promotional Material Confirmation</h3>
+                  <!-- 操作人 -->
+                  <span class="log-author">Everyone</span>
+                  <!-- 图片展开按钮 -->
+                  <button class="image-toggle" aria-label="展开图片">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M3 10l7-7 7 7M3 10h14" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <!-- 内容填写区域 -->
+                <p>During the meeting, we presented and explained the PPT on our experimental direction, and confirmed
+                  the revision plan for the South China Exchange Meeting PPT. We set clear revision requirements:
+                  prioritise visual images with concise keyword-only text, clarify the logical thread of our
+                  experiments, highlight the core PAGER module, avoid excessive professional content, and insert
+                  detailed experimental protocols via hyperlinks. We also studied outstanding entries from previous iGEM
+                  competitions, and finalised the direction for content supplementation and optimisation of our Wiki. In
+                  addition, we discussed promotional materials for the South China Exchange Meeting, and confirmed the
+                  core merchandise categories including badges, blind bags, and stamps.
+                </p>
+                <!-- 图片展示区域 -->
+                <div class="log-images">
+                  <div class="image-grid">
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/w5/4.22-5.jpg"
+                        alt="iGEM 5th team meeting discussing experimental progress">
+                    </div>
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/w5/4.22-9.jpg"
+                        alt="Multi-group coordination and advisor guidance session">
+                    </div>
+                    <div class="image-item">
+                      <img src="../static/image/team-photo/w5/4.22-16.jpg"
+                        alt="Multi-group coordination and advisor guidance session">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
         </section>
       </div>
@@ -1358,6 +1592,7 @@
       window.addEventListener('scroll', updateNavHighlight, { passive: true });
     })();
   </script>
+  <script src="../static/js/mobile-menu.js"></script>
 </body>
 
 </html>

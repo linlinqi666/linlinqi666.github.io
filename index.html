@@ -14,12 +14,16 @@
   <header>
   </header>
 
-  <nav>
-    <div class="container">
-      <div class="logo">
-      </div>
-    </div>
-    <div class="nav-items">
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于nav之外） -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- 移动端全屏菜单（独立于nav之外） -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <div class="mobile-menu" id="mobile-menu">
       <ul id="nav-menu">
         <li>
           <a href="index.html">
@@ -28,7 +32,7 @@
           </a>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-xiangmu"></span>
             <span>项目</span>
           </a>
@@ -52,7 +56,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-tuandui"></span>
             <span>团队</span>
           </a>
@@ -72,7 +76,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-cplus"></span>
             <span>干实验组</span>
           </a>
@@ -88,7 +92,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="#">
+          <a href="#" class="dropdown-toggle">
             <span class="iconfont icon-shiyan-L"></span>
             <span>湿实验组</span>
           </a>
@@ -103,25 +107,111 @@
             </a>
           </div>
         </li>
-        <li class="dropdown">
+        <li>
           <a href="human-practices/human-practices.html">
             <span class="iconfont icon-shehuishijian"></span>
             <span>人类实践</span>
           </a>
-          <!-- <div class="dropdown-content">
-            <a href="human-practices/education.html">
-              <span class="iconfont icon-jiaoyu"></span>
-              <span>教育意义</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <div class="logo">
+      </div>
+    </div>
+
+    <div class="nav-items" id="nav-items">
+      <ul id="nav-menu-desktop">
+        <li>
+          <a href="index.html">
+            <span class="iconfont icon-home"></span>
+            <span>首页</span>
+          </a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-xiangmu"></span>
+            <span>项目</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="project/description.html">
+              <span class="iconfont icon-jianjie"></span>
+              <span>简介</span>
             </a>
-            <a href="human-practices/social-groups.html">
-              <span class="iconfont icon-shehuituanti"></span>
-              <span>社会群体</span>
+            <a href="project/design.html">
+              <span class="iconfont icon-sheji"></span>
+              <span>设计</span>
             </a>
-            <a href="human-practices/human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>人类实践</span>
+            <a href="project/safety.html">
+              <span class="iconfont icon-anquan"></span>
+              <span>安全性</span>
             </a>
-          </div> -->
+            <a href="project/log.html">
+              <span class="iconfont icon-rizhi"></span>
+              <span>日志</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-tuandui"></span>
+            <span>团队</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="team/members.html">
+              <span class="iconfont icon-tuanduichengyuan"></span>
+              <span>团队成员</span>
+            </a>
+            <a href="team/affiliation.html">
+              <span class="iconfont icon-guishu"></span>
+              <span>归属</span>
+            </a>
+            <a href="team/collaboration.html">
+              <span class="iconfont icon-cooperation"></span>
+              <span>合作</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-cplus"></span>
+            <span>干实验组</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="dry-lab/model.html">
+              <span class="iconfont icon-wumoxing"></span>
+              <span>模型</span>
+            </a>
+            <a href="dry-lab/hardware.html">
+              <span class="iconfont icon-yingjian"></span>
+              <span>硬件</span>
+            </a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">
+            <span class="iconfont icon-shiyan-L"></span>
+            <span>湿实验组</span>
+          </a>
+          <div class="dropdown-content">
+            <a href="wet-lab/experiment-record.html">
+              <span class="iconfont icon-shiyanjilu"></span>
+              <span>实验记录</span>
+            </a>
+            <a href="wet-lab/experiment-result.html">
+              <span class="iconfont icon-shiyanjieguo"></span>
+              <span>实验结果</span>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="human-practices/human-practices.html">
+            <span class="iconfont icon-shehuishijian"></span>
+            <span>人类实践</span>
+          </a>
         </li>
       </ul>
     </div>
@@ -130,7 +220,7 @@
   <main class="long-page">
     <!-- Section 1: Hero/Poster -->
     <section id="hero" class="fullscreen-section section-1">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc1.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc1.jpg" alt="Hero background">
       <div class="section-content">
         <h1>iGEM SZPU 2026</h1>
         <p>Yeast-Based Influenza Biosensor</p>
@@ -138,42 +228,42 @@
     </section>
 
     <section id="project-overview" class="fullscreen-section section-2">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc2.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc2.jpg" alt="Project overview background">
       <div class="section-content">
         <h2></h2>
       </div>
     </section>
 
     <section id="design" class="fullscreen-section section-3">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc3.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc3.jpg" alt="Design background">
       <div class="section-content">
         <h2></h2>
       </div>
     </section>
 
     <section id="wet-lab" class="fullscreen-section section-4">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc4.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc4.jpg" alt="Wet lab background">
       <div class="section-content">
         <h2></h2>
       </div>
     </section>
 
     <section id="dry-lab" class="fullscreen-section section-5">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc5.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc5.jpg" alt="Dry lab background">
       <div class="section-content">
         <h2></h2>
       </div>
     </section>
 
     <section id="human-practices" class="fullscreen-section section-6">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc6.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc6.jpg" alt="Human practices background">
       <div class="section-content">
         <h2></h2>
       </div>
     </section>
 
     <section id="team" class="fullscreen-section section-7">
-      <div class="section-bg" style="background-image: url('static/image/bc/index_bc7.jpg');"></div>
+      <img class="section-bg-img" src="static/image/bc/index_bc7.jpg" alt="Team background">
       <div class="section-content">
         <h2></h2>
       </div>
@@ -234,7 +324,7 @@
     </div>
   </footer>
 
-  </script>
+  <script src="static/js/mobile-menu.js"></script>
 </body>
 
 </html>

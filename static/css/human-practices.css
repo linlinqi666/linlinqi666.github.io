@@ -68,12 +68,6 @@
 
 /* ===== Sidebar ===== */
 .hp-sidebar {
-  width: 260px;
-  min-width: 260px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 120px;
-  max-height: calc(100vh - 160px);
   background: linear-gradient(180deg, #FFF8E7 0%, #FFFAF0 50%, #FFF5E6 100%);
   border-radius: var(--hp-radius-lg);
   padding: var(--hp-space-md);
@@ -81,7 +75,6 @@
     var(--hp-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   border: 1px solid var(--hp-border);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -1092,13 +1085,6 @@
     padding: var(--hp-space-md);
   }
 
-  .hp-sidebar {
-    width: 100%;
-    min-width: 100%;
-    position: static;
-    max-height: none;
-  }
-
   .hp-sidebar .stats-section {
     margin-top: var(--hp-space-md);
   }
@@ -1118,13 +1104,15 @@
 }
 
 @media (max-width: 768px) {
+
   /* 全局设置 */
   html {
     scroll-padding-top: 80px;
   }
 
   /* 禁止横向滚动 */
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
     width: 100%;
   }
@@ -1543,6 +1531,7 @@
 }
 
 @media (max-width: 480px) {
+
   /* 导航栏进一步缩小 */
   nav {
     height: 50px;
