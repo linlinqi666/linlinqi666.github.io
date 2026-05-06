@@ -260,20 +260,24 @@
     background: rgba(135, 206, 235, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    z-index: 999998;
+    z-index: -1;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
+    transition: opacity 0.4s ease, visibility 0.4s ease, z-index 0s 0.4s;
     pointer-events: none;
+    touch-action: none;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .mobile-menu-overlay.active {
+    z-index: 999998;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    touch-action: auto;
+    transition: opacity 0.4s ease, visibility 0.4s ease, z-index 0s;
   }
 
   /* ===== 移动端菜单内容 ===== */
@@ -506,5 +510,39 @@
     padding-bottom: 1rem;
   }
 }
+
+/* ===== 页脚滚动图片通用移动端适配 ===== */
+@media (max-width: 768px) {
+  .footer-left {
+    min-height: 80px;
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .footer-left::before,
+  .footer-left::after {
+    width: 40px;
+  }
+
+  .scroller-track1,
+  .scroller-track2 {
+    gap: var(--spacing-xl);
+  }
+
+  .scroll-image {
+    max-height: 40px;
+    max-width: 160px;
+  }
+
+  .content-section {
+    margin-top: 10%;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .content-section section {
+    width: 95%;
+    padding: var(--spacing-md);
+  }
+}
+
 
 /* iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined [ ] Color Universal Design Verified [ ] High Contrast Mode Tested */
