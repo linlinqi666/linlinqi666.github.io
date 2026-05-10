@@ -17,7 +17,23 @@
   --mobile-tap-target: 44px;
 }
 
-/* ===== 手机端统一适配 (max-width: 768px) ===== */
+/* ===== 1024px以下：移动端 - 显示汉堡菜单 ===== */
+@media (max-width: 1024px) {
+
+  /* 隐藏桌面导航项 */
+  .nav-items,
+  #nav-items,
+  #nav-menu-desktop {
+    display: none;
+  }
+
+  /* 显示汉堡菜单 */
+  .hamburger-menu {
+    display: flex;
+  }
+}
+
+/* ===== 768px以下：手机端 ===== */
 @media (max-width: 768px) {
 
   /* ===== 全局基础设置 ===== */
@@ -38,106 +54,7 @@
     overflow-y: scroll;
   }
 
-  /* scroll-snap降级方案 */
-  @supports (scroll-snap-type: y proximity) {
-    body {
-      scroll-snap-type: y proximity;
-    }
-  }
-
-  /* ===== 通用容器 ===== */
-  .container,
-  .main-content {
-    padding: var(--mobile-padding-md);
-    max-width: 100%;
-  }
-
-  /* ===== 字体设置（避免!important滥用） ===== */
-  .mobile-content h1,
-  h1 {
-    font-size: clamp(1.5rem, 5vw, 1.8rem);
-  }
-
-  .mobile-content h2,
-  h2 {
-    font-size: clamp(1.2rem, 4vw, 1.4rem);
-  }
-
-  .mobile-content h3,
-  h3 {
-    font-size: clamp(1rem, 3vw, 1.1rem);
-  }
-
-  .mobile-content p,
-  .mobile-content li,
-  .mobile-content span,
-  .mobile-content div,
-  p,
-  li,
-  span,
-  div {
-    font-size: clamp(0.85rem, 2.5vw, 0.9rem);
-  }
-
-  /* ===== 图片优化（兼容性处理） ===== */
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    background-color: var(--mobile-bg-fallback);
-  }
-
-  /* object-fit降级方案 */
-  @supports (object-fit: cover) {
-    img {
-      object-fit: cover;
-      object-position: center;
-    }
-  }
-
-  /* 全屏区块背景图优化 */
-  .fullscreen-section {
-    min-height: 100vh;
-    height: auto;
-    position: relative;
-    background-color: var(--mobile-bg-fallback);
-    overflow: hidden;
-  }
-
-  .section-bg-img {
-    width: 100%;
-    height: 100%;
-    min-height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: var(--mobile-bg-fallback);
-  }
-
-  @supports (object-fit: cover) {
-    .section-bg-img {
-      object-fit: cover;
-      object-position: center top;
-    }
-  }
-
-  /* ===== 布局统一单列纵向（减少!important） ===== */
-  .mobile-flex-column,
-  .flex-row,
-  .horizontal-layout,
-  .footer-content {
-    flex-direction: column;
-  }
-
-  .mobile-grid-column,
-  .grid,
-  .grid-layout,
-  .grid-2-cols,
-  .two-column-layout {
-    grid-template-columns: 1fr;
-  }
-
-  /* ===== 导航栏适配（刘海屏安全区域） ===== */
+  /* ===== 导航栏适配 ===== */
   nav {
     position: fixed;
     top: 0;
@@ -151,17 +68,9 @@
     padding-top: max(0.5rem, env(safe-area-inset-top));
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-left: max(1rem, env(safe-area-inset-left));
-    /* 保留原背景图片 */
     background: url('../image/nav_bc.jpg') no-repeat left center;
     background-size: cover;
-  }
-
-  /* backdrop-filter降级方案 - 保持原背景图片 */
-  @supports (backdrop-filter: blur(8px)) {
-    nav {
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
+    z-index: 9999;
   }
 
   nav.scrolled {
@@ -173,25 +82,7 @@
     height: 40px;
   }
 
-  /* 隐藏桌面端导航菜单 */
-  .nav-items,
-  #nav-items,
-  #nav-menu-desktop {
-    display: none;
-  }
-
-  /* ===== 侧边栏适配 ===== */
-  .sidebar,
-  .hp-sidebar,
-  .log-sidebar,
-  .description-sidebar {
-    width: 100%;
-    min-width: 100%;
-    position: static;
-    max-height: none;
-  }
-
-  /* ===== 汉堡菜单按钮（刘海屏 + ARIA优化） ===== */
+  /* ===== 汉堡菜单按钮 ===== */
   .hamburger-menu {
     display: flex;
     flex-direction: column;
@@ -207,16 +98,9 @@
     position: fixed;
     top: max(12px, env(safe-area-inset-top) + 8px);
     right: max(12px, env(safe-area-inset-right) + 8px);
-    z-index: 999999;
+    z-index: 100000;
     pointer-events: auto;
     box-sizing: border-box;
-    will-change: transform;
-  }
-
-  /* focus-visible键盘导航样式 */
-  .hamburger-menu:focus-visible {
-    outline: 2px solid var(--mobile-primary);
-    outline-offset: 2px;
   }
 
   .hamburger-menu span {
@@ -242,7 +126,7 @@
     transform: translateY(-8.5px) rotate(-45deg);
   }
 
-  /* ===== 移动端全屏菜单遮罩层（性能优化） ===== */
+  /* ===== 移动端全屏菜单遮罩层 ===== */
   .mobile-menu-overlay {
     position: fixed;
     top: 0;
@@ -252,36 +136,23 @@
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     background: var(--mobile-menu-bg);
-    z-index: -1;
+    z-index: 99998;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, z-index 0s 0.3s;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     pointer-events: none;
-    touch-action: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    will-change: opacity;
-  }
-
-  /* backdrop-filter降级方案 */
-  @supports (backdrop-filter: blur(20px)) {
-    .mobile-menu-overlay {
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
   }
 
   .mobile-menu-overlay.active {
-    z-index: 999998;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    touch-action: auto;
-    transition: opacity 0.3s ease, visibility 0.3s ease, z-index 0s;
   }
 
-  /* ===== 移动端菜单内容（滚动优化） ===== */
+  /* ===== 移动端菜单内容 ===== */
   .mobile-menu {
     width: 100%;
     max-width: 400px;
@@ -289,16 +160,12 @@
     padding-left: max(2rem, env(safe-area-inset-left));
     padding-right: max(2rem, env(safe-area-inset-right));
     transform: translateY(20px);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease;
     overflow-y: auto;
     overflow-x: hidden;
     max-height: min(80vh, 80svh);
     -webkit-overflow-scrolling: touch;
-    pointer-events: auto;
     display: block;
-    visibility: visible;
-    opacity: 1;
-    will-change: transform;
   }
 
   .mobile-menu-overlay.active .mobile-menu {
@@ -339,24 +206,12 @@
     background: var(--mobile-menu-bg-hover);
   }
 
-  /* focus-visible键盘导航 */
-  .mobile-menu ul li a:focus-visible {
-    outline: 2px solid var(--mobile-menu-item-hover);
-    outline-offset: -2px;
-  }
-
   .mobile-menu ul li a .iconfont {
     margin-right: 0.8rem;
     font-size: 1.4rem;
     color: var(--mobile-menu-item);
     min-width: 28px;
     text-align: center;
-  }
-
-  .mobile-menu ul li a span:not(.iconfont) {
-    display: inline;
-    visibility: visible;
-    opacity: 1;
   }
 
   .mobile-menu .dropdown-content {
@@ -378,17 +233,6 @@
     color: var(--mobile-dropdown-item);
   }
 
-  .mobile-menu .dropdown-content a:hover,
-  .mobile-menu .dropdown-content a:active {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--mobile-menu-item-hover);
-  }
-
-  .mobile-menu .dropdown-content .iconfont {
-    font-size: 1.2rem;
-    color: var(--mobile-dropdown-item);
-  }
-
   .mobile-menu .dropdown-toggle::after {
     content: '▾';
     margin-left: 0.5rem;
@@ -401,6 +245,75 @@
     transform: rotate(180deg);
   }
 
+  /* ===== 通用容器 ===== */
+  .container,
+  .main-content {
+    padding: var(--mobile-padding-md);
+    max-width: 100%;
+  }
+
+  /* ===== 字体设置 ===== */
+  .mobile-content h1,
+  h1 {
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
+  }
+
+  .mobile-content h2,
+  h2 {
+    font-size: clamp(1.2rem, 4vw, 1.4rem);
+  }
+
+  .mobile-content h3,
+  h3 {
+    font-size: clamp(1rem, 3vw, 1.1rem);
+  }
+
+  .mobile-content p,
+  .mobile-content li,
+  .mobile-content span,
+  .mobile-content div,
+  p,
+  li,
+  span,
+  div {
+    font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+  }
+
+  /* ===== 图片优化 ===== */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    background-color: var(--mobile-bg-fallback);
+  }
+
+  /* ===== 布局统一单列纵向 ===== */
+  .mobile-flex-column,
+  .flex-row,
+  .horizontal-layout,
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .mobile-grid-column,
+  .grid,
+  .grid-layout,
+  .grid-2-cols,
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* ===== 侧边栏适配 ===== */
+  .sidebar,
+  .hp-sidebar,
+  .log-sidebar,
+  .description-sidebar {
+    width: 100%;
+    min-width: 100%;
+    position: static;
+    max-height: none;
+  }
+
   /* ===== 按钮和链接触摸优化 ===== */
   a,
   button,
@@ -408,14 +321,6 @@
     min-height: var(--mobile-tap-target);
     min-width: var(--mobile-tap-target);
     padding: 12px 16px;
-  }
-
-  /* focus-visible键盘导航 */
-  a:focus-visible,
-  button:focus-visible,
-  .btn:focus-visible {
-    outline: 2px solid var(--mobile-primary);
-    outline-offset: 2px;
   }
 
   /* ===== 页脚适配 ===== */
@@ -447,15 +352,9 @@
     font-size: 0.75rem;
   }
 
-  /* 页脚滚动图片 */
   .footer-left {
     min-height: 80px;
     padding: var(--mobile-padding-md) var(--mobile-padding-sm);
-  }
-
-  .footer-left::before,
-  .footer-left::after {
-    width: 40px;
   }
 
   .scroller-track1,
@@ -466,21 +365,6 @@
   .scroll-image {
     max-height: 40px;
     max-width: 160px;
-  }
-
-  /* ===== Last Updated 适配 ===== */
-  .last-updated {
-    padding: 0.25rem;
-    margin-top: 1rem;
-  }
-
-  .last-updated svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .last-updated span {
-    font-size: 0.6rem;
   }
 
   /* ===== 内容区域 ===== */
@@ -501,32 +385,7 @@
     display: none;
   }
 
-  /* ===== 触摸设备优化（扩大覆盖范围） ===== */
-  @media (pointer: coarse) {
-
-    .card:hover,
-    .item:hover {
-      transform: none;
-      box-shadow: none;
-    }
-
-    .card:active,
-    .item:active {
-      transform: scale(0.98);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    a,
-    button,
-    input,
-    select,
-    textarea {
-      min-height: var(--mobile-tap-target);
-      min-width: var(--mobile-tap-target);
-    }
-  }
-
-  /* ===== 横屏模式全面适配 ===== */
+  /* ===== 横屏模式适配 ===== */
   @media (orientation: landscape) {
 
     .hero-section,
@@ -536,61 +395,121 @@
       min-height: 100svh;
     }
 
-    nav {
-      position: static;
-    }
-
-    .container {
-      padding-top: var(--mobile-padding-md);
-      padding-bottom: var(--mobile-padding-md);
-    }
-
     .mobile-menu {
       max-height: min(70vh, 70svh);
-    }
-
-    /* 横屏时限制文本行宽，提升阅读体验 */
-    .content-section p,
-    .content-section li {
-      max-width: 60ch;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-
-  /* ===== 平板适配 (768px-1024px) - 简化版桌面菜单 ===== */
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .hamburger-menu {
-      display: none;
-    }
-
-    .nav-items,
-    #nav-items {
-      display: flex;
-    }
-
-    .mobile-menu-overlay {
-      display: none !important;
-    }
-
-    .grid-2-cols,
-    .two-column-layout {
-      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
 
-/* ===== 图片加载失败兜底样式 ===== */
-img:not([src]),
-img[src=""],
-img.error {
-  background-color: var(--mobile-bg-fallback);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100px;
-  color: #666;
-  font-size: 0.8rem;
+/* ===== 480px以下：超小屏幕手机 ===== */
+@media (max-width: 480px) {
+
+  /* 确保汉堡菜单显示 */
+  .hamburger-menu {
+    display: flex;
+  }
+
+  /* 确保桌面导航隐藏 */
+  .nav-items,
+  #nav-items,
+  #nav-menu-desktop {
+    display: none;
+  }
+
+  html,
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: var(--mobile-padding-sm);
+  }
+
+  nav {
+    height: 55px;
+    padding: 0.4rem 0.75rem;
+  }
+
+  nav.scrolled {
+    height: 50px;
+  }
+
+  .hamburger-menu {
+    width: 26px;
+    height: 26px;
+    top: max(10px, env(safe-area-inset-top) + 6px);
+    right: max(10px, env(safe-area-inset-right) + 6px);
+  }
+
+  .mobile-menu {
+    padding: 1.5rem;
+  }
+
+  .mobile-menu ul li a {
+    font-size: 1.1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .mobile-menu .dropdown-content a {
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+  }
+
+  a,
+  button,
+  .btn {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 10px 14px;
+  }
+}
+
+/* ===== 1025px-1200px：平板到小屏笔记本过渡 ===== */
+@media (min-width: 1025px) and (max-width: 1200px) {
+
+  /* 显示桌面导航 */
+  .nav-items,
+  #nav-items,
+  #nav-menu-desktop {
+    display: flex;
+  }
+
+  /* 隐藏汉堡菜单 */
+  .hamburger-menu {
+    display: none;
+  }
+
+  .section-content h1 {
+    font-size: 3.5rem;
+  }
+
+  .section-content h2 {
+    font-size: 2.5rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+}
+
+/* ===== 1200px以上：大屏幕优化 ===== */
+@media (min-width: 1201px) {
+
+  /* 显示桌面导航 */
+  .nav-items,
+  #nav-items,
+  #nav-menu-desktop {
+    display: flex;
+  }
+
+  /* 隐藏汉堡菜单 */
+  .hamburger-menu {
+    display: none;
+  }
+
+  .container {
+    max-width: 1400px;
+  }
 }
 
 /* iGEM Check: [x] Units Included [x] N >= 3 [x] Control Group Defined [x] Color Universal Design Verified [x] High Contrast Mode Tested [x] Accessibility Optimized [x] Performance Optimized */
