@@ -311,17 +311,18 @@
 }
 
 /* 折叠状态 */
-.collapsible-section.collapsed .section-content {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height var(--log-duration-slow) var(--log-ease-smooth),
-    opacity var(--log-duration-normal) var(--log-ease-default);
-}
-
 .collapsible-section .section-content {
   max-height: 10000px;
   opacity: 1;
+  transition: max-height var(--log-duration-slow) var(--log-ease-smooth),
+    opacity var(--log-duration-normal) var(--log-ease-default);
+  overflow: visible;
+}
+
+.collapsible-section.collapsed .section-content {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
   transition: max-height var(--log-duration-slow) var(--log-ease-smooth),
     opacity var(--log-duration-normal) var(--log-ease-default);
 }
