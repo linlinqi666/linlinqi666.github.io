@@ -3,14 +3,50 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#87CEEB">
+  <meta name="msapplication-TileColor" content="#87CEEB">
+  <meta name="color-scheme" content="light">
+
+  <!-- 安全区域CSS变量定义（不应用到html元素以免破坏全屏布局） -->
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+    }
+  </style>
+
+  <!-- DNS预取 -->
+  <link rel="dns-prefetch" href="static/iconfont">
+  <link rel="dns-prefetch" href="static/css">
+  <link rel="dns-prefetch" href="static/image">
+
+  <!-- 预连接关键资源 -->
+  <link rel="preconnect" href="static/iconfont" crossorigin>
+  <link rel="preconnect" href="static/css" crossorigin>
   <title>iGEM SZPU-2026 - 首页</title>
-  <link rel="stylesheet" href="static/iconfont/iconfont.css">
-  <link rel="stylesheet" href="static/css/index.css">
-  <link rel="stylesheet" href="static/css/mobile.css">
+  <link rel="preload" href="static/iconfont/iconfont.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/navigation/navigation.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="static/iconfont/iconfont.css">
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/mobile.css">
+    <link rel="stylesheet" href="static/css/navigation/navigation.css">
+  </noscript>
 </head>
 
-<body>
+<body class="home-page">
   <header>
   </header>
 
@@ -92,6 +128,10 @@
             <a href="dry-lab/software.html">
               <span class="iconfont icon-ruanjian-"></span>
               <span>Software</span>
+            </a>
+            <a href="dry-lab/image-compressor.html">
+              <span class="iconfont icon-tupian"></span>
+              <span>Image Compressor</span>
             </a>
           </div>
         </li>
@@ -219,6 +259,10 @@
               <span class="iconfont icon-ruanjian-"></span>
               <span>Software</span>
             </a>
+            <a href="dry-lab/image-compressor.html">
+              <span class="iconfont icon-tupian"></span>
+              <span>Image Compressor</span>
+            </a>
           </div>
         </li>
         <li class="dropdown">
@@ -320,16 +364,15 @@
       <img class="section-bg-img" src="static/image/bc/index_bc3.jpg" alt="Design background">
     </section>
 
-    <section id="background-inspiration" class="fullscreen-section section-background">
-      <img class="section-bg-img" src="static/image/bc/index_bc1.jpg" alt="Background & Inspiration background">
+    <section id="background-inspiration" class="fullscreen-section section-background-pantone">
       <div class="hero-content">
-        <div class="hero-column hero-left animate-on-scroll">
+        <div class="hero-column hero-left animate-item">
           <h1>Background</h1>
           <p>Influenza A virus (H1N1) spreads primarily through airborne droplets and aerosols, remaining a persistent
             global health threat.</p>
-          <p>WHO FLUNET data (June 2021 – March 2026) reveals dramatic fluctuations:</p>
+          <p>WHO FLUNET data (June 2020 – March 2026) reveals dramatic fluctuations:</p>
           <ul>
-            <li><strong>During COVID-19 (2021-2022):</strong> NPIs (masking, distancing, travel restrictions) suppressed
+            <li><strong>During COVID-19 (2020-2022):</strong> NPIs (masking, distancing, travel restrictions) suppressed
               influenza to historic lows.</li>
             <li><strong>Post-pandemic rebound (2023-2026):</strong> As NPIs lifted, influenza resurged — positivity
               rates hit nearly 50% in some regions, with rapid subtype shifts from H3N2 to B(Victoria).</li>
@@ -341,21 +384,8 @@
             point-of-use.</p>
           <p>That is what EchoYeast delivers.</p>
         </div>
-        <div class="hero-column hero-right animate-on-scroll">
-          <h1>Inspiration</h1>
-          <p>FLUNET data reveals a pattern: after COVID-19 restrictions lifted, H3N2 surged while H1N1 remained stable.
-            But H3N2 mutates too rapidly — a sensor for it would quickly become obsolete.</p>
-          <p>We initially tried building an H3N2 sensor. The limitations were clear: high mutation rate makes long-term
-            detection unreliable.</p>
-          <p>So we made a strategic choice: start with H1N1 — slower evolution, more stable target, safer proof of
-            concept.</p>
-          <p>The innovation: Once validated, we can swap the nanobody to detect other subtypes (including new H3N2
-            variants). No redesign. No starting from zero.</p>
-          <p>Thus, EchoYeast was born: a yeast biosensor that turns virus recognition into an instant visible signal
-            (GFP or color change).</p>
-          <p>Our vision: A sustainable, reprogrammable platform. When the virus evolves, we just swap the recognition
-            module — not the whole system.</p>
-        </div>
+        <img src="static/image/data/virus_detections.jpg" alt="Virus detections data"
+          class="data-chart-img animate-item">
       </div>
     </section>
 
@@ -391,13 +421,33 @@
       <img class="section-bg-img" src="static/image/bc/index_bc7.jpg" alt="Footer background">
       <div class="component-container">
         <div class="footer-wrapper">
-          <!-- 滚动图片展示区域 -->
-          <div class="footer-scroller">
-            <div class="image-scroller">
-              <div class="scroller-track">
-                <img src="static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
-                <img src="static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
-
+          <!-- 顶部内容：图片滚动 + Contact Us -->
+          <div class="footer-top">
+            <!-- 滚动图片展示区域 -->
+            <div class="footer-scroller">
+              <div class="image-scroller">
+                <div class="scroller-track">
+                  <img src="static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                  <img src="static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                </div>
+              </div>
+            </div>
+            <!-- Contact Us 区域 -->
+            <div class="footer-contact">
+              <h4>Contact Us:</h4>
+              <div class="contact-icons">
+                <div class="contact-icon-wrapper" data-tooltip="Phone: +86 xxx xxxx xxxx">
+                  <span class="iconfont icon-dianhua"></span>
+                </div>
+                <div class="contact-icon-wrapper" data-tooltip="Email: szpu@igem.org">
+                  <span class="iconfont icon-youxiang"></span>
+                </div>
+                <div class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+                  <span class="iconfont icon-bilibili-fill"></span>
+                </div>
+                <div class="contact-icon-wrapper" data-tooltip="WeChat: SZPU-2026">
+                  <span class="iconfont icon-weixin"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -421,7 +471,6 @@
                 <div class="footer-column">
                   <h4>Project</h4>
                   <ul>
-                    <li><a href="index.html">Home</a></li>
                     <li><a href="project/description.html">Description</a></li>
                     <li><a href="project/design.html">Design</a></li>
                     <li><a href="project/engineering.html">Engineering</a></li>
@@ -488,7 +537,10 @@
   </main>
 
   <script src="static/js/mobile-menu.js"></script>
-  <script src="static/js/scroll-animation.js"></script>
+  <script src="static/js/timeline-animation.js"></script>
+  <script src="static/js/lazy-load.js"></script>
+  <!-- 移动端背景图片动态适配系统 -->
+  <script src="static/js/background-adapter.js"></script>
 </body>
 
 </html>

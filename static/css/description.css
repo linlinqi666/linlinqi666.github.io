@@ -275,8 +275,18 @@ html {
   margin-bottom: 0.2rem;
 }
 
-.level1>a {
+/* 导航链接包装器 */
+.nav-link-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+/* 一级导航链接 */
+.nav-main-link {
   display: block;
+  flex: 1;
   font-weight: 600;
   font-size: var(--desc-font-size-md);
   color: var(--desc-color-primary-dark);
@@ -286,17 +296,36 @@ html {
   transition: all var(--desc-duration-fast) ease;
 }
 
-.level1>a:hover {
+.nav-main-link:hover {
   background: var(--desc-bg-card-hover);
 }
 
-.level1>a.active {
+.nav-main-link.active {
   background: var(--desc-bg-card-active);
+  color: var(--desc-color-primary);
 }
 
-/* 有子菜单的一级项 */
-.level1.has-submenu>a {
-  padding-right: 0.5rem;
+/* 展开/折叠图标 */
+.toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--desc-color-primary-light);
+  cursor: pointer;
+  transition: transform var(--desc-duration-normal) ease, color var(--desc-duration-fast) ease;
+  padding-right: 0.25rem;
+  flex-shrink: 0;
+}
+
+.toggle-icon:hover {
+  color: var(--desc-color-primary);
+}
+
+.level1.expanded .toggle-icon {
+  transform: rotate(180deg);
+  color: var(--desc-color-primary);
 }
 
 /* 二级目录 */
@@ -306,14 +335,16 @@ html {
   margin: 0.1rem 0 0.1rem 0.8rem;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+  transition: max-height 0.35s ease-out, opacity 0.25s ease-out, transform 0.25s ease-out;
   opacity: 0;
+  transform: translateY(-5px);
 }
 
-.level2.expanded {
-  max-height: 400px;
+.level1.expanded .level2 {
+  max-height: 500px;
   opacity: 1;
-  transition: max-height 0.4s ease-in, opacity 0.2s ease-in;
+  transform: translateY(0);
+  transition: max-height 0.4s ease-in, opacity 0.25s ease-in, transform 0.25s ease-in;
 }
 
 /* 三级目录�?*/
@@ -1210,9 +1241,20 @@ html {
   }
 
   /* 导航列表适配 */
-  .level1>a {
+  .nav-main-link {
     font-size: var(--desc-font-size-sm-md);
     padding: 0.5rem 0.4rem;
+  }
+
+  .toggle-icon {
+    width: 28px;
+    height: 28px;
+    padding-right: 0.2rem;
+  }
+
+  .toggle-icon svg {
+    width: 14px;
+    height: 14px;
   }
 
   .level3>a {
