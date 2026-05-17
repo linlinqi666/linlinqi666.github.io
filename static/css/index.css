@@ -88,6 +88,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 html {
@@ -113,11 +122,7 @@ body {
   scroll-behavior: smooth;
 }
 
-/* 仅首页的滚动锁定功能 */
-body.home-page {
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-}
+
 
 /* ================================================== */
 /* 导航栏样式 */
@@ -373,7 +378,6 @@ header {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  scroll-snap-align: start;
   padding-top: 100px;
 }
 
@@ -851,10 +855,33 @@ header {
 /* 特色分界线 */
 /* ================================================== */
 
+/* ================================================== */
+/* 首页滚动锁定功能 */
+/* ================================================== */
+body.home-page {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.fullscreen-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* 页脚特殊处理 - 确保可以完整显示 */
 .section-footer {
   background: linear-gradient(135deg, rgba(74, 144, 226, 0.95) 0%, rgba(53, 112, 181, 0.95) 100%);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  height: auto;
+  min-height: 100vh;
+  padding: 4rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .section-footer .section-bg-img {
@@ -1117,25 +1144,23 @@ header {
 .section-footer .component-container {
   width: 100%;
   max-width: 1400px;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-3xl);
   position: relative;
   z-index: 10;
+  margin: 0 auto;
+  height: 100%;
 }
 
 .footer-wrapper {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--spacing-4xl);
-  padding-top: var(--spacing-3xl);
-  padding-bottom: var(--spacing-md);
 }
 
 /* 顶部内容区域 */
@@ -1395,8 +1420,8 @@ header {
   opacity: 0.8;
   font-size: var(--font-size-md);
   display: flex;
-  flex-direction: row;
-  gap: var(--spacing-xl);
+  flex-direction: column;
+  gap: var(--spacing-sm);
   align-items: center;
   justify-content: center;
   padding-top: var(--spacing-lg);
