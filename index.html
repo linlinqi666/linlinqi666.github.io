@@ -33,17 +33,13 @@
   <link rel="preconnect" href="static/iconfont" crossorigin>
   <link rel="preconnect" href="static/css" crossorigin>
   <title>iGEM SZPU-2026 - 首页</title>
-  <link rel="preload" href="static/iconfont/iconfont.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/navigation/navigation.css" as="style"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="static/iconfont/iconfont.css">
-    <link rel="stylesheet" href="static/css/index.css">
-    <link rel="stylesheet" href="static/css/mobile.css">
-    <link rel="stylesheet" href="static/css/navigation/navigation.css">
-  </noscript>
+
+  <!-- 直接同步加载CSS，确保加载顺序可控 -->
+  <!-- 加载顺序：基础样式 → 导航样式 → 移动端样式（最后加载，确保覆盖） -->
+  <link rel="stylesheet" href="static/iconfont/iconfont.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/navigation/navigation.css">
+  <link rel="stylesheet" href="static/css/mobile.css">
 </head>
 
 <body class="home-page">
@@ -58,9 +54,8 @@
   </button>
 
   <!-- 移动端全屏菜单（独立于nav之外） -->
-  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
-    <div class="mobile-menu" id="mobile-menu">
-      <button class="mobile-menu-close" id="mobile-menu-close" aria-label="关闭菜单"></button>
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
+    <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
       <ul id="nav-menu">
         <li>
           <a href="index.html">
