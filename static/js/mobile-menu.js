@@ -14,6 +14,7 @@
     var hamburgerBtn = document.getElementById('hamburger-menu');
     var overlay = document.getElementById('mobile-menu-overlay');
     var mobileMenu = document.getElementById('mobile-menu');
+    var closeBtn = document.getElementById('mobile-menu-close');
 
     // 检查关键元素是否存在
     if (!hamburgerBtn || !overlay || !mobileMenu) {
@@ -132,6 +133,14 @@
         }
       }
     });
+
+    // ===== 关闭按钮点击 =====
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        closeMenu();
+      });
+    }
 
     // ===== 遮罩层点击 =====
     overlay.addEventListener('click', function (e) {

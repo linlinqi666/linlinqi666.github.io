@@ -3,6 +3,255 @@
 /* ================================================== */
 
 /* ================================================== */
+/* 全局样式 - CSS变量和重置 */
+/* ================================================== */
+
+:root {
+  /* 颜色系统 */
+  --color-primary: #4a90e2;
+  --color-primary-dark: #3570b5;
+  --color-primary-light: rgba(74, 144, 226, 0.9);
+  --color-primary-lighter: rgba(252, 231, 203, 0.9);
+  --color-primary-shadow: rgba(74, 144, 255, 0.4);
+  --color-primary-shadow-hover: rgba(74, 144, 226, 0.12);
+
+  --color-brown: #8B5A2B;
+  --color-brown-dark: #5D3A1A;
+  --color-brown-light: #D4A574;
+  --color-brown-lighter: rgba(139, 90, 43, 0.05);
+  --color-brown-border: rgba(212, 165, 116, 0.2);
+
+  --color-text: #333;
+  --color-text-light: #666;
+  --color-text-lighter: #999;
+  --color-white: #ffffff;
+  --color-bg-gray: #f4f4f4;
+
+  /* 背景色系统 */
+  --bg-page: rgba(252, 231, 203, 0.9);
+  --bg-sidebar: #FFF8E7;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8f9fa;
+  --bg-dropdown: rgba(252, 231, 203, 0.9);
+  --bg-footer: #4a90e2;
+  --bg-footer-light: rgba(255, 255, 255, 0.08);
+  --bg-footer-border: rgba(255, 255, 255, 0.15);
+
+  /* 边框系统 */
+  --border-color: rgba(212, 165, 116, 0.2);
+  --border-color-light: rgba(212, 165, 116, 0.1);
+  --border-footer: rgba(255, 255, 255, 0.3);
+  --border-footer-bottom: rgba(255, 255, 255, 0.2);
+
+  /* 阴影系统 */
+  --shadow-nav: 0 6px 25px rgba(74, 144, 255, 0.4);
+  --shadow-card: 0 2px 8px rgba(74, 144, 255, 0.3);
+  --shadow-image: 0 2px 4px rgba(0, 0, 0, 0.15);
+  --shadow-image-hover: 0 4px 8px rgba(0, 0, 0, 0.25);
+  --shadow-sidebar: 0 8px 32px rgba(139, 90, 43, 0.1);
+
+  /* 圆角系统 */
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 50%;
+  --radius-pill: 9999px;
+
+  /* 间距系统 */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.25rem;
+  --spacing-2xl: 1.5rem;
+  --spacing-3xl: 2rem;
+  --spacing-4xl: 2.5rem;
+  --spacing-5xl: 4rem;
+
+  /* 字体系统 */
+  --font-size-xs: 0.7rem;
+  --font-size-sm: 0.8rem;
+  --font-size-md: 0.9rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.3rem;
+  --font-size-2xl: 3rem;
+
+  /* 动画时长 */
+  --duration-fast: 0.2s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.4s;
+  --duration-scroll: 25s;
+
+  /* 过渡函数 */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-default: ease;
+}
+
+/* ================================================== */
+/* 导航栏基础样式 */
+/* ================================================== */
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: url('../../image/nav_bc.jpg') no-repeat left center;
+  background-size: cover;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all var(--duration-slow) var(--ease-smooth);
+}
+
+nav.scrolled {
+  height: 80px;
+  box-shadow: var(--shadow-nav);
+}
+
+nav .nav-items {
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+  flex-shrink: 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+nav .logo a {
+  border-radius: 50%;
+}
+
+nav .logo img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-sm);
+  list-style: none;
+}
+
+nav ul li {
+  position: relative;
+  margin: 0 var(--spacing-sm);
+}
+
+.iconfont {
+  margin-right: var(--spacing-sm);
+}
+
+nav ul li a,
+.dropdown-content a {
+  display: block;
+  color: var(--color-primary-light);
+  text-decoration: none;
+  font-size: var(--font-size-lg);
+}
+
+nav ul li a {
+  padding: var(--spacing-sm);
+  min-width: 100px;
+  text-align: center;
+  transition: background-color var(--duration-normal) var(--ease-default);
+}
+
+nav ul li .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1001;
+  min-width: 160px;
+  border-radius: 0 0 var(--radius-xs) var(--radius-xs);
+  background-color: var(--bg-dropdown);
+  animation: dropdownAnimation var(--duration-normal) var(--ease-default);
+}
+
+.dropdown-content a {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-lg);
+  margin: 0;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.dropdown-content .iconfont {
+  margin-right: var(--spacing-sm);
+}
+
+nav ul li a {
+  position: relative;
+}
+
+nav ul li a:hover,
+.dropdown-content a:hover {
+  font-weight: bold;
+}
+
+nav ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background-color: var(--color-primary);
+  transition: width var(--duration-normal) var(--ease-default);
+}
+
+nav ul li a:hover::after {
+  width: 100%;
+}
+
+@keyframes dropdownAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+nav ul li:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a:hover {
+  color: var(--bg-dropdown);
+  background-color: var(--color-primary);
+  border-radius: 0;
+}
+
+/* ================================================== */
 /* 侧边导航栏 - 可复用模块 */
 /* ================================================== */
 
@@ -21,7 +270,7 @@
   --igem-sidebar-color-primary: #7A4A1A;
   --igem-sidebar-color-primary-dark: #4A3525;
   --igem-sidebar-color-primary-light: #C49A6C;
-  --igem-sidebar-color-primary-lightest: #8A7A65;
+  --igem-sidebar-color-primary-lightest: #8A7B65;
   --igem-sidebar-color-accent: #A67C52;
 
   /* 背景纹理 */
@@ -56,7 +305,7 @@
   --igem-sidebar-font-sm: 0.8rem;
   --igem-sidebar-font-md: 0.88rem;
   --igem-sidebar-font-lg: 1rem;
-  --igem-sidebar-font-xl: 1.2rem;
+  --igem-sidebar-font-xl: 1.3rem;
   --igem-sidebar-font-xxl: 1.4rem;
 
   /* 行高和字重 */
@@ -165,7 +414,7 @@
 }
 
 /* 确保内容在装饰层之上 */
-.igem-sidebar>*:not(.igem-sidebar-decoration) {
+.igem-sidebar > *:not(.igem-sidebar-decoration) {
   position: relative;
   z-index: 1;
 }
@@ -236,7 +485,6 @@
 }
 
 @keyframes igemSidebarFloat {
-
   0%,
   100% {
     transform: translate(0, 0) scale(1);
@@ -481,7 +729,7 @@
   margin-bottom: 0.2rem;
 }
 
-.igem-sidebar-level3>a {
+.igem-sidebar-level3 > a {
   display: block;
   font-size: var(--igem-sidebar-font-sm);
   color: var(--igem-sidebar-color-primary-lightest);
@@ -493,7 +741,7 @@
   padding-left: 1.4rem;
 }
 
-.igem-sidebar-level3>a::before {
+.igem-sidebar-level3 > a::before {
   content: '';
   position: absolute;
   left: 0.7rem;
@@ -506,24 +754,24 @@
   transition: all var(--igem-sidebar-transition-fast);
 }
 
-.igem-sidebar-level3>a:hover {
+.igem-sidebar-level3 > a:hover {
   background: var(--igem-sidebar-bg-hover);
   color: var(--igem-sidebar-color-primary-dark);
   padding-left: 1.6rem;
 }
 
-.igem-sidebar-level3>a:hover::before {
+.igem-sidebar-level3 > a:hover::before {
   background: var(--igem-sidebar-color-primary);
   transform: translateY(-50%) scale(1.4);
 }
 
-.igem-sidebar-level3>a.active {
+.igem-sidebar-level3 > a.active {
   background: rgba(139, 90, 43, 0.08);
   color: var(--igem-sidebar-color-primary-dark);
   font-weight: var(--igem-sidebar-font-weight-medium);
 }
 
-.igem-sidebar-level3>a.active::before {
+.igem-sidebar-level3 > a.active::before {
   background: var(--igem-sidebar-color-primary);
   box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.15);
   transform: translateY(-50%) scale(1.2);
@@ -627,7 +875,6 @@
 }
 
 @keyframes liquidWave {
-
   0%,
   100% {
     transform: translateY(0) scaleX(1);
@@ -652,7 +899,7 @@
 .igem-sidebar-ferment-bubble {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(245, 230, 200, 0.7) 40%, rgba(212, 165, 116, 0.35) 70%, transparent 100%);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(245, 230, 200, 0.6) 40%, rgba(212, 165, 116, 0.35) 70%, transparent 100%);
   box-shadow: 0 1px 3px rgba(139, 90, 43, 0.15);
   animation: igemSidebarFermentBubble var(--igem-bubble-rise-duration) ease-in-out infinite;
 }
@@ -698,7 +945,7 @@
 }
 
 /* ===== 响应式设计 ===== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .igem-sidebar-container {
     flex-direction: column;
     padding: 1rem;
@@ -821,7 +1068,6 @@
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -833,7 +1079,6 @@
 }
 
 @keyframes bubbleFloat {
-
   0%,
   100% {
     transform: translateY(0px) scale(1);
@@ -871,7 +1116,7 @@
 
 .sidebar-header h3 {
   color: var(--desc-color-primary-dark, #5D4E37);
-  font-size: var(--desc-font-size-xl, 1.1rem);
+  font-size: var(--desc-font-size-xl, 1.3rem);
   font-weight: 600;
   margin: 0;
   flex: 1;
@@ -1028,7 +1273,7 @@
   margin-bottom: 0.1rem;
 }
 
-.level3>a {
+.level3 > a {
   display: block;
   font-size: var(--desc-font-size-sm, 0.82rem);
   color: var(--desc-color-primary-lightest, #6B5B45);
@@ -1038,11 +1283,11 @@
   transition: all var(--desc-duration-fast, 0.2s) ease;
 }
 
-.level3>a:hover {
+.level3 > a:hover {
   background: var(--desc-bg-card-hover, rgba(139, 90, 43, 0.08));
 }
 
-.level3>a.active {
+.level3 > a.active {
   background: rgba(139, 90, 43, 0.06);
   color: var(--desc-color-primary-dark, #5D4E37);
 }
@@ -1165,7 +1410,7 @@
 .ferment-bubble:nth-child(2) {
   width: 3px;
   height: 3px;
-  bottom: 15%;
+  bottom: 13%;
   left: 62%;
   animation-delay: 0.5s;
 }
@@ -1173,7 +1418,7 @@
 .ferment-bubble:nth-child(3) {
   width: 6px;
   height: 6px;
-  bottom: 20%;
+  bottom: 18%;
   left: 42%;
   animation-delay: 1s;
 }
@@ -1274,14 +1519,14 @@
  *    </div>
  * 
  * 2. 自定义主题：
- *    在:root中覆盖设计令牌：
+ *    在 :root 中覆盖设计令牌：
  *    :root {
  *      --igem-sidebar-color-primary: #你的颜色;
  *      --igem-sidebar-bg: #你的背景;
  *    }
  * 
  * 3. 进度计算：
- *    设置CSS变量 --progress (0-100) 和 --bubble-height (0-100)
+ *    设置 CSS 变量 --progress (0-100) 和 --bubble-height (0-100)
  * 
  * 4. ⚠️ 关键注意事项：
  *    - 保持 position: sticky 和 top: 120px 以确保粘性定位正常
@@ -1289,187 +1534,7 @@
  *    - 使用与 SKILL.md 一致的类名保持兼容性
  */
 
-/* 导航基础样式 */
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  background: url('../../image/nav_bc.jpg') no-repeat left center;
-  background-size: cover;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all var(--duration-slow) var(--ease-smooth);
-}
-
-nav.scrolled {
-  height: 80px;
-  box-shadow: var(--shadow-nav);
-}
-
-nav .nav-items {
-  display: flex;
-  align-items: center;
-  margin-left: 2rem;
-  flex-shrink: 0;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-}
-
-nav a {
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-nav .logo a {
-  border-radius: 50%;
-}
-
-nav .logo img {
-  display: block;
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-}
-
-/* 导航菜单 */
-nav ul {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: var(--spacing-sm);
-  list-style: none;
-}
-
-nav ul li {
-  position: relative;
-  margin: 0 var(--spacing-sm);
-}
-
-.iconfont {
-  margin-right: var(--spacing-sm);
-}
-
-nav ul li a,
-.dropdown-content a {
-  display: block;
-  color: var(--color-primary-light);
-  text-decoration: none;
-  font-size: var(--font-size-lg);
-}
-
-nav ul li a {
-  padding: var(--spacing-sm);
-  min-width: 100px;
-  text-align: center;
-  transition: background-color var(--duration-normal) var(--ease-default);
-}
-
-/* 下拉菜单 */
-nav ul li .dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1001;
-  min-width: 160px;
-  border-radius: 0 0 var(--radius-xs) var(--radius-xs);
-  background-color: var(--bg-dropdown);
-  animation: dropdownAnimation var(--duration-normal) var(--ease-default);
-}
-
-.dropdown-content a {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-size: var(--font-size-lg);
-  margin: 0;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: all var(--duration-normal) var(--ease-default);
-}
-
-.dropdown-content .iconfont {
-  margin-right: var(--spacing-sm);
-}
-
-/* 交互状态 */
-nav ul li a {
-  position: relative;
-}
-
-nav ul li a:hover,
-.dropdown-content a:hover {
-  font-weight: bold;
-}
-
-nav ul li a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 3px;
-  background-color: var(--color-primary);
-  transition: width var(--duration-normal) var(--ease-default);
-}
-
-nav ul li a:hover::after {
-  width: 100%;
-}
-
-/* 下拉动画 */
-@keyframes dropdownAnimation {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-nav ul li:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown-content a:hover {
-  color: var(--bg-dropdown);
-  background-color: var(--color-primary);
-  border-radius: 0;
-}
-
-/* 移动端菜单按钮 */
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 24px;
-  height: 16px;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 1002;
-  position: relative;
-}
-
 /* ================================================== */
 /* navigation.css 职责：仅桌面端导航样式 */
-/* 移动端样式完全由 mobile.css 负责，避免冲突 */
+/* 移动端样式完全由 mobile.css 管理，避免冲突 */
 /* ================================================== */

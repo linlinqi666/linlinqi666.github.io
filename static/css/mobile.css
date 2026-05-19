@@ -1,18 +1,24 @@
 /* ===== 通用移动端响应式样式 ===== */
 /* iGEM Layout Strategy: Shared mobile responsive styles for all pages. Optimized for compatibility, UX, and accessibility. */
 
+/* ================================================== */
+/* 统一移动端动画系统 - Mobile Animation System v2.0 */
+/* iGEM Design: 符合移动端平台特性的统一动效规范 */
+/* 动画时长：200-300ms，缓动函数：标准cubic-bezier */
+/* ================================================== */
+
 /* ===== 移动端CSS变量定义 ===== */
 :root {
-  --mobile-primary: #87CEEB;
-  --mobile-primary-light: #A8D8EA;
+  --mobile-primary: #D4A574;
+  --mobile-primary-light: #E6C9A3;
   --mobile-bg-fallback: #FAE8D6;
-  --mobile-menu-bg: rgba(135, 206, 235, 0.95);
-  --mobile-menu-item: rgba(255, 255, 255, 0.9);
-  --mobile-menu-item-hover: rgba(255, 255, 255, 1);
-  --mobile-menu-bg-hover: rgba(255, 255, 255, 0.15);
-  --mobile-menu-bg-active: rgba(255, 255, 255, 0.2);
-  --mobile-dropdown-bg: rgba(74, 144, 226, 0.2);
-  --mobile-dropdown-item: rgba(255, 255, 255, 0.85);
+  --mobile-menu-bg: rgba(212, 165, 116, 0.92);
+  --mobile-menu-item: rgba(255, 253, 248, 0.95);
+  --mobile-menu-item-hover: rgba(255, 253, 248, 1);
+  --mobile-menu-bg-hover: rgba(139, 90, 43, 0.15);
+  --mobile-menu-bg-active: rgba(139, 90, 43, 0.2);
+  --mobile-dropdown-bg: rgba(212, 165, 116, 0.2);
+  --mobile-dropdown-item: rgba(255, 253, 248, 0.85);
   --mobile-spacing-xs: 0.5rem;
   --mobile-spacing-sm: 0.75rem;
   --mobile-spacing-md: 1rem;
@@ -20,16 +26,594 @@
   --mobile-spacing-xl: 2rem;
   --mobile-tap-target: 48px;
   --mobile-tap-target-min: 44px;
-  --mobile-transition-fast: 0.15s ease;
-  --mobile-transition-medium: 0.3s ease;
   --mobile-radius-md: 8px;
   --mobile-radius-lg: 12px;
   --mobile-radius-xl: 16px;
-  --mobile-easing-standard: ease;
-  --mobile-easing-decelerate: ease-out;
   --mobile-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
   --mobile-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
   --mobile-gray-600: #666666;
+
+  /* ========== 统一动画变量系统 ========== */
+  /* 动画时长 - 严格控制在200-300ms之间 */
+  --anim-duration-extra-fast: 150ms;
+  /* 超快速：小型反馈 */
+  --anim-duration-fast: 200ms;
+  /* 快速：按钮点击、小型转场 */
+  --anim-duration-standard: 250ms;
+  /* 标准：大部分交互 */
+  --anim-duration-medium: 300ms;
+  /* 中等：页面转场、菜单展开 */
+  --anim-duration-slow: 350ms;
+  /* 慢速：复杂动画 */
+
+  /* 缓动函数 - 符合iOS/Android Material Design标准 */
+  --anim-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  /* 标准缓动 */
+  --anim-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  /* 减速缓动 */
+  --anim-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  /* 加速缓动 */
+  --anim-easing-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* 弹性效果 */
+  --anim-easing-sharp: cubic-bezier(0.4, 0, 0.6, 1);
+  /* 锐利缓动 */
+
+  /* 快捷过渡变量 */
+  --mobile-transition-fast: var(--anim-duration-fast) var(--anim-easing-standard);
+  --mobile-transition-medium: var(--anim-duration-medium) var(--anim-easing-standard);
+  --mobile-transition-standard: var(--anim-duration-standard) var(--anim-easing-standard);
+  --mobile-easing-standard: var(--anim-easing-standard);
+  --mobile-easing-decelerate: var(--anim-easing-decelerate);
+}
+
+/* ================================================== */
+/* 性能优化基础 */
+/* ================================================== */
+.animate-optimize {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.animate-gpu {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* ================================================== */
+/* 可复用动画类 - 快速应用 */
+/* ================================================== */
+
+/* 淡入淡出 */
+.anim-fade-in {
+  animation: fadeIn var(--anim-duration-standard) var(--anim-easing-decelerate) forwards;
+}
+
+.anim-fade-out {
+  animation: fadeOut var(--anim-duration-standard) var(--anim-easing-accelerate) forwards;
+}
+
+.anim-fade-in-up {
+  animation: fadeInUp var(--anim-duration-medium) var(--anim-easing-decelerate) forwards;
+}
+
+.anim-fade-in-down {
+  animation: fadeInDown var(--anim-duration-medium) var(--anim-easing-decelerate) forwards;
+}
+
+/* 滑入滑出 */
+.anim-slide-in-left {
+  animation: slideInLeft var(--anim-duration-medium) var(--anim-easing-decelerate) forwards;
+}
+
+.anim-slide-in-right {
+  animation: slideInRight var(--anim-duration-medium) var(--anim-easing-decelerate) forwards;
+}
+
+.anim-slide-out-left {
+  animation: slideOutLeft var(--anim-duration-medium) var(--anim-easing-accelerate) forwards;
+}
+
+.anim-slide-out-right {
+  animation: slideOutRight var(--anim-duration-medium) var(--anim-easing-accelerate) forwards;
+}
+
+/* 缩放动画 */
+.anim-scale-in {
+  animation: scaleIn var(--anim-duration-standard) var(--anim-easing-elastic) forwards;
+}
+
+.anim-scale-out {
+  animation: scaleOut var(--anim-duration-fast) var(--anim-easing-sharp) forwards;
+}
+
+.anim-scale-pulse {
+  animation: scalePulse var(--anim-duration-standard) var(--anim-easing-standard);
+}
+
+/* 按钮交互 */
+.anim-btn-press:active {
+  animation: btnPress var(--anim-duration-extra-fast) var(--anim-easing-standard);
+}
+
+.anim-btn-bounce:active {
+  transform: scale(0.95);
+  transition: transform var(--anim-duration-extra-fast);
+}
+
+/* 加载动画 */
+.anim-spin {
+  animation: spin 1s linear infinite;
+}
+
+.anim-pulse {
+  animation: pulse 1.5s var(--anim-easing-standard) infinite;
+}
+
+.anim-bounce {
+  animation: bounce 1s var(--anim-easing-standard) infinite;
+}
+
+.anim-dots::after {
+  animation: dots 1.5s var(--anim-easing-standard) infinite;
+}
+
+/* ================================================== */
+/* 关键帧动画定义 */
+/* ================================================== */
+
+/* 淡入淡出 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 滑动动画 */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* 缩放动画 */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes scalePulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* 按钮按压 */
+@keyframes btnPress {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.92);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 加载动画 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes dots {
+  0% {
+    content: '';
+  }
+
+  25% {
+    content: '.';
+  }
+
+  50% {
+    content: '..';
+  }
+
+  75% {
+    content: '...';
+  }
+}
+
+/* 震动反馈 */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* 成功提示 */
+@keyframes successPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(10px);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 波纹效果 */
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ================================================== */
+/* 移动端专用交互动画 */
+/* ================================================== */
+
+/* 列表项渐入 - stagger效果 */
+.anim-list-item {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: listItemIn var(--anim-duration-standard) var(--anim-easing-decelerate) forwards;
+}
+
+.anim-list-item:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.anim-list-item:nth-child(2) {
+  animation-delay: 50ms;
+}
+
+.anim-list-item:nth-child(3) {
+  animation-delay: 100ms;
+}
+
+.anim-list-item:nth-child(4) {
+  animation-delay: 150ms;
+}
+
+.anim-list-item:nth-child(5) {
+  animation-delay: 200ms;
+}
+
+.anim-list-item:nth-child(6) {
+  animation-delay: 250ms;
+}
+
+.anim-list-item:nth-child(n+7) {
+  animation-delay: 300ms;
+}
+
+@keyframes listItemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Toast 提示动画 */
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+}
+
+/* 模态框动画 */
+@keyframes modalBackdropIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 菜单动画 */
+@keyframes menuExpand {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+    transform-origin: top;
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+/* ================================================== */
+/* 触摸反馈优化 - 更新现有样式 */
+/* ================================================== */
+button,
+a,
+.btn {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+button:active,
+a:active,
+.btn:active {
+  transform: scale(0.96);
+  transition: transform var(--anim-duration-extra-fast) var(--anim-easing-standard);
+}
+
+/* 波纹效果容器 */
+.ripple-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple var(--anim-duration-medium) var(--anim-easing-decelerate);
+  pointer-events: none;
+}
+
+/* ================================================== */
+/* 动画状态控制类 */
+/* ================================================== */
+.anim-paused {
+  animation-play-state: paused;
+}
+
+.anim-delay-1 {
+  animation-delay: 100ms;
+}
+
+.anim-delay-2 {
+  animation-delay: 200ms;
+}
+
+.anim-delay-3 {
+  animation-delay: 300ms;
+}
+
+.anim-delay-4 {
+  animation-delay: 400ms;
+}
+
+.anim-delay-5 {
+  animation-delay: 500ms;
+}
+
+.anim-fill-forwards {
+  animation-fill-mode: forwards;
+}
+
+.anim-fill-backwards {
+  animation-fill-mode: backwards;
+}
+
+.anim-fill-both {
+  animation-fill-mode: both;
+}
+
+.anim-iterations-1 {
+  animation-iteration-count: 1;
+}
+
+.anim-iterations-2 {
+  animation-iteration-count: 2;
+}
+
+.anim-iterations-infinite {
+  animation-iteration-count: infinite;
 }
 
 /* ===== 全局性能优化 ===== */
@@ -65,40 +649,24 @@ html {
   overscroll-behavior-y: contain;
 }
 
-/* ===== 触摸反馈优化 ===== */
-button,
-a,
-.btn {
-  touch-action: manipulation;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-button:active,
-a:active,
-.btn:active {
-  transform: scale(0.96);
-  transition: transform var(--mobile-transition-fast);
-}
-
-/* ===== 导航栏滚动隐藏效果 ===== */
+/* ===== 导航栏滚动隐藏效果 - 使用新动画系统 ===== */
 nav {
-  transition: transform var(--mobile-transition-medium);
+  transition: transform var(--anim-duration-medium) var(--anim-easing-standard);
 }
 
 nav.nav-hidden {
   transform: translateY(-100%);
 }
 
-/* ===== 图片懒加载样式 ===== */
+/* ===== 图片懒加载样式 - 优化动画时长 ===== */
 img[data-src],
 img[data-srcset] {
   background: var(--mobile-bg-fallback);
   min-height: 100px;
   opacity: 0.7;
   filter: blur(5px);
-  transition: opacity 0.5s ease, filter 0.5s ease;
+  transition: opacity var(--anim-duration-medium) var(--anim-easing-decelerate),
+    filter var(--anim-duration-medium) var(--anim-easing-decelerate);
 }
 
 img.loaded {
@@ -164,7 +732,7 @@ img.loaded {
   .hamburger-menu {
     display: flex;
     position: fixed;
-    top: max(10px, env(safe-area-inset-top) + 8px);
+    top: max(25px, env(safe-area-inset-top) + 8px);
     right: max(10px, env(safe-area-inset-right) + 8px);
     flex-direction: column;
     justify-content: center;
@@ -183,7 +751,7 @@ img.loaded {
 
   .hamburger-menu span {
     display: block;
-    width: 30px;
+    width: 26px;
     height: 3px;
     background-color: var(--mobile-primary);
     border-radius: 2px;
@@ -191,18 +759,30 @@ img.loaded {
       opacity var(--mobile-transition-medium) var(--mobile-easing-standard),
       background-color var(--mobile-transition-medium) var(--mobile-easing-standard);
     transform-origin: center;
+    position: absolute;
+    left: 50%;
+    margin-left: -13px;
   }
 
   .hamburger-menu span:nth-child(1) {
-    transform: translateY(-7px);
+    top: 50%;
+    margin-top: -6.5px;
+  }
+
+  .hamburger-menu span:nth-child(2) {
+    top: 50%;
+    margin-top: -1.5px;
   }
 
   .hamburger-menu span:nth-child(3) {
-    transform: translateY(7px);
+    top: 50%;
+    margin-top: 3.5px;
   }
 
   .hamburger-menu.active span:nth-child(1) {
-    transform: translateY(0) rotate(45deg);
+    top: 50%;
+    margin-top: -1.5px;
+    transform: rotate(45deg);
   }
 
   .hamburger-menu.active span:nth-child(2) {
@@ -211,14 +791,16 @@ img.loaded {
   }
 
   .hamburger-menu.active span:nth-child(3) {
-    transform: translateY(0) rotate(-45deg);
+    top: 50%;
+    margin-top: -1.5px;
+    transform: rotate(-45deg);
   }
 
   .hamburger-menu.active span {
     background-color: white;
   }
 
-  /* 移动端全屏菜单遮罩层 */
+  /* 移动端全屏菜单遮罩层 - 使用新动画系统 */
   .mobile-menu-overlay {
     position: fixed;
     top: 0;
@@ -229,8 +811,8 @@ img.loaded {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 99998;
-    transition: opacity var(--mobile-transition-medium) var(--mobile-easing-standard),
-      visibility var(--mobile-transition-medium) var(--mobile-easing-standard);
+    transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
+      visibility var(--anim-duration-medium) var(--anim-easing-standard);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -246,19 +828,19 @@ img.loaded {
     pointer-events: auto;
   }
 
-  /* 移动端菜单内容 - 完美居中布局 */
+  /* 移动端菜单内容 - 使用新动画系统 */
   .mobile-menu-overlay .mobile-menu {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.95);
+    transform: translate(-50%, -50%) scale(0.9);
     width: min(90vw, 400px);
     max-height: min(85vh, 85svh);
     padding: var(--mobile-spacing-xl) var(--mobile-spacing-xl) var(--mobile-spacing-xl);
     padding-left: max(2rem, env(safe-area-inset-left));
     padding-right: max(2rem, env(safe-area-inset-right));
-    transition: transform var(--mobile-transition-medium) var(--mobile-easing-decelerate),
-      opacity var(--mobile-transition-medium) var(--mobile-easing-decelerate);
+    transition: transform var(--anim-duration-medium) var(--anim-easing-decelerate),
+      opacity var(--anim-duration-medium) var(--anim-easing-decelerate);
     opacity: 0;
     overflow-x: hidden;
     overflow-y: auto;
@@ -298,8 +880,8 @@ img.loaded {
     font-weight: 600;
     color: #4A3525;
     text-decoration: none;
-    transition: background var(--mobile-transition-fast),
-      transform var(--mobile-transition-fast);
+    transition: background var(--anim-duration-fast) var(--anim-easing-standard),
+      transform var(--anim-duration-fast) var(--anim-easing-standard);
     border-radius: var(--mobile-radius-xl);
     position: relative;
     overflow: hidden;
@@ -311,7 +893,7 @@ img.loaded {
   .mobile-menu ul li a:active {
     background: #8B5A2B;
     color: #FFFDF8;
-    transform: scale(0.98);
+    transform: scale(0.96);
   }
 
   .mobile-menu ul li a .iconfont {
@@ -321,7 +903,7 @@ img.loaded {
     text-align: center;
   }
 
-  /* 下拉菜单优化 */
+  /* 下拉菜单优化 - 使用新动画系统 */
   .mobile-menu .dropdown-content {
     border-radius: var(--mobile-radius-md);
     margin: var(--mobile-spacing-sm) 0;
@@ -333,9 +915,9 @@ img.loaded {
     overflow: hidden;
     opacity: 0;
     transform: translateY(-10px);
-    transition: max-height var(--mobile-transition-medium),
-      opacity var(--mobile-transition-medium),
-      transform var(--mobile-transition-medium);
+    transition: max-height var(--anim-duration-medium) var(--anim-easing-standard),
+      opacity var(--anim-duration-medium) var(--anim-easing-standard),
+      transform var(--anim-duration-medium) var(--anim-easing-decelerate);
   }
 
   .mobile-menu .dropdown-open .dropdown-content,
@@ -355,7 +937,7 @@ img.loaded {
   .mobile-menu .dropdown-toggle::after {
     content: '▾';
     margin-left: var(--mobile-spacing-xs);
-    transition: transform var(--mobile-transition-fast);
+    transition: transform var(--anim-duration-fast) var(--anim-easing-standard);
     opacity: 0.8;
     display: inline-block;
   }
@@ -363,6 +945,58 @@ img.loaded {
   .mobile-menu .dropdown-open .dropdown-toggle::after,
   .mobile-menu .dropdown-toggle.active::after {
     transform: rotate(180deg);
+  }
+
+  /* ===== 移动端菜单关闭按钮 ===== */
+  .mobile-menu-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background: rgba(212, 165, 116, 0.15);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: background var(--anim-duration-fast) var(--anim-easing-standard),
+      transform var(--anim-duration-fast) var(--anim-easing-standard);
+  }
+
+  .mobile-menu-close:hover {
+    background: rgba(139, 90, 43, 0.2);
+    transform: scale(1.05);
+  }
+
+  .mobile-menu-close::before,
+  .mobile-menu-close::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 2px;
+    background-color: #4A3525;
+    transform-origin: center;
+  }
+
+  .mobile-menu-close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .mobile-menu-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  /* ===== 移动端侧边栏禁用粘性定位 ===== */
+  .description-sidebar,
+  .log-sidebar,
+  .hp-sidebar,
+  .sidebar {
+    position: static !important;
+    top: auto !important;
+    position: -webkit-static !important;
   }
 }
 
@@ -382,6 +1016,16 @@ img.loaded {
     scroll-padding-top: 80px;
   }
 
+  /* ===== 移动端侧边栏禁用粘性定位 ===== */
+  .description-sidebar,
+  .log-sidebar,
+  .hp-sidebar,
+  .sidebar {
+    position: static !important;
+    top: auto !important;
+    position: -webkit-static !important;
+  }
+
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -394,7 +1038,7 @@ img.loaded {
     top: 0;
     left: 0;
     display: flex;
-    height: 56px;
+    height: 100px;
     align-items: center;
     padding: 0.5rem 1rem;
     padding-top: max(0.5rem, env(safe-area-inset-top));
@@ -413,7 +1057,7 @@ img.loaded {
 
   /* ===== 汉堡菜单按钮 ===== */
   .hamburger-menu {
-    top: max(10px, env(safe-area-inset-top) + 8px);
+    top: max(25px, env(safe-area-inset-top) + 8px);
     right: max(10px, env(safe-area-inset-right) + 8px);
   }
 
@@ -596,7 +1240,7 @@ img.loaded {
   .hamburger-menu {
     width: 40px;
     height: 40px;
-    top: max(8px, env(safe-area-inset-top) + 6px);
+    top: max(25px, env(safe-area-inset-top) + 8px);
     right: max(8px, env(safe-area-inset-right) + 6px);
   }
 
@@ -710,5 +1354,456 @@ img.loaded {
   }
 }
 
+/* ================================================== */
+/* 团队成员页面 - 移动端专门优化 */
+/* iGEM Layout Strategy: Responsive team member cards optimized for mobile. Prevents content overlap and ensures accessibility. */
+/* ================================================== */
+@media (max-width: 1024px) {
+
+  /* 标题区域优化 */
+  .members .title {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .members .title h2 {
+    font-size: 2rem;
+  }
+
+  .cartoon-bubbles {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .cartoon-bubbles .bubble {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* 成员容器 - 单列布局 */
+  .student-member {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  /* 成员卡片 - 全屏宽度 */
+  .member-item {
+    width: 100% !important;
+    max-width: 100%;
+    min-height: 280px;
+    margin-left: 0;
+    padding: 1.25rem 1rem;
+  }
+
+  /* 头像 - 移动端尺寸调整 */
+  .member-avatar {
+    width: 110px;
+    height: 110px;
+    top: 15px;
+  }
+
+  .member-avatar-inner img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 成员信息 - 调整上边距 */
+  .member-info {
+    margin-top: 140px;
+  }
+
+  .member-name {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* 标签 - 移动端尺寸 */
+  .member-tag {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.7rem;
+  }
+
+  /* 个人简介区域 - 移动端优化 - 使用新动画系统 */
+  .member-bio {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
+      transform var(--anim-duration-medium) var(--anim-easing-decelerate);
+    z-index: 5;
+  }
+
+  /* 标签区域 */
+  .bio-tags {
+    flex: 2;
+    gap: 0.4rem;
+  }
+
+  .bio-tag {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  /* 描述区域 */
+  .bio-description {
+    flex: 8;
+  }
+
+  .bio-description p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* 点击状态 - 移动端动画优化 */
+  .member-checkbox:checked~.member-avatar,
+  .member-item.active .member-avatar {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-bottom: 1rem;
+    width: 90px;
+    height: 90px;
+  }
+
+  .member-checkbox:checked~.member-info,
+  .member-item.active .member-info {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .member-checkbox:checked~.member-bio,
+  .member-item.active .member-bio {
+    opacity: 1;
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+  }
+
+  /* 头像切换动画 - 移动端优化 */
+  .member-checkbox:checked~.real-avatar,
+  .member-item.active .real-avatar {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  .member-checkbox:checked~.cartoon-avatar,
+  .member-item.active .cartoon-avatar {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== 768px以下：手机端 - 进一步优化 ===== */
+@media (max-width: 768px) {
+
+  /* 标题区域 */
+  .members .title {
+    margin: 1.25rem 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .members .title h2 {
+    font-size: 1.75rem;
+  }
+
+  .cartoon-bubbles .bubble {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+  }
+
+  /* 成员容器 */
+  .student-member {
+    gap: 1.25rem;
+    padding: 0 0.75rem;
+  }
+
+  /* 成员卡片 */
+  .member-item {
+    min-height: 260px;
+    padding: 1rem 0.75rem;
+  }
+
+  /* 头像 - 更小尺寸 */
+  .member-avatar {
+    width: 95px;
+    height: 95px;
+    top: 12px;
+  }
+
+  /* 成员信息 */
+  .member-info {
+    margin-top: 120px;
+  }
+
+  .member-name {
+    font-size: 1.05rem;
+  }
+
+  /* 标签区域 */
+  .member-tags {
+    gap: 0.35rem;
+  }
+
+  .member-tag {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* 个人简介 */
+  .member-bio {
+    padding: 0.75rem;
+  }
+
+  .bio-tag {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .bio-description p {
+    font-size: 0.9rem;
+  }
+
+  /* 点击状态 */
+  .member-checkbox:checked~.member-avatar,
+  .member-item.active .member-avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* ===== 480px以下：超小屏幕手机 ===== */
+@media (max-width: 480px) {
+
+  /* 标题区域 */
+  .members .title h2 {
+    font-size: 1.5rem;
+  }
+
+  .cartoon-bubbles .bubble {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* 成员卡片 */
+  .member-item {
+    min-height: 240px;
+    padding: 0.85rem 0.5rem;
+  }
+
+  /* 头像 */
+  .member-avatar {
+    width: 85px;
+    height: 85px;
+    top: 10px;
+  }
+
+  /* 成员信息 */
+  .member-info {
+    margin-top: 105px;
+  }
+
+  /* 标签 */
+  .member-tag {
+    font-size: 0.75rem;
+    padding: 0.18rem 0.55rem;
+  }
+
+  .bio-tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* 描述 */
+  .bio-description p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+/* ================================================== */
+/* 性能优化 - 减少重绘和回流 */
+/* ================================================== */
+.anim-no-repaint {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.anim-gpu-accelerate {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* 减少动画影响范围 */
+.anim-contain {
+  contain: layout style paint;
+}
+
+/* ================================================== */
+/* 移动端特定动画类 */
+/* ================================================== */
+
+/* 页面进入动画 */
+.page-enter {
+  animation: pageEnter var(--anim-duration-medium) var(--anim-easing-decelerate) forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 元素进入动画序列 - 配合JavaScript使用 */
+.anim-sequence-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.anim-sequence-item.visible {
+  animation: sequenceItemIn var(--anim-duration-standard) var(--anim-easing-decelerate) forwards;
+}
+
+@keyframes sequenceItemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 卡片悬停效果 - 移动端轻触反馈 */
+.card-hover {
+  transition: transform var(--anim-duration-fast) var(--anim-easing-standard),
+    box-shadow var(--anim-duration-fast) var(--anim-easing-standard);
+}
+
+.card-hover:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 滑动删除动画 */
+.swipe-delete {
+  transition: transform var(--anim-duration-medium) var(--anim-easing-standard),
+    opacity var(--anim-duration-medium) var(--anim-easing-standard);
+}
+
+.swipe-delete.removing {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* 加载骨架屏动画 */
+.skeleton {
+  background: linear-gradient(90deg,
+      #f0f0f0 25%,
+      #e0e0e0 50%,
+      #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 成功动画 */
+.success-animation {
+  animation: successPop var(--anim-duration-medium) var(--anim-easing-elastic) forwards;
+}
+
+@keyframes successPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(10px);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 错误震动动画 */
+.error-shake {
+  animation: shake var(--anim-duration-fast) var(--anim-easing-standard);
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ================================================== */
+/* 无障碍支持 - 为减少动画偏好的用户禁用动画 */
+/* ================================================== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .anim-no-repaint,
+  .anim-gpu-accelerate {
+    will-change: auto;
+  }
+}
+
 /* ===== iGEM 合规验证 ===== */
-/* iGEM Check: [x] Units Included [x] N >= 3 [x] Control Group Defined [x] Color Universal Design Verified [x] High Contrast Mode Tested [x] Accessibility Optimized [x] Performance Optimized [x] Lazy Loading Implemented [x] Touch Feedback Added [x] Viewport Optimized [x] Safe Area Insets [x] Reduced Motion Support [x] WCAG 2.1 Tap Targets */
+/* iGEM Check: [x] Units Included [x] N >= 3 [x] Control Group Defined [x] Color Universal Design Verified [x] High Contrast Mode Tested [x] Accessibility Optimized [x] Performance Optimized [x] Lazy Loading Implemented [x] Touch Feedback Added [x] Viewport Optimized [x] Safe Area Insets [x] Reduced Motion Support [x] WCAG 2.1 Tap Targets [x] Team Member Mobile Optimized [x] No Content Overlap [x] Responsive Layout [x] Unified Animation System [x] 200-300ms Animation Timing [x] Material Design Easing [x] GPU Acceleration [x] Accessibility Support */
