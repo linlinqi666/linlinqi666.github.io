@@ -947,48 +947,6 @@ img.loaded {
     transform: rotate(180deg);
   }
 
-  /* ===== 移动端菜单关闭按钮 ===== */
-  .mobile-menu-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border: none;
-    background: rgba(212, 165, 116, 0.15);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10;
-    transition: background var(--anim-duration-fast) var(--anim-easing-standard),
-      transform var(--anim-duration-fast) var(--anim-easing-standard);
-  }
-
-  .mobile-menu-close:hover {
-    background: rgba(139, 90, 43, 0.2);
-    transform: scale(1.05);
-  }
-
-  .mobile-menu-close::before,
-  .mobile-menu-close::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 18px;
-    height: 2px;
-    background-color: #4A3525;
-    transform-origin: center;
-  }
-
-  .mobile-menu-close::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  .mobile-menu-close::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-
   /* ===== 移动端侧边栏禁用粘性定位 ===== */
   .description-sidebar,
   .log-sidebar,
@@ -1428,20 +1386,21 @@ img.loaded {
     padding: 0.25rem 0.7rem;
   }
 
-  /* 个人简介区域 - 移动端优化 - 使用新动画系统 */
+  /* 个人简介区域 - 移动端优化 - 从下方滑入 */
   .member-bio {
     position: absolute;
     width: 100%;
     height: 100%;
     right: 0;
-    top: 0;
+    top: 100%;
+    /* 初始位置在视口下方 */
     opacity: 0;
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
-      transform var(--anim-duration-medium) var(--anim-easing-decelerate);
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5;
+    visibility: hidden;
   }
 
   /* 标签区域 */
@@ -1465,16 +1424,19 @@ img.loaded {
     line-height: 1.5;
   }
 
-  /* 点击状态 - 移动端动画优化 */
+  /* 点击状态 - 移动端保持固定位置，使用视觉反馈 */
   .member-checkbox:checked~.member-avatar,
   .member-item.active .member-avatar {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    transform: none !important;
-    margin-bottom: 1rem;
-    width: 90px;
-    height: 90px;
+    /* 保持原始位置和尺寸 */
+    position: absolute !important;
+    top: 15px !important;
+    left: 50% !important;
+    width: 110px;
+    height: 110px;
+    /* 视觉反馈：缩放 + 边框高亮 + 淡出 */
+    box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(-50%) scale(1.05) !important;
+    opacity: 0;
   }
 
   .member-checkbox:checked~.member-info,
@@ -1487,10 +1449,13 @@ img.loaded {
   .member-checkbox:checked~.member-bio,
   .member-item.active .member-bio {
     opacity: 1;
-    position: relative;
+    top: 0;
+    /* 从下方滑入到正常位置 */
+    position: absolute;
     width: 100%;
-    height: auto;
+    height: 100%;
     min-height: 200px;
+    visibility: visible;
   }
 
   /* 头像切换动画 - 移动端优化 */
@@ -1578,11 +1543,19 @@ img.loaded {
     font-size: 0.9rem;
   }
 
-  /* 点击状态 */
+  /* 点击状态 - 小屏幕保持固定位置 */
   .member-checkbox:checked~.member-avatar,
   .member-item.active .member-avatar {
-    width: 80px;
-    height: 80px;
+    /* 保持原始位置和尺寸 */
+    position: absolute !important;
+    top: 12px !important;
+    left: 50% !important;
+    width: 95px;
+    height: 95px;
+    /* 视觉反馈：缩放 + 边框高亮 + 淡出 */
+    box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(-50%) scale(1.05) !important;
+    opacity: 0;
   }
 }
 
@@ -1632,6 +1605,21 @@ img.loaded {
   .bio-description p {
     font-size: 0.85rem;
     line-height: 1.4;
+  }
+
+  /* 点击状态 - 超小屏幕保持固定位置 */
+  .member-checkbox:checked~.member-avatar,
+  .member-item.active .member-avatar {
+    /* 保持原始位置和尺寸 */
+    position: absolute !important;
+    top: 10px !important;
+    left: 50% !important;
+    width: 85px;
+    height: 85px;
+    /* 视觉反馈：缩放 + 边框高亮 + 淡出 */
+    box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(-50%) scale(1.05) !important;
+    opacity: 0;
   }
 }
 
