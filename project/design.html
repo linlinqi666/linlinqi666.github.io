@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="../static/css/navigation/navigation.css">
   <link rel="stylesheet" href="../static/css/index.css">
   <link rel="stylesheet" href="../static/css/mobile.css">
-  <link rel="stylesheet" href="../static/css/description.css">
+  <link rel="stylesheet" href="../static/css/design.css">
+  <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
+  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
 </head>
 
 <body>
@@ -432,15 +434,6 @@
           </div>
           <div class="progress-title">Progress</div>
         </div>
-
-        <!-- 最后更新 -->
-        <div class="last-updated">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-          <span>Last Updated: 2026.05.13</span>
-        </div>
       </aside>
 
       <!-- Right Content Area -->
@@ -633,8 +626,8 @@
           <div class="footer-scroller">
             <div class="image-scroller">
               <div class="scroller-track">
-                <img src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
-                <img src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
               </div>
             </div>
           </div>
@@ -743,6 +736,13 @@
 
   <script src="../static/js/sidebar-progress.js"></script>
   <script src="../static/js/mobile-menu.js"></script>
+  <script src="../static/js/page-progress-bar.js"></script>
+  <script src="../static/js/scroll-progress-bar.js"></script>
+  <script src="../static/js/nav-scroll-behavior.js"></script>
+  <script>
+    // 页面加载进度条
+    new PageProgressBar().startAutoProgress();
+  </script>
 </body>
 
 </html>

@@ -107,7 +107,12 @@ nav {
   background-size: cover;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: all var(--duration-slow) var(--ease-smooth);
+  transition: height var(--duration-slow) var(--ease-smooth),
+    box-shadow var(--duration-slow) var(--ease-smooth),
+    backdrop-filter var(--duration-slow) var(--ease-smooth),
+    -webkit-backdrop-filter var(--duration-slow) var(--ease-smooth),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -116,6 +121,11 @@ nav.scrolled {
   box-shadow: 0 8px 32px rgba(74, 144, 255, 0.35);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+}
+
+/* 智能导航栏滚动隐藏效果 */
+nav.nav-hidden {
+  transform: translateY(-100%);
 }
 
 nav .nav-items {
@@ -221,9 +231,9 @@ nav ul li a {
 
 nav ul li a:hover,
 .dropdown-content a:hover {
-  font-weight: 600;
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
+  text-shadow: 0 0 1px currentColor;
 }
 
 nav ul li a::after {
@@ -593,7 +603,7 @@ nav ul li:hover .dropdown-content {
 .igem-sidebar-badge {
   display: inline-block;
   padding: 0.4rem 1rem;
-  background: linear-gradient(135deg, var(--igem-sidebar-color-primary) 0%, var(--igem-sidebar-color-accent) 100%);
+  background: linear-gradient(135deg, var(--igem-sidebar-color-primary-light) 0%, var(--igem-sidebar-color-accent) 100%);
   border-radius: var(--igem-sidebar-radius-pill);
   font-size: var(--igem-sidebar-font-xs);
   color: white;
@@ -678,6 +688,9 @@ nav ul li:hover .dropdown-content {
   background: var(--igem-sidebar-bg-active);
   color: var(--igem-sidebar-color-primary);
   font-weight: var(--igem-sidebar-font-weight-bold);
+  /* iGEM Layout Strategy: 补偿 font-weight 变化导致的宽度偏移 */
+  text-shadow: 0.5px 0 0 currentColor;
+  letter-spacing: -0.01em;
 }
 
 .igem-sidebar-main-link.active::before {
@@ -773,7 +786,6 @@ nav ul li:hover .dropdown-content {
 .igem-sidebar-level3>a:hover {
   background: var(--igem-sidebar-bg-hover);
   color: var(--igem-sidebar-color-primary-dark);
-  padding-left: 1.6rem;
 }
 
 .igem-sidebar-level3>a:hover::before {
@@ -785,6 +797,9 @@ nav ul li:hover .dropdown-content {
   background: rgba(139, 90, 43, 0.08);
   color: var(--igem-sidebar-color-primary-dark);
   font-weight: var(--igem-sidebar-font-weight-medium);
+  /* iGEM Layout Strategy: 补偿 font-weight 变化导致的宽度偏移 */
+  text-shadow: 0.5px 0 0 currentColor;
+  letter-spacing: -0.01em;
 }
 
 .igem-sidebar-level3>a.active::before {
@@ -959,6 +974,49 @@ nav ul li:hover .dropdown-content {
     transform: translateY(-60px) scale(0.3);
     opacity: 0;
   }
+}
+
+/* ===== 进度百分比文字 ===== */
+.igem-flask-progress-text {
+  margin-top: var(--igem-sidebar-spacing-sm);
+  text-align: center;
+}
+
+.igem-progress-percentage {
+  font-size: 1.25rem;
+  font-weight: var(--igem-sidebar-font-weight-bold);
+  color: var(--igem-sidebar-color-primary);
+  background: linear-gradient(135deg, var(--igem-sidebar-color-primary) 0%, var(--igem-sidebar-color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== 最后更新 ===== */
+.igem-sidebar-updated {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--igem-sidebar-spacing-sm);
+  padding: var(--igem-sidebar-spacing-sm);
+  background: rgba(139, 90, 43, 0.05);
+  border-radius: var(--igem-sidebar-radius-xs);
+  margin-top: var(--igem-sidebar-spacing-lg);
+}
+
+.igem-sidebar-updated svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--igem-sidebar-color-primary);
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.igem-sidebar-updated span {
+  font-size: var(--igem-sidebar-font-xs);
+  color: var(--igem-sidebar-color-primary-dark);
+  opacity: 0.8;
 }
 
 /* ===== 响应式设计 ===== */
@@ -1233,6 +1291,9 @@ nav ul li:hover .dropdown-content {
   background: var(--desc-bg-card-active, rgba(139, 90, 43, 0.12));
   color: var(--desc-color-primary-dark, #5D4E37);
   font-weight: 600;
+  /* iGEM Layout Strategy: 使用 text-shadow 补偿 font-weight 变化导致的宽度偏移 */
+  text-shadow: 0.5px 0 0 currentColor;
+  letter-spacing: -0.01em;
 }
 
 .nav-main-link.active::before {

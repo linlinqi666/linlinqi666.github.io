@@ -26,7 +26,17 @@
     navHighlightOffset: 150, // 导航高亮偏移量(px)，标题离视口顶部该距离时开始高亮
     debugMode: false,
     enableValidation: true,
-    validateOnLoad: true
+    validateOnLoad: true,
+    // 可导航内容的 ID 前缀列表，用于匹配滚动区域
+    // 添加新页面章节时，在此数组中追加对应前缀即可
+    sectionIdPrefixes: [
+      'section-', 'module-', 'the-', 'chassis-', 'chassis',
+      'gene-', 'nanobody-', 'fusion-', 'fusion-gpa', 'fusion-pager',
+      'pager-', 'gpcr-', 'g-protein-', 'dual-', 'sensing-',
+      'display-', 'virus-', 'overview', 'sensing-system',
+      'signal-transduction', 'reporter-system', 'reporter',
+      'surface-display', 'proof-of-concept'
+    ]
   };
 
   // ============================================
@@ -243,7 +253,8 @@
   // ============================================
   const NavigationHighlighter = {
     findCurrentSection: function (scrollTop) {
-      const allSections = document.querySelectorAll('[id^="section-"], [id^="module-"], [id^="the-"], [id^="chassis-"], [id^="chassis"], [id^="gene-"], [id^="nanobody-"], [id^="fusion-"], [id^="fusion-gpa"], [id^="fusion-pager"], [id^="pager-"], [id^="gpcr-"], [id^="g-protein-"], [id^="dual-"], [id^="sensing-"], [id^="display-"], [id^="virus-"], [id^="overview"], [id^="sensing-system"], [id^="signal-transduction"], [id^="reporter-system"], [id^="reporter"], [id^="surface-display"], [id^="proof-of-concept"]');
+      const selector = CONFIG.sectionIdPrefixes.map(function (p) { return '[id^="' + p + '"]'; }).join(', ');
+      const allSections = document.querySelectorAll(selector);
       let currentSection = '';
       const offset = CONFIG.navHighlightOffset;
 

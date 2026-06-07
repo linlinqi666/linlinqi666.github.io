@@ -884,12 +884,11 @@ body.home-page {
 
 /* 滚动图片区域 */
 .footer-scroller {
-  width: 50%;
+  width: 60%;
   position: relative;
   background: #ffffff;
   border-radius: var(--radius-md);
-  padding: var(--spacing-3xl);
-  overflow: hidden;
+  padding: var(--spacing-5xl);
   border: 1px solid var(--bg-footer-border);
 }
 
@@ -903,6 +902,10 @@ body.home-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.footer-contact a {
+  text-decoration: none;
 }
 
 .footer-contact h4 {
@@ -1046,8 +1049,11 @@ body.home-page {
 .scroller-track {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-4xl);
   flex-shrink: 0;
+  min-width: 600px;
+  min-height: 120px;
 }
 
 .scroll-image {
@@ -1061,7 +1067,7 @@ body.home-page {
 }
 
 .scroll-image:hover {
-  transform: scale(1.15);
+  transform: scale(1.1);
   opacity: 1;
 }
 
@@ -1303,5 +1309,84 @@ body.home-page {
 
   .bc1.join {
     width: 120px;
+  }
+}
+
+/* ================================================== */
+/* 微信二维码悬浮样式 */
+/* ================================================== */
+
+/* 微信二维码容器 */
+.wechat-qr-wrapper {
+  overflow: visible;
+}
+
+/* 隐藏默认的 tooltip，只对微信图标生效 */
+.wechat-qr-wrapper::before,
+.wechat-qr-wrapper::after {
+  display: none;
+}
+
+/* 二维码容器 */
+.wechat-qr-container {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(0) scale(0.8);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  margin-bottom: 16px;
+}
+
+/* 悬浮时显示二维码 */
+.wechat-qr-wrapper:hover .wechat-qr-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px) scale(1);
+}
+
+/* 二维码箭头 */
+.wechat-qr-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #ffffff;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  z-index: 2;
+}
+
+/* 二维码图片样式 */
+.wechat-qr-image {
+  width: 180px;
+  height: 180px;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 4px solid #ffffff;
+  background-color: #ffffff;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* 悬浮时图片有个轻微的放大效果 */
+.wechat-qr-wrapper:hover .wechat-qr-image {
+  transform: scale(1.02);
+}
+
+/* 响应式设计 - 在小屏幕上调整二维码大小 */
+@media (max-width: 768px) {
+  .wechat-qr-image {
+    width: 140px;
+    height: 140px;
   }
 }

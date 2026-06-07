@@ -1,0 +1,150 @@
+/* ================================================== */
+/* 页面加载进度条组件 - Page Loading Progress Bar     */
+/* 重构版：顶部水平进度条，加载完成后自动隐藏          */
+/* ================================================== */
+
+/* ===== 进度条容器 ===== */
+#page-progress-bar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  z-index: 100001 !important;
+  pointer-events: none !important;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#page-progress-bar.is-visible {
+  opacity: 1;
+}
+
+#page-progress-bar.is-completed {
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
+}
+
+/* ===== 轨道 ===== */
+#page-progress-bar .ppb-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(74, 144, 226, 0.08);
+  overflow: hidden;
+}
+
+/* ===== 填充条 ===== */
+#page-progress-bar .ppb-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,
+    #4a90e2 0%,
+    #6BA8E8 40%,
+    #D4A574 70%,
+    #8B5A2B 100%);
+  transition: width 0.35s ease;
+  will-change: width;
+}
+
+/* ===== 光泽动画 ===== */
+#page-progress-bar .ppb-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%);
+  transform: translateX(-100%);
+}
+
+#page-progress-bar.is-loading .ppb-fill::after {
+  animation: ppb-shimmer 1.8s infinite;
+}
+
+@keyframes ppb-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ===== 发光效果 ===== */
+#page-progress-bar .ppb-glow {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  right: -4px;
+  width: 20px;
+  background: rgba(74, 144, 226, 0.35);
+  border-radius: 50%;
+  filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#page-progress-bar.is-loading .ppb-glow {
+  opacity: 1;
+}
+
+/* ===== 百分比标签 ===== */
+#page-progress-bar .ppb-label {
+  position: fixed !important;
+  z-index: 100002 !important;
+  top: 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-family: Arial, sans-serif !important;
+  color: #4a90e2 !important;
+  padding: 3px 6px !important;
+  border-radius: 3px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+  pointer-events: none !important;
+  opacity: 0;
+  transition: opacity 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+#page-progress-bar.is-loading .ppb-label {
+  opacity: 1;
+}
+
+/* ===== 完成脉冲 ===== */
+#page-progress-bar .ppb-fill--pulse {
+  animation: ppb-pulse 0.6s ease-out;
+}
+
+@keyframes ppb-pulse {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.4); }
+  100% { filter: brightness(1); }
+}
+
+/* ===== 减少动画 ===== */
+@media (prefers-reduced-motion: reduce) {
+  #page-progress-bar .ppb-fill,
+  #page-progress-bar .ppb-glow,
+  #page-progress-bar .ppb-label {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  #page-progress-bar {
+    height: 3px !important;
+  }
+  #page-progress-bar .ppb-label {
+    font-size: 10px !important;
+    padding: 2px 5px !important;
+  }
+}
