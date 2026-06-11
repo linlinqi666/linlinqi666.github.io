@@ -374,6 +374,7 @@
     <div class="log-content">
       <!-- 日志列表 -->
       <div class="log-timeline">
+        <!-- 要收起就添加collapsed类 -->
         <!-- 湿实验组日志 -->
         <section id="wet-lab" class="log-section collapsible-section collapsed">
           <!-- 大标题的标签 -->
@@ -688,7 +689,8 @@
         </section>
 
         <!-- 干实验组日志 -->
-        <section id="dry-lab" class="log-section collapsible-section collapsed">
+        <section id="dry-lab" class="log-section collapsible-section">
+
           <!-- 大标题的标签 -->
           <div class="section-header">
             <h2 class="section-title">
@@ -703,36 +705,56 @@
           </div>
           <div class="section-content">
             <!-- 日志卡片 -->
-            <article class="log-card">
+            <article class="log-card has-images">
               <div class="log-date">
                 <!-- 开始日期 -->
                 <div class="date-start">
-                  <div class="date-day"></div>
-                  <div class="date-month"></div>
+                  <div class="date-day">21</div>
+                  <div class="date-month">May</div>
                 </div>
                 <!-- 分隔符 -->
                 <div class="date-divider">~</div>
                 <!-- 结束日期 -->
                 <div class="date-end">
-                  <div class="date-day"></div>
-                  <div class="date-month"></div>
+                  <div class="date-day">3</div>
+                  <div class="date-month">June</div>
                 </div>
               </div>
               <div class="log-body">
                 <div class="log-header">
                   <!-- 每个的小标题 -->
-                  <h3></h3>
-
+                  <h3>Preliminary Mathematical Modelling and Pending Validation</h3>
+                  <button class="image-toggle" aria-label="展开图片">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M3 10l7-7 7 7M3 10h14" stroke-linecap="round" />
+                    </svg>
+                  </button>
                 </div>
                 <!-- 内容填写区域 -->
-                <p></p>
+                <p>Over the past two weeks, I gained a foundational understanding of mathematical modelling. Based on
+                  the relevant literature, I have developed a relatively basic and versatile model. However, this model
+                  is still awaiting validation and further optimisation once the experimental results are available.</p>
+
+                <!-- 图片展示区域 -->
+                <div class="log-images">
+                  <div class="image-grid">
+                    <div class="image-item">
+                      <img loading="lazy" src="../static/image/team-photo/Dry Lab/mm1.png"
+                        alt="PI meeting with wet lab team members discussing experimental documentation">
+                    </div>
+                    <div class="image-item">
+                      <img loading="lazy" src="../static/image/team-photo/Dry Lab/mm2.png"
+                        alt="Team discussion on experimental planning and next steps">
+                    </div>
+                  </div>
+                </div>
               </div>
             </article>
           </div>
         </section>
 
         <!-- 人类实践日志 -->
-        <section id="human-practices" class="log-section collapsible-section collapsed">
+        <section id="human-practices" class="log-section collapsible-section">
           <!-- 大标题的标签 -->
           <div class="section-header">
             <h2 class="section-title">
@@ -947,7 +969,7 @@
         </section>
 
         <!-- Wiki日志 -->
-        <section id="wiki" class="log-section collapsible-section collapsed">
+        <section id="wiki" class="log-section collapsible-section">
           <!-- 大标题的标签 -->
           <div class="section-header">
             <h2 class="section-title">
@@ -1220,61 +1242,71 @@
               </div>
             </article>
 
-            <article class="log-card has-images">
+            <article class="log-card">
               <div class="log-date">
                 <!-- 开始日期 -->
                 <div class="date-start">
-                  <div class="date-day">6</div>
+                  <div class="date-day">30</div>
                   <div class="date-month">May</div>
                 </div>
                 <!-- 分隔符 -->
                 <div class="date-divider">~</div>
                 <!-- 结束日期 -->
                 <div class="date-end">
-                  <div class="date-day">12</div>
-                  <div class="date-month">May</div>
+                  <div class="date-day">10</div>
+                  <div class="date-month">June</div>
                 </div>
               </div>
               <div class="log-body">
                 <div class="log-header">
                   <!-- 每个的小标题 -->
-                  <h3>Wiki Mobile Adaptation for Exchange Meeting</h3>
-
-                  <button class="image-toggle" aria-label="展开图片">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-                      <path d="M3 10l7-7 7 7M3 10h14" stroke-linecap="round" />
-                    </svg>
-                  </button>
+                  <h3>Major error discovery</h3>
                 </div>
                 <!-- 内容填写区域 -->
-                <p>As the upcoming exchange meeting approaches, I realize the urgent need to establish a mobile-friendly
-                  version of our wiki webpage for more convenient mobile browsing. For this reason, I have completed
-                  modifications and adjustments and open-sourced my code to ensure that the webpage is fully optimized
-                  and seamlessly mobile</p>
-                <!-- 图片展示区域 -->
-                <div class="log-images">
-                  <div class="image-grid">
-                    <div class="image-item">
-                      <img loading="lazy" src="../static/image/team-photo/wiki/w6-1.jpg"
-                        alt="New log page for team work recording">
-                    </div>
-                    <div class="image-item">
-                      <img loading="lazy" src="../static/image/team-photo/wiki/w6-2.jpg"
-                        alt="Redesigned Team Members page layout">
-                    </div>
-                    <div class="image-item">
-                      <img loading="lazy" src="../static/image/team-photo/wiki/w6-3.png"
-                        alt="Redesigned Team Members page layout">
-                    </div>
-                  </div>
+                <p>Recently, I uncovered a major flaw on our Wiki homepage. We previously used a background image
+                  approach, which unfortunately caused severe compatibility issues during mobile optimization. This
+                  setback has dealt a significant blow to our original Wiki design strategy.
+
+                  Consequently, we are shifting to a brand-new design concept for the Wiki homepage and have thoroughly
+                  optimized our mobile responsiveness. During this process, I developed several key JavaScript files to
+                  elevate the user experience. These include a smart navigation bar that automatically collapses as
+                  users scroll down, as well as web-loading and page-reading progress bars. As a result, the layout,
+                  typography, and interactive details across most pages are now significantly cleaner, sleeker, and more
+                  cohesive.</p>
+              </div>
+            </article>
+
+            <article class="log-card">
+              <div class="log-date">
+                <!-- 开始日期 -->
+                <div class="date-start">
+                  <div class="date-day">30</div>
+                  <div class="date-month">May</div>
                 </div>
+                <!-- 分隔符 -->
+                <div class="date-divider">~</div>
+                <!-- 结束日期 -->
+                <div class="date-end">
+                  <div class="date-day">10</div>
+                  <div class="date-month">June</div>
+                </div>
+              </div>
+              <div class="log-body">
+                <div class="log-header">
+                  <!-- 每个的小标题 -->
+                  <h3>JS file</h3>
+                </div>
+                <!-- 内容填写区域 -->
+                <p>During this period, I primarily focused on developing several JavaScript files to enhance the wiki
+                  user experience. Key improvements include a smart navigation bar that automatically collapses as users
+                  scroll down, alongside the integration of loading and page-reading progress bars.</p>
               </div>
             </article>
           </div>
         </section>
 
         <!-- 团队管理日志 -->
-        <section id="team-management" class="log-section collapsible-section collapsed">
+        <section id="team-management" class="log-section collapsible-section">
           <!-- 大标题的标签 -->
           <div class="section-header">
             <h2 class="section-title">
@@ -1307,7 +1339,7 @@
               <div class="log-body">
                 <div class="log-header">
                   <!-- 每个的小标题 -->
-                  <h3>Team Building</h3>
+                  <h3>EchoYeastTeam Building!</h3>
 
                 </div>
                 <!-- 内容填写区域 -->
@@ -1590,6 +1622,54 @@
                 </div>
               </div>
             </article>
+
+            <article class="log-card has-images">
+              <div class="log-date">
+                <!-- 日期 -->
+                <div class="date-day">29</div>
+                <div class="date-month">April</div>
+              </div>
+              <div class="log-body">
+                <div class="log-header">
+                  <!-- 每个的小标题 -->
+                  <h3>PPT Revision Specification, Wiki Benchmarking & Promotional Material Confirmation</h3>
+
+                  <!-- 图片展开按钮 -->
+                  <button class="image-toggle" aria-label="展开图片">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M3 10l7-7 7 7M3 10h14" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <!-- 内容填写区域 -->
+                <p>During the meeting, we presented and explained the PPT on our experimental direction, and confirmed
+                  the revision plan for the South China Exchange Meeting PPT. We set clear revision requirements:
+                  prioritise visual images with concise keyword-only text, clarify the logical thread of our
+                  experiments, highlight the core PAGER module, avoid excessive professional content, and insert
+                  detailed experimental protocols via hyperlinks. We also studied outstanding entries from previous iGEM
+                  competitions, and finalised the direction for content supplementation and optimisation of our Wiki. In
+                  addition, we discussed promotional materials for the South China Exchange Meeting, and confirmed the
+                  core merchandise categories including badges, blind bags, and stamps.
+                </p>
+                <!-- 图片展示区域 -->
+                <div class="log-images">
+                  <div class="image-grid">
+                    <div class="image-item">
+                      <img loading="lazy" src="../static/image/team-photo/w6/1.jpg"
+                        alt="iGEM 5th team meeting discussing experimental progress">
+                    </div>
+                    <div class="image-item">
+                      <img loading="lazy" src="../static/image/team-photo/w6/4.jpg"
+                        alt="Multi-group coordination and advisor guidance session">
+                    </div>
+                    <div class="image-item">
+                      <img loading="lazy" src="../static/image/team-photo/w6/7.jpg"
+                        alt="Multi-group coordination and advisor guidance session">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
         </section>
       </div>
@@ -1606,8 +1686,12 @@
           <div class="footer-scroller">
             <div class="image-scroller">
               <div class="scroller-track">
-                <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
-                <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                <a href="https://www.szpu.edu.cn/" target="_blank">
+                  <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                </a>
+                <a href="https://fd.szpu.edu.cn/" target="_blank">
+                  <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                </a>
               </div>
             </div>
           </div>
@@ -1615,18 +1699,20 @@
           <div class="footer-contact">
             <h4>Contact Us:</h4>
             <div class="contact-icons">
-              <div class="contact-icon-wrapper" data-tooltip="Phone: +86 xxx xxxx xxxx">
-                <span class="iconfont icon-dianhua"></span>
-              </div>
-              <div class="contact-icon-wrapper" data-tooltip="Email: szpu@igem.org">
+              <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
                 <span class="iconfont icon-youxiang"></span>
               </div>
-              <div class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <a href="https://space.bilibili.com/3706970825558875?spm_id_from=333.1387" target="_blank"
+                class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
                 <span class="iconfont icon-bilibili-fill"></span>
-              </div>
-              <div class="contact-icon-wrapper" data-tooltip="WeChat: SZPU-2026">
+              </a>
+              <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
                 <span class="iconfont icon-weixin"></span>
-              </div>
+                <div class="wechat-qr-container">
+                  <div class="wechat-qr-arrow"></div>
+                  <img src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
+                </div>
+              </a>
             </div>
           </div>
         </div>
