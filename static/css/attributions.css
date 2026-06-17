@@ -291,6 +291,10 @@ body {
   background: linear-gradient(135deg, #7c3aed, #5b21b6);
 }
 
+.avatar-adviser {
+  background: linear-gradient(135deg, #b48c46, #8b5a2b);
+}
+
 .member-info {
   flex: 1;
   min-width: 0;
@@ -353,6 +357,11 @@ body {
   color: #5b21b6;
 }
 
+.badge-adviser {
+  background: rgba(180, 140, 70, 0.2);
+  color: #8b5a2b;
+}
+
 .member-affiliation {
   font-size: 0.85rem;
   color: var(--color-text-light);
@@ -386,6 +395,7 @@ body {
 
 .task-tag {
   display: inline-block;
+  position: relative;
   padding: 4px 12px;
   background: var(--bg-card);
   border: 1px solid var(--border-color-light);
@@ -393,6 +403,157 @@ body {
   font-size: 0.8rem;
   color: var(--color-text);
   line-height: 1.4;
+  letter-spacing: 0.01em;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+  transition:
+    background 200ms var(--ease-default),
+    border-color 200ms var(--ease-default),
+    color 200ms var(--ease-default),
+    box-shadow 240ms var(--ease-default),
+    transform 240ms var(--ease-default);
+  will-change: transform, box-shadow;
+}
+
+/* 有详情内容的 tag：标记为可悬停，添加暗示性微下划线 */
+.task-tag[data-detail]:not([data-detail=""]):not(:empty) {
+  cursor: help;
+  border-bottom-color: var(--color-brown-light);
+  border-bottom-width: 1.5px;
+}
+
+/* 悬停态：轻浮起 + 柔阴影 + 棕色主题色 */
+.task-tag[data-detail]:not([data-detail=""]):not(:empty):hover,
+.task-tag[data-detail]:not([data-detail=""]):not(:empty):focus-visible {
+  background: linear-gradient(180deg,
+      rgba(139, 90, 43, 0.05) 0%,
+      rgba(139, 90, 43, 0.12) 100%);
+  border-color: var(--color-brown);
+  color: var(--color-brown-dark);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 2px 8px rgba(139, 90, 43, 0.12),
+    0 1px 3px rgba(139, 90, 43, 0.08);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+/* 按下瞬间反馈（鼠标点击或键盘激活） */
+.task-tag[data-detail]:not([data-detail=""]):not(:empty):active {
+  transform: translateY(0);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 1px 2px rgba(139, 90, 43, 0.08);
+}
+
+/* 键盘 focus 状态：增加可见的环状高亮 */
+.task-tag:focus-visible {
+  outline: 2px solid var(--color-brown);
+  outline-offset: 2px;
+}
+
+/* ================================================== */
+/* Tooltip — Task Tag Hover Detail Box                */
+/* ================================================== */
+
+.task-tooltip {
+  position: fixed;
+  z-index: 9999;
+  max-width: 320px;
+  min-width: 160px;
+  padding: 12px 16px;
+  background:
+    linear-gradient(180deg, #3a342e 0%, #2c2620 100%);
+  color: #f5efe4;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 90, 43, 0.35);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 10px 24px rgba(20, 16, 12, 0.28),
+    0 4px 10px rgba(20, 16, 12, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  opacity: 0;
+  transform: translateY(6px) scale(0.97);
+  pointer-events: auto;
+  transform-origin: center top;
+  transition:
+    opacity 200ms cubic-bezier(0.2, 0.7, 0.3, 1),
+    transform 240ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  will-change: opacity, transform;
+}
+
+/* 展开时的浮起效果 */
+.task-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Tooltip 内部文字优化：首行微加粗 + 更柔和的字色 */
+.task-tooltip {
+  color: #f5efe4;
+}
+
+/* Tooltip arrow (triangle) — points toward the hovered tag */
+.task-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
+}
+
+/* Arrow pointing DOWN (tooltip is ABOVE the tag) */
+.task-tooltip[data-placement="top"]::after {
+  bottom: -6px;
+  border-top: 6px solid #2c2620;
+}
+
+/* Arrow pointing UP (tooltip is BELOW the tag) */
+.task-tooltip[data-placement="bottom"]::after {
+  top: -6px;
+  border-bottom: 6px solid #3a342e;
+}
+
+/* Edge-case fine-tuning — when tooltip is near viewport edges */
+.task-tooltip[data-placement="top"][data-edge="left"]::after,
+.task-tooltip[data-placement="bottom"][data-edge="left"]::after {
+  left: 18px;
+  transform: none;
+}
+
+.task-tooltip[data-placement="top"][data-edge="right"]::after,
+.task-tooltip[data-placement="bottom"][data-edge="right"]::after {
+  left: auto;
+  right: 18px;
+  transform: none;
+}
+
+/* Tooltip 边缘位置放置动画微调 */
+.task-tooltip[data-placement="top"] {
+  transform-origin: center bottom;
+}
+
+/* 鼠标悬停在 tooltip 本体时保持显示状态（更明显的高亮） */
+.task-tooltip:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 12px 28px rgba(20, 16, 12, 0.32),
+    0 5px 14px rgba(20, 16, 12, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .specific-tasks-section {
@@ -457,166 +618,166 @@ body {
   box-shadow: 0 2px 8px rgba(139, 90, 43, 0.3);
 }
 
+/* ========================================================= */
+/* External Contributions — 紧凑三列卡片网格（无头像样式）   */
+/* ========================================================= */
+
 .external-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
 .external-card {
   background: var(--bg-card);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-2xl);
+  border-radius: 8px;
+  padding: 18px;
   border: 1px solid var(--border-color-light);
-  transition: all var(--duration-normal) var(--ease-default);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition:
+    transform 200ms var(--ease-default),
+    box-shadow 240ms var(--ease-default),
+    border-color 200ms var(--ease-default);
 }
 
 .external-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(139, 90, 43, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(139, 90, 43, 0.1),
+    0 1px 3px rgba(139, 90, 43, 0.05);
   border-color: var(--color-brown-light);
 }
 
-.external-header {
-  display: flex;
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
-  align-items: flex-start;
-}
-
-.external-icon-block {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-md);
-  flex-shrink: 0;
-  background: linear-gradient(135deg, var(--color-brown-light), var(--color-brown));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-white);
-  font-size: 1.8rem;
-}
-
-.external-icon-block .iconfont {
-  font-size: 1.8rem;
-  color: var(--color-white);
-}
-
+/* 顶部标题区（姓名 + 元信息） */
 .external-title-area {
-  flex: 1;
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color-light);
 }
 
 .external-name {
-  font-size: 1.2rem;
+  font-size: 0.95rem;
   color: var(--color-brown-dark);
-  margin: 0 0 var(--spacing-sm) 0;
-  line-height: 1.4;
-  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .external-meta {
   display: flex;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  margin: 0;
 }
 
-.external-type-badge {
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.external-type-badge.type-academic {
-  background: rgba(139, 90, 43, 0.12);
-  color: var(--color-brown);
-}
-
-.external-type-badge.type-industry {
-  background: rgba(139, 90, 43, 0.08);
-  color: var(--color-brown);
-}
-
-.external-type-badge.type-community {
-  background: rgba(139, 90, 43, 0.15);
-  color: var(--color-brown);
-}
-
-.external-relationship-badge {
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: var(--bg-page);
+.meta-label {
   color: var(--color-text-light);
-  border: 1px solid var(--border-color-light);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-.external-card .tasks-section {
-  margin-bottom: var(--spacing-lg);
-}
-
-.external-card .tasks-label {
-  display: block;
-  font-size: 0.8rem;
+.meta-value {
   color: var(--color-brown);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--spacing-sm);
+  font-style: italic;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
+.meta-value.type-academic {
+  color: var(--color-brown);
+}
+
+.meta-value.type-industry {
+  color: var(--color-brown);
+}
+
+.meta-value.type-community {
+  color: var(--color-brown);
+}
+
+/* 紧凑内容块：Tasks / Specific Tasks */
+.ext-compact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ext-compact-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--color-brown-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Tasks 标签布局：更紧凑的 pill */
 .external-card .tasks-tags {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .external-card .task-tag {
-  padding: 6px 14px;
+  padding: 4px 10px;
   background: var(--bg-page);
   border: 1px solid var(--border-color-light);
-  border-radius: var(--radius-pill);
-  font-size: 0.8rem;
-  color: var(--color-text);
-  transition: all var(--duration-normal) var(--ease-default);
+  border-radius: 20px;
+  font-size: 0.74rem;
+  color: var(--color-brown);
+  line-height: 1.3;
+  font-weight: 500;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+  transition:
+    background 200ms var(--ease-default),
+    border-color 200ms var(--ease-default),
+    color 200ms var(--ease-default),
+    box-shadow 240ms var(--ease-default),
+    transform 240ms var(--ease-default);
+  will-change: transform, box-shadow;
+  display: inline-block;
 }
 
-.external-card .task-tag:hover {
-  background: rgba(139, 90, 43, 0.08);
+/* 有详情内容的 tag：暗示性可交互 */
+.external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty) {
+  cursor: help;
+  background: rgba(139, 90, 43, 0.04);
   border-color: var(--color-brown-light);
 }
 
-.external-specific-tasks {
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--border-color-light);
+.external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty):hover,
+.external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty):focus-visible {
+  background: var(--color-brown);
+  border-color: var(--color-brown);
+  color: var(--color-white);
+  box-shadow: 0 2px 8px rgba(139, 90, 43, 0.25);
+  transform: translateY(-1px);
+  outline: none;
 }
 
-.external-specific-tasks .specific-tasks-label {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--color-brown);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--spacing-sm);
+.external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty):active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(139, 90, 43, 0.15);
 }
 
-.external-specific-tasks p {
-  font-size: 0.9rem;
+/* Specific Tasks 段落文本 */
+.ext-compact-text {
+  font-size: 0.78rem;
   color: var(--color-text-light);
-  line-height: 1.7;
+  line-height: 1.65;
   margin: 0;
-}
-
-.external-icon {
-  font-size: 2.5rem;
-  color: var(--color-brown);
-  margin-bottom: var(--spacing-md);
-  display: block;
+  font-weight: 400;
 }
 
 /* ================================================== */
@@ -677,10 +838,10 @@ body {
   font-weight: 500;
 }
 
-/* 甘特图容器 */
+/* 甘特图容器 - 紧凑布局 */
 .timeline-section {
   position: relative;
-  margin-bottom: var(--spacing-2xl);
+  margin-top: var(--spacing-lg);
 }
 
 .timeline-container {
@@ -693,7 +854,7 @@ body {
 }
 
 .timeline {
-  min-width: 900px;
+  min-width: 720px;
   position: relative;
 }
 
@@ -707,8 +868,8 @@ body {
 }
 
 .timeline-task-label {
-  flex: 0 0 200px;
-  font-size: 0.85rem;
+  flex: 0 0 140px;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-brown-dark);
   padding-right: var(--spacing-lg);
@@ -731,12 +892,12 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* 甘特图每一行 */
+/* 甘特图每一行 - 紧凑 */
 .timeline-row {
   display: flex;
   align-items: center;
   padding: var(--spacing-sm) 0;
-  min-height: 50px;
+  min-height: 44px;
   border-bottom: 1px solid var(--border-color-light);
   transition: background-color var(--duration-fast) var(--ease-default);
 }
@@ -749,21 +910,21 @@ body {
   border-bottom: none;
 }
 
-/* 任务名称区域 */
+/* 任务名称区域 - 紧凑 */
 .timeline-task-name {
-  flex: 0 0 200px;
+  flex: 0 0 140px;
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   padding-right: var(--spacing-lg);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--color-text);
 }
 
 .timeline-task-icon {
   color: var(--color-brown);
-  font-size: 1.1rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
 
@@ -771,11 +932,11 @@ body {
   line-height: 1.4;
 }
 
-/* 条形图区域 */
+/* 条形图区域 - 紧凑 */
 .timeline-bar-container {
   flex: 1;
   position: relative;
-  height: 32px;
+  height: 28px;
   display: flex;
   align-items: center;
 }
@@ -836,15 +997,15 @@ body {
   white-space: nowrap;
 }
 
-/* 图例 */
+/* 图例 - 紧凑 */
 .timeline-legend {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
-  padding: var(--spacing-lg) var(--spacing-md);
-  margin-top: var(--spacing-md);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-sm) 0;
+  margin-top: var(--spacing-sm);
   border-top: 1px solid var(--border-color-light);
 }
 
@@ -1210,6 +1371,11 @@ body {
   .members-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
+
+  /* 外部卡片：中等屏幕下为两列 */
+  .external-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -1366,5 +1532,77 @@ body {
 
   .member-info {
     text-align: center;
+  }
+
+  /* 小屏幕下 task-tag 更紧凑 */
+  .task-tag,
+  .external-card .task-tag {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+
+  /* 小屏幕 external-card 进一步紧凑 */
+  .external-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .external-name {
+    font-size: 0.88rem;
+  }
+
+  .external-meta {
+    font-size: 0.68rem;
+  }
+
+  .ext-compact-text {
+    font-size: 0.74rem;
+  }
+
+  /* 小屏幕 tooltip 更贴近视口，宽度自适应 */
+  .task-tooltip {
+    max-width: calc(100vw - 24px);
+    min-width: 120px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    border-radius: 8px;
+  }
+}
+
+/* ============================================================ */
+/* 高对比度模式与无障碍：尊重系统偏好                          */
+/* ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+  .task-tag,
+  .task-tooltip,
+  .task-tag[data-detail]:not([data-detail=""]):not(:empty),
+  .external-card .task-tag,
+  .external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty) {
+    transition: none !important;
+  }
+
+  .task-tooltip {
+    transform: none !important;
+  }
+
+  .task-tag[data-detail]:not([data-detail=""]):not(:empty):hover,
+  .external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty):hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+
+  .task-tag[data-detail]:not([data-detail=""]):not(:empty),
+  .external-card .task-tag[data-detail]:not([data-detail=""]):not(:empty) {
+    border-bottom-color: #000;
+    border-bottom-width: 2px;
+  }
+
+  .task-tooltip {
+    border-color: rgba(255, 255, 255, 0.6);
+    background: #1a1612;
+    color: #ffffff;
   }
 }

@@ -350,6 +350,193 @@
   };
 
   // ============================================
+  // 模块 2.5: Task Tag Tooltip (Hover 详情提示)
+  // ============================================
+  const TaskTagTooltip = {
+    tooltipEl: null,
+    hideDelay: 120,
+    showDelay: 80,
+    hideTimer: null,
+    showTimer: null,
+
+    init: function () {
+      const self = this;
+
+      // 1) 创建单例 tooltip 元素
+      const tip = document.createElement('div');
+      tip.className = 'task-tooltip';
+      tip.setAttribute('role', 'tooltip');
+      tip.setAttribute('id', 'task-tag-tooltip');
+      tip.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(tip);
+      self.tooltipEl = tip;
+
+      // 1.5) 为所有有详情内容的 task-tag 添加 tabindex，使其可被键盘聚焦
+      //      同时建立与 tooltip 的 aria 关联
+      function prepareTags() {
+        const tags = document.querySelectorAll('.task-tag[data-detail]');
+        tags.forEach(function (tag) {
+          const detail = tag.getAttribute('data-detail');
+          if (!detail || detail.trim() === '') return;
+          if (!tag.hasAttribute('tabindex')) {
+            tag.setAttribute('tabindex', '0');
+          }
+          tag.setAttribute('aria-describedby', 'task-tag-tooltip');
+        });
+      }
+      prepareTags();
+      // 页面内容动态更新时也重新准备
+      if (typeof MutationObserver !== 'undefined') {
+        new MutationObserver(prepareTags).observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      }
+
+      // 2) 事件委托：监听所有 .task-tag 的 hover
+      document.addEventListener('mouseover', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        const detail = tag.getAttribute('data-detail');
+        if (!detail || detail.trim() === '') return;
+
+        if (self.hideTimer) { clearTimeout(self.hideTimer); self.hideTimer = null; }
+        if (self.showTimer) { clearTimeout(self.showTimer); }
+
+        self.showTimer = setTimeout(function () {
+          self.show(tag, detail.trim());
+        }, self.showDelay);
+      });
+
+      document.addEventListener('mouseout', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        if (self.showTimer) { clearTimeout(self.showTimer); self.showTimer = null; }
+        self.hideTimer = setTimeout(function () { self.hide(); }, self.hideDelay);
+      });
+
+      // 2.5) 键盘焦点事件支持（无障碍）
+      document.addEventListener('focusin', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        const detail = tag.getAttribute('data-detail');
+        if (!detail || detail.trim() === '') return;
+
+        if (self.showTimer) { clearTimeout(self.showTimer); }
+        if (self.hideTimer) { clearTimeout(self.hideTimer); self.hideTimer = null; }
+        self.show(tag, detail.trim());
+      });
+
+      document.addEventListener('focusout', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        if (self.showTimer) { clearTimeout(self.showTimer); self.showTimer = null; }
+        self.hide();
+      });
+
+      // 3) 鼠标悬停在 tooltip 本体上时保持显示（防止闪㷧）
+      tip.addEventListener('mouseenter', function () {
+        if (self.hideTimer) { clearTimeout(self.hideTimer); self.hideTimer = null; }
+      });
+      tip.addEventListener('mouseleave', function () {
+        self.hideTimer = setTimeout(function () { self.hide(); }, self.hideDelay);
+      });
+
+      // 4) 滚动 / 窗口变化时自动重新定位或隐藏
+      window.addEventListener('scroll', function () {
+        if (tip.classList.contains('is-visible')) {
+          // 滚动时直接隐藏，避免视觉抖动
+          self.hide(true);
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', function () { self.hide(true); });
+    },
+
+    /**
+     * 显示 tooltip，根据视口空间智能决定上下位置
+     * @param {HTMLElement} anchor - 被 hover 的 task-tag
+     * @param {string} text - 要显示的详情文本
+     */
+    show: function (anchor, text) {
+      const tip = this.tooltipEl;
+      if (!tip) return;
+
+      tip.textContent = text;
+      // 先把 tooltip 放到屏幕外测量其实际宽高
+      tip.style.left = '-9999px';
+      tip.style.top = '-9999px';
+      tip.setAttribute('data-placement', '');
+      tip.setAttribute('data-edge', '');
+
+      // 触发回流以测量
+      const tipRect = tip.getBoundingClientRect();
+      const anchorRect = anchor.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const gap = 8;           // tooltip 与 tag 的间距
+      const margin = 10;       // 距离屏幕边缘的安全边距
+
+      // --- 垂直位置：优先在上方，空间不够则放下方 ---
+      const spaceAbove = anchorRect.top;
+      const spaceBelow = vh - anchorRect.bottom;
+      const placement = (spaceAbove >= tipRect.height + gap + margin) ? 'top' : 'bottom';
+
+      // --- 水平位置：以 tag 中心为基准，边界夹住 ---
+      let left = anchorRect.left + anchorRect.width / 2 - tipRect.width / 2;
+      left = Math.max(margin, Math.min(left, vw - tipRect.width - margin));
+
+      // --- 顶部 / 底部位置 ---
+      let top;
+      if (placement === 'top') {
+        top = anchorRect.top - tipRect.height - gap;
+      } else {
+        top = anchorRect.bottom + gap;
+      }
+
+      tip.setAttribute('data-placement', placement);
+
+      // 箭头对齐的 edge 标记（防止贴边时箭头飞到屏幕外）
+      const arrowCenter = anchorRect.left + anchorRect.width / 2;
+      if (arrowCenter - left < 18) {
+        tip.setAttribute('data-edge', 'left');
+      } else if ((left + tipRect.width) - arrowCenter < 18) {
+        tip.setAttribute('data-edge', 'right');
+      }
+
+      tip.style.left = Math.round(left) + 'px';
+      tip.style.top = Math.round(top) + 'px';
+      tip.setAttribute('aria-hidden', 'false');
+
+      // 下一帧添加可见类，触发过渡动画
+      requestAnimationFrame(function () {
+        tip.classList.add('is-visible');
+      });
+    },
+
+    /**
+     * 隐藏 tooltip
+     * @param {boolean} immediate - 是否立即隐藏（无过渡）
+     */
+    hide: function (immediate) {
+      const tip = this.tooltipEl;
+      if (!tip) return;
+      tip.setAttribute('aria-hidden', 'true');
+      if (immediate) {
+        tip.style.transition = 'none';
+        tip.classList.remove('is-visible');
+        // 下一帧恢复过渡
+        requestAnimationFrame(function () {
+          tip.style.transition = '';
+        });
+      } else {
+        tip.classList.remove('is-visible');
+      }
+    }
+  };
+
+  // ============================================
   // 模块 3: 滚动导航高亮 (Scroll Spy)
   // ============================================
   const ScrollSpy = {
@@ -428,6 +615,7 @@
 
       CardFilter.init('.role-tab', '#members-grid .member-card', 'data-role');
       CardFilter.init('.type-filter-btn', '#external-grid .external-card', 'data-type');
+      TaskTagTooltip.init();
       TimelineInteraction.init();
       ScrollSpy.init();
 
@@ -453,7 +641,7 @@
      */
     filterCards: function (selector, filterValue) {
       const btn = document.querySelector(selector + '[data-role="' + filterValue + '"]') ||
-                  document.querySelector(selector + '[data-type="' + filterValue + '"]');
+        document.querySelector(selector + '[data-type="' + filterValue + '"]');
       if (btn) btn.click();
     }
   };
