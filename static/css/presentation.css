@@ -709,3 +709,78 @@
     opacity: 0.6;
   }
 }
+
+/* ================================================== */
+/* 响应式适配 */
+/* ================================================== */
+
+@media (max-width: 1024px) {
+  .presentation-section {
+    padding: var(--pres-section-padding-mobile);
+    padding-top: calc(90px + 1.5rem);
+  }
+
+  .split-asymmetric,
+  .intro-layout {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-3xl);
+  }
+
+  .split-asymmetric .split-visual {
+    order: 2;
+  }
+
+  .split-asymmetric .split-content {
+    order: 1;
+  }
+
+  .statistics-metrics,
+  .product-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .product-scene .placeholder-block {
+    aspect-ratio: 16/9;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  }
+
+  .hero-text .section-title {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .metric-row {
+    flex-direction: column;
+  }
+
+  .metric-card {
+    min-width: auto;
+  }
+
+  .step-item {
+    gap: var(--spacing-md);
+  }
+
+  .step-number {
+    font-size: var(--font-size-lg);
+    min-width: 36px;
+  }
+
+  .product-card {
+    padding: var(--spacing-lg);
+  }
+
+  .section-indicator {
+    right: 12px;
+    gap: 10px;
+  }
+
+  .section-indicator__dot {
+    width: 8px;
+    height: 8px;
+  }
+}
