@@ -784,3 +784,53 @@
     height: 8px;
   }
 }
+
+/* ================================================== */
+/* 右侧圆点指示器 */
+/* ================================================== */
+
+.section-indicator {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.section-indicator__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(139, 90, 43, 0.3);
+  cursor: pointer;
+  transition: background var(--pres-duration-fast) var(--pres-transition-smooth),
+    transform var(--pres-duration-fast) var(--pres-transition-smooth);
+}
+
+.section-indicator__dot:hover {
+  background: rgba(139, 90, 43, 0.6);
+  transform: scale(1.2);
+}
+
+.section-indicator__dot.is-active {
+  background: var(--color-primary);
+  transform: scale(1.3);
+}
+
+/* 移动端隐藏圆点指示器，避免与汉堡菜单冲突 */
+@media (max-width: 1024px) {
+  .section-indicator {
+    display: none;
+  }
+}
