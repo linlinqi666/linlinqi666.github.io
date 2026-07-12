@@ -621,15 +621,9 @@ header {
 /* ================================================== */
 /* 首页滚动锁定功能 */
 /* ================================================== */
+/* 首页不再使用 CSS scroll-snap，由 presentation-controller.js 管理平滑滚动体验 */
 body.home-page {
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-}
-
-.fullscreen-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  overflow-x: hidden;
 }
 
 /* 页脚特殊处理 - 确保可以完整显示 */
@@ -643,8 +637,6 @@ body.home-page {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 .section-footer .section-bg-img {
