@@ -111,3 +111,92 @@
   height: 100%;
   object-fit: contain;
 }
+
+/* ================================================== */
+/* 共享动画系统 */
+/* ================================================== */
+
+.anim-fade-up,
+.anim-slide-left,
+.anim-slide-right,
+.anim-scale-in {
+  opacity: 0;
+  transition: opacity var(--pres-duration-normal) var(--pres-transition-smooth),
+    transform var(--pres-duration-normal) var(--pres-transition-smooth);
+  will-change: opacity, transform;
+}
+
+.anim-fade-up {
+  transform: translateY(40px);
+}
+
+.anim-slide-left {
+  transform: translateX(60px);
+}
+
+.anim-slide-right {
+  transform: translateX(-60px);
+}
+
+.anim-scale-in {
+  transform: scale(0.92);
+}
+
+.anim-fade-up.is-visible,
+.anim-slide-left.is-visible,
+.anim-slide-right.is-visible,
+.anim-scale-in.is-visible {
+  opacity: 1;
+  transform: translate(0) scale(1);
+}
+
+/* 错开动画 */
+.stagger-children>* {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--pres-duration-normal) var(--pres-transition-smooth),
+    transform var(--pres-duration-normal) var(--pres-transition-smooth);
+}
+
+.stagger-children.is-visible>* {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-children.is-visible>*:nth-child(1) {
+  transition-delay: calc(var(--pres-stagger-delay) * 0);
+}
+
+.stagger-children.is-visible>*:nth-child(2) {
+  transition-delay: calc(var(--pres-stagger-delay) * 1);
+}
+
+.stagger-children.is-visible>*:nth-child(3) {
+  transition-delay: calc(var(--pres-stagger-delay) * 2);
+}
+
+.stagger-children.is-visible>*:nth-child(4) {
+  transition-delay: calc(var(--pres-stagger-delay) * 3);
+}
+
+.stagger-children.is-visible>*:nth-child(5) {
+  transition-delay: calc(var(--pres-stagger-delay) * 4);
+}
+
+.stagger-children.is-visible>*:nth-child(6) {
+  transition-delay: calc(var(--pres-stagger-delay) * 5);
+}
+
+/* 减少动画偏好适配 */
+@media (prefers-reduced-motion: reduce) {
+
+  .anim-fade-up,
+  .anim-slide-left,
+  .anim-slide-right,
+  .anim-scale-in,
+  .stagger-children>* {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
