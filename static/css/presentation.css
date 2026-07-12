@@ -566,3 +566,146 @@
   width: 100%;
   max-width: 1100px;
 }
+
+/* ================================================== */
+/* 基因敲除 SVG 动画 */
+/* ================================================== */
+
+.knockout-svg {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  overflow: visible;
+}
+
+/* 默认暂停，进入视口后播放 */
+.knockout-animation .cell-outline,
+.knockout-animation .gene-labels,
+.knockout-animation .cas9-complex,
+.knockout-animation .dna-break,
+.knockout-animation .gfp-signal circle {
+  animation-play-state: paused;
+}
+
+.knockout-animation.is-playing .cell-outline,
+.knockout-animation.is-playing .gene-labels,
+.knockout-animation.is-playing .cas9-complex,
+.knockout-animation.is-playing .dna-break,
+.knockout-animation.is-playing .gfp-signal circle {
+  animation-play-state: running;
+}
+
+.knockout-animation .cell-outline {
+  animation: cellPulse 8s ease-in-out infinite;
+}
+
+.knockout-animation .gene-labels {
+  animation: geneFade 8s ease-in-out infinite;
+}
+
+.knockout-animation .cas9-complex {
+  animation: cas9Move 8s ease-in-out infinite;
+}
+
+.knockout-animation .dna-break {
+  animation: dnaBreak 8s ease-in-out infinite;
+}
+
+.knockout-animation .gfp-signal circle {
+  animation: gfpGlow 8s ease-in-out infinite;
+}
+
+.knockout-animation .gfp-signal circle:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.knockout-animation .gfp-signal circle:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes cellPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  45% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+
+  55% {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+@keyframes geneFade {
+
+  0%,
+  35% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes cas9Move {
+  0% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  35% {
+    transform: translateX(80px);
+  }
+
+  55%,
+  100% {
+    transform: translateX(80px);
+    opacity: 0;
+  }
+}
+
+@keyframes dnaBreak {
+
+  0%,
+  30% {
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  60%,
+  100% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes gfpGlow {
+
+  0%,
+  60% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  90%,
+  100% {
+    opacity: 0.6;
+  }
+}

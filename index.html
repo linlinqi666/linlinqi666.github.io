@@ -433,7 +433,47 @@
           </div>
           <div class="intro-visual anim-slide-left" data-animate>
             <div class="knockout-animation" data-placeholder="knockout-animation" aria-label="基因敲除与通路重建动画">
-              <!-- SVG 动画将在 Task 10 中实现 -->
+              <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="knockout-svg">
+                <!-- 酵母细胞轮廓 -->
+                <ellipse class="cell-outline" cx="200" cy="200" rx="140" ry="120" fill="rgba(255,248,220,0.6)"
+                  stroke="rgba(139,90,43,0.4)" stroke-width="3" />
+
+                <!-- 基因标签 -->
+                <g class="gene-labels">
+                  <rect x="90" y="130" width="70" height="28" rx="14" fill="rgba(74,144,226,0.2)"
+                    stroke="rgba(74,144,226,0.5)" />
+                  <text x="125" y="149" text-anchor="middle" font-size="12" fill="var(--color-primary-dark)">STE2</text>
+
+                  <rect x="165" y="110" width="70" height="28" rx="14" fill="rgba(74,144,226,0.2)"
+                    stroke="rgba(74,144,226,0.5)" />
+                  <text x="200" y="129" text-anchor="middle" font-size="12" fill="var(--color-primary-dark)">FAR1</text>
+
+                  <rect x="240" y="130" width="70" height="28" rx="14" fill="rgba(74,144,226,0.2)"
+                    stroke="rgba(74,144,226,0.5)" />
+                  <text x="275" y="149" text-anchor="middle" font-size="12" fill="var(--color-primary-dark)">GPA1</text>
+                </g>
+
+                <!-- Cas9/sgRNA 复合物 -->
+                <g class="cas9-complex">
+                  <circle cx="60" cy="200" r="24" fill="rgba(255,99,71,0.8)" />
+                  <text x="60" y="205" text-anchor="middle" font-size="10" fill="white">Cas9</text>
+                  <line x1="84" y1="200" x2="120" y2="200" stroke="rgba(255,99,71,0.6)" stroke-width="2"
+                    stroke-dasharray="4,2" />
+                </g>
+
+                <!-- DNA 断裂示意 -->
+                <g class="dna-break">
+                  <path d="M 120 200 Q 160 180 200 200" fill="none" stroke="rgba(139,90,43,0.5)" stroke-width="3" />
+                  <path d="M 200 200 Q 240 220 280 200" fill="none" stroke="rgba(139,90,43,0.5)" stroke-width="3" />
+                </g>
+
+                <!-- 通路激活后的 GFP 光点 -->
+                <g class="gfp-signal">
+                  <circle cx="200" cy="260" r="8" fill="#34A853" opacity="0" />
+                  <circle cx="180" cy="270" r="5" fill="#34A853" opacity="0" />
+                  <circle cx="220" cy="270" r="5" fill="#34A853" opacity="0" />
+                </g>
+              </svg>
             </div>
           </div>
         </div>
