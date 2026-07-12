@@ -1,0 +1,113 @@
+/* ================================================== */
+/* 首页沉浸式展示 - 基础架构 */
+/* ================================================== */
+
+:root {
+  /* 展示区域参数 */
+  --pres-section-min-height: 100vh;
+  --pres-section-padding: 6rem 2rem;
+  --pres-section-padding-mobile: 5rem 1.25rem;
+  --pres-max-width: 1400px;
+  --pres-content-max-width: 1200px;
+
+  /* 动画参数 */
+  --pres-transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --pres-duration-fast: 0.3s;
+  --pres-duration-normal: 0.6s;
+  --pres-duration-slow: 0.9s;
+  --pres-stagger-delay: 0.12s;
+}
+
+/* 统一区域基础 */
+.presentation-section {
+  position: relative;
+  width: 100%;
+  min-height: var(--pres-section-min-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pres-section-padding);
+  padding-top: calc(100px + 2rem);
+  overflow: hidden;
+}
+
+.presentation-section .section-inner {
+  width: 100%;
+  max-width: var(--pres-max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* 背景变体 */
+.presentation-section.section-light {
+  background: linear-gradient(180deg, var(--bg-page) 0%, #fff8e8 100%);
+}
+
+.presentation-section.section-muted {
+  background: linear-gradient(180deg, #f9f7e8 0%, var(--bg-page) 100%);
+}
+
+.presentation-section.section-accent {
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08) 0%, rgba(139, 90, 43, 0.06) 100%);
+}
+
+/* 小标签 */
+.section-eyebrow {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 标题层级 */
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-brown-dark);
+  margin-bottom: var(--spacing-lg);
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.7;
+  color: var(--color-text);
+  max-width: 700px;
+}
+
+/* 通用占位框 */
+.placeholder-block {
+  width: 100%;
+  background: rgba(139, 90, 43, 0.06);
+  border: 2px dashed rgba(139, 90, 43, 0.2);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--color-text-light);
+  font-size: var(--font-size-md);
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.placeholder-block[data-placeholder]::before {
+  content: attr(data-placeholder);
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-lighter);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.placeholder-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
