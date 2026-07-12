@@ -266,3 +266,63 @@
     transform: scaleY(1);
   }
 }
+
+/* ================================================== */
+/* 非对称分割布局（40/60） */
+/* ================================================== */
+
+.split-asymmetric {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: var(--spacing-4xl);
+  align-items: center;
+  width: 100%;
+}
+
+.split-asymmetric .split-visual {
+  width: 100%;
+}
+
+.split-asymmetric .split-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+/* 指标卡片横向排列 */
+.metric-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.metric-card {
+  flex: 1;
+  min-width: 160px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  box-shadow: 0 4px 16px rgba(139, 90, 43, 0.06);
+  transition: transform var(--pres-duration-fast) var(--pres-transition-smooth),
+    box-shadow var(--pres-duration-fast) var(--pres-transition-smooth);
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(139, 90, 43, 0.12);
+}
+
+.metric-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-brown-dark);
+}
+
+.metric-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
