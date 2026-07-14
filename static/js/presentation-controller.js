@@ -105,9 +105,9 @@
     const existing = document.querySelector(CONFIG.indicatorSelector);
     if (existing) existing.remove();
 
-    const nav = document.createElement('nav');
-    nav.className = 'section-indicator';
-    nav.setAttribute('aria-label', '页面章节导航');
+    const indicatorContainer = document.createElement('aside');
+    indicatorContainer.className = 'section-indicator';
+    indicatorContainer.setAttribute('aria-label', '页面章节导航');
 
     state.sections.forEach((section, index) => {
       const btn = document.createElement('button');
@@ -115,11 +115,11 @@
       const title = section.dataset.title || section.id || `第 ${index + 1} 节`;
       btn.setAttribute('aria-label', `跳转到 ${title}`);
       btn.addEventListener('click', () => scrollToSection(index));
-      nav.appendChild(btn);
+      indicatorContainer.appendChild(btn);
     });
 
-    document.body.appendChild(nav);
-    state.indicators = Array.from(nav.querySelectorAll('.section-indicator__dot'));
+    document.body.appendChild(indicatorContainer);
+    state.indicators = Array.from(indicatorContainer.querySelectorAll('.section-indicator__dot'));
   }
 
   function updateIndicators() {
