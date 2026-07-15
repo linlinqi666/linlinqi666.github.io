@@ -91,39 +91,16 @@
   // 进度条创建
   const ProgressBar = {
     create: function () {
-      if (document.getElementById('scroll-progress-bar')) {
-        state.barElement = document.getElementById('scroll-progress-bar');
-        state.fillElement = document.getElementById('scroll-progress-fill');
+      const existingBar = document.getElementById('scroll-progress-bar');
+      if (!existingBar) {
+        state.barElement = null;
+        state.fillElement = null;
         return;
       }
 
-      const bar = document.createElement('div');
-      bar.id = 'scroll-progress-bar';
-      bar.style.position = 'fixed';
-      bar.style.top = '0';
-      bar.style.right = '0';
-      bar.style.bottom = '0';
-      bar.style.width = '4px';
-      bar.style.zIndex = '999999';
-      bar.style.pointerEvents = 'none';
-      bar.style.background = 'rgba(0, 0, 0, 0.15)';
-
-      const fill = document.createElement('div');
-      fill.id = 'scroll-progress-fill';
-      fill.style.position = 'fixed';
-      fill.style.top = '0';
-      fill.style.right = '0';
-      fill.style.width = '4px';
-      fill.style.background = 'linear-gradient(to bottom, #1565C0, #42A5F5)';
-      fill.style.boxShadow = '-3px 0 12px rgba(21, 101, 192, 0.6)';
-      fill.style.height = '0%';
-
-      bar.appendChild(fill);
-      document.documentElement.appendChild(bar);
-
-      state.barElement = bar;
-      state.fillElement = fill;
-      Utils.log('进度条创建成功');
+      state.barElement = existingBar;
+      state.fillElement = document.getElementById('scroll-progress-fill');
+      Utils.log('进度条已存在，复用现有元素');
     }
   };
 
@@ -167,8 +144,12 @@
 
     Utils.log('初始化中...');
 
-    // 创建进度条
+    // 仅当页面已存在 #scroll-progress-bar 时才初始化，避免与新右侧面板冲突
     ProgressBar.create();
+    if (!state.barElement) {
+      Utils.log('未找到 #scroll-progress-bar，跳过初始化');
+      return;
+    }
 
     // 检测滚动容器
     state.scrollInfo = ScrollDetector.detectScrollContainer();

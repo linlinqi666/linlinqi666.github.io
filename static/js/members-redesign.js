@@ -7,6 +7,10 @@
   // with a cross-fade transition, so the story layer can stay frameless.
 
   const ROLE_ORDER = ['Wet Lab', 'Dry Lab', 'WIKI', 'HP', 'Designer', 'Adviser'];
+
+  // Roles used for left-hand grouping; these are not shown as personalized
+  // tags in the right-hand detail panel.
+  const CLASSIFICATION_ROLES = new Set(ROLE_ORDER);
   const ROLE_COLORS = {
     'Wet Lab': '#1E40AF',
     'Dry Lab': '#065F46',
@@ -184,10 +188,16 @@
 
   function getPrimaryRole(member) {
     if (!member || !Array.isArray(member.roles)) return 'Wet Lab';
+    if (primaryRoleCache.has(member)) return primaryRoleCache.get(member);
     for (const role of ROLE_ORDER) {
-      if (member.roles.includes(role)) return role;
+      if (member.roles.includes(role)) {
+        primaryRoleCache.set(member, role);
+        return role;
+      }
     }
-    return member.roles[0] || 'Wet Lab';
+    const fallback = member.roles[0] || 'Wet Lab';
+    primaryRoleCache.set(member, fallback);
+    return fallback;
   }
 
   // Expand brace patterns like '../path/${id}.{jpg,png,webp}' into an array
@@ -367,6 +377,7 @@
   }
 
   function groupMembers() {
+    if (cachedGroupedMembers) return cachedGroupedMembers;
     const groups = {};
     ROLE_ORDER.forEach(role => { groups[role] = []; });
     members.forEach(member => {
@@ -374,7 +385,8 @@
       if (!groups[primary]) groups[primary] = [];
       groups[primary].push(member);
     });
-    return ROLE_ORDER.map(role => ({ role, members: groups[role] }));
+    cachedGroupedMembers = ROLE_ORDER.map(role => ({ role, members: groups[role] }));
+    return cachedGroupedMembers;
   }
 
   let selectedId = null;
@@ -383,9 +395,27 @@
   let railFillerRafId = null;
   let backgroundGeneration = 0;
 
+  const DESKTOP_BREAKPOINT = 1024;
+  let cachedScrollbarWidth = null;
+  let railResizeObserver = null;
+  let cachedGroupedMembers = null;
+  const primaryRoleCache = new Map();
+  let lastRailRect = null;
+  let resizeRafId = null;
+
+  // Cached DOM references populated during init to avoid repeated queries.
+  const domRefs = {
+    rail: null,
+    filler: null,
+    bgLayer: null,
+    slideA: null,
+    slideB: null
+  };
+
   // Measure the real scrollbar width on this browser/os, accounting for
   // hidden/overlay scrollbars and high-DPI sub-pixel differences.
   function measureScrollbarWidth() {
+    if (cachedScrollbarWidth !== null) return cachedScrollbarWidth;
     const outer = document.createElement('div');
     outer.style.visibility = 'hidden';
     outer.style.overflow = 'scroll';
@@ -402,7 +432,13 @@
 
     const width = outer.offsetWidth - inner.offsetWidth;
     document.body.removeChild(outer);
+    cachedScrollbarWidth = width;
     return width;
+  }
+
+  function invalidateScrollbarWidth() {
+    cachedScrollbarWidth = null;
+    lastRailRect = null;
   }
 
   // iGEM Layout Strategy: The rail-edge-filler is a fixed-position strip that
@@ -411,16 +447,18 @@
   // filler is fixed, we sync its top/height to the rail's viewport geometry
   // on resize, scroll and layout shifts.
   function updateRailEdgeFiller() {
-    const filler = document.getElementById('rail-edge-filler');
-    const rail = document.getElementById('bio-rail');
+    const filler = domRefs.filler;
+    const rail = domRefs.rail;
     if (!filler || !rail) return;
 
     // No filler needed when the rail itself is hidden (either by breakpoint CSS
     // or by the collapsed state).
-    const railStyle = window.getComputedStyle(rail);
-    if (railStyle.display === 'none' || !rail.classList.contains('is-visible')) {
-      filler.style.top = '';
-      filler.style.height = '';
+    if (!rail.classList.contains('is-visible')) {
+      if (filler.style.top !== '' || filler.style.height !== '') {
+        filler.style.top = '';
+        filler.style.height = '';
+        lastRailRect = null;
+      }
       return;
     }
 
@@ -428,10 +466,20 @@
     document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
 
     const railRect = rail.getBoundingClientRect();
+    // Skip writes when the rail geometry has not changed since the last frame.
+    if (lastRailRect &&
+      Math.round(lastRailRect.top) === Math.round(railRect.top) &&
+      Math.round(lastRailRect.height) === Math.round(railRect.height)) {
+      return;
+    }
+    lastRailRect = railRect;
+
     // Round to whole pixels so the filler stays pixel-perfect with the rail
     // and keeps any sub-pixel drift within the 1px tolerance.
-    filler.style.top = `${Math.round(railRect.top)}px`;
-    filler.style.height = `${Math.round(railRect.height)}px`;
+    const top = `${Math.round(railRect.top)}px`;
+    const height = `${Math.round(railRect.height)}px`;
+    if (filler.style.top !== top) filler.style.top = top;
+    if (filler.style.height !== height) filler.style.height = height;
   }
 
   function scheduleRailEdgeFillerUpdate() {
@@ -443,10 +491,14 @@
   }
 
   function observeRailContainer() {
+    if (railResizeObserver) {
+      railResizeObserver.disconnect();
+      railResizeObserver = null;
+    }
     const app = document.getElementById('members-redesign-app');
     if (!app || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(() => scheduleRailEdgeFillerUpdate());
-    ro.observe(app);
+    railResizeObserver = new ResizeObserver(() => scheduleRailEdgeFillerUpdate());
+    railResizeObserver.observe(app);
   }
 
   function renderGroups(container) {
@@ -526,12 +578,10 @@
   }
 
   function updateBackgroundWithCandidates(candidates, position, size) {
-    const bgLayer = document.querySelector('.members-bg-layer');
-    if (!bgLayer) return;
-
-    const slideA = bgLayer.querySelector('.bg-slide-a');
-    const slideB = bgLayer.querySelector('.bg-slide-b');
-    if (!slideA || !slideB) return;
+    const bgLayer = domRefs.bgLayer;
+    const slideA = domRefs.slideA;
+    const slideB = domRefs.slideB;
+    if (!bgLayer || !slideA || !slideB) return;
 
     const current = activeBackgroundSlide === 'a' ? slideA : slideB;
     const next = activeBackgroundSlide === 'a' ? slideB : slideA;
@@ -544,7 +594,12 @@
 
     function applyLoaded(path) {
       if (generation !== backgroundGeneration) return;
-      const safePath = path ? encodeURI(path).replace(/'/g, '%27') : '';
+      const safePath = path
+        ? encodeURI(path)
+          .replace(/'/g, '%27')
+          .replace(/\(/g, '%28')
+          .replace(/\)/g, '%29')
+        : '';
       next.style.backgroundImage = safePath ? `url('${safePath}')` : '';
       next.style.backgroundPosition = bgPosition;
       next.style.backgroundSize = bgSize;
@@ -629,6 +684,8 @@
     const onPointerMove = (e) => {
       if (!isDragging) return;
       const currentX = e.clientX;
+      // Skip redundant move events to reduce per-frame writes.
+      if (moveHistory.length > 0 && currentX === moveHistory[moveHistory.length - 1].x) return;
       const deltaX = currentX - startX;
       moveHistory.push({ x: currentX, t: Date.now() });
       if (moveHistory.length > 6) moveHistory.shift();
@@ -672,6 +729,8 @@
 
       if (shouldClose) {
         rail.classList.remove('is-visible');
+        const toggle = rail.querySelector('.rail-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
         isRailCollapsed = true;
       } else {
         rail.classList.add('is-visible');
@@ -719,9 +778,10 @@
     const detailBio = document.getElementById('detail-bio');
 
     if (detailName) detailName.textContent = member.name;
-    if (detailRole) detailRole.textContent = member.roles.join(' / ');
+    if (detailRole) detailRole.style.display = 'none';
     if (detailRoleTags) {
       detailRoleTags.innerHTML = member.roles
+        .filter(role => !CLASSIFICATION_ROLES.has(role))
         .map(role => `<span class="detail-tag">${escapeHtml(role)}</span>`)
         .join('');
     }
@@ -740,9 +800,10 @@
     const railBio = document.getElementById('rail-bio');
 
     if (railName) railName.textContent = member.name;
-    if (railRole) railRole.textContent = member.roles.join(' / ');
+    if (railRole) railRole.style.display = 'none';
     if (railRoleTags) {
       railRoleTags.innerHTML = member.roles
+        .filter(role => !CLASSIFICATION_ROLES.has(role))
         .map(role => `<span class="rail-tag">${escapeHtml(role)}</span>`)
         .join('');
     }
@@ -762,7 +823,7 @@
 
     // Mobile: collapse the strip after selection so the detail panel is visible.
     const strip = document.getElementById('members-strip');
-    if (strip && window.innerWidth <= 1024) {
+    if (strip && window.innerWidth <= DESKTOP_BREAKPOINT) {
       strip.classList.remove('is-expanded');
     }
   }
@@ -774,10 +835,26 @@
   }
 
   function init() {
+    // Clean up any observer from a previous init (e.g. hot reload).
+    if (railResizeObserver) {
+      railResizeObserver.disconnect();
+      railResizeObserver = null;
+    }
+
+    // Cache DOM references that are used repeatedly outside this function.
+    domRefs.rail = document.getElementById('bio-rail');
+    domRefs.filler = document.getElementById('rail-edge-filler');
+    const bgLayer = document.querySelector('.members-bg-layer');
+    if (bgLayer) {
+      domRefs.bgLayer = bgLayer;
+      domRefs.slideA = bgLayer.querySelector('.bg-slide-a');
+      domRefs.slideB = bgLayer.querySelector('.bg-slide-b');
+    }
+
     const stripGroups = document.getElementById('strip-groups');
     const stripToggle = document.getElementById('strip-toggle');
     const membersStrip = document.getElementById('members-strip');
-    const rail = document.getElementById('bio-rail');
+    const rail = domRefs.rail;
     const railToggle = document.getElementById('rail-toggle');
 
     if (stripGroups) renderGroups(stripGroups);
@@ -798,7 +875,7 @@
     }
 
     // Select the first member by default on desktop.
-    if (members.length > 0 && window.innerWidth > 1024) {
+    if (members.length > 0 && window.innerWidth > DESKTOP_BREAKPOINT) {
       selectMember(members[0].id);
     } else if (rail) {
       closeRail(rail);
@@ -806,15 +883,26 @@
 
     // Reset rail visibility when crossing the desktop breakpoint.
     let lastWidth = window.innerWidth;
-    window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      if (!rail) return;
-      if (lastWidth > 1024 && width <= 1024) {
-        closeRail(rail);
-      } else if (lastWidth <= 1024 && width > 1024 && selectedId) {
-        openRail(rail);
-      }
-      lastWidth = width;
+    function scheduleResizeUpdate() {
+      if (resizeRafId) return;
+      resizeRafId = requestAnimationFrame(() => {
+        resizeRafId = null;
+        invalidateScrollbarWidth();
+        const width = window.innerWidth;
+        if (!rail) return;
+        if (lastWidth > DESKTOP_BREAKPOINT && width <= DESKTOP_BREAKPOINT) {
+          closeRail(rail);
+        } else if (lastWidth <= DESKTOP_BREAKPOINT && width > DESKTOP_BREAKPOINT && selectedId) {
+          openRail(rail);
+        }
+        lastWidth = width;
+        scheduleRailEdgeFillerUpdate();
+      });
+    }
+
+    window.addEventListener('resize', scheduleResizeUpdate, { passive: true });
+    window.addEventListener('orientationchange', () => {
+      invalidateScrollbarWidth();
       scheduleRailEdgeFillerUpdate();
     });
 
