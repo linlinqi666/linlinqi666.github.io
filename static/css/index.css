@@ -1203,53 +1203,34 @@ body.home-page {
 }
 
 /* ================================================== */
-/* 首页核心发现吸顶导引条（Executive Summary）       */
-/* iGEM Layout Strategy: fixed viewport-center badge， */
-/* 在任意滚动位置保持视口绝对居中；通过相邻 section    */
-/* 的 margin-top 补偿脱离文档流后的占位高度。          */
+/* 首页核心发现（Executive Summary）                   */
+/* iGEM Layout Strategy: in-flow 容器 + flex 居中，    */
+/* 100vh 独立占位空间，不依赖 fixed/sticky 定位。       */
+/* 为后续 scroll-driven animation 提供干净的容器基础。  */
 /* ================================================== */
 .executive-summary {
-  position: sticky;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80vw;
-  max-width: var(--pres-max-width);
-  z-index: 100;
-  background: transparent;
-  pointer-events: none;
-}
-
-/* Executive Summary 背景占位区域：为 fixed 定位的 badge 提供视觉背景 */
-.executive-summary-bg {
   position: relative;
   height: 100vh;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: var(--bg-page);
   overflow: hidden;
 }
 
-.executive-summary-bg__inner {
+/* 背景装饰光晕：通过伪元素叠加三层径向渐变，营造科学氛围 */
+.executive-summary::before {
+  content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 50% 40%, rgba(21, 101, 192, 0.06) 0%, transparent 70%),
-    radial-gradient(ellipse at 30% 60%, rgba(66, 165, 245, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 50%, rgba(52, 168, 83, 0.03) 0%, transparent 50%);
-}
-
-@media (max-width: 768px) {
-  .executive-summary-bg {
-    height: 100vh;
-  }
-}
-
-/* 为脱离文档流的 fixed executive-summary 预留原始占位高度 */
-.executive-summary + .presentation-section {
-  margin-top: calc(7rem + 10vw);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .executive-summary__inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: var(--pres-content-max-width);
   margin: 0 auto;
@@ -1308,7 +1289,7 @@ body.home-page {
 .badge-gpa1-label {
   position: absolute;
   top: -85%;
-  left: 50%;
+  left: 80%;
   transform: translateX(-50%);
   z-index: 2;
   font-size: 1.2rem;
@@ -1330,12 +1311,28 @@ body.home-page {
 
 .badge-human-wrapper {
   position: absolute;
-  top: -120px;
-  right: -91px;
-  width: 140px;
-  height: 77px;
+  top: -107px;
+  right: -82px;
+  width: 130px;
+  height: 69px;
   overflow: hidden;
   pointer-events: none;
+}
+
+.badge-human-label {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: transform 0.6s ease-out;
 }
 
 .badge-human {
@@ -1349,10 +1346,6 @@ body.home-page {
 }
 
 @media (max-width: 768px) {
-  .executive-summary {
-    width: 100vw;
-  }
-
   .executive-summary__inner {
     padding: var(--pres-space-md);
     gap: var(--pres-space-sm);
@@ -1360,10 +1353,6 @@ body.home-page {
 
   .badge-gpa1-label.animate-gpa1 {
     transform: translateX(calc(-50% - 3.75rem));
-  }
-
-  .executive-summary + .presentation-section {
-    margin-top: calc(5rem + 8vw);
   }
 }
 
