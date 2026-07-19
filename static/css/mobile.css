@@ -24,13 +24,13 @@
   --mobile-spacing-md: 1rem;
   --mobile-spacing-lg: 1.5rem;
   --mobile-spacing-xl: 2rem;
-  --mobile-tap-target: 48px;
-  --mobile-tap-target-min: 44px;
-  --mobile-radius-md: 8px;
-  --mobile-radius-lg: 12px;
-  --mobile-radius-xl: 16px;
-  --mobile-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --mobile-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --mobile-tap-target: 3rem;
+  --mobile-tap-target-min: 2.75rem;
+  --mobile-radius-md: 0.5rem;
+  --mobile-radius-lg: 0.75rem;
+  --mobile-radius-xl: 1rem;
+  --mobile-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  --mobile-shadow-lg: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
   --mobile-gray-600: #666666;
 
   /* ========== 统一动画变量系统 ========== */
@@ -72,7 +72,7 @@
 .animate-optimize {
   will-change: transform, opacity;
   backface-visibility: hidden;
-  perspective: 1000px;
+  perspective: 62.5rem;
   transform-style: preserve-3d;
 }
 
@@ -187,7 +187,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(1.25rem);
   }
 
   to {
@@ -199,7 +199,7 @@
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-1.25rem);
   }
 
   to {
@@ -342,7 +342,7 @@
   }
 
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-0.625rem);
   }
 }
 
@@ -373,19 +373,19 @@
   }
 
   20% {
-    transform: translateX(-4px);
+    transform: translateX(-0.25rem);
   }
 
   40% {
-    transform: translateX(4px);
+    transform: translateX(0.25rem);
   }
 
   60% {
-    transform: translateX(-4px);
+    transform: translateX(-0.25rem);
   }
 
   80% {
-    transform: translateX(4px);
+    transform: translateX(0.25rem);
   }
 }
 
@@ -393,12 +393,12 @@
 @keyframes successPop {
   0% {
     opacity: 0;
-    transform: scale(0.6) translateY(10px);
+    transform: scale(0.6) translateY(0.625rem);
   }
 
   70% {
     opacity: 1;
-    transform: scale(1.1) translateY(-2px);
+    transform: scale(1.1) translateY(-0.125rem);
   }
 
   100% {
@@ -422,7 +422,7 @@
 /* 列表项渐入 - stagger效果 */
 .anim-list-item {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(1rem);
   animation: listItemIn var(--anim-duration-standard) var(--anim-easing-decelerate) forwards;
 }
 
@@ -465,7 +465,7 @@
 @keyframes toastIn {
   from {
     opacity: 0;
-    transform: translateY(40px) scale(0.9);
+    transform: translateY(2.5rem) scale(0.9);
   }
 
   to {
@@ -482,7 +482,7 @@
 
   to {
     opacity: 0;
-    transform: translateY(-20px) scale(0.9);
+    transform: translateY(-1.25rem) scale(0.9);
   }
 }
 
@@ -500,7 +500,7 @@
 @keyframes modalIn {
   from {
     opacity: 0;
-    transform: scale(0.85) translateY(20px);
+    transform: scale(0.85) translateY(1.25rem);
   }
 
   to {
@@ -662,9 +662,9 @@ nav.nav-hidden {
 img[data-src],
 img[data-srcset] {
   background: var(--mobile-bg-fallback);
-  min-height: 100px;
+  min-height: 6.25rem;
   opacity: 0.7;
-  filter: blur(5px);
+  filter: blur(0.3125rem);
   transition: opacity var(--anim-duration-medium) var(--anim-easing-decelerate),
     filter var(--anim-duration-medium) var(--anim-easing-decelerate);
 }
@@ -718,7 +718,7 @@ img.loaded {
   }
 }
 
-/* ===== 1024px以下：移动端 - 显示汉堡菜单 ===== */
+/* ===== 64rem以下：移动端 - 显示汉堡菜单 ===== */
 @media (max-width: 1024px) {
 
   /* 隐藏桌面导航项 */
@@ -732,16 +732,16 @@ img.loaded {
   .hamburger-menu {
     display: flex;
     position: fixed;
-    top: max(25px, env(safe-area-inset-top) + 8px);
-    right: max(10px, env(safe-area-inset-right) + 8px);
+    top: max(1.5625rem, env(safe-area-inset-top) + 0.5rem);
+    right: max(0.625rem, env(safe-area-inset-right) + 0.5rem);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 44px;
-    height: 44px;
-    padding: 2px;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.125rem;
     background: transparent;
-    border: 2px solid var(--mobile-primary-light);
+    border: 0.125rem solid var(--mobile-primary-light);
     border-radius: var(--mobile-radius-lg);
     z-index: 100000;
     cursor: pointer;
@@ -751,37 +751,37 @@ img.loaded {
 
   .hamburger-menu span {
     display: block;
-    width: 26px;
-    height: 3px;
+    width: 1.625rem;
+    height: 0.1875rem;
     background-color: var(--mobile-primary);
-    border-radius: 2px;
+    border-radius: 0.125rem;
     transition: transform var(--mobile-transition-medium) var(--mobile-easing-standard),
       opacity var(--mobile-transition-medium) var(--mobile-easing-standard),
       background-color var(--mobile-transition-medium) var(--mobile-easing-standard);
     transform-origin: center;
     position: absolute;
     left: 50%;
-    margin-left: -13px;
+    margin-left: -0.8125rem;
   }
 
   .hamburger-menu span:nth-child(1) {
     top: 50%;
-    margin-top: -6.5px;
+    margin-top: -0.375rem;
   }
 
   .hamburger-menu span:nth-child(2) {
     top: 50%;
-    margin-top: -1.5px;
+    margin-top: -0.09375rem;
   }
 
   .hamburger-menu span:nth-child(3) {
     top: 50%;
-    margin-top: 3.5px;
+    margin-top: 0.1875rem;
   }
 
   .hamburger-menu.active span:nth-child(1) {
     top: 50%;
-    margin-top: -1.5px;
+    margin-top: -0.09375rem;
     transform: rotate(45deg);
   }
 
@@ -792,7 +792,7 @@ img.loaded {
 
   .hamburger-menu.active span:nth-child(3) {
     top: 50%;
-    margin-top: -1.5px;
+    margin-top: -0.09375rem;
     transform: rotate(-45deg);
   }
 
@@ -808,8 +808,8 @@ img.loaded {
     right: 0;
     bottom: 0;
     background: var(--mobile-menu-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(1.25rem);
+    -webkit-backdrop-filter: blur(1.25rem);
     z-index: 99998;
     transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
       visibility var(--anim-duration-medium) var(--anim-easing-standard);
@@ -834,7 +834,7 @@ img.loaded {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.9);
-    width: min(90vw, 400px);
+    width: min(90vw, 25rem);
     max-height: min(85vh, 85svh);
     padding: var(--mobile-spacing-xl) var(--mobile-spacing-xl) var(--mobile-spacing-xl);
     padding-left: max(2rem, env(safe-area-inset-left));
@@ -848,9 +848,9 @@ img.loaded {
     display: block;
     box-sizing: border-box;
     background: #FFFDF8;
-    border-radius: 16px;
-    border: 3px solid #D4A574;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    border-radius: 1rem;
+    border: 0.1875rem solid #D4A574;
+    box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.25);
   }
 
   .mobile-menu-overlay.active .mobile-menu {
@@ -899,7 +899,7 @@ img.loaded {
   .mobile-menu ul li a .iconfont {
     margin-right: var(--mobile-spacing-sm);
     font-size: 1.4rem;
-    min-width: 32px;
+    min-width: 2rem;
     text-align: center;
   }
 
@@ -908,13 +908,13 @@ img.loaded {
     border-radius: var(--mobile-radius-md);
     margin: var(--mobile-spacing-sm) 0;
     padding: var(--mobile-spacing-xs) 0;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(0.3125rem);
+    -webkit-backdrop-filter: blur(0.3125rem);
     background: var(--mobile-dropdown-bg);
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-0.625rem);
     transition: max-height var(--anim-duration-medium) var(--anim-easing-standard),
       opacity var(--anim-duration-medium) var(--anim-easing-standard),
       transform var(--anim-duration-medium) var(--anim-easing-decelerate);
@@ -922,7 +922,7 @@ img.loaded {
 
   .mobile-menu .dropdown-open .dropdown-content,
   .mobile-menu .dropdown-content.open {
-    max-height: 500px;
+    max-height: 31.25rem;
     opacity: 1;
     transform: translateY(0);
   }
@@ -957,7 +957,7 @@ img.loaded {
   }
 }
 
-/* ===== 768px以下：手机端 ===== */
+/* ===== 48rem以下：手机端 ===== */
 @media (max-width: 768px) {
 
   /* ===== 全局基础设置 ===== */
@@ -970,7 +970,7 @@ img.loaded {
   }
 
   html {
-    scroll-padding-top: 80px;
+    scroll-padding-top: 5rem;
   }
 
   /* ===== 移动端侧边栏禁用粘性定位 ===== */
@@ -994,27 +994,27 @@ img.loaded {
     top: 0;
     left: 0;
     display: flex;
-    height: 100px;
+    height: 6.25rem;
     align-items: center;
     padding: 0.5rem 1rem;
     padding-top: max(0.5rem, env(safe-area-inset-top));
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-left: max(1rem, env(safe-area-inset-left));
-    background: url('../image/nav_bc.jpg') no-repeat left center;
+    background: url(../image/nav_bc.webp) no-repeat left center;
     background-size: cover;
     will-change: transform;
     box-shadow: var(--mobile-shadow-lg);
   }
 
   nav .logo img {
-    width: 40px;
-    height: 100px;
+    width: 2.5rem;
+    height: 6.25rem;
   }
 
   /* ===== 汉堡菜单按钮 ===== */
   .hamburger-menu {
-    top: max(25px, env(safe-area-inset-top) + 8px);
-    right: max(10px, env(safe-area-inset-right) + 8px);
+    top: max(1.5625rem, env(safe-area-inset-top) + 0.5rem);
+    right: max(0.625rem, env(safe-area-inset-right) + 0.5rem);
   }
 
   /* ===== 通用容器 ===== */
@@ -1068,7 +1068,6 @@ img.loaded {
 
   .presentation-section img,
   .presentation-section .placeholder-block,
-  .presentation-section .knockout-svg,
   .presentation-section svg {
     max-width: 100%;
     height: auto;
@@ -1145,19 +1144,19 @@ img.loaded {
 
   .footer-left {
     padding: var(--mobile-spacing-md);
-    min-height: 80px;
+    min-height: 5rem;
   }
 
   .scroller-track1,
   .scroller-track2 {
     gap: var(--mobile-spacing-xl);
-    max-height: 40px;
-    max-width: 160px;
+    max-height: 2.5rem;
+    max-width: 10rem;
   }
 
   .scroll-image {
-    max-height: 44px;
-    max-width: 180px;
+    max-height: 2.75rem;
+    max-width: 11.25rem;
   }
 
   .content-section {
@@ -1188,12 +1187,12 @@ img.loaded {
     }
 
     nav.scrolled {
-      height: 48px;
+      height: 3rem;
     }
   }
 }
 
-/* ===== 480px以下：超小屏幕手机 ===== */
+/* ===== 30rem以下：超小屏幕手机 ===== */
 @media (max-width: 480px) {
 
   /* 基础字体缩放 */
@@ -1207,25 +1206,25 @@ img.loaded {
 
   /* 导航栏微调 */
   nav {
-    height: 100px;
+    height: 6.25rem;
     padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
   }
 
   .hamburger-menu {
-    width: 40px;
-    height: 40px;
-    top: max(25px, env(safe-area-inset-top) + 8px);
-    right: max(8px, env(safe-area-inset-right) + 6px);
+    width: 2.5rem;
+    height: 2.5rem;
+    top: max(1.5625rem, env(safe-area-inset-top) + 0.5rem);
+    right: max(0.5rem, env(safe-area-inset-right) + 0.375rem);
   }
 
   .hamburger-menu span {
-    width: 20px;
-    height: 2.5px;
+    width: 1.25rem;
+    height: 0.125rem;
   }
 
   /* 超小屏幕下的菜单优化 */
   .mobile-menu-overlay .mobile-menu {
-    width: min(95vw, 380px);
+    width: min(95vw, 23.75rem);
     max-height: min(88vh, 88svh);
     padding: var(--mobile-spacing-lg) var(--mobile-spacing-lg) var(--mobile-spacing-lg);
   }
@@ -1241,11 +1240,11 @@ img.loaded {
   .btn {
     min-height: var(--mobile-tap-target-min);
     min-width: var(--mobile-tap-target-min);
-    padding: 10px 14px;
+    padding: 0.625rem 0.875rem;
   }
 }
 
-/* ===== 1025px-1200px：平板到小屏笔记本 ===== */
+/* ===== 64.0625rem-75rem：平板到小屏笔记本 ===== */
 @media (min-width: 1025px) and (max-width: 1200px) {
 
   /* 显示桌面导航 */
@@ -1285,7 +1284,7 @@ img.loaded {
   }
 }
 
-/* ===== 1200px以上：大屏幕 ===== */
+/* ===== 75rem以上：大屏幕 ===== */
 @media (min-width: 1201px) {
 
   /* 显示桌面导航 */
@@ -1317,7 +1316,7 @@ img.loaded {
 
   /* 容器最大宽度 */
   .container {
-    max-width: 1400px;
+    max-width: 87.5rem;
   }
 }
 
@@ -1353,8 +1352,8 @@ img.loaded {
   }
 
   .cartoon-bubbles .bubble {
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
   }
 
   /* 成员容器 - 单列布局 */
@@ -1369,16 +1368,16 @@ img.loaded {
   .member-item {
     width: 100% !important;
     max-width: 100%;
-    min-height: 280px;
+    min-height: 17.5rem;
     margin-left: 0;
     padding: 1.25rem 1rem;
   }
 
   /* 头像 - 移动端尺寸调整 */
   .member-avatar {
-    width: 110px;
-    height: 110px;
-    top: 15px;
+    width: 6.875rem;
+    height: 6.875rem;
+    top: 0.9375rem;
   }
 
   .member-avatar-inner img {
@@ -1388,7 +1387,7 @@ img.loaded {
 
   /* 成员信息 - 调整上边距 */
   .member-info {
-    margin-top: 140px;
+    margin-top: 8.75rem;
   }
 
   .member-name {
@@ -1445,12 +1444,12 @@ img.loaded {
   .member-item.active .member-avatar {
     /* 保持原始位置和尺寸 */
     position: absolute !important;
-    top: 15px !important;
+    top: 0.9375rem !important;
     left: 50% !important;
-    width: 110px;
-    height: 110px;
+    width: 6.875rem;
+    height: 6.875rem;
     /* 视觉反馈：缩放 + 边框高亮 + 淡出 */
-    box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 0.25rem rgba(139, 90, 43, 0.3), 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15);
     transform: translateX(-50%) scale(1.05) !important;
     opacity: 0;
   }
@@ -1470,7 +1469,7 @@ img.loaded {
     position: absolute;
     width: 100%;
     height: 100%;
-    min-height: 200px;
+    min-height: 12.5rem;
     visibility: visible;
   }
 
@@ -1488,7 +1487,7 @@ img.loaded {
   }
 }
 
-/* ===== 768px以下：手机端 - 进一步优化 ===== */
+/* ===== 48rem以下：手机端 - 进一步优化 ===== */
 @media (max-width: 768px) {
 
   /* 标题区域 */
@@ -1502,9 +1501,9 @@ img.loaded {
   }
 
   .cartoon-bubbles .bubble {
-    width: 28px;
-    height: 28px;
-    border-width: 2px;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-width: 0.125rem;
   }
 
   /* 成员容器 */
@@ -1515,20 +1514,20 @@ img.loaded {
 
   /* 成员卡片 */
   .member-item {
-    min-height: 260px;
+    min-height: 16.25rem;
     padding: 1rem 0.75rem;
   }
 
   /* 头像 - 更小尺寸 */
   .member-avatar {
-    width: 95px;
-    height: 95px;
-    top: 12px;
+    width: 5.9375rem;
+    height: 5.9375rem;
+    top: 0.75rem;
   }
 
   /* 成员信息 */
   .member-info {
-    margin-top: 120px;
+    margin-top: 7.5rem;
   }
 
   .member-name {
@@ -1564,18 +1563,18 @@ img.loaded {
   .member-item.active .member-avatar {
     /* 保持原始位置和尺寸 */
     position: absolute !important;
-    top: 12px !important;
+    top: 0.75rem !important;
     left: 50% !important;
-    width: 95px;
-    height: 95px;
+    width: 5.9375rem;
+    height: 5.9375rem;
     /* 视觉反馈：缩放 + 边框高亮 + 淡出 */
-    box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 0.25rem rgba(139, 90, 43, 0.3), 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15);
     transform: translateX(-50%) scale(1.05) !important;
     opacity: 0;
   }
 }
 
-/* ===== 480px以下：超小屏幕手机 ===== */
+/* ===== 30rem以下：超小屏幕手机 ===== */
 @media (max-width: 480px) {
 
   /* 标题区域 */
@@ -1584,26 +1583,26 @@ img.loaded {
   }
 
   .cartoon-bubbles .bubble {
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   /* 成员卡片 */
   .member-item {
-    min-height: 240px;
+    min-height: 15rem;
     padding: 0.85rem 0.5rem;
   }
 
   /* 头像 */
   .member-avatar {
-    width: 85px;
-    height: 85px;
-    top: 10px;
+    width: 5.3125rem;
+    height: 5.3125rem;
+    top: 0.625rem;
   }
 
   /* 成员信息 */
   .member-info {
-    margin-top: 105px;
+    margin-top: 6.5625rem;
   }
 
   /* 标签 */
@@ -1628,12 +1627,12 @@ img.loaded {
   .member-item.active .member-avatar {
     /* 保持原始位置和尺寸 */
     position: absolute !important;
-    top: 10px !important;
+    top: 0.625rem !important;
     left: 50% !important;
-    width: 85px;
-    height: 85px;
+    width: 5.3125rem;
+    height: 5.3125rem;
     /* 视觉反馈：缩放 + 边框高亮 + 淡出 */
-    box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 0.25rem rgba(139, 90, 43, 0.3), 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15);
     transform: translateX(-50%) scale(1.05) !important;
     opacity: 0;
   }
@@ -1645,7 +1644,7 @@ img.loaded {
 .anim-no-repaint {
   will-change: transform, opacity;
   backface-visibility: hidden;
-  perspective: 1000px;
+  perspective: 62.5rem;
 }
 
 .anim-gpu-accelerate {
@@ -1670,7 +1669,7 @@ img.loaded {
 @keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(1.25rem);
   }
 
   to {
@@ -1682,7 +1681,7 @@ img.loaded {
 /* 元素进入动画序列 - 配合JavaScript使用 */
 .anim-sequence-item {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(1.25rem);
 }
 
 .anim-sequence-item.visible {
@@ -1704,7 +1703,7 @@ img.loaded {
 
 .card-hover:active {
   transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 /* 滑动删除动画 */
@@ -1746,12 +1745,12 @@ img.loaded {
 @keyframes successPop {
   0% {
     opacity: 0;
-    transform: scale(0.6) translateY(10px);
+    transform: scale(0.6) translateY(0.625rem);
   }
 
   70% {
     opacity: 1;
-    transform: scale(1.05) translateY(-2px);
+    transform: scale(1.05) translateY(-0.125rem);
   }
 
   100% {
@@ -1773,19 +1772,19 @@ img.loaded {
   }
 
   20% {
-    transform: translateX(-4px);
+    transform: translateX(-0.25rem);
   }
 
   40% {
-    transform: translateX(4px);
+    transform: translateX(0.25rem);
   }
 
   60% {
-    transform: translateX(-4px);
+    transform: translateX(-0.25rem);
   }
 
   80% {
-    transform: translateX(4px);
+    transform: translateX(0.25rem);
   }
 }
 

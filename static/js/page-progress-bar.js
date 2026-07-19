@@ -1,23 +1,22 @@
 /**
- * ============================================
  * iGEM SZPU-2026 - Page Progress Bar
- * ============================================
  *
- * @version 2.0
- * @description 页面加载进度条（企业级性能优化版）
- * @features
- *   - requestAnimationFrame 确保 60fps 流畅渲染
- *   - 智能定时器管理，防止内存泄漏
- *   - 性能监控（可选）
- *   - 完全兼容原有 API
- *   - 自动清理机制
+ * Top-loading progress indicator with automatic trickle progress and
+ * page-load lifecycle integration. Built without external dependencies.
  */
 (function () {
   'use strict';
 
-  // ============================================
-  // 配置常量（集中管理）
-  // ============================================
+  if (!window.iGEMUtils) {
+    console.error('[PageProgress] 缺少依赖：请先加载 static/js/utils.js');
+    return;
+  }
+
+  const Utils = window.iGEMUtils;
+  const raf = Utils.safeRequestAnimationFrame;
+  const caf = Utils.safeCancelAnimationFrame;
+
+  /** @type {Object} Default runtime configuration. */
   const CONFIG = {
     AUTO_HIDE: true,
     AUTO_HIDE_DELAY: 600,
@@ -27,101 +26,105 @@
     DEBUG_MODE: false
   };
 
-  // ============================================
-  // 内部状态
-  // ============================================
+  /**
+   * @typedef {Object} ProgressState
+   * @property {number} progress
+   * @property {boolean} isLoading
+   * @property {boolean} isCompleted
+   * @property {number|null} trickleTimer
+   * @property {number|null} autoHideTimer
+   * @property {number|null} rafId
+   * @property {boolean} rafPending
+   * @property {string} targetWidth
+   * @property {HTMLElement|null} containerElement
+   * @property {HTMLElement|null} fillElement
+   * @property {HTMLElement|null} glowElement
+   * @property {Function|null} readyStateHandler
+   * @property {Function|null} loadHandler
+   */
+
+  /** @type {ProgressState} Internal component state. */
   const state = {
     progress: 0,
     isLoading: false,
     isCompleted: false,
     trickleTimer: null,
+    autoHideTimer: null,
+    rafId: null,
+    rafPending: false,
+    targetWidth: '0%',
+    containerElement: null,
     fillElement: null,
     glowElement: null,
-    containerElement: null,
-    rafId: null
+    readyStateHandler: null,
+    loadHandler: null
   };
 
-  // ============================================
-  // 工具函数
-  // ============================================
-  const Utils = {
-    /**
-     * 安全日志
-     */
-    log: function (message, data) {
-      if (CONFIG.DEBUG_MODE) {
-        console.log('[PageProgress]', message, data || '');
-      }
-    },
-
-    /**
-     * requestAnimationFrame 包装器
-     */
-    requestTick: function (callback) {
-      if (state.rafId) {
-        cancelAnimationFrame(state.rafId);
-      }
-      state.rafId = requestAnimationFrame(callback);
-    },
-
-    /**
-     * 清理 RAF
-     */
-    cancelTick: function () {
-      if (state.rafId) {
-        cancelAnimationFrame(state.rafId);
-        state.rafId = null;
-      }
-    },
-
-    /**
-     * 清理定时器
-     */
-    clearTimer: function () {
-      if (state.trickleTimer) {
-        clearInterval(state.trickleTimer);
-        state.trickleTimer = null;
-      }
+  /**
+   * Logs a debug message when debug mode is enabled.
+   * @param {string} message
+   * @param {*} [data]
+   */
+  function log(message, data) {
+    if (CONFIG.DEBUG_MODE) {
+      console.log('[PageProgress]', message, data || '');
     }
-  };
+  }
 
-  // ============================================
-  // DOM 操作（集中管理）
-  // ============================================
+  /** Cancels any pending animation frame and resets the scheduling flag. */
+  function cancelRaf() {
+    if (state.rafId) {
+      caf(state.rafId);
+      state.rafId = null;
+    }
+    state.rafPending = false;
+  }
+
+  /** Clears both the trickle interval and the auto-hide timeout. */
+  function clearTimers() {
+    if (state.trickleTimer) {
+      clearInterval(state.trickleTimer);
+      state.trickleTimer = null;
+    }
+    if (state.autoHideTimer) {
+      clearTimeout(state.autoHideTimer);
+      state.autoHideTimer = null;
+    }
+  }
+
+  /** Removes document/window listeners registered by the component. */
+  function removeEventListeners() {
+    if (state.readyStateHandler) {
+      document.removeEventListener('readystatechange', state.readyStateHandler);
+      state.readyStateHandler = null;
+    }
+    if (state.loadHandler) {
+      window.removeEventListener('load', state.loadHandler);
+      state.loadHandler = null;
+    }
+  }
+
+  /** Creates or reuses the progress bar DOM and caches element references. */
   const DOMManager = {
-    /**
-     * 创建进度条 DOM 结构
-     */
     create: function () {
-      // 避免重复创建
-      if (document.getElementById('page-progress-bar')) {
-        Utils.log('进度条已存在，复用现有元素');
-        state.containerElement = document.getElementById('page-progress-bar');
-        state.fillElement = state.containerElement.querySelector('.ppb-fill');
-        state.glowElement = state.containerElement.querySelector('.ppb-glow');
-        return;
+      let bar = document.getElementById('page-progress-bar');
+      if (bar) {
+        log('Progress bar exists, reusing');
+      } else {
+        log('Creating progress bar');
+        bar = document.createElement('div');
+        bar.id = 'page-progress-bar';
+        bar.innerHTML = '<div class="ppb-track"><div class="ppb-fill"><div class="ppb-glow"></div></div></div>';
+        document.body.appendChild(bar);
       }
 
-      Utils.log('创建新进度条');
-
-      // 创建容器
-      const bar = document.createElement('div');
-      bar.id = 'page-progress-bar';
-      bar.innerHTML = '<div class="ppb-track"><div class="ppb-fill"><div class="ppb-glow"></div></div></div>';
-
-      document.body.appendChild(bar);
-
-      // 缓存元素引用
       state.containerElement = bar;
       state.fillElement = bar.querySelector('.ppb-fill');
       state.glowElement = bar.querySelector('.ppb-glow');
     },
 
-    /**
-     * 销毁进度条
-     */
     destroy: function () {
-      Utils.log('销毁进度条');
+      log('Destroying DOM');
       if (state.containerElement && state.containerElement.parentNode) {
         state.containerElement.parentNode.removeChild(state.containerElement);
       }
@@ -131,40 +134,32 @@
     }
   };
 
-  // ============================================
-  // UI 更新（requestAnimationFrame 优化）
-  // ============================================
+  /** Schedules and applies UI updates efficiently with a single RAF per frame. */
   const UIUpdater = {
-    /**
-     * 更新进度条 UI
-     */
     update: function () {
       if (!state.fillElement) return;
 
       const percent = Math.round(state.progress * 100);
-      const newWidth = percent + '%';
+      state.targetWidth = percent + '%';
 
-      // 只有当值真的变化时才更新 DOM
-      if (state.fillElement.style.width !== newWidth) {
-        Utils.requestTick(function () {
-          state.fillElement.style.width = newWidth;
-        });
-      }
+      if (state.rafPending) return;
+
+      state.rafPending = true;
+      state.rafId = raf(function applyWidth() {
+        state.rafPending = false;
+        state.rafId = null;
+        if (state.fillElement) {
+          state.fillElement.style.width = state.targetWidth;
+        }
+      });
     },
 
-    /**
-     * 显示进度条
-     */
     show: function () {
       if (!state.containerElement) return;
-      state.containerElement.classList.add('is-visible');
-      state.containerElement.classList.add('is-loading');
+      state.containerElement.classList.add('is-visible', 'is-loading');
       state.containerElement.classList.remove('is-completed');
     },
 
-    /**
-     * 标记完成
-     */
     markComplete: function () {
       if (!state.containerElement || !state.fillElement) return;
       state.containerElement.classList.remove('is-loading');
@@ -172,9 +167,6 @@
       state.fillElement.classList.add('ppb-fill--pulse');
     },
 
-    /**
-     * 隐藏进度条
-     */
     hide: function () {
       if (!state.containerElement || !state.fillElement) return;
       state.containerElement.classList.remove('is-visible');
@@ -182,17 +174,12 @@
     }
   };
 
-  // ============================================
-  // 进度条逻辑
-  // ============================================
+  /** Core progress bar behavior including trickle and lifecycle. */
   const ProgressBar = {
-    /**
-     * 开始进度条
-     */
     start: function () {
       if (state.isLoading) return this;
 
-      Utils.log('开始进度条');
+      log('Starting progress bar');
 
       state.progress = 0.08;
       state.isLoading = true;
@@ -206,7 +193,9 @@
     },
 
     /**
-     * 设置进度
+     * Sets the progress to a specific percentage.
+     * @param {number} value - Percentage in the range 0-100.
+     * @returns {ProgressBar}
      */
     setProgress: function (value) {
       if (state.isCompleted) return this;
@@ -217,24 +206,26 @@
       return this;
     },
 
-    /**
-     * 完成进度条
-     */
     complete: function () {
       if (state.isCompleted) return this;
 
-      Utils.log('完成进度条');
+      log('Completing progress bar');
 
       state.progress = 1;
       state.isLoading = false;
       state.isCompleted = true;
 
-      ProgressBar.stopTrickle();
+      clearTimers();
       UIUpdater.update();
       UIUpdater.markComplete();
 
+      if (state.readyStateHandler) {
+        document.removeEventListener('readystatechange', state.readyStateHandler);
+        state.readyStateHandler = null;
+      }
+
       if (CONFIG.AUTO_HIDE) {
-        setTimeout(function () {
+        state.autoHideTimer = setTimeout(function () {
           UIUpdater.hide();
         }, CONFIG.AUTO_HIDE_DELAY);
       }
@@ -242,13 +233,10 @@
       return this;
     },
 
-    /**
-     * 启动自动进度（trickle）
-     */
     startTrickle: function () {
-      Utils.log('启动 trickle');
+      log('Starting trickle');
 
-      ProgressBar.stopTrickle(); // 先停止已有的
+      clearTimers();
 
       state.trickleTimer = setInterval(function () {
         if (state.isLoading && !state.isCompleted) {
@@ -262,20 +250,9 @@
       }, CONFIG.TRICKLE_INTERVAL);
     },
 
-    /**
-     * 停止 trickle
-     */
-    stopTrickle: function () {
-      Utils.clearTimer();
-    },
-
-    /**
-     * 自动启动进度（监听 DOM 加载状态）
-     */
     startAutoProgress: function () {
-      Utils.log('启动自动进度');
+      log('Starting auto progress');
 
-      // 如果页面已加载完成，快速显示并隐藏
       if (document.readyState === 'complete') {
         ProgressBar.start();
         ProgressBar.setProgress(80);
@@ -285,10 +262,9 @@
         return this;
       }
 
-      // 否则监听加载状态
       ProgressBar.start();
 
-      function updateOnReadyState() {
+      state.readyStateHandler = function updateOnReadyState() {
         switch (document.readyState) {
           case 'loading':
             ProgressBar.setProgress(20);
@@ -300,26 +276,30 @@
             ProgressBar.complete();
             break;
         }
-      }
+      };
 
-      updateOnReadyState();
-      document.addEventListener('readystatechange', updateOnReadyState, { once: false });
+      state.readyStateHandler();
+      document.addEventListener('readystatechange', state.readyStateHandler);
 
-      window.addEventListener('load', function () {
+      state.loadHandler = function () {
         if (!state.isCompleted) {
           ProgressBar.complete();
         }
-      }, { once: true });
+      };
+      window.addEventListener('load', state.loadHandler, { once: true });
 
       return this;
     }
   };
 
-  // ============================================
-  // 公共 API
-  // ============================================
+  /**
+   * Creates a new PageProgressBar instance.
+   * @param {Object} [options]
+   * @param {boolean} [options.autoHide]
+   * @param {number} [options.autoHideDelay]
+   * @returns {Object} Instance API.
+   */
   function PageProgressBar(options) {
-    // 合并配置
     if (options) {
       if (typeof options.autoHide !== 'undefined') {
         CONFIG.AUTO_HIDE = options.autoHide;
@@ -329,26 +309,27 @@
       }
     }
 
-    // 创建 DOM
     DOMManager.create();
 
-    // 返回链式调用接口
     return {
       start: ProgressBar.start,
       setProgress: ProgressBar.setProgress,
       complete: ProgressBar.complete,
-      startAutoProgress: ProgressBar.startAutoProgress
+      startAutoProgress: ProgressBar.startAutoProgress,
+      destroy: PageProgressBar.destroy
     };
   }
 
-  // ============================================
-  // 静态方法（便于调试）
-  // ============================================
+  /**
+   * Enables or disables debug logging.
+   * @param {boolean} enabled
+   */
   PageProgressBar.setDebugMode = function (enabled) {
     CONFIG.DEBUG_MODE = enabled;
-    Utils.log('调试模式: ' + (enabled ? '开启' : '关闭'));
+    log('Debug mode: ' + (enabled ? 'on' : 'off'));
   };
 
+  /** @returns {Object} A snapshot of the current progress state. */
   PageProgressBar.getState = function () {
     return {
       progress: state.progress,
@@ -357,25 +338,20 @@
     };
   };
 
+  /** Destroys the component, clearing timers, RAF and event listeners. */
   PageProgressBar.destroy = function () {
-    Utils.log('销毁组件');
-    Utils.cancelTick();
-    Utils.clearTimer();
+    log('Destroying component');
+    cancelRaf();
+    clearTimers();
+    removeEventListeners();
     DOMManager.destroy();
   };
 
-  // ============================================
-  // 暴露到全局
-  // ============================================
   window.PageProgressBar = PageProgressBar;
 
-  // ============================================
-  // 页面卸载时清理（防止内存泄漏）
-  // ============================================
   window.addEventListener('beforeunload', function () {
     if (window.PageProgressBar && window.PageProgressBar.destroy) {
       window.PageProgressBar.destroy();
     }
   });
-
 })();

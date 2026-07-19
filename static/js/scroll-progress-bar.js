@@ -3,170 +3,168 @@
  * iGEM SZPU-2026 - Scroll Progress Bar
  * ============================================
  *
- * @version 1.1
- * @description 极简滚动进度条（稳定版 + 基础性能优化）
- * 参考：sidebar-progress.js 架构
+ * @description 极简滚动进度条（rAF 节流版）
+ *
+ * 本次优化要点：
+ *  1. scroll 事件使用 requestAnimationFrame 节流，进度随滚动实时更新。
+ *  2. 所有 addEventListener 均使用被动事件监听（能力检测后回退）。
+ *  3. resize 使用 150ms debounce，并在尺寸变化后重新检测滚动容器。
+ *  4. 缓存 DOM 引用与事件 handler，提供 destroy() 与 beforeunload 自动清理。
+ *  5. 复用 window.iGEMUtils 中的通用工具函数，移除私有实现。
  */
 (function () {
   'use strict';
 
-  // 模块状态
+  if (!window.iGEMUtils) {
+    console.error('[ScrollProgress] 缺少依赖：请先加载 static/js/utils.js');
+    return;
+  }
+
+  const Utils = window.iGEMUtils;
+
+  /**
+   * 模块配置。
+   * @type {{ DEBUG_MODE: boolean, RESIZE_DEBOUNCE: number }}
+   */
+  const CONFIG = {
+    DEBUG_MODE: false,
+    RESIZE_DEBOUNCE: 150
+  };
+
+  /**
+   * 模块状态。
+   * @type {{
+   *   scrollInfo: { element: Window|Element, isWindow: boolean }|null,
+   *   isInitialized: boolean,
+   *   fillElement: HTMLElement|null,
+   *   scrollHandler: function|null,
+   *   resizeHandler: function|null
+   * }}
+   */
   const state = {
     scrollInfo: null,
     isInitialized: false,
-    barElement: null,
-    fillElement: null
+    fillElement: null,
+    scrollHandler: null,
+    resizeHandler: null
   };
 
-  // 工具函数
-  const Utils = {
-    log: function (message, data) {
-      console.log('[ScrollProgress]', message, data || '');
-    },
-    getScrollPosition: function (element, isWindow) {
-      if (isWindow) {
-        return window.scrollY || window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop || 0;
-      }
-      return element.scrollTop;
-    },
-    getScrollHeight: function (element, isWindow) {
-      if (isWindow) {
-        return Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight,
-          document.documentElement.offsetHeight,
-          document.body.offsetHeight
-        );
-      }
-      return element.scrollHeight;
-    },
-    getClientHeight: function (element, isWindow) {
-      if (isWindow) {
-        return window.innerHeight ||
-          document.documentElement.clientHeight ||
-          document.body.clientHeight;
-      }
-      return element.clientHeight;
-    },
-    debounce: function (func, wait) {
-      let timeout;
-      return function executedFunction() {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(function () {
-          func.apply(context, args);
-        }, wait);
-      };
+  /**
+   * 在调试模式下输出日志。
+   * @param {string} message 日志消息
+   * @param {any} [data] 附加数据
+   */
+  function log(message, data) {
+    if (CONFIG.DEBUG_MODE) {
+      console.log('[ScrollProgress]', message, data !== undefined ? data : '');
     }
-  };
+  }
 
-  // 滚动容器检测（完全参考 sidebar-progress.js）
-  const ScrollDetector = {
-    detectScrollContainer: function () {
-      const descContent = document.querySelector('.description-content, .content-area');
-      if (descContent) {
-        const style = window.getComputedStyle(descContent);
-        if ((style.height !== 'auto' || style.maxHeight !== 'none') &&
-          (style.overflowY === 'scroll' || style.overflowY === 'auto')) {
-          Utils.log('检测到滚动容器: .description-content/.content-area');
-          return { element: descContent, isWindow: false };
-        }
-      }
+  /**
+   * 获取被动事件监听选项。
+   * @returns {boolean|{ passive: true }}
+   */
+  function getPassiveOption() {
+    return Utils.supportsPassiveEvents() ? { passive: true } : false;
+  }
 
-      const bodyStyle = window.getComputedStyle(document.body);
-      if ((bodyStyle.height !== 'auto' || bodyStyle.maxHeight !== 'none') &&
-        (bodyStyle.overflowY === 'scroll' || bodyStyle.overflowY === 'auto')) {
-        Utils.log('检测到滚动容器: document.body');
-        return { element: document.body, isWindow: false };
-      }
+  /**
+   * 计算当前滚动进度百分比。
+   * @returns {number} 0-100 之间的整数
+   */
+  function calculateProgress() {
+    const scrollInfo = state.scrollInfo;
+    const scrollElement = scrollInfo.element;
+    const isWindowScroll = scrollInfo.isWindow;
 
-      Utils.log('检测到滚动容器: window');
-      return { element: window, isWindow: true };
+    const scrollTop = Utils.getScrollPosition(scrollElement, isWindowScroll);
+    const containerHeight = Utils.getClientHeight(scrollElement, isWindowScroll);
+    const totalHeight = Utils.getScrollHeight(scrollElement, isWindowScroll);
+    const maxScroll = Math.max(1, totalHeight - containerHeight);
+    const scrollPercent = (scrollTop / maxScroll) * 100;
+
+    return Math.round(Math.min(100, Math.max(0, scrollPercent)));
+  }
+
+  /**
+   * 更新进度条填充高度。
+   * @param {number} progressPercent 0-100 之间的百分比
+   */
+  function updateFill(progressPercent) {
+    if (state.fillElement) {
+      state.fillElement.style.height = progressPercent + '%';
     }
-  };
+  }
 
-  // 进度条创建
-  const ProgressBar = {
-    create: function () {
-      const existingBar = document.getElementById('scroll-progress-bar');
-      if (!existingBar) {
-        state.barElement = null;
-        state.fillElement = null;
-        return;
-      }
+  /**
+   * 更新滚动进度条。
+   */
+  function updateScrollProgress() {
+    updateFill(calculateProgress());
+  }
 
-      state.barElement = existingBar;
-      state.fillElement = document.getElementById('scroll-progress-fill');
-      Utils.log('进度条已存在，复用现有元素');
+  /**
+   * resize 完成后重新检测滚动容器并刷新进度。
+   */
+  function onResize() {
+    state.scrollInfo = Utils.detectScrollContainer();
+    updateScrollProgress();
+  }
+
+  /**
+   * 清理所有事件监听与引用。
+   */
+  function destroy() {
+    const passiveOption = getPassiveOption();
+
+    if (state.scrollHandler) {
+      state.scrollHandler.cancel();
     }
-  };
-
-  // 进度计算与更新
-  const ProgressCalculator = {
-    calculateProgress: function () {
-      const scrollInfo = state.scrollInfo;
-      const scrollElement = scrollInfo.element;
-      const isWindowScroll = scrollInfo.isWindow;
-
-      const scrollTop = Utils.getScrollPosition(scrollElement, isWindowScroll);
-      const containerHeight = Utils.getClientHeight(scrollElement, isWindowScroll);
-      const totalHeight = Utils.getScrollHeight(scrollElement, isWindowScroll);
-      const maxScroll = Math.max(1, totalHeight - containerHeight);
-      const scrollPercent = (scrollTop / maxScroll) * 100;
-      const progressPercent = Math.round(Math.min(100, Math.max(0, scrollPercent)));
-
-      return progressPercent;
-    },
-
-    updateProgressUI: function (progressPercent) {
-      if (state.fillElement) {
-        state.fillElement.style.height = progressPercent + '%';
-      }
+    if (state.scrollHandler && state.scrollInfo && state.scrollInfo.element) {
+      state.scrollInfo.element.removeEventListener('scroll', state.scrollHandler, passiveOption);
     }
-  };
-
-  // 主更新循环
-  const MainLoop = {
-    updateScrollProgress: function () {
-      const progressPercent = ProgressCalculator.calculateProgress();
-      ProgressCalculator.updateProgressUI(progressPercent);
+    if (state.resizeHandler) {
+      window.removeEventListener('resize', state.resizeHandler, passiveOption);
     }
-  };
 
-  // 初始化
+    state.scrollInfo = null;
+    state.fillElement = null;
+    state.isInitialized = false;
+    state.scrollHandler = null;
+    state.resizeHandler = null;
+  }
+
+  /**
+   * 初始化模块。
+   */
   function init() {
     if (state.isInitialized) {
       return;
     }
 
-    Utils.log('初始化中...');
+    log('初始化中...');
 
     // 仅当页面已存在 #scroll-progress-bar 时才初始化，避免与新右侧面板冲突
-    ProgressBar.create();
-    if (!state.barElement) {
-      Utils.log('未找到 #scroll-progress-bar，跳过初始化');
+    const barElement = document.getElementById('scroll-progress-bar');
+    if (!barElement) {
+      log('未找到 #scroll-progress-bar，跳过初始化');
       return;
     }
 
-    // 检测滚动容器
-    state.scrollInfo = ScrollDetector.detectScrollContainer();
+    state.fillElement = document.getElementById('scroll-progress-fill');
+    state.scrollInfo = Utils.detectScrollContainer();
     state.isInitialized = true;
 
-    // 事件绑定（完全参考 sidebar-progress.js）
-    const updateWithRaf = Utils.debounce(function () {
-      MainLoop.updateScrollProgress();
-    }, 16);
+    state.scrollHandler = Utils.rafThrottle(updateScrollProgress);
+    state.resizeHandler = Utils.debounce(onResize, CONFIG.RESIZE_DEBOUNCE);
 
-    state.scrollInfo.element.addEventListener('scroll', updateWithRaf, { passive: true });
-    window.addEventListener('resize', updateWithRaf, { passive: true });
+    const passiveOption = getPassiveOption();
+    state.scrollInfo.element.addEventListener('scroll', state.scrollHandler, passiveOption);
+    window.addEventListener('resize', state.resizeHandler, passiveOption);
 
-    // 初始更新
-    MainLoop.updateScrollProgress();
+    updateScrollProgress();
 
-    Utils.log('初始化完成');
+    log('初始化完成');
   }
 
   if (document.readyState === 'loading') {
@@ -175,4 +173,23 @@
     init();
   }
 
+  // 页面卸载时自动清理
+  window.addEventListener('beforeunload', destroy);
+
+  // 暴露公共 API
+  window.ScrollProgressBar = {
+    update: updateScrollProgress,
+    destroy: destroy,
+    setDebugMode: function (enabled) {
+      CONFIG.DEBUG_MODE = !!enabled;
+    },
+    getState: function () {
+      return {
+        isInitialized: state.isInitialized,
+        hasBar: !!document.getElementById('scroll-progress-bar'),
+        hasFill: !!state.fillElement,
+        scrollContainer: state.scrollInfo ? (state.scrollInfo.isWindow ? 'window' : state.scrollInfo.element.className || state.scrollInfo.element.tagName) : 'none'
+      };
+    }
+  };
 })();

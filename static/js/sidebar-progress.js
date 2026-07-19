@@ -1,34 +1,34 @@
 /**
- * ============================================
  * iGEM SZPU-2026 - Sidebar Progress System
- * ============================================
  *
- * @version 2.1
- * @description 通用模块化进度计算、导航高亮、布局验证系统
- * 适用于所有带侧边导航栏的页面
- *
- * 关键功能：
- * - 智能滚动容器检测
- * - 精确的进度百分比计算
- * - 实时导航高亮
- * - 布局完整性验证与自动恢复
- * - 内置测试工具
+ * 通用模块化进度计算、导航高亮、布局验证系统。
+ * 依赖全局 `window.iGEMUtils`，请在页面中先于本脚本加载 `utils.js`。
  */
 (function () {
   'use strict';
 
-  // ============================================
-  // 配置常量
-  // ============================================
+  const Utils = window.iGEMUtils;
+  if (!Utils) {
+    console.error('[Progress System] 缺少依赖：请先加载 static/js/utils.js');
+    return;
+  }
+
+  /**
+   * 模块配置。
+   * @type {Object}
+   */
   const CONFIG = {
     scrollBottomThreshold: 50,
     navVisibleThreshold: 0.1,
-    navHighlightOffset: 150, // 导航高亮偏移量(px)，标题离视口顶部该距离时开始高亮
+    navHighlightOffset: 150,
     debugMode: false,
     enableValidation: true,
     validateOnLoad: true,
-    // 可导航内容的 ID 前缀列表，用于匹配滚动区域
-    // 添加新页面章节时，在此数组中追加对应前缀即可
+    /**
+     * 可导航内容的 ID 前缀列表。
+     * 添加新页面章节时，在此数组中追加对应前缀即可。
+     * @type {string[]}
+     */
     sectionIdPrefixes: [
       'section-', 'module-', 'the-', 'chassis-', 'chassis',
       'gene-', 'nanobody-', 'fusion-', 'fusion-gpa', 'fusion-pager',
@@ -39,69 +39,38 @@
     ]
   };
 
-  // ============================================
-  // 模块状态
-  // ============================================
+  /**
+   * 模块内部状态。
+   * @type {Object}
+   */
   const state = {
     cachedElements: null,
+    cachedSections: null,
     scrollInfo: null,
     isInitialized: false,
-    rafId: null
+    scrollHandler: null,
+    resizeHandler: null
   };
 
-  // ============================================
-  // 工具函数
-  // ============================================
-  const Utils = {
-    log: function (message, data) {
-      if (CONFIG.debugMode) {
-        console.log('[Progress System] ' + message, data || '');
-      }
-    },
-    getScrollPosition: function (element, isWindow) {
-      if (isWindow) {
-        return window.scrollY || window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop || 0;
-      }
-      return element.scrollTop;
-    },
-    getScrollHeight: function (element, isWindow) {
-      if (isWindow) {
-        return Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight,
-          document.documentElement.offsetHeight,
-          document.body.offsetHeight
-        );
-      }
-      return element.scrollHeight;
-    },
-    getClientHeight: function (element, isWindow) {
-      if (isWindow) {
-        return window.innerHeight ||
-          document.documentElement.clientHeight ||
-          document.body.clientHeight;
-      }
-      return element.clientHeight;
-    },
-    debounce: function (func, wait) {
-      let timeout;
-      return function executedFunction() {
-        const later = function () {
-          clearTimeout(timeout);
-          func.apply(void 0, arguments);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
+  /**
+   * 在调试模式下输出日志。
+   * @param {string} message - 日志消息
+   * @param {*} [data] - 附加数据
+   */
+  function log(message, data) {
+    if (CONFIG.debugMode) {
+      console.log('[Progress System] ' + message, data !== undefined ? data : '');
     }
-  };
+  }
 
-  // ============================================
-  // DOM 元素缓存与获取
-  // ============================================
+  /**
+   * DOM 元素缓存管理。
+   */
   const Elements = {
+    /**
+     * 获取并缓存常用 DOM 元素。
+     * @returns {Object} 缓存的元素集合
+     */
     getCachedElements: function () {
       if (!state.cachedElements) {
         state.cachedElements = {
@@ -117,42 +86,41 @@
       }
       return state.cachedElements;
     },
+
+    /**
+     * 清除 DOM 元素缓存。
+     */
     clearCache: function () {
       state.cachedElements = null;
     }
   };
 
-  // ============================================
-  // 滚动容器检测
-  // ============================================
-  const ScrollDetector = {
-    detectScrollContainer: function () {
-      const descContent = document.querySelector('.description-content, .content-area');
-      if (descContent) {
-        const style = window.getComputedStyle(descContent);
-        if ((style.height !== 'auto' || style.maxHeight !== 'none') &&
-          (style.overflowY === 'scroll' || style.overflowY === 'auto')) {
-          Utils.log('检测到滚动容器: .description-content/.content-area');
-          return { element: descContent, isWindow: false };
-        }
-      }
+  /**
+   * 生成章节选择器字符串。
+   * @returns {string} CSS 选择器
+   */
+  function getSectionSelector() {
+    return CONFIG.sectionIdPrefixes.map(function (prefix) {
+      return '[id^="' + prefix + '"]';
+    }).join(', ');
+  }
 
-      const bodyStyle = window.getComputedStyle(document.body);
-      if ((bodyStyle.height !== 'auto' || bodyStyle.maxHeight !== 'none') &&
-        (bodyStyle.overflowY === 'scroll' || bodyStyle.overflowY === 'auto')) {
-        Utils.log('检测到滚动容器: document.body');
-        return { element: document.body, isWindow: false };
-      }
+  /**
+   * 缓存可导航章节元素，仅在 resize 或初始化时调用以减少滚动时的 DOM 查询。
+   */
+  function buildSectionCache() {
+    state.cachedSections = document.querySelectorAll(getSectionSelector());
+    log('章节缓存已重建，数量：' + state.cachedSections.length);
+  }
 
-      Utils.log('检测到滚动容器: window');
-      return { element: window, isWindow: true };
-    }
-  };
-
-  // ============================================
-  // 布局完整性验证与恢复
-  // ============================================
+  /**
+   * 布局完整性验证与自动恢复。
+   */
   const LayoutValidator = {
+    /**
+     * 验证关键布局属性。
+     * @returns {boolean} 布局是否有效
+     */
     validateLayoutIntegrity: function () {
       if (!CONFIG.enableValidation) return true;
 
@@ -172,41 +140,49 @@
       const allValid = Object.values(checks).every(Boolean);
 
       if (!allValid) {
-        Utils.log('布局完整性检查失败，尝试自动恢复...', checks);
+        log('布局完整性检查失败，尝试自动恢复...', checks);
         this.autoRecover(checks, el);
       } else {
-        Utils.log('布局完整性检查通过');
+        log('布局完整性检查通过');
       }
 
       return allValid;
     },
 
+    /**
+     * 自动恢复关键布局样式。
+     * @param {Object} checks - 各检查项结果
+     * @param {Object} el - 缓存的 DOM 元素
+     */
     autoRecover: function (checks, el) {
       if (!checks.sidebarPosition && el.descriptionSidebar) {
         el.descriptionSidebar.style.position = 'sticky';
-        Utils.log('已恢复: 侧边栏 sticky 定位');
+        log('已恢复: 侧边栏 sticky 定位');
       }
       if (!checks.sidebarTop && el.descriptionSidebar) {
         el.descriptionSidebar.style.top = '120px';
-        Utils.log('已恢复: 侧边栏 top 偏移');
+        log('已恢复: 侧边栏 top 偏移');
       }
       if (!checks.containerOverflow && el.descriptionContainer) {
         el.descriptionContainer.style.overflow = 'visible';
-        Utils.log('已恢复: 容器 overflow');
+        log('已恢复: 容器 overflow');
       }
       if (!checks.containerDisplay && el.descriptionContainer) {
         el.descriptionContainer.style.display = 'flex';
-        Utils.log('已恢复: 容器 display');
+        log('已恢复: 容器 display');
       }
     }
   };
 
-  // ============================================
-  // 进度计算核心
-  // ============================================
+  /**
+   * 进度计算与 UI 更新。
+   */
   const ProgressCalculator = {
+    /**
+     * 根据当前滚动位置计算进度百分比。
+     * @returns {{scrollTop: number, scrollPercent: number, progressPercent: number}}
+     */
     calculateProgress: function () {
-      const el = Elements.getCachedElements();
       const scrollInfo = state.scrollInfo;
       const scrollElement = scrollInfo.element;
       const isWindowScroll = scrollInfo.isWindow;
@@ -222,7 +198,7 @@
         progressPercent = 100;
       }
 
-      Utils.log('进度计算', {
+      log('进度计算', {
         scrollTop: scrollTop,
         containerHeight: containerHeight,
         totalHeight: totalHeight,
@@ -233,6 +209,10 @@
       return { scrollTop: scrollTop, scrollPercent: scrollPercent, progressPercent: progressPercent };
     },
 
+    /**
+     * 更新进度相关 UI。
+     * @param {number} progressPercent - 0-100 的进度值
+     */
     updateProgressUI: function (progressPercent) {
       const el = Elements.getCachedElements();
 
@@ -248,19 +228,23 @@
     }
   };
 
-  // ============================================
-  // 导航高亮系统
-  // ============================================
+  /**
+   * 导航高亮逻辑。
+   */
   const NavigationHighlighter = {
+    /**
+     * 根据滚动位置查找当前所在章节 ID。
+     * @param {number} scrollTop - 当前滚动位置
+     * @returns {string} 当前章节 ID
+     */
     findCurrentSection: function (scrollTop) {
-      const selector = CONFIG.sectionIdPrefixes.map(function (p) { return '[id^="' + p + '"]'; }).join(', ');
-      const allSections = document.querySelectorAll(selector);
+      const sections = state.cachedSections || document.querySelectorAll(getSectionSelector());
       let currentSection = '';
       const offset = CONFIG.navHighlightOffset;
 
-      // 找到最后一个顶部位置 <= offset的section（即标题已经到达或超过视口顶部150px位置的section）
-      for (let i = allSections.length - 1; i >= 0; i--) {
-        const section = allSections[i];
+      // 使用从后向前的顺序，找到第一个顶部已进入高亮偏移区域的章节。
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
         const rect = section.getBoundingClientRect();
 
         if (rect.top <= offset) {
@@ -269,14 +253,17 @@
         }
       }
 
-      // 如果没有找到，默认使用第一个section
-      if (!currentSection && allSections.length > 0) {
-        currentSection = allSections[0].id;
+      if (!currentSection && sections.length > 0) {
+        currentSection = sections[0].id;
       }
 
       return currentSection;
     },
 
+    /**
+     * 高亮当前章节对应的导航项。
+     * @param {string} currentSection - 当前章节 ID
+     */
     highlightNavigation: function (currentSection) {
       const el = Elements.getCachedElements();
 
@@ -293,7 +280,7 @@
           const l1 = el.navLinks[i].closest('.level1');
           if (l1) {
             l1.classList.add('active');
-            l1.classList.add('expanded'); // 自动展开对应目录
+            l1.classList.add('expanded');
           }
           matched = true;
           break;
@@ -305,13 +292,14 @@
         if (currentElement) {
           const parentCard = currentElement.closest('.content-card');
           if (parentCard && parentCard.id) {
-            const parentLink = document.querySelector('.description-nav a[href="#' + parentCard.id + '"], .sidebar-nav a[href="#' + parentCard.id + '"]');
+            const parentLink = document.querySelector(
+              '.description-nav a[href="#' + parentCard.id + '"], .sidebar-nav a[href="#' + parentCard.id + '"]');
             if (parentLink) {
               parentLink.classList.add('active');
               const l1 = parentLink.closest('.level1');
               if (l1) {
                 l1.classList.add('active');
-                l1.classList.add('expanded'); // 自动展开对应目录
+                l1.classList.add('expanded');
               }
             }
           }
@@ -320,25 +308,29 @@
     }
   };
 
-  // ============================================
-  // 主更新循环
-  // ============================================
+  /**
+   * 主更新循环。
+   */
   const MainLoop = {
+    /**
+     * 执行一次进度计算、UI 更新与导航高亮。
+     */
     updateScrollProgress: function () {
-      const ref = ProgressCalculator.calculateProgress();
-      const scrollTop = ref.scrollTop;
-      const progressPercent = ref.progressPercent;
-      ProgressCalculator.updateProgressUI(progressPercent);
+      const result = ProgressCalculator.calculateProgress();
+      ProgressCalculator.updateProgressUI(result.progressPercent);
 
-      const currentSection = NavigationHighlighter.findCurrentSection(scrollTop);
+      const currentSection = NavigationHighlighter.findCurrentSection(result.scrollTop);
       NavigationHighlighter.highlightNavigation(currentSection);
     }
   };
 
-  // ============================================
-  // 目录交互系统
-  // ============================================
+  /**
+   * 目录展开/收起交互。
+   */
   const NavigationInteractions = {
+    /**
+     * 为一级导航绑定展开/收起事件。
+     */
     setupDirectoryToggle: function () {
       const el = Elements.getCachedElements();
 
@@ -347,28 +339,32 @@
         const navLink = item.querySelector('.nav-main-link');
         const level2 = item.querySelector('.level2');
 
-        if (level2) {
-          if (toggleIcon) {
-            toggleIcon.addEventListener('click', function (e) {
-              e.preventDefault();
-              item.classList.toggle('expanded');
-            });
-          }
+        if (!level2) return;
 
-          if (navLink) {
-            navLink.addEventListener('click', function (e) {
-              item.classList.toggle('expanded');
-            });
-          }
+        if (toggleIcon) {
+          toggleIcon.addEventListener('click', function (e) {
+            e.preventDefault();
+            item.classList.toggle('expanded');
+          });
+        }
+
+        if (navLink) {
+          navLink.addEventListener('click', function () {
+            item.classList.toggle('expanded');
+          });
         }
       });
     }
   };
 
-  // ============================================
-  // 测试工具
-  // ============================================
+  /**
+   * 内置测试工具。
+   */
   const Tester = {
+    /**
+     * 运行快速自检。
+     * @returns {Promise<boolean>} 是否全部通过
+     */
     runQuickTest: function () {
       const self = this;
       return Promise.resolve().then(function () {
@@ -377,7 +373,8 @@
         const el = Elements.getCachedElements();
 
         const checks = {
-          stickyPosition: el.descriptionSidebar ? window.getComputedStyle(el.descriptionSidebar).position === 'sticky' &&
+          stickyPosition: el.descriptionSidebar ?
+            window.getComputedStyle(el.descriptionSidebar).position === 'sticky' &&
             window.getComputedStyle(el.descriptionSidebar).top === '120px' : false,
           elementsExist: !!(el.progressPercentage && el.flaskLiquid && el.bubbling),
           scrollContainer: !!state.scrollInfo
@@ -409,77 +406,140 @@
       });
     },
 
+    /**
+     * 等待指定毫秒。
+     * @param {number} ms - 等待时间
+     * @returns {Promise<void>}
+     */
     wait: function (ms) {
       return new Promise(function (resolve) { return setTimeout(resolve, ms); });
     },
 
+    /**
+     * 验证布局完整性。
+     * @returns {boolean}
+     */
     validateLayout: function () {
       return LayoutValidator.validateLayoutIntegrity();
     }
   };
 
-  // ============================================
-  // 公开 API
-  // ============================================
+  /**
+   * 公开 API。
+   */
   window.SidebarProgress = {
+    /**
+     * 强制重新计算进度并更新 UI。
+     */
     recalculate: function () {
       Elements.clearCache();
       MainLoop.updateScrollProgress();
-      Utils.log('已强制重新计算进度');
+      log('已强制重新计算进度');
     },
 
+    /**
+     * 验证布局完整性。
+     * @returns {boolean}
+     */
     validate: function () {
       return LayoutValidator.validateLayoutIntegrity();
     },
 
+    /**
+     * 运行快速测试。
+     * @returns {Promise<boolean>}
+     */
     runTest: function () {
       return Tester.runQuickTest();
     },
 
+    /**
+     * 设置调试模式。
+     * @param {boolean} enabled - 是否启用
+     */
     setDebugMode: function (enabled) {
       CONFIG.debugMode = enabled;
       console.log('调试模式:', enabled ? '已启用' : '已禁用');
     },
 
+    /**
+     * 获取当前模块状态。
+     * @returns {Object}
+     */
     getState: function () {
       return {
         isInitialized: state.isInitialized,
         scrollInfo: state.scrollInfo,
         config: Object.assign({}, CONFIG)
       };
-    }
+    },
+
+    /**
+     * 清理所有事件监听与缓存引用。
+     */
+    destroy: destroy
   };
 
   // 保持向后兼容的别名
   window.DescriptionProgress = window.SidebarProgress;
 
-  // ============================================
-  // 初始化
-  // ============================================
+  /**
+   * 清理所有事件监听与缓存引用。
+   */
+  function destroy() {
+    if (state.scrollHandler) {
+      state.scrollHandler.cancel && state.scrollHandler.cancel();
+    }
+    if (state.scrollHandler && state.scrollInfo && state.scrollInfo.element) {
+      const passiveOption = Utils.supportsPassiveEvents() ? { passive: true } : false;
+      state.scrollInfo.element.removeEventListener('scroll', state.scrollHandler, passiveOption);
+    }
+    if (state.resizeHandler) {
+      window.removeEventListener('resize', state.resizeHandler);
+      state.resizeHandler.cancel && state.resizeHandler.cancel();
+    }
+
+    state.scrollHandler = null;
+    state.resizeHandler = null;
+    state.scrollInfo = null;
+    state.cachedElements = null;
+    state.cachedSections = null;
+    state.isInitialized = false;
+  }
+
+  /**
+   * 初始化模块。
+   */
   function init() {
     if (state.isInitialized) return;
 
-    Utils.log('系统初始化中...');
+    log('系统初始化中...');
 
-    state.scrollInfo = ScrollDetector.detectScrollContainer();
+    state.scrollInfo = Utils.detectScrollContainer();
     state.isInitialized = true;
+    buildSectionCache();
 
     if (CONFIG.validateOnLoad) {
       LayoutValidator.validateLayoutIntegrity();
     }
 
-    const updateWithRaf = Utils.debounce(function () {
+    const throttledUpdate = Utils.rafThrottle(MainLoop.updateScrollProgress);
+    state.resizeHandler = Utils.debounce(function () {
+      buildSectionCache();
       MainLoop.updateScrollProgress();
-    }, 16);
+    }, 100);
+    state.scrollHandler = throttledUpdate;
 
-    state.scrollInfo.element.addEventListener('scroll', updateWithRaf, { passive: true });
-    window.addEventListener('resize', updateWithRaf, { passive: true });
+    const passiveOption = Utils.supportsPassiveEvents() ? { passive: true } : false;
+
+    state.scrollInfo.element.addEventListener('scroll', throttledUpdate, passiveOption);
+    window.addEventListener('resize', state.resizeHandler, passiveOption);
 
     NavigationInteractions.setupDirectoryToggle();
 
     MainLoop.updateScrollProgress();
 
-    Utils.log('系统初始化完成');
+    log('系统初始化完成');
     console.log('💡 提示: 在控制台运行 SidebarProgress.runTest() 进行完整测试');
   }
 
@@ -488,4 +548,6 @@
   } else {
     init();
   }
+
+  window.addEventListener('beforeunload', destroy);
 })();
