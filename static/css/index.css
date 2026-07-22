@@ -15,13 +15,16 @@
 
 html {
   scroll-behavior: smooth;
+  min-height: 100%;
+  /* 使用 height:auto 替代 height:100%，让 <html> 随实际内容扩展，
+     避免固定高度导致页面无法滚动；主体最小高度由 body 的 min-height:100vh 保证。 */
+  height: auto;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
   overflow-x: hidden;
 }
 
@@ -1204,22 +1207,19 @@ body.home-page {
 
 /* ================================================== */
 /* 首页核心发现（Executive Summary）                   */
-/* iGEM Layout Strategy: in-flow 容器 + flex 居中，    */
-/* 100vh 独立占位空间，不依赖 fixed/sticky 定位。       */
-/* 为后续 scroll-driven animation 提供干净的容器基础。  */
+/* iGEM Layout Strategy: 300vh 滚动驱动画布，          */
+/* 主体通过 fixed 定位在 50vh~250vh 区间固定（200vh 动画窗口），*/
+/* 随滚动逐步揭示 Gpa1 → 人源基因的动画叙事。           */
 /* ================================================== */
 .executive-summary {
   position: relative;
-  height: 100vh;
+  height: 300vh;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding-top: 100vh;
   background: var(--bg-page);
-  overflow: hidden;
 }
 
-/* 背景装饰光晕：通过伪元素叠加三层径向渐变，营造科学氛围 */
+/* 背景装饰层占位（如需光晕效果可在此叠加径向渐变） */
 .executive-summary::before {
   content: '';
   position: absolute;
@@ -1229,18 +1229,22 @@ body.home-page {
 }
 
 .executive-summary__inner {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 1;
   width: 100%;
-  max-width: var(--pres-content-max-width);
-  margin: 0 auto;
-  padding: var(--pres-space-md) var(--pres-space-xl);
+  height: 100vh;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: var(--pres-space-md);
-  padding: 5vw;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.executive-summary__inner--visible {
+  opacity: 1;
 }
 
 .executive-summary__badge {
@@ -1287,21 +1291,20 @@ body.home-page {
 }
 
 .badge-gpa1-label {
+  --gpa1-final-offset: 6.25rem;
+  /* Gpa1 标签动画阶段：progress 0~0.5 完成移动，0.5~1.0 保持最终位置 */
+  --gpa1-phase: clamp(0, calc(var(--es-progress, 0) * 2), 1);
   position: absolute;
   top: -85%;
-  left: 80%;
-  transform: translateX(-50%);
+  left: calc(50% + (80% - 50%) * var(--gpa1-phase));
+  transform: translateX(calc(-50% - var(--gpa1-phase) * var(--gpa1-final-offset)));
   z-index: 2;
   font-size: 1.2rem;
   font-weight: 600;
   color: #333;
   padding: 0.125rem 0.5rem;
   border-radius: 0.25rem;
-  transition: transform 0.6s ease-out;
-}
-
-.badge-gpa1-label.animate-gpa1 {
-  transform: translateX(calc(-50% - 6.25rem));
+  transition: none;
 }
 
 .badge-dna {
@@ -1317,6 +1320,8 @@ body.home-page {
   height: 69px;
   overflow: hidden;
   pointer-events: none;
+  opacity: clamp(0, calc((var(--es-progress, 0) - 0.5) * 2), 1);
+  transition: none;
 }
 
 .badge-human-label {
@@ -1332,16 +1337,10 @@ body.home-page {
   color: #ffffff;
   padding: 0.125rem 0.5rem;
   border-radius: 0.25rem;
-  transition: transform 0.6s ease-out;
 }
 
 .badge-human {
   transform: scale(10) translate(0, 0);
-  opacity: 0;
-  transition: opacity 0.8s ease-in;
-}
-
-.badge-human.animate-human {
   opacity: 1;
 }
 
@@ -1351,8 +1350,8 @@ body.home-page {
     gap: var(--pres-space-sm);
   }
 
-  .badge-gpa1-label.animate-gpa1 {
-    transform: translateX(calc(-50% - 3.75rem));
+  .badge-gpa1-label {
+    --gpa1-final-offset: 3.75rem;
   }
 }
 
