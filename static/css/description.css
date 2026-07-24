@@ -2,6 +2,13 @@
 
 /* ===== DRY原则：设计令牌（Design Tokens） ===== */
 /* 注意：使用 --desc- 前缀避免与全局导航栏样式冲突 */
+/* 为 description 页面滚动装饰动画放开水平裁剪，使两侧 SVG 能从视口外探入；
+   使用 clip 避免产生水平滚动条 */
+html,
+body {
+  overflow-x: clip;
+}
+
 :root {
   /* ============================================ */
   /* 页面专用颜色系统 - 基于棕色主题 */
@@ -135,6 +142,110 @@ html {
 .description-content {
   flex: 1;
   min-width: 0;
+}
+
+/* ===== 滚动漂浮装饰层 ===== */
+/* iGEM Layout Strategy: 检测到 description 页面为长文内容页，增加两侧滚动装饰动画以打破纯文本节奏。
+   采用 fixed 定位覆盖整个视口，使装饰不受容器宽度与 overflow-x: clip 限制，确保在常见笔记本
+   屏幕（1366px+）上也能清晰进入视口，而不是被内容容器边缘裁剪。 */
+.description-float-art {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  /* 层级高于侧边栏（z-index: 10），确保装饰压在内容与侧边栏之上 */
+  z-index: 11;
+  overflow: visible;
+}
+
+.df-art {
+  position: absolute;
+  width: var(--df-size, 100px);
+  height: var(--df-size, 100px);
+  will-change: transform, opacity;
+}
+
+.df-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  /* iGEM Visual Strategy: 为浅色 SVG 增加更强的投影，使其在米白背景上具备可辨识度 */
+  filter: drop-shadow(0 6px 16px rgba(74, 55, 40, 0.18));
+}
+
+/* 左侧装饰：从屏幕左外漂浮到视口左侧 */
+/* 终点让 SVG 约 40px 探入视口，其余部分位于视口外，既保证可见又避免大面积遮挡内容 */
+.df-art--left {
+  left: -40px;
+  transform: translateX(calc((1 - var(--df-progress, 0)) * -180px)) translateY(calc((1 - var(--df-progress, 0)) * 8vh)) rotate(var(--df-rotate, 0deg));
+  opacity: calc(var(--df-progress, 0) * 0.85);
+}
+
+/* 右侧装饰：从屏幕右外漂浮到视口右侧 */
+/* 终点让 SVG 约 40px 探入视口，其余部分位于视口外，既保证可见又避免大面积遮挡内容 */
+.df-art--right {
+  right: -40px;
+  transform: translateX(calc((1 - var(--df-progress, 0)) * 180px)) translateY(calc((1 - var(--df-progress, 0)) * -6vh)) rotate(var(--df-rotate, 0deg));
+  opacity: calc(var(--df-progress, 0) * 0.85);
+}
+
+/* 垂直错落分布：同侧间距不均匀，制造自然漂浮感 */
+.df-art--1 {
+  top: 8%;
+  --df-size: 95px;
+  --df-rotate: -10deg;
+}
+
+.df-art--2 {
+  top: 28%;
+  --df-size: 120px;
+  --df-rotate: 6deg;
+}
+
+.df-art--3 {
+  top: 52%;
+  --df-size: 85px;
+  --df-rotate: -5deg;
+}
+
+.df-art--4 {
+  top: 78%;
+  --df-size: 105px;
+  --df-rotate: 8deg;
+}
+
+.df-art--5 {
+  top: 14%;
+  --df-size: 110px;
+  --df-rotate: 5deg;
+}
+
+.df-art--6 {
+  top: 36%;
+  --df-size: 90px;
+  --df-rotate: -8deg;
+}
+
+.df-art--7 {
+  top: 60%;
+  --df-size: 115px;
+  --df-rotate: 4deg;
+}
+
+.df-art--8 {
+  top: 84%;
+  --df-size: 100px;
+  --df-rotate: -6deg;
+}
+
+/* 在平板及移动端隐藏装饰，避免内容拥挤 */
+@media (max-width: 1023px) {
+  .description-float-art {
+    display: none;
+  }
 }
 
 /* ===== 内容卡片 ===== */

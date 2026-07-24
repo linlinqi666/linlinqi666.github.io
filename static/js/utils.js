@@ -98,28 +98,39 @@
   }
 
   /**
+   * 判断元素是否为实际可滚动的容器。
+   * 仅当元素具备滚动样式且存在真实可滚动溢出时才返回 true，
+   * 避免将随内容自然撑高的 body/html 误判为滚动容器。
+   *
+   * @param {Element} element 待检测元素
+   * @returns {boolean} 是否为实际可滚动容器
+   */
+  function isActuallyScrollable(element) {
+    if (!element || !element.getBoundingClientRect) return false;
+    const style = window.getComputedStyle(element);
+    const overflowY = style.overflowY;
+    const hasScrollableStyle = overflowY === 'scroll' || overflowY === 'auto';
+    const hasConstrainedHeight = style.height !== 'auto' || style.maxHeight !== 'none';
+    const hasOverflow = element.scrollHeight > element.clientHeight + 1;
+    return hasScrollableStyle && hasConstrainedHeight && hasOverflow;
+  }
+
+  /**
    * 检测实际滚动容器。
    * 优先级：.description-content/.content-area → body → window。
+   * 要求候选元素确实存在可滚动溢出，否则回退到 window。
+   * document.documentElement 的滚动等价于 window 滚动，统一视为 window，
+   * 避免将绑定在 html 上的 scroll 事件遗漏。
    *
    * @returns {{ element: Window|Element, isWindow: boolean }} 滚动容器信息
    */
   function detectScrollContainer() {
     const contentEl = document.querySelector('.description-content, .content-area');
-    if (contentEl) {
-      const style = window.getComputedStyle(contentEl);
-      if (
-        (style.height !== 'auto' || style.maxHeight !== 'none') &&
-        (style.overflowY === 'scroll' || style.overflowY === 'auto')
-      ) {
-        return { element: contentEl, isWindow: false };
-      }
+    if (contentEl && isActuallyScrollable(contentEl)) {
+      return { element: contentEl, isWindow: false };
     }
 
-    const bodyStyle = window.getComputedStyle(document.body);
-    if (
-      (bodyStyle.height !== 'auto' || bodyStyle.maxHeight !== 'none') &&
-      (bodyStyle.overflowY === 'scroll' || bodyStyle.overflowY === 'auto')
-    ) {
+    if (isActuallyScrollable(document.body)) {
       return { element: document.body, isWindow: false };
     }
 
