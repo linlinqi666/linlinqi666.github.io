@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../static/css/description.css">
   <link rel="stylesheet" href="../static/css/integrated human-practices.css">
   <link rel="stylesheet" href="../static/css/mobile.css">
+  <script src="../static/js/components/hp-reveal-box.js" defer></script>
   <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
   <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
 </head>
@@ -289,19 +290,6 @@
           <div class="bubble bubble-3"></div>
         </div>
 
-        <div class="sidebar-header">
-          <div class="dna-icon">
-            <svg viewBox="0 0 40 40" class="dna-helix">
-              <path d="M20,5 Q25,15 20,20 Q15,25 20,35" stroke="currentColor" fill="none" stroke-width="2" />
-              <circle cx="20" cy="10" r="3" fill="currentColor" />
-              <circle cx="20" cy="20" r="3" fill="currentColor" />
-              <circle cx="20" cy="30" r="3" fill="currentColor" />
-            </svg>
-          </div>
-          <h3>Human Practices</h3>
-          <div class="yeast-badge">Integrated HP</div>
-        </div>
-
         <!-- iGEM Layout Strategy: 导航结构对齐 description.html 模板，仅保留社会实践相关章节 -->
         <div class="description-nav-wrapper">
           <ul class="description-nav">
@@ -356,8 +344,6 @@
 
         <!-- 页面概述：内容待后续补充 -->
         <div id="section-overview" class="content-card hp-overview-card">
-          <div class="executive-summary" lang="zh-CN">
-          </div>
           <div class="hp-section-header">
             <span class="hp-section-number">00</span>
             <h2 class="hp-section-title">概述</h2>
@@ -368,10 +354,7 @@
 
         <!-- Chapter 1: 专家访谈章节 -->
         <div id="section-dialogues" class="content-card hp-dialogues-card hp-section-offset-0">
-          <div class="executive-summary" lang="zh-CN">
-            <p><strong>Executive Summary:</strong>
-              与临床检验专家王文杰老师的访谈帮助我们跳出“病毒亚型鉴定”的技术执念，将项目方向重新锚定在“快速、广谱、便捷的病毒监测与公共环境预警”上。</p>
-          </div>
+          <p>与临床检验专家王文杰老师的访谈帮助我们跳出“病毒亚型鉴定”的技术执念，将项目方向重新锚定在“快速、广谱、便捷的病毒监测与公共环境预警”上。</p>
 
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
@@ -397,82 +380,89 @@
             </div>
           </div>
 
-          <!-- 访谈背景 -->
-          <div class="hp-interview-context">
-            <p>
-              为了深入了解甲型流感病毒检测在真实医疗环境中的应用需求，并进一步明确我们“基于工程化酵母的甲型流感病毒生物传感器”项目的实际价值，我们开展了一次面向临床检验专家的社会实践访谈。在访谈过程中，我们围绕甲型流感病毒的变异特点、现有检测技术的局限性、抗病毒治疗策略以及未来检测设备的发展方向进行了深入交流。
-            </p>
-          </div>
-
-          <!-- 关键观点 -->
-          <div class="hp-insights-grid">
-            <article class="hp-insight-card">
-              <div class="hp-insight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 6v6l4 2" />
-                </svg>
+          <div class="hp-reveal-box" data-hp-reveal id="reveal-dialogue">
+            <div class="hp-reveal-content" id="reveal-dialogue-content">
+              <!-- 访谈背景 -->
+              <div class="hp-interview-context">
+                <p>
+                  为了深入了解甲型流感病毒检测在真实医疗环境中的应用需求，并进一步明确我们“基于工程化酵母的甲型流感病毒生物传感器”项目的实际价值，我们开展了一次面向临床检验专家的社会实践访谈。在访谈过程中，我们围绕甲型流感病毒的变异特点、现有检测技术的局限性、抗病毒治疗策略以及未来检测设备的发展方向进行了深入交流。
+                </p>
               </div>
-              <h3>病毒变异与检测重点</h3>
-              <p>甲型流感病毒主要通过血凝素（HA）和神经氨酸酶（NA）蛋白发生变异，而当前医院检测的重点主要在于判断病毒感染情况，而非区分具体亚型。</p>
-            </article>
 
-            <article class="hp-insight-card">
-              <div class="hp-insight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M10 2h4M12 14l3-3m-3 3l-3-3m3 3V6" />
-                  <circle cx="12" cy="20" r="2" />
-                </svg>
+              <!-- 关键观点 -->
+              <div class="hp-insights-grid">
+                <article class="hp-insight-card">
+                  <div class="hp-insight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 6v6l4 2" />
+                    </svg>
+                  </div>
+                  <h3>病毒变异与检测重点</h3>
+                  <p>甲型流感病毒主要通过血凝素（HA）和神经氨酸酶（NA）蛋白发生变异，而当前医院检测的重点主要在于判断病毒感染情况，而非区分具体亚型。</p>
+                </article>
+
+                <article class="hp-insight-card">
+                  <div class="hp-insight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M10 2h4M12 14l3-3m-3 3l-3-3m3 3V6" />
+                      <circle cx="12" cy="20" r="2" />
+                    </svg>
+                  </div>
+                  <h3>现有技术的局限</h3>
+                  <p>现有核酸检测和快速抗原检测通常需要在患者出现症状并达到一定病毒载量后才能发挥作用，检测技术的发展仍存在一定滞后性。</p>
+                </article>
+
+                <article class="hp-insight-card hp-insight-highlight">
+                  <div class="hp-insight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M3 21h18M5 21V7l8-4 8 4v14M9 10h.01M15 10h.01M9 14h.01M15 14h.01M9 18h.01M15 18h.01" />
+                    </svg>
+                  </div>
+                  <h3>未来检测方向</h3>
+                  <p>
+                    未来检测技术的关键不只是识别病毒类型，而是在更早阶段实现病毒存在的快速监测。在学校、幼儿园、地铁等人员密集环境中，通过环境监测提前发现病毒传播风险，有望帮助公共卫生管理从“被动治疗”转向“主动预防”。
+                  </p>
+                </article>
+
+                <article class="hp-insight-card">
+                  <div class="hp-insight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M9 12l2 2 4-4" />
+                      <circle cx="12" cy="12" r="10" />
+                    </svg>
+                  </div>
+                  <h3>应用建议</h3>
+                  <p>需要充分考虑实际应用中的限制因素，例如检测范围、环境变量以及病毒浓度变化等问题，并建议在后续实验设计中进一步控制变量、明确应用场景。</p>
+                </article>
               </div>
-              <h3>现有技术的局限</h3>
-              <p>现有核酸检测和快速抗原检测通常需要在患者出现症状并达到一定病毒载量后才能发挥作用，检测技术的发展仍存在一定滞后性。</p>
-            </article>
 
-            <article class="hp-insight-card hp-insight-highlight">
-              <div class="hp-insight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M3 21h18M5 21V7l8-4 8 4v14M9 10h.01M15 10h.01M9 14h.01M15 14h.01M9 18h.01M15 18h.01" />
-                </svg>
+              <!-- 项目启示 -->
+              <div class="hp-project-impact">
+                <div class="hp-project-impact-header">
+                  <span class="hp-project-impact-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                  </span>
+                  <h3>对项目的启示</h3>
+                </div>
+                <p>
+                  这次交流帮助我们将实验室中的工程设计与真实临床需求建立联系。专家反馈使我们重新审视传感器的检测目标，从单纯追求病毒亚型识别转向探索更加广谱、快速、便捷的病毒监测方案，也进一步坚定了我们利用合成生物学技术开发新型流感预警工具的方向。通过与临床一线专家的沟通，我们认识到，一个真正具有社会价值的生物技术产品不仅需要实验室中的性能优化，更需要回应现实世界中的医疗需求与公共健康挑战。
+                </p>
               </div>
-              <h3>未来检测方向</h3>
-              <p>未来检测技术的关键不只是识别病毒类型，而是在更早阶段实现病毒存在的快速监测。在学校、幼儿园、地铁等人员密集环境中，通过环境监测提前发现病毒传播风险，有望帮助公共卫生管理从“被动治疗”转向“主动预防”。
-              </p>
-            </article>
-
-            <article class="hp-insight-card">
-              <div class="hp-insight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M9 12l2 2 4-4" />
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-              </div>
-              <h3>应用建议</h3>
-              <p>需要充分考虑实际应用中的限制因素，例如检测范围、环境变量以及病毒浓度变化等问题，并建议在后续实验设计中进一步控制变量、明确应用场景。</p>
-            </article>
-          </div>
-
-          <!-- 项目启示 -->
-          <div class="hp-project-impact">
-            <div class="hp-project-impact-header">
-              <span class="hp-project-impact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                </svg>
-              </span>
-              <h3>对项目的启示</h3>
             </div>
-            <p>
-              这次交流帮助我们将实验室中的工程设计与真实临床需求建立联系。专家反馈使我们重新审视传感器的检测目标，从单纯追求病毒亚型识别转向探索更加广谱、快速、便捷的病毒监测方案，也进一步坚定了我们利用合成生物学技术开发新型流感预警工具的方向。通过与临床一线专家的沟通，我们认识到，一个真正具有社会价值的生物技术产品不仅需要实验室中的性能优化，更需要回应现实世界中的医疗需求与公共健康挑战。
-            </p>
+            <div class="hp-reveal-handle" tabindex="0" role="button" aria-expanded="false"
+              aria-controls="reveal-dialogue-content">
+              <span class="hp-reveal-hint">↓ 拉动查看更多</span>
+              <span class="hp-reveal-collapse">点击收起</span>
+            </div>
           </div>
         </div>
 
         <!-- Chapter 2: 教育与推广章节 -->
         <div id="section-education" class="content-card hp-education-card hp-section-offset-2">
-          <div class="executive-summary" lang="zh-CN">
-            <p><strong>Executive Summary:</strong>
-              走进职业高中开展科普宣讲，让合成生物学走出实验室；学生关于便携性与检测速度的反馈，把“负责任的研究与创新”理念转化为具体的产品优化方向。</p>
-          </div>
+          <p>走进职业高中开展科普宣讲，让合成生物学走出实验室；学生关于便携性与检测速度的反馈，把“负责任的研究与创新”理念转化为具体的产品优化方向。</p>
 
           <div class="hp-section-header">
             <span class="hp-section-number">02</span>
@@ -501,63 +491,72 @@
           </div>
           <p class="hp-image-caption">图 2. 校园宣讲现场：团队向高二学生介绍 iGEM 理念与工程化酵母生物传感器项目</p>
 
-          <!-- 活动背景 -->
-          <div class="hp-activity-overview">
-            <p>为了践行 iGEM
-              所倡导的科学传播与社会责任理念，并进一步了解公众群体对于甲型流感病毒检测技术的认知与需求，我们走进深圳市第一职业技术学校坪山校区，与高二学生开展了一次项目科普交流活动。本次活动旨在向非专业群体介绍国际基因工程机器大赛（iGEM）的理念与价值，同时展示“基于工程化酵母的甲型流感病毒生物传感器”项目，让更多年轻学生了解合成生物学如何通过跨学科创新解决现实社会问题。
-            </p>
-          </div>
-
-          <!-- 交流亮点 -->
-          <div class="hp-education-highlights">
-            <article class="hp-edu-highlight">
-              <div class="hp-edu-highlight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <rect x="2" y="3" width="20" height="14" rx="2" />
-                  <path d="M8 21h8M12 17v4" />
-                </svg>
+          <div class="hp-reveal-box" data-hp-reveal id="reveal-education">
+            <div class="hp-reveal-content" id="reveal-education-content">
+              <!-- 活动背景 -->
+              <div class="hp-activity-overview">
+                <p>为了践行 iGEM
+                  所倡导的科学传播与社会责任理念，并进一步了解公众群体对于甲型流感病毒检测技术的认知与需求，我们走进深圳市第一职业技术学校坪山校区，与高二学生开展了一次项目科普交流活动。本次活动旨在向非专业群体介绍国际基因工程机器大赛（iGEM）的理念与价值，同时展示“基于工程化酵母的甲型流感病毒生物传感器”项目，让更多年轻学生了解合成生物学如何通过跨学科创新解决现实社会问题。
+                </p>
               </div>
-              <h3>我们分享了什么</h3>
-              <p>从 iGEM
-                比赛的发展背景、团队建设模式与科研创新理念，到项目的研究意义、实验原理与未来应用场景，我们尝试打破“科研只存在于实验室”的刻板印象，让学生看到生命科学研究同样需要编程、设计、传播等多领域能力的共同参与。
-              </p>
-            </article>
 
-            <article class="hp-edu-highlight hp-edu-highlight-accent">
-              <div class="hp-edu-highlight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path
-                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5a8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                </svg>
+              <!-- 交流亮点 -->
+              <div class="hp-education-highlights">
+                <article class="hp-edu-highlight">
+                  <div class="hp-edu-highlight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <rect x="2" y="3" width="20" height="14" rx="2" />
+                      <path d="M8 21h8M12 17v4" />
+                    </svg>
+                  </div>
+                  <h3>我们分享了什么</h3>
+                  <p>从 iGEM
+                    比赛的发展背景、团队建设模式与科研创新理念，到项目的研究意义、实验原理与未来应用场景，我们尝试打破“科研只存在于实验室”的刻板印象，让学生看到生命科学研究同样需要编程、设计、传播等多领域能力的共同参与。
+                  </p>
+                </article>
+
+                <article class="hp-edu-highlight hp-edu-highlight-accent">
+                  <div class="hp-edu-highlight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5a8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                    </svg>
+                  </div>
+                  <h3>同学们关心什么</h3>
+                  <p>学生们从实际使用者角度积极提问：检测设备能否进一步便携化？检测时间是否可以再缩短？这些来自潜在用户群体的反馈，让我们重新思考传感器在产品化过程中对便捷性、响应速度以及应用场景适配性的要求。</p>
+                </article>
+
+                <article class="hp-edu-highlight">
+                  <div class="hp-edu-highlight-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M6 21v-8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8M6 9l6-6 6 6" />
+                    </svg>
+                  </div>
+                  <h3>双向学习与成长</h3>
+                  <p>对参与学生而言，这是一次近距离接触合成生物学与科研创新的机会；对团队而言，把复杂的生物学原理转化为易于理解的语言，也促使我们重新梳理项目逻辑，加深了对技术路线与社会价值的理解。</p>
+                </article>
               </div>
-              <h3>同学们关心什么</h3>
-              <p>学生们从实际使用者角度积极提问：检测设备能否进一步便携化？检测时间是否可以再缩短？这些来自潜在用户群体的反馈，让我们重新思考传感器在产品化过程中对便捷性、响应速度以及应用场景适配性的要求。</p>
-            </article>
 
-            <article class="hp-edu-highlight">
-              <div class="hp-edu-highlight-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M6 21v-8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8M6 9l6-6 6 6" />
-                </svg>
+              <!-- RRi 理念总结 -->
+              <div class="hp-rri-statement">
+                <div class="hp-rri-header">
+                  <span class="hp-rri-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                  </span>
+                  <h3>Responsible Research and Innovation</h3>
+                </div>
+                <p>
+                  此次活动不仅是一次项目展示，也是一次双向学习与沟通的过程。我们进一步认识到，一个具有社会价值的生物技术项目不仅需要实验室中的技术突破，也需要与公众建立有效沟通，理解真实需求并持续优化。此次实践推动了项目从单纯的技术研发走向更加开放、负责的创新模式，体现了
+                  iGEM 所倡导的“负责任的研究与创新”理念。</p>
               </div>
-              <h3>双向学习与成长</h3>
-              <p>对参与学生而言，这是一次近距离接触合成生物学与科研创新的机会；对团队而言，把复杂的生物学原理转化为易于理解的语言，也促使我们重新梳理项目逻辑，加深了对技术路线与社会价值的理解。</p>
-            </article>
-          </div>
-
-          <!-- RRi 理念总结 -->
-          <div class="hp-rri-statement">
-            <div class="hp-rri-header">
-              <span class="hp-rri-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                </svg>
-              </span>
-              <h3>Responsible Research and Innovation</h3>
             </div>
-            <p>
-              此次活动不仅是一次项目展示，也是一次双向学习与沟通的过程。我们进一步认识到，一个具有社会价值的生物技术项目不仅需要实验室中的技术突破，也需要与公众建立有效沟通，理解真实需求并持续优化。此次实践推动了项目从单纯的技术研发走向更加开放、负责的创新模式，体现了
-              iGEM 所倡导的“负责任的研究与创新”理念。</p>
+            <div class="hp-reveal-handle" tabindex="0" role="button" aria-expanded="false"
+              aria-controls="reveal-education-content">
+              <span class="hp-reveal-hint">↓ 拉动查看更多</span>
+              <span class="hp-reveal-collapse">点击收起</span>
+            </div>
           </div>
         </div>
 
@@ -601,8 +600,8 @@
               <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
                 <span class="iconfont icon-youxiang"></span>
               </div>
-              <a href="https://space.bilibili.com/3706970825558875?spm_id_from=333.1387" target="_blank"
-                rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+                class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
                 <span class="iconfont icon-bilibili-fill"></span>
               </a>
               <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
@@ -643,12 +642,12 @@
   </section>
 
   <!-- iGEM Layout Strategy: 引用完整的脚本集合，保持与其他页面一致 -->
-  <script src="../static/js/utils.js"></script>
-  <script src="../static/js/sidebar-progress.js"></script>
-  <script src="../static/js/mobile-menu.js"></script>
-  <script src="../static/js/page-progress-bar.js"></script>
-  <script src="../static/js/scroll-progress-bar.js"></script>
-  <script src="../static/js/nav-scroll-behavior.js"></script>
+  <script src="../static/js/core/utils.js"></script>
+  <script src="../static/js/components/sidebar-progress.js"></script>
+  <script src="../static/js/core/mobile-menu.js"></script>
+  <script src="../static/js/core/page-progress-bar.js"></script>
+  <script src="../static/js/core/scroll-progress-bar.js"></script>
+  <script src="../static/js/core/nav-scroll-behavior.js"></script>
   <script>
     new PageProgressBar().startAutoProgress();
   </script>

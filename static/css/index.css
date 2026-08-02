@@ -34,7 +34,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.7;
   color: var(--color-text);
   background-color: var(--bg-page);
@@ -42,6 +42,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
 }
 
 /* ================================================== */
@@ -242,7 +251,7 @@ header {
 
 .section-background .hero-column {
   flex: 1;
-  background: linear-gradient(135deg, rgba(255, 250, 240, 0.92), rgba(252, 231, 203, 0.92));
+  background: linear-gradient(135deg, rgba(255, 253, 248, 0.92), rgba(252, 247, 238, 0.92));
   border-radius: 24px;
   padding: 2.5rem;
   box-shadow: 0 8px 32px rgba(139, 90, 43, 0.15);
@@ -646,56 +655,59 @@ body.home-page {
   display: none;
 }
 
+/* 首页各内容 section 作为随机 SVG 的载体，需有最小高度与定位基准 */
+.presentation-section {
+  position: relative;
+  min-height: 100vh;
+  overflow: visible;
+}
+
 /* 酵母浮动装饰 */
 .yeast-float {
   position: absolute;
-  z-index: 1;
+  z-index: 10;
   pointer-events: none;
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  transition:
+    opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  /* SVG 原图为 1920×1080 的全幅插画，使用 contain 确保小容器内显示完整内容 */
+  object-fit: contain;
 }
 
-.yeast-float svg {
+.yeast-float svg,
+.yeast-float img {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
-.yeast-left {
-  left: 5%;
+/* 当所在 section 滚动进入视口时渐显 */
+.yeast-float--visible {
+  opacity: 0.75;
+  transform: translateY(0) scale(1);
 }
 
-.yeast-right {
-  right: 5%;
+/* 减少动画偏好：直接显示 */
+@media (prefers-reduced-motion: reduce) {
+  .yeast-float {
+    transition: none;
+    opacity: 0.75;
+    transform: none;
+  }
 }
 
-.yeast-left.yeast-1 {
-  top: 15%;
-  width: 80px;
-  height: 80px;
-  animation: floatYeast1 6s ease-in-out infinite;
-}
+/* 移动端降低不透明度，避免遮挡正文 */
+@media (max-width: 768px) {
+  .yeast-float {
+    opacity: 0;
+  }
 
-.yeast-left.yeast-2 {
-  top: 50%;
-  width: 60px;
-  height: 60px;
-  animation: floatYeast2 7s ease-in-out infinite;
-  animation-delay: -2s;
-}
-
-.yeast-right.yeast-1 {
-  top: 25%;
-  width: 70px;
-  height: 70px;
-  animation: floatYeast3 6.5s ease-in-out infinite;
-  animation-delay: -1s;
-}
-
-.yeast-right.yeast-2 {
-  top: 60%;
-  width: 55px;
-  height: 55px;
-  animation: floatYeast4 7.5s ease-in-out infinite;
-  animation-delay: -3s;
+  .yeast-float--visible {
+    opacity: 0.55;
+  }
 }
 
 @keyframes floatYeast1 {
@@ -1721,3 +1733,517 @@ body.home-page {
     height: 140px;
   }
 }
+
+/* ================================================== */
+/* 首页 8 屏酵母滚动重设计                             */
+/* iGEM Layout Strategy: 将长页面转换为 8 个 100vh      */
+/* 酵母插画屏，视觉/文本 45/55，交替排布，原生 JS 动效。 */
+/* ================================================== */
+
+html.home-scroll-snap {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 6.25rem;
+}
+
+.yeast-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  scroll-snap-align: start;
+  padding-top: 6.25rem;
+  background: var(--bg-page);
+}
+
+/* iGEM Layout Strategy: 对首屏下方的酵母屏启用 content-visibility，
+   在 Chromium 内核浏览器中跳过视口外庞大 SVG 的渲染，降低滚动时主线程负担。 */
+.yeast-screen:not(#hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+  contain: layout paint;
+}
+
+/* 偶数屏反向：视觉在右、文本在左 */
+.yeast-screen--reverse .yeast-screen__inner {
+  flex-direction: row-reverse;
+}
+
+.yeast-screen__inner {
+  width: 80%;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.yeast-screen__visual {
+  flex: 0 0 45%;
+  max-width: 520px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yeast-screen__svg {
+  width: 140%;
+  height: auto;
+  max-height: 65vh;
+  object-fit: contain;
+  /* iGEM Layout Strategy: 降低 drop-shadow 模糊半径，减少每帧重绘开销。 */
+  filter: drop-shadow(0 4px 12px rgba(139, 90, 43, 0.1));
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.yeast-screen__content {
+  flex: 0 0 55%;
+  max-width: 680px;
+  color: var(--color-text);
+}
+
+.yeast-screen__eyebrow {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.yeast-screen__title {
+  font-size: clamp(1.75rem, 3.2vw, 2.8rem);
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--color-brown-dark);
+  margin-bottom: var(--spacing-lg);
+}
+
+.yeast-screen__subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  color: var(--color-text-light);
+  min-height: 2em;
+  margin-bottom: var(--spacing-xl);
+}
+
+.yeast-screen__subtitle::after {
+  content: '|';
+  display: inline-block;
+  margin-left: 0.15em;
+  color: var(--color-primary);
+  animation: typewriterCursor 0.9s step-end infinite;
+}
+
+@keyframes typewriterCursor {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.yeast-screen__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 2rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-white);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 16px var(--color-primary-shadow);
+  transition: transform var(--duration-normal) var(--ease-smooth), box-shadow var(--duration-normal) var(--ease-smooth);
+  cursor: pointer;
+}
+
+.yeast-screen__cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--color-primary-shadow);
+}
+
+.yeast-screen__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-lg);
+}
+
+.yeast-screen__list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.7;
+}
+
+.yeast-screen__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.yeast-screen__note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  border-left: 3px solid var(--color-brown-light);
+  padding-left: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.yeast-screen__placeholder {
+  font-size: var(--font-size-sm);
+  color: var(--color-brown);
+  background: var(--color-brown-lighter);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-top: var(--spacing-sm);
+}
+
+/* DBTL 迷你循环 */
+.dbtl-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  margin: var(--spacing-md) 0 var(--spacing-lg);
+  font-weight: 600;
+  color: var(--color-brown-dark);
+}
+
+.dbtl-step {
+  white-space: nowrap;
+}
+
+.dbtl-arrow {
+  color: var(--color-primary);
+}
+
+/* 文字摘要卡片区（团队亮点） */
+.section-summary {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem;
+  background: var(--bg-page);
+}
+
+.summary-inner {
+  width: 80%;
+  max-width: 1200px;
+}
+
+.section-summary__title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  color: var(--color-brown-dark);
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08);
+  transition: transform var(--duration-normal) var(--ease-smooth), box-shadow var(--duration-normal) var(--ease-smooth);
+  cursor: pointer;
+}
+
+.summary-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(139, 90, 43, 0.15);
+}
+
+.summary-card .iconfont {
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+  display: inline-block;
+}
+
+.summary-card h3 {
+  font-size: var(--font-size-lg);
+  color: var(--color-brown-dark);
+  margin-bottom: var(--spacing-sm);
+}
+
+.summary-card p {
+  font-size: var(--font-size-md);
+  color: var(--color-text-light);
+  line-height: 1.7;
+}
+
+/* 8-Portal 导航 */
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.portal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--color-brown-dark);
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(139, 90, 43, 0.08);
+  transition: transform var(--duration-normal) var(--ease-smooth), box-shadow var(--duration-normal) var(--ease-smooth), border-color var(--duration-normal) var(--ease-smooth);
+  cursor: pointer;
+}
+
+.portal-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 28px var(--color-primary-shadow-hover);
+  border-color: var(--color-primary-light);
+}
+
+.portal-card .iconfont {
+  font-size: 2.25rem;
+  color: var(--color-primary);
+  transition: transform 0.3s ease;
+}
+
+.portal-card:hover .iconfont {
+  transform: scale(1.1);
+}
+
+/* 滚动渐入动画 */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 减少动画偏好：直接显示 */
+@media (prefers-reduced-motion: reduce) {
+  .yeast-screen__svg {
+    animation: none;
+  }
+
+  .yeast-screen__subtitle::after {
+    animation: none;
+    content: '';
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 1024px) {
+  .yeast-screen__inner {
+    width: 90%;
+    gap: 2rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .portal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  html.home-scroll-snap {
+    scroll-snap-type: none;
+    scroll-padding-top: 0;
+  }
+
+  .yeast-screen {
+    height: auto;
+    min-height: 100vh;
+    scroll-snap-align: none;
+    padding: 8rem 1.5rem 4rem;
+  }
+
+  .yeast-screen__inner,
+  .yeast-screen--reverse .yeast-screen__inner {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .yeast-screen__visual,
+  .yeast-screen__content {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+  }
+
+  .yeast-screen__visual {
+    max-width: 280px;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .yeast-screen__title {
+    font-size: 1.6rem;
+  }
+
+  .yeast-screen__subtitle {
+    min-height: 1.5em;
+  }
+
+  .dbtl-mini {
+    flex-wrap: wrap;
+  }
+
+  .summary-grid,
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-summary {
+    padding: 6rem 1.5rem;
+  }
+}
+
+/* ================================================== */
+/* 首页各 section 独立背景图片（占位）                  */
+/* 使用说明：把每个 ID 对应 --section-bg-img 的 none   */
+/* 替换为实际图片路径，例如 url('static/image/xx.jpg') */
+/* ================================================== */
+
+#hero {
+  --section-bg-img: url('../image/bc/画板+1.webp');
+}
+
+#executive-summary {
+  --section-bg-img: url('../image/bc/画板+2.webp');
+}
+
+#public-health {
+  --section-bg-img: url('../image/bc/画板+3.webp');
+}
+
+#project-intro {
+  --section-bg-img: url('../image/bc/画板+4.webp');
+}
+
+#dbtl-cycle {
+  --section-bg-img: url('../image/bc/画板+5.webp');
+}
+
+#statistics {
+  --section-bg-img: url('../image/bc/画板+6.webp');
+}
+
+#safety {
+  --section-bg-img: url('../image/bc/画板+7.webp');
+}
+
+#human-practices {
+  --section-bg-img: none;
+}
+
+#future-vision {
+  --section-bg-img: none;
+}
+
+#team-highlight {
+  --section-bg-img: none;
+}
+
+#final-cta {
+  --section-bg-img: none;
+}
+
+#hero,
+#executive-summary,
+#public-health,
+#project-intro,
+#dbtl-cycle,
+#statistics,
+#safety,
+#human-practices,
+#future-vision,
+#team-highlight,
+#final-cta {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.18)),
+    var(--section-bg-img);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: scroll, scroll;
+  /* background-color: var(--bg-page);
+  -webkit-mask-image: linear-gradient(
+    transparent 0%,
+    #fff 12%,
+    #fff 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    transparent 0%,
+    #fff 12%,
+    #fff 88%,
+    transparent 100%
+  ); */
+}
+
+/* 移动端：背景图保持 cover 居中，避免 fixed 导致的渲染问题 */
+@media (max-width: 768px) {
+
+  #hero,
+  #executive-summary,
+  #public-health,
+  #project-intro,
+  #dbtl-cycle,
+  #statistics,
+  #safety,
+  #human-practices,
+  #future-vision,
+  #team-highlight,
+  #final-cta {
+    background-attachment: scroll, scroll;
+  }
+}
+
+/* iGEM Check: [x] 100vh scroll-snap screens [x] 45/55 alternating layout [x] Float keyframes reused [x] Mobile responsive [x] Reduced motion supported [x] Per-section background placeholders */

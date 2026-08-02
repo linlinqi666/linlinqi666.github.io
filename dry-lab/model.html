@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,9 +8,11 @@
   <link rel="stylesheet" href="../static/iconfont/iconfont.css">
   <link rel="stylesheet" href="../static/css/navigation/navigation.css">
   <link rel="stylesheet" href="../static/css/index.css">
+  <link rel="stylesheet" href="../static/css/description.css">
+  <link rel="stylesheet" href="../static/css/model.css">
   <link rel="stylesheet" href="../static/css/mobile.css">
   <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
-  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">>
+  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
 </head>
 
 <body>
@@ -273,16 +275,209 @@
   </nav>
 
   <main>
-    <section id="dry-lab-model">
-      <h2>模型</h2>
-      <p>这里介绍了干实验组的模型工作，包括数学模型、计算机模拟等内容。</p>
-    </section>
+    <div class="description-container">
+
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <!-- 酵母细胞装饰 -->
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="dna-icon">
+            <svg viewBox="0 0 40 40" class="dna-helix">
+              <path d="M20,5 Q25,15 20,20 Q15,25 20,35" stroke="currentColor" fill="none" stroke-width="2" />
+              <circle cx="20" cy="10" r="3" fill="currentColor" />
+              <circle cx="20" cy="20" r="3" fill="currentColor" />
+              <circle cx="20" cy="30" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>模型导航</h3>
+          <div class="yeast-badge">Dry Lab</div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#model-award" class="nav-main-link">Best Model Award</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#assumptions" class="nav-main-link">模型假设</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#biological-assumptions">生物学假设</a></li>
+                <li class="level3"><a href="#mathematical-assumptions">数学假设</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#data-parameters" class="nav-main-link">数据与参数</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#results" class="nav-main-link">模型结果</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#dose-response">剂量-反应曲线</a></li>
+                <li class="level3"><a href="#kinetics">动力学模拟</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#validation" class="nav-main-link">模型验证</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <div id="model-award" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>本页面向 iGEM Best Model 奖项要求，展示用于理解、预测和指导 PAGER-Yeast 生物传感器设计的数学模型与计算机模拟工作。</p>
+          </div>
+          <h2>Best Model Award</h2>
+          <p>机制模型、机器学习或其他计算方法可以帮助项目设计、预测系统行为或解释实验结果。本页面需以任何人都能理解的方式解释模型的假设、数据、参数和结果。</p>
+          <p>[待补充：说明本队模型工作的核心目标，以及它如何与湿实验结果相互印证。]</p>
+        </div>
+
+        <div id="overview" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>概述建模动机、模型类型（如 ODE、 agent-based、统计模型）及其在 DBTL 循环中的位置。</p>
+          </div>
+          <h2>Overview</h2>
+          <ul>
+            <li><strong>建模目的：</strong>预测 PAGER 受体在 HA 抗原存在下的激活效率、信号放大倍数及检测下限。</li>
+            <li><strong>模型类型：</strong>[待补充：常微分方程组 / 随机模拟 / 机器学习 / 组合模型]</li>
+            <li><strong>与湿实验的对应：</strong>模型预测将通过流式细胞术 yEGFP 荧光强度与 X-Gal 显色结果进行验证。</li>
+          </ul>
+          <p>[待补充：建议上传模型流程图或 DBTL 循环图，尺寸 1200×600px，.webp 格式并压缩至 150KB 以下。]</p>
+        </div>
+
+        <div id="assumptions" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>明确列出模型简化假设及其适用范围，确保评审能够理解模型的边界条件。</p>
+          </div>
+          <h2>模型假设</h2>
+          <div id="biological-assumptions">
+            <h3>生物学假设</h3>
+            <ul>
+              <li>酵母细胞均匀悬浮，不考虑细胞间异质性（或计划通过单细胞模型引入）。</li>
+              <li>HA 抗原与 anti-HA 纳米抗体结合符合质量作用定律。</li>
+              <li>MT1 抑制肽与 hM1Dq 受体的结合/解离处于快速平衡。</li>
+              <li>DCZ 激动剂浓度在诱导期间保持恒定。</li>
+            </ul>
+          </div>
+          <div id="mathematical-assumptions">
+            <h3>数学假设</h3>
+            <ul>
+              <li>采用确定性 ODE 描述信号通路的平均行为。</li>
+              <li>忽略细胞生长对报告基因表达的稀释效应（或作为参数纳入）。</li>
+              <li>参数估计基于文献值与湿实验拟合。</li>
+            </ul>
+          </div>
+          <p>[待补充：为每条假设标注依据来源（文献 DOI 或实验数据）。]</p>
+        </div>
+
+        <div id="data-parameters" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>列出模型所需的输入数据、参数表及其单位，确保可复现性。</p>
+          </div>
+          <h2>数据与参数</h2>
+          <ul>
+            <li><strong>输入数据：</strong>[待补充：HA 抗原浓度范围、DCZ 浓度、酵母接种密度、培养时间等]</li>
+            <li><strong>关键参数：</strong>[待补充：结合速率常数 k<sub>on</sub>/k<sub>off</sub>、受体表达量、G 蛋白激活速率、报告基因表达速率、降解速率等]</li>
+            <li><strong>参数来源：</strong>[待补充：文献值 / 拟合得到 / 待实验测定]</li>
+          </ul>
+          <p>[待补充：建议以表格形式呈现参数名、符号、数值、单位、来源与不确定性。]</p>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+
+        <div id="results" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>展示模型输出结果，重点呈现对项目设计有指导意义的预测。</p>
+          </div>
+          <h2>模型结果</h2>
+          <div id="dose-response">
+            <h3>剂量-反应曲线</h3>
+            <p>[待补充：模拟不同 HA 抗原浓度下的 yEGFP 荧光输出曲线；需标注坐标轴单位、误差定义（SD/SEM）、样本量 n、对照组。]</p>
+          </div>
+          <div id="kinetics">
+            <h3>动力学模拟</h3>
+            <p>[待补充：模拟抗原结合、MT1 位移、hM1Dq 激活、报告基因表达随时间变化的过程；建议用动态线图或阶段注释框呈现。]</p>
+          </div>
+          <p>[待补充：所有图表需包含误差棒定义、样本量、对照组说明，并优先使用原生 JS 交互式图表。]</p>
+        </div>
+
+        <div id="validation" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>说明模型预测与实验结果或已有文献的对比，评估模型可靠性。</p>
+          </div>
+          <h2>模型验证</h2>
+          <ul>
+            <li><strong>实验对照：</strong>[待补充：野生型 BY4741、空载体对照、阳性对照的预测与实测对比]</li>
+            <li><strong>敏感性分析：</strong>[待补充：识别对输出影响最大的关键参数]</li>
+            <li><strong>模型局限：</strong>[待补充：当前未考虑的生物学细节及未来改进方向]</li>
+          </ul>
+          <p>[待补充：建议采用“预测 vs 实测”镜像卡片布局，高亮重合区域。]</p>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+      </div>
+    </div>
   </main>
 
   <section id="footer" class="fullscreen-section section-footer">
-        <picture>
-        <source srcset="../static/image/bc/index_bc7.webp" type="image/webp">
-    <img loading="lazy" class="section-bg-img" src="../static/image/bc/index_bc7.jpg" alt="Footer background">
+    <picture>
+      <source srcset="../static/image/bc/index_bc7.webp" type="image/webp">
+      <img loading="lazy" class="section-bg-img" src="../static/image/bc/index_bc7.jpg" alt="Footer background">
     </picture>
     <div class="component-container">
       <div class="footer-wrapper">
@@ -293,15 +488,15 @@
             <div class="image-scroller">
               <div class="scroller-track">
                 <a href="https://www.szpu.edu.cn/" target="_blank">
-                                    <picture>
-                      <source srcset="../static/image/SZPU(notext).webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                  <picture>
+                    <source srcset="../static/image/SZPU(notext).webp" type="image/webp">
+                    <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
                   </picture>
                 </a>
                 <a href="https://fd.szpu.edu.cn/" target="_blank">
-                                    <picture>
-                      <source srcset="../static/image/shiyao(notext).webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                  <picture>
+                    <source srcset="../static/image/shiyao(notext).webp" type="image/webp">
+                    <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
                   </picture>
                 </a>
               </div>
@@ -314,7 +509,7 @@
               <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
                 <span class="iconfont icon-youxiang"></span>
               </div>
-              <a href="https://space.bilibili.com/3706970825558875?spm_id_from=333.1387" target="_blank"
+              <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
                 class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
                 <span class="iconfont icon-bilibili-fill"></span>
               </a>
@@ -322,9 +517,9 @@
                 <span class="iconfont icon-weixin"></span>
                 <div class="wechat-qr-container">
                   <div class="wechat-qr-arrow"></div>
-                                    <picture>
-                      <source srcset="../static/image/other/echoyeast_social.webp" type="image/webp">
-                  <img src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
+                  <picture>
+                    <source srcset="../static/image/other/echoyeast_social.webp" type="image/webp">
+                    <img src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
                   </picture>
                 </div>
               </a>
@@ -465,11 +660,12 @@
       });
     }
   </script>
-  <script src="../static/js/utils.js"></script>
-  <script src="../static/js/mobile-menu.js"></script>
-  <script src="../static/js/page-progress-bar.js"></script>
-  <script src="../static/js/scroll-progress-bar.js"></script>
-  <script src="../static/js/nav-scroll-behavior.js"></script>
+  <script src="../static/js/core/utils.js"></script>
+  <script src="../static/js/components/sidebar-progress.js"></script>
+  <script src="../static/js/core/mobile-menu.js"></script>
+  <script src="../static/js/core/page-progress-bar.js"></script>
+  <script src="../static/js/core/scroll-progress-bar.js"></script>
+  <script src="../static/js/core/nav-scroll-behavior.js"></script>
   <script>
     new PageProgressBar().startAutoProgress();
   </script>

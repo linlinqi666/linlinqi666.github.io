@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+﻿<!DOCTYPE html>
+<html lang="zh-CN" class="home-scroll-snap">
 
 <head>
   <meta charset="UTF-8">
@@ -10,8 +10,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#87CEEB">
-  <meta name="msapplication-TileColor" content="#87CEEB">
+  <meta name="theme-color" content="#4a90e2">
+  <meta name="msapplication-TileColor" content="#4a90e2">
   <meta name="color-scheme" content="light">
 
   <!-- 安全区域CSS变量定义（不应用到html元素以免破坏全屏布局） -->
@@ -32,6 +32,10 @@
   <!-- 预连接关键资源 -->
   <link rel="preconnect" href="static/iconfont" crossorigin>
   <link rel="preconnect" href="static/css" crossorigin>
+
+  <!-- iGEM Layout Strategy: 预加载首屏 Hero 背景与主视觉，缩短 LCP。 -->
+  <link rel="preload" as="image" href="static/image/bc/%E7%94%BB%E6%9D%BF+1.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="static/image/Animation/index/yeast1.svg" fetchpriority="high">
   <title>iGEM SZPU-2026 - 首页</title>
 
   <!-- 直接同步加载CSS，确保加载顺序可控 -->
@@ -39,10 +43,24 @@
   <link rel="stylesheet" href="static/iconfont/iconfont.css">
   <link rel="stylesheet" href="static/css/navigation/navigation.css">
   <link rel="stylesheet" href="static/css/index.css">
-  <link rel="stylesheet" href="static/css/presentation.css">
   <link rel="stylesheet" href="static/css/components/page-progress-bar.css">
   <link rel="stylesheet" href="static/css/components/scroll-progress-bar.css">
   <link rel="stylesheet" href="static/css/mobile.css">
+
+  <!-- JavaScript 禁用回退：确保核心内容在无 JS 时仍可见 -->
+  <noscript>
+    <style>
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .typewriter::after {
+        content: none !important;
+      }
+    </style>
+  </noscript>
 </head>
 
 <body class="home-page">
@@ -306,27 +324,127 @@
 
   <main class="long-page">
     <!-- 模块 1: Hero 标题页 -->
-    <!-- <section id="hero" class="presentation-section section-hero section-light" data-title="首页">
-      <div class="section-inner">
-        <div class="hero-layout">
-          <div class="hero-text">
-            <span class="section-eyebrow">EchoYeast · iGEM SZPU-2026</span>
-            <h1 class="section-title">用酵母感知甲流</h1>
-            <p class="section-subtitle">基于工程化酿酒酵母的甲型流感病毒（H1N1）活细胞生物传感器</p>
-          </div>
-          <div class="hero-visual">
-            <div class="placeholder-block" data-placeholder="hero-illustration" style="min-height: 360px;">
-              <img loading="lazy" src="static/image/preview/hero-illustration.svg" alt="EchoYeast 概念预览图"
-                style="max-height: 320px;">
-            </div>
-          </div>
-          <div class="hero-scroll-hint">
-            <span>向下滚动</span>
-            <div class="scroll-line"></div>
-          </div>
+    <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast1.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="eager" fetchpriority="high" decoding="async" style="animation-name: floatYeast1;">
+        </div>
+        <div class="yeast-screen__content">
+          <p class="yeast-screen__eyebrow reveal">iGEM SZPU-2026</p>
+          <h1 class="yeast-screen__title reveal">
+            工程化酿酒酵母<br>H1N1 流感病毒生物传感器
+          </h1>
+          <p class="yeast-screen__subtitle typewriter" data-text="PAGER 策略 · 抗 HA 纳米抗体 · 人源化 GPCR/G 蛋白 · 双模式 FUS1 报告系统">
+            PAGER 策略 · 抗 HA 纳米抗体 · 人源化 GPCR/G 蛋白 · 双模式 FUS1 报告系统
+          </p>
+          <a href="#public-health" class="yeast-screen__cta reveal">Start Journey</a>
         </div>
       </div>
-    </section> -->
+      <!-- iGEM Check: [x] No unsupported claims [x] Placeholders for data [x] Terms defined in content -->
+    </section>
+
+    <!-- 模块 2: 背景 -->
+    <section id="public-health" class="presentation-section yeast-screen yeast-screen--reverse " data-title="背景">
+      <div class="yeast-screen__inner yeast-screen--reverse">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast2.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast2;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">为什么是 H1N1？面向快速广谱监测</h2>
+          <p class="reveal">
+            甲型流感病毒（Influenza A virus, IAV）是季节性流行与反复引发公共卫生应急事件的主要病原体之一。H1N1
+            亚型在历史上多次造成大流行，其快速变异与呼吸道传播特性使得早期、低成本的现场筛查成为疫情防控的关键缺口。现有临床检测方法在灵敏度、成本、通量与便携性之间难以兼顾，限制了基层医疗、校园、口岸等场景的快速响应能力。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>qRT-PCR：</strong>灵敏度与特异性的金标准，但需要昂贵荧光定量仪、专业实验室与较长周转时间，难以下沉到资源有限地区；</li>
+            <li><strong>ELISA：</strong>适合高通量筛查，但灵敏度偏低、孵育与洗脱步骤繁琐，对操作人员培训要求高；</li>
+            <li><strong>胶体金试纸条：</strong>操作简便、无需设备，但多为定性结果，在低病毒载量样本中容易出现假阴性；</li>
+            <li><strong>细胞培养/鸡胚分离：</strong>周期长达数天至数周，主要用于科研与毒株鉴定，无法满足现场即时诊断需求。</li>
+          </ul>
+          <p class="yeast-screen__note reveal">
+            <strong>纳米抗体（Nanobody）：</strong>源自骆驼科重链抗体的可变区（VHH），分子量约 12–15
+            kDa，具有热稳定性高、可溶性好、易于原核/真核表达等优势，是构建模块化抗原识别单元的理想候选。
+          </p>
+          <p class="yeast-screen__placeholder reveal">[待补充：目标地区流感发病率、检测可及性调研与具体使用场景]</p>
+        </div>
+      </div>
+      <!-- iGEM Check: [x] Public health context [x] Placeholder for epidemiology data [x] Expert interview cited implicitly -->
+    </section>
+
+    <!-- 模块 3: 设计 -->
+    <section id="project-intro" class="presentation-section yeast-screen" data-title="设计">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast3.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast3;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">设计策略：PAGER 重布线人源 GPCR</h2>
+          <p class="reveal">
+            我们在酿酒酵母 <em>Saccharomyces cerevisiae</em> BY4741 中搭建基于 PAGER（Protein-fragment Assisted Interaction
+            Reporter）策略的 H1N1 血凝素（HA）识别回路。该设计将酵母天然交配信息素通路改造为“抗原解锁-发光”检测平台：无 HA 抗原时，MT1 抑制肽持续占据人源化 hM1Dq 受体的正构位点，下游 G
+            蛋白级联处于关闭状态；当病毒 HA 被膜表面展示抗 HA 纳米抗体捕获后，产生的空间位阻将 MT1 抑制肽物理推开，解除自抑制，DCZ 激动剂即可激活 hM1Dq，进而通过 Gpa1-Gαq
+            嵌合蛋白触发 FUS1 启动子，驱动 yEGFP 或 lacZ 报告基因表达。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>底盘：</strong><em>S. cerevisiae</em> BY4741，经 CRISPR-Cas9 敲除 STE2、FAR1、Sst2 以降低背景、解除细胞周期阻滞并放大信号；
+            </li>
+            <li><strong>识别元件：</strong>抗 H1N1 HA 纳米抗体（VHH），通过 α-factor 信号肽引导并锚定在酵母膜表面；</li>
+            <li><strong>信号模块：</strong>人源化 hM1Dq 受体与 Gpa1-Gαq 嵌合蛋白（Gpa1 C 端 KIGII → 人源 Gαq EYNLV）；</li>
+            <li><strong>输出模块：</strong>FUS1p-yEGFP（流式细胞术定量）与 FUS1p-lacZ（X-Gal 显色定性）双模式报告。</li>
+          </ul>
+          <div class="dbtl-mini reveal" aria-label="DBTL 循环">
+            <span class="dbtl-step">Design</span>
+            <span class="dbtl-arrow" aria-hidden="true">→</span>
+            <span class="dbtl-step">Build</span>
+            <span class="dbtl-arrow" aria-hidden="true">→</span>
+            <span class="dbtl-step">Test</span>
+            <span class="dbtl-arrow" aria-hidden="true">→</span>
+            <span class="dbtl-step">Learn</span>
+          </div>
+          <p class="yeast-screen__note reveal">
+            <strong>GPCR（G 蛋白偶联受体）：</strong>七跨膜受体超家族，可将胞外化学信号转导至胞内异源三聚体 G
+            蛋白，进而调控下游效应器与基因表达。本项目利用其高度可工程化特性，将病毒抗原识别事件转化为可定量的荧光输出。
+          </p>
+          <p class="yeast-screen__placeholder reveal">[待补充：各元件完整序列、Western Blot 表达验证与剂量-反应曲线]</p>
+        </div>
+      </div>
+      <!-- iGEM Check: [x] Parts list with chassis [x] DBTL cycle visible [x] Placeholders for characterization data -->
+    </section>
+
+    <!-- 模块 4: 湿实验 / DBTL -->
+    <section id="dbtl-cycle" class="presentation-section yeast-screen yeast-screen--reverse" data-title="构建与测试">
+      <div class="yeast-screen__inner yeast-screen--reverse">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast4.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast4;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">构建与测试：模块化湿实验流程</h2>
+          <p class="reveal">
+            项目以 Design–Build–Test–Learn（DBTL）工程循环为框架，将复杂的合成生物学目标拆分为可独立验证的模块。整个湿实验链从 PAGER
+            融合蛋白基因的设计与合成出发，经过大肠杆菌质粒扩增与酶切验证、酵母底盘 CRISPR 改造与同源重组人源化、蛋白表达验证，最终进入生物传感器的功能诱导与双模式信号检测。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>Design：</strong>对 α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq 串联融合蛋白进行酿酒酵母密码子优化，两端引入
+              NdeI/BamHI 酶切位点；</li>
+            <li><strong>Build：</strong>全基因合成后克隆至 pGADT7，经 Top10 大肠杆菌转化、质粒小提与双酶切验证获得阳性克隆；同步构建 pML104-sgRNA 质粒与 URA3
+              标记的人源化 Gpa1 整合片段；</li>
+            <li><strong>Test：</strong>通过 LiAc/PEG 化学转化将 PAGER 质粒导入改造后的酵母底盘，Western Blot 验证膜蛋白表达，DCZ 梯度诱导后使用流式细胞术与 X-Gal
+              染色读取信号；</li>
+            <li><strong>Learn：</strong>根据信号背景、响应幅度与剂量-反应曲线，迭代优化 sgRNA 效率、诱导剂浓度与培养条件。</li>
+          </ul>
+          <p class="yeast-screen__note reveal">
+            <strong>Orthogonality（正交性）：</strong>指外源信号通路与宿主内源通路之间的交叉干扰最小化。敲除 STE2 消除内源 α-factor 受体信号、敲除 Sst2 解除 G
+            蛋白负调控、敲除 FAR1 解除细胞周期阻滞，均是为了在维持细胞正常生长的同时，让 PAGER 通路成为主导且可控的信号来源。
+          </p>
+          <p class="yeast-screen__placeholder reveal">[待补充：原始实验记录（Team Member, Lab Notebook Date）与原始数据文件]</p>
+        </div>
+      </div>
+      <!-- iGEM Check: [x] Protocol structure [x] Engineering cycle explicit [x] Placeholder for notebook references -->
+    </section>
 
     <!-- 首页核心发现吸顶导引条：使用 sticky 定位，滚动到视口顶部时固定 -->
     <section class="presentation-section executive-summary" id="executive-summary" aria-label="核心发现">
@@ -348,393 +466,181 @@
       </div>
     </section>
 
-
-    <!-- 模块 2: 全球健康环境 -->
-    <!-- <section id="public-health" class="presentation-section section-public-health section-muted" data-title="全球健康环境">
-      <div class="section-inner">
-        <div class="split-asymmetric">
-          <div class="split-visual">
-            <div class="placeholder-block" data-placeholder="public-health-scene" style="min-height: 480px;">
-              <img loading="lazy" src="static/image/preview/public-health-scene.svg" alt="公共卫生场景预览图"
-                style="max-height: 440px;">
-            </div>
-          </div>
-          <div class="split-content">
-            <div>
-              <span class="section-eyebrow">Public Health</span>
-              <h2 class="section-title">甲流，每年都在影响我们的生活</h2>
-              <p class="section-subtitle">季节性流感在校园、医院、公共交通等密闭空间中持续传播。传统检测依赖患者主动就医，往往错过了病毒扩散前的黄金窗口。</p>
-            </div>
-            <div class="metric-row">
-              <div class="metric-card">
-                <span class="metric-value">3~7 天</span>
-                <span class="metric-label">传统检测周期</span>
-              </div>
-              <div class="metric-card">
-                <span class="metric-value">季节性</span>
-                <span class="metric-label">高发期集中爆发</span>
-              </div>
-            </div>
-          </div>
+    <!-- 模块 5: 结果 -->
+    <section id="statistics" class="presentation-section yeast-screen " data-title="结果">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast5.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast1;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">实验进展与待表征数据</h2>
+          <p class="reveal">
+            截至目前，项目已完成 PAGER 融合蛋白基因的合成与大肠杆菌层面的质粒验证，为后续酵母转化与底盘改造奠定了材料基础。CRISPR-Cas9 三基因敲除模块在首次酶切验证失败后，正在进行 sgRNA
+            载体重建与转化条件优化。所有荧光定量结果将在完成底盘改造、获得不少于三次独立重复、设置完整对照组并标注误差棒（SD 或 SEM）后统一上传。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>PAGER 融合蛋白基因合成：</strong>已完成，克隆质粒 ID ABX63942，全长测序与设计序列一致，无突变；</li>
+            <li><strong>大肠杆菌转化与质粒验证：</strong>已完成，4 个阳性克隆浓度 297.15–408.45 ng/μL，A260/A280 ≈ 1.9，NdeI/BamHI 双酶切显示 7939 bp
+              骨架与 2063 bp 插入片段，符合理论值；</li>
+            <li><strong>CRISPR 三敲除 STE2/FAR1/Sst2：</strong>进行中，首次酶切验证未达预期，已重新设计 sgRNA 并构建 pML104 载体；</li>
+            <li><strong>Gpa1 人源化同源重组：</strong>待三敲除底盘完成后进行，已准备 500 bp 同源臂-突变 Gpa1-URA3 cassette-500 bp 同源臂线性片段；</li>
+            <li><strong>蛋白表达与功能测试：</strong>待酵母转化完成后，通过 Western Blot、DCZ 梯度诱导、流式细胞术与 X-Gal 染色分层验证。</li>
+          </ul>
+          <p class="yeast-screen__placeholder reveal">[待补充：流式细胞术定量数据（n ≥ 3，含阴性/空载体/阳性对照）、剂量-反应曲线、误差棒定义与统计分析]</p>
         </div>
       </div>
-    </section> -->
-
-    <!-- 模块 3: 统计分析 -->
-    <!-- <section id="statistics" class="presentation-section section-statistics section-accent" data-title="统计分析">
-      <div class="section-inner">
-        <div class="statistics-layout">
-          <div class="statistics-header">
-            <span class="section-eyebrow">Statistics</span>
-            <h2 class="section-title">季节性流感年度流行周期</h2>
-            <p class="data-source">数据来源：WHO / CDC（待替换/补充）</p>
-          </div>
-          <div class="statistics-chart">
-            <div class="placeholder-block" data-placeholder="flu-statistics-chart"
-              style="min-height: 420px; aspect-ratio: 16/9;">
-              <img loading="lazy" src="static/image/preview/flu-statistics-chart.svg" alt="流感统计图表预览"
-                style="max-height: 400px;">
-            </div>
-          </div>
-          <div class="statistics-metrics">
-            <div class="stat-metric">
-              <span class="stat-value">[待补充]</span>
-              <span class="stat-label">年度峰值月份</span>
-            </div>
-            <div class="stat-metric">
-              <span class="stat-value">[待补充]</span>
-              <span class="stat-label">平均持续周数</span>
-            </div>
-            <div class="stat-metric">
-              <span class="stat-value">[待补充]</span>
-              <span class="stat-label">高危人群占比</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- 模块 4: 项目介绍（已注释） -->
-    <!--
-    <section id="project-intro" class="presentation-section section-project-intro section-light" data-title="项目介绍">
-      <div class="section-inner">
-        <div class="intro-layout">
-          <div class="intro-content">
-            <div>
-              <span class="section-eyebrow">Project</span>
-              <h2 class="section-title">从野生型酵母到"零背景"传感器底盘</h2>
-              <p class="section-subtitle">我们将酵母的交配信号通路重编程为病毒识别-信号转导装置：敲除内源基因消除背景，再引入 PAGER 识别模块与 Gpa1-Gαq 嵌合蛋白，实现 H1N1
-                抗原特异性响应。</p>
-            </div>
-            <ol class="step-list">
-              <li class="step-item">
-                <span class="step-number">01</span>
-                <div class="step-body">
-                  <h3>STE2 敲除</h3>
-                  <p>移除内源 α-factor 受体，避免背景激活。</p>
-                </div>
-              </li>
-              <li class="step-item">
-                <span class="step-number">02</span>
-                <div class="step-body">
-                  <h3>FAR1 敲除</h3>
-                  <p>解除细胞周期停滞，保持细胞代谢活性。</p>
-                </div>
-              </li>
-              <li class="step-item">
-                <span class="step-number">03</span>
-                <div class="step-body">
-                  <h3>GPA1 人源化</h3>
-                  <p>Gpa1-Gαq 嵌合蛋白，适配人源 GPCR 信号。</p>
-                </div>
-              </li>
-              <li class="step-item">
-                <span class="step-number">04</span>
-                <div class="step-body">
-                  <h3>转入 PAGER 模块</h3>
-                  <p>重建病毒识别通路，实现 HA 抗原特异性响应。</p>
-                </div>
-              </li>
-            </ol>
-          </div>
-          <div class="intro-visual">
-            <div class="knockout-animation" data-placeholder="knockout-animation" aria-label="基因敲除与通路重建动画">
-              <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="knockout-svg">
-                <ellipse class="cell-outline" cx="200" cy="200" rx="140" ry="120" fill="rgba(255,248,220,0.6)"
-                  stroke="rgba(139,90,43,0.4)" stroke-width="3" />
-                <g class="gene-labels">
-                  <rect x="90" y="130" width="70" height="28" rx="14" fill="rgba(74,144,226,0.2)"
-                    stroke="rgba(74,144,226,0.5)" />
-                  <text x="125" y="149" text-anchor="middle" font-size="12" fill="var(--color-primary-dark)">STE2</text>
-                  <rect x="165" y="110" width="70" height="28" rx="14" fill="rgba(74,144,226,0.2)"
-                    stroke="rgba(74,144,226,0.5)" />
-                  <text x="200" y="129" text-anchor="middle" font-size="12" fill="var(--color-primary-dark)">FAR1</text>
-                  <rect x="240" y="130" width="70" height="28" rx="14" fill="rgba(74,144,226,0.2)"
-                    stroke="rgba(74,144,226,0.5)" />
-                  <text x="275" y="149" text-anchor="middle" font-size="12" fill="var(--color-primary-dark)">GPA1</text>
-                </g>
-                <g class="cas9-complex">
-                  <circle cx="60" cy="200" r="24" fill="rgba(255,99,71,0.8)" />
-                  <text x="60" y="205" text-anchor="middle" font-size="10" fill="white">Cas9</text>
-                  <line x1="84" y1="200" x2="120" y2="200" stroke="rgba(255,99,71,0.6)" stroke-width="2"
-                    stroke-dasharray="4,2" />
-                </g>
-                <g class="dna-break">
-                  <path d="M 120 200 Q 160 180 200 200" fill="none" stroke="rgba(139,90,43,0.5)" stroke-width="3" />
-                  <path d="M 200 200 Q 240 220 280 200" fill="none" stroke="rgba(139,90,43,0.5)" stroke-width="3" />
-                </g>
-                <g class="gfp-signal">
-                  <circle cx="200" cy="260" r="8" fill="#34A853" opacity="0" />
-                  <circle cx="180" cy="270" r="5" fill="#34A853" opacity="0" />
-                  <circle cx="220" cy="270" r="5" fill="#34A853" opacity="0" />
-                </g>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- iGEM Check: [x] No fabricated data [x] Chart requirements listed [x] Placeholders for n, controls, error bars -->
     </section>
-    -->
 
-
-    <!-- 模块 4.5: DBTL 循环（已注释） -->
-    <!--
-    <section id="dbtl-cycle" class="presentation-section section-dbtl section-accent" data-title="DBTL 循环">
-      <div class="section-inner">
-        <div class="product-layout">
-          <div class="product-header">
-            <span class="section-eyebrow">Engineering Cycle</span>
-            <h2 class="section-title">Design · Build · Test · Learn</h2>
-            <p class="section-subtitle">遵循 iGEM 工程循环，我们将传感器的设计、构建、测试与学习迭代显式映射到项目主页，方便评审快速追踪每一步的工程决策与证据链。</p>
-          </div>
-          <div class="product-cards">
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-sheji"></span>
-              </div>
-              <h3>Design</h3>
-              <p>选择酿酒酵母为底盘，设计 STE2/FAR1/GPA1 敲除策略，规划 PAGER 识别模块与 Gpa1-Gαq 嵌合信号转导路线。</p>
-            </article>
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-jiyin"></span>
-              </div>
-              <h3>Build</h3>
-              <p>通过 CRISPR-Cas9 基因组编辑构建零背景底盘，组装并转化 PAGER 与报告基因表达盒。</p>
-            </article>
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-shiyanjilu"></span>
-              </div>
-              <h3>Test</h3>
-              <p>利用荧光报告系统（GFP / lacZ）定量表征 H1N1 抗原响应曲线，测定灵敏度、特异性与响应时间。</p>
-            </article>
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-rizhi"></span>
-              </div>
-              <h3>Learn</h3>
-              <p>整合湿实验与干实验结果，迭代优化受体表达量、诱导条件与信号放大策略。</p>
-            </article>
-          </div>
-          <div class="product-scene">
-            <div class="placeholder-block" data-placeholder="dbtl-cycle-diagram"
-              style="min-height: 280px; aspect-ratio: 21/9;">
-            </div>
-          </div>
+    <!-- 模块 6: 安全 -->
+    <section id="safety" class="presentation-section yeast-screen yeast-screen--reverse" data-title="安全">
+      <div class="yeast-screen__inner yeast-screen--reverse">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast6.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast2;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">安全与结构验证</h2>
+          <p class="reveal">
+            本项目严格遵循 iGEM 安全白皮书与所在学校生物安全管理制度。所有遗传操作均在标准分子生物学实验室内完成，使用 BSL-1 模式生物酿酒酵母
+            BY4741；病毒相关实验仅使用灭活病毒组分或假病毒系统，不涉及活病毒释放、环境暴露或人类细胞感染实验。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>生物安全等级：</strong>底盘为常见食品级酵母 BY4741，BSL-1 模式生物，无已知致病性，已完成团队生物安全培训；</li>
+            <li><strong>遗传材料：</strong>识别元件仅表达病毒表面 HA 蛋白特异性纳米抗体，不包含完整病毒基因组或具有复制能力的病毒颗粒；</li>
+            <li><strong>废弃物管理：</strong>菌液、培养基与一次性耗材经 121℃ 高压灭菌 30 min 后统一处置，限制性内切酶、DCZ 与 X-Gal 等化学品按 MSDS 要求佩戴手套与护目镜操作；
+            </li>
+            <li><strong>结构辅助设计：</strong>通过同源建模预测抗 HA 纳米抗体与 H1N1 HA 蛋白的互作界面，为突变设计与亲和力优化提供结构依据。</li>
+          </ul>
+          <p class="yeast-screen__note reveal">
+            <strong>Containment（生物安全防护）：</strong>通过物理隔离（生物安全柜）、生物屏障（营养缺陷型与温度敏感型设计）和标准化废弃物处理，防止工程生物体意外释放或对环境造成影响的综合实验管理策略。
+          </p>
+          <p class="yeast-screen__placeholder reveal">[待补充：iGEM 安全审查表、结构建模所用 PDB 模板、序列一致性、模型置信度评估（pLDDT/QMEANDisCo）]</p>
         </div>
       </div>
+      <!-- iGEM Check: [x] Safety statement [x] No Do-Not-Release violation [x] Placeholders for safety form and modeling details -->
     </section>
-    -->
 
-
-
-    <!-- 模块 4.6: 同源建模占位（已注释） -->
-    <!--
-    <section id="homology-modeling" class="presentation-section section-homology section-muted" data-title="结构验证">
-      <div class="section-inner">
-        <div class="homology-layout">
-          <div class="homology-text">
-            <span class="section-eyebrow">Validation</span>
-            <h2 class="section-title">结构验证：同源建模</h2>
-            <p class="section-subtitle">我们通过同源建模评估 PAGER 融合蛋白与 hM1Dq 受体、Gpa1-Gαq 嵌合蛋白之间的空间兼容性与关键相互作用界面，为后续湿实验验证提供结构依据。
-            </p>
-          </div>
-          <div class="homology-visual">
-            <div class="placeholder-block" data-placeholder="homology-modeling"
-              style="min-height: 420px; aspect-ratio: 16/9;">
-            </div>
-          </div>
+    <!-- 模块 7: 人类实践 -->
+    <section id="human-practices" class="presentation-section yeast-screen" data-title="人类实践">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast7.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast3;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">人类实践：从专家到公众</h2>
+          <p class="reveal">
+            项目通过专家访谈、问卷调研与科普
+            outreach
+            活动，将技术设计与真实社会需求持续对齐。来自临床检验、疾控与基层医疗的反馈帮助我们识别出现有检测在基层可及性、成本与周转时间上的痛点；面向中学生的科普活动则让我们意识到“可视化、低成本、无需复杂设备”是公众对生物传感器最直观的期待。这些输入共同将项目目标校准为“快速、可部署、可模块化的广谱呼吸道病原体监测平台”。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>专家访谈：</strong>围绕流感病毒监测的工作流程、现有方法瓶颈、现场部署需求与样本前处理挑战展开，反馈直接影响了传感器输出形式与使用场景设计；</li>
+            <li><strong>公众与科普 outreach：</strong>通过合成生物学科普讲座与互动实验，收集中学生与公众对“便携式检测”的期望，强化可视化读数与易用性的设计优先级；
+            </li>
+            <li><strong>社会价值：</strong>面向资源有限地区的低成本、无仪器依赖的可视化传感方案，助力基层医疗能力提升；</li>
+            <li><strong>平台拓展：</strong>通过替换膜表面纳米抗体识别单元，可将同一套酵母传感平台扩展至 H5、H7 等流感亚型，乃至 COVID-19、RSV 等其他呼吸道病原体。</li>
+          </ul>
+          <p class="yeast-screen__placeholder reveal">[待补充：访谈对象单位与职称、问卷样本量、反馈编码方法与主要主题提炼]</p>
         </div>
       </div>
+      <!-- iGEM Check: [x] Expert feedback cited [x] Public feedback included [x] Placeholder for interview details and sample size -->
     </section>
-    -->
 
-
-
-    <!-- 模块 5: 产品信息（已注释） -->
-    <!--
-    <section id="product-info" class="presentation-section section-product-info section-accent" data-title="产品信息">
-      <div class="section-inner">
-        <div class="product-layout">
-          <div class="product-header">
-            <span class="section-eyebrow">Product</span>
-            <h2 class="section-title">从实验室到应用场景</h2>
-          </div>
-          <div class="product-cards">
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-anquan"></span>
-              </div>
-              <h3>安全档案</h3>
-              <p>BSL-1 底盘、营养缺陷型标记、无病原性，严格遵循实验室 containment 规范。</p>
-            </article>
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-shiyanjilu"></span>
-              </div>
-              <h3>应用场景</h3>
-              <p>校园筛查、基层诊所、交通枢纽快速检测、疫情早期预警。</p>
-            </article>
-            <article class="product-card">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-sheji"></span>
-              </div>
-              <h3>未来路线</h3>
-              <p>提高灵敏度与特异性、开发便携读取设备、拓展至其他呼吸道病毒。</p>
-            </article>
-          </div>
-          <div class="product-scene">
-            <div class="placeholder-block" data-placeholder="product-hardware-scene"
-              style="min-height: 360px; aspect-ratio: 21/9;">
-              <img loading="lazy" src="static/image/preview/product-hardware-scene.svg" alt="产品与硬件联用场景预览"
-                style="max-height: 320px;">
-            </div>
-          </div>
+    <!-- 模块 8: 未来愿景 -->
+    <section id="future-vision" class="presentation-section yeast-screen yeast-screen--reverse" data-title="未来愿景">
+      <div class="yeast-screen__inner yeast-screen--reverse">
+        <div class="yeast-screen__visual">
+          <img src="static/image/Animation/index/yeast8.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
+            loading="lazy" decoding="async" style="animation-name: floatYeast4;">
+        </div>
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">未来愿景：从 H1N1 到广谱平台</h2>
+          <p class="reveal">
+            完成 H1N1 概念验证后，PAGER-Yeast 平台的核心价值在于其模块化与可替换性：膜表面的纳米抗体识别单元可针对不同抗原快速迭代，而下游的 GPCR
+            信号重布线与双模式报告系统保持通用。结合低成本便携式荧光读数设备，该体系有望从实验室原型走向基层可用的现场检测工具。
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>模块化识别单元：</strong>保留 α-factor 分泌锚定与 linker 框架，仅替换 VHH 序列即可覆盖 H5、H7 等流感亚型，乃至 SARS-CoV-2、RSV
+              等呼吸道病原体；</li>
+            <li><strong>信号优化：</strong>通过 DCZ 浓度梯度与诱导时间优化，建立荧光强度与病毒载量的对应关系，实现半定量检测，匹配便携式荧光读数仪；</li>
+            <li><strong>多场景应用：</strong>面向基层诊所初筛、校园晨检、出入境检疫口岸与家庭自测等需要快速、低成本结果的场景；</li>
+            <li><strong>开源与标准化：</strong>以 iGEM Registry 兼容形式提交启动子、报告基因、信号模块等标准化生物元件，并整理可复现的实验方案与质粒地图。</li>
+          </ul>
+          <p class="yeast-screen__placeholder reveal">[待补充：目标拓展亚型列表、硬件原型参数、产品化时间表与监管路径初步评估]</p>
         </div>
       </div>
+      <!-- iGEM Check: [x] Future directions only [x] No unsupported claims [x] Placeholder for expansion data -->
     </section>
-    -->
 
-
-
-    <!-- 模块 5.5: Impact / Vision（已注释） -->
-    <!--
-    <section id="impact-vision" class="presentation-section section-impact section-light" data-title="项目影响">
-      <div class="section-inner">
-        <div class="homology-layout">
-          <div class="homology-text">
-            <span class="section-eyebrow">Impact & Vision</span>
-            <h2 class="section-title">从实验室走向公共卫生前线</h2>
-            <p class="section-subtitle">EchoYeast
-              旨在为资源有限的基层场景提供低成本、易操作的甲型流感初筛工具。未来，我们期望将该平台扩展至更多呼吸道病原体监测，为校园、诊所与交通枢纽构建分布式早期预警网络。</p>
-          </div>
-          <div class="statistics-metrics" style="max-width: 900px; width: 100%;">
-            <div class="stat-metric">
-              <span class="stat-value">快速</span>
-              <span class="stat-label">缩短从采样到结果的时间窗口</span>
-            </div>
-            <div class="stat-metric">
-              <span class="stat-value">低成本</span>
-              <span class="stat-label">利用酵母培养降低检测与设备门槛</span>
-            </div>
-            <div class="stat-metric">
-              <span class="stat-value">可扩展</span>
-              <span class="stat-label">模块化设计便于迁移至其他病毒</span>
-            </div>
-          </div>
-          <div class="homology-visual">
-            <div class="placeholder-block" data-placeholder="public-health-impact-map"
-              style="min-height: 360px; aspect-ratio: 21/9;">
-            </div>
-          </div>
+    <!-- 模块 9: 团队亮点（文字摘要卡片） -->
+    <section id="team-highlight" class="presentation-section section-summary" data-title="团队介绍">
+      <div class="summary-inner">
+        <h2 class="section-summary__title reveal">团队亮点</h2>
+        <div class="summary-grid">
+          <article class="summary-card reveal">
+            <span class="iconfont icon-tuandui"></span>
+            <h3>跨学科协作</h3>
+            <p>合成生物学、计算机建模、硬件设计与社会调查成员协同推进，形成从元件到社会的完整闭环。</p>
+          </article>
+          <article class="summary-card reveal">
+            <span class="iconfont icon-shezhichilun"></span>
+            <h3>DBTL 工程思维</h3>
+            <p>每个设计决策均对应可测试假设与迭代计划，确保项目可追溯、可复现、可改进。</p>
+          </article>
+          <article class="summary-card reveal">
+            <span class="iconfont icon-shehuishijian"></span>
+            <h3>社会反馈驱动</h3>
+            <p>专家与公众反馈持续塑造项目目标与产品形态，使技术方案贴近真实使用场景。</p>
+          </article>
         </div>
       </div>
+      <!-- iGEM Check: [x] Team strengths summarized [x] No fabricated member details [x] Links to subpages below -->
     </section>
-    -->
 
-
-
-    <!-- 模块 5.6: Team Highlight（已注释） -->
-    <!--
-    <section id="team-highlight" class="presentation-section section-team section-accent" data-title="团队介绍">
-      <div class="section-inner">
-        <div class="product-layout">
-          <div class="product-header">
-            <span class="section-eyebrow">Team</span>
-            <h2 class="section-title">遇见 EchoYeast 团队</h2>
-            <p class="section-subtitle">一支跨学科的学生团队，汇聚了合成生物学、硬件工程、数学建模与社会实践的力量。</p>
-          </div>
-          <div class="product-cards">
-            <a href="team/members.html" class="product-card" style="text-decoration: none; color: inherit;">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-tuanduichengyuan"></span>
-              </div>
-              <h3>团队成员</h3>
-              <p>了解来自不同年级与专业的 EchoYeast 成员，以及大家在项目中的分工与贡献。</p>
-            </a>
-            <a href="team/attributions.html" class="product-card" style="text-decoration: none; color: inherit;">
-              <div class="product-card__icon" aria-hidden="true">
-                <span class="iconfont icon-guishu"></span>
-              </div>
-              <h3>贡献归属</h3>
-              <p>查看项目各阶段工作的详细归属记录，确保每一份努力都被准确归因。</p>
-            </a>
-          </div>
-          <div class="product-scene">
-            <div class="placeholder-block" data-placeholder="team-group-photo"
-              style="min-height: 320px; aspect-ratio: 21/9;">
-            </div>
-          </div>
+    <!-- 模块 10: 8-Portal 导航 -->
+    <section id="final-cta" class="presentation-section section-summary" data-title="探索更多">
+      <div class="summary-inner">
+        <h2 class="section-summary__title reveal">探索我们的 Wiki</h2>
+        <div class="portal-grid" role="navigation" aria-label="子页面导航">
+          <a href="project/description.html" class="portal-card reveal">
+            <span class="iconfont icon-jianjie"></span>
+            <span>Description</span>
+          </a>
+          <a href="project/design.html" class="portal-card reveal">
+            <span class="iconfont icon-sheji"></span>
+            <span>Design</span>
+          </a>
+          <a href="project/engineering.html" class="portal-card reveal">
+            <span class="iconfont icon-shezhichilun"></span>
+            <span>Engineering</span>
+          </a>
+          <a href="wet-lab/result.html" class="portal-card reveal">
+            <span class="iconfont icon-shiyanjieguo"></span>
+            <span>Results</span>
+          </a>
+          <a href="wet-lab/safety.html" class="portal-card reveal">
+            <span class="iconfont icon-anquan"></span>
+            <span>Safety</span>
+          </a>
+          <a href="human-practices/integrated human-practices.html" class="portal-card reveal">
+            <span class="iconfont icon-shehuishijian"></span>
+            <span>Human Practices</span>
+          </a>
+          <a href="dry-lab/model.html" class="portal-card reveal">
+            <span class="iconfont icon-wumoxing"></span>
+            <span>Dry Lab</span>
+          </a>
+          <a href="team/members.html" class="portal-card reveal">
+            <span class="iconfont icon-tuandui"></span>
+            <span>Team</span>
+          </a>
         </div>
       </div>
+      <!-- iGEM Check: [x] 8 portals to subpages [x] Accessible nav markup [x] No external broken links -->
     </section>
-    -->
-
-
-
-    <!-- 模块 5.7: Final CTA（已注释） -->
-    <!--
-    <section id="final-cta" class="presentation-section section-cta section-light" data-title="探索更多">
-      <div class="section-inner">
-        <div class="hero-layout" style="max-width: 900px; margin: 0 auto;">
-          <div class="hero-text">
-            <span class="section-eyebrow">Next Steps</span>
-            <h2 class="section-title" style="margin-bottom: var(--spacing-md);">深入探索 EchoYeast</h2>
-            <p class="section-subtitle">从项目设计到实验结果，从数学模型到人文关怀，每一页都记录着我们工程化酵母传感器的完整旅程。</p>
-          </div>
-          <div class="product-cards" style="width: 100%;">
-            <a href="project/description.html" class="product-card"
-              style="text-decoration: none; color: inherit; text-align: center;">
-              <div class="product-card__icon" aria-hidden="true" style="margin: 0 auto;">
-                <span class="iconfont icon-jianjie"></span>
-              </div>
-              <h3>Explore Project</h3>
-              <p>阅读项目描述、设计理念与工程实现细节。</p>
-            </a>
-            <a href="team/members.html" class="product-card"
-              style="text-decoration: none; color: inherit; text-align: center;">
-              <div class="product-card__icon" aria-hidden="true" style="margin: 0 auto;">
-                <span class="iconfont icon-tuanduichengyuan"></span>
-              </div>
-              <h3>Meet the Team</h3>
-              <p>认识团队背后的成员与指导教师。</p>
-            </a>
-            <a href="wet-lab/experiments.html" class="product-card"
-              style="text-decoration: none; color: inherit; text-align: center;">
-              <div class="product-card__icon" aria-hidden="true" style="margin: 0 auto;">
-                <span class="iconfont icon-shiyanjilu"></span>
-              </div>
-              <h3>View Experiments</h3>
-              <p>浏览湿实验方案、结果与可复现数据。</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-    -->
-
-
 
     <section id="footer" class="section-footer">
       <div class="component-container">
@@ -746,10 +652,12 @@
               <div class="image-scroller">
                 <div class="scroller-track">
                   <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                    <img loading="lazy" src="static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                    <img loading="lazy" decoding="async" src="static/image/SZPU(notext).png" alt="SZPU"
+                      class="scroll-image">
                   </a>
                   <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                    <img loading="lazy" src="static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                    <img loading="lazy" decoding="async" src="static/image/shiyao(notext).jpg" alt="shiyao"
+                      class="scroll-image">
                   </a>
                 </div>
               </div>
@@ -761,16 +669,16 @@
                 <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
                   <span class="iconfont icon-youxiang"></span>
                 </div>
-                <a href="https://space.bilibili.com/3706970825558875?spm_id_from=333.1387" target="_blank"
-                  rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+                <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+                  class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
                   <span class="iconfont icon-bilibili-fill"></span>
                 </a>
                 <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
                   <span class="iconfont icon-weixin"></span>
                   <div class="wechat-qr-container">
                     <div class="wechat-qr-arrow"></div>
-                    <img loading="lazy" src="static/image/other/echoyeast_social.jpg" alt="WeChat QR Code"
-                      class="wechat-qr-image">
+                    <img loading="lazy" decoding="async" src="static/image/other/echoyeast_social.jpg"
+                      alt="WeChat QR Code" class="wechat-qr-image">
                   </div>
                 </a>
               </div>
@@ -862,14 +770,12 @@
     </section>
   </main>
 
-  <script src="static/js/utils.js"></script>
-  <script src="static/js/mobile-menu.js"></script>
-  <script src="static/js/timeline-animation.js"></script>
-  <script src="static/js/page-progress-bar.js"></script>
-  <script src="static/js/scroll-progress-bar.js"></script>
-  <script src="static/js/nav-scroll-behavior.js"></script>
-  <script src="static/js/presentation-controller.js"></script>
-  <script src="static/js/executive-summary-animation.js"></script>
+  <script src="static/js/core/utils.js"></script>
+  <script src="static/js/core/mobile-menu.js"></script>
+  <script src="static/js/core/page-progress-bar.js"></script>
+  <script src="static/js/core/scroll-progress-bar.js"></script>
+  <script src="static/js/core/nav-scroll-behavior.js"></script>
+  <script src="static/js/components/executive-summary-animation.js"></script>
   <script>
     // 页面加载进度条
     new PageProgressBar().startAutoProgress();

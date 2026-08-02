@@ -1550,3 +1550,153 @@ footer {
     min-height: 48px;
   }
 }
+
+/* ===== Pull-to-Reveal 内容框 ===== */
+/* iGEM Layout Strategy: 将访谈与校园宣讲的大段背景/启示内容折叠收起，
+   用可拖拽把手把信息节奏控制权交还读者，同时保证专家简介与照片墙作为视觉分界线保留在上方。 */
+.hp-reveal-box {
+  position: relative;
+  background: var(--bg-card, #ffffff);
+  border-radius: var(--desc-radius-lg, 12px);
+  box-shadow: var(--desc-shadow-card, 0 4px 12px rgba(139, 90, 43, 0.06));
+  border: 1px solid var(--desc-border-color-light, rgba(212, 165, 116, 0.1));
+  overflow: hidden;
+
+  /* 默认尺寸令牌 */
+  --hp-reveal-preview-height: 140px;
+  --hp-reveal-handle-height: 48px;
+
+  /* 初始高度由 JS 写入，这里提供回退 */
+  height: var(--hp-reveal-preview-height);
+  margin-bottom: var(--desc-spacing-2xl, 1.5rem);
+}
+
+.hp-reveal-content {
+  padding: var(--desc-spacing-2xl, 1.5rem);
+  padding-bottom: calc(var(--hp-reveal-handle-height) + var(--desc-spacing-lg, 1rem));
+  color: var(--desc-color-primary-darker);
+}
+
+.hp-reveal-content > *:first-child {
+  margin-top: 0;
+}
+
+.hp-reveal-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.hp-reveal-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--hp-reveal-handle-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--desc-spacing-sm, 0.5rem);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.96) 35%,
+    rgba(255, 250, 245, 0.98) 100%
+  );
+  color: var(--desc-color-primary, #8B5A2B);
+  font-size: var(--desc-font-size-sm, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 2;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.hp-reveal-handle::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--desc-color-primary-light, #D4A574);
+  opacity: 0.35;
+  transition: opacity 0.25s ease, width 0.25s ease;
+}
+
+.hp-reveal-handle:hover,
+.hp-reveal-handle:focus-visible {
+  color: var(--desc-color-primary-dark, #5D4E37);
+  outline: none;
+}
+
+.hp-reveal-handle:focus-visible::before {
+  background: var(--desc-color-primary, #8B5A2B);
+  opacity: 0.8;
+}
+
+.hp-reveal-handle:active {
+  cursor: grabbing;
+}
+
+.hp-reveal-hint,
+.hp-reveal-collapse {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--desc-spacing-xs, 0.25rem);
+}
+
+.hp-reveal-collapse {
+  display: none;
+}
+
+.hp-reveal-box.is-expanded .hp-reveal-handle {
+  background: var(--bg-card, #ffffff);
+}
+
+.hp-reveal-box.is-expanded .hp-reveal-hint {
+  display: none;
+}
+
+.hp-reveal-box.is-expanded .hp-reveal-collapse {
+  display: inline-flex;
+}
+
+.hp-reveal-box.is-animating {
+  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 拖拽时隐藏过渡，保证实时跟随 */
+.hp-reveal-box.is-dragging {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-reveal-box.is-animating {
+    transition: none;
+  }
+}
+
+/* 移动端把手尺寸与预览高度 */
+@media (max-width: 768px) {
+  .hp-reveal-box {
+    --hp-reveal-preview-height: 120px;
+    --hp-reveal-handle-height: 44px;
+  }
+
+  .hp-reveal-content {
+    padding: var(--desc-spacing-lg, 1rem);
+    padding-bottom: calc(var(--hp-reveal-handle-height) + var(--desc-spacing-md, 0.75rem));
+  }
+
+  .hp-reveal-handle {
+    font-size: var(--desc-font-size-sm, 0.82rem);
+  }
+}
+
+/* iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined */

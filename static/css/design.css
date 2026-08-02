@@ -1,7 +1,7 @@
-/* 项目设计页面样式 */
+/* 项目设计页面样式 - Design Page Styles */
 
 /* ===== DRY原则：设计令牌（Design Tokens） ===== */
-/* 注意：使用 --desc- 前缀保持与description.css一致 */
+/* 注意：使用 --desc- 前缀保持与 description.css 一致，避免与全局导航/页脚冲突 */
 :root {
   /* 页面专用颜色系统 - 基于棕色主题 */
   --desc-color-primary: #8B5A2B;
@@ -10,29 +10,30 @@
   --desc-color-primary-darker: #4A3728;
   --desc-color-primary-lightest: #6B5B45;
 
-  --desc-bg-card-hover: rgba(139, 90, 43, 0.08);
-  --desc-bg-card-active: rgba(139, 90, 43, 0.12);
+  --desc-bg-card-hover: rgba(139, 90, 43, 0.06);
+  --desc-bg-card-active: rgba(139, 90, 43, 0.10);
   --desc-bg-highlight: rgba(245, 238, 225, 0.7);
-  --desc-bg-highlight-light: rgba(245, 238, 225, 0.6);
+  --desc-bg-highlight-light: rgba(245, 238, 225, 0.5);
 
   /* 边框系统 */
-  --desc-border-color: rgba(212, 165, 116, 0.2);
-  --desc-border-color-light: rgba(212, 165, 116, 0.1);
-  --desc-border-color-card: rgba(212, 165, 116, 0.12);
-  --desc-border-color-header: rgba(139, 90, 43, 0.1);
+  --desc-border-color: rgba(212, 165, 116, 0.22);
+  --desc-border-color-light: rgba(212, 165, 116, 0.12);
+  --desc-border-color-card: rgba(212, 165, 116, 0.10);
+  --desc-border-color-header: rgba(139, 90, 43, 0.10);
 
-  /* 阴影系统 */
-  --desc-shadow-card: 0 4px 12px rgba(139, 90, 43, 0.06);
+  /* 阴影系统 - 更柔和、更低的高度感，减少塑料感 */
+  --desc-shadow-card: 0 1px 3px rgba(74, 55, 40, 0.04), 0 4px 14px rgba(139, 90, 43, 0.05);
+  --desc-shadow-card-hover: 0 2px 6px rgba(74, 55, 40, 0.05), 0 8px 20px rgba(139, 90, 43, 0.07);
   --desc-shadow-sidebar: 0 4px 16px rgba(139, 90, 43, 0.08);
-  --desc-shadow-sm: 0 2px 8px rgba(139, 90, 43, 0.05);
-  --desc-shadow-xs: 0 1px 4px rgba(139, 90, 43, 0.04);
+  --desc-shadow-sm: 0 1px 4px rgba(139, 90, 43, 0.04);
+  --desc-shadow-xs: 0 1px 2px rgba(139, 90, 43, 0.03);
 
   /* 圆角系统 */
   --desc-radius-pill: 16px;
   --desc-radius-xs: 4px;
   --desc-radius-sm: 6px;
   --desc-radius-md: 8px;
-  --desc-radius-lg: 12px;
+  --desc-radius-lg: 10px;
 
   /* 通用背景系统 */
   --bg-sidebar: rgba(255, 252, 247, 0.95);
@@ -53,15 +54,15 @@
   --desc-font-size-sm-md: 0.85rem;
   --desc-font-size-md: 0.88rem;
   --desc-font-size-md-lg: 0.92rem;
-  --desc-font-size-lg: 0.98rem;
-  --desc-font-size-xl: 1.1rem;
-  --desc-font-size-2xl: 1.2rem;
-  --desc-font-size-3xl: 1.55rem;
+  --desc-font-size-lg: 0.96rem;
+  --desc-font-size-xl: 1.05rem;
+  --desc-font-size-2xl: 1.15rem;
+  --desc-font-size-3xl: 1.45rem;
 
   /* 动画时长 */
   --desc-duration-fast: 0.2s;
   --desc-duration-normal: 0.3s;
-  --desc-duration-slow: 0.6s;
+  --desc-duration-slow: 0.5s;
 
   /* 额外颜色系统 */
   --color-green-dark: #2D5A3D;
@@ -77,6 +78,11 @@
 /* ===== 页面布局 ===== */
 html {
   scroll-padding-top: 120px;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
 }
 
 main {
@@ -104,13 +110,21 @@ main {
   padding: var(--desc-spacing-3xl);
   margin-bottom: var(--desc-spacing-3xl);
   box-shadow: var(--desc-shadow-card);
-  border: 1px solid var(--desc-border-color-light);
+  border: 1px solid var(--desc-border-color-card);
+  transition: transform var(--desc-duration-fast) ease, box-shadow var(--desc-duration-fast) ease;
+  /* iGEM Layout Strategy: 降低悬浮位移幅度（仅 2px），使用更柔和的扩散阴影，避免卡片像塑料浮块。 */
 }
 
+.content-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--desc-shadow-card-hover);
+}
+
+/* ===== 执行摘要 ===== */
 .executive-summary {
-  background: linear-gradient(90deg, rgba(139, 90, 43, 0.06) 0%, rgba(139, 90, 43, 0.02) 100%);
+  background: linear-gradient(90deg, rgba(139, 90, 43, 0.05) 0%, rgba(139, 90, 43, 0.015) 100%);
   border-left: 3px solid var(--desc-color-primary-light);
-  padding: 0.9rem 1.1rem;
+  padding: 0.85rem 1.1rem;
   margin-bottom: 1.5rem;
   border-radius: 0 var(--desc-radius-xs) var(--desc-radius-xs) 0;
 }
@@ -124,56 +138,68 @@ main {
   line-height: 1.7;
 }
 
+/* ===== 标题层级 ===== */
 .content-card h2 {
   color: var(--desc-color-primary-darker);
   font-size: var(--desc-font-size-3xl);
   margin-bottom: var(--desc-spacing-xl);
-  padding-bottom: var(--desc-spacing-sm);
-  border-bottom: 2px solid var(--desc-color-primary-light);
+  padding-bottom: var(--desc-spacing-md);
+  border-bottom: 1px solid var(--desc-border-color);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
 }
 
 .content-card h3 {
   color: var(--desc-color-primary-dark);
   font-size: var(--desc-font-size-2xl);
-  margin: var(--desc-spacing-xl) 0 var(--desc-spacing-md);
+  margin: var(--desc-spacing-2xl) 0 var(--desc-spacing-md);
   padding: var(--desc-spacing-sm) var(--desc-spacing-md);
-  background: rgba(139, 90, 43, 0.04);
-  border-radius: var(--desc-radius-xs);
-  border-left: 3px solid var(--desc-color-primary);
+  background: linear-gradient(90deg, rgba(139, 90, 43, 0.05) 0%, rgba(139, 90, 43, 0.01) 100%);
+  border-radius: 0 var(--desc-radius-xs) var(--desc-radius-xs) 0;
+  border-left: 4px solid var(--desc-color-primary);
   font-weight: 600;
+  line-height: 1.4;
+  /* iGEM Layout Strategy: 与 description.css 协调但差异化——使用渐变背景条 + 4px 左边框，视觉上更沉稳，适合 Design 页面的模块化说明。 */
 }
 
+/* ===== 段落与列表 ===== */
 .content-card p {
   color: var(--desc-color-primary-darker);
-  line-height: 1.85;
-  margin-bottom: var(--desc-spacing-sm-md);
+  line-height: 1.8;
+  margin-bottom: var(--desc-spacing-md);
   text-align: justify;
   text-indent: 2em;
   font-size: var(--desc-font-size-lg);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 连续段落间保持清晰呼吸感 */
+.content-card p + p {
+  margin-top: var(--desc-spacing-sm);
 }
 
 .content-card ul,
 .content-card ol {
   color: var(--desc-color-primary-darker);
   padding-left: 1.5rem;
-  margin-bottom: var(--desc-spacing-sm-md);
+  margin-bottom: var(--desc-spacing-md);
 }
 
 .content-card ul {
   list-style: none;
 }
 
-.content-card ul>li {
+.content-card ul > li {
   position: relative;
   padding-left: var(--desc-spacing-lg);
   margin-bottom: var(--desc-spacing-sm);
-  line-height: 1.7;
-  font-size: 0.95rem;
+  line-height: 1.75;
+  font-size: var(--desc-font-size-lg);
 }
 
-.content-card ul>li::before {
+.content-card ul > li::before {
   content: '';
   position: absolute;
   left: 0;
@@ -191,4 +217,206 @@ main {
   font-family: 'Courier New', monospace;
   font-size: var(--desc-font-size-md);
   color: var(--desc-color-primary-dark);
+}
+
+/* ===== 表格占位区 ===== */
+.table-placeholder {
+  border: 2px dashed var(--desc-border-color);
+  background: var(--desc-bg-highlight-light);
+  border-radius: var(--desc-radius-md);
+  padding: 2.25rem 1.5rem;
+  margin: 1.25rem 0;
+  text-align: center;
+  position: relative;
+  transition: background var(--desc-duration-fast) ease, border-color var(--desc-duration-fast) ease;
+  /* iGEM Layout Strategy: 使用虚线边框 + 低饱和背景明确提示“待补充”，避免被误认为空白或版式错误。 */
+}
+
+.table-placeholder::before {
+  content: '⊞';
+  display: block;
+  font-size: 1.6rem;
+  color: rgba(139, 90, 43, 0.25);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.table-placeholder:hover {
+  background: var(--desc-bg-highlight);
+  border-color: rgba(212, 165, 116, 0.35);
+}
+
+.table-placeholder h4 {
+  color: var(--desc-color-primary);
+  font-size: var(--desc-font-size-md);
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.table-placeholder .placeholder-note {
+  color: rgba(93, 78, 55, 0.62);
+  font-size: var(--desc-font-size-sm);
+  font-style: italic;
+  margin: 0;
+  text-indent: 0;
+  line-height: 1.6;
+}
+
+/* ===== 响应式设计 ===== */
+
+/* 1440px 及以上：保持容器居中，避免内容过宽 */
+@media (min-width: 1440px) {
+  .description-container {
+    padding: 0 32px;
+  }
+}
+
+/* 1024px 及以下：收窄间距，防止挤压 */
+@media (max-width: 1024px) {
+  .description-container {
+    gap: 24px;
+    padding: 0 16px;
+  }
+
+  .content-card {
+    padding: var(--desc-spacing-2xl);
+    margin-bottom: var(--desc-spacing-2xl);
+  }
+
+  .content-card h2 {
+    font-size: 1.35rem;
+  }
+
+  .content-card h3 {
+    font-size: 1.05rem;
+  }
+
+  .content-card p {
+    font-size: 0.94rem;
+  }
+}
+
+/* 768px 及以下：卡片全宽，进一步压缩内边距 */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 80px;
+  }
+
+  main {
+    margin-top: 60px;
+    padding: 24px 0;
+  }
+
+  .description-container {
+    padding: 0 12px;
+    gap: 16px;
+  }
+
+  .content-card {
+    padding: var(--desc-spacing-lg);
+    margin-bottom: var(--desc-spacing-lg);
+    border-radius: var(--desc-radius-md);
+  }
+
+  .content-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: var(--desc-spacing-md);
+    padding-bottom: var(--desc-spacing-sm);
+  }
+
+  .content-card h3 {
+    font-size: 0.98rem;
+    margin: var(--desc-spacing-lg) 0 var(--desc-spacing-sm);
+    padding: var(--desc-spacing-xs) 0.6rem;
+    border-left-width: 3px;
+  }
+
+  .content-card p {
+    text-indent: 1.5em;
+    font-size: var(--desc-font-size-md);
+    line-height: 1.75;
+    margin-bottom: var(--desc-spacing-sm);
+  }
+
+  .content-card ul > li {
+    font-size: var(--desc-font-size-md);
+    padding-left: var(--desc-spacing-md);
+  }
+
+  .executive-summary {
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .executive-summary p {
+    font-size: var(--desc-font-size-sm);
+  }
+
+  .table-placeholder {
+    padding: 1.75rem 1rem;
+  }
+
+  .table-placeholder::before {
+    font-size: 1.35rem;
+  }
+}
+
+/* 480px 及以下：小屏手机适配 */
+@media (max-width: 480px) {
+  .description-container {
+    padding: 0 10px;
+  }
+
+  .content-card {
+    padding: var(--desc-spacing-md);
+    border-radius: var(--desc-radius-sm);
+  }
+
+  .content-card h2 {
+    font-size: 1.08rem;
+  }
+
+  .content-card h3 {
+    font-size: 0.92rem;
+    padding: var(--desc-spacing-xs) 0.55rem;
+  }
+
+  .content-card p {
+    font-size: var(--desc-font-size-sm-md);
+    text-indent: 1.25em;
+    line-height: 1.7;
+  }
+
+  .content-card ul > li {
+    font-size: var(--desc-font-size-sm-md);
+  }
+}
+
+/* 375px 及以下：极限窄屏确保无溢出 */
+@media (max-width: 375px) {
+  .description-container {
+    padding: 0 8px;
+  }
+
+  .content-card {
+    padding: 0.85rem;
+  }
+
+  .content-card h2 {
+    font-size: 1rem;
+  }
+
+  .content-card h3 {
+    font-size: 0.88rem;
+  }
+
+  .content-card p {
+    font-size: var(--desc-font-size-sm);
+    text-indent: 1.1em;
+  }
+
+  .table-placeholder {
+    padding: 1.5rem 0.75rem;
+  }
 }

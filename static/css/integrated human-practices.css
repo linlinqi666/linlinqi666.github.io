@@ -1,32 +1,14 @@
 /* ================================================== */
 /* Integrated Human Practices — matches description.css */
-/* Only HP-specific components; layout, cards, sidebar, executive-summary */
-/* are inherited from navigation.css + description.css.                 */
+/* Only HP-specific components; layout, cards, sidebar are inherited    */
+/* from navigation.css + description.css.                               */
 /* ================================================== */
-
-/* iGEM Layout Strategy: 覆盖 index.css 中为首页核心发现区定义的 100vh 高度，确保 HP 内容页面中执行摘要仅占据内容所需空间 */
-.executive-summary {
-  height: auto;
-  min-height: auto;
-  display: block;
-}
 
 /* ===== 页面概述卡片 ===== */
 .hp-overview-card {
   position: relative;
   background: linear-gradient(135deg, var(--bg-card) 0%, rgba(245, 238, 225, 0.5) 100%);
   border-top: 3px solid var(--desc-color-primary);
-}
-
-.hp-overview-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--desc-color-primary) 0%, var(--desc-color-primary-light) 100%);
-  border-radius: var(--desc-radius-lg) var(--desc-radius-lg) 0 0;
 }
 
 .hp-overview-card .hp-section-number {
@@ -120,13 +102,6 @@
 .hp-section-offset-2 {
   transform: translateY(2px);
   z-index: 0;
-}
-
-/* 执行摘要：次要但抬高的信息层 */
-.executive-summary {
-  position: relative;
-  z-index: var(--hp-layer-raised);
-  box-shadow: var(--hp-shadow-sm);
 }
 
 /* ===== Section headers ===== */
@@ -258,7 +233,7 @@
 .hp-interview-context {
   background: var(--bg-card);
   border-left: 3px solid var(--desc-color-primary-light);
-  padding: var(--desc-spacing-lg) var(--desc-spacing-xl);
+  padding: 0 var(--desc-spacing-xl);
   border-radius: 0 var(--desc-radius-sm) var(--desc-radius-sm) 0;
   margin-bottom: var(--desc-spacing-2xl);
   box-shadow: var(--hp-shadow-xs);

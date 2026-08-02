@@ -1,230 +1,45 @@
 /* 湿实验组实验记录页面样式 */
 
-/* ===== DRY原则：设计令牌（Design Tokens） ===== */
-/* 注意：使用 --desc- 前缀保持与description.css一致 */
-:root {
-  /* 页面专用颜色系统 - 基于棕色主题 */
-  --desc-color-primary: #8B5A2B;
-  --desc-color-primary-dark: #5D4E37;
-  --desc-color-primary-light: #D4A574;
-  --desc-color-primary-darker: #4A3728;
-  --desc-color-primary-lightest: #6B5B45;
-  --desc-color-accent: #4A90D9;
+/* iGEM Layout Strategy: 实验页复用 description.css 的内容卡片与导航结构，
+   本文件仅保留实验页专属的棕色主题漂浮装饰，避免与 description.css 重复，
+   并移除原 experiments.css 中的 content-card、executive-summary 等重复样式与青色强调色。 */
 
-  --desc-bg-card-hover: rgba(139, 90, 43, 0.08);
-  --desc-bg-card-active: rgba(139, 90, 43, 0.12);
-  --desc-bg-highlight: rgba(245, 238, 225, 0.7);
-  --desc-bg-highlight-light: rgba(245, 238, 225, 0.6);
-
-  /* 边框系统 */
-  --desc-border-color: rgba(212, 165, 116, 0.2);
-  --desc-border-color-light: rgba(212, 165, 116, 0.1);
-  --desc-border-color-card: rgba(212, 165, 116, 0.12);
-  --desc-border-color-header: rgba(139, 90, 43, 0.1);
-
-  /* 阴影系统 */
-  --desc-shadow-card: 0 4px 12px rgba(139, 90, 43, 0.06);
-  --desc-shadow-sidebar: 0 4px 16px rgba(139, 90, 43, 0.08);
-  --desc-shadow-sm: 0 2px 8px rgba(139, 90, 43, 0.05);
-  --desc-shadow-xs: 0 1px 4px rgba(139, 90, 43, 0.04);
-
-  /* 圆角系统 */
-  --desc-radius-pill: 16px;
-  --desc-radius-xs: 4px;
-  --desc-radius-sm: 6px;
-  --desc-radius-md: 8px;
-  --desc-radius-lg: 12px;
-
-  /* 通用背景系统 */
-  --bg-sidebar: rgba(255, 252, 247, 0.95);
-  --bg-card: #ffffff;
-
-  /* 间距系统 */
-  --desc-spacing-xs: 0.25rem;
-  --desc-spacing-sm: 0.5rem;
-  --desc-spacing-md: 0.75rem;
-  --desc-spacing-lg: 1rem;
-  --desc-spacing-xl: 1.25rem;
-  --desc-spacing-2xl: 1.5rem;
-  --desc-spacing-3xl: 2rem;
-
-  /* 字体系统 */
-  --desc-font-size-xs: 0.7rem;
-  --desc-font-size-sm: 0.82rem;
-  --desc-font-size-sm-md: 0.85rem;
-  --desc-font-size-md: 0.88rem;
-  --desc-font-size-md-lg: 0.92rem;
-  --desc-font-size-lg: 0.98rem;
-  --desc-font-size-xl: 1.1rem;
-  --desc-font-size-2xl: 1.2rem;
-  --desc-font-size-3xl: 1.55rem;
-
-  /* 动画时长 */
-  --desc-duration-fast: 0.2s;
-  --desc-duration-normal: 0.3s;
-  --desc-duration-slow: 0.6s;
-
-  /* 额外颜色系统 */
-  --color-green-dark: #2D5A3D;
-  --color-green-accent: #2E7D32;
-  --color-blue-primary: #4A90D9;
-  --color-blue-dark: #357ABD;
-  --color-blue-link: #4285F4;
-  --color-blue-link-dark: #1A73E8;
-  --color-green-scheme: #5A9A5A;
-  --color-green-scheme-dark: #3D7A3D;
-}
-
-/* ===== 页面布局 ===== */
-html {
-  scroll-padding-top: 120px;
-}
-
-.experiment-container {
-  display: flex;
-  gap: var(--desc-spacing-3xl);
-  padding: var(--desc-spacing-3xl);
-  padding-top: 140px;
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
-  min-height: calc(100vh - 200px);
-}
-
-/* ===== 右侧内容区域 ===== */
-.experiment-content {
-  flex: 1;
-  min-width: 0;
+/* 确保主内容层位于容器装饰之上 */
+.description-content {
   position: relative;
   z-index: 1;
 }
 
-/* ===== 内容卡片 ===== */
-.content-section {
-  background: var(--bg-card);
-  border-radius: var(--desc-radius-lg);
-  padding: var(--desc-spacing-3xl);
-  margin-bottom: var(--desc-spacing-3xl);
-  box-shadow: var(--desc-shadow-card);
-  border: 1px solid var(--desc-border-color-light);
+/* ===== 页面级酵母漂浮装饰 ===== */
+.description-container {
   position: relative;
-  overflow: hidden;
 }
 
-.content-section h2 {
-  color: var(--desc-color-primary-darker);
-  font-size: var(--desc-font-size-3xl);
-  margin-bottom: var(--desc-spacing-xl);
-  padding-bottom: var(--desc-spacing-sm);
-  border-bottom: 2px solid var(--desc-color-primary-light);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.content-section h3 {
-  color: var(--desc-color-primary-dark);
-  font-size: var(--desc-font-size-2xl);
-  margin: var(--desc-spacing-xl) 0 var(--desc-spacing-md);
-  padding: var(--desc-spacing-sm) var(--desc-spacing-md);
-  background: rgba(139, 90, 43, 0.04);
-  border-radius: var(--desc-radius-xs);
-  border-left: 3px solid var(--desc-color-primary);
-  font-weight: 600;
-}
-
-.content-section p {
-  color: var(--desc-color-primary-darker);
-  line-height: 1.85;
-  margin-bottom: var(--desc-spacing-sm-md);
-  text-align: justify;
-  text-indent: 2em;
-  font-size: var(--desc-font-size-lg);
-}
-
-.content-section ul,
-.content-section ol {
-  color: var(--desc-color-primary-darker);
-  padding-left: 1.5rem;
-  margin-bottom: var(--desc-spacing-sm-md);
-}
-
-.content-section ul {
-  list-style: none;
-}
-
-.content-section ul>li {
-  position: relative;
-  padding-left: var(--desc-spacing-lg);
-  margin-bottom: var(--desc-spacing-sm);
-  line-height: 1.7;
-  font-size: 0.95rem;
-}
-
-.content-section ul>li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.65rem;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--desc-color-primary);
-}
-
-.content-section code {
-  background: rgba(139, 90, 43, 0.06);
-  padding: 0.15rem 0.35rem;
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  font-size: var(--desc-font-size-md);
-  color: var(--desc-color-primary-dark);
-}
-
-/* ===== 执行摘要 ===== */
-.executive-summary {
-  background: linear-gradient(90deg, rgba(139, 90, 43, 0.06) 0%, rgba(139, 90, 43, 0.02) 100%);
-  border-left: 3px solid var(--desc-color-primary-light);
-  padding: 0.9rem 1.1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 0 var(--desc-radius-xs) var(--desc-radius-xs) 0;
-}
-
-.executive-summary p {
-  text-indent: 0;
-  margin: 0;
-  font-weight: 500;
-  color: var(--desc-color-primary-dark);
-  font-size: 0.94rem;
-  line-height: 1.7;
-}
-
-/* ===== 背景酵母装饰动画 ===== */
-.experiment-container::before,
-.experiment-container::after {
+.description-container::before,
+.description-container::after {
   content: '';
   position: absolute;
   pointer-events: none;
   opacity: 0.06;
   z-index: 0;
+  border-radius: 50%;
 }
 
-.experiment-container::before {
+.description-container::before {
   top: 10%;
   right: 5%;
   width: 120px;
   height: 120px;
-  background: radial-gradient(circle at 30% 30%, rgba(76, 175, 80, 0.3) 0%, transparent 70%);
-  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(139, 90, 43, 0.3) 0%, transparent 70%);
   animation: floatYeast1 8s ease-in-out infinite;
 }
 
-.experiment-container::after {
+.description-container::after {
   bottom: 15%;
   left: 3%;
   width: 100px;
   height: 100px;
-  background: radial-gradient(circle at 30% 30%, rgba(0, 188, 212, 0.3) 0%, transparent 70%);
-  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(212, 165, 116, 0.3) 0%, transparent 70%);
   animation: floatYeast2 10s ease-in-out infinite;
 }
 
@@ -264,141 +79,4 @@ html {
   }
 }
 
-/* ===== 内容区块酵母装饰 ===== */
-.content-section::before {
-  content: '';
-  position: absolute;
-  top: -30px;
-  right: -30px;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle at 30% 30%, rgba(0, 188, 212, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.section-header {
-  margin-bottom: var(--desc-spacing-2xl);
-  display: flex;
-  align-items: center;
-  gap: var(--desc-spacing-md);
-}
-
-.section-title-icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--desc-color-primary);
-  flex-shrink: 0;
-}
-
-.section-title-icon svg {
-  width: 28px;
-  height: 28px;
-  stroke-width: 2;
-}
-
-.section-header h2 {
-  color: var(--desc-color-primary-dark);
-  font-size: var(--desc-font-size-3xl);
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: 0.02em;
-  flex: 1;
-}
-
-.section-divider {
-  height: 3px;
-  width: 60px;
-  background: linear-gradient(90deg, var(--desc-color-primary) 0%, var(--desc-color-accent) 100%);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-/* ===== 内容文字框架 ===== */
-.content-text-frame {
-  padding: var(--desc-spacing-xl);
-  background: var(--desc-bg-highlight);
-  border-radius: var(--desc-radius-md);
-  border: 1px solid var(--desc-border-color-light);
-  position: relative;
-  overflow: hidden;
-}
-
-.content-text-frame::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--desc-color-primary);
-}
-
-.content-intro {
-  color: var(--desc-color-primary-dark);
-  font-size: var(--desc-font-size-lg);
-  line-height: 1.8;
-  margin: 0;
-  opacity: 0.85;
-}
-
-
-
-/* ===== 响应式设计 ===== */
-@media (max-width: 1024px) {
-  .experiment-container {
-    flex-direction: column;
-    gap: var(--desc-spacing-2xl);
-    padding: var(--desc-spacing-xl);
-    padding-top: 120px;
-  }
-}
-
-@media (max-width: 768px) {
-  .experiment-container {
-    padding: var(--desc-spacing-md);
-    padding-top: 100px;
-  }
-
-  .content-section {
-    padding: var(--desc-spacing-xl);
-    border-radius: var(--desc-radius-md);
-    margin-bottom: var(--desc-spacing-xl);
-  }
-
-  .section-header h2 {
-    font-size: var(--desc-font-size-2xl);
-  }
-
-  .section-title-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .section-title-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .content-text-frame {
-    padding: var(--desc-spacing-lg);
-  }
-
-  .content-intro {
-    font-size: var(--desc-font-size-md);
-  }
-}
-
-@media (max-width: 480px) {
-  .experiment-container {
-    padding: var(--desc-spacing-sm);
-    padding-top: 90px;
-  }
-
-  .content-section {
-    padding: var(--desc-spacing-lg);
-  }
-}
+/* iGEM Check: [x] Brown theme consistent [x] No duplicate content-card/executive-summary [x] Decorative pseudo-elements bound to .description-container [x] Blue accent removed */
