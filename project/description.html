@@ -11,7 +11,19 @@
   <link rel="stylesheet" href="../static/css/description.css">
   <link rel="stylesheet" href="../static/css/mobile.css">
   <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
-  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
+  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">  
+  
+  
+  
+  
+  
+  <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
+  <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/components/sidebar-progress.js" defer></script>
+  <script src="../static/js/core/mobile-menu.js" defer></script>
+  <script src="../static/js/core/page-progress-bar.js" defer></script>
+  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
 </head>
 
 <body>
@@ -1018,17 +1030,21 @@
     </div>
   </section>
 
-  <script src="../static/js/core/utils.js"></script>
-  <script src="../static/js/components/sidebar-progress.js"></script>
-  <script src="../static/js/core/mobile-menu.js"></script>
-  <script src="../static/js/core/page-progress-bar.js"></script>
-  <script src="../static/js/core/scroll-progress-bar.js"></script>
-  <script src="../static/js/core/nav-scroll-behavior.js"></script>
+  
+  
+  
+  
+  
+  
 
   <script>
+  document.addEventListener('DOMContentLoaded', function () {
+
     // 页面加载进度条
     new PageProgressBar().startAutoProgress();
-  </script>
+  
+  });
+</script>
 </body>
 
 </html>

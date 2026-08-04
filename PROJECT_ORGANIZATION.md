@@ -59,13 +59,13 @@ SZPU-2026 wiki/
     │   │   ├── page-progress-bar.js
     │   │   ├── scroll-progress-bar.js
     │   │   └── nav-scroll-behavior.js
-    │   ├── components/             # 组件脚本
-    │   │   ├── sidebar-progress.js
-    │   │   ├── hp-reveal-box.js
-    │   │   └── hp-perspective-carousel.js
     │   └── pages/                  # 页面专属脚本
     │       ├── members.js
     │       └── attributions.js
+    ├── components/                 # 组件脚本（目录实为 static/components/，与 js/ 平级，非 js/components）
+    │   ├── sidebar-progress.js
+    │   ├── hp-reveal-box.js
+    │   └── hp-carousel.js          # 3D 圆环轮播（见第十二节）
     └── image/                      # 所有图片资源
         ├── nav_bc.webp             # 导航栏背景图
         └── HP/                     # HP 板块图片（expert.jpg, school1~4.jpg 等）
@@ -87,18 +87,20 @@ static/css/components/page-progress-bar.css
 static/css/components/scroll-progress-bar.css
 ```
 
-**JS（标准加载顺序，utils.js 必须最先）：**
+**JS（统一置于 `<head>` 并以 `defer` 加载；标准执行顺序，utils.js 必须最先）：**
 ```
 static/js/core/utils.js                → 公共工具（最先，无依赖）
 static/js/core/mobile-menu.js
 static/js/core/page-progress-bar.js
 static/js/core/scroll-progress-bar.js
 static/js/core/nav-scroll-behavior.js
-[可选组件] static/js/components/sidebar-progress.js   → 仅内容页
-[可选组件] static/js/components/hp-reveal-box.js       → 仅 HP 页
-[可选组件] static/js/components/hp-perspective-carousel.js → 仅 HP 页
+[可选组件] static/components/sidebar-progress.js   → 仅内容页
+[可选组件] static/components/hp-reveal-box.js       → 仅 HP 页
+[可选组件] static/components/hp-carousel.js         → 仅 HP 页（3D 圆环轮播，见第十二节）
 [可选页面] static/js/pages/members.js / attributions.js → 仅对应页
 ```
+
+> 工程化约定：上述全部外部脚本现已统一移动到每个页面的 `<head>` 并以 `defer` 加载（见第八节第 2 条与第十三节）。页尾依赖 `PageProgressBar` 的内联脚本 `new PageProgressBar().startAutoProgress();` 已由 `tools/normalize-scripts.js` 自动包裹进 `DOMContentLoaded` 监听，确保 defer 脚本先于其执行。
 
 ### 3.2 各页面依赖清单
 
@@ -115,7 +117,7 @@ static/js/core/nav-scroll-behavior.js
 | wet-lab/safety.html | — | 是 | 是 | sidebar-progress.js |
 | wet-lab/parts.html | parts.css(空) | 否 | 否 | — |
 | human-practices/education.html | education.css(空) | 是 | 是 | sidebar-progress.js |
-| human-practices/integrated human-practices.html | integrated human-practices.css | 是 | 是 | sidebar-progress.js + hp-reveal-box.js + hp-perspective-carousel.js |
+| human-practices/integrated human-practices.html | integrated human-practices.css | 是 | 是 | sidebar-progress.js + hp-reveal-box.js + hp-carousel.js |
 | human-practices/social-groups.html | social-groups.css(空) | 否 | 否 | — |
 | project/description.html | — | 是 | 是 | sidebar-progress.js |
 | project/design.html | design.css(实) | 否 | 是 | sidebar-progress.js |
@@ -237,7 +239,7 @@ static/js/core/nav-scroll-behavior.js
 ### 5.8 HP 特殊交互组件
 
 - `hp-reveal-box.js`：滚动揭示盒子（淡入/位移）。
-- `hp-perspective-carousel.js`：横向拖动轮播（integrated human-practices.html 的"拖动显示"结构）。轮播 HTML 结构（`hp-perspective-carousel`）与 CSS 已就绪，**图片缺失时由 `onerror` 显示"待补"占位**，放入对应图片即自动显示，无需改代码。
+- `hp-carousel.js`：3D 圆环轮播（integrated human-practices.html 的"拖动显示"结构，实为环形径向排列，非拖动式；详见第十二节）。轮播 HTML 结构（`hp-carousel`）与 CSS 已就绪，**图片缺失时由 `onerror` 显示"待补"占位**，放入对应图片即自动显示，无需改代码。
 
 ### 5.9 JavaScript 架构原则
 
@@ -263,6 +265,8 @@ static/js/core/nav-scroll-behavior.js
 3. **图片路径风险（历史教训）：** 曾出现将 `expert.jpg` 误写为 `WWJ.png`、将 `school1~4.jpg` 误写为 `lecture-1~4.jpg` 导致全站破图。任何图片改动都需先核对文件存在性。
 4. **`file://` 协议受限：** 本地直接双击打开 HTML 会被浏览器以 `file:` 协议拦截脚本/资源；测试须通过本地 HTTP 服务（如 `python -m http.server`）访问。
 5. **description.css 关键令牌标注：** 其中多处写明"绝对不能改 / navigation.css 会接管"，修改前务必阅读注释。
+6. **脚本加载策略已统一（工程化重构，2026-08-04）：** 原先混用"底部同步脚本 / head 内 defer / head 同步"三种写法，已全部统一为"外部脚本置于 `<head>` + `defer`"，并由 `tools/normalize-scripts.js` 自动维护；页尾依赖 `PageProgressBar` 的内联脚本已包裹 `DOMContentLoaded`。请勿再恢复手写底部脚本堆（详见第十三节）。
+7. **根目录 stray 已清理（2026-08-04）：** 误生成的 `AppData/` 已移至 `communication/stray-backup/`；演示/调试文件 `demo-3d-timeline.html`、`map.html`、`static/iconfont/demo_index.html` 已移至 `communication/demos/`，保持部署目录干净。
 
 ---
 
@@ -271,7 +275,7 @@ static/js/core/nav-scroll-behavior.js
 以下是硬约束，**任何新增或修改都不得违反**：
 
 1. **CSS 加载顺序：** 每个页面必须包含五大共享 CSS，且顺序为 `navigation.css → index.css → [页面/description].css → mobile.css → components/*.css`；**`mobile.css` 必须最后**，以保证响应式覆盖生效。
-2. **JS 加载顺序：** `core/utils.js` 必须最先加载；其余脚本其后。组件/页面脚本只在对应页面加载，不得全局强加。
+2. **JS 加载位置与顺序：** 所有外部脚本统一置于页面 `<head>` 并以 `defer` 加载（不阻塞渲染、DOM 解析后按文档顺序执行）；`core/utils.js` 必须最先。组件/页面脚本只在对应页面加载，不得全局强加；依赖已加载脚本的页尾内联脚本须包裹进 `DOMContentLoaded`（由 `tools/normalize-scripts.js` 自动处理）。
 3. **统一内容页模板：** 新增内容页必须采用标准结构——加载 `description.css`、包含 `<aside class="description-sidebar">`、加载 `sidebar-progress.js`，并复用 `--desc-*` 令牌与现有组件类，**不要凭空发明新结构**。
 4. **色彩只能来自令牌：** 所有颜色必须使用 `:root` 中的令牌（`--color-*` 或 `--desc-color-*`）。**禁止在业务样式中硬编码十六进制色值**；蓝色仅用于链接、绿色仅用于成功/高亮，不可作为主色扩散。
 5. **保持棕色主题：** 主色固定 `#8B5A2B`，禁止引入新的主色或额外的字体族；字体栈保持 `system-ui` 体系。
@@ -303,6 +307,13 @@ static/js/core/nav-scroll-behavior.js
   <link rel="stylesheet" href="../static/css/mobile.css">
   <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
   <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
+  <!-- JS：统一置于 head + defer，utils 最先（根目录页面前缀改为 static/） -->
+  <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/components/sidebar-progress.js" defer></script>
+  <script src="../static/js/core/mobile-menu.js" defer></script>
+  <script src="../static/js/core/page-progress-bar.js" defer></script>
+  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
 </head>
 <body>
   <!-- 顶栏 nav（由 navigation.css + nav-scroll-behavior.js 驱动） -->
@@ -319,14 +330,6 @@ static/js/core/nav-scroll-behavior.js
     </div>
   </main>
   <section id="footer" class="fullscreen-section section-footer"></section>
-
-  <!-- JS：utils 最先，其次组件/行为脚本 -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
 </body>
 </html>
 ```
@@ -373,7 +376,9 @@ communication/
 
 ### 11.3 根目录 stray 文件夹警示
 
-若仓库根目录出现非预期的文件夹（如 `AppData/`、`node_modules/` 之外的 `.dbg/` 等），多半是某脚本把相对路径误写成仓库根导致的副产物，**不属于本项目内容**，应查清来源后清理，切勿随手提交。
+若仓库根目录出现非预期的文件夹（如 `node_modules/` 之外的 `.dbg/` 等），多半是某脚本把相对路径误写成仓库根导致的副产物，**不属于本项目内容**，应查清来源后清理，切勿随手提交。
+
+> 注（2026-08-04）：历史上曾误生成 `AppData/` 文件夹，现已查明并移至 `communication/stray-backup/`（`communication/` 被 `.gitignore` 忽略），部署目录保持干净。同类 stray 仍按本警示处理。
 
 ### 11.4 流程约束（补充到第八节）
 
@@ -449,4 +454,23 @@ communication/
 
 ### 12.6 文档纠正
 
-- 第五节 5.8 与第八节提到的 `hp-perspective-carousel.js` 已不准确；当前实际文件为 `static/js/components/hp-carousel.js`（3D 圆环轮播，非拖动式）。后续以本节的 `hp-carousel.js` 为准。
+- 第五节 5.8 与第八节提到的 `hp-perspective-carousel.js` 已不准确；当前实际文件为 `static/components/hp-carousel.js`（3D 圆环轮播，非拖动式）。后续以本节的 `hp-carousel.js` 为准。
+
+---
+
+## 十三、工程化脚本统一工具（tools/normalize-scripts.js）
+
+为消除手工维护 18 个页面脚本顺序/路径的出错风险，项目引入零依赖 Node 脚本 `tools/normalize-scripts.js`，统一所有页面的外部脚本加载方式。
+
+**它做什么：**
+- 移除每个页面里散落的外部 `<script src>`（无论位于 `<head>` 还是 `</body>` 前），重新按固定顺序写入 `<head>` 并加 `defer`：`utils.js` 最先，其次 `sidebar-progress.js`（仅内容页），随后四个核心行为脚本，最后按文件名追加页面/组件脚本（`hp-carousel.js` / `hp-reveal-box.js` / `members.js` / `attributions.js` / `executive-summary-animation.js`）。
+- 将原先位于外部脚本块之后、依赖 `PageProgressBar` 的页尾内联脚本 `new PageProgressBar().startAutoProgress();` 自动包裹进 `DOMContentLoaded` 监听，确保 defer 脚本先于其执行（否则 defer 延后会导致 `PageProgressBar is not defined`）。
+- 幂等：可重复运行；路径与顺序由文件名规则生成，不依赖现有（可能被手改坏的）`src` 字符串。
+
+**用法：**
+```powershell
+cd "f:\IGEM\SZPU-2026 wiki"
+npm run normalize        # 等价于 node tools/normalize-scripts.js
+```
+
+**约束：** 新增页面请从第九节模板复制（脚本已在 `<head>` 内），不要再把 `<script>` 堆到 `</body>` 前；若需增删某页脚本集合，改 `tools/normalize-scripts.js` 内的 `scriptsFor()` 规则后重跑即可，不要在页面里手动改。

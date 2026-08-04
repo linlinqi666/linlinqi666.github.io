@@ -11,9 +11,19 @@
   <link rel="stylesheet" href="../static/css/members.css">
   <link rel="stylesheet" href="../static/css/mobile.css">
   <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
-  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
-  <script src="../static/js/core/utils.js"></script>
-  <script defer src="../static/js/pages/members.js"></script>
+  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">  
+  
+  
+  
+  
+  
+  <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
+  <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/js/core/mobile-menu.js" defer></script>
+  <script src="../static/js/core/page-progress-bar.js" defer></script>
+  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="../static/js/pages/members.js" defer></script>
 </head>
 
 <body>
@@ -459,13 +469,17 @@
   </section>
 
   <!-- 移动端汉堡菜单（根据SKILL.md规范使用统一的JS文件） -->
-  <script src="../static/js/core/mobile-menu.js"></script>
-  <script src="../static/js/core/page-progress-bar.js"></script>
-  <script src="../static/js/core/scroll-progress-bar.js"></script>
-  <script src="../static/js/core/nav-scroll-behavior.js"></script>
+  
+  
+  
+  
   <script>
+  document.addEventListener('DOMContentLoaded', function () {
+
     new PageProgressBar().startAutoProgress();
-  </script>
+  
+  });
+</script>
 
 </body>
 
