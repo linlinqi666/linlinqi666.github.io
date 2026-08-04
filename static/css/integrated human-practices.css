@@ -1601,3 +1601,237 @@
     transition: none;
   }
 }
+
+/* ================================================== */
+/* Interactive Expert Map Component (from communication/demos/map.html)
+   Scope: .hz-map root namespace | Theme: HP warm brown/cream palette */
+/* ================================================== */  /* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
+  .hz-map * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .hz-map {
+    --hz-accent: var(--hz-accent, #8b7355);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--hz-fg, #4a3b2a);
+    max-width: 1100px; margin: 0 auto;
+    /* 自带深色画框，保证迁移到任意页面观感一致、可直接复现 */
+    background: var(--hz-bg, linear-gradient(180deg, #efe8db 0%, #f5f0e6 100%));
+    padding: 24px 18px 36px;
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.45);
+    /* 隔离层叠与布局，避免影响宿主页面 */
+    isolation: isolate;
+  }
+
+  .hz-map .hz-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px; margin-bottom: 18px;
+  }
+  .hz-map .hz-header h1 {
+    font-size: 22px; font-weight: 700; letter-spacing: 1px;
+    background: linear-gradient(90deg, var(--hz-focus, #8b7355), #b6f0c8);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hz-map .hz-header .hz-hint { font-size: 13px; color: var(--hz-fg-muted, #8b7355); }
+
+  .hz-map .hz-back {
+    display: none; padding: 8px 16px;
+    border: 1px solid #3a567c; background: rgba(255,255,255,.06);
+    color: #cfe0f2; border-radius: 999px; cursor: pointer; font-size: 13px;
+    transition: background .2s, transform .1s;
+  }
+  .hz-map .hz-back:hover { background: rgba(255,255,255,.14); }
+  .hz-map .hz-back:active { transform: scale(.96); }
+
+  .hz-map .hz-container {
+    position: relative; width: 100%;
+    aspect-ratio: 1009.673 / 665.963;      /* 世界地图 natural ratio */
+    background: linear-gradient(180deg, #d4cbb8 0%, #ebe5d9 100%);
+    border: 1px solid rgba(139,115,85,0.2);
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(74,59,42,0.18);
+    /* 使用更平滑的过渡曲线，减少视觉跳动 */
+    transition: aspect-ratio .35s cubic-bezier(.4,0,.2,1);
+    contain: layout paint style;              /* 加强 containment */
+  }
+  .hz-map .hz-container.china-mode { aspect-ratio: 774.044 / 569.651; }
+
+  .hz-map .hz-layer {
+    position: absolute; inset: 0;
+    /* 性能优化：CSS contain 限制浏览器重排/重绘范围 */
+    contain: layout style paint size;
+    content-visibility: auto;
+    /* 仅在过渡期间启用 will-change，避免持续占用合成层内存 */
+    transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  .hz-map .hz-layer.is-transitioning {
+    will-change: opacity, transform;
+  }
+  .hz-map .hz-world { opacity: 1; transform: scale(1); content-visibility: visible; }
+  .hz-map .hz-world.hidden { opacity: 0; transform: scale(1.03); pointer-events: none; }
+  /* 中国地图层：用 opacity + visibility 过渡，避免 content-visibility 导致层不渲染 */
+  .hz-map .hz-china { 
+    opacity: 0; 
+    transform: scale(.96); 
+    pointer-events: none;
+    visibility: hidden;
+    /* visibility 延迟到 opacity 淡出完成后才隐藏，保证淡出动画可见 */
+    transition: opacity .45s cubic-bezier(.4,0,.2,1),
+                transform .45s cubic-bezier(.4,0,.2,1),
+                visibility 0s linear .45s;
+  }
+  .hz-map .hz-china.visible { 
+    opacity: 1; 
+    transform: scale(1); 
+    pointer-events: auto;
+    visibility: visible;
+    /* 进入时立即可见，仅 opacity/transform 参与过渡 */
+    transition: opacity .45s cubic-bezier(.4,0,.2,1),
+                transform .45s cubic-bezier(.4,0,.2,1),
+                visibility 0s linear 0s;
+  }
+
+  .hz-map .hz-layer > svg { 
+    width: 100%; height: 100%; display: block;
+    /* SVG 渲染优化：限制重绘范围 */
+    contain: layout paint; 
+  }
+
+  /* 世界地图：其余国家默认浅灰底由 CSS 统一处理，避免逐个 setAttribute */
+  .hz-map #worldCountries path {
+    fill: var(--hz-world-fill, #e8dfd2); stroke: var(--hz-world-stroke, #d4cabb); stroke-width: .5;
+    transition: filter .15s ease;
+    /* 减少路径元素的重绘开销 */
+    will-change: filter;
+  }
+  .hz-map #worldCountries .china-active { 
+    cursor: pointer; 
+    will-change: filter, transform;
+  }
+  .hz-map #worldCountries .china-active:hover {
+    filter: brightness(1.08) drop-shadow(0 0 5px rgba(139,115,85,0.6));
+  }
+
+  /* 修复：点击进入中国时，被点击的 SVG 路径会获得焦点并显示浏览器默认轮廓
+     （部分系统主题下呈黄色实线框，形状即中国板块，造成"加载框"错觉）。
+     纯鼠标点击导航时移除默认 outline，仅保留键盘 focus-visible 的自定义高亮。 */
+  .hz-map #worldCountries .china-active:focus { outline: none; }
+  .hz-map #worldCountries .china-active:focus-visible {
+    outline: 2px solid var(--hz-focus, #8b7355); outline-offset: 1px;
+  }
+  .hz-map #chinaProvinces path:focus,
+  .hz-map #chinaProvinces path:focus-visible { outline: none; }
+
+  /* 中国地图：省份路径 - 性能优化版 */
+  .hz-map #chinaProvinces path {
+    fill: var(--hz-china-fill, #8b7355); stroke: var(--hz-china-stroke, #d4cabb); stroke-width: .8;
+    transition: fill .2s ease;
+    /* 仅在父容器可见时才渲染（配合 content-visibility） */
+    contain: layout paint;
+  }
+  .hz-map #chinaProvinces path:hover { fill: var(--hz-china-hover, #a68a6a); }
+
+  /* 图钉：底部尖端精确落在坐标点（translate(-50%,-100%) 使盒底中心对齐坐标） */
+  .hz-map .hz-pin {
+    position: absolute; width: 30px; height: 36px;
+    transform: translate(-50%, -100%);
+    cursor: pointer; z-index: 5;
+    appearance: none; border: none; background: none; padding: 0;
+    transition: transform .18s cubic-bezier(.4,0,.2,1), filter .18s ease;
+    /* 图钉独立合成层，避免影响地图层 */
+    contain: layout style paint;
+    will-change: transform, filter;
+  }
+  .hz-map .hz-pin:hover,
+  .hz-map .hz-pin:focus-visible {
+    transform: translate(-50%, -100%) scale(1.14);
+    z-index: 9; outline: none; filter: drop-shadow(0 0 6px var(--hz-pin-ring, rgba(74,59,42,0.35)));
+  }
+  .hz-map .hz-pin .drop {
+    position: absolute; top: 0; left: 0; width: 30px; height: 30px;
+    background: linear-gradient(135deg, #ff7a6e, var(--hz-accent, #8b7355));
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,.35);
+  }
+  .hz-map .hz-pin .avatar {
+    position: absolute; top: 3px; left: 5px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; font-weight: 700;
+    border: 2px solid #fff; box-sizing: border-box; overflow: hidden;
+  }
+  .hz-map .hz-pin .tip {
+    position: absolute; bottom: 118%; left: 50%; transform: translateX(-50%);
+    white-space: nowrap; padding: 4px 8px; border-radius: 6px;
+    background: rgba(8,16,28,.92); color: #eaf2fb; font-size: 12px;
+    opacity: 0; pointer-events: none; transition: opacity .15s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,.4); z-index: 10;
+  }
+  .hz-map .hz-pin:hover .tip,
+  .hz-map .hz-pin:focus-visible .tip { opacity: 1; }
+
+  .hz-map .hz-legend {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-top: 16px; font-size: 13px; color: var(--hz-fg-muted-light, #a69078);
+  }
+  .hz-map .hz-legend .hz-swatch { display: inline-flex; align-items: center; gap: 6px; }
+  .hz-map .hz-legend .hz-box { width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,.3); }
+  .hz-map .hz-legend .hz-note { color: #7f93a8; font-size: 12px; }
+
+  .hz-map .hz-modal {
+    position: fixed; inset: 0;
+    background: var(--hz-modal-scrim, rgba(74,59,42,0.45)); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 99; padding: 16px;
+    /* 模态框隔离，避免影响底层地图渲染 */
+    contain: strict;
+  }
+  .hz-map .hz-modal.show { display: flex; animation: hzFade .2s ease-out; }
+  @keyframes hzFade { from { opacity: 0; } to { opacity: 1; } }
+
+  .hz-map .hz-modal-card {
+    width: min(420px, 100%);
+    background: #fff; color: #1c2733;
+    border-radius: 18px; padding: 26px 24px 24px;
+    position: relative; box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    animation: hzPop .28s cubic-bezier(.2,.9,.3,1.3);
+  }
+  @keyframes hzPop { from { transform: translateY(14px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .hz-map .hz-modal-close {
+    position: absolute; top: 14px; right: 16px;
+    width: 30px; height: 30px; border: none; border-radius: 50%;
+    background: #f0f2f5; color: #667; font-size: 18px; cursor: pointer; line-height: 1;
+    transition: background .15s;
+  }
+  .hz-map .hz-modal-close:hover { background: #e2e6ea; }
+
+  .hz-map .hz-modal-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .hz-map .hz-big-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto; border: 3px solid var(--hz-accent, #8b7355);
+    color: #fff; font-size: 24px; font-weight: 700;
+  }
+  .hz-map .hz-modal-head h2 { font-size: 20px; }
+  .hz-map .hz-modal-head .hz-region { font-size: 13px; color: var(--hz-accent, #8b7355); margin-top: 4px; font-weight: 600; }
+
+  .hz-map .hz-modal-card .hz-label { font-size: 12px; color: #8a97a6; letter-spacing: .5px; margin: 14px 0 6px; text-transform: uppercase; }
+  .hz-map .hz-modal-card .hz-hp { font-size: 14px; line-height: 1.7; color: #38434f; background: #f7f9fb; border-radius: 12px; padding: 12px 14px; }
+
+  /* 尊重用户的减弱动效偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .hz-map .hz-layer,
+    .hz-map .hz-layer.is-transitioning,
+    .hz-map .hz-pin,
+    .hz-map .hz-modal,
+    .hz-map .hz-modal-card,
+    .hz-map .hz-back,
+    .hz-map .hz-container,
+    .hz-map #worldCountries path,
+    .hz-map #chinaProvinces path { 
+      transition: none !important; 
+      animation: none !important; 
+      will-change: auto !important;
+    }
+  }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -11,6 +11,143 @@
   <link rel="stylesheet" href="../static/css/description.css">
   <link rel="stylesheet" href="../static/css/integrated human-practices.css">
   <link rel="stylesheet" href="../static/css/mobile.css">
+  <!-- 3D 时间轴样式：照搬自 communication/demos/demo-3d-timeline.html，
+       作用域限定在 .hp3d-root，不污染站点全局样式 -->
+  <style>
+  .hp3d-root, .hp3d-root *, .hp3d-root *::before, .hp3d-root *::after { box-sizing: border-box; }
+  .hp3d-root {
+    --color-primary: #4a3b2a;
+    --color-cream: #f6f1e7;
+    --color-bg: #faf8f3;
+    --color-accent: #8b7355;
+  }
+  .hp3d-root .timeline-orbit-container { max-width: 1200px; margin: 1.5rem auto 2rem; padding: 0 24px; }
+  .hp3d-root .container-header { text-align: center; margin-bottom: 0.6rem; }
+  .hp3d-root .container-header h1 { font-size: 1.7rem; font-weight: 600; }
+  .hp3d-root .container-header .subtitle { font-size: 0.9rem; color: var(--color-accent); opacity: 0.75; }
+
+  .hp3d-root .timeline-stage { position: relative; width: 100%; height: 220px; margin-bottom: 0; perspective: 750px; perspective-origin: 50% 50%; overflow: visible; }
+  .hp3d-root .timeline-scene { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(18deg); will-change: transform; opacity: 0; }
+  .hp3d-root .timeline-ring { position: absolute; left: 50%; top: 50%; width: calc(2 * var(--tr, 300px)); height: calc(2 * var(--tr, 300px)); margin-left: calc(-1 * var(--tr, 300px)); margin-top: calc(-1 * var(--tr, 300px)); border-radius: 50%; border: 1.5px dashed rgba(139,115,85,0.25); transform: rotateX(90deg); pointer-events: none; }
+  .hp3d-root .timeline-node { position: absolute; left: 50%; top: 50%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; cursor: pointer; will-change: transform, opacity; transform-style: preserve-3d; }
+  .hp3d-root .timeline-node-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-accent); border: 2px solid var(--color-cream); box-shadow: 0 0 0 1.5px var(--color-accent); margin-bottom: 5px; flex-shrink: 0; transition: all 0.3s ease; }
+  .hp3d-root .timeline-node.active .timeline-node-dot { background: var(--color-primary); box-shadow: 0 0 0 2.5px var(--color-primary), 0 0 10px rgba(74,59,42,0.45); transform: scale(1.35); }
+  .hp3d-root .timeline-node-label { font-size: 0.75rem; white-space: nowrap; color: var(--color-accent); font-weight: 600; letter-spacing: 0.03em; opacity: 0.8; transition: all 0.3s ease; font-variant-numeric: tabular-nums; }
+  .hp3d-root .timeline-node.active .timeline-node-label { color: var(--color-primary); font-size: 0.82rem; opacity: 1; }
+
+  .hp3d-root .orbit-stage { position: relative; width: 100%; height: 260px; margin-top: -25px; perspective: 1100px; perspective-origin: 50% 45%; background: radial-gradient(ellipse at center, rgba(74,59,42,0.03) 0%, transparent 70%); border-radius: 16px; overflow: visible; }
+  .hp3d-root .orbit-scene { position: absolute; inset: 0; transform-style: preserve-3d; transform: none; will-change: transform; opacity: 0; }
+  .hp3d-root .orbit-ring { position: absolute; left: 50%; top: 50%; width: calc(2 * var(--r, 280px)); height: calc(2 * var(--r, 280px)); margin-left: calc(-1 * var(--r, 280px)); margin-top: calc(-1 * var(--r, 280px)); border-radius: 50%; border: 2px dashed rgba(74,59,42,0.22); transform: rotateX(90deg); pointer-events: none; }
+  .hp3d-root .orbit-card { position: absolute; left: 50%; top: 50%; width: 280px; height: 196px; margin-left: -140px; margin-top: -98px; border-radius: 16px; cursor: pointer; background-color: #c9b89c; background-size: cover; background-position: center; border: 3px solid rgba(246,241,231,0.95); box-shadow: 0 16px 38px -12px rgba(74,59,42,0.45); transform-style: preserve-3d; will-change: transform, opacity; transition: box-shadow 0.4s ease; }
+  .hp3d-root .orbit-card .orbit-card-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(74,59,42,0.4); font-size: 0.85rem; letter-spacing: 0.05em; border-radius: 16px; }
+  .hp3d-root .orbit-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; border-radius: 16px; }
+  /* 透明扩展热区：让转到两侧（被 3D 压缩、视觉较小的）卡片更容易点击跳转，
+     不影响视觉尺寸，仅扩大可点击范围（inset 负值向外延伸） */
+  .hp3d-root .orbit-card::after { content: ""; position: absolute; inset: -22px; border-radius: 20px; }
+  .hp3d-root .orbit-card.front { box-shadow: 0 28px 52px -14px rgba(74,59,42,0.55), 0 0 0 1px rgba(74,59,42,0.15); }
+
+  .hp3d-root .slider-control { position: relative; height: 56px; display: flex; align-items: center; justify-content: center; padding: 0 40px; margin-top: 2px; }
+  .hp3d-root .slider-wrapper { position: relative; width: 100%; max-width: 760px; height: 40px; display: flex; align-items: center; }
+  .hp3d-root .slider-track { position: absolute; width: 100%; height: 5px; background: linear-gradient(90deg, rgba(139,115,85,0.1), rgba(139,115,85,0.28), rgba(139,115,85,0.1)); border-radius: 3px; overflow: hidden; }
+  .hp3d-root .slider-fill { position: absolute; left: 0; height: 100%; background: linear-gradient(90deg, var(--color-accent), var(--color-primary)); border-radius: 3px; width: 0%; }
+  .hp3d-root .slider-input { position: relative; width: 100%; height: 40px; -webkit-appearance: none; appearance: none; background: transparent; cursor: grab; z-index: 2; margin: 0; }
+  .hp3d-root .slider-input:active { cursor: grabbing; }
+  .hp3d-root .slider-input::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--color-cream), #fff); border: 3px solid var(--color-primary); box-shadow: 0 4px 14px rgba(74,59,42,0.32), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; transition: transform 0.16s ease; }
+  .hp3d-root .slider-input::-webkit-slider-thumb:hover { transform: scale(1.12); }
+  .hp3d-root .slider-input::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.03); }
+  .hp3d-root .slider-input::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--color-cream), #fff); border: 3px solid var(--color-primary); box-shadow: 0 4px 14px rgba(74,59,42,0.32); cursor: grab; }
+
+  .hp3d-root .detail-panel { margin-top: 8px; background: var(--color-cream); border-radius: 14px; border: 1px solid rgba(74,59,42,0.1); box-shadow: 0 10px 36px -14px rgba(74,59,42,0.26); overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+  .hp3d-root .detail-panel.show { opacity: 1; transform: translateY(0); }
+  .hp3d-root .detail-viewport { overflow: hidden; }
+  .hp3d-root .detail-track { display: flex; transition: transform 0.42s cubic-bezier(0.22,1,0.36,1); will-change: transform; }
+  .hp3d-root .detail-slide { flex: 0 0 100%; padding: 26px 30px 30px; }
+
+  .hp3d-root .detail-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+  .hp3d-root .detail-num { flex-shrink: 0; font-size: 1.45rem; font-weight: 700; color: var(--color-accent); line-height: 1; padding-top: 2px; font-variant-numeric: tabular-nums; }
+  .hp3d-root .detail-headtext h3 { font-size: 1.2rem; font-weight: 700; line-height: 1.4; }
+  .hp3d-root .detail-sub { font-size: 0.82rem; color: var(--color-accent); opacity: 0.78; margin-top: 4px; }
+  .hp3d-root .detail-intro { font-size: 0.92rem; line-height: 1.72; color: rgba(74,59,42,0.8); margin-bottom: 16px; }
+  .hp3d-root .detail-expert { display: flex; gap: 16px; align-items: center; background: rgba(74,59,42,0.05); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+  .hp3d-root .detail-expert-avatar { width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, #cbb89a, #a8906f); display: flex; align-items: center; justify-content: center; color: rgba(246,241,231,0.9); font-size: 1.3rem; font-weight: 700; overflow: hidden; }
+  .hp3d-root .detail-expert-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .hp3d-root .detail-expert-name { font-size: 1rem; font-weight: 700; }
+  .hp3d-root .detail-expert-title { font-size: 0.8rem; color: var(--color-accent); margin: 2px 0 4px; }
+  .hp3d-root .detail-expert-field { font-size: 0.8rem; line-height: 1.55; color: rgba(74,59,42,0.7); }
+  .hp3d-root .detail-photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+  .hp3d-root .detail-photo { position: relative; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, #ddd0b8, #c3b291); display: flex; align-items: flex-end; justify-content: center; }
+  .hp3d-root .detail-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .hp3d-root .detail-photo span { position: absolute; bottom: 0; left: 0; right: 0; font-size: 0.68rem; color: rgba(74,59,42,0.55); background: rgba(246,241,231,0.7); padding: 2px 4px; text-align: center; }
+  .hp3d-root .detail-insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .hp3d-root .detail-insight { background: rgba(74,59,42,0.04); border-left: 3px solid var(--color-accent); border-radius: 7px; padding: 11px 13px; }
+  .hp3d-root .detail-insight h4 { font-size: 0.88rem; margin-bottom: 5px; display: flex; align-items: center; gap: 7px; }
+  .hp3d-root .detail-insight h4::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--color-accent); flex-shrink: 0; }
+  .hp3d-root .detail-insight p { font-size: 0.8rem; line-height: 1.58; color: rgba(74,59,42,0.7); }
+  .hp3d-root .detail-counter { text-align: center; font-size: 0.76rem; color: var(--color-accent); letter-spacing: 0.1em; padding: 8px 0 2px; opacity: 0.65; }
+
+  /* 取消 reveal-box 后，内容块不再需要为把手预留底部空间 */
+  .hp3d-root .detail-slide .hp-reveal-content { padding-bottom: var(--desc-spacing-2xl, 1.5rem); }
+
+  /* 清华交流：用常规网格替代 3D 轮播 */
+  .hp3d-root .hp-tsinghua-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 200px);
+    gap: 14px;
+    margin: 18px 0 10px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(74, 59, 42, 0.1);
+  }
+  .hp3d-root .hp-tsinghua-grid .hp-photo-item {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(74, 59, 42, 0.08);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  }
+  .hp3d-root .hp-tsinghua-grid .hp-photo-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 24px rgba(74, 59, 42, 0.16);
+  }
+  .hp3d-root .hp-tsinghua-grid .hp-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .hp3d-root .hp-tsinghua-grid .hp-photo-item:hover img { transform: scale(1.05); }
+  .hp3d-root .hp-tsinghua-grid .hp-photo-item figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background: linear-gradient(transparent, rgba(74, 55, 40, 0.75));
+    color: white;
+    font-size: 0.82rem;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .hp3d-root .timeline-orbit-container { padding: 0 14px; }
+    .hp3d-root .orbit-stage { height: 340px; perspective: 760px; margin-top: -40px; }
+    .hp3d-root .orbit-card { width: 170px; height: 119px; margin-left: -85px; margin-top: -59.5px; }
+    .hp3d-root .timeline-stage { height: 90px; }
+    .hp3d-root .timeline-scene { padding-top: 20px; }
+    .hp3d-root .slider-input::-webkit-slider-thumb { width: 24px; height: 24px; }
+    .hp3d-root .detail-slide { padding: 18px 16px 20px; }
+    .hp3d-root .detail-slide .detail-headtext h3 { font-size: 1.08rem; }
+    .hp3d-root .detail-photos { grid-template-columns: repeat(2, 1fr); }
+    .hp3d-root .hp-tsinghua-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 150px); gap: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hp3d-root .orbit-scene, .hp3d-root .timeline-scene, .hp3d-root .orbit-card, .hp3d-root .timeline-node,
+    .hp3d-root .detail-panel, .hp3d-root .detail-track, .hp3d-root .slider-fill { transition: none !important; }
+  }
+  </style>
   
   
   <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
@@ -23,14 +160,20 @@
   
   
   <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/components/sidebar-progress.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
+  <script src="../static/js/core/utils.js" charset="UTF-8" defer></script>
+  <!-- 侧边栏已注释，相关组件在当前页面无需加载
+  <script src="../static/components/sidebar-progress.js" charset="UTF-8" defer></script>
+  -->
+  <script src="../static/js/core/mobile-menu.js" charset="UTF-8" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js" charset="UTF-8" defer></script>
+  <!-- 当前页面主要由 3D 轮播导航，进度条组件在 file:// 测试环境报错且非必需
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/components/hp-carousel.js" defer></script>
-  <script src="../static/components/hp-reveal-box.js" defer></script>
+  -->
+  <!-- 以下组件在当前页面未使用，注释以减少请求与滚动监听开销
+  <script src="../static/js/components/hp-carousel.js" charset="UTF-8" defer></script>
+  <script src="../static/components/hp-reveal-box.js" charset="UTF-8" defer></script>
+  -->
 </head>
 
 <body>
@@ -295,72 +438,38 @@
   <!-- iGEM Layout Strategy: 使用 description-container 匹配 sidebar-progress.js 的容器检测逻辑，内容结构对齐 description.html 模板 -->
   <main>
     <div class="description-container">
-      <!-- 侧边导航栏 -->
+      <!-- 侧边导航栏（已注释，当前页面由 3D 轮播直接导航）
       <aside class="description-sidebar">
-        <!-- 酵母细胞装饰 -->
-        <div class="yeast-decoration">
-          <div class="yeast-cell yeast-cell-1"></div>
-          <div class="yeast-cell yeast-cell-2"></div>
-          <div class="yeast-cell yeast-cell-3"></div>
-          <div class="bubble bubble-1"></div>
-          <div class="bubble bubble-2"></div>
-          <div class="bubble bubble-3"></div>
-        </div>
-
-        <!-- iGEM Layout Strategy: 导航结构对齐 description.html 模板，仅保留社会实践相关章节 -->
-        <div class="description-nav-wrapper">
-          <ul class="description-nav">
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#section-overview" class="nav-main-link">概述</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#section-dialogues" class="nav-main-link">专家访谈</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#section-education" class="nav-main-link">校园宣讲</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#section-impact" class="nav-main-link">从对话到行动</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 阅读进度监测 -->
-        <div class="progress-section">
-          <div class="progress-flask">
-            <div class="flask-body">
-              <div class="flask-neck"></div>
-              <div class="flask-liquid">
-                <div class="liquid-fill"></div>
-                <div class="bubbling">
-                  <div class="ferment-bubble f-bubble-1"></div>
-                  <div class="ferment-bubble f-bubble-2"></div>
-                  <div class="ferment-bubble f-bubble-3"></div>
-                  <div class="ferment-bubble f-bubble-4"></div>
-                </div>
-              </div>
-            </div>
-            <div class="flask-progress">
-              <span class="progress-percentage" id="progress-percentage">0%</span>
-            </div>
-          </div>
-          <div class="progress-title">阅读进度</div>
-        </div>
+        ...
       </aside>
+      -->
 
       <!-- 内容区域 -->
       <div class="description-content" id="content">
 
-        <!-- 页面概述：内容待后续补充 -->
-        <div id="section-overview" class="content-card hp-overview-card">
+        <!-- ===== 3D 时间轴导航：照搬自 communication/demos/demo-3d-timeline.html ===== -->
+        <div class="hp3d-root">
+          <div class="timeline-orbit-container">
+            <div class="timeline-stage" id="timelineStage">
+              <div class="timeline-scene" id="timelineScene" style="--tr: 300px; opacity: 0;">
+                <div class="timeline-ring"></div>
+              </div>
+            </div>
+            <div class="orbit-stage" id="orbitStage">
+              <div class="orbit-scene" id="orbitScene" style="--r: 280px; opacity: 0;">
+                <div class="orbit-ring"></div>
+              </div>
+            </div>
+            <div class="slider-control">
+              <div class="slider-wrapper">
+                <div class="slider-track"><div class="slider-fill" id="sliderFill"></div></div>
+                <input type="range" class="slider-input" id="sliderInput" min="0" max="3600" value="0" step="1">
+              </div>
+            </div>
+            <div class="detail-panel" id="detailPanel">
+              <div class="detail-viewport"><div class="detail-track" id="detailTrack">
+        <div class="detail-slide">
+<div id="section-overview" class="content-card hp-overview-card">
           <div class="hp-section-header">
             <span class="hp-section-number">00</span>
             <h2 class="hp-section-title">概述</h2>
@@ -368,47 +477,35 @@
           <!-- 内容 -->
           <p class="hp-section-intro"></p>
         </div>
+        </div>
 
-        <!-- 第一篇 HP 文章：清华交流 3D 旋转木马（注：原 HTML 未提交，此段由 AI 依 JS dataList 重建，标题/位置待你确认 -->
-        <div id="section-carousel" class="content-card">
+        <div class="detail-slide">
+<div id="section-carousel" class="content-card">
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
             <h2 class="hp-section-title">清华大学合成生物学创意大赛参赛交流</h2>
             <p class="hp-section-subtitle">HP 比赛篇 · 在清华赛场与外界对话</p>
           </div>
-          <div class="hp-carousel" style="--r:260px">
-            <div class="hp-carousel-stage">
-              <div class="hp-carousel-scene" style="opacity:0">
-                <div class="hp-carousel-ring"></div>
-                <!-- 静态占位：JS 初始化时会删除并基于 dataList 重建卡片 -->
-                <figure class="hp-carousel-card">
-                  <img class="hp-carousel-img" src="../static/image/HP/tsinghua/1.webp" alt="清华交流 1">
-                  <figcaption>01 · 开幕现场</figcaption>
-                </figure>
-                <figure class="hp-carousel-card">
-                  <img class="hp-carousel-img" src="../static/image/HP/tsinghua/2.webp" alt="清华交流 2">
-                  <figcaption>02 · 现场交流</figcaption>
-                </figure>
-                <figure class="hp-carousel-card">
-                  <img class="hp-carousel-img" src="../static/image/HP/tsinghua/3.webp" alt="清华交流 3">
-                  <figcaption>03 · 实验展示</figcaption>
-                </figure>
-                <figure class="hp-carousel-card">
-                  <img class="hp-carousel-img" src="../static/image/HP/tsinghua/4.webp" alt="清华交流 4">
-                  <figcaption>04 · 互动问答</figcaption>
-                </figure>
-                <figure class="hp-carousel-card">
-                  <img class="hp-carousel-img" src="../static/image/HP/tsinghua/5.webp" alt="清华交流 5">
-                  <figcaption>05 · 合影留念</figcaption>
-                </figure>
-                <figure class="hp-carousel-card">
-                  <img class="hp-carousel-img" src="../static/image/HP/tsinghua/6.webp" alt="清华交流 6">
-                  <figcaption>06 · 观众互动</figcaption>
-                </figure>
-              </div>
-              <button class="hp-carousel-arrow left" aria-label="上一张">‹</button>
-              <button class="hp-carousel-arrow right" aria-label="下一张">›</button>
-            </div>
+          <!-- 清华交流照片：改为常规网格展示，不再使用 3D 轮播 -->
+          <div class="hp-tsinghua-grid">
+            <figure class="hp-photo-item hp-photo-feature">
+              <img src="../static/image/HP/tsinghua/1.webp" alt="清华交流 1" loading="lazy">
+            </figure>
+            <figure class="hp-photo-item">
+              <img src="../static/image/HP/tsinghua/2.webp" alt="清华交流 2" loading="lazy">
+            </figure>
+            <figure class="hp-photo-item">
+              <img src="../static/image/HP/tsinghua/3.webp" alt="清华交流 3" loading="lazy">
+            </figure>
+            <figure class="hp-photo-item">
+              <img src="../static/image/HP/tsinghua/4.webp" alt="清华交流 4" loading="lazy">
+            </figure>
+            <figure class="hp-photo-item">
+              <img src="../static/image/HP/tsinghua/5.webp" alt="清华交流 5" loading="lazy">
+            </figure>
+            <figure class="hp-photo-item">
+              <img src="../static/image/HP/tsinghua/6.webp" alt="清华交流 6" loading="lazy">
+            </figure>
           </div>
           <div class="hp-interview-context">
 
@@ -429,9 +526,10 @@
 
           </div>
         </div>
+        </div>
 
-        <!-- 第二篇 HP 文章：华南交流会（探险篇） -->
-        <div id="section-southchina" class="content-card">
+        <div class="detail-slide">
+<div id="section-southchina" class="content-card">
           <div class="hp-section-header">
             <span class="hp-section-number">02</span>
             <h2 class="hp-section-title">HP探险篇—这次我们来到了华南交流会！</h2>
@@ -442,6 +540,20 @@
             <span>作者：SZPU-ECHOYeast</span>
             <span>发布：2026-05-27</span>
             <a href="https://mp.weixin.qq.com/s/qkolmePJuZWP5JXd4DLf3Q" target="_blank" rel="noopener">查看公众号原文 ↗</a>
+          </div>
+
+          <!-- 活动照片（预留图片占位槽：已有封面图，其余槽位后续补充真实照片） -->
+          <div class="hp-article-photos">
+            <h3 class="hp-subheading">活动照片</h3>
+            <div class="detail-photos">
+              <div class="detail-photo">
+                <img src="../static/image/HP/southchina/cover.jpg" alt="华南交流会现场合影" loading="lazy">
+                <span>交流会合影</span>
+              </div>
+              <div class="detail-photo"><span>图片待补充</span></div>
+              <div class="detail-photo"><span>图片待补充</span></div>
+              <div class="detail-photo"><span>图片待补充</span></div>
+            </div>
           </div>
 
           <div class="hp-interview-context">
@@ -475,10 +587,11 @@
 
           </div>
         </div>
+        </div>
 
-        <!-- Chapter 1: 专家访谈章节 -->
-        <div id="section-dialogues" class="content-card hp-dialogues-card hp-section-offset-0">
-          <p>与临床检验专家王文杰老师的访谈帮助我们跳出“病毒亚型鉴定”的技术执念，将项目方向重新锚定在“快速、广谱、便捷的病毒监测与公共环境预警”上。</p>
+        <div class="detail-slide">
+<div id="section-dialogues" class="content-card hp-dialogues-card hp-section-offset-0">
+          <p>与临床检验专家王文杰老师的访谈帮助我们跳出"病毒亚型鉴定"的技术执念，将项目方向重新锚定在"快速、广谱、便捷的病毒监测与公共环境预警"上。</p>
 
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
@@ -504,12 +617,11 @@
             </div>
           </div>
 
-          <div class="hp-reveal-box" data-hp-reveal id="reveal-dialogue">
-            <div class="hp-reveal-content" id="reveal-dialogue-content">
-              <!-- 访谈背景 -->
-              <div class="hp-interview-context">
+          <div class="hp-reveal-content" id="reveal-dialogue-content">
+            <!-- 访谈背景 -->
+            <div class="hp-interview-context">
                 <p>
-                  为了深入了解甲型流感病毒检测在真实医疗环境中的应用需求，并进一步明确我们“基于工程化酵母的甲型流感病毒生物传感器”项目的实际价值，我们开展了一次面向临床检验专家的社会实践访谈。在访谈过程中，我们围绕甲型流感病毒的变异特点、现有检测技术的局限性、抗病毒治疗策略以及未来检测设备的发展方向进行了深入交流。
+                  为了深入了解甲型流感病毒检测在真实医疗环境中的应用需求，并进一步明确我们"基于工程化酵母的甲型流感病毒生物传感器"项目的实际价值，我们开展了一次面向临床检验专家的社会实践访谈。在访谈过程中，我们围绕甲型流感病毒的变异特点、现有检测技术的局限性、抗病毒治疗策略以及未来检测设备的发展方向进行了深入交流。
                 </p>
               </div>
 
@@ -545,7 +657,7 @@
                   </div>
                   <h3>未来检测方向</h3>
                   <p>
-                    未来检测技术的关键不只是识别病毒类型，而是在更早阶段实现病毒存在的快速监测。在学校、幼儿园、地铁等人员密集环境中，通过环境监测提前发现病毒传播风险，有望帮助公共卫生管理从“被动治疗”转向“主动预防”。
+                    未来检测技术的关键不只是识别病毒类型，而是在更早阶段实现病毒存在的快速监测。在学校、幼儿园、地铁等人员密集环境中，通过环境监测提前发现病毒传播风险，有望帮助公共卫生管理从"被动治疗"转向"主动预防"。
                   </p>
                 </article>
 
@@ -575,18 +687,13 @@
                   这次交流帮助我们将实验室中的工程设计与真实临床需求建立联系。专家反馈使我们重新审视传感器的检测目标，从单纯追求病毒亚型识别转向探索更加广谱、快速、便捷的病毒监测方案，也进一步坚定了我们利用合成生物学技术开发新型流感预警工具的方向。通过与临床一线专家的沟通，我们认识到，一个真正具有社会价值的生物技术产品不仅需要实验室中的性能优化，更需要回应现实世界中的医疗需求与公共健康挑战。
                 </p>
               </div>
-            </div>
-            <div class="hp-reveal-handle" tabindex="0" role="button" aria-expanded="false"
-              aria-controls="reveal-dialogue-content">
-              <span class="hp-reveal-hint">↓ 拉动查看更多</span>
-              <span class="hp-reveal-collapse">点击收起</span>
-            </div>
           </div>
         </div>
+        </div>
 
-        <!-- Chapter 2: 教育与推广章节 -->
-        <div id="section-education" class="content-card hp-education-card hp-section-offset-2">
-          <p>走进职业高中开展科普宣讲，让合成生物学走出实验室；学生关于便携性与检测速度的反馈，把“负责任的研究与创新”理念转化为具体的产品优化方向。</p>
+        <div class="detail-slide">
+<div id="section-education" class="content-card hp-education-card hp-section-offset-2">
+          <p>走进职业高中开展科普宣讲，让合成生物学走出实验室；学生关于便携性与检测速度的反馈，把"负责任的研究与创新"理念转化为具体的产品优化方向。</p>
 
           <div class="hp-section-header">
             <span class="hp-section-number">02</span>
@@ -615,12 +722,11 @@
           </div>
           <p class="hp-image-caption">图 2. 校园宣讲现场：团队向高二学生介绍 iGEM 理念与工程化酵母生物传感器项目</p>
 
-          <div class="hp-reveal-box" data-hp-reveal id="reveal-education">
-            <div class="hp-reveal-content" id="reveal-education-content">
-              <!-- 活动背景 -->
-              <div class="hp-activity-overview">
+          <div class="hp-reveal-content" id="reveal-education-content">
+            <!-- 活动背景 -->
+            <div class="hp-activity-overview">
                 <p>为了践行 iGEM
-                  所倡导的科学传播与社会责任理念，并进一步了解公众群体对于甲型流感病毒检测技术的认知与需求，我们走进深圳市第一职业技术学校坪山校区，与高二学生开展了一次项目科普交流活动。本次活动旨在向非专业群体介绍国际基因工程机器大赛（iGEM）的理念与价值，同时展示“基于工程化酵母的甲型流感病毒生物传感器”项目，让更多年轻学生了解合成生物学如何通过跨学科创新解决现实社会问题。
+                  所倡导的科学传播与社会责任理念，并进一步了解公众群体对于甲型流感病毒检测技术的认知与需求，我们走进深圳市第一职业技术学校坪山校区，与高二学生开展了一次项目科普交流活动。本次活动旨在向非专业群体介绍国际基因工程机器大赛（iGEM）的理念与价值，同时展示"基于工程化酵母的甲型流感病毒生物传感器"项目，让更多年轻学生了解合成生物学如何通过跨学科创新解决现实社会问题。
                 </p>
               </div>
 
@@ -635,7 +741,7 @@
                   </div>
                   <h3>我们分享了什么</h3>
                   <p>从 iGEM
-                    比赛的发展背景、团队建设模式与科研创新理念，到项目的研究意义、实验原理与未来应用场景，我们尝试打破“科研只存在于实验室”的刻板印象，让学生看到生命科学研究同样需要编程、设计、传播等多领域能力的共同参与。
+                    比赛的发展背景、团队建设模式与科研创新理念，到项目的研究意义、实验原理与未来应用场景，我们尝试打破"科研只存在于实验室"的刻板印象，让学生看到生命科学研究同样需要编程、设计、传播等多领域能力的共同参与。
                   </p>
                 </article>
 
@@ -673,19 +779,19 @@
                 </div>
                 <p>
                   此次活动不仅是一次项目展示，也是一次双向学习与沟通的过程。我们进一步认识到，一个具有社会价值的生物技术项目不仅需要实验室中的技术突破，也需要与公众建立有效沟通，理解真实需求并持续优化。此次实践推动了项目从单纯的技术研发走向更加开放、负责的创新模式，体现了
-                  iGEM 所倡导的“负责任的研究与创新”理念。</p>
+                  iGEM 所倡导的"负责任的研究与创新"理念。</p>
               </div>
-            </div>
-            <div class="hp-reveal-handle" tabindex="0" role="button" aria-expanded="false"
-              aria-controls="reveal-education-content">
-              <span class="hp-reveal-hint">↓ 拉动查看更多</span>
-              <span class="hp-reveal-collapse">点击收起</span>
+          </div>
+        </div>
+        </div>
+        </div></div>
+              <div class="detail-counter" id="detailCounter"></div>
             </div>
           </div>
         </div>
 
-        <!-- Chapter 3: 影响平衡章节 -->
-      </div>
+
+</div>
     </div>
   </main>
 
@@ -773,11 +879,400 @@
   
   
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      // PageProgressBar 脚本已注释，避免未定义报错
+      // new PageProgressBar().startAutoProgress();
+    });
+  </script>
 
-    new PageProgressBar().startAutoProgress();
-  
+  <!-- 3D 时间轴导航脚本：基于 demo-3d-timeline.html 正确架构修复 -->
+<script>
+(function () {
+  'use strict';
+
+  // 轨道元数据：仅用于生成 3D 卡片与时间轴节点
+  var articles = [
+    { time: '00', title: '项目概述', img: '' },
+    { time: '01', title: '清华参赛交流', img: '../static/image/HP/tsinghua/1.webp' },
+    { time: '02', title: '华南交流会', img: '../static/image/HP/southchina/cover.jpg' },
+    { time: '03', title: '专家访谈', img: '../static/image/HP/expert.jpg' },
+    { time: '04', title: '中学生科普', img: '../static/image/HP/school1.jpg' }
+  ];
+
+  var orbitScene = document.getElementById('orbitScene');
+  var timelineScene = document.getElementById('timelineScene');
+  var orbitStage = document.getElementById('orbitStage');
+  var timelineStage = document.getElementById('timelineStage');
+  var sliderInput = document.getElementById('sliderInput');
+  var sliderFill = document.getElementById('sliderFill');
+  var detailPanel = document.getElementById('detailPanel');
+  var detailTrack = document.getElementById('detailTrack');
+  var detailCounter = document.getElementById('detailCounter');
+
+  var n = articles.length;
+  var slideCount = (detailTrack && detailTrack.children.length) || n;
+  var step = 360 / n;          // 图片轴为真正闭合圆环：每张 360/n，首尾相接
+  var DEG = Math.PI / 180;
+  var TILT_ORBIT = 0;          // 图片轴：完全水平（统一水平面，无倾斜）
+  var TILT_TL = 18;            // 时间轴：保留 3D 椭圆纵深
+  var rOrbit = 280;
+  var rTimeline = 300;
+  var cardW = 250, cardH = 175;
+  var VISIBLE = Math.min(5, n);
+
+  var targetAngle = 0, currentAngle = 0, LERP = 0.11;
+  var cards = [], tlnodes = [];
+  var currentFrontIdx = -1;
+  var snapActive = false;
+  var defaultImg = '../static/image/HP/tsinghua/1.webp';
+  var imageCache = new Map();
+
+  function mod(a, m) { return ((a % m) + m) % m; }
+
+  function computeLayout(count) {
+    var isMobile = window.innerWidth <= 768;
+    var mobileFactor = isMobile ? 0.62 : 1;
+    var s = 360 / count;
+    // 按期望最大卡宽估算半径（弧长=卡宽*1.18），保证任意文章数都不重叠
+    var arc = 250 * 1.18;
+    var r = arc * count / (2 * Math.PI);
+    var rMax = isMobile ? Math.max(150, (window.innerWidth - 50) * 0.95) : 380;
+    r = Math.max(170, Math.min(r, rMax));
+    var w = Math.min(250, (2 * Math.PI * r / count) - 22) * mobileFactor;
+    w = Math.max(82, w);
+    var h = w * 0.7;
+    return { step: s, r: r, cardW: w, cardH: h, isMobile: isMobile };
+  }
+
+  function applyLayout() {
+    var L = computeLayout(n);
+    step = L.step;
+    rOrbit = L.r;
+    rTimeline = rOrbit * (L.isMobile ? 1.04 : 1.06);
+    cardW = L.cardW; cardH = L.cardH;
+
+    orbitScene.style.setProperty('--r', rOrbit + 'px');
+    timelineScene.style.setProperty('--tr', rTimeline + 'px');
+
+    // 时间轴：椭圆纵深 = 2 * rTimeline * sin(TILT_TL)；图片轴：水平环，竖直约等于卡高
+    var tV = rTimeline * Math.sin(TILT_TL * DEG);
+    timelineStage.style.height = (tV * 2 + 44) + 'px';
+    orbitStage.style.height = (cardH + 90) + 'px';
+    // 拉近两轴竖直距离：图片轴向上嵌入时间轴底部
+    orbitStage.style.marginTop = (-Math.min(55, tV * 0.4)) + 'px';
+
+    layoutCards();
+    if (tlnodes.length) layoutNodes();
+  }
+
+  function layoutCards() {
+    cards.forEach(function (c) {
+      c.style.width = cardW + 'px';
+      c.style.height = cardH + 'px';
+      c.style.marginLeft = (-cardW / 2) + 'px';
+      c.style.marginTop = (-cardH / 2) + 'px';
+      c._baseAngle = (c._slotOffset || 0) * step;
+      c.style.transform = 'rotateY(' + c._baseAngle + 'deg) translateZ(' + rOrbit + 'px)';
+    });
+  }
+
+  function layoutNodes() {
+    tlnodes.forEach(function (node, i) {
+      node._baseAngle = i * step;
+      node.style.transform =
+        'rotateY(' + (i * step) + 'deg) translateZ(' + rTimeline + 'px) rotateX(' + (-TILT_TL) + 'deg)';
+    });
+  }
+
+  function valueToAngle(v) {
+    var f = parseFloat(v) / parseFloat(sliderInput.max);
+    return -f * (n - 1) * step;
+  }
+
+  function angleToValue(a) {
+    return (-a / ((n - 1) * step)) * parseFloat(sliderInput.max);
+  }
+
+  function preloadOne(src) {
+    if (imageCache.has(src)) return;
+    var img = new Image();
+    img.decoding = 'async';
+    img.src = src;
+    function mark(ok) { imageCache.set(src, ok); }
+    if (img.decode) {
+      img.onload = function () { img.decode().then(function () { mark(true); }).catch(function () { mark(true); }); };
+      img.onerror = function () { mark(false); };
+    } else {
+      img.onload = function () { mark(true); };
+      img.onerror = function () { mark(false); };
+    }
+  }
+
+  function assignCard(card, idx) {
+    if (card._articleIdx === idx) return;
+    card._articleIdx = idx;
+    card.dataset.index = idx;
+    var a = articles[idx];
+    var imgSrc = a.img || defaultImg;
+    card.style.backgroundImage = 'url("' + imgSrc + '")';
+    var im = card.querySelector('img');
+    if (!im) {
+      im = document.createElement('img');
+      im.loading = 'eager';
+      im.decoding = 'async';
+      card.appendChild(im);
+    }
+    im.alt = a.title;
+    im.onload = null;
+    im.onerror = null;
+    if (imageCache.get(imgSrc)) {
+      im.style.opacity = '1';
+    } else {
+      im.style.opacity = '0';
+      im.style.transition = 'opacity 0.35s ease';
+      im.onload = function () { im.style.opacity = '1'; };
+      im.onerror = function () { im.style.opacity = '1'; };
+    }
+    im.src = imgSrc;
+    preloadOne(imgSrc);
+  }
+
+  function updateVirtualCards(activeFloat) {
+    var activeInt = Math.round(activeFloat);
+    if (n <= VISIBLE) {
+      if (cards.length && cards[0]._articleIdx === undefined) {
+        cards.forEach(function (c) { assignCard(c, mod(activeInt + c._slotOffset, n)); });
+      }
+      return;
+    }
+    cards.forEach(function (c) { assignCard(c, mod(activeInt + c._slotOffset, n)); });
+  }
+
+  function init() {
+    if (!orbitScene || !timelineScene || !detailTrack) return;
+    slideCount = detailTrack.children.length || n;
+    applyLayout();
+    renderCards();
+    renderTimelineNodes();
+    renderDetailSlides();
+    bindEvents();
+    startLoop();
+
+    window.addEventListener('resize', function () { applyLayout(); });
+
+    requestAnimationFrame(function () {
+      orbitScene.style.opacity = '1';
+      timelineScene.style.opacity = '1';
+      detailPanel.classList.add('show');
+    });
+  }
+
+  function renderCards() {
+    var half = Math.floor(VISIBLE / 2);
+    for (var slot = 0; slot < VISIBLE; slot++) {
+      var card = document.createElement('figure');
+      card.className = 'orbit-card';
+      card._slotOffset = slot - half;
+      orbitScene.appendChild(card);
+      cards.push(card);
+    }
+    updateVirtualCards(0);
+    layoutCards();
+  }
+
+  function renderTimelineNodes() {
+    articles.forEach(function (a, i) {
+      var node = document.createElement('div');
+      node.className = 'timeline-node' + (i === 0 ? ' active' : '');
+      node.dataset.index = i;
+      var dot = document.createElement('div');
+      dot.className = 'timeline-node-dot';
+      var label = document.createElement('span');
+      label.className = 'timeline-node-label';
+      label.textContent = a.time;
+      node.appendChild(dot);
+      node.appendChild(label);
+      timelineScene.appendChild(node);
+      tlnodes.push(node);
+    });
+    layoutNodes();
+  }
+
+  // detailTrack 已经预渲染了真实文章结构，不要清空重建；只同步计数器
+  function renderDetailSlides() {
+    slideCount = detailTrack.children.length || n;
+    detailCounter.textContent = '1 / ' + slideCount;
+  }
+
+  function startLoop() {
+    function loop() {
+      var d = targetAngle - currentAngle;
+
+      if (snapActive) {
+        // 代码驱动跳转（点击卡片、节点、键盘、释放后吸附）：轨道与拖动条一起做 LERP 平滑动画
+        if (Math.abs(d) > 0.05) {
+          currentAngle += d * LERP;
+        } else {
+          currentAngle = targetAngle;
+          snapActive = false;
+        }
+        var sv = angleToValue(currentAngle);
+        sv = Math.max(0, Math.min(parseFloat(sliderInput.max), sv));
+        sliderInput.value = sv.toFixed(0);
+        syncSliderFill();
+      } else {
+        // 用户直接拖动拖动条：轨道实时同步，无延迟
+        currentAngle = targetAngle;
+      }
+
+      var activeFloat = -currentAngle / step;
+      updateVirtualCards(activeFloat);
+      layoutCards();
+      orbitScene.style.transform = 'rotateY(' + currentAngle + 'deg)';
+      timelineScene.style.transform = 'rotateX(' + TILT_TL + 'deg) rotateY(' + currentAngle + 'deg)';
+
+      updateAllPerspective();
+
+      requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  function getFrontIndex() {
+    return Math.max(0, Math.min(n - 1, Math.round(-currentAngle / step)));
+  }
+
+  function updateAllPerspective() {
+    var fi = getFrontIndex();
+    var changed = fi !== currentFrontIdx;
+    currentFrontIdx = fi;
+
+    cards.forEach(function (c) {
+      var norm = (((c._baseAngle + currentAngle) % 360) + 360) % 360;
+      var t = (1 - Math.cos(norm * DEG)) / 2;
+      var op = 1 - t * t;
+      if (norm > 120 && norm < 240) op = 0;
+      else if (norm > 90) op *= 0.4;
+      else if (norm > 60) op *= 0.85;
+      op = Math.max(0, op);
+      c.style.opacity = op.toFixed(3);
+      c.style.zIndex = Math.round(100 - 100 * t);
+      c.classList.toggle('front', c._articleIdx === fi && norm < 30);
+      c.style.pointerEvents = op > 0.15 ? '' : 'none';
+    });
+
+    tlnodes.forEach(function (node) {
+      var norm = (((node._baseAngle + currentAngle) % 360) + 360) % 360;
+      var t = (1 - Math.cos(norm * DEG)) / 2;
+      node.style.opacity = Math.max(0.12, 1 - t * 0.7).toFixed(3);
+      node.style.zIndex = Math.round(50 - 50 * t);
+    });
+
+    if (changed) {
+      tlnodes.forEach(function (node, i) { node.classList.toggle('active', i === fi); });
+      updateDetailPanel(fi);
+    }
+  }
+
+  function updateDetailPanel(idx) {
+    idx = Math.max(0, Math.min(slideCount - 1, idx));
+    detailTrack.style.transform = 'translateX(' + (-idx * 100) + '%)';
+    detailCounter.textContent = (idx + 1) + ' / ' + slideCount;
+  }
+
+  function syncSliderFill() {
+    sliderFill.style.width = (parseFloat(sliderInput.value) / parseFloat(sliderInput.max) * 100) + '%';
+  }
+
+  function bindEvents() {
+    sliderInput.addEventListener('input', function () {
+      snapActive = false;
+      targetAngle = valueToAngle(sliderInput.value);
+      currentAngle = targetAngle; // 拖动时实时同步，避免拖动条先到、轨道后到的"闪现"感
+      syncSliderFill();
+    });
+    sliderInput.addEventListener('change', snapToNearest);
+    sliderInput.addEventListener('keyup', function (e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') snapToNearest();
+    });
+
+    tlnodes.forEach(function (nd, i) {
+      nd.addEventListener('click', function () { goTo(i); updateDetailPanel(i); });
+    });
+    cards.forEach(function (c) {
+      c.addEventListener('click', function () { var idx = parseInt(c.dataset.index, 10); goTo(idx); updateDetailPanel(idx); });
+    });
+
+    /* 轨道舞台全局点击：即使鼠标落在 3D 压缩后的卡片视觉区域但未命中元素本身，
+       也根据最近卡片的屏幕中心进行跳转，解决两侧卡片难点击的问题 */
+    orbitStage.addEventListener('click', function (e) {
+      if (e.target.closest('.orbit-card') || e.target.closest('.timeline-node') || e.target.closest('.slider-control')) return;
+      var stageRect = orbitStage.getBoundingClientRect();
+      var clickX = e.clientX - stageRect.left;
+      var clickY = e.clientY - stageRect.top;
+      var nearest = -1, minDist = Infinity;
+      cards.forEach(function (card) {
+        var rect = card.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2 - stageRect.left;
+        var cy = rect.top + rect.height / 2 - stageRect.top;
+        var d = Math.sqrt(Math.pow(clickX - cx, 2) + Math.pow(clickY - cy, 2));
+        if (d < minDist) { minDist = d; nearest = parseInt(card.dataset.index, 10); }
+      });
+      if (nearest >= 0 && minDist < 260) {
+        goTo(nearest);
+        updateDetailPanel(nearest);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!orbitStage.matches(':hover')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    });
+  }
+
+  function goTo(idx) {
+    targetAngle = -idx * step;
+    snapActive = true;
+  }
+
+  function snapToNearest() {
+    var f = parseFloat(sliderInput.value) / parseFloat(sliderInput.max);
+    var idx = Math.max(0, Math.min(n - 1, Math.round(f * (n - 1))));
+    targetAngle = -idx * step;
+    snapActive = true;
+    updateDetailPanel(idx);
+  }
+
+  function go(dir) {
+    // 滚动轴只能到末篇为止：到两端即停，不再首尾环绕
+    var idx = currentFrontIdx + dir;
+    if (idx < 0) idx = 0;
+    if (idx > n - 1) idx = n - 1;
+    goTo(idx);
+    updateDetailPanel(idx);
+  }
+
+  // 侧边导航链接直接驱动 3D 轮播（即使 sidebar-progress.js 未加载也能工作）
+  document.querySelectorAll('a[data-hp-slide]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var idx = parseInt(a.getAttribute('data-hp-slide'), 10);
+      if (!isNaN(idx) && window.HP3D) window.HP3D.goTo(idx);
+    });
   });
+
+  window.HP3D = {
+    goTo: function (idx) {
+      idx = Math.max(0, Math.min(slideCount - 1, idx));
+      goTo(idx);
+      updateDetailPanel(idx);
+    }
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
 </script>
 </body>
 
