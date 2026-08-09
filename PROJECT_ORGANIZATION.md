@@ -19,6 +19,19 @@
 ```
 SZPU-2026 wiki/
 ├── index.html                      # 首页（落地页，无侧边栏）
+├── PROJECT_ORGANIZATION.md         # 本全局指导文档（唯一权威依据，!被 .gitignore 保留）
+├── package.json / package-lock.json# 依赖声明（playwright-core）+ npm 脚本；支撑 npm run normalize
+├── .gitignore                      # 忽略规则（含 communication/、.playwright-cli/ 等对话产物）
+├── .github/                        # GitHub Pages 部署工作流（static.yml）
+├── node_modules/                   # 依赖安装目录（.gitignore 忽略，不入库）
+├── communication/                  # 对话/工具产物归集地（.gitignore 忽略，严禁散落他处）
+│   ├── screenshots/                # 截图 / 验证渲染图（*.png）
+│   ├── demos/                      # 演示 / 测试 HTML（demo-3d-timeline、demo_index、map、test-*）
+│   ├── research-reports/           # 对话生成的研究 / 总结报告（*.md）
+│   ├── tools-debug/                # 调试 / 抓取脚本与日志（*.js/*.cjs/*.py/*.log）
+│   ├── stray-backup/               # 误生成文件夹 / 页面备份（AppData/、ORIGINAL_*）
+│   └── .playwright-cli/            # Playwright 运行时快照（自动生成）
+├── tools/                          # 正式工程化脚本（normalize-scripts.js、inject-search.js 等，非临时调试）
 ├── dry-lab/                        # 干实验板块
 │   ├── hardware.html
 │   ├── model.html
@@ -30,7 +43,7 @@ SZPU-2026 wiki/
 │   └── safety.html
 ├── human-practices/                # 人类实践板块
 │   ├── education.html
-│   ├── integrated human-practices.html   # 综合 HP（含拖动轮播等特殊组件）
+│   ├── integrated human-practices.html   # 综合 HP（含 3D 圆环轮播等特殊组件）
 │   └── social-groups.html
 ├── project/                        # 项目正文板块
 │   ├── description.html
@@ -54,18 +67,23 @@ SZPU-2026 wiki/
     │   └── ...（各页面专属 CSS，部分为占位空文件）
     ├── js/
     │   ├── core/                   # 核心脚本
-    │   │   ├── utils.js            # 公共工具库（必须先加载）
+    │   │   ├── utils.js            # 公共工具库（必须先加载，无依赖）
     │   │   ├── mobile-menu.js
     │   │   ├── page-progress-bar.js
     │   │   ├── scroll-progress-bar.js
-    │   │   └── nav-scroll-behavior.js
-    │   └── pages/                  # 页面专属脚本
-    │       ├── members.js
-    │       └── attributions.js
-    ├── components/                 # 组件脚本（目录实为 static/components/，与 js/ 平级，非 js/components）
-    │   ├── sidebar-progress.js
-    │   ├── hp-reveal-box.js
-    │   └── hp-carousel.js          # 3D 圆环轮播（见第十二节）
+    │   │   ├── nav-scroll-behavior.js
+    │   │   ├── search.js           # 全站搜索模块（见 5.11）
+    │   │   ├── search-index.js     # 由 search-index-generator.js 生成的搜索索引（defer 加载，约 189KB）
+    │   │   └── search-index-generator.js  # Node 脚本，扫描全站页面生成 search-index.js
+    │   ├── components/             # 页面组件脚本（位于 static/js/ 下，与 core/、pages/ 同级）
+    │   │   ├── sidebar-progress.js # 侧边栏烧瓶进度 + TOC 高亮（内容页）
+    │   │   ├── hp-carousel.js      # 3D 圆环轮播（见第十二节）
+    │   │   ├── hp-reveal-box.js    # HP 下拉揭示盒
+    │   │   └── executive-summary-animation.js  # 首页 Executive Summary 滚动驱动 + 酵母浮动 + 打字机
+    │   ├── pages/                  # 页面专属脚本
+    │   │   ├── members.js
+    │   │   └── attributions.js
+    │   └── hp-timeline-3d.js       # 3D 时间轴圆环引擎（当前未被任何页面引用，见 5.10/十四）
     └── image/                      # 所有图片资源
         ├── nav_bc.webp             # 导航栏背景图
         └── HP/                     # HP 板块图片（expert.jpg, school1~4.jpg 等）
@@ -94,9 +112,9 @@ static/js/core/mobile-menu.js
 static/js/core/page-progress-bar.js
 static/js/core/scroll-progress-bar.js
 static/js/core/nav-scroll-behavior.js
-[可选组件] static/components/sidebar-progress.js   → 仅内容页
-[可选组件] static/components/hp-reveal-box.js       → 仅 HP 页
-[可选组件] static/components/hp-carousel.js         → 仅 HP 页（3D 圆环轮播，见第十二节）
+[可选组件] static/js/components/sidebar-progress.js   → 仅内容页
+[可选组件] static/js/components/hp-reveal-box.js       → 仅 HP 页
+[可选组件] static/js/components/hp-carousel.js         → 仅 HP 页（3D 圆环轮播，见第十二节）
 [可选页面] static/js/pages/members.js / attributions.js → 仅对应页
 ```
 
@@ -117,7 +135,7 @@ static/js/core/nav-scroll-behavior.js
 | wet-lab/safety.html | — | 是 | 是 | sidebar-progress.js |
 | wet-lab/parts.html | parts.css(空) | 否 | 否 | — |
 | human-practices/education.html | education.css(空) | 是 | 是 | sidebar-progress.js |
-| human-practices/integrated human-practices.html | integrated human-practices.css | 是 | 是 | sidebar-progress.js + hp-reveal-box.js + hp-carousel.js |
+| human-practices/integrated human-practices.html | integrated human-practices.css | 是 | 是 | （sidebar-progress / hp-reveal-box / hp-carousel 脚本当前已被作者注释禁用，见七.8 与十四；如需启用请先取消注释并确认路径为 static/js/components/） |
 | human-practices/social-groups.html | social-groups.css(空) | 否 | 否 | — |
 | project/description.html | — | 是 | 是 | sidebar-progress.js |
 | project/design.html | design.css(实) | 否 | 是 | sidebar-progress.js |
@@ -247,7 +265,38 @@ static/js/core/nav-scroll-behavior.js
 - 所有脚本应以 IIFE 或命名空间封装，避免污染全局；除 `utils.js` 外不依赖具体加载顺序。
 - 组件脚本（sidebar-progress、hp-*）仅在其对应页面加载；页面脚本（members、attributions）同理。
 
----
+### 5.10 JS 组件实现原理速查
+
+下表按文件说明各脚本的作用、关键实现技术与性能特征（截至 2026-08-07）。所有脚本均为 IIFE / 命名空间封装，依赖 `utils.js` 提供的 `rafThrottle` / `debounce` / `detectScrollContainer` / `supportsPassiveEvents`，并以 `defer` 在 `<head>` 加载。
+
+| 文件 | 作用 | 关键实现 | 性能特征 |
+|---|---|---|---|
+| `core/utils.js` | 公共工具库 | `rafThrottle`、`debounce`、`detectScrollContainer`、`supportsPassiveEvents`、rAF 安全降级 | 基础设施，最先加载 |
+| `core/nav-scroll-behavior.js` | 导航栏下滑隐藏/上滑显示 | rAF 节流 + passive 监听 + 自动检测滚动容器 + resize debounce | 良好；未在滚动中同步读布局 |
+| `core/page-progress-bar.js` | 顶部加载进度条 | 单 rAF 批处理 width 写入 + trickle 定时器 + 自动隐藏 | 良好 |
+| `core/scroll-progress-bar.js` | 侧边滚动进度条 | `utils.rafThrottle` + passive + resize debounce；**`init`/`resize`/`load` 时缓存 `scrollHeight`/`clientHeight`，热路径只读 scrollY** | 已优化（原每帧读 scrollHeight/clientHeight 为重排主因之一，见十四） |
+| `core/mobile-menu.js` | 移动端汉堡菜单 | rAF 开关、body overflow 锁、debounced resize、ARIA | 良好 |
+| `components/sidebar-progress.js` | 侧边栏烧瓶进度 + TOC 高亮 | rAF 节流；**init/resize/load 时缓存各 section 绝对偏移**，滚动期仅比对 scrollY（不再每帧 `getBoundingClientRect`） | 已优化（原每帧读布局为重排主因之一，见十四） |
+| `components/hp-carousel.js` | 3D 圆环轮播 | 卡片径向排列 + `will-change` 提升合成层；交互透视计算合并进单个 rAF；过渡期临时提升 filter 层、结束释放 | 良好；视觉效果冻结见十二 |
+| `components/hp-reveal-box.js` | HP 下拉揭示盒 | Pointer 事件、尊重 `prefers-reduced-motion`、高度动画、debounced resize | 良好 |
+| `components/executive-summary-animation.js` | 首页 Executive Summary 滚动驱动 + 酵母浮动 + 打字机 + 滚动渐入 | 用 IntersectionObserver 仅在接近视口时挂 scroll 监听；酵母浮动 SVG **离屏时 `animation-play-state:paused`** | 已优化（见十四） |
+| `pages/members.js` | 成员页数据驱动渲染 + 双图背景交叉淡入 | DocumentFragment 渲染、ResizeObserver、rAF 节流 resize/scroll、rail 仅在可见时更新 | 良好 |
+| `pages/attributions.js` | 卡片筛选 + 时间线双面板 + Tooltip + ScrollSpy | 筛选/面板切换、Tooltip 用 MutationObserver、`ScrollSpy` 用 rAF 节流 | 基本良好；MutationObserver 在全站 body 上略有开销 |
+| `core/search.js` | 全站搜索 | 懒加载索引、debounced 输入、Esc/外部点击关闭 | 良好 |
+| `core/search-index.js` | 搜索索引（生成物） | 全站页面分块文本 + 图片记录，**约 189KB** | 已改为 `defer` 加载（见十四） |
+| `core/search-index-generator.js` | 索引生成器（Node） | 扫描 `PAGES` 生成 `search-index.js` | 构建期运行 |
+| `hp-timeline-3d.js` | 3D 时间轴圆环引擎 | 3D 径向编排；**rAF 收敛即停、交互时 `kick()` 重启** | 已优化；当前未被任何页面引用（孤儿，见十四） |
+
+### 5.11 搜索子系统（search.js + search-index.js）
+
+`search.js` 在导航栏提供搜索入口，首次打开时通过动态注入 `<script>` 异步加载 `static/js/core/search-index.js`（也可由页面 `<head>` 中的 `defer` 标签预置）。索引由 `static/js/core/search-index-generator.js` 在构建期扫描全站页面正文与图片生成：
+
+```powershell
+cd "f:\IGEM\SZPU-2026 wiki"
+node static/js/core/search-index-generator.js
+```
+
+搜索逻辑为本地线性匹配（含图片文件名/alt），结果按页面分组、支持高亮，点击跳转对应页面。该索引体积较大（约 189KB），务必以 `defer` 加载或保持按需懒加载，禁止同步阻塞 `<head>`（见十四）。
 
 ## 六、图片与资源约定
 
@@ -266,7 +315,18 @@ static/js/core/nav-scroll-behavior.js
 4. **`file://` 协议受限：** 本地直接双击打开 HTML 会被浏览器以 `file:` 协议拦截脚本/资源；测试须通过本地 HTTP 服务（如 `python -m http.server`）访问。
 5. **description.css 关键令牌标注：** 其中多处写明"绝对不能改 / navigation.css 会接管"，修改前务必阅读注释。
 6. **脚本加载策略已统一（工程化重构，2026-08-04）：** 原先混用"底部同步脚本 / head 内 defer / head 同步"三种写法，已全部统一为"外部脚本置于 `<head>` + `defer`"，并由 `tools/normalize-scripts.js` 自动维护；页尾依赖 `PageProgressBar` 的内联脚本已包裹 `DOMContentLoaded`。请勿再恢复手写底部脚本堆（详见第十三节）。
-7. **根目录 stray 已清理（2026-08-04）：** 误生成的 `AppData/` 已移至 `communication/stray-backup/`；演示/调试文件 `demo-3d-timeline.html`、`map.html`、`static/iconfont/demo_index.html` 已移至 `communication/demos/`，保持部署目录干净。
+7. **根目录 stray 二次清理（2026-08-04）：** 此前误生成的 `AppData/` 已移至 `communication/stray-backup/`；演示/调试文件 `demo-3d-timeline.html`（根目录为与 `communication/demos/` 同名的重复副本，已删除）、`map.html`、`static/iconfont/demo_index.html` 已移至 `communication/demos/`。本批又将所有散落在根目录的验证截图（`verify-*.png`、`hero-final.png` 等共 14 张）、调试脚本（`screenshot.js`/`shot.js`/`verify.js`/`restructure.js`）与运行日志（`*.log`）、测试页（`test-css.html`/`test-timeline.html`）分别归集至 `communication/screenshots/`、`communication/tools-debug/`、`communication/demos/`，并删除了空垃圾文件夹 `.dbg/`。根目录现仅保留 `index.html`、`PROJECT_ORGANIZATION.md`、`.gitignore`、`package.json`/`package-lock.json` 及正式栏目目录，部署目录保持干净（详见第十一节）。
+
+8. **脚本路径 404 已修复（2026-08-07）：** 文档与 `normalize-scripts.js` 曾把组件脚本写成 `static/components/*`、把 `executive-summary-animation.js` 写成 `static/js/core/*`，而真实目录为 `static/js/components/`，导致 `sidebar-progress.js`、`hp-reveal-box.js`、`executive-summary-animation.js` 在相关页面 404（交互静默失效）。现已统一修正：18 个页面的引用与 `normalize-scripts.js` 生成器路径均已改为 `static/js/components/*`；如新增页面请用第九节模板（路径已正确），不要手写错误路径。
+9. **首屏渲染阻塞已修复（2026-08-07）：** `search-index.js`（约 189KB）原在每个页面 `<head>` 内**同步**加载，阻塞 HTML 解析与首屏渲染（LCP）。已改为 `defer`，停止阻塞；其懒加载由 `search.js` 兜底。
+10. **性能问题清单（2026-08-07，详见十四）：** 全站卡顿的根因包括：(a) 多页面并存多个独立 `scroll` 监听各自触发 rAF；(b) `sidebar-progress.js` 原每帧对全部 section 调用 `getBoundingClientRect()` 造成强制同步布局（已改为缓存偏移）；(c) `hp-timeline-3d.js` 原永久 rAF 循环（已改为收敛即停）；(d) CSS 的 `backdrop-filter` 滚动重绘、首页酵母 SVG 常驻 `will-change` + 无限动画、懒加载图 `filter:blur` 占位、多处大 `box-shadow`。上述 (b)(c) 已修复，(d) 中酵母动画已加离屏暂停，`backdrop-filter` 等既定视觉效果予以保留。
+11. **根目录散落脚本已收纳（2026-08-07）：** `inject-search.js` 原散落在仓库根目录，已移入 `tools/`（与 `normalize-scripts.js` 同为正式工程化 Node 脚本，不属于浏览器运行时资源，故不入 `static/js/`）。搬运时一并修正：①`ROOT` 由 `path.resolve(__dirname)` 改为 `path.resolve(__dirname, '..')`（`__dirname` 现指向 `tools/`，须回退一级到仓库根，否则页面路径拼接错位导致全部跳过）；②其注入的 `search-index.js` 原不带 `defer`，重跑会回退第七.9 的首屏优化，已改为 `defer`。`package.json` 新增 `npm run inject-search`（并补齐缺失的 `npm run normalize`）；运行请用 `node tools/inject-search.js` 或 `npm run inject-search`，不要再在根目录直接 `node inject-search.js`。
+12. **图片路径重构（2026-08-07）：** `static/image` 目录重组后，全站共 20 个页面/CSS 的图片引用失效。已按磁盘真实位置重构：①`SZPU(notext).png`、`shiyao(notext).jpg` 由 `static/image/` 根移至 `static/image/any-icon/`；②`nav_bc.webp`（CSS 内 `../image/nav_bc.webp`、`../../image/nav_bc.webp`）移至 `static/image/wikiStructure/`；③页脚背景图 `bc/index_bc7.jpg`/`.webp`（15 页 `<picture>` 页脚背景）重命名为同目录 `bc/画板+7.jpg`/`.webp`。共 38+30 处替换；`index.css` 第 2151 行 `xx.jpg` 仅为注释示例、非真实引用，`project/description.html` 与 `wet-lab/experiments.html` 中 `%E7%94%BB%E6%9D%BF+7.webp` 为 `画板+7.webp` 的 URL 编码写法（文件真实存在，浏览器解码后正常），二者均无需改动。最终解码感知复扫：**全站 0 个真实失效图片引用**。
+
+13. **底部页脚图标统一为 .webp（2026-08-07）：** 依 index.html 底部示例（`static/image/any-icon/SZPU(notext).webp` / `shiyao(notext).webp`），将全站 18 个页面底部页脚 SZPU/shiyao 图标引用由 `.png`/`.jpg` 改为 `.webp`（共 36 处），位置仍保留 `any-icon/`，文件均存在。integrated human-practices.html 第 1297 行时间轴数据 `img: '../static/image/any-icon/home.webp'`（15.77KB）经核对已正确，无需改动，一并记录备查。
+14. **integrated HP 内联 3D 时间轴 rAF 收敛即停（2026-08-07）：** 该页 3D 时间轴由**内联脚本**（非外置 `hp-timeline-3d.js`，该页未加载外置文件）驱动，原 `startLoop→loop` 在 1551 行**无条件 `requestAnimationFrame(loop)` 永久循环**，即使圆环静止也每帧重写全部卡片/节点的 transform、opacity、zIndex，并逐帧改写每个时间节点 label 的 `fontSize`/`color` → 持续占用主线程，为 integrated HP 页卡顿**头号原因**。已改为收敛即停（kick/rafId 模式：仅 `snapActive` 吸附动画进行中持续循环，静止即 `rafId=null` 停；滑块/点击/键盘/窗口缩放经 `kick()` 重启），视觉不变。另发现时间轴封面引用 `static/image/HP/southchina/SZU.jpg`（**13.5MB**）、`static/image/HP/school1.jpg`（3.6MB）等巨型图片，且 `assignCard` 用 `loading='eager'` + `preloadOne` 主动预解码全部 4 张，建议转 webp 并缩图（数 MB 的 JPG 作小封面会瞬间占满主线程解码）。详见第十四节。
+15. **`scroll-progress-bar.js` 缓存布局尺寸（2026-08-07）：** 原 `calculateProgress()` 每帧滚动都调用 `getClientHeight()` + `getScrollHeight()`（读取 `documentElement.scrollHeight/offsetHeight/clientHeight`），与每帧 `style.height` 写入交错形成**强制同步布局**；`scrollHeight/clientHeight` 仅在 resize 或资源加载时才变化，滚动期恒定。已改为在 `init`/`onResize`/`load` 时缓存 `clientHeight`、`totalHeight`（新增 `state.metrics` + `refreshMetrics()`），热路径只读取 `getScrollPosition()`（scrollY，不触发重排）并写高度——消除进度条的每帧重排。视觉/进度数值完全不变。
+16. **`project/log.html` 滚动高亮缓存偏移（2026-08-07）：** 该页内联 `updateNavHighlight` 原每 100ms（本地 `throttle`）对全部 `section` 调用 `getBoundingClientRect()` 计算可见比例，与 sidebar-progress 旧 bug 同类——**每帧强制同步布局**，为 log 页滚动卡顿的主因。已改为在 `init`（`buildSectionOffsets`）+ `resize`（防抖）+ `load` 时一次性缓存各 section 绝对偏移（`rect.top + scrollY`），滚动期仅用 `window.scrollY + innerHeight*0.3` 探针与缓存偏移做数值比较后切换 `.active` 类，彻底消除每帧 `getBoundingClientRect`。视觉/高亮行为不变。`sections`/`navItems` 与本地 `throttle` 均保留。
 
 ---
 
@@ -286,7 +346,14 @@ static/js/core/nav-scroll-behavior.js
 10. **尊重关键令牌注释：** `description.css` 中标注"不可改 / 由 navigation.css 接管"的令牌（侧边栏 sticky 定位、烧瓶进度因子、浮动装饰层级等）严禁改动。
 11. **JS 模块化：** 新脚本以 IIFE/命名空间封装，避免全局污染，且不依赖 `utils.js` 之外的加载顺序。
 12. **动效克制：** 新增动效须柔和、复用标准时长与 `--ease-smooth`，避免过长或突兀效果。
-13. **对话产物隔离：** 对话/工具产生的任何额外文件（截图、导出、报告、工具日志等），必须在生成后立即移入 `communication/` 对应子目录，并确保 `.gitignore` 已覆盖；绝不允许留在仓库根目录或业务目录（详见第十一节）。
+13. **对话产物隔离（最高优先级红线）：** 对话/工具产生的任何额外文件（截图、导出、报告、工具日志、临时调试脚本、测试页、误生成文件夹等），必须在生成当次立即移入 `communication/` 对应子目录，并确保 `.gitignore` 已覆盖；绝不允许留在仓库根目录或业务目录。提交前务必 `git status` 复查（详见第十一节）。
+
+14. **脚本路径必须真实存在：** 所有 `<script src>` 指向的文件必须位于磁盘（组件在 `static/js/components/`、核心在 `static/js/core/`、页面在 `static/js/pages/`）。改动路径后须用 `npm run normalize` 重新生成并本地起服务验证无 404（历史教训见七.8）。
+15. **滚动监听必须节流：** 任何 `scroll` 监听须用 `utils.rafThrottle` 或单 rAF 合并 + `passive:true`；**禁止在滚动回调中同步读取布局**（`getBoundingClientRect`/`offsetTop`/`clientHeight` 等），应在 init/resize 时缓存偏移，滚动期只做样式写入（见十四.3）。
+16. **禁止永久 rAF 循环：** 动画/轮询类逻辑（如 3D 圆环）必须在达到目标态后停止 `requestAnimationFrame`，仅在交互时重启；不得每帧无条件重写 transform（见十四.3）。
+17. **大体积数据脚本不得阻塞首屏：** 索引/数据类脚本（如 `search-index.js`）一律 `defer` 或按需懒加载，禁止在 `<head>` 内同步加载（见十四.3）。
+18. **谨慎使用高成本 CSS：** `backdrop-filter`、`filter:blur`、`position:fixed` 全屏层、过多/过大 `box-shadow` 会显著增加绘制与合成开销；`will-change` 仅作临时提升并尽快释放，不要永久堆在大量元素上；无限 `@keyframes` 动画须离屏暂停（`IntersectionObserver` 设 `animation-play-state:paused`）或尊重 `prefers-reduced-motion`。
+19. **性能预算：** 单页并存独立 `scroll` 监听不超过必要数量；新增持续动画前先评估其合成/绘制成本，长页面尤甚。
 
 ---
 
@@ -309,7 +376,7 @@ static/js/core/nav-scroll-behavior.js
   <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
   <!-- JS：统一置于 head + defer，utils 最先（根目录页面前缀改为 static/） -->
   <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/components/sidebar-progress.js" defer></script>
+  <script src="../static/js/components/sidebar-progress.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
@@ -348,16 +415,25 @@ python -m http.server 8080 --bind 127.0.0.1
 
 ---
 
-## 十一、对话产物与 .gitignore 管理约定（强制）
+## 十一、对话产物与 .gitignore 管理约定（强制，最高优先级红线）
 
-任何由对话/AI 过程产生的"额外文件"（截图、导出的中间文件、研究/总结报告、浏览器工具日志等）**严禁散落在仓库根目录或各业务目录**，必须统一归集到仓库根下的 `communication/` 文件夹。这是硬性约定，目的是避免污染版本库、干扰评审与部署。
+> **核心红线（务必牢记）：** 任何由对话/AI 过程产生的"额外文件"（截图、导出的中间文件、研究/总结报告、浏览器工具日志、临时调试脚本、测试页、误生成的文件夹等）**严禁散落在仓库根目录或任何业务目录（`dry-lab/`、`wet-lab/`、`human-practices/`、`project/`、`team/`、`static/` 等）**。它们必须统一归集到仓库根下的 `communication/` 对应子目录。这是硬性约定，优先级高于"先放着、以后整理"的随意习惯——**一经生成就立即归位**，绝不能留到部署/评审前才发现满盘狼藉。
 
-### 11.1 归集规则
+**为什么这条规定如此重要（真实教训）：**
+- **污染版本库与部署产物**：这些文件会被误提交进 git，或随静态站一起被部署到 iGEM 服务器，导致对外页面出现无关的 `verify-*.png`、`test-*.html`、`.log` 等垃圾。
+- **干扰评审、损害专业度**：评委或协作者打开仓库时，根目录成堆的散落文件会严重损害项目观感，且难以分辨哪些才是真正的内容文件。
+- **破坏目录约定、引发路径风险**：脚本误把相对路径写成仓库根，会生成 `.dbg/` 之类的 stray 文件夹（见 11.3）；随手新增图片/脚本还可能踩中第六节"图片路径风险"的历史坑。
+- **2026-08-04 已两次发生根目录散落**：先有 `AppData/`，后又出现 14 张验证截图、`screenshot.js`/`shot.js`/`verify.js`/`restructure.js` 等调试脚本与 `*.log`、测试页 `test-*.html`，以及空垃圾文件夹 `.dbg/`，已全部二次清理归集（见第七.7 条）。这正说明"随手留根目录"极易复发，必须靠纪律而非事后补救。
 
-- **截图（*.png / *.jpg 等）**：例如用 Playwright 渲染验证时生成的 `description_page.png`、`index_home.png`，必须移入 `communication/`，不得留在根目录。
-- **浏览器工具运行时文件夹 `.playwright-cli/`**（含 `console-*.log`、`page-*.yml` 快照）：由 Playwright 类工具自动生成，应整体移入 `communication/.playwright-cli/`。注意该工具下次运行仍可能在根目录重建 `.playwright-cli/`，故 `.gitignore` 同时忽略根目录的 `.playwright-cli/`。
-- **研究/总结报告（*.md）**：对话生成的研究报告、页面总结等放入 `communication/research-reports/`，与正式文档（`PROJECT_ORGANIZATION.md`）区分开。
-- **其它临时导出**：任何 `temp`、`export`、`_tmp` 类文件同理，先建子目录再放入，不要直接丢在根目录。
+### 11.1 归集规则（按类型入座）
+
+- **截图 / 验证渲染图（`*.png` / `*.jpg` 等）**：Playwright 渲染验证生成的 `description_page.png`、`index_home.png`、`verify-*.png`、`hero-final.png` 等，一律移入 `communication/screenshots/`，不得留在根目录或业务目录。
+- **演示 / 测试 HTML**：`demo-3d-timeline.html`、`map.html`、`demo_index.html`、`test-css.html`、`test-timeline.html` 等归入 `communication/demos/`（注意：正式页面引用的是 `communication/demos/demo-3d-timeline.html`，根目录同名副本为重复，应直接删除而非再存一份）。
+- **研究 / 总结报告（`*.md`）**：对话生成的研究报告、页面总结放入 `communication/research-reports/`，与正式指导文档 `PROJECT_ORGANIZATION.md` 严格区分。
+- **调试 / 抓取脚本与日志（`*.js` / `*.cjs` / `*.py` / `*.log` 等）**：验证、截图、微信抓取、轮播调试、`restructure` 等工具脚本与运行日志归入 `communication/tools-debug/`；`tools/` 目录仅存放正式工程化脚本（如 `normalize-scripts.js`），不要把临时调试脚本混进去。
+- **误生成文件夹 / 页面备份**：`AppData/`、`ORIGINAL_integrated.html` 之类归入 `communication/stray-backup/`。
+- **浏览器工具运行时文件夹 `.playwright-cli/`**（含 `console-*.log`、`page-*.yml` 快照）：由 Playwright 类工具自动生成，整体移入 `communication/.playwright-cli/`。该工具下次运行仍可能在根目录重建，`.gitignore` 同时忽略根目录的 `.playwright-cli/`。
+- **其它临时导出**：任何 `temp`、`export`、`_tmp` 类文件同理，先建子目录再放入 `communication/`，不要直接丢在根目录。
 
 ### 11.2 .gitignore 对应条目
 
@@ -376,15 +452,15 @@ communication/
 
 ### 11.3 根目录 stray 文件夹警示
 
-若仓库根目录出现非预期的文件夹（如 `node_modules/` 之外的 `.dbg/` 等），多半是某脚本把相对路径误写成仓库根导致的副产物，**不属于本项目内容**，应查清来源后清理，切勿随手提交。
+若仓库根目录出现非预期的文件夹（如 `node_modules/` 之外的 `.dbg/` 等），多半是某脚本把相对路径误写成仓库根导致的副产物，**不属于本项目内容**，应查清来源后清理（空的 `.dbg/` 直接删除），切勿随手提交。
 
-> 注（2026-08-04）：历史上曾误生成 `AppData/` 文件夹，现已查明并移至 `communication/stray-backup/`（`communication/` 被 `.gitignore` 忽略），部署目录保持干净。同类 stray 仍按本警示处理。
+> 注（2026-08-04，二次清理）：历史上曾误生成 `AppData/` 文件夹，已查明并移至 `communication/stray-backup/`；本轮又出现空 `.dbg/` 文件夹，已删除；同类 stray 仍按本警示处理。
 
 ### 11.4 流程约束（补充到第八节）
 
 在第 8 节约束规则基础上追加：
 
-> **第 13 条：** 对话/工具产生的任何额外文件，必须在生成后立即移入 `communication/` 对应子目录，并确保 `.gitignore` 已覆盖；绝不允许将其留在仓库根目录或业务目录。
+> **第 13 条（最高优先级）：** 对话/工具产生的任何额外文件，**必须在生成当次立即**移入 `communication/` 对应子目录，并确保 `.gitignore` 已覆盖；绝不允许将其留在仓库根目录或业务目录。提交前请务必 `git status` 复查根目录与业务目录，确认无 stray 文件混入。
 
 ---
 
@@ -454,13 +530,13 @@ communication/
 
 ### 12.6 文档纠正
 
-- 第五节 5.8 与第八节提到的 `hp-perspective-carousel.js` 已不准确；当前实际文件为 `static/components/hp-carousel.js`（3D 圆环轮播，非拖动式）。后续以本节的 `hp-carousel.js` 为准。
+- 第五节 5.8 与第八节提到的 `hp-perspective-carousel.js` 已不准确；当前实际文件为 `static/js/components/hp-carousel.js`（3D 圆环轮播，非拖动式）。后续以本节的 `hp-carousel.js` 为准。
 
 ---
 
 ## 十三、工程化脚本统一工具（tools/normalize-scripts.js）
 
-为消除手工维护 18 个页面脚本顺序/路径的出错风险，项目引入零依赖 Node 脚本 `tools/normalize-scripts.js`，统一所有页面的外部脚本加载方式。
+为消除手工维护 18 个页面脚本顺序/路径的出错风险，项目引入零依赖 Node 脚本 `tools/normalize-scripts.js`，统一所有页面的外部脚本加载方式。另有一同属工程化的 `tools/inject-search.js`，负责批量注入导航搜索按钮与 `search.js`/`search-index.js` 引用（见第七.11）；两者均须从 `tools/` 目录运行，不得放回仓库根。
 
 **它做什么：**
 - 移除每个页面里散落的外部 `<script src>`（无论位于 `<head>` 还是 `</body>` 前），重新按固定顺序写入 `<head>` 并加 `defer`：`utils.js` 最先，其次 `sidebar-progress.js`（仅内容页），随后四个核心行为脚本，最后按文件名追加页面/组件脚本（`hp-carousel.js` / `hp-reveal-box.js` / `members.js` / `attributions.js` / `executive-summary-animation.js`）。
@@ -474,3 +550,55 @@ npm run normalize        # 等价于 node tools/normalize-scripts.js
 ```
 
 **约束：** 新增页面请从第九节模板复制（脚本已在 `<head>` 内），不要再把 `<script>` 堆到 `</body>` 前；若需增删某页脚本集合，改 `tools/normalize-scripts.js` 内的 `scriptsFor()` 规则后重跑即可，不要在页面里手动改。
+
+> **2026-08-07 路径修正：** `scriptsFor()` 中的组件路径已从错误的 `static/components/*` 改为 `static/js/components/*`，`executive-summary-animation.js` 改由 `comp('executive-summary-animation.js')` 生成（原为 `core('core/...')` 的 404）。重新运行 `npm run normalize` 现在会产出正确路径；请勿再改回。
+
+---
+
+## 十四、性能分析与优化（2026-08-07）
+
+> 本节记录全站卡顿的多维度定位、已实施的优化（均维持原有视觉效果）与未来性能预算。相关代码改动见第七.8–10、第五.10 与 `tools/normalize-scripts.js`、`static/js/components/sidebar-progress.js`、`static/js/hp-timeline-3d.js`、`static/js/components/executive-summary-animation.js`。
+
+### 14.1 现象与定位
+
+站点普遍反馈滚动/交互卡顿。定位手段：逐文件审查全部 JS 组件的实现原理，并对 `static/css/` 全量 CSS 做渲染性能审计（关注 `backdrop-filter`、`filter:blur`、`will-change`、无限动画、大 `box-shadow`、`position:fixed` 全屏层）。同时核对了每个页面实际加载的脚本路径，发现多处 404 与一处首屏阻塞。
+
+### 14.2 多维度分析
+
+**1) 关键渲染路径 / 资源加载维度**
+- 多处脚本路径错误导致 404：`static/components/*`（应为 `static/js/components/*`）、`executive-summary-animation.js` 写成 `static/js/core/*`。后果是 `sidebar-progress.js`、`hp-reveal-box.js`、`executive-summary-animation.js` 在相关页面静默失效——侧边栏烧瓶进度与 TOC 高亮不工作、HP 揭示盒无响应、首页酵母浮动/打字机/滚动渐入不运行。
+- `search-index.js`（约 189KB）在每个页面 `<head>` 内**同步**加载，阻塞 HTML 解析与首屏渲染（LCP 明显变慢）。
+
+**2) JS 渲染线程 / 事件监听维度**
+- 内容页并存 3~4 个独立 `window` `scroll` 监听（nav / page-progress / scroll-progress / sidebar），各触发自身 rAF；attributions 页更多（再加 Tooltip、ScrollSpy）。每帧最多数个 rAF 回调。
+- `sidebar-progress.js` 原实现每帧对全部 section 调用 `getBoundingClientRect()` 并与样式写入交错，造成**强制同步布局（layout thrash）**，长内容页尤为明显——这是内容页卡顿的主因之一。
+- `scroll-progress-bar.js` 原 `calculateProgress()` 每帧调用 `getClientHeight()` + `getScrollHeight()`（读 `documentElement.scrollHeight/offsetHeight/clientHeight`），与每帧 `style.height` 写入交错形成**强制同步布局**；这些尺寸在滚动期恒定，本应缓存。`project/log.html` 内联 `updateNavHighlight` 同理每 100ms 对全部 `section` 调 `getBoundingClientRect()`，是 log 页滚动卡顿主因。
+- `hp-timeline-3d.js` 原 `render` 以 `requestAnimationFrame` **永久循环**，即使圆环已静止也每帧重写所有卡片 `transform`，持续占用主线程（该脚本当前未被任何页面引用，属隐患）。
+- `project/log.html` 的内联滚动高亮、各页 `scroll-progress-bar` 等"加了很多 JS"后，多个独立 `scroll` 监听叠加，任一在回调中同步读布局即放大为持续重排——这是"加了很多 js 开始卡"的直接机制。
+
+**3) CSS 合成与绘制维度**
+- `nav` 的 `backdrop-filter: blur` 在滚动时强制对背景内容做模糊重绘（fixed 全宽条带，开销持续）。
+- 首页 8 个酵母 SVG 常驻 `will-change: transform` + 无限 `floatYeast` 动画（此前因脚本 404 实际未播放；路径修复后恢复，并已加离屏暂停）。
+- 懒加载图 `filter:blur` 占位、多处大 `box-shadow`（首页 hero/card、HP orbit 卡片）、`position:fixed` 全屏浮动装饰层（`float-art`）持续绘制。
+
+### 14.3 已实施的优化（均维持原有效果）
+
+- **路径修正（恢复被 404 静默失效的交互）：** `static/components/*` → `static/js/components/*`（18 个页面 + `normalize-scripts.js`）；`executive-summary-animation.js` 路径修正（首页 + `normalize`）。侧边栏烧瓶/TOC 高亮、HP reveal、首页酵母浮动/打字机/滚动渐入现已正常。
+- **停止首屏阻塞：** `search-index.js` 改为 `defer`（停止阻塞解析，保留 `search.js` 懒加载兜底）。
+- **`sidebar-progress.js` 去重排：** 在 init / resize / `load` 时一次性缓存各 section 的绝对偏移（`getBoundingClientRect().top + scrollY`），滚动期仅用 `scrollY` 与缓存偏移比对，彻底消除每帧 `getBoundingClientRect` 强制重排。
+- **`hp-timeline-3d.js` 收敛即停：** `render` 在 `currentAngle` 收敛到 `targetAngle`（误差 < 0.01°）时停止 rAF 循环，仅在交互（滑块 `input`/`change`、‹ › 按钮、点击节点/卡片）时 `kick()` 重启，视觉完全不变。
+- **`executive-summary-animation.js` 酵母离屏暂停：** 8 个酵母浮动 SVG 用 `IntersectionObserver` 在离屏时设 `animation-play-state:paused`、入屏恢复，视觉无差异，后台/长页滚动时大幅减少合成开销。
+- **`scroll-progress-bar.js` 去重排：** 在 `init`/`onResize`/`load` 时缓存 `clientHeight`、`totalHeight`（`state.metrics` + `refreshMetrics()`），热路径每帧只读取 `getScrollPosition()`（scrollY，不触发重排）并写高度，彻底消除进度条的每帧 `scrollHeight/clientHeight` 强制重排。
+- **`project/log.html` 滚动高亮去重排：** 一次性缓存各 `section` 绝对偏移（`buildSectionOffsets` 于 init/resize/load），滚动期仅以 `scrollY + innerHeight*0.3` 探针与缓存偏移比对切换 `.active` 类，彻底消除每帧 `getBoundingClientRect` 强制重排（与 sidebar-progress 同一手法）。
+
+### 14.4 权衡与保留项（视觉效果不变）
+
+- `nav` 的 `backdrop-filter` 属既定的毛玻璃导航视觉效果，**未移除**；其滚动重绘成本已知。若后续需进一步压榨滚动帧率，可改为不透明实色背景，或仅在滚动静止后启用模糊——属视觉改动，须走评审。
+- `hp-carousel` 的卡片 `will-change` / `blur` 空气透视属第十二节冻结的视觉效果，保持不变；其交互已用 rAF 合并、滤镜层在过渡结束后释放（见 5.10）。
+- 首页酵母 SVG 的 `will-change: transform` 保持（动画期间需要），离屏已由 `animation-play-state` 暂停。
+
+### 14.5 性能预算与回归防护
+
+- 新增/修改脚本后，本地起 `python -m http.server` 打开内容页与首页，确认：侧边栏烧瓶进度与 TOC 高亮随滚动更新、HP reveal/轮播（若启用）正常、首页酵母浮动/打字机/滚动渐入正常、搜索面板可开；并用 DevTools Performance 录制滚动，确认无长任务与持续 rAF。
+- 严禁 reintroduce 第十四节所列反模式（永久 rAF、滚动中同步读布局、同步阻塞的大脚本、永久 `will-change` 堆、无守卫的无限动画）。对应硬约束见第八节第 14–19 条。
+- 任何推崇"看起来更顺"的视觉微调，若涉及 `backdrop-filter`、模糊、环形结构、动画参数，按第十二.4 判断：视觉改动须用户拍板。

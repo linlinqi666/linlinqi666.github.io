@@ -22,6 +22,8 @@
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="../static/js/core/search-index.js" defer></script>
+  <script src="../static/js/core/search.js" defer></script>
 </head>
 
 <body>
@@ -281,7 +283,27 @@
         </li>
       </ul>
     </div>
-  </nav>
+  <div class="nav-search" id="nav-search" data-base-path="..">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    </button>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..." autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
+    </div>
+  </div></nav>
 
   <main class="log-container">
     <!-- 侧边导航栏 -->
@@ -1853,8 +1875,8 @@
 
   <section id="footer" class="fullscreen-section section-footer">
         <picture>
-        <source srcset="../static/image/bc/index_bc7.webp" type="image/webp">
-    <img loading="lazy" class="section-bg-img" src="../static/image/bc/index_bc7.jpg" alt="Footer background">
+        <source srcset="../static/image/bc/画板+7.webp" type="image/webp">
+    <img loading="lazy" class="section-bg-img" src="../static/image/bc/画板+7.jpg" alt="Footer background">
     </picture>
     <div class="component-container">
       <div class="footer-wrapper">
@@ -1867,13 +1889,13 @@
                 <a href="https://www.szpu.edu.cn/" target="_blank">
                                     <picture>
                       <source srcset="../static/image/SZPU(notext).webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                  <img loading="lazy" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
                   </picture>
                 </a>
                 <a href="https://fd.szpu.edu.cn/" target="_blank">
                                     <picture>
                       <source srcset="../static/image/shiyao(notext).webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                  <img loading="lazy" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
                   </picture>
                 </a>
               </div>
@@ -2065,19 +2087,26 @@
         statValue.textContent = articleCount;
       }
 
-      // 优化的滚动监听
-      const updateNavHighlight = throttle(function () {
-        let currentSection = '#all';
-        let maxVisibleRatio = 0;
-
-        for (const section of sections) {
+      // 性能优化（视觉/交互不变）：缓存各 section 绝对偏移，滚动时仅做数值比较，
+      // 彻底消除原每帧（throttle 100ms）对全部 section 调用 getBoundingClientRect()
+      // 造成的强制同步布局——与 sidebar-progress.js 同一优化手法。
+      let sectionOffsets = [];
+      function buildSectionOffsets() {
+        sectionOffsets = sections.map(function (section) {
           const rect = section.getBoundingClientRect();
-          const visibleHeight = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(0, rect.top));
-          const visibleRatio = visibleHeight / rect.height;
+          return { id: section.id, top: rect.top + window.scrollY };
+        });
+      }
+      buildSectionOffsets();
 
-          if (visibleRatio > maxVisibleRatio && visibleRatio > 0.1) {
-            maxVisibleRatio = visibleRatio;
-            currentSection = '#' + section.id;
+      const updateNavHighlight = throttle(function () {
+        const probe = window.scrollY + window.innerHeight * 0.3; // 视口上 30% 处作为判定线
+        let currentSection = '#all';
+        for (let i = 0; i < sectionOffsets.length; i++) {
+          if (sectionOffsets[i].top <= probe) {
+            currentSection = '#' + sectionOffsets[i].id;
+          } else {
+            break;
           }
         }
 
@@ -2088,6 +2117,11 @@
       });
 
       window.addEventListener('scroll', updateNavHighlight, { passive: true });
+
+      // 布局变化（图片/字体加载、视口尺寸变化）后刷新缓存偏移
+      const refreshOffsets = throttle(buildSectionOffsets, 200);
+      window.addEventListener('resize', refreshOffsets, { passive: true });
+      window.addEventListener('load', buildSectionOffsets);
     })();
   
   });

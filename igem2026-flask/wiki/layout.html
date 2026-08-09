@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SZPU-CHINA{% endblock %} | SZPU-CHINA · iGEM 2026</title>
+
+  <!-- iGEM requirement: license + link to the source repository in the footer -->
+  <link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+  <link rel="icon" href="https://static.igem.org/websites/common/2022/favicons/favicon.svg">
+
+  <!-- Bootstrap 5 (vendored locally -> served from iGEM GitLab Pages, no 3rd-party CDN) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+  <!-- Font Awesome (vendored locally -> served from iGEM GitLab Pages, no 3rd-party CDN) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
+  <!-- Team styles (also served locally) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/wiki.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/description.css') }}">
+  {% block styles %}{% endblock %}
+</head>
+
+<body>
+  {% include "menu.html" %}
+
+  <header class="bg-hero py-5 mb-4">
+    <div class="container">
+      <p class="hero-eyebrow">SZPU-CHINA · iGEM 2026</p>
+      <h1 class="hero-title">{{ self.title() }}</h1>
+      {% block lead %}{% endblock %}
+    </div>
+  </header>
+
+  <main class="container py-4">
+    {% block page_content %}{% endblock %}
+  </main>
+
+  {% include "footer.html" %}
+
+  <!-- Scripts are referenced ONLY here (never inside page templates) -->
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/mobile-menu.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/nav-scroll-behavior.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/utils.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

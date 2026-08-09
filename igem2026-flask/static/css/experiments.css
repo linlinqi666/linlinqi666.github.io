@@ -1,0 +1,82 @@
+/* 湿实验组实验记录页面样式 */
+
+/* iGEM Layout Strategy: 实验页复用 description.css 的内容卡片与导航结构，
+   本文件仅保留实验页专属的棕色主题漂浮装饰，避免与 description.css 重复，
+   并移除原 experiments.css 中的 content-card、executive-summary 等重复样式与青色强调色。 */
+
+/* 确保主内容层位于容器装饰之上 */
+.description-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 页面级酵母漂浮装饰 ===== */
+.description-container {
+  position: relative;
+}
+
+.description-container::before,
+.description-container::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.06;
+  z-index: 0;
+  border-radius: 50%;
+}
+
+.description-container::before {
+  top: 10%;
+  right: 5%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at 30% 30%, rgba(139, 90, 43, 0.3) 0%, transparent 70%);
+  animation: floatYeast1 8s ease-in-out infinite;
+}
+
+.description-container::after {
+  bottom: 15%;
+  left: 3%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at 30% 30%, rgba(212, 165, 116, 0.3) 0%, transparent 70%);
+  animation: floatYeast2 10s ease-in-out infinite;
+}
+
+@keyframes floatYeast1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(10px, -15px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(0, -25px) scale(1.1);
+  }
+
+  75% {
+    transform: translate(-10px, -15px) scale(1.05);
+  }
+}
+
+@keyframes floatYeast2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(-15px, 10px) scale(1.08);
+  }
+
+  66% {
+    transform: translate(10px, 20px) scale(0.95);
+  }
+}
+
+/* iGEM Check: [x] Brown theme consistent [x] No duplicate content-card/executive-summary [x] Decorative pseudo-elements bound to .description-container [x] Blue accent removed */

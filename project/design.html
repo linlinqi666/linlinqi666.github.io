@@ -19,11 +19,13 @@
   
   <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
   <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/components/sidebar-progress.js" defer></script>
+  <script src="../static/js/components/sidebar-progress.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="../static/js/core/search-index.js" defer></script>
+  <script src="../static/js/core/search.js" defer></script>
 </head>
 
 <body>
@@ -283,7 +285,27 @@
         </li>
       </ul>
     </div>
-  </nav>
+  <div class="nav-search" id="nav-search" data-base-path="..">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    </button>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..." autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
+    </div>
+  </div></nav>
 
   <main>
     <div class="description-container">
@@ -631,8 +653,8 @@
 
   <section id="footer" class="fullscreen-section section-footer">
     <picture>
-      <source srcset="../static/image/bc/index_bc7.webp" type="image/webp">
-      <img loading="lazy" class="section-bg-img" src="../static/image/bc/index_bc7.jpg" alt="Footer background">
+      <source srcset="../static/image/bc/画板+7.webp" type="image/webp">
+      <img loading="lazy" class="section-bg-img" src="../static/image/bc/画板+7.jpg" alt="Footer background">
     </picture>
     <div class="component-container">
       <div class="footer-wrapper">
@@ -645,13 +667,13 @@
                 <a href="https://www.szpu.edu.cn/" target="_blank">
                   <picture>
                     <source srcset="../static/image/SZPU(notext).webp" type="image/webp">
-                    <img loading="lazy" src="../static/image/SZPU(notext).png" alt="SZPU" class="scroll-image">
+                    <img loading="lazy" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
                   </picture>
                 </a>
                 <a href="https://fd.szpu.edu.cn/" target="_blank">
                   <picture>
                     <source srcset="../static/image/shiyao(notext).webp" type="image/webp">
-                    <img loading="lazy" src="../static/image/shiyao(notext).jpg" alt="shiyao" class="scroll-image">
+                    <img loading="lazy" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
                   </picture>
                 </a>
               </div>

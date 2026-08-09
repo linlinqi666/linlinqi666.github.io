@@ -1,0 +1,954 @@
+{% extends "layout.html" %}
+{% block title %}Team{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/members.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/attributions.css') }}">
+{% endblock %}
+{% block page_content %}
+<div class="page-content">
+<div id="members-redesign-app" class="members-redesign-app">
+      <!-- 中间人物大背景图容器：由 JS updateBackground() 切换 -->
+      <div class="members-bg-layer" aria-hidden="true">
+        <div class="bg-slide bg-slide-a is-active"></div>
+        <div class="bg-slide bg-slide-b"></div>
+        <div class="bg-mask"></div>
+      </div>
+      <aside class="members-strip" id="members-strip" aria-label="Member navigation">
+        <div class="strip-header">
+          <h2 class="strip-title">Team Members</h2>
+          <button class="strip-toggle" id="strip-toggle" aria-label="Toggle member list" aria-expanded="false">
+            <span class="strip-toggle-arrow" aria-hidden="true">&#x25BC;</span>
+          </button>
+        </div>
+        <div class="strip-groups" id="strip-groups"></div>
+      </aside>
+      <section class="members-detail" id="members-detail" aria-live="polite" aria-atomic="true">
+        <div class="detail-card" id="detail-card" hidden>
+          <div class="detail-content">
+            <h3 class="detail-name" id="detail-name"></h3>
+            <p class="detail-role" id="detail-role"></p>
+            <div class="detail-tags detail-role-tags" id="detail-role-tags"></div>
+            <div class="detail-tags detail-direction-tags" id="detail-direction-tags"></div>
+            <div class="detail-bio" id="detail-bio"></div>
+          </div>
+        </div>
+      </section>
+      <!-- 右侧人物简介条带：与左侧条带等拉伸高度，支持向右拖动收起 -->
+      <aside class="bio-rail" id="bio-rail" aria-label="Member info">
+        <div class="rail-edge-filler" id="rail-edge-filler" aria-hidden="true"></div>
+        <button class="rail-toggle" id="rail-toggle" aria-label="Show member info" aria-expanded="false">
+          <span class="rail-toggle-icon" aria-hidden="true">&#x25C0;</span>
+        </button>
+        <div class="bio-rail-inner">
+          <div class="rail-scroll">
+            <h3 class="rail-name" id="rail-name"></h3>
+            <p class="rail-role" id="rail-role"></p>
+            <div class="rail-tags rail-role-tags" id="rail-role-tags"></div>
+            <div class="rail-tags rail-direction-tags" id="rail-direction-tags"></div>
+            <p class="rail-bio" id="rail-bio"></p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+<div class="attributions-container">
+      <!-- 页面标题 -->
+      <section class="page-title-section">
+        <h1 class="page-title">Team Attributions</h1>
+        <p class="page-subtitle">SZPU-2026 Team Contributions, External Support, and Project Timeline</p>
+        <div class="title-decoration">
+          <div class="deco-line"></div>
+          <div class="deco-dot"></div>
+          <div class="deco-line"></div>
+        </div>
+      </section>
+
+      <!-- Jump to 导航 -->
+      <section class="jump-to-nav">
+        <div class="jump-to-header">
+          <span class="jump-to-label"><span class="fas fa-tags"></span> Quick Navigation</span>
+        </div>
+        <div class="jump-to-buttons">
+          <a href="#team-contributions" class="jump-to-btn">
+            <span class="fas fa-users"></span>
+            <span>Team Members</span>
+          </a>
+          <a href="#external-contributions" class="jump-to-btn">
+            <span class="fas fa-handshake"></span>
+            <span>External Support</span>
+          </a>
+          <a href="#timeline" class="jump-to-btn">
+            <span class="fas fa-book"></span>
+            <span>Project Timeline</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Team Member Contributions -->
+      <section id="team-contributions" class="section section-member">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <span class="section-title-icon"><span class="fas fa-users"></span></span>
+            <h2 class="section-title">Team Member Contributions</h2>
+          </div>
+          <p class="section-description">Core team members and their specialized roles in the SZPU-2026 project</p>
+        </div>
+
+        <!-- 角色分类标签 -->
+        <div class="role-tabs">
+          <button class="role-tab active" data-role="all">All Members</button>
+          <button class="role-tab" data-role="pi">Primary Investigator</button>
+          <button class="role-tab" data-role="adviser">Advisers</button>
+          <button class="role-tab" data-role="wet">Wet Lab</button>
+          <button class="role-tab" data-role="dry">Dry Lab</button>
+          <button class="role-tab" data-role="hp">Human Practices</button>
+          <button class="role-tab" data-role="design">Design & Wiki</button>
+        </div>
+
+        <div class="members-grid" id="members-grid">
+          <!-- PI - Primary Investigator Placeholder -->
+          <div class="member-card" data-role="pi">
+            <div class="member-header">
+              <div class="member-avatar avatar-pi">
+                <!-- TODO: PI 头像占位 - 后续添加真实图片 -->
+                <img src="" alt="PI Avatar" style="visibility:hidden;width:100%;height:100%;object-fit:cover;" />
+              </div>
+              <div class="member-info">
+                <h3>Yongjun Tang</h3>
+                <p class="member-role"><span class="role-badge badge-pi">Primary Investigator</span></p>
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="Leading">[待补充]</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">[待补充]</p>
+            </div>
+          </div>
+
+          <!-- Jie Xia - Team Leader, Wet Lab -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/xj.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/xj.jpg" alt="Jie Xia"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Jie Xia</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Team Leader</span> <span
+                    class="role-badge badge-secondary">Wet Lab</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Team Coordination</span>
+                <span class="task-tag" data-detail="">Wet Lab Execution</span>
+                <span class="task-tag" data-detail="">Project Management</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Leads overall team organization and project timeline management.
+                Coordinates wet lab experimental operations, including molecular cloning and protein expression
+                experiments. Oversees inter-group communication between wet lab, dry lab, and human practices teams
+                to ensure project progress stays on track.</p>
+            </div>
+          </div>
+
+          <!-- Yifan Gao - Wet Lab -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/gyf.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/gyf.jpg" alt="Yifan Gao"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Yifan Gao</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
+                    class="role-badge badge-secondary">Student Researcher</span></p>
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Experiment Execution</span>
+                <span class="task-tag" data-detail="">Data Collection</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Conducts wet lab experiments including PCR, plasmid extraction,
+                and agarose gel electrophoresis. Assists with data collection and maintenance of laboratory
+                equipment. Supports team research through meticulous experimental record-keeping and
+                reagent preparation.</p>
+            </div>
+          </div>
+
+          <!-- Chengxi Luo - Wet Lab + Dry Lab + HP -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/lcx.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/lcx.jpg" alt="Chengxi Luo"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Chengxi Luo</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Wet Lab & Dry Lab</span> <span
+                    class="role-badge badge-secondary">HP Coordinator</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Experiment Execution</span>
+                <span class="task-tag" data-detail="">Dry Lab Coordination</span>
+                <span class="task-tag" data-detail="">Logistics</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Performs wet lab experiments while coordinating dry lab modeling
+                activities. Manages team logistics including meeting scheduling, reagent inventory, and supply
+                procurement. Bridges communication between experimental work and computational modeling teams
+                to ensure data flows effectively between groups.</p>
+            </div>
+          </div>
+
+          <!-- Rui Luo - HP, Designer -->
+          <div class="member-card" data-role="hp">
+            <div class="member-header">
+              <div class="member-avatar avatar-hp">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/lr.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/lr.jpg" alt="Rui Luo"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Rui Luo</h3>
+                <p class="member-role"><span class="role-badge badge-hp">HP</span> <span
+                    class="role-badge badge-secondary">Designer</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Design</span>
+                <span class="task-tag" data-detail="">Content Writing</span>
+                <span class="task-tag" data-detail="">Outreach</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Manages visual design for team presentations and wiki layout.
+                Drafts and edits project description content for the team wiki. Coordinates external outreach
+                activities including science communication events and inter-team collaboration initiatives.</p>
+            </div>
+          </div>
+
+          <!-- Yuquan Luo - Dry Lab, HP -->
+          <div class="member-card" data-role="dry">
+            <div class="member-header">
+              <div class="member-avatar avatar-dry">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/lyq.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/lyq.jpg" alt="Yuquan Luo"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Yuquan Luo</h3>
+                <p class="member-role"><span class="role-badge badge-dry">Dry Lab</span> <span
+                    class="role-badge badge-secondary">HP</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Computational Analysis</span>
+                <span class="task-tag" data-detail="">Outreach Support</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Conducts computational analysis for the project, including
+                sequence alignment and data visualization. Assists with human practices activities including
+                stakeholder interviews and community engagement. Provides technical support for dry lab
+                data processing and analysis workflows.</p>
+            </div>
+          </div>
+
+          <!-- Siqi Peng - HP, Designer -->
+          <div class="member-card" data-role="design">
+            <div class="member-header">
+              <div class="member-avatar avatar-design">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/psq.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/psq.jpg" alt="Siqi Peng"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Siqi Peng</h3>
+                <p class="member-role"><span class="role-badge badge-design">Designer</span> <span
+                    class="role-badge badge-secondary">HP</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Visual Design</span>
+                <span class="task-tag" data-detail="">Science Communication</span>
+                <span class="task-tag" data-detail="">Illustration</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Creates visual design assets including team logo, poster layouts,
+                and illustration diagrams for the project wiki. Designs presentation materials for science
+                communication activities. Develops visual content that makes synthetic biology concepts
+                accessible and engaging for non-technical audiences.</p>
+            </div>
+          </div>
+
+          <!-- Xiaozhen Su - Wet Lab -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/sxz.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/sxz.jpg" alt="Xiaozhen Su"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Xiaozhen Su</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
+                    class="role-badge badge-secondary">Chassis Strain Engineering</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">CRISPR/Cas9 Gene Editing</span>
+                <span class="task-tag" data-detail="">Strain Engineering</span>
+                <span class="task-tag" data-detail="">Genotype Validation</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Engineers <em>Saccharomyces cerevisiae</em> BY4741 chassis strain
+                using CRISPR/Cas9-mediated gene knockout to establish an optimized cellular host for exogenous
+                signaling pathways. Knocks out <em>STE2</em> to block endogenous α-factor mating signal input,
+                <em>FAR1</em> to release α-factor-induced cell cycle arrest enabling sustained growth during
+                long-term monitoring, and <em>SST2</em> to remove the G-protein signaling negative regulator and
+                amplify GPCR-mediated signal response. Implements sgRNA design, pML104 vector cloning, LiAc/PEG
+                chemical transformation, SD-Ura selection screening, and PCR sequencing validation.
+              </p>
+            </div>
+          </div>
+
+          <!-- Qi Xu - Web Developer, Dry Lab -->
+          <div class="member-card" data-role="dry">
+            <div class="member-header">
+              <div class="member-avatar avatar-dry">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/xq.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/xq.jpg" alt="Qi Xu"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Qi Xu</h3>
+                <p class="member-role"><span class="role-badge badge-dry">Web Developer</span> <span
+                    class="role-badge badge-secondary">Dry Lab</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Frontend Development</span>
+                <span class="task-tag" data-detail="">Wiki Implementation</span>
+                <span class="task-tag" data-detail="">Interactive Design</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Develops the team wiki frontend including responsive layouts,
+                interactive components, and CSS animations. Implements JavaScript functionality for
+                timeline interactions, filtering systems, and dynamic content switching. Ensures
+                cross-browser compatibility and accessibility compliance across all wiki pages.</p>
+            </div>
+          </div>
+
+          <!-- Aishi Zeng - Wet Lab -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/zas.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/zas.jpg" alt="Aishi Zeng"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Aishi Zeng</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
+                    class="role-badge badge-secondary">PAGER Sensor Construction</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Fusion Protein Design</span>
+                <span class="task-tag" data-detail="">Molecular Cloning</span>
+                <span class="task-tag" data-detail="">Sensor Assembly</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Designs and constructs the PAGER membrane-display fusion sensor
+                protein implementing the molecular gating logic of "antigen-free autoinhibition, antigen-present
+                disinhibition." Assembles the multi-component fusion protein from N- to C-terminus: α-factor
+                signal peptide for membrane anchoring, MT1 autoinhibitory peptide for background suppression,
+                anti-HA nanobody for specific influenza antigen recognition, TEV cleavage site for functional
+                verification, and hM1Dq receptor for downstream G-protein signaling. Establishes the sensing
+                mechanism where HA antigen binding sterically removes MT1 inhibition, enabling DCZ-mediated
+                receptor activation.</p>
+            </div>
+          </div>
+
+          <!-- Yuelin Zheng - Wet Lab -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/zyl.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/zyl.jpg" alt="Yuelin Zheng"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Yuelin Zheng</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
+                    class="role-badge badge-secondary">Chimeric G-protein Engineering</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Gpa1/Gαq Chimeric Design</span>
+                <span class="task-tag" data-detail="">Homologous Recombination</span>
+                <span class="task-tag" data-detail="">Genomic Integration</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Constructs humanized Gpa1/Gαq chimeric protein to establish a
+                signal transduction bridge between human GPCR receptors and the yeast endogenous MAPK signaling
+                pathway. Replaces the 5 C-terminal amino acids (KIGII) of yeast Gpa1 with the corresponding
+                human Gαq sequence (EYNLV), preserving the main functional domain of Gpa1 while conferring
+                human G-protein receptor binding specificity. Implements homologous recombination-based
+                genomic integration at the <em>GPA1</em> locus using ~500bp upstream/downstream homology arms
+                and URA3 selection marker, with SD-Ura screening to identify positive integrants.</p>
+            </div>
+          </div>
+
+          <!-- Chenxi Luo - Wet Lab -->
+          <div class="member-card" data-role="wet">
+            <div class="member-header">
+              <div class="member-avatar avatar-wet">
+                                <picture>
+                    <source srcset="https://static.igem.wiki/2026/szpu-china/image/character/lcx.webp" type="image/webp">
+                <img loading="lazy" src="https://static.igem.wiki/2026/szpu-china/image/character/lcx.jpg" alt="Chenxi Luo"
+                  style="width:100%;height:100%;object-fit:cover;" />
+                </picture>
+              </div>
+              <div class="member-info">
+                <h3>Chenxi Luo</h3>
+                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
+                    class="role-badge badge-secondary">Reporter System Construction</span></p>
+
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">FUS1 Reporter Design</span>
+                <span class="task-tag" data-detail="">Plasmid Construction</span>
+                <span class="task-tag" data-detail="">Functional Validation</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Builds MAPK-responsive reporter systems converting upstream
+                antigen recognition signals into measurable outputs. Constructs two parallel reporter plasmids
+                using pESC-HIS as the backbone: the <em>FUS1</em> promoter-driven yEGFP reporter for quantitative
+                fluorescence detection by flow cytometry, and the <em>FUS1</em> promoter-driven lacZ reporter for
+                colorimetric visualization by X-Gal staining. Implements restriction digestion and Gibson
+                assembly cloning, chemical transformation into engineered yeast strains, and functional
+                validation with gradient DCZ agonist induction (10nM to 1μM) alongside proper control groups.</p>
+            </div>
+          </div>
+
+          <!-- Lizhen Zhu - Adviser, Wet Lab Guidance -->
+          <div class="member-card" data-role="adviser">
+            <div class="member-header">
+              <div class="member-avatar avatar-adviser">
+                <img src="" alt="Lizhen Zhu" style="visibility:hidden;width:100%;height:100%;object-fit:cover;" />
+              </div>
+              <div class="member-info">
+                <h3>Lizhen Zhu</h3>
+                <p class="member-role"><span class="role-badge badge-adviser">Adviser</span> <span
+                    class="role-badge badge-secondary">Molecular Biology Guidance</span></p>
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Cloning Strategy Guidance</span>
+                <span class="task-tag" data-detail="">Protocol Development</span>
+                <span class="task-tag" data-detail="">Result Interpretation</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Provides hands-on guidance for molecular cloning workflows including
+                primer design. Reviews and
+                refines experimental protocols to ensure reproducibility and proper controls are established before
+                each major experiment.</p>
+            </div>
+          </div>
+
+          <!-- Jianhua Zhou - Adviser, Wet Lab Guidance -->
+          <div class="member-card" data-role="adviser">
+            <div class="member-header">
+              <div class="member-avatar avatar-adviser">
+                <img src="" alt="Jianhua Zhou" style="visibility:hidden;width:100%;height:100%;object-fit:cover;" />
+              </div>
+              <div class="member-info">
+                <h3>Jianhua Zhou</h3>
+                <p class="member-role"><span class="role-badge badge-adviser">Adviser</span> <span
+                    class="role-badge badge-secondary">Protein Expression Guidance</span></p>
+              </div>
+            </div>
+            <div class="tasks-section">
+              <span class="tasks-label">Key Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">Protein Expression Optimization</span>
+                <span class="task-tag" data-detail="">Assay Design</span>
+                <span class="task-tag" data-detail="">Troubleshooting</span>
+              </div>
+            </div>
+            <div class="specific-tasks-section">
+              <span class="specific-tasks-label">Specific Contributions</span>
+              <p class="specific-tasks-content">Advises on characterization assay design. Helps identify
+                experimental bottlenecks and recommends troubleshooting approaches when expression yields are low.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 团队协作说明 -->
+        <div class="team-collaboration-note">
+          <div class="collab-icon">
+            <span class="fas fa-handshake"></span>
+          </div>
+          <div class="collab-content">
+            <h4>Cross-Team Collaboration</h4>
+            <p>Our team operates through integrated cross-functional collaboration. Wet lab members provide experimental
+              data that informs dry lab modeling, while human practices activities are integrated into the project's
+              design cycle. This interdisciplinary approach ensures that our engineering solutions are grounded in both
+              scientific rigor and real-world applicability.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- External Contributions -->
+      <section id="external-contributions" class="section section-external">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <span class="section-title-icon icon-external"><span class="fas fa-handshake"></span></span>
+            <h2 class="section-title">External Contributions</h2>
+          </div>
+          <p class="section-description">Organizations and individuals who provided valuable support to our project</p>
+        </div>
+
+        <!-- 类型过滤按钮 -->
+        <div class="external-type-filter">
+          <button class="type-filter-btn active" data-type="all">All Types</button>
+          <button class="type-filter-btn" data-type="academic">Academic</button>
+          <button class="type-filter-btn" data-type="industry">Industry</button>
+          <button class="type-filter-btn" data-type="community">Community</button>
+        </div>
+
+        <div class="external-grid" id="external-grid">
+          <!-- Card 1 -->
+          <div class="external-card" data-type="academic">
+            <div class="external-title-area">
+              <h3 class="external-name">[待补充 - 姓名/机构]</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution Type:</span>
+                <span class="meta-value type-academic">Academic</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship to the Team:</span>
+                <span class="meta-value">Collaborator</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">[待补充]</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Tasks</span>
+              <p class="ext-compact-text">[待补充 - 具体贡献说明]</p>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="external-card" data-type="academic">
+            <div class="external-title-area">
+              <h3 class="external-name">[待补充 - 姓名/机构]</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution Type:</span>
+                <span class="meta-value type-academic">Academic</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship to the Team:</span>
+                <span class="meta-value">Collaborator</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">[待补充]</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Tasks</span>
+              <p class="ext-compact-text">[待补充 - 具体贡献说明]</p>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="external-card" data-type="industry">
+            <div class="external-title-area">
+              <h3 class="external-name">[待补充 - 姓名/机构]</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution Type:</span>
+                <span class="meta-value type-industry">Industry</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship to the Team:</span>
+                <span class="meta-value">Collaborator</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">[待补充]</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Tasks</span>
+              <p class="ext-compact-text">[待补充 - 具体贡献说明]</p>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="external-card" data-type="industry">
+            <div class="external-title-area">
+              <h3 class="external-name">[待补充 - 姓名/机构]</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution Type:</span>
+                <span class="meta-value type-industry">Industry</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship to the Team:</span>
+                <span class="meta-value">Collaborator</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">[待补充]</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Tasks</span>
+              <p class="ext-compact-text">[待补充 - 具体贡献说明]</p>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="external-card" data-type="community">
+            <div class="external-title-area">
+              <h3 class="external-name">[待补充 - 姓名/机构]</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution Type:</span>
+                <span class="meta-value type-community">Community</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship to the Team:</span>
+                <span class="meta-value">Collaborator</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">[待补充]</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Tasks</span>
+              <p class="ext-compact-text">[待补充 - 具体贡献说明]</p>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="external-card" data-type="community">
+            <div class="external-title-area">
+              <h3 class="external-name">[待补充 - 姓名/机构]</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution Type:</span>
+                <span class="meta-value type-community">Community</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship to the Team:</span>
+                <span class="meta-value">Collaborator</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                <span class="task-tag" data-detail="">[待补充]</span>
+              </div>
+            </div>
+
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Tasks</span>
+              <p class="ext-compact-text">[待补充 - 具体贡献说明]</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 致谢横幅 -->
+        <div class="acknowledgment-banner">
+          <div class="ack-content">
+            <span class="fas fa-heart"></span>
+            <div>
+              <h4>Special Acknowledgments</h4>
+              <p>We sincerely thank all individuals and organizations who have contributed their time, expertise, and
+                resources to support our iGEM journey. Your generosity and guidance have been instrumental to our
+                project's success.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Timeline -->
+      <section id="timeline" class="section section-timeline">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <span class="section-title-icon icon-timeline"><span class="fas fa-book"></span></span>
+            <h2 class="section-title">Project Timeline</h2>
+          </div>
+          <p class="section-description">Key milestones and activities throughout our 2026 iGEM season — <span
+              class="timeline-hint">click bars for details</span></p>
+        </div>
+
+        <!-- 时间线统计卡片：已移除 -->
+
+        <div class="timeline-section">
+          <div class="timeline-container">
+            <div class="timeline" id="timeline-chart">
+              <!-- 时间线头部（月份标签） -->
+              <div class="timeline-header">
+                <div class="timeline-task-label">Activity</div>
+                <div class="timeline-months">
+                  <div class="timeline-month">Feb</div>
+                  <div class="timeline-month">Mar</div>
+                  <div class="timeline-month">Apr</div>
+                  <div class="timeline-month">May</div>
+                  <div class="timeline-month">Jun</div>
+                  <div class="timeline-month">Jul</div>
+                  <div class="timeline-month">Aug</div>
+                  <div class="timeline-month">Sep</div>
+                  <div class="timeline-month">Oct</div>
+                </div>
+              </div>
+
+              <!-- Timeline Row 1: Team Formation -->
+              <div class="timeline-row">
+                <div class="timeline-task-name">
+                  <span class="timeline-task-icon fas fa-users"></span>
+                  <span class="timeline-task-text">Team Formation</span>
+                </div>
+                <div class="timeline-bar-container">
+                  <div class="timeline-grid-lines">
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                  </div>
+                  <div class="timeline-bar" style="left: 0%; width: 17.56%;" data-start="February 1, 2026"
+                    data-end="March 18, 2026" data-duration="6 weeks" data-worked="6 weeks"
+                    data-description="Team member recruitment, interviews, onboarding, and official team formation. Establishing team roles, communication channels, and initial project culture.">
+                    <span class="timeline-bar-duration">Feb 1 – Mar 18</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Timeline Row 2: Project Planning -->
+              <div class="timeline-row">
+                <div class="timeline-task-name">
+                  <span class="timeline-task-icon fas fa-diagram-project"></span>
+                  <span class="timeline-task-text">Project Planning</span>
+                </div>
+                <div class="timeline-bar-container">
+                  <div class="timeline-grid-lines">
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                    <div class="timeline-grid-line"></div>
+                  </div>
+                  <div class="timeline-bar" style="left: 17.56%; width: 15.77%;" data-start="March 18, 2026"
+                    data-end="May 1, 2026" data-duration="6 weeks" data-worked="6 weeks"
+                    data-description="Brainstorming project ideas, literature review, defining research objectives, advisor consultation, and establishing the project roadmap and design framework.">
+                    <span class="timeline-bar-duration">Mar 18 – May 1</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 提示信息 -->
+              <div class="timeline-legend">
+                <div class="legend-item">
+                  <span class="legend-bar"></span>
+                  <span class="legend-text">Active Period</span>
+                </div>
+                <div class="legend-tip">
+                  <span class="fas fa-hand-pointer"></span>
+                  Click any bar to view detailed information
+                </div>
+              </div>
+
+              <!-- Tooltip -->
+              <div class="timeline-tooltip" id="timeline-tooltip">
+                <div class="tooltip-arrow"></div>
+                <div class="timeline-tooltip-header">
+                  <span class="tooltip-title-icon fas fa-book"></span>
+                  <span class="timeline-tooltip-header-text" id="tooltip-title">Activity Details</span>
+                </div>
+
+                <div class="timeline-tooltip-slider">
+                  <div class="timeline-tooltip-panel panel-current" id="panel-current">
+                    <div class="timeline-tooltip-body">
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-play"></span> Start</span>
+                        <span class="timeline-tooltip-value" id="tooltip-start">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-xmark"></span> End</span>
+                        <span class="timeline-tooltip-value" id="tooltip-end">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-clock"></span> Duration</span>
+                        <span class="timeline-tooltip-value" id="tooltip-duration">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-flask"></span>
+                          Worked</span>
+                        <span class="timeline-tooltip-value" id="tooltip-worked">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row tooltip-desc-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-file-lines"></span> Details</span>
+                        <div class="timeline-tooltip-value tooltip-desc" id="tooltip-description">—</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="timeline-tooltip-panel panel-incoming" id="panel-incoming" aria-hidden="true">
+                    <div class="timeline-tooltip-body">
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-play"></span> Start</span>
+                        <span class="timeline-tooltip-value" id="tooltip-start-2">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-xmark"></span> End</span>
+                        <span class="timeline-tooltip-value" id="tooltip-end-2">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-clock"></span> Duration</span>
+                        <span class="timeline-tooltip-value" id="tooltip-duration-2">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-flask"></span>
+                          Worked</span>
+                        <span class="timeline-tooltip-value" id="tooltip-worked-2">—</span>
+                      </div>
+                      <div class="timeline-tooltip-row tooltip-desc-row">
+                        <span class="timeline-tooltip-label"><span class="fas fa-file-lines"></span> Details</span>
+                        <div class="timeline-tooltip-value tooltip-desc" id="tooltip-description-2">—</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tooltip-close-hint">Click any bar again to close</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pages/members.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
+{% endblock %}

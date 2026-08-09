@@ -1,0 +1,14 @@
+# iGEM 2026 official-style wiki CI.
+# Builds the Frozen-Flask site and publishes `public/` via GitLab Pages.
+# Triggers automatically on every push to the default branch.
+pages:
+  stage: build
+  image: python:3.12
+  script:
+    - pip install -r dependencies.txt
+    - FLASK_APP=app.py flask freeze
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

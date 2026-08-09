@@ -1,0 +1,799 @@
+:root {
+  --page-bg: #F7F1E4;
+  --primary-blue: #2B6CB0;
+  --tag-fill-blue: #DBEAFE;
+  --card-bg: #FFFFFF;
+  --card-radius: 16px;
+  --strip-radius: 8px;
+  --avatar-diameter: 48px;
+  --cartoon-diameter: 72px;
+  --strip-height: 64px;
+  --transition: 0.3s ease;
+
+  /* Full-bleed photo edge fade: percentage of the element's shorter side.
+     Range 5%-15% is recommended; larger values create a softer vignette. */
+  --photo-edge-fade: 12%;
+
+  /* Role accent stripe colors */
+  --role-wet: #DBEAFE;
+  --role-dry: #D1FAE5;
+  --role-hp: #FFEDD5;
+  --role-designer: #F3E8FF;
+
+  /* Derived role text colors */
+  --role-wet-text: #1E40AF;
+  --role-dry-text: #065F46;
+  --role-hp-text: #9A3412;
+  --role-designer-text: #7E22CE;
+}
+
+/* iGEM Visual Guideline: This page avoids purely decorative black arrow icons
+   (e.g., group collapse chevrons) inside list items. State changes are conveyed
+   through layout animation and color. Functional toggles such as the mobile
+   strip toggle and the rail tab are the only exceptions. */
+
+/* iGEM Layout Strategy: Split-layout with a full-bleed member photo behind the
+   content layer. The ribbon navigation floats on the left and the text story
+   floats on the right, both kept readable by soft edge masks. */
+
+/* The global header is empty on the Members page and only pushes the redesign
+   app away from the viewport top; hide it so the rail can span the full
+   viewport height and align with the top edge. */
+body>header {
+  display: none;
+}
+
+.members-redesign-app {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  height: auto;
+  background: var(--page-bg);
+  padding: 0;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+/* ---------- Full-bleed background layer ---------- */
+/* 中间人物大背景图容器：由 JS updateBackground() 切换 .bg-slide 的背景图，.bg-mask 用于保留左侧导航与右侧文字的阅读空间。 */
+.members-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 中间人物大背景图的双缓冲滑动容器，由 JS 切换 .is-active 实现淡入淡出。 */
+.bg-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+  /* iGEM Visual Strategy: Apply a radial edge mask so the full-bleed member
+     photo dissolves smoothly into the page background instead of ending in a
+     hard edge. The fade width is relative to the element's shorter side and
+     stays outside the central subject area. */
+  -webkit-mask-image: radial-gradient(ellipse at center,
+      black calc(100% - (var(--photo-edge-fade) * 2)),
+      transparent 100%);
+  mask-image: radial-gradient(ellipse at center,
+      black calc(100% - (var(--photo-edge-fade) * 2)),
+      transparent 100%);
+}
+
+.bg-slide.is-active {
+  opacity: 1;
+}
+
+/* 中间人物大背景图的遮罩层，避免背景图干扰左侧条带与右侧详情文字。 */
+.bg-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    /* Left-to-right fade keeps the ribbon navigation readable. */
+    linear-gradient(to right,
+      rgba(247, 241, 228, 1) 0%,
+      rgba(247, 241, 228, 0.92) 18%,
+      rgba(247, 241, 228, 0.55) 34%,
+      rgba(247, 241, 228, 0.2) 48%,
+      rgba(247, 241, 228, 0) 60%),
+    /* Top fade blends the photo into the nav-safe page background. */
+    linear-gradient(to bottom,
+      rgba(247, 241, 228, 0.95) 0%,
+      rgba(247, 241, 228, 0) 140px),
+    /* Bottom fade prevents the photo from visually leaking toward the footer. */
+    linear-gradient(to top,
+      rgba(247, 241, 228, 1) 0%,
+      rgba(247, 241, 228, 0.85) 10%,
+      rgba(247, 241, 228, 0) 24%);
+}
+
+/* ---------- Content layers (above background) ---------- */
+.members-strip,
+.members-detail {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Left navigation strip ---------- */
+.members-strip {
+  flex: 0 0 35%;
+  max-width: 390px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 100px 0 0 0;
+  padding: 24px 0 48px 0;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.strip-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.strip-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0;
+}
+
+.strip-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(43, 108, 176, 0.3);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--primary-blue);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.strip-toggle:hover {
+  background: var(--tag-fill-blue);
+}
+
+.strip-toggle-arrow {
+  display: inline-block;
+  transition: transform var(--transition);
+  font-size: 12px;
+}
+
+.strip-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Collapsible group */
+.strip-group {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--strip-radius);
+  padding: 8px 8px 8px 0;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--strip-radius);
+  transition: background var(--transition);
+}
+
+.group-header:hover {
+  background: rgba(43, 108, 176, 0.06);
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.group-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.group-indicator[data-role="Wet Lab"] {
+  background: var(--role-wet-text);
+}
+
+.group-indicator[data-role="Dry Lab"] {
+  background: var(--role-dry-text);
+}
+
+.group-indicator[data-role="HP"] {
+  background: var(--role-hp-text);
+}
+
+.group-indicator[data-role="Designer"] {
+  background: var(--role-designer-text);
+}
+
+.group-indicator[data-role="WIKI"] {
+  background: #2563EB;
+}
+
+.group-indicator[data-role="Adviser"] {
+  background: #92400E;
+}
+
+.group-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B7280;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Visual guideline: group headers do not use decorative arrow icons. State is
+   conveyed by the expand/collapse animation of .group-members only. */
+
+.group-members {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  overflow: visible;
+  transition: max-height var(--transition), opacity var(--transition);
+  max-height: 800px;
+  opacity: 1;
+}
+
+.strip-group:not(.is-expanded) .group-members {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+/* Member strip as a flag ribbon: rectangle + rotated square tail */
+.member-strip {
+  --ribbon-bg: var(--card-bg);
+  display: flex;
+  align-items: center;
+  height: var(--strip-height);
+  padding: 0 44px 0 14px;
+  /* room on the right for the ribbon tail */
+  background: var(--ribbon-bg);
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  border-right: none;
+  border-radius: var(--strip-radius) 0 0 var(--strip-radius);
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.ribbon-tail {
+  --tail-size: calc(var(--strip-height) / 1.414);
+  position: absolute;
+  right: calc((var(--strip-height) - var(--tail-size)) / 2);
+  top: calc((var(--strip-height) - var(--tail-size)) / 2);
+  width: var(--tail-size);
+  height: var(--tail-size);
+  background: var(--ribbon-bg);
+  transform: rotate(45deg);
+  z-index: 0;
+  pointer-events: none;
+  transition: background var(--transition);
+}
+
+.member-strip:hover {
+  --ribbon-bg: #F0F7FF;
+  background: #F0F7FF;
+  border-color: rgba(43, 108, 176, 0.35);
+}
+
+.member-strip:hover .strip-avatar {
+  transform: scale(1.03);
+}
+
+.member-strip.is-selected {
+  --ribbon-bg: #EBF4FF;
+  background: #EBF4FF;
+  border-color: rgba(43, 108, 176, 0.55);
+  box-shadow: 0 4px 14px rgba(43, 108, 176, 0.12);
+  z-index: 1;
+}
+
+.member-strip.is-selected .strip-name {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.member-strip.is-selected .strip-avatar {
+  border-color: var(--primary-blue);
+}
+
+.strip-avatar {
+  width: var(--avatar-diameter);
+  height: var(--avatar-diameter);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-right: 12px;
+  transition: transform var(--transition), border-color var(--transition);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.strip-name {
+  flex: 1;
+  font-size: 14px;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition), font-weight var(--transition);
+  z-index: 1;
+}
+
+/* ---------- Right detail panel (frameless text layer) ---------- */
+.members-detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 404px 48px 0;
+}
+
+.detail-card {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 520px;
+  padding: 32px;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.detail-card.is-animating {
+  animation: detailFadeIn 0.3s ease both;
+}
+
+@keyframes detailFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.detail-content {
+  display: none;
+  position: relative;
+  z-index: 2;
+  max-width: 58%;
+  padding: 16px 20px;
+  color: #374151;
+  text-shadow:
+    0 1px 2px rgba(247, 241, 228, 0.95),
+    0 1px 8px rgba(247, 241, 228, 0.8);
+}
+
+/* Subtle local wash behind text for readability without creating a card. */
+.detail-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 14px;
+  background: linear-gradient(to right,
+      rgba(247, 241, 228, 0.88) 0%,
+      rgba(247, 241, 228, 0.55) 50%,
+      rgba(247, 241, 228, 0.12) 80%,
+      transparent 100%);
+  pointer-events: none;
+}
+
+.detail-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.detail-role {
+  font-size: 14px;
+  color: #4B5563;
+  margin: 0 0 18px;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.detail-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  opacity: 0;
+  animation: tagFadeIn 0.3s ease forwards;
+}
+
+.detail-role-tags .detail-tag {
+  background: var(--tag-fill-blue);
+  color: var(--primary-blue);
+}
+
+.detail-direction-tags .detail-tag {
+  background: var(--tag-fill-blue);
+  border: none;
+  color: var(--primary-blue);
+}
+
+.detail-tags .detail-tag:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.detail-tags .detail-tag:nth-child(2) {
+  animation-delay: 100ms;
+}
+
+.detail-tags .detail-tag:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.detail-tags .detail-tag:nth-child(4) {
+  animation-delay: 300ms;
+}
+
+.detail-tags .detail-tag:nth-child(5) {
+  animation-delay: 400ms;
+}
+
+@keyframes tagFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-bio {
+  margin-top: 18px;
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.detail-bio p {
+  margin: 0;
+}
+
+/* Right bio rail: absolute viewport-right panel that spans the full height of
+   the app container and sits flush against the right edge.
+   iGEM Layout Strategy: Pull the rail out of the flex flow so its top/bottom
+   edges align with the container boundaries, independent of sibling content. */
+.bio-rail {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: #1F2937;
+  font-size: 13px;
+  text-align: right;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bio-rail-inner {
+  width: 100%;
+  height: 100%;
+  padding: 32px 28px 32px 110px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  scrollbar-width: none;
+  pointer-events: auto;
+  /* iGEM Layout Strategy: Keep the right side of the rail fully opaque where
+     text lives, then fade quickly toward the left so the photo remains visible
+     without the text ever overlapping a transparent background. */
+  background: linear-gradient(to left,
+      rgba(247, 241, 228, 0.98) 0%,
+      rgba(247, 241, 228, 0.98) 50%,
+      rgba(247, 241, 228, 0.95) 65%,
+      rgba(247, 241, 228, 0.85) 75%,
+      rgba(247, 241, 228, 0.4) 88%,
+      transparent 100%);
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bio-rail.is-visible .bio-rail-inner {
+  transform: translateX(0);
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bio-rail.is-dragging .bio-rail-inner {
+  transition: none;
+}
+
+.bio-rail-inner::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollable wrapper keeps short content vertically centered while allowing
+   long bios to start at the top and scroll naturally. Content is right-aligned
+   so it stays inside the opaque region of the rail gradient. */
+.rail-scroll {
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Toggle tab that reappears when the rail is dragged/closed. */
+.rail-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--primary-blue);
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 11;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0.25s ease, background 0.2s ease;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.rail-toggle:hover {
+  background: var(--tag-fill-blue);
+}
+
+.rail-toggle-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Edge filler: covers the narrow scrollbar/track gap between the rail and the
+   viewport right edge so the expanded panel appears truly flush. */
+.rail-edge-filler {
+  position: fixed;
+  right: 0;
+  width: var(--scrollbar-width, 0px);
+  pointer-events: none;
+  background: linear-gradient(to left,
+      rgba(247, 241, 228, 0.98) 0%,
+      rgba(247, 241, 228, 0.98) 50%,
+      rgba(247, 241, 228, 0.95) 65%,
+      rgba(247, 241, 228, 0.85) 75%,
+      rgba(247, 241, 228, 0.4) 88%,
+      transparent 100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  z-index: -1;
+}
+
+.bio-rail.is-visible .rail-edge-filler {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bio-rail.is-visible .rail-toggle {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rail-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0 0 8px;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.rail-role {
+  font-size: 13px;
+  color: #374151;
+  margin: 0 0 14px;
+  text-align: right;
+}
+
+.rail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.rail-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--tag-fill-blue);
+  color: var(--primary-blue);
+}
+
+.rail-bio {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #1F2937;
+  margin: 0;
+  text-align: right;
+}
+
+/* Keep the footer visually above the full-bleed photo layer. */
+#footer {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .members-redesign-app {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 24px 40px 0;
+  }
+
+  .members-strip,
+  .members-detail {
+    flex: 1 1 auto;
+    max-width: none;
+    width: 100%;
+    padding: 0;
+  }
+
+  .strip-header {
+    display: flex;
+  }
+
+  .strip-toggle {
+    display: flex;
+  }
+
+  .strip-groups {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height var(--transition), opacity var(--transition);
+  }
+
+  .members-strip.is-expanded .strip-groups {
+    max-height: 1200px;
+    opacity: 1;
+    overflow: visible;
+  }
+
+  /* On smaller screens the strip becomes a top switcher; drop the flag tail
+     so the row stays cleanly inside the viewport. */
+  .member-strip {
+    border-right: 1px solid rgba(209, 213, 219, 0.9);
+    border-radius: var(--strip-radius);
+    padding-right: 14px;
+  }
+
+  .member-strip:hover,
+  .member-strip.is-selected {
+    border-right-color: rgba(43, 108, 176, 0.55);
+  }
+
+  .ribbon-tail {
+    display: none;
+  }
+
+  .detail-content {
+    display: block;
+    max-width: 70%;
+  }
+
+  .detail-card {
+    min-height: 420px;
+    padding: 24px;
+  }
+
+  /* The vertical bio rail is hidden on tablet/mobile to avoid overlapping the
+     collapsed strip and detail content. */
+  .bio-rail {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* On narrow screens the photo background is hidden so the frameless text
+     remains readable without competing with a full-bleed image. */
+  .members-bg-layer {
+    display: none;
+  }
+
+  .detail-content {
+    max-width: 100%;
+  }
+
+  .detail-content::before {
+    background: linear-gradient(to right,
+        rgba(247, 241, 228, 0.95) 0%,
+        rgba(247, 241, 228, 0.75) 70%,
+        rgba(247, 241, 228, 0.4) 100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .members-redesign-app {
+    padding: 16px 16px 32px 0;
+    gap: 16px;
+  }
+
+  .detail-card {
+    min-height: auto;
+    padding: 20px 16px 24px;
+  }
+
+  .detail-name {
+    font-size: 22px;
+  }
+}

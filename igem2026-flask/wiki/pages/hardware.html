@@ -1,0 +1,264 @@
+{% extends "layout.html" %}
+{% block title %}Hardware{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/hardware.css') }}">
+{% endblock %}
+{% block page_content %}
+<div class="page-content">
+<div class="description-container">
+
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <!-- 酵母细胞装饰 -->
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="dna-icon">
+            <svg viewBox="0 0 40 40" class="dna-helix">
+              <path d="M20,5 Q25,15 20,20 Q15,25 20,35" stroke="currentColor" fill="none" stroke-width="2" />
+              <circle cx="20" cy="10" r="3" fill="currentColor" />
+              <circle cx="20" cy="20" r="3" fill="currentColor" />
+              <circle cx="20" cy="30" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>硬件导航</h3>
+          <div class="yeast-badge">Dry Lab</div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#hardware-award" class="nav-main-link">Best Hardware Award</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#requirements" class="nav-main-link">设计需求</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#use-cases">应用场景</a></li>
+                <li class="level3"><a href="#specifications">技术指标</a></li>
+                <li class="level3"><a href="#constraints">约束条件</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#architecture" class="nav-main-link">系统架构</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#components">核心组件</a></li>
+                <li class="level3"><a href="#optics">光学模块</a></li>
+                <li class="level3"><a href="#electronics">电控模块</a></li>
+                <li class="level3"><a href="#enclosure">结构外壳</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#prototyping" class="nav-main-link">原型与测试</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#design-iteration">设计迭代</a></li>
+                <li class="level3"><a href="#calibration">校准与验证</a></li>
+                <li class="level3"><a href="#integration">与传感器整合</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#documentation" class="nav-main-link">文档与 BOM</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#future" class="nav-main-link">未来工作</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <div id="hardware-award" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>本页面向 iGEM Best Hardware 奖项要求，介绍团队为 PAGER-Yeast 生物传感器配套设计或制作的硬件设备。</p>
+          </div>
+          <h2>Best Hardware Award</h2>
+          <p>iGEM 鼓励队伍开发与 synthetic biology 项目紧密结合的硬件装置。硬件可以是用于检测、培养、采样或自动化的定制设备，需说明设计动机、实现过程与可复现性。</p>
+          <p>[待补充：明确本队硬件的核心定位，例如“便携式 yEGFP 荧光读取盒”或“低成本酵母培养与检测一体化装置”。]</p>
+        </div>
+
+        <div id="overview" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>概述硬件要解决什么问题、面向哪些用户，以及它在 PAGER-Yeast 项目中的角色。</p>
+          </div>
+          <h2>Overview</h2>
+          <ul>
+            <li><strong>硬件名称：</strong>[待补充]</li>
+            <li><strong>开发动机：</strong>[待补充：例如流式细胞仪昂贵、基层缺乏荧光检测设备等]</li>
+            <li><strong>目标用户：</strong>[待补充：实验室快速筛查、社区诊所、现场检测人员等]</li>
+            <li><strong>与项目的关系：</strong>[待补充：如何与酵母传感器、软件工具协同工作]</li>
+          </ul>
+          <p>[待补充：建议上传硬件渲染图或实物照片，尺寸 1200×600px，.webp 格式并压缩至 150KB 以下。]</p>
+        </div>
+
+        <div id="requirements" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>明确硬件的设计需求、应用场景与技术指标，为后续设计选择提供依据。</p>
+          </div>
+          <h2>设计需求</h2>
+          <div id="use-cases">
+            <h3>应用场景</h3>
+            <ul>
+              <li>[待补充：场景 1，例如实验室快速初筛]</li>
+              <li>[待补充：场景 2，例如现场/基层环境部署]</li>
+              <li>[待补充：场景 3，例如与标准流式细胞仪的结果对照]</li>
+            </ul>
+          </div>
+          <div id="specifications">
+            <h3>技术指标</h3>
+            <ul>
+              <li><strong>检测对象：</strong>[待补充：yEGFP 绿色荧光 / X-Gal 蓝色显色]</li>
+              <li><strong>检测范围：</strong>[待补充：浓度或荧光强度范围]</li>
+              <li><strong>分辨率/灵敏度：</strong>[待补充：需基于实验标定]</li>
+              <li><strong>尺寸与重量：</strong>[待补充：便于便携的约束]</li>
+              <li><strong>供电方式：</strong>[待补充：USB / 电池 / 市电]</li>
+            </ul>
+          </div>
+          <div id="constraints">
+            <h3>约束条件</h3>
+            <p>[待补充：成本控制、材料可获取性、生物安全、环境耐受性等约束。]</p>
+          </div>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+
+        <div id="architecture" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>展示硬件的系统架构、核心模块及其相互连接关系。</p>
+          </div>
+          <h2>系统架构</h2>
+          <div id="components">
+            <h3>核心组件</h3>
+            <ul>
+              <li>[待补充：主控板 / 微控制器型号]</li>
+              <li>[待补充：激发光源与滤光片]</li>
+              <li>[待补充：光电传感器 / 摄像头]</li>
+              <li>[待补充：温控或培养模块（如有）]</li>
+            </ul>
+          </div>
+          <div id="optics">
+            <h3>光学模块</h3>
+            <p>[待补充：激发波长、发射波长、滤光片参数、光路设计说明。]</p>
+          </div>
+          <div id="electronics">
+            <h3>电控模块</h3>
+            <p>[待补充：电路原理图说明、传感器接口、通信方式（UART/I2C/USB/蓝牙）。]</p>
+          </div>
+          <div id="enclosure">
+            <h3>结构外壳</h3>
+            <p>[待补充：外壳材料、3D 打印文件、样品舱设计、遮光与便携性考虑。]</p>
+          </div>
+        </div>
+
+        <div id="prototyping" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>说明硬件原型的迭代过程、测试方法与项目整合情况。</p>
+          </div>
+          <h2>原型与测试</h2>
+          <div id="design-iteration">
+            <h3>设计迭代</h3>
+            <p>[待补充：从概念草图到原型机的迭代记录，包括遇到的问题与改进方案。]</p>
+          </div>
+          <div id="calibration">
+            <h3>校准与验证</h3>
+            <ul>
+              <li><strong>标准品：</strong>[待补充：用于校准的荧光标准品或参考样本]</li>
+              <li><strong>对照实验：</strong>[待补充：阴性/阳性对照设置]</li>
+              <li><strong>重复性：</strong>[待补充：n ≥ 3 的重复测量计划]</li>
+            </ul>
+          </div>
+          <div id="integration">
+            <h3>与传感器整合</h3>
+            <p>[待补充：如何将硬件与 PAGER-Yeast 酵母检测体系结合使用，例如样本加载、 incubation 与读数流程。]</p>
+          </div>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+
+        <div id="documentation" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>提供硬件的文档、物料清单（BOM）与开源资料，确保可复现性。</p>
+          </div>
+          <h2>文档与 BOM</h2>
+          <ul>
+            <li><strong>物料清单（BOM）：</strong>[待补充：包含型号、厂家、数量、成本的表格]</li>
+            <li><strong>设计文件：</strong>[待补充：3D 模型、电路图、PCB 文件链接]</li>
+            <li><strong>组装指南：</strong>[待补充：分步装配说明]</li>
+            <li><strong>开源协议：</strong>[待补充：CERN-OHL / MIT / 其他硬件开源协议]</li>
+          </ul>
+        </div>
+
+        <div id="future" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>说明硬件的后续优化方向与潜在应用拓展。</p>
+          </div>
+          <h2>未来工作</h2>
+          <ul>
+            <li>[待补充：小型化、低成本化或智能化改进方向]</li>
+            <li>[待补充：与 Software 页面工具的数据联动计划]</li>
+            <li>[待补充：面向基层医疗或家庭自测场景的应用潜力]</li>
+          </ul>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

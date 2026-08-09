@@ -1,0 +1,243 @@
+{% extends "layout.html" %}
+{% block title %}Results{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+{% endblock %}
+{% block page_content %}
+<div class="page-content">
+<div class="description-container">
+
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="dna-icon">
+            <svg viewBox="0 0 40 40" class="dna-helix">
+              <path d="M20,5 Q25,15 20,20 Q15,25 20,35" stroke="currentColor" fill="none" stroke-width="2" />
+              <circle cx="20" cy="10" r="3" fill="currentColor" />
+              <circle cx="20" cy="20" r="3" fill="currentColor" />
+              <circle cx="20" cy="30" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>结果导航</h3>
+          <div class="yeast-badge">Wet Lab</div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-overview" class="nav-main-link">Results 概览</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#key-findings" class="nav-main-link">关键实验结果</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#plasmid-verification">质粒构建验证</a></li>
+                <li class="level3"><a href="#chassis-construction">底盘改造验证</a></li>
+                <li class="level3"><a href="#sensor-response">传感器响应检测</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#data-visualization" class="nav-main-link">数据可视化</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#fluorescence-data">荧光强度数据</a></li>
+                <li class="level3"><a href="#dose-response">剂量-反应曲线</a></li>
+                <li class="level3"><a href="#imaging">显色与成像</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#analysis" class="nav-main-link">分析与讨论</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#significance">结果意义</a></li>
+                <li class="level3"><a href="#trends">趋势与模式</a></li>
+                <li class="level3"><a href="#limitations">局限性与不确定性</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#future" class="nav-main-link">未来计划与反思</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#next-steps">后续实验</a></li>
+                <li class="level3"><a href="#improvements">改进方向</a></li>
+                <li class="level3"><a href="#lessons">经验总结</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <div id="results-overview" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>本页面展示 PAGER-Yeast 项目的实验结果，包括数据可视化、结果分析、科学意义讨论以及未来计划。所有数据需客观呈现，避免夸大结论。</p>
+          </div>
+          <h2>Results 概览</h2>
+          <p>Results 页面应清晰、客观地描述实验和研究结果，使用表格、图形和图像进行可视化，并在项目目标背景下讨论其意义。</p>
+          <ul>
+            <li><strong>核心问题：</strong>PAGER-Yeast 生物传感器能否有效检测 IAV HA 抗原？</li>
+            <li><strong>主要方法：</strong>流式细胞术（yEGFP 荧光）、X-Gal 显色、分子克隆验证。</li>
+            <li><strong>数据状态：</strong>[待补充：当前已完成的实验与待补充的数据]</li>
+          </ul>
+        </div>
+
+        <div id="key-findings" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>分模块呈现实验获得的关键结果，每个结果需有对应的对照、重复与误差说明。</p>
+          </div>
+          <h2>关键实验结果</h2>
+          <div id="plasmid-verification">
+            <h3>质粒构建验证</h3>
+            <ul>
+              <li>PAGER 融合蛋白基因克隆至 pGADT7，测序结果与设计一致。</li>
+              <li>双酶切验证显示插入片段 2063 bp、骨架 7939 bp，与理论值相符。</li>
+              <li>质粒浓度：408.45 / 404.85 / 297.15 / 355.90 ng/μL；A260/A280 ≈ 1.9。</li>
+            </ul>
+            <p>[待补充：上传电泳图与测序报告，标注泳道、Marker 与条带大小。]</p>
+          </div>
+          <div id="chassis-construction">
+            <h3>底盘改造验证</h3>
+            <ul>
+              <li>CRISPR-Cas9 三敲除（STE2/FAR1/Sst2）与 Gpa1 人源化改造正在进行中。</li>
+              <li>[待补充：菌落 PCR + Sanger 测序验证结果]</li>
+              <li>[待补充：Western Blot 验证 PAGER 融合蛋白表达]</li>
+            </ul>
+          </div>
+          <div id="sensor-response">
+            <h3>传感器响应检测</h3>
+            <p>[待补充：DCZ 诱导与 HA 抗原刺激下的 yEGFP 荧光响应、X-Gal 显色结果；需包含阴性/阳性对照、重复次数与统计显著性。]</p>
+          </div>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+
+        <div id="data-visualization" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>使用图表呈现数据，确保每张图都有明确的坐标轴标签、单位、误差定义与图例。</p>
+          </div>
+          <h2>数据可视化</h2>
+          <div id="fluorescence-data">
+            <h3>荧光强度数据</h3>
+            <p>[待补充：流式细胞术得到的 yEGFP 荧光强度分布图或平均荧光强度柱状图；X 轴为样本/HA 浓度，Y 轴为荧光强度（a.u. 或 MFI），误差棒定义为 SD/SEM，n ≥ 3。]</p>
+          </div>
+          <div id="dose-response">
+            <h3>剂量-反应曲线</h3>
+            <p>[待补充：不同 HA 抗原浓度下的响应曲线，标注检测下限（LOD）、线性范围与饱和浓度；建议用原生 JS 交互式图表实现。]</p>
+          </div>
+          <div id="imaging">
+            <h3>显色与成像</h3>
+            <p>[待补充：X-Gal 显色照片、荧光显微镜或肉眼观察图像；图片需使用 .webp 格式并压缩至 150KB 以下，附比例尺与拍摄条件。]</p>
+          </div>
+        </div>
+
+        <div id="analysis" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>解释结果背后的生物学意义，讨论趋势、模式、意外发现及实验局限。</p>
+          </div>
+          <h2>分析与讨论</h2>
+          <div id="significance">
+            <h3>结果意义</h3>
+            <p>[待补充：实验结果如何支持或修正 PAGER-Yeast 的设计假设？与项目目标（低成本、高灵敏度现场检测）的关联是什么？]</p>
+          </div>
+          <div id="trends">
+            <h3>趋势与模式</h3>
+            <ul>
+              <li>[待补充：随 HA 浓度升高的荧光响应趋势]</li>
+              <li>[待补充：DCZ 诱导浓度与响应幅度的关系]</li>
+              <li>[待补充：不同对照组之间的信号差异]</li>
+            </ul>
+          </div>
+          <div id="limitations">
+            <h3>局限性与不确定性</h3>
+            <p>[待补充：当前数据的限制，例如样本量、背景信号、批次差异、未优化的诱导条件等；避免隐瞒负面结果。]</p>
+          </div>
+        </div>
+
+        <div id="future" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>基于实验结果提出后续计划、潜在应用方向与团队反思。</p>
+          </div>
+          <h2>未来计划与反思</h2>
+          <div id="next-steps">
+            <h3>后续实验</h3>
+            <ul>
+              <li>[待补充：优化诱导条件与检测体系]</li>
+              <li>[待补充：扩大样本量并引入更多 HA 浓度梯度]</li>
+              <li>[待补充：与 Model 页面预测结果进行对照验证]</li>
+            </ul>
+          </div>
+          <div id="improvements">
+            <h3>改进方向</h3>
+            <ul>
+              <li>[待补充：降低背景信号的策略]</li>
+              <li>[待补充：提高响应速度或灵敏度的可能途径]</li>
+              <li>[待补充：与 Hardware 便携检测设备的整合计划]</li>
+            </ul>
+          </div>
+          <div id="lessons">
+            <h3>经验总结</h3>
+            <p>[待补充：实验过程中遇到的关键问题、解决方案与团队学习；强调科学诚实与透明度。]</p>
+          </div>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

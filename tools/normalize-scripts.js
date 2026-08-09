@@ -50,7 +50,7 @@ function scriptsFor(file) {
   const isRoot = !file.includes('/');
   const base = isRoot ? 'static/' : '../static/';
   const core = (p) => `${base}js/${p}`;
-  const comp = (p) => `${base}components/${p}`;
+  const comp = (p) => `${base}js/components/${p}`;
 
   const list = [];
   list.push({ order: 0, src: core('core/utils.js') });
@@ -70,7 +70,7 @@ function scriptsFor(file) {
   } else if (fname === 'attributions.html') {
     list.push({ order: 99, src: core('pages/attributions.js') });
   } else if (fname === 'index.html') {
-    list.push({ order: 99, src: core('core/executive-summary-animation.js') });
+    list.push({ order: 99, src: comp('executive-summary-animation.js') });
   }
 
   list.sort((a, b) => a.order - b.order || a.src.localeCompare(b.src));

@@ -1,0 +1,163 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block lead %}Engineering <em>Saccharomyces cerevisiae</em> into a low-cost, on-site biosensor for rapid influenza A virus detection.{% endblock %}
+{% block page_content %}
+<div class="page-content">
+
+  <section class="mb-5">
+    <div class="row align-items-center g-4">
+      <div class="col-md-7">
+        <h2>EchoYeast: a yeast-cell POCT biosensor</h2>
+        <p>
+          SZPU-China is a student team from Shenzhen Polytechnic University competing in iGEM 2026.
+          We engineer the budding yeast <em>Saccharomyces cerevisiae</em> BY4741 as a chassis to build
+          EchoYeast — a programmable, low-cost, point-of-care biosensor for the rapid on-site detection of
+          influenza A virus (IAV), based on the PAGER (Protein-fragment Assisted Interaction Reporter)
+          antigen-gated receptor strategy.
+        </p>
+        <p>
+          When the sample contains IAV hemagglutinin (HA) antigen, a membrane-displayed anti-HA nanobody
+          captures it; the resulting steric hindrance releases an autoinhibitory peptide from a humanized
+          hM1Dq receptor, and — in the presence of the DCZ agonist — activates a downstream G-protein
+          pathway that drives a FUS1 promoter to express yEGFP / lacZ reporters. The result is a direct
+          "antigen binding → light emission" conversion.
+        </p>
+      </div>
+      <div class="col-md-5 text-center">
+        <img src="https://static.igem.wiki/2026/szpu-china/image/Animation/index/yeast1.svg" alt="Yeast cell illustrating the EchoYeast biosensor" class="img-fluid" style="max-width:280px;">
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-5">
+    <h2>Why influenza A, and why a rapid field test?</h2>
+    <p>
+      Influenza A virus (IAV) is a leading cause of seasonal epidemics and repeated public-health
+      emergencies. The H1N1 subtype has caused multiple pandemics in history; its rapid mutation and
+      respiratory transmission make early, low-cost field screening a critical gap in outbreak control.
+      Existing clinical methods struggle to balance sensitivity, cost, throughput and portability:
+    </p>
+    <ul>
+      <li><strong>qRT-PCR:</strong> the gold standard for sensitivity and specificity, but requires expensive qPCR instruments, a professional lab and long turnaround — hard to deploy in resource-limited regions.</li>
+      <li><strong>ELISA:</strong> suitable for high-throughput screening, but lower sensitivity and laborious incubation/wash steps with high operator training demand.</li>
+      <li><strong>Colloidal gold strips:</strong> simple and instrument-free, yet mostly qualitative and prone to false negatives at low viral load.</li>
+      <li><strong>Cell culture / egg isolation:</strong> days to weeks, used mainly for research and strain identification, not field diagnosis.</li>
+    </ul>
+    <p>
+      <strong>Nanobodies (VHH):</strong> derived from the variable domain of camelid heavy-chain antibodies
+      (~12–15 kDa), they are thermostable, soluble and easy to express in prokaryotic/eukaryotic systems —
+      an ideal building block for a modular antigen-recognition unit.
+    </p>
+  </section>
+
+  <section class="mb-5">
+    <h2>Design strategy: PAGER rewires a humanized GPCR</h2>
+    <p>
+      We build an HA-recognition circuit in yeast based on the PAGER strategy. The design turns the yeast's
+      native mating pheromone pathway into an "antigen-unlock → luminescence" detection platform: without HA
+      antigen, the MT1 inhibitory peptide occupies the orthosteric site of the humanized hM1Dq receptor and
+      the downstream G-protein cascade stays off; once viral HA is captured by the membrane-displayed anti-HA
+      nanobody, steric hindrance physically displaces MT1, relieving autoinhibition so that DCZ can activate
+      hM1Dq, which — through the Gpa1-Gαq chimeric protein — triggers the FUS1 promoter to drive yEGFP or lacZ.
+    </p>
+    <ul>
+      <li><strong>Chassis:</strong> <em>S. cerevisiae</em> BY4741, CRISPR-Cas9 knockout of STE2, FAR1, Sst2 to lower background, release cell-cycle arrest and amplify signal.</li>
+      <li><strong>Recognition:</strong> anti-H1N1 HA nanobody (VHH) guided and anchored to the yeast membrane via the α-factor signal peptide.</li>
+      <li><strong>Signal module:</strong> humanized hM1Dq receptor and Gpa1-Gαq chimera (Gpa1 C-terminus KIGII → human Gαq EYNLV).</li>
+      <li><strong>Output:</strong> dual-mode FUS1p-yEGFP (flow-cytometry quantification) and FUS1p-lacZ (X-Gal colorimetric readout).</li>
+    </ul>
+  </section>
+
+  <section class="mb-5">
+    <h2>Build &amp; Test: a modular wet-lab workflow</h2>
+    <p>
+      Guided by the Design–Build–Test–Learn (DBTL) engineering cycle, the project decomposes a complex
+      synthetic-biology goal into independently verifiable modules — from gene design and synthesis of the
+      PAGER fusion protein, through <em>E. coli</em> plasmid amplification and restriction validation, yeast
+      chassis CRISPR modification and homologous-recombination humanization, protein-expression verification,
+      and finally functional induction and dual-mode signal detection of the biosensor.
+    </p>
+    <ul>
+      <li><strong>Design:</strong> codon-optimize α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq for yeast, adding NdeI/BamHI sites.</li>
+      <li><strong>Build:</strong> gene synthesis cloned into pGADT7; pML104-sgRNA plasmid and URA3-marked humanized Gpa1 integration cassette prepared.</li>
+      <li><strong>Test:</strong> LiAc/PEG transformation into the modified chassis; Western Blot for membrane expression; DCZ-gradient induction read by flow cytometry and X-Gal staining.</li>
+      <li><strong>Learn:</strong> iterate on sgRNA efficiency, inducer concentration and culture conditions from signal background, response amplitude and dose–response.</li>
+    </ul>
+  </section>
+
+  <section class="mb-5">
+    <h2>Progress and pending characterization data</h2>
+    <ul>
+      <li><strong>PAGER fusion gene synthesis:</strong> complete; plasmid ID ABX63942, full-length sequencing matches design with no mutations.</li>
+      <li><strong><em>E. coli</em> transformation &amp; plasmid validation:</strong> complete; 4 positive clones at 297.15–408.45 ng/μL, A260/A280 ≈ 1.9, NdeI/BamHI digest shows 7939 bp backbone + 2063 bp insert as expected.</li>
+      <li><strong>CRISPR triple knockout STE2/FAR1/Sst2:</strong> in progress; first digest validation missed expectations, sgRNA redesigned and pML104 rebuilt.</li>
+      <li><strong>Gpa1 humanization by HR:</strong> pending completed triple-knockout chassis; 500 bp homology arm – mutated Gpa1 – URA3 cassette – 500 bp homology arm fragment prepared.</li>
+      <li><strong>Protein expression &amp; functional test:</strong> pending yeast transformation; layered validation by Western Blot, DCZ-gradient induction, flow cytometry and X-Gal staining.</li>
+    </ul>
+    <p class="text-muted">Flow-cytometry data (n ≥ 3, with negative/empty-vector/positive controls), dose–response curves and error-bar definitions will be uploaded after chassis modification and ≥3 independent repeats.</p>
+  </section>
+
+  <section class="mb-5">
+    <h2>Safety and structural validation</h2>
+    <p>
+      The project strictly follows the iGEM Safety White Paper and the host institution's biosafety
+      management. All genetic operations are performed in a standard molecular-biology lab using the BSL-1
+      model organism <em>S. cerevisiae</em> BY4741; virus-related work uses only inactivated viral components
+      or pseudovirus systems — no live-virus release, environmental exposure or human-cell infection.
+    </p>
+    <ul>
+      <li><strong>Biosafety level:</strong> food-grade yeast BY4741, BSL-1, non-pathogenic; team biosafety trained.</li>
+      <li><strong>Genetic material:</strong> recognition element only expresses an HA-specific nanobody, no complete viral genome or replication-competent particles.</li>
+      <li><strong>Waste management:</strong> culture, medium and consumables autoclaved at 121 °C for 30 min; restriction enzymes, DCZ and X-Gal handled per MSDS with gloves and goggles.</li>
+      <li><strong>Structure-assisted design:</strong> homology modeling predicts the anti-HA nanobody / H1N1 HA interface to guide mutation design and affinity optimization.</li>
+    </ul>
+  </section>
+
+  <section class="mb-5">
+    <h2>Human Practices: from experts to the public</h2>
+    <p>
+      Through expert interviews, surveys and outreach, we continuously align the technical design with real
+      social needs. Feedback from clinical testing, CDC and primary-care professionals helped us identify the
+      pain points of existing tests in accessibility, cost and turnaround; outreach to secondary-school
+      students showed that "visual, low-cost, instrument-free" is the public's most intuitive expectation of a
+      biosensor. Together these inputs calibrate the project goal toward a "fast, deployable, modular
+      broad-spectrum respiratory-pathogen surveillance platform."
+    </p>
+  </section>
+
+  <section class="mb-5">
+    <h2>Future vision: from H1N1 to a broad-spectrum platform</h2>
+    <p>
+      After the H1N1 proof of concept, the core value of the PAGER-Yeast platform is its modularity and
+      replaceability: the membrane nanobody recognition unit can be rapidly iterated for different antigens
+      while the downstream GPCR rewiring and dual-mode reporter stay generic. Combined with a low-cost portable
+      fluorescence reader, the system can move from a lab prototype to a field-usable tool.
+    </p>
+    <ul>
+      <li><strong>Modular recognition:</strong> keep the α-factor anchor + linker framework, swap only the VHH to cover H5, H7 and beyond (SARS-CoV-2, RSV).</li>
+      <li><strong>Signal optimization:</strong> map fluorescence to viral load via DCZ concentration/time gradients for semi-quantitative detection.</li>
+      <li><strong>Multi-scene use:</strong> primary-clinic screening, campus morning checks, port quarantine, home self-test.</li>
+      <li><strong>Open &amp; standard:</strong> submit promoters, reporters and signal modules to the iGEM Registry in compatible form; release reproducible protocols and plasmid maps.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Explore our Wiki</h2>
+    <div class="row g-3">
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/description">Description</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/design">Design</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/engineering">Engineering</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/model">Dry Lab</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/experiments">Wet Lab</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/human-practices">Human Practices</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/education">Education</a></div>
+      <div class="col-6 col-md-3"><a class="btn btn-outline-success w-100" href="/team">Team</a></div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/core/scroll-progress-bar.js') }}" defer></script>
+{% endblock %}

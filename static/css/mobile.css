@@ -678,7 +678,7 @@ img.loaded {
 /* 图片展示模式 - 可选隐藏导航栏 */
 /* 使用方式：在 body 或容器上添加 .image-showcase-mode 类 */
 /* ================================================== */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
 
   .image-showcase-mode nav,
   .image-showcase-mode .hamburger-menu,
@@ -695,7 +695,7 @@ img.loaded {
 /* ================================================== */
 /* 桌面端样式 - 完全隐藏移动端元素 */
 /* ================================================== */
-@media (min-width: 1025px) {
+@media (min-width: 1201px) {
 
   /* 隐藏汉堡菜单按钮 */
   .hamburger-menu {
@@ -718,14 +718,44 @@ img.loaded {
   }
 }
 
-/* ===== 64rem以下：移动端 - 显示汉堡菜单 ===== */
-@media (max-width: 1024px) {
+/* ===== 75rem以下：移动端 - 显示汉堡菜单 ===== */
+@media (max-width: 1200px) {
 
   /* 隐藏桌面导航项 */
   .nav-items,
   #nav-items,
   #nav-menu-desktop {
     display: none !important;
+  }
+
+  /* 移动端搜索按钮定位在汉堡菜单左侧 */
+  .nav-search {
+    position: fixed;
+    top: max(1.5625rem, env(safe-area-inset-top) + 0.5rem);
+    right: max(3.5rem, env(safe-area-inset-right) + 3.5rem);
+    margin-left: 0;
+    padding-bottom: 0;
+    z-index: 10001;
+  }
+
+  .nav-search__toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+    background: rgba(255, 248, 231, 0.12);
+  }
+
+  .nav-search__panel {
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateY(-0.75rem) scale(0.96);
+    width: min(90vw, 32rem);
+    max-height: calc(100vh - 7rem);
+  }
+
+  .nav-search--open .nav-search__panel {
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 
   /* 显示汉堡菜单 */
@@ -1000,7 +1030,7 @@ img.loaded {
     padding-top: max(0.5rem, env(safe-area-inset-top));
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-left: max(1rem, env(safe-area-inset-left));
-    background: url(../image/nav_bc.webp) no-repeat left center;
+    background: url(../image/wikiStructure/nav_bc.webp) no-repeat left center;
     background-size: cover;
     will-change: transform;
     box-shadow: var(--mobile-shadow-lg);
@@ -1009,6 +1039,21 @@ img.loaded {
   nav .logo img {
     width: 2.5rem;
     height: 6.25rem;
+  }
+
+  /* ===== 搜索按钮 ===== */
+  .nav-search {
+    right: max(3.25rem, env(safe-area-inset-right) + 3.25rem);
+  }
+
+  .nav-search__toggle {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .nav-search__icon {
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   /* ===== 汉堡菜单按钮 ===== */
@@ -1210,6 +1255,20 @@ img.loaded {
     padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
   }
 
+  .nav-search {
+    right: max(3rem, env(safe-area-inset-right) + 3rem);
+  }
+
+  .nav-search__toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .nav-search__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
   .hamburger-menu {
     width: 2.5rem;
     height: 2.5rem;
@@ -1246,33 +1305,6 @@ img.loaded {
 
 /* ===== 64.0625rem-75rem：平板到小屏笔记本 ===== */
 @media (min-width: 1025px) and (max-width: 1200px) {
-
-  /* 显示桌面导航 */
-  .nav-items,
-  #nav-items,
-  #nav-menu-desktop {
-    display: flex;
-  }
-
-  /* 隐藏汉堡菜单 */
-  .hamburger-menu {
-    display: none !important;
-  }
-
-  /* 隐藏移动端菜单遮罩 */
-  .mobile-menu-overlay {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  /* 隐藏移动端菜单内容 */
-  .mobile-menu {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-  }
 
   /* 标题字体 */
   .section-content h1 {
@@ -1331,7 +1363,7 @@ img.loaded {
 /* 团队成员页面 - 移动端专门优化 */
 /* iGEM Layout Strategy: Responsive team member cards optimized for mobile. Prevents content overlap and ensures accessibility. */
 /* ================================================== */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
 
   /* 标题区域优化 */
   .members .title {
