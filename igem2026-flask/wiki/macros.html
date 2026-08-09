@@ -1,0 +1,57 @@
+{# wiki/macros.html — 可复用模板组件（macro = 带参数的模板函数）
+   用法：在页面顶部写 {% from "macros.html" import card, igem_img with context %}
+#}
+
+{# 卡片组件：用于首页/栏目页的"亮点方块"等重复结构。
+   参数：
+     title  卡片标题
+     body   卡片正文（可传 HTML 片段）
+     href   可选，整卡链接
+     icon   可选，Bootstrap/Font Awesome 图标类，如 "fas fa-vial"
+#}
+{% macro card(title, body="", href="", icon="") %}
+<div class="content-card h-100">
+  {% if icon %}<i class="{{ icon }} card-icon" aria-hidden="true"></i>{% endif %}
+  {% if href %}<a href="{{ href }}" class="card-link">{% endif %}
+    <h3 class="card-title">{{ title }}</h3>
+    {% if body %}<div class="card-body-text">{{ body }}</div>{% endif %}
+  {% if href %}</a>{% endif %}
+</div>
+{% endmacro %}
+
+{# iGEM 合规图片宏：所有站点图片必须走官方图床 static.igem.wiki/2026/szpu-china/。
+   用法：{{ igem_img("image/Animation/index/yeast1.svg", "酵母细胞示意图") }}
+   参数：
+     name  图片相对路径（不含前缀，如 "image/xxx.jpg"）
+     alt   替代文本（无障碍 + SEO，务必填写）
+     cls   可选额外 class，如 "img-fluid"
+#}
+{% macro igem_img(name, alt="", cls="img-fluid") %}
+<img src="https://static.igem.wiki/2026/szpu-china/{{ name }}"
+     alt="{{ alt }}" class="{{ cls }}" loading="lazy">
+{% endmacro %}
+
+{# 图片占位宏：正式图片就位前，用纯主题色块（内联 SVG，无外部资源，iGEM 合规）
+   占位，保留 <img> 标签结构与 alt 描述，便于后续直接替换为真实图片。
+   用法：{{ img_placeholder("H1N1 监测背景插画", "yeast-screen__svg") }}
+   参数：
+     alt   替代文本
+     cls   可选额外 class，默认同时带 img-placeholder 与 yeast-screen__svg
+#}
+{% macro img_placeholder(alt="插画占位", cls="yeast-screen__svg") %}
+<img class="img-placeholder {{ cls }}"
+     src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='480'%20height='480'%3E%3Crect%20width='100%25'%20height='100%25'%20fill='%23D4A574'/%3E%3C/svg%3E"
+     alt="{{ alt }}" loading="lazy">
+{% endmacro %}
+
+{# 导航链接项（供 menu/footer 共用循环）。
+   参数：
+     href  链接地址（已含 url_for 结果或绝对路径）
+     label 显示文字
+     active 是否当前页（高亮）
+#}
+{% macro nav_link(href, label, active=false) %}
+<li class="nav-item">
+  <a class="nav-link{% if active %} active{% endif %}" href="{{ href }}"{% if active %} aria-current="page"{% endif %}>{{ label }}</a>
+</li>
+{% endmacro %}

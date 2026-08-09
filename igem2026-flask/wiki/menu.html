@@ -1,59 +1,77 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+{# wiki/menu.html — 复刻根目录棕色 iconfont 导航（iGEM 合规：资源全部本地化）#}
+{# 桌面导航：<nav> + .nav-items(#nav-items)；移动端：#hamburger-menu + #mobile-menu-overlay/#mobile-menu#}
+{# 数据来自 context_processor 注入的 site_nav，结构与根目录 site.js 一致（使用 dropdown）。#}
+{# 与 static/js/core/mobile-menu.js 及 nav-scroll-behavior.js 兼容。#}
+
+{% macro navList() %}
+  {% for item in site_nav %}
+    {% if item.dropdown %}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">
+          <span class="iconfont {{ item.icon }}"></span>
+          <span>{{ item.label }}</span>
+        </a>
+        <div class="dropdown-content">
+          {% for sub in item.dropdown %}
+            <a href="{{ sub.href }}"
+               {% if active_page == sub.page %}class="active" aria-current="page"{% endif %}>
+              <span class="iconfont {{ sub.icon }}"></span>
+              <span>{{ sub.label }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </li>
+    {% else %}
+      <li>
+        <a href="{{ item.href }}"
+           {% if active_page == (item.page or 'home') %}class="active" aria-current="page"{% endif %}>
+          <span class="iconfont {{ item.icon }}"></span>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+<!-- 移动端全屏菜单 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
+  <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
+    <ul id="nav-menu">
+      {{ navList() }}
+    </ul>
+  </div>
+</div>
+
+<!-- 桌面端导航 -->
+<nav>
   <div class="container">
-    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">EchoYeast · SZPU-CHINA</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-      aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      {{ navList() }}
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path=".">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+        <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
     </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Project</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='description') }}">Description</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='design') }}">Design</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='engineering') }}">Engineering</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='results') }}">Results</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='contribution') }}">Contribution</a></li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Wet Lab</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='experiments') }}">Experiments</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='notebook') }}">Notebook</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='parts') }}">Parts</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='measurement') }}">Measurement</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='alternative-platform') }}">Alternative Platform</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='safety-and-security') }}">Safety and Security</a></li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Dry Lab</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='model') }}">Model</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='software') }}">Software</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='hardware') }}">Hardware</a></li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Engagement</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='entrepreneurship') }}">Entrepreneurship</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='human-practices') }}">Human Practices</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='education') }}">Education</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='inclusivity') }}">Inclusivity</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('pages', page='sustainability') }}">Sustainability</a></li>
-          </ul>
-        </li>
-
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('pages', page='team') }}">Team</a></li>
-      </ul>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..."
+          autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
     </div>
   </div>
 </nav>

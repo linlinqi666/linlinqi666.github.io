@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}Results{% endblock %}
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+{# results 页面复用 description.css 中的 description-container / description-sidebar 等样式；
+   原引用的 css/results.css 不存在（404），此处移除失效链接。 #}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/description.css') }}">
 {% endblock %}
 {% block page_content %}
 <div class="page-content">

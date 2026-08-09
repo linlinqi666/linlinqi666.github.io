@@ -1,11 +1,8 @@
 {% extends "layout.html" %}
 {% block title %}Experiments{% endblock %}
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/experiments.css') }}">
-{% endblock %}
 {% block page_content %}
-<div class="page-content">
-<div class="description-container">
+
+    <div class="description-container">
       <!-- Left Sidebar -->
       <aside class="description-sidebar">
         <!-- 酵母细胞装饰 -->
@@ -38,35 +35,23 @@
                 <a href="#overview" class="nav-main-link">概述</a>
               </div>
             </li>
-            <li class="level1">
+            <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#exp1" class="nav-main-link">实验 1：PAGER融合蛋白基因设计与合成</a>
+                <span class="nav-main-link">实验模块</span>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
               </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#exp2" class="nav-main-link">实验 2：质粒大肠杆菌转化、提取与双酶切验证</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#exp3" class="nav-main-link">实验 3：CRISPR-Cas9三基因敲除</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#exp4" class="nav-main-link">实验 4：人源化Gpa1嵌合蛋白修饰</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#exp5" class="nav-main-link">实验 5：PAGER质粒转化与WB验证</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#exp6" class="nav-main-link">实验 6：PAGER生物传感器诱导与信号检测</a>
-              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#exp1">实验 1：PAGER融合蛋白基因设计与合成</a></li>
+                <li class="level3"><a href="#exp2">实验 2：质粒大肠杆菌转化、提取与双酶切验证</a></li>
+                <li class="level3"><a href="#exp3">实验 3：CRISPR-Cas9三基因敲除</a></li>
+                <li class="level3"><a href="#exp4">实验 4：人源化Gpa1嵌合蛋白修饰</a></li>
+                <li class="level3"><a href="#exp5">实验 5：PAGER质粒转化与WB验证</a></li>
+                <li class="level3"><a href="#exp6">实验 6：PAGER生物传感器诱导与信号检测</a></li>
+              </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
@@ -559,5 +544,13 @@
         </div>
       </div>
     </div>
-</div>
+  
+
+{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/description.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/experiments.css') }}">
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
 {% endblock %}

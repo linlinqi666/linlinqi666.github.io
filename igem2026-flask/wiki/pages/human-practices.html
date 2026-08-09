@@ -1,11 +1,8 @@
 {% extends "layout.html" %}
 {% block title %}Human Practices{% endblock %}
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/integrated human-practices.css') }}">
-{% endblock %}
 {% block page_content %}
-<div class="page-content">
-<div class="description-container">
+
+    <div class="description-container">
       <!-- 侧边导航栏（已注释，当前页面由 3D 轮播直接导航）
       <aside class="description-sidebar">
         ...
@@ -54,6 +51,7 @@
     </div>
 
   <div class="hz-container" id="hzMapContainer">
+
 
     <!-- 中国地图层：省份路径来自 MapSVG CC0 china.svg -->
     <div class="hz-layer hz-china" id="hzChinaLayer">
@@ -243,6 +241,8 @@
   </div>
 </div>
 </div>
+
+
 
         </div>
         </div>
@@ -455,11 +455,22 @@
           </div>
         </div>
 
+
 </div>
     </div>
-</div>
+  
+
+{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/description.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated human-practices.css') }}">
 {% endblock %}
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/components/hp-carousel.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/components/hp-reveal-box.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='data/hp-timeline-data.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='data/hp-map-data.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/hp-carousel.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/hp-reveal-box.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/hp-timeline.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/hp-map.js') }}" defer></script>
 {% endblock %}

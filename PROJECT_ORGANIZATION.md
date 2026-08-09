@@ -4,13 +4,19 @@
 >
 > 审查方式：基于全仓库静态文件分析，并使用 Playwright（Chromium）对 `index.html`、`project/description.html` 等页面进行实际渲染，提取了计算后的真实样式值（字体、背景、侧边栏尺寸、字号等）进行交叉验证。
 
+## 〇、当前项目关系与状态（2026-08-09）
+本仓库内存在两个 wiki 工程，分工如下：
+- **igem2026-flask（生产提交工程）**：基于官方 `wiki-frozen-flask` 模板的 Frozen-Flask 站点，为 2026 赛季正式提交版本。静态资源仅含 CSS/JS（图片走 `static.igem.wiki`），通过 `.gitlab-ci.yml` 源码构建发布，符合 iGEM 官方三条硬性规则。合规细节见 `communication/gitlab/IGEM2026_WIKI_COMPLIANCE.md`。
+- **根目录静态站点（本工程 / 历史参考版）**：早期手工静态站，图片保留在 `static/image/`，为 Frozen-Flask 迁移前的参考实现。现已按相同主题规范重新配色（米黄为主、棕为辅、蓝仅 footer），但**不作为**官方提交版本，仅作结构参考。
+- **主题规范（两工程统一）**：主色=米黄/奶油、辅色=暖棕、强调=蓝（仅 footer）。详见第四节。
+
 ---
 
 ## 一、项目总览
 
 本项目是一个标准 iGEM 竞赛 Wiki 站点，采用纯静态 HTML + CSS + 原生 JavaScript 实现，无构建工具、无框架。站点按内容板块划分为五大一级栏目：`Project`、`Team`、`Dry Lab`、`Wet Lab`、`Human Practices`，外加首页 `index.html`。
 
-核心设计语言是**棕色/咖啡（coffee-brown）主题**：以 `#8B5A2B` 为主色，深棕 `#5D3A1A` 为强调与页脚色，浅棕 `#D4A574` 为辅助；背景为暖奶油色 `rgba(252, 231, 203, 0.9)`；蓝色 `#4285F4` 仅用于链接，绿色 `#2E7D32` 仅用于成功/高亮状态。整体气质温暖、学术、克制。
+核心设计语言是**米黄/奶油（cream）主题**：以米黄 `#FFF8E7` / `rgba(252, 231, 203, 0.9)` 为主色（导航栏背景、页面背景、下拉菜单、卡片），暖棕 `#8B5A2B` 为辅色（导航栏文字、标题、按钮、边框），深棕 `#5D3A1A` 为强调；蓝色 `#4A90E2` 仅用于 footer，链接蓝 `#4285F4` 仅用于超链接，绿色 `#2E7D32` 仅用于成功/高亮状态。整体气质温暖、学术、克制。
 
 ---
 
@@ -159,17 +165,18 @@ static/js/core/nav-scroll-behavior.js
 
 | 角色 | 变量 | 值 |
 |---|---|---|
-| 主色 Primary | `--color-primary` / `--color-brown` | `#8B5A2B` |
-| 主色深 | `--color-primary-dark` / `--color-brown-dark` | `#5D3A1A` |
-| 主色浅 | `--color-primary-light` / `--color-brown-light` | `#D4A574` |
+| 主色 Primary（米黄/奶油） | `--color-beige` / `--bg-page` / `--bg-dropdown` / `--bg-sidebar` | `#FFF8E7` / `rgba(252, 231, 203, 0.9)` |
+| 辅色 Secondary（暖棕） | `--color-primary` / `--color-brown` | `#8B5A2B` |
+| 辅色深 | `--color-primary-dark` / `--color-brown-dark` | `#5D3A1A` |
+| 辅色浅 | `--color-primary-light` / `--color-brown-light` | `#D4A574` |
 | 主色极浅 | `--color-brown-lighter` | `rgba(139,90,43,0.05)` |
 | 正文文字 | `--color-text` | `#333` |
 | 次级文字 | `--color-text-light` | `#666` |
 | 三级文字 | `--color-text-lighter` | `#999` |
 | 卡片背景 | `--bg-card` | `#ffffff` |
-| 页面背景 | `--bg-page` | `rgba(252, 231, 203, 0.9)`（暖奶油） |
-| 侧边栏背景 | `--bg-sidebar` | `#FFF8E7` |
-| 页脚背景 | `--bg-footer` | `#5D3A1A` |
+| 页面背景 | `--bg-page` | `rgba(252, 231, 203, 0.9)`（暖奶油，米黄主色） |
+| 侧边栏背景 | `--bg-sidebar` | `#FFF8E7`（米黄主色） |
+| 页脚背景 | `--bg-footer` | `#4A90E2`（蓝，footer 专属） |
 | 浅灰背景 | `--color-bg-gray` | `#f4f4f4` |
 
 **强调色（仅作点缀，不可泛滥使用）：**
@@ -177,7 +184,7 @@ static/js/core/nav-scroll-behavior.js
 | 用途 | 值 |
 |---|---|
 | 链接蓝 | `#4285F4`（hover `#1A73E8`） |
-| 强调蓝 | `#4A90D9` / `#357ABD` |
+| footer 蓝（强调 ACCENT，仅 footer） | `#4A90E2` / `#3570B5` |
 | 成功/绿色 | `#2D5A3D` / `#2E7D32` |
 | 绿色方案 | `#5A9A5A` / `#3D7A3D` |
 
@@ -220,11 +227,11 @@ static/js/core/nav-scroll-behavior.js
 
 ### 5.1 整体布局骨架
 
-`body` 采用 `display:flex; flex-direction:column; min-height:100vh`。所有页面统一包含：固定顶栏 `<nav>`（高 100px，背景 `nav_bc.webp` 毛玻璃模糊）、顶部阅读进度条（page-progress）、侧边滚动进度条（scroll-progress，部分页）、`<main>` 主内容区、底部 `<section id="footer" class="section-footer">`（背景 `#5D3A1A`）。
+`body` 采用 `display:flex; flex-direction:column; min-height:100vh`。所有页面统一包含：固定顶栏 `<nav>`（高 100px，背景米黄 `var(--bg-dropdown)` 毛玻璃模糊）、顶部阅读进度条（page-progress）、侧边滚动进度条（scroll-progress，部分页）、`<main>` 主内容区、底部 `<section id="footer" class="section-footer">`（背景 `#4A90E2` 蓝，footer 专属）。
 
 ### 5.2 顶部导航栏（navigation.css + nav-scroll-behavior.js）
 
-- `nav`：`position:fixed; top:0; z-index:9999; height:6.25rem`（滚动后 `.scrolled` 缩为 `5rem` 并加阴影）；背景 `url(../../image/nav_bc.webp)` 覆盖 + `backdrop-filter:blur`。
+- `nav`：`position:fixed; top:0; z-index:9999; height:6.25rem`（滚动后 `.scrolled` 缩为 `5rem` 并加阴影）；背景 `var(--bg-dropdown)`（米黄主色）+ `backdrop-filter:blur`。
 - 采用"图标字体 + 下拉"的 mega-menu 结构：主栏目（Home/Project/Team/Dry Lab/Wet Lab/Human Practices）用 iconfont 字形，每个主栏目下挂子页面图标/链接。
 - 行为脚本 `nav-scroll-behavior.js` 实现：下滑隐藏（`.nav-hidden`）、上滑显示、滚动到一定位置加 `.scrolled`。**该脚本为全局必需，禁止移除。**
 
@@ -338,7 +345,7 @@ node static/js/core/search-index-generator.js
 2. **JS 加载位置与顺序：** 所有外部脚本统一置于页面 `<head>` 并以 `defer` 加载（不阻塞渲染、DOM 解析后按文档顺序执行）；`core/utils.js` 必须最先。组件/页面脚本只在对应页面加载，不得全局强加；依赖已加载脚本的页尾内联脚本须包裹进 `DOMContentLoaded`（由 `tools/normalize-scripts.js` 自动处理）。
 3. **统一内容页模板：** 新增内容页必须采用标准结构——加载 `description.css`、包含 `<aside class="description-sidebar">`、加载 `sidebar-progress.js`，并复用 `--desc-*` 令牌与现有组件类，**不要凭空发明新结构**。
 4. **色彩只能来自令牌：** 所有颜色必须使用 `:root` 中的令牌（`--color-*` 或 `--desc-color-*`）。**禁止在业务样式中硬编码十六进制色值**；蓝色仅用于链接、绿色仅用于成功/高亮，不可作为主色扩散。
-5. **保持棕色主题：** 主色固定 `#8B5A2B`，禁止引入新的主色或额外的字体族；字体栈保持 `system-ui` 体系。
+5. **保持米黄/棕主题：** 主色固定米黄/奶油（`#FFF8E7` / `rgba(252,231,203,0.9)`），辅色固定暖棕 `#8B5A2B`，蓝色仅用于 footer；禁止引入新的主色/辅色或额外的字体族；字体栈保持 `system-ui` 体系。
 6. **间距/圆角/阴影/动效复用令牌：** 必须使用 `--spacing-*`、`--radius-*`、`--shadow-*`、`--duration-*`、`--ease-smooth`，禁止随意写死像素数值或使用非标准缓动。
 7. **图片必须可寻址：** 引用前确认文件存在于 `static/image/`（子页用 `../` 前缀），并为 `<img>` 保留 `onerror` 兜底。
 8. **保留占位文件：** 不要删除任何专属 CSS 文件（即使是空占位），HTML 仍引用它们。

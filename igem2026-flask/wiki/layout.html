@@ -1,50 +1,83 @@
+{% set htmlClass = htmlClass | default('') %}
+{% set bodyClass = bodyClass | default('') %}
+{% set mainClass = mainClass | default('') %}
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN" class="{{ htmlClass }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}SZPU-CHINA{% endblock %} | SZPU-CHINA · iGEM 2026</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#8B5A2B">
+  <meta name="msapplication-TileColor" content="#8B5A2B">
+  <meta name="color-scheme" content="light">
 
-  <!-- iGEM requirement: license + link to the source repository in the footer -->
-  <link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
-  <link rel="icon" href="https://static.igem.org/websites/common/2022/favicons/favicon.svg">
+  <!-- 安全区域CSS变量定义 -->
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+    }
+  </style>
 
-  <!-- Bootstrap 5 (vendored locally -> served from iGEM GitLab Pages, no 3rd-party CDN) -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
-  <!-- Font Awesome (vendored locally -> served from iGEM GitLab Pages, no 3rd-party CDN) -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
-  <!-- Team styles (also served locally) -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/wiki.css') }}">
+  <title>{% block title %}iGEM SZPU-2026{% endblock %}</title>
+  {% block head_extra %}{% endblock %}
+
+  <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 组件 → 移动端（最后，确保覆盖） -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation/navigation.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/description.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/page-progress-bar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/scroll-progress-bar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
   {% block styles %}{% endblock %}
+
+  <!-- JavaScript 禁用回退 -->
+  <noscript>
+    <style>
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .typewriter::after { content: none !important; }
+    </style>
+  </noscript>
+
+  <!-- 标准化脚本：统一 defer 加载（utils 最先，DOM 解析后按序执行） -->
+  <script src="{{ url_for('static', filename='js/core/utils.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/mobile-menu.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/scroll-progress-bar.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/nav-scroll-behavior.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/executive-summary-animation.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/search-index.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/search.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
 </head>
 
-<body>
+<body class="{{ bodyClass }}">
+  <header></header>
+
+  <!-- 汉堡菜单按钮（仅移动端显示） -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+    <span></span><span></span><span></span>
+  </button>
+
   {% include "menu.html" %}
 
-  <header class="bg-hero py-5 mb-4">
-    <div class="container">
-      <p class="hero-eyebrow">SZPU-CHINA · iGEM 2026</p>
-      <h1 class="hero-title">{{ self.title() }}</h1>
-      {% block lead %}{% endblock %}
-    </div>
-  </header>
-
-  <main class="container py-4">
+  <main class="{{ mainClass }}">
     {% block page_content %}{% endblock %}
   </main>
+  {% block footer %}{% include "footer.html" %}{% endblock %}
 
-  {% include "footer.html" %}
-
-  <!-- Scripts are referenced ONLY here (never inside page templates) -->
-  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/mobile-menu.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/nav-scroll-behavior.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/utils.js') }}" defer></script>
-  {% block scripts %}{% endblock %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
 </body>
-
 </html>

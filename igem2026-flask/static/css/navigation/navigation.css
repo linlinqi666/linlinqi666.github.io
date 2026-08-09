@@ -7,7 +7,13 @@
 /* ================================================== */
 
 :root {
-  /* 颜色系统 - 恢复原始棕蓝主题：棕色为主色，蓝色仅作少量强调 */
+  /*
+   * 主题色规范（所有页面应统一使用以下变量，禁止私自引入新的蓝/棕硬编码）
+   * 主色 PRIMARY：米黄（背景、下拉菜单、卡片、导航栏背景）
+   * 辅色 SECONDARY：暖棕（导航栏文字、按钮、侧边栏高亮、边框）
+   * 底部强调色：蓝（footer 专用，与米黄主色形成区分）
+   * 注：--color-primary 沿用历史命名，其值为棕色(辅色)；米黄主色见 --color-beige
+   */
   --color-primary: #8B5A2B;
   --color-primary-dark: #5D3A1A;
   --color-primary-light: #D4A574;
@@ -33,7 +39,9 @@
   --bg-card: #ffffff;
   --bg-card-hover: #f8f9fa;
   --bg-dropdown: rgba(252, 231, 203, 0.9);
-  --bg-footer: #5D3A1A;
+  --bg-footer: #4A90E2;
+  --bg-footer-dark: #3570B5;
+  --bg-footer-gradient: linear-gradient(180deg, rgba(74, 144, 226, 0.95) 0%, rgba(53, 112, 181, 0.95) 100%);
   --bg-footer-light: rgba(255, 255, 255, 0.08);
   --bg-footer-border: rgba(255, 255, 255, 0.15);
 
@@ -103,7 +111,7 @@ nav {
   height: 6.25rem;
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: url(https://static.igem.wiki/2026/szpu-china/image/wikiStructure/nav_bc.webp) no-repeat left center;
+  background: var(--bg-dropdown);
   background-size: cover;
   backdrop-filter: blur(0.75rem);
   -webkit-backdrop-filter: blur(0.75rem);
@@ -113,7 +121,7 @@ nav {
     -webkit-backdrop-filter var(--duration-slow) var(--ease-smooth),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0.0625rem solid var(--border-color);
 }
 
 nav.scrolled {
@@ -189,7 +197,7 @@ nav ul li a,
   font-weight: 500;
 }
 
-/* 导航栏主链接在棕色背景图上使用米白色，确保可读性 */
+/* 导航栏主链接在米色背景上使用棕色主色 */
 nav ul li a {
   color: var(--color-primary);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -244,7 +252,7 @@ nav ul li a {
 
 nav ul li a:hover,
 .dropdown-content a:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(139, 90, 43, 0.08);
   transform: translateY(-0.125rem);
   text-shadow: 0 0 0.0625rem currentColor;
 }
@@ -257,7 +265,7 @@ nav ul li a::after {
   transform: translateX(-50%);
   width: 0;
   height: 0.1875rem;
-  background: linear-gradient(90deg, transparent, #FFF8E7, transparent);
+  background: linear-gradient(90deg, transparent, var(--color-primary-light), transparent);
   transition: width var(--duration-normal) var(--ease-default);
   border-radius: 0.125rem;
 }
@@ -305,8 +313,8 @@ nav ul li:hover .dropdown-content {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  border: 0.0625rem solid rgba(255, 248, 231, 0.25);
-  background: rgba(255, 248, 231, 0.08);
+  border: 0.0625rem solid rgba(139, 90, 43, 0.25);
+  background: rgba(139, 90, 43, 0.06);
   color: var(--color-primary);
   cursor: pointer;
   display: flex;
@@ -532,17 +540,17 @@ nav ul li:hover .dropdown-content {
   --igem-sidebar-color-accent: #A67C52;
 
   /* 背景纹理 */
-  --igem-sidebar-bg-texture: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+  --igem-sidebar-bg-texture: radial-gradient(circle at 0% 0%, rgba(166, 124, 82, 0.08) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(122, 74, 26, 0.05) 0%, transparent 50%);
 
   /* 交互状态颜色 */
-  --igem-sidebar-bg-hover: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(2, 132, 199, 0.06) 100%);
-  --igem-sidebar-bg-active: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(2, 132, 199, 0.1) 100%);
-  --igem-sidebar-border-color: linear-gradient(180deg, rgba(56, 189, 248, 0.3) 0%, rgba(14, 165, 233, 0.2) 100%);
-  --igem-sidebar-border-color-header: rgba(14, 165, 233, 0.15);
+  --igem-sidebar-bg-hover: linear-gradient(135deg, rgba(166, 124, 82, 0.1) 0%, rgba(122, 74, 26, 0.06) 100%);
+  --igem-sidebar-bg-active: linear-gradient(135deg, rgba(166, 124, 82, 0.15) 0%, rgba(122, 74, 26, 0.1) 100%);
+  --igem-sidebar-border-color: linear-gradient(180deg, rgba(166, 124, 82, 0.3) 0%, rgba(122, 74, 26, 0.2) 100%);
+  --igem-sidebar-border-color-header: rgba(122, 74, 26, 0.15);
 
   /* 增强的阴影系统 */
-  --igem-sidebar-shadow: 0 0.5rem 2rem rgba(14, 165, 233, 0.12), 0 0.125rem 0.5rem rgba(14, 165, 233, 0.06), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.8);
-  --igem-sidebar-shadow-hover: 0 0.75rem 3rem rgba(14, 165, 233, 0.18), 0 0.25rem 1rem rgba(14, 165, 233, 0.1), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.9);
+  --igem-sidebar-shadow: 0 0.5rem 2rem rgba(122, 74, 26, 0.12), 0 0.125rem 0.5rem rgba(122, 74, 26, 0.06), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.8);
+  --igem-sidebar-shadow-hover: 0 0.75rem 3rem rgba(122, 74, 26, 0.18), 0 0.25rem 1rem rgba(122, 74, 26, 0.1), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.9);
 
   /* 精细的圆角系统 */
   --igem-sidebar-radius-lg: 1.25rem;
@@ -589,9 +597,9 @@ nav ul li:hover .dropdown-content {
   /* 增强的烧瓶液体渐变 - 更有层次感 */
   --igem-flask-liquid-color-1: rgba(196, 154, 108, 0.5);
   --igem-flask-liquid-color-2: rgba(166, 124, 82, 0.65);
-  --igem-flask-liquid-color-3: rgba(14, 165, 233, 0.8);
+  --igem-flask-liquid-color-3: rgba(122, 74, 26, 0.8);
   --igem-flask-liquid-color-4: rgba(94, 61, 29, 0.92);
-  --igem-flask-liquid-glow: rgba(56, 189, 248, 0.4);
+  --igem-flask-liquid-glow: rgba(166, 124, 82, 0.4);
 
   /* 气泡动画 */
   --igem-bubble-rise-duration: 2.2s;
@@ -630,7 +638,7 @@ nav ul li:hover .dropdown-content {
   border-radius: var(--igem-sidebar-radius-lg);
   padding: var(--igem-sidebar-spacing-2xl);
   box-shadow: var(--igem-sidebar-shadow);
-  border: 0.0625rem solid rgba(56, 189, 248, 0.25);
+  border: 0.0625rem solid rgba(166, 124, 82, 0.25);
   min-width: var(--igem-sidebar-min-width);
   max-width: var(--igem-sidebar-max-width);
   z-index: var(--igem-sidebar-z-index);
@@ -681,8 +689,8 @@ nav ul li:hover .dropdown-content {
 .igem-sidebar-yeast-cell {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.85) 0%, rgba(56, 189, 248, 0.5) 40%, rgba(166, 124, 82, 0.35) 70%, transparent 100%);
-  box-shadow: 0 0.125rem 0.5rem rgba(14, 165, 233, 0.15), inset 0 -0.0625rem 0.125rem rgba(14, 165, 233, 0.1);
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.85) 0%, rgba(166, 124, 82, 0.5) 40%, rgba(166, 124, 82, 0.35) 70%, transparent 100%);
+  box-shadow: 0 0.125rem 0.5rem rgba(122, 74, 26, 0.15), inset 0 -0.0625rem 0.125rem rgba(122, 74, 26, 0.1);
   animation: igemSidebarFloat 7s ease-in-out infinite;
 }
 
@@ -713,8 +721,8 @@ nav ul li:hover .dropdown-content {
 .igem-sidebar-bubble {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.6) 40%, rgba(56, 189, 248, 0.25) 70%, transparent 100%);
-  box-shadow: 0 0.0625rem 0.25rem rgba(56, 189, 248, 0.2);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(252, 247, 238, 0.6) 40%, rgba(166, 124, 82, 0.25) 70%, transparent 100%);
+  box-shadow: 0 0.0625rem 0.25rem rgba(166, 124, 82, 0.2);
   animation: igemSidebarBubbleRise 5s ease-in-out infinite;
 }
 
@@ -802,7 +810,7 @@ nav ul li:hover .dropdown-content {
   color: var(--igem-sidebar-color-primary);
   background: linear-gradient(135deg, rgba(255, 253, 248, 1) 0%, rgba(252, 247, 238, 0.8) 100%);
   border-radius: 50%;
-  box-shadow: 0 0.25rem 1rem rgba(14, 165, 233, 0.12), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0.25rem 1rem rgba(122, 74, 26, 0.12), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.9);
 }
 
 .igem-sidebar-icon svg {
@@ -842,7 +850,7 @@ nav ul li:hover .dropdown-content {
   color: white;
   font-weight: var(--igem-sidebar-font-weight-medium);
   margin-top: var(--igem-sidebar-spacing-md);
-  box-shadow: 0 0.125rem 0.5rem rgba(14, 165, 233, 0.25);
+  box-shadow: 0 0.125rem 0.5rem rgba(122, 74, 26, 0.25);
   letter-spacing: 0.05em;
 }
 
@@ -951,13 +959,13 @@ nav ul li:hover .dropdown-content {
 
 .igem-sidebar-toggle-icon:hover {
   color: var(--igem-sidebar-color-primary);
-  background: rgba(14, 165, 233, 0.08);
+  background: rgba(122, 74, 26, 0.08);
 }
 
 .igem-sidebar-level1.expanded .igem-sidebar-toggle-icon {
   transform: rotate(90deg);
   color: var(--igem-sidebar-color-primary);
-  background: rgba(14, 165, 233, 0.1);
+  background: rgba(122, 74, 26, 0.1);
 }
 
 .igem-sidebar-level1:hover .igem-sidebar-toggle-icon {
@@ -1027,7 +1035,7 @@ nav ul li:hover .dropdown-content {
 }
 
 .igem-sidebar-level3>a.active {
-  background: rgba(14, 165, 233, 0.08);
+  background: rgba(122, 74, 26, 0.08);
   color: var(--igem-sidebar-color-primary-dark);
   font-weight: var(--igem-sidebar-font-weight-medium);
   /* iGEM Layout Strategy: 补偿 font-weight 变化导致的宽度偏移 */
@@ -1037,7 +1045,7 @@ nav ul li:hover .dropdown-content {
 
 .igem-sidebar-level3>a.active::before {
   background: var(--igem-sidebar-color-primary);
-  box-shadow: 0 0 0 0.1875rem rgba(14, 165, 233, 0.15);
+  box-shadow: 0 0 0 0.1875rem rgba(122, 74, 26, 0.15);
   transform: translateY(-50%) scale(1.2);
 }
 
@@ -1080,9 +1088,9 @@ nav ul li:hover .dropdown-content {
   transform: translateX(-50%);
   width: var(--igem-flask-neck-width);
   height: var(--igem-flask-neck-height);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(224, 242, 254, 0.9) 50%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(252, 247, 238, 0.9) 50%, rgba(255, 255, 255, 0.7) 100%);
   border-radius: 0.375rem 0.375rem 0 0;
-  border: 0.125rem solid rgba(14, 165, 233, 0.25);
+  border: 0.125rem solid rgba(122, 74, 26, 0.25);
   box-shadow: inset 0 0.125rem 0.25rem rgba(255, 255, 255, 0.6);
 }
 
@@ -1093,11 +1101,11 @@ nav ul li:hover .dropdown-content {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(224, 242, 254, 0.85) 40%, rgba(186, 230, 253, 0.8) 70%, rgba(255, 255, 255, 0.5) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(252, 247, 238, 0.85) 40%, rgba(186, 230, 253, 0.8) 70%, rgba(255, 255, 255, 0.5) 100%);
   border-radius: 0 0 0.75rem 0.75rem;
   border: 0.125rem solid rgba(139, 90, 43, 0.22);
   border-top: none;
-  box-shadow: inset 0 0.0625rem 0.1875rem rgba(255, 255, 255, 0.8), 0 0.25rem 0.75rem rgba(14, 165, 233, 0.1);
+  box-shadow: inset 0 0.0625rem 0.1875rem rgba(255, 255, 255, 0.8), 0 0.25rem 0.75rem rgba(122, 74, 26, 0.1);
   z-index: 0;
 }
 
@@ -1132,7 +1140,7 @@ nav ul li:hover .dropdown-content {
   height: 0.75rem;
   background: linear-gradient(180deg,
       rgba(255, 255, 255, 0.7) 0%,
-      rgba(224, 242, 254, 0.4) 40%,
+      rgba(252, 247, 238, 0.4) 40%,
       transparent 100%);
   border-radius: 50%;
   animation: liquidWave 3s ease-in-out infinite;
@@ -1164,8 +1172,8 @@ nav ul li:hover .dropdown-content {
 .igem-sidebar-ferment-bubble {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.6) 40%, rgba(56, 189, 248, 0.35) 70%, transparent 100%);
-  box-shadow: 0 0.0625rem 0.1875rem rgba(14, 165, 233, 0.15);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(252, 247, 238, 0.6) 40%, rgba(166, 124, 82, 0.35) 70%, transparent 100%);
+  box-shadow: 0 0.0625rem 0.1875rem rgba(122, 74, 26, 0.15);
   animation: igemSidebarFermentBubble var(--igem-bubble-rise-duration) ease-in-out infinite;
 }
 
@@ -1233,7 +1241,7 @@ nav ul li:hover .dropdown-content {
   align-items: center;
   gap: var(--igem-sidebar-spacing-sm);
   padding: var(--igem-sidebar-spacing-sm);
-  background: rgba(14, 165, 233, 0.05);
+  background: rgba(122, 74, 26, 0.05);
   border-radius: var(--igem-sidebar-radius-xs);
   margin-top: var(--igem-sidebar-spacing-lg);
 }
@@ -1290,8 +1298,8 @@ nav ul li:hover .dropdown-content {
   background: var(--bg-sidebar, rgba(255, 252, 247, 0.95));
   border-radius: var(--desc-radius-lg, 0.75rem);
   padding: var(--desc-spacing-2xl, 1.5rem);
-  box-shadow: var(--desc-sidebar-shadow, 0 0.25rem 1rem rgba(14, 165, 233, 0.08));
-  border: 0.0625rem solid var(--desc-border-color, rgba(56, 189, 248, 0.2));
+  box-shadow: var(--desc-sidebar-shadow, 0 0.25rem 1rem rgba(122, 74, 26, 0.08));
+  border: 0.0625rem solid var(--desc-border-color, rgba(166, 124, 82, 0.2));
   min-width: var(--desc-sidebar-min-width, 17.5rem);
   max-width: var(--desc-sidebar-max-width, 20rem);
   z-index: var(--desc-sidebar-z-index, 10);
@@ -1320,7 +1328,7 @@ nav ul li:hover .dropdown-content {
 .yeast-cell-1 {
   width: 1.875rem;
   height: 1.875rem;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(122, 74, 26, 0.6) 0%, transparent 70%);
   top: 10%;
   right: 15%;
   animation-delay: 0s;
@@ -1347,7 +1355,7 @@ nav ul li:hover .dropdown-content {
 .yeast-decoration .bubble {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(166, 124, 82, 0.3) 0%, transparent 70%);
   animation: bubbleFloat 8s ease-in-out infinite;
 }
 
@@ -1423,18 +1431,18 @@ nav ul li:hover .dropdown-content {
 .sidebar-header .dna-helix {
   width: 2rem;
   height: 2rem;
-  color: var(--desc-color-primary, #0C4A6E);
+  color: var(--desc-color-primary, #7A4A1A);
 }
 
 .sidebar-header h3 {
-  color: var(--desc-color-primary-dark, #075985);
+  color: var(--desc-color-primary-dark, #4A3525);
   font-size: var(--desc-font-size-xl, 1.3rem);
   font-weight: 600;
   margin: 0;
 }
 
 .yeast-badge {
-  background: linear-gradient(135deg, var(--desc-color-primary, #0C4A6E) 0%, var(--desc-color-primary-dark, #075985) 100%);
+  background: linear-gradient(135deg, var(--desc-color-primary, #7A4A1A) 0%, var(--desc-color-primary-dark, #4A3525) 100%);
   color: white;
   padding: 0.25rem 0.6rem;
   border-radius: var(--desc-radius-pill, 1rem);
@@ -1461,7 +1469,7 @@ nav ul li:hover .dropdown-content {
 }
 
 .description-nav-wrapper::-webkit-scrollbar-thumb {
-  background: var(--desc-color-primary-light, #38BDF8);
+  background: var(--desc-color-primary-light, #C49A6C);
   border-radius: 0.1875rem;
 }
 
@@ -1506,14 +1514,14 @@ nav ul li:hover .dropdown-content {
   transform: translateY(-50%);
   width: 0.1875rem;
   height: 0;
-  background: var(--desc-color-primary, #0C4A6E);
+  background: var(--desc-color-primary, #7A4A1A);
   border-radius: 0 0.125rem 0.125rem 0;
   transition: height var(--desc-duration-normal, 0.3s) ease;
 }
 
 .nav-main-link:hover {
-  background: var(--desc-bg-card-hover, rgba(14, 165, 233, 0.08));
-  color: var(--desc-color-primary-dark, #075985);
+  background: var(--desc-bg-card-hover, rgba(122, 74, 26, 0.08));
+  color: var(--desc-color-primary-dark, #4A3525);
 }
 
 .nav-main-link:hover::before {
@@ -1521,8 +1529,8 @@ nav ul li:hover .dropdown-content {
 }
 
 .nav-main-link.active {
-  background: var(--desc-bg-card-active, rgba(14, 165, 233, 0.12));
-  color: var(--desc-color-primary-dark, #075985);
+  background: var(--desc-bg-card-active, rgba(122, 74, 26, 0.12));
+  color: var(--desc-color-primary-dark, #4A3525);
   font-weight: 600;
   /* iGEM Layout Strategy: 使用 text-shadow 补偿 font-weight 变化导致的宽度偏移 */
   text-shadow: 0.0312rem 0 0 currentColor;
@@ -1545,12 +1553,12 @@ nav ul li:hover .dropdown-content {
   border-radius: var(--desc-radius-xs, 0.25rem);
   transition: all var(--desc-duration-fast, 0.2s) ease;
   flex-shrink: 0;
-  color: var(--desc-color-primary-light, #38BDF8);
+  color: var(--desc-color-primary-light, #C49A6C);
 }
 
 .toggle-icon:hover {
-  background: var(--desc-bg-card-hover, rgba(14, 165, 233, 0.08));
-  color: var(--desc-color-primary, #0C4A6E);
+  background: var(--desc-bg-card-hover, rgba(122, 74, 26, 0.08));
+  color: var(--desc-color-primary, #7A4A1A);
 }
 
 .toggle-icon svg {
@@ -1598,19 +1606,19 @@ nav ul li:hover .dropdown-content {
 }
 
 .level3>a:hover {
-  background: var(--desc-bg-card-hover, rgba(14, 165, 233, 0.08));
+  background: var(--desc-bg-card-hover, rgba(122, 74, 26, 0.08));
 }
 
 .level3>a.active {
-  background: rgba(14, 165, 233, 0.06);
-  color: var(--desc-color-primary-dark, #075985);
+  background: rgba(122, 74, 26, 0.06);
+  color: var(--desc-color-primary-dark, #4A3525);
 }
 
 /* ===== 进度条区域 ===== */
 .progress-section {
   margin-top: 1.5rem;
   padding-top: 3rem;
-  border-top: 0.0625rem solid var(--desc-border-color-header, rgba(14, 165, 233, 0.1));
+  border-top: 0.0625rem solid var(--desc-border-color-header, rgba(122, 74, 26, 0.1));
   position: relative;
   z-index: 1;
 }
@@ -1644,7 +1652,7 @@ nav ul li:hover .dropdown-content {
   height: var(--desc-flask-neck-height, 1.125rem);
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(186, 230, 253, 0.8) 50%, rgba(255, 255, 255, 0.6) 100%);
   border-radius: 0.3125rem 0.3125rem 0 0;
-  border: 0.125rem solid rgba(14, 165, 233, 0.2);
+  border: 0.125rem solid rgba(122, 74, 26, 0.2);
 }
 
 .flask-body::before {
@@ -1656,7 +1664,7 @@ nav ul li:hover .dropdown-content {
   bottom: 0;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(240, 220, 180, 0.7) 30%, rgba(240, 220, 180, 0.7) 70%, rgba(255, 255, 255, 0.5) 100%);
   border-radius: 0;
-  border: 0.125rem solid rgba(14, 165, 233, 0.18);
+  border: 0.125rem solid rgba(122, 74, 26, 0.18);
   border-top: none;
   z-index: 0;
 }
@@ -1676,7 +1684,7 @@ nav ul li:hover .dropdown-content {
   background: linear-gradient(180deg,
       var(--desc-flask-liquid-color-1, rgba(180, 160, 130, 0.6)) 0%,
       var(--desc-flask-liquid-color-2, rgba(160, 120, 70, 0.7)) 30%,
-      var(--desc-flask-liquid-color-3, rgba(14, 165, 233, 0.8)) 60%,
+      var(--desc-flask-liquid-color-3, rgba(122, 74, 26, 0.8)) 60%,
       var(--desc-flask-liquid-color-4, rgba(100, 60, 20, 0.9)) 100%);
   transition: var(--desc-progress-transition, height 0.3s ease-out);
 }
@@ -1709,7 +1717,7 @@ nav ul li:hover .dropdown-content {
 .ferment-bubble {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(56, 189, 248, 0.5) 50%, transparent 100%);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(166, 124, 82, 0.5) 50%, transparent 100%);
   animation: fermentBubble var(--desc-bubble-rise-duration, 2s) ease-in-out infinite;
 }
 

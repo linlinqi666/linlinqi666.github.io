@@ -1,51 +1,93 @@
-<footer class="bg-dark text-white pt-5 pb-4 mt-5">
-  <div class="container">
-    <div class="row gy-4">
-      <div class="col-lg-6">
-        <h4 class="footer-brand">EchoYeast · SZPU-CHINA</h4>
-        <p class="footer-intro">
-          SZPU-China is a student team from Shenzhen Polytechnic University competing in
-          iGEM 2026. We build a yeast-cell POCT biosensor for rapid on-site detection of
-          influenza A virus, based on the programmable antigen-gated receptor (PAGER) system.
-        </p>
-        <div class="footer-contact-icons">
-          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" aria-label="Bilibili">Bilibili</a>
-          <a href="mailto:szpu@igem.org" aria-label="Email">Email</a>
+<section id="footer" class="section-footer">
+  <div class="component-container">
+    <div class="footer-wrapper">
+      <!-- 顶部内容：图片滚动 + Contact Us -->
+      <div class="footer-top">
+        <div class="footer-scroller">
+          <div class="image-scroller">
+            <div class="scroller-track">
+              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/2026/szpu-china/image/any-icon/SZPU(notext).webp" alt="SZPU"
+                  class="scroll-image">
+              </a>
+              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/2026/szpu-china/image/any-icon/shiyao(notext).webp" alt="shiyao"
+                  class="scroll-image">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us:</h4>
+          <div class="contact-icons">
+            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+              <span class="iconfont icon-youxiang"></span>
+            </div>
+            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+              class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <span class="iconfont icon-bilibili-fill"></span>
+            </a>
+            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+              <span class="iconfont icon-weixin"></span>
+              <div class="wechat-qr-container">
+                <div class="wechat-qr-arrow"></div>
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/2026/szpu-china/image/other/echoyeast_social.jpg"
+                  alt="WeChat QR Code" class="wechat-qr-image">
+              </div>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="col-lg-3">
-        <h5>Explore</h5>
-        <ul class="footer-links">
-          <li><a href="{{ url_for('pages', page='description') }}">Description</a></li>
-          <li><a href="{{ url_for('pages', page='engineering') }}">Engineering</a></li>
-          <li><a href="{{ url_for('pages', page='model') }}">Model</a></li>
-          <li><a href="{{ url_for('pages', page='human-practices') }}">Human Practices</a></li>
-          <li><a href="{{ url_for('pages', page='team') }}">Team</a></li>
-        </ul>
+      <!-- 特色分界线1 -->
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+            <circle cx="20" cy="20" r="4" fill="white" />
+          </svg>
+        </span>
+        <span class="divider-line"></span>
       </div>
 
-      <div class="col-lg-3">
-        <h5>Contact</h5>
-        <ul class="footer-links">
-          <li>Shenzhen Polytechnic University</li>
-          <li>518055 Shenzhen, Guangdong, China</li>
-          <li><a href="mailto:szpu@igem.org">szpu@igem.org</a></li>
-        </ul>
+      <!-- 导航链接区域（从 site_nav 循环生成，跳过 Home） -->
+      <div class="footer-navigation">
+        <div class="footer-content-box">
+          <div class="footer-columns">
+            {% for item in site_nav %}
+              {% if item.label != "Home" %}
+                <div class="footer-column">
+                  <h4>{{ item.label }}</h4>
+                  <ul>
+                    {% for sub in item.dropdown %}
+                      <li><a href="{{ sub.href }}">{{ sub.label }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 特色分界线2 -->
+      <div class="footer-divider divider-simple">
+        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
+        <span class="divider-line-short"></span>
+        <span class="divider-text">Synthetic Biology</span>
+        <span class="divider-line-short"></span>
+        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
+      </div>
+
+      <!-- 版权信息区域 -->
+      <div class="footer-bottom-section">
+        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+        <p>The repository used to create this website is available at <a
+            href="https://gitlab.igem.org/2026/szpu-china" target="_blank"
+            rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
       </div>
     </div>
-
-    <hr class="footer-divider">
-
-    <p class="footer-license">
-      © 2026 - Content on this site is licensed under a
-      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
-        Creative Commons Attribution 4.0 International license</a>.
-    </p>
-    <p class="footer-repo">
-      The repository used to create this website is available at
-      <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">
-        gitlab.igem.org/2026/szpu-china</a>.
-    </p>
   </div>
-</footer>
+</section>
