@@ -830,16 +830,14 @@ img.loaded {
     background-color: white;
   }
 
-  /* 移动端全屏菜单遮罩层 - 使用新动画系统 */
+  /* 移动端遮罩层 - 纯色半透明 scrim，去掉毛玻璃模糊以提升移动端流畅度 */
   .mobile-menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--mobile-menu-bg);
-    backdrop-filter: blur(1.25rem);
-    -webkit-backdrop-filter: blur(1.25rem);
+    background: rgba(17, 24, 39, 0.55);
     z-index: 99998;
     transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
       visibility var(--anim-duration-medium) var(--anim-easing-standard);
@@ -858,15 +856,17 @@ img.loaded {
     pointer-events: auto;
   }
 
-  /* 移动端菜单内容 - 使用新动画系统 */
+  /* 移动端菜单内容 - 底部抽屉（Bottom Sheet）：从底部 translateY 滑入，仅动 transform/opacity */
   .mobile-menu-overlay .mobile-menu {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
-    width: min(90vw, 25rem);
-    max-height: min(85vh, 85svh);
-    padding: var(--mobile-spacing-xl) var(--mobile-spacing-xl) var(--mobile-spacing-xl);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    width: 100%;
+    max-height: min(88vh, 88svh);
+    padding: var(--mobile-spacing-xl) var(--mobile-spacing-lg)
+      calc(var(--mobile-spacing-xl) + env(safe-area-inset-bottom));
     padding-left: max(2rem, env(safe-area-inset-left));
     padding-right: max(2rem, env(safe-area-inset-right));
     transition: transform var(--anim-duration-medium) var(--anim-easing-decelerate),
@@ -878,13 +878,15 @@ img.loaded {
     display: block;
     box-sizing: border-box;
     background: #FFFDF8;
-    border-radius: 1rem;
+    border-radius: 1.25rem 1.25rem 0 0;
     border: 0.1875rem solid #38BDF8;
-    box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.25);
+    border-bottom: none;
+    box-shadow: 0 -0.5rem 2rem rgba(0, 0, 0, 0.25);
+    will-change: transform;
   }
 
   .mobile-menu-overlay.active .mobile-menu {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateY(0);
     opacity: 1;
   }
 
@@ -1281,11 +1283,10 @@ img.loaded {
     height: 0.125rem;
   }
 
-  /* 超小屏幕下的菜单优化 */
+  /* 超小屏幕下的底部抽屉优化：保持全宽，略微降低最大高度并预留底部安全区 */
   .mobile-menu-overlay .mobile-menu {
-    width: min(95vw, 23.75rem);
-    max-height: min(88vh, 88svh);
-    padding: var(--mobile-spacing-lg) var(--mobile-spacing-lg) var(--mobile-spacing-lg);
+    max-height: min(82vh, 82svh);
+    padding-bottom: calc(var(--mobile-spacing-lg) + env(safe-area-inset-bottom));
   }
 
   /* 菜单间距调整 */

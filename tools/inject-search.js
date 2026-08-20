@@ -109,7 +109,7 @@ function injectPage(pagePath) {
   }
 
   // 2. 注入搜索索引与 search.js 脚本引用到 </head> 之前
-  //    注：search-index.js 与 search.js 统一 defer，避免阻塞首屏（见 PROJECT_ORGANIZATION.md 第七.9、第八.2）
+  //    注：search-index.js 与 search.js 统一 defer，避免阻塞首屏（见 README.md 第七.9、第八.2）
   const indexScriptTag = `  <script src="${basePath}/static/js/core/search-index.js" defer></script>`;
   const searchScriptTag = `  <script src="${basePath}/static/js/core/search.js" defer></script>`;
   const scriptTags = indexScriptTag + '\n' + searchScriptTag;

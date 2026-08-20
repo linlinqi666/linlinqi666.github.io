@@ -1,0 +1,303 @@
+---
+permalink: "dry-lab/software.html"
+title: "Software - iGEM SZPU-2026"
+lang: "en"
+basePath: "../"
+css:
+  - static/css/description.css
+  - static/css/software.css
+js:
+  - static/js/components/sidebar-progress.js
+---
+
+{% extends "layouts/base.njk" %}
+
+{% block main %}
+<div class="description-container">
+
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <!-- 酵母细胞装饰 -->
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="dna-icon">
+            <svg viewBox="0 0 40 40" class="dna-helix">
+              <path d="M20,5 Q25,15 20,20 Q15,25 20,35" stroke="currentColor" fill="none" stroke-width="2" />
+              <circle cx="20" cy="10" r="3" fill="currentColor" />
+              <circle cx="20" cy="20" r="3" fill="currentColor" />
+              <circle cx="20" cy="30" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>软件导航</h3>
+          <div class="yeast-badge">Dry Lab</div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#software-award" class="nav-main-link">Best Software Award</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#features" class="nav-main-link">功能与特性</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#core-functions">核心功能</a></li>
+                <li class="level3"><a href="#user-interface">用户界面</a></li>
+                <li class="level3"><a href="#interoperability">兼容性与扩展</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#usage" class="nav-main-link">使用说明</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#installation">安装与运行环境</a></li>
+                <li class="level3"><a href="#quick-start">快速开始</a></li>
+                <li class="level3"><a href="#examples">示例与教程</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#code" class="nav-main-link">代码与仓库</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#documentation" class="nav-main-link">文档与 API</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#future" class="nav-main-link">未来工作</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <div id="software-award" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>本页面向 iGEM Best Software Tool 奖项要求，介绍团队为 PAGER-Yeast 项目开发的软件工具、算法或可视化平台。</p>
+          </div>
+          <h2>Best Software Award</h2>
+          <p>iGEM 鼓励队伍开发能够帮助 synthetic biology 研究、设计或教育的软件工具。软件可以是新的数据分析流程、可视化平台、硬件配套程序、教育应用或建模工具等。</p>
+          <p>[待补充：明确本队软件的核心定位，例如“用于分析流式细胞术数据的阈值判定与剂量-反应曲线拟合工具”。]</p>
+        </div>
+
+        <div id="overview" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>概述软件要解决什么问题、面向哪些用户，以及它在项目中的角色。</p>
+          </div>
+          <h2>Overview</h2>
+          <ul>
+            <li><strong>软件名称：</strong>[待补充]</li>
+            <li><strong>开发动机：</strong>[待补充：例如流式数据批量处理繁琐、缺乏开源的酵母荧光响应分析工具等]</li>
+            <li><strong>目标用户：</strong>[待补充： wet lab 成员、其他 iGEM 队伍、基层检测人员等]</li>
+            <li><strong>与项目的关系：</strong>[待补充：如何支持 PAGER-Yeast 的数据分析、模型验证或硬件控制]</li>
+          </ul>
+          <p>[待补充：建议上传软件架构图或界面截图，尺寸 1200×600px，.webp 格式并压缩至 150KB 以下。]</p>
+        </div>
+
+        <div id="features" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>列出软件的主要功能、界面特点与兼容性，帮助评审快速理解工具价值。</p>
+          </div>
+          <h2>功能与特性</h2>
+          <div id="core-functions">
+            <h3>核心功能</h3>
+            <ul>
+              <li>[待补充：功能 1，例如上传 .fcs 流式数据并自动提取荧光强度分布]</li>
+              <li>[待补充：功能 2，例如绘制剂量-反应曲线并计算 EC₅₀]</li>
+              <li>[待补充：功能 3，例如与数学模型结果进行对比并输出残差图]</li>
+            </ul>
+          </div>
+          <div id="user-interface">
+            <h3>用户界面</h3>
+            <p>[待补充：界面布局说明、交互流程、是否支持中英文切换、移动端适配情况等。]</p>
+          </div>
+          <div id="interoperability">
+            <h3>兼容性与扩展</h3>
+            <ul>
+              <li><strong>运行平台：</strong>[待补充：Web / Windows / macOS / Linux / 移动端]</li>
+              <li><strong>依赖环境：</strong>[待补充：Python 3.10+ / Node.js / Docker 等]</li>
+              <li><strong>输入输出格式：</strong>[待补充：支持 .fcs / .csv / .json / .xlsx 等]</li>
+              <li><strong>可扩展性：</strong>[待补充：模块化插件、API 接口、是否便于其他队伍复用]</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="usage" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>提供软件的安装、运行与使用指南，确保评审和外部用户能够复现。</p>
+          </div>
+          <h2>使用说明</h2>
+          <div id="installation">
+            <h3>安装与运行环境</h3>
+            <p>[待补充：分步骤说明安装命令或部署方式，例如 git clone、pip install、docker run 等。]</p>
+          </div>
+          <div id="quick-start">
+            <h3>快速开始</h3>
+            <p>[待补充：最小可运行示例，包括输入文件、运行命令与预期输出。]</p>
+          </div>
+          <div id="examples">
+            <h3>示例与教程</h3>
+            <p>[待补充：提供 1-2 个典型使用场景，例如“分析 DCZ 诱导梯度下的 yEGFP 响应数据”。]</p>
+          </div>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+
+        <div id="code" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>说明代码仓库地址、开源协议与核心代码结构。</p>
+          </div>
+          <h2>代码与仓库</h2>
+          <ul>
+            <li><strong>仓库链接：</strong>[待补充：GitHub / GitLab 地址]</li>
+            <li><strong>开源协议：</strong>[待补充：MIT / GPL / Apache 等]</li>
+            <li><strong>目录结构：</strong>[待补充：src/、docs/、tests/、examples/ 等说明]</li>
+            <li><strong>贡献指南：</strong>[待补充：是否接受 issue 与 pull request]</li>
+          </ul>
+        </div>
+
+        <div id="documentation" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>提供文档、API 说明与测试覆盖情况，展示软件工程规范性。</p>
+          </div>
+          <h2>文档与 API</h2>
+          <ul>
+            <li><strong>用户文档：</strong>[待补充：README、Wiki、视频教程链接]</li>
+            <li><strong>API 文档：</strong>[待补充：函数/接口列表、参数说明、返回值]</li>
+            <li><strong>测试：</strong>[待补充：单元测试覆盖率、示例数据验证]</li>
+            <li><strong>版本控制：</strong>[待补充：版本号、changelog]</li>
+          </ul>
+        </div>
+
+        <div id="future" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>说明软件的后续迭代方向与对 iGEM 社区的潜在贡献。</p>
+          </div>
+          <h2>未来工作</h2>
+          <ul>
+            <li>[待补充：计划新增功能或优化点]</li>
+            <li>[待补充：如何与 Hardware 页面中的便携检测设备联动]</li>
+            <li>[待补充：是否计划发布为 iGEM 社区通用工具或提交至 Registry]</li>
+          </ul>
+          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 移动端汉堡菜单切换
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const mobileOverlay = document.getElementById('mobile-menu-overlay');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (hamburgerMenu && mobileOverlay && mobileMenu) {
+      hamburgerMenu.addEventListener('click', function (e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
+
+        if (mobileOverlay.classList.contains('active')) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      });
+
+      // 点击遮罩层关闭
+      mobileOverlay.addEventListener('click', function (e) {
+        if (e.target === mobileOverlay) {
+          hamburgerMenu.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // 移动端下拉菜单切换
+      const dropdownToggles = mobileMenu.querySelectorAll('.dropdown-toggle');
+      dropdownToggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const parent = this.parentElement;
+          parent.classList.toggle('dropdown-open');
+        });
+      });
+
+      // 点击导航链接后关闭菜单
+      const navLinks = mobileMenu.querySelectorAll('a:not(.dropdown-toggle)');
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          hamburgerMenu.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+  
+  });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    new PageProgressBar().startAutoProgress();
+  
+  });
+</script>
+{% endblock %}

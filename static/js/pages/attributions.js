@@ -668,7 +668,6 @@
       ScrollSpy.init();
 
       state.isInitialized = true;
-      console.log('[Attributions] 页面交互已初始化');
     },
 
     /**

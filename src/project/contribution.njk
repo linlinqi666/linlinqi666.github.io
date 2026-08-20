@@ -1,0 +1,318 @@
+---
+permalink: "project/contribution.html"
+title: "Contribution - iGEM SZPU-2026"
+lang: "zh-CN"
+basePath: "../"
+css:
+  - static/css/description.css
+  - static/css/contribution.css
+js:
+  - static/js/components/sidebar-progress.js
+---
+
+{% extends "layouts/base.njk" %}
+
+{% block main %}
+<div class="description-container">
+
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="dna-icon">
+            <svg viewBox="0 0 40 40" class="dna-helix">
+              <path d="M20,5 Q25,15 20,20 Q15,25 20,35" stroke="currentColor" fill="none" stroke-width="2" />
+              <circle cx="20" cy="10" r="3" fill="currentColor" />
+              <circle cx="20" cy="20" r="3" fill="currentColor" />
+              <circle cx="20" cy="30" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>贡献导航</h3>
+          <div class="yeast-badge">iGEM</div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#contribution-overview" class="nav-main-link">Contribution 概览</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#parts-registry" class="nav-main-link">Parts 注册贡献</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#new-parts">新增 BioBrick</a></li>
+                <li class="level3"><a href="#improved-parts">改进元件</a></li>
+                <li class="level3"><a href="#characterization">表征数据</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#protocols-methods" class="nav-main-link">实验方案与方法</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#cloning-protocols">克隆与验证</a></li>
+                <li class="level3"><a href="#yeast-protocols">酵母操作</a></li>
+                <li class="level3"><a href="#assay-protocols">检测方法</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#software-tools" class="nav-main-link">软件与工具</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#analysis-tools">数据分析</a></li>
+                <li class="level3"><a href="#model-code">模型代码</a></li>
+                <li class="level3"><a href="#documentation">文档资源</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#collaboration" class="nav-main-link">协作与社区</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#team-collaboration">队伍合作</a></li>
+                <li class="level3"><a href="#education">科普与教育</a></li>
+                <li class="level3"><a href="#future-teams">致未来队伍</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <div id="contribution-overview" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>本页面记录 PAGER-Yeast 项目对 iGEM 社区与合成生物学领域的贡献，包括提交至 Registry
+              的元件、共享的实验方案、软件工具、协作成果以及可供未来队伍复用的经验。</p>
+          </div>
+          <h2>Contribution 概览</h2>
+          <p>iGEM Contribution 板块用于展示团队如何回馈社区。贡献形式不限于新元件，也包括优化现有元件、提供详细表征数据、开源代码、标准化协议以及跨队协作。</p>
+          <ul>
+            <li><strong>核心贡献方向：</strong>新型 PAGER 抗原门控受体元件、酵母底盘改造策略、检测流程标准化。</li>
+            <li><strong>可复用成果：</strong>[待补充：列出计划提交或可共享的具体资源，如质粒、菌株、代码仓库链接。]</li>
+            <li><strong>社区影响：</strong>[待补充：与哪些队伍或机构合作，开展了哪些科普与教育活动。]</li>
+          </ul>
+        </div>
+
+        <div id="parts-registry" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>说明提交至 iGEM Registry 的 BioBrick 元件、改进元件及其表征数据，确保其他队伍能够复现和使用。</p>
+          </div>
+          <h2>Parts 注册贡献</h2>
+          <div id="new-parts">
+            <h3>新增 BioBrick</h3>
+            <ul>
+              <li><strong>PAGER 融合蛋白表达盒：</strong>α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq，克隆于 pGADT7。</li>
+              <li><strong>FUS1-yEGFP 报告盒：</strong>用于定量荧光检测的 G 蛋白响应启动子报告系统。</li>
+              <li><strong>FUS1-lacZ 报告盒：</strong>用于裸眼定性判读的 β-半乳糖苷酶报告系统。</li>
+            </ul>
+            <p>[待补充：Registry 上的 Part 编号、物理样本状态、序列验证文件链接。]</p>
+          </div>
+          <div id="improved-parts">
+            <h3>改进元件</h3>
+            <ul>
+              <li>[待补充：是否对现有 Registry 元件进行了优化，例如启动子强度调整、RBS 优化、密码子优化等]</li>
+              <li>[待补充：改进前后的性能对比数据]</li>
+            </ul>
+          </div>
+          <div id="characterization">
+            <h3>表征数据</h3>
+            <p>[待补充：为每个新/改进元件提供的定量表征数据，包括测量条件、重复次数 n ≥ 3、误差定义（SD/SEM）、对照组设置。]</p>
+            <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+          </div>
+        </div>
+
+        <div id="protocols-methods" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>公开团队开发或优化的实验协议，包含材料、设备、浓度、温控时间等结构化信息，便于其他研究者复现。</p>
+          </div>
+          <h2>实验方案与方法</h2>
+          <div id="cloning-protocols">
+            <h3>克隆与验证</h3>
+            <ul>
+              <li>PAGER 融合蛋白基因的合成、限制性酶切（NdeI/BamHI）与克隆流程。</li>
+              <li>双酶切验证与 Sanger 测序确认插入片段大小与序列正确性。</li>
+            </ul>
+            <p>[待补充：详细的反应体系、循环条件、琼脂糖凝胶参数与测序引物。]</p>
+          </div>
+          <div id="yeast-protocols">
+            <h3>酵母操作</h3>
+            <ul>
+              <li>LiAc/PEG 化学转化法制备 PAGER-Yeast 工程菌株。</li>
+              <li>CRISPR-Cas9 三敲除（STE2/FAR1/Sst2）与 Gpa1 人源化改造方案。</li>
+            </ul>
+            <p>[待补充：选择标记、筛选培养基、菌落 PCR 验证引物与培养条件。]</p>
+          </div>
+          <div id="assay-protocols">
+            <h3>检测方法</h3>
+            <ul>
+              <li>流式细胞术检测 yEGFP 荧光响应。</li>
+              <li>X-Gal 显色法定性检测 lacZ 表达。</li>
+            </ul>
+            <p>[待补充：诱导剂 DCZ 浓度梯度、孵育时间、仪器型号与采集参数。]</p>
+          </div>
+        </div>
+
+        <div id="software-tools" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>汇总团队开发的软件、模型代码、数据分析脚本及配套文档，并提供访问链接与使用说明。</p>
+          </div>
+          <h2>软件与工具</h2>
+          <div id="analysis-tools">
+            <h3>数据分析</h3>
+            <p>[待补充：用于处理流式数据、计算荧光强度、绘制剂量-反应曲线的脚本或工具；建议提供 GitHub/GitLab 链接与依赖说明。]</p>
+          </div>
+          <div id="model-code">
+            <h3>模型代码</h3>
+            <p>[待补充：G 蛋白信号通路或抗原-抗体结合动力学模型的代码、参数来源与运行环境。]</p>
+          </div>
+          <div id="documentation">
+            <h3>文档资源</h3>
+            <p>[待补充：面向未来队伍的 Wiki 模板、实验记录模板、安全操作清单等可下载资源。]</p>
+          </div>
+        </div>
+
+        <div id="collaboration" class="content-card">
+          <div class="executive-summary">
+            <p><strong>执行摘要：</strong>记录与其他 iGEM 队伍、研究机构、社区组织的协作成果，以及团队开展的科普教育活动。</p>
+          </div>
+          <h2>协作与社区</h2>
+          <div id="team-collaboration">
+            <h3>队伍合作</h3>
+            <p>[待补充：与其他高校 iGEM 队伍的合作内容、共享资源、联合实验或互相验证结果。]</p>
+          </div>
+          <div id="education">
+            <h3>科普与教育</h3>
+            <p>[待补充：面向中学生、公众或基层医务人员的合成生物学与流感检测科普活动；附上活动日期、地点、参与人数与反馈。]</p>
+          </div>
+          <div id="future-teams">
+            <h3>致未来队伍</h3>
+            <ul>
+              <li>[待补充：本项目中最值得复用的经验或教训]</li>
+              <li>[待补充：建议后续队伍优先验证的关键步骤]</li>
+              <li>[待补充：联系人与资源获取方式]</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 移动端汉堡菜单切换
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const mobileOverlay = document.getElementById('mobile-menu-overlay');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (hamburgerMenu && mobileOverlay && mobileMenu) {
+      hamburgerMenu.addEventListener('click', function (e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
+
+        if (mobileOverlay.classList.contains('active')) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      });
+
+      // 点击遮罩层关闭
+      mobileOverlay.addEventListener('click', function (e) {
+        if (e.target === mobileOverlay) {
+          hamburgerMenu.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // 移动端下拉菜单切换
+      const dropdownToggles = mobileMenu.querySelectorAll('.dropdown-toggle');
+      dropdownToggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const parent = this.parentElement;
+          parent.classList.toggle('dropdown-open');
+        });
+      });
+
+      // 点击导航链接后关闭菜单
+      const navLinks = mobileMenu.querySelectorAll('a:not(.dropdown-toggle)');
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          hamburgerMenu.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+  
+  });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 页面加载进度条
+    new PageProgressBar().startAutoProgress();
+  
+  });
+</script>
+{% endblock %}

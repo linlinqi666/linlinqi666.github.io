@@ -1,15 +1,16 @@
 /**
  * search-index-generator.js
- * 预生成全站搜索索引 JSON。
+ * 预生成全站搜索索引 JavaScript。
  *
  * 用法：node static/js/core/search-index-generator.js
- * 输出：static/js/core/search-index.json
+ * 输出：static/js/core/search-index.js
  */
 const fs = require('fs');
 const path = require('path');
 const { parseHTML } = require('linkedom');
 
 const ROOT = path.resolve(__dirname, '../../..');
+const OUTPUT_PATH = path.join(ROOT, 'static/js/core/search-index.js');
 
 const PAGES = [
   'index.html',
@@ -139,10 +140,9 @@ function buildIndex() {
     });
   });
 
-  const outPath = path.join(ROOT, 'static/js/core/search-index.js');
   const jsContent = `/* 由 search-index-generator.js 自动生成，请勿手动修改 */\nwindow.iGEMSearchIndex = ${JSON.stringify(records, null, 2)};\n`;
-  fs.writeFileSync(outPath, jsContent, 'utf-8');
-  console.log(`已生成索引：${outPath}`);
+  fs.writeFileSync(OUTPUT_PATH, jsContent, 'utf-8');
+  console.log(`已生成索引：${OUTPUT_PATH}`);
   console.log(`页面数：${PAGES.length}，记录数：${records.length}`);
 }
 

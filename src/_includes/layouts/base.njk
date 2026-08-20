@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ lang | default('zh-CN') }}"{% if htmlClass %} class="{{ htmlClass }}"{% endif %}>
+<head>
+  {% include "partials/head.njk" %}
+</head>
+<body class="{{ bodyClass | default('') }}">
+  {% include "partials/nav.njk" %}
+  {% include "partials/progress.njk" %}
+  <main class="{{ mainClass | default('') }}">
+    {% block main %}{% endblock %}
+  </main>
+  {% if footer !== false %}{% include "partials/footer.njk" %}{% endif %}
+
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
+  <script src="{{ basePath | default('') }}static/js/core/utils.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/mobile-menu.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/page-progress-bar.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/search.js" defer></script>
+  {% for s in (js or []) %}<script src="{{ basePath | default('') }}{{ s }}" defer></script>{% endfor %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

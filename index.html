@@ -1,17 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN" class="home-scroll-snap">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGEM SZPU-2026 - 首页</title>
+<meta name="description" content="">
+<meta name="author" content="SZPU-China 2026">
+<meta name="theme-color" content="#8B5A2B">
+<meta name="msapplication-TileColor" content="#8B5A2B">
+<link rel="dns-prefetch" href="static/iconfont">
+<link rel="stylesheet" href="static/iconfont/iconfont.css">
+<link rel="stylesheet" href="static/css/navigation/navigation.css">
+<link rel="stylesheet" href="static/css/index.css">
+
+<link rel="stylesheet" href="static/css/components/page-progress-bar.css">
+<link rel="stylesheet" href="static/css/components/scroll-progress-bar.css">
+<link rel="stylesheet" href="static/css/mobile.css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="format-detection" content="telephone=no, email=no, address=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#4a90e2">
-  <meta name="msapplication-TileColor" content="#4a90e2">
+  
+  
   <meta name="color-scheme" content="light">
 
   <!-- 安全区域CSS变量定义（不应用到html元素以免破坏全屏布局） -->
@@ -36,16 +47,16 @@
   <!-- iGEM Layout Strategy: 预加载首屏 Hero 背景与主视觉，缩短 LCP。 -->
   <link rel="preload" as="image" href="static/image/bc/%E7%94%BB%E6%9D%BF+1.webp" fetchpriority="high">
   <link rel="preload" as="image" href="static/image/Animation/index/yeast1.svg" fetchpriority="high">
-  <title>iGEM SZPU-2026 - 首页</title>
+  
 
   <!-- 直接同步加载CSS，确保加载顺序可控 -->
   <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 移动端样式（最后加载，确保覆盖） -->
-  <link rel="stylesheet" href="static/iconfont/iconfont.css">
-  <link rel="stylesheet" href="static/css/navigation/navigation.css">
-  <link rel="stylesheet" href="static/css/index.css">
-  <link rel="stylesheet" href="static/css/components/page-progress-bar.css">
-  <link rel="stylesheet" href="static/css/components/scroll-progress-bar.css">
-  <link rel="stylesheet" href="static/css/mobile.css">
+  
+  
+  
+  
+  
+  
 
   <!-- JavaScript 禁用回退：确保核心内容在无 JS 时仍可见 -->
   <noscript>
@@ -60,280 +71,124 @@
         content: none !important;
       }
     </style>
-  </noscript>  
-  
-  
-  
-  
-  
-  <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
-  <script src="static/js/core/utils.js" defer></script>
-  <script src="static/js/core/mobile-menu.js" defer></script>
-  <script src="static/js/core/page-progress-bar.js" defer></script>
-  <script src="static/js/core/scroll-progress-bar.js" defer></script>
-  <script src="static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="static/js/components/executive-summary-animation.js" defer></script>
-  <script src="./static/js/core/search-index.js" defer></script>
-  <script src="./static/js/core/search.js" defer></script>
+  </noscript>
+
+
 </head>
-
 <body class="home-page">
-  <header>
-  </header>
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
+<button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
 
-  <!-- 汉堡菜单按钮（仅移动端显示，独立于nav之外） -->
-  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-
-  <!-- 移动端全屏菜单（独立于nav之外） -->
-  <div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
-    <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
-      <ul id="nav-menu">
-        <li>
-          <a href="index.html">
-            <span class="iconfont icon-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-xiangmu"></span>
-            <span>Project</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="project/description.html">
-              <span class="iconfont icon-jianjie"></span>
-              <span>Description</span>
-            </a>
-            <a href="project/design.html">
-              <span class="iconfont icon-sheji"></span>
-              <span>Design</span>
-            </a>
-            <a href="project/engineering.html">
-              <span class="iconfont icon-shezhichilun"></span>
-              <span>Engineering</span>
-            </a>
-            <a href="project/log.html">
-              <span class="iconfont icon-rizhi"></span>
-              <span>Log</span>
-            </a>
-            <a href="project/contribution.html">
-              <span class="iconfont icon-gongxian"></span>
-              <span>Contribution</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="team/members.html">
-              <span class="iconfont icon-tuanduichengyuan"></span>
-              <span>Members</span>
-            </a>
-            <a href="team/attributions.html">
-              <span class="iconfont icon-guishu"></span>
-              <span>Attributions</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-cplus"></span>
-            <span>Dry Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="dry-lab/model.html">
-              <span class="iconfont icon-wumoxing"></span>
-              <span>Model</span>
-            </a>
-            <a href="dry-lab/hardware.html">
-              <span class="iconfont icon-yingjian"></span>
-              <span>Hardware</span>
-            </a>
-            <a href="dry-lab/software.html">
-              <span class="iconfont icon-ruanjian-"></span>
-              <span>Software</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shiyan-L"></span>
-            <span>Wet Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="wet-lab/experiments.html">
-              <span class="iconfont icon-shiyanjilu"></span>
-              <span>Experiments</span>
-            </a>
-            <a href="wet-lab/result.html">
-              <span class="iconfont icon-shiyanjieguo"></span>
-              <span>Results</span>
-            </a>
-            <a href="wet-lab/parts.html">
-              <span class="iconfont icon-jiyin"></span>
-              <span>Parts</span>
-            </a>
-            <a href="wet-lab/safety.html">
-              <span class="iconfont icon-anquan"></span>
-              <span>Safety</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="human-practices/integrated human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>Integrated HP</span>
-            </a>
-            <a href="human-practices/education.html">
-              <span class="iconfont icon-jiaoyu1"></span>
-              <span>Education</span>
-            </a>
-            <a href="human-practices/social-groups.html">
-              <span class="iconfont icon-cooperation"></span>
-              <span>Social Groups</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
+<!-- 移动端全屏菜单（独立于 nav 之外）；隐藏态交由 mobile.css 控制（opacity:0 + translateY(100%) + visibility:hidden），以保留底部抽屉滑入动画 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+  <div class="mobile-menu" id="mobile-menu">
+    <ul id="nav-menu">
+      <li>
+        <a href="index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
   </div>
+</div>
 
-  <nav>
-    <div class="container">
-      <div class="logo">
-      </div>
-    </div>
-
-    <div class="nav-items" id="nav-items">
-      <ul id="nav-menu-desktop">
-        <li>
-          <a href="index.html">
-            <span class="iconfont icon-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-xiangmu"></span>
-            <span>Project</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="project/description.html">
-              <span class="iconfont icon-jianjie"></span>
-              <span>Description</span>
-            </a>
-            <a href="project/design.html">
-              <span class="iconfont icon-sheji"></span>
-              <span>Design</span>
-            </a>
-            <a href="project/engineering.html">
-              <span class="iconfont icon-shezhichilun"></span>
-              <span>Engineering</span>
-            </a>
-            <a href="project/log.html">
-              <span class="iconfont icon-rizhi"></span>
-              <span>Log</span>
-            </a>
-            <a href="project/contribution.html">
-              <span class="iconfont icon-gongxian"></span>
-              <span>Contribution</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="team/members.html">
-              <span class="iconfont icon-tuanduichengyuan"></span>
-              <span>Members</span>
-            </a>
-            <a href="team/attributions.html">
-              <span class="iconfont icon-guishu"></span>
-              <span>Attributions</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-cplus"></span>
-            <span>Dry Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="dry-lab/model.html">
-              <span class="iconfont icon-wumoxing"></span>
-              <span>Model</span>
-            </a>
-            <a href="dry-lab/hardware.html">
-              <span class="iconfont icon-yingjian"></span>
-              <span>Hardware</span>
-            </a>
-            <a href="dry-lab/software.html">
-              <span class="iconfont icon-ruanjian-"></span>
-              <span>Software</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shiyan-L"></span>
-            <span>Wet Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="wet-lab/experiments.html">
-              <span class="iconfont icon-shiyanjilu"></span>
-              <span>Experiments</span>
-            </a>
-            <a href="wet-lab/result.html">
-              <span class="iconfont icon-shiyanjieguo"></span>
-              <span>Results</span>
-            </a>
-            <a href="wet-lab/parts.html">
-              <span class="iconfont icon-jiyin"></span>
-              <span>Parts</span>
-            </a>
-            <a href="wet-lab/safety.html">
-              <span class="iconfont icon-anquan"></span>
-              <span>Safety</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="human-practices/integrated human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>Integrated HP</span>
-            </a>
-            <a href="human-practices/education.html">
-              <span class="iconfont icon-jiaoyu1"></span>
-              <span>Education</span>
-            </a>
-            <a href="human-practices/social-groups.html">
-              <span class="iconfont icon-cooperation"></span>
-              <span>Social Groups</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      <li>
+        <a href="index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
   <div class="nav-search" id="nav-search" data-base-path=".">
     <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
       <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -354,10 +209,21 @@
         <div class="nav-search__empty">Start typing to search pages...</div>
       </div>
     </div>
-  </div></nav>
+  </div>
+</nav>
+
+  <!-- 阅读进度条 -->
+<div class="page-progress-bar" id="page-progress-bar">
+  <div class="page-progress-fill" id="page-progress-fill"></div>
+</div>
+<!-- 侧边滚动进度条 -->
+<div class="scroll-progress-bar" id="scroll-progress-bar">
+  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
+</div>
 
   <main class="long-page">
-    <!-- 模块 1: Hero 标题页 -->
+    
+<!-- 模块 1: Hero 标题页 -->
     <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
       <div class="yeast-screen__inner">
         <div class="yeast-screen__visual">
@@ -802,22 +668,28 @@
         </div>
       </div>
     </section>
-  </main>
 
+  </main>
   
+
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先，详见 front matter 的 js 数组与 search.js / search-index.js 的 defer 加载） -->
+  <script src="static/js/core/utils.js"></script>
+  <script src="static/js/core/mobile-menu.js"></script>
+  <script src="static/js/core/nav-scroll-behavior.js"></script>
+  <script src="static/js/core/page-progress-bar.js"></script>
+  <script src="static/js/core/scroll-progress-bar.js"></script>
+  <script src="static/js/core/search-index.js" defer></script>
+  <script src="static/js/core/search.js" defer></script>
+  <script src="static/js/components/executive-summary-animation.js"></script>
   
-  
-  
-  
-  
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
     // 页面加载进度条
     new PageProgressBar().startAutoProgress();
   
   });
 </script>
-</body>
 
+</body>
 </html>

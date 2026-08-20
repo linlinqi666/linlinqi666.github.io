@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Human Practices - iGEM SZPU-2026</title>
-  <link rel="stylesheet" href="../static/iconfont/iconfont.css">
-  <link rel="stylesheet" href="../static/css/navigation/navigation.css">
-  <link rel="stylesheet" href="../static/css/index.css">
-  <link rel="stylesheet" href="../static/css/description.css">
-  <link rel="stylesheet" href="../static/css/integrated human-practices.css">
-  <link rel="stylesheet" href="../static/css/mobile.css">
-  <!-- 3D 时间轴样式：照搬自 communication/demos/demo-3d-timeline.html，
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Practices - iGEM SZPU-2026</title>
+<meta name="description" content="">
+<meta name="author" content="SZPU-China 2026">
+<meta name="theme-color" content="#8B5A2B">
+<meta name="msapplication-TileColor" content="#8B5A2B">
+<link rel="dns-prefetch" href="../static/iconfont">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css">
+<link rel="stylesheet" href="../static/css/index.css">
+<link rel="stylesheet" href="../static/css/description.css">
+<link rel="stylesheet" href="../static/css/integrated human-practices.css">
+
+<link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
+<link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
+<link rel="stylesheet" href="../static/css/mobile.css">
+<!-- 3D 时间轴样式：照搬自 对话归档/tests/demo-3d-timeline.html，
        作用域限定在 .hp3d-root，不污染站点全局样式 -->
   <style>
   .hp3d-root, .hp3d-root *, .hp3d-root *::before, .hp3d-root *::after { box-sizing: border-box; }
@@ -21,44 +28,19 @@
     --color-bg: #faf8f3;
     --color-accent: #8b7355;
   }
-  .hp3d-root .timeline-orbit-container { max-width: 1200px; margin: 5rem auto 2rem; padding: 0 24px; overflow: visible; }
-  .hp3d-root .container-header { text-align: center; margin-bottom: 0.6rem; }
-  .hp3d-root .container-header h1 { font-size: 1.7rem; font-weight: 600; }
-  .hp3d-root .container-header .subtitle { font-size: 0.9rem; color: var(--color-accent); opacity: 0.75; }
+  /* 传统分步导航：替代 3D 轮播，点击切换内容板块 */
+  .hp3d-root .hp-stepper { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 2.5rem auto 1.5rem; max-width: 900px; padding: 0 16px; }
+  .hp3d-root .hp-step { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border: 1.5px solid rgba(139,115,85,0.3); border-radius: 999px; background: transparent; color: var(--color-accent); font-size: 0.92rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; font-family: inherit; }
+  .hp3d-root .hp-step b { font-variant-numeric: tabular-nums; font-size: 0.82rem; opacity: 0.7; font-weight: 700; }
+  .hp3d-root .hp-step span { white-space: nowrap; }
+  .hp3d-root .hp-step:hover { border-color: var(--color-primary); color: var(--color-primary); transform: translateY(-2px); }
+  .hp3d-root .hp-step.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; box-shadow: 0 8px 20px -8px rgba(74,59,42,0.5); }
+  .hp3d-root .hp-step.active b { opacity: 0.85; }
+  .hp3d-root .hp-step:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
-  /* 单一共享 3D 舞台：卡片环与日期环同处一个透视空间，靠固定几何定位，
-     不再有跨舞台运行时测量，整条时间环也绝不会因调参而整体平移 */
-  .hp3d-root .dual-stage { position: relative; width: 100%; perspective: 1100px; perspective-origin: 50% 55%; overflow: visible; }
-  .hp3d-root .dual-scene { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; opacity: 0; }
-  .hp3d-root .cards-group { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
-  .hp3d-root .orbit-ring { position: absolute; left: 50%; top: 50%; width: calc(2 * var(--r, 280px)); height: calc(2 * var(--r, 280px)); margin-left: calc(-1 * var(--r, 280px)); margin-top: calc(-1 * var(--r, 280px)); border-radius: 50%; border: 2px dashed rgba(74,59,42,0.22); transform: rotateX(90deg); pointer-events: none; }
-  .hp3d-root .timeline-group { position: absolute; inset: 0; transform-style: preserve-3d; }
-  .hp3d-root .timeline-ring { position: absolute; left: 50%; top: 50%; width: calc(2 * var(--tr, 300px)); height: calc(2 * var(--tr, 300px)); margin-left: calc(-1 * var(--tr, 300px)); margin-top: calc(-1 * var(--tr, 300px)); border-radius: 50%; border: 1.5px dashed rgba(139,115,85,0.25); transform: rotateX(90deg); pointer-events: none; }
-  .hp3d-root .timeline-node { position: absolute; width: 80px; height: 20px; left: 47%; top: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; will-change: transform, opacity; transform-style: preserve-3d; }
-  .hp3d-root .timeline-node-label { font-size: 0.75rem; white-space: nowrap; color: var(--color-accent); font-weight: 600; letter-spacing: 0.03em; opacity: 0.8; transition: all 0.3s ease; font-variant-numeric: tabular-nums; }
-  .hp3d-root .timeline-node.active .timeline-node-label { color: var(--color-primary); }
-  .hp3d-root .orbit-card { position: absolute; left: 50%; top: 50%; border-radius: 16px; cursor: pointer; background-color: #c9b89c; background-size: cover; background-position: center; border: 3px solid rgba(246,241,231,0.95); box-shadow: 0 16px 38px -12px rgba(74,59,42,0.45); transform-style: preserve-3d; will-change: transform, opacity; transition: box-shadow 0.4s ease; }
-  .hp3d-root .orbit-card .orbit-card-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(74,59,42,0.4); font-size: 0.85rem; letter-spacing: 0.05em; border-radius: 16px; }
-  .hp3d-root .orbit-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; border-radius: 16px; }
-  /* 透明扩展热区：让转到两侧（被 3D 压缩、视觉较小的）卡片更容易点击跳转，
-     不影响视觉尺寸，仅扩大可点击范围（inset 负值向外延伸） */
-  .hp3d-root .orbit-card::after { content: ""; position: absolute; inset: -22px; border-radius: 20px; }
-  .hp3d-root .orbit-card.front { box-shadow: 0 28px 52px -14px rgba(74,59,42,0.55), 0 0 0 1px rgba(74,59,42,0.15); }
-
-  .hp3d-root .slider-control { position: relative; height: 56px; display: flex; align-items: center; justify-content: center; padding: 0 40px; margin-top: 2px; }
-  .hp3d-root .slider-wrapper { position: relative; width: 100%; max-width: 760px; height: 40px; display: flex; align-items: center; }
-  .hp3d-root .slider-track { position: absolute; width: 100%; height: 5px; background: linear-gradient(90deg, rgba(139,115,85,0.1), rgba(139,115,85,0.28), rgba(139,115,85,0.1)); border-radius: 3px; overflow: hidden; }
-  .hp3d-root .slider-fill { position: absolute; left: 0; height: 100%; background: linear-gradient(90deg, var(--color-accent), var(--color-primary)); border-radius: 3px; width: 0%; }
-  .hp3d-root .slider-input { position: relative; width: 100%; height: 40px; -webkit-appearance: none; appearance: none; background: transparent; cursor: grab; z-index: 2; margin: 0; }
-  .hp3d-root .slider-input:active { cursor: grabbing; }
-  .hp3d-root .slider-input::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--color-cream), #fff); border: 3px solid var(--color-primary); box-shadow: 0 4px 14px rgba(74,59,42,0.32), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; transition: transform 0.16s ease; }
-  .hp3d-root .slider-input::-webkit-slider-thumb:hover { transform: scale(1.12); }
-  .hp3d-root .slider-input::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.03); }
-  .hp3d-root .slider-input::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--color-cream), #fff); border: 3px solid var(--color-primary); box-shadow: 0 4px 14px rgba(74,59,42,0.32); cursor: grab; }
-
-  .hp3d-root .detail-panel { margin-top: 8px; background: var(--color-cream); border-radius: 14px; border: 1px solid rgba(74,59,42,0.1); box-shadow: 0 10px 36px -14px rgba(74,59,42,0.26); overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+  .hp3d-root .detail-panel { margin-top: 8px; overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1); }
   .hp3d-root .detail-panel.show { opacity: 1; transform: translateY(0); }
-  .hp3d-root .detail-viewport { overflow: hidden; }
+  .hp3d-root .detail-viewport { overflow: hidden; transition: height 0.42s cubic-bezier(0.22,1,0.36,1); }
   .hp3d-root .detail-track { display: flex; transition: transform 0.42s cubic-bezier(0.22,1,0.36,1); will-change: transform; }
   .hp3d-root .detail-slide { flex: 0 0 100%; padding: 26px 30px 30px; }
 
@@ -131,23 +113,21 @@
   }
 
   @media (max-width: 768px) {
-    .hp3d-root .timeline-orbit-container { padding: 0 14px; }
-    .hp3d-root .dual-stage { perspective: 760px; }
-    .hp3d-root .slider-input::-webkit-slider-thumb { width: 24px; height: 24px; }
     .hp3d-root .detail-slide { padding: 18px 16px 20px; }
     .hp3d-root .detail-slide .detail-headtext h3 { font-size: 1.08rem; }
     .hp3d-root .detail-photos { grid-template-columns: repeat(2, 1fr); }
     .hp3d-root .hp-tsinghua-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 150px); gap: 10px; }
+    .hp3d-root .hp-stepper { gap: 8px; margin: 1.8rem auto 1.2rem; }
+    .hp3d-root .hp-step { padding: 8px 14px; font-size: 0.85rem; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hp3d-root .dual-scene, .hp3d-root .orbit-card, .hp3d-root .timeline-node,
-    .hp3d-root .detail-panel, .hp3d-root .detail-track, .hp3d-root .slider-fill { transition: none !important; }
+    .hp3d-root .detail-panel, .hp3d-root .detail-track { transition: none !important; }
   }
   </style>
   
   
-  <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
-  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">  
+  
+    
   
   
   
@@ -155,20 +135,20 @@
   
   
   
-  <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
-  <script src="../static/js/core/utils.js" charset="UTF-8" defer></script>
+  
+  
   <!-- 侧边栏已注释，相关组件在当前页面无需加载
-  <script src="../static/js/components/sidebar-progress.js" charset="UTF-8" defer></script>
+  
   -->
-  <script src="../static/js/core/mobile-menu.js" charset="UTF-8" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" charset="UTF-8" defer></script>
+  
+  
   <!-- 当前页面主要由 3D 轮播导航，进度条组件在 file:// 测试环境报错且非必需
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  
+  
   -->
   <!-- 以下组件在当前页面未使用，注释以减少请求与滚动监听开销
-  <script src="../static/js/components/hp-carousel.js" charset="UTF-8" defer></script>
-  <script src="../static/js/components/hp-reveal-box.js" charset="UTF-8" defer></script>
+  
+  
   -->
 
 <style>
@@ -188,12 +168,8 @@
     --hz-province-hover: #b8a883;
     font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     color: #4a3f33;
-    max-width: 1100px; margin: 0 auto;
-    /* 暖棕色画框，与项目主题色保持一致 */
-    background: radial-gradient(1200px 600px at 50% -10%, #f3eadd 0%, #e0d2c1 60%, #c9b99a 100%);
-    padding: 24px 18px 36px;
-    border-radius: 20px;
-    box-shadow: 0 24px 70px rgba(74,59,42,.22);
+    width: 100%;
+    max-width: 100%; margin: 0 auto;
     /* 隔离层叠与布局，避免影响宿主页面 */
     isolation: isolate;
   }
@@ -212,18 +188,11 @@
 
   .hz-map .hz-container {
     position: relative; width: 100%;
-    aspect-ratio: 774.044 / 569.651;        /* 中国地图 natural ratio */
-    background: linear-gradient(180deg, var(--hz-map-bg-1) 0%, var(--hz-map-bg-2) 100%);
-    border: 1px solid rgba(139,115,85,.25);
-    border-radius: 18px;
-    /* 用 padding 给边缘 pin 留出安全区，避免被圆角背景裁切 */
-    padding: 18px; box-sizing: border-box;
-    box-shadow: 0 20px 60px rgba(74,59,42,.18);
-    contain: layout paint style;              /* 加强 containment */
+    contain: layout paint style;
   }
 
   .hz-map .hz-layer {
-    position: absolute; inset: 18px;
+    position: relative;
     /* 性能优化：CSS contain 限制浏览器重排/重绘范围 */
     contain: layout style paint size;
     content-visibility: auto;
@@ -237,7 +206,7 @@
   }
 
   .hz-map .hz-layer > svg { 
-    width: 100%; height: 100%; display: block;
+    width: 100%; height: auto; display: block;
     /* SVG 渲染优化：限制重绘范围 */
     contain: layout paint; 
   }
@@ -252,11 +221,17 @@
   .hz-map #chinaProvinces path:focus,
   .hz-map #chinaProvinces path:focus-visible { outline: none; }
 
-  /* 中国地图：省份路径 - 暖棕主题，静态填充，无 hover 动画 */
+  /* 中国地图：省份路径 - 暖棕主题，悬停高亮 */
   .hz-map #chinaProvinces path {
     fill: var(--hz-province-fill); stroke: var(--hz-province-stroke); stroke-width: .8;
-    /* 仅在父容器可见时才渲染（配合 content-visibility） */
     contain: layout paint;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: fill .2s ease, stroke .2s ease;
+  }
+  .hz-map #chinaProvinces path:hover {
+    fill: var(--hz-province-hover);
+    stroke: var(--hz-province-stroke);
   }
 
   /* ===== 筛选面板 ===== */
@@ -366,22 +341,22 @@
     background: rgba(6,12,22,.6); backdrop-filter: blur(4px);
     display: none; align-items: center; justify-content: center;
     z-index: 99; padding: 16px;
-    /* 模态框隔离，避免影响底层地图渲染 */
-    contain: strict;
+    /* 使用宽松的 containment，避免影响 fixed 定位 */
+    contain: layout style;
   }
   .hz-map .hz-modal.show { display: flex; animation: hzFade .2s ease-out; }
   @keyframes hzFade { from { opacity: 0; } to { opacity: 1; } }
 
   .hz-map .hz-modal-card {
     width: min(760px, 92vw);
-    max-height: calc(100vh - 48px);
-    overflow: auto;
+    height: calc(100vh - 48px);
+    max-height: 560px;
+    overflow: hidden;
     background: #f5f0e8; color: #3d342b;
     border-radius: 20px; padding: 28px 30px 26px;
     position: relative; box-shadow: 0 30px 80px rgba(0,0,0,.5);
-    animation: hzPop .28s cubic-bezier(.2,.9,.3,1.3);
+    contain: layout style; /* 减少重绘范围 */
   }
-  @keyframes hzPop { from { transform: translateY(14px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
 
   .hz-map .hz-modal-close {
     position: absolute; top: 14px; right: 16px;
@@ -391,9 +366,14 @@
   }
   .hz-map .hz-modal-close:hover { background: rgba(139,115,85,.28); }
 
-  .hz-map .hz-modal-body { display: flex; gap: 24px; align-items: flex-start; }
+  .hz-map .hz-modal-body {
+    display: flex; gap: 24px; align-items: flex-start;
+    height: calc(100% - 20px); /* 减去标题区域高度 */
+  }
   .hz-map .hz-modal-photo-col {
     flex: 0 0 150px; display: flex; flex-direction: column; gap: 12px;
+    /* 侧边栏固定，不随内容滚动 */
+    position: sticky; top: 0;
   }
   .hz-map .hz-modal-photo {
     position: relative;
@@ -414,7 +394,16 @@
   .hz-map .hz-photo-name { font-weight: 700; font-size: 14px; color: #3d342b; margin-bottom: 2px; }
   .hz-map .hz-photo-org { color: #8b7355; font-size: 12px; margin-bottom: 6px; }
   .hz-map .hz-photo-desc { color: #5a4d3f; font-size: 12.5px; }
-  .hz-map .hz-modal-content { flex: 1 1 auto; min-width: 0; }
+  .hz-map .hz-modal-content {
+    flex: 1 1 auto; min-width: 0;
+    overflow-y: auto; /* 内容区可滚动 */
+    padding-right: 8px; /* 滚动条空间 */
+    /* 隐藏滚动条样式优化（可选） */
+    scrollbar-width: thin; scrollbar-color: rgba(139,115,85,.3) transparent;
+  }
+  .hz-modal-content::-webkit-scrollbar { width: 5px; }
+  .hz-modal-content::-webkit-scrollbar-track { background: transparent; }
+  .hz-modal-content::-webkit-scrollbar-thumb { background: rgba(139,115,85,.35); border-radius: 4px; }
   .hz-map .hz-modal-content h2 {
     margin: 0 0 4px; font-size: 22px; color: #6b8c42; font-weight: 700;
   }
@@ -430,9 +419,13 @@
   }
 
   @media (max-width: 640px) {
-    .hz-map .hz-modal-card { padding: 22px 18px 20px; }
-    .hz-map .hz-modal-body { flex-direction: column; align-items: center; gap: 16px; }
-    .hz-map .hz-modal-photo-col { flex: 0 0 auto; align-items: center; width: 100%; }
+    .hz-map .hz-modal-card { padding: 22px 18px 20px; max-height: 70vh; }
+    .hz-map .hz-modal-body {
+      flex-direction: column; align-items: center; gap: 16px;
+      height: auto; /* 移动端自适应高度 */
+      overflow-y: auto;
+    }
+    .hz-map .hz-modal-photo-col { flex: 0 0 auto; align-items: center; width: 100%; position: static; }
     .hz-map .hz-modal-photo { width: 120px; height: 150px; }
     .hz-map .hz-photo-bio { text-align: center; max-width: 280px; }
     .hz-map .hz-modal-content h2 { font-size: 19px; }
@@ -452,269 +445,129 @@
     }
   }
 
+  /* 地图独立于内容框之外：全宽无约束 */
+  #mapSlideStandalone { width: 100%; }
+  #mapSlideStandalone > .hz-map { width: 100%; }
+
 </style>
-  <script src="../static/js/core/search-index.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
+
+
 </head>
+<body class="">
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
+<button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
 
-<body>
-  <header>
-  </header>
-
-  <!-- 汉堡菜单按钮（仅移动端显示，独立于nav之外） -->
-  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-
-  <!-- 移动端全屏菜单（独立于nav之外） -->
-  <div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
-    <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
-      <ul id="nav-menu">
-        <li>
-          <a href="../index.html">
-            <span class="iconfont icon-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-xiangmu"></span>
-            <span>Project</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../project/description.html">
-              <span class="iconfont icon-jianjie"></span>
-              <span>Description</span>
-            </a>
-            <a href="../project/design.html">
-              <span class="iconfont icon-sheji"></span>
-              <span>Design</span>
-            </a>
-            <a href="../project/engineering.html">
-              <span class="iconfont icon-shezhichilun"></span>
-              <span>Engineering</span>
-            </a>
-            <a href="../project/log.html">
-              <span class="iconfont icon-rizhi"></span>
-              <span>Log</span>
-            </a>
-            <a href="../project/contribution.html">
-              <span class="iconfont icon-gongxian"></span>
-              <span>Contribution</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../team/members.html">
-              <span class="iconfont icon-tuanduichengyuan"></span>
-              <span>Members</span>
-            </a>
-            <a href="../team/attributions.html">
-              <span class="iconfont icon-guishu"></span>
-              <span>Attributions</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-cplus"></span>
-            <span>Dry Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../dry-lab/model.html">
-              <span class="iconfont icon-wumoxing"></span>
-              <span>Model</span>
-            </a>
-            <a href="../dry-lab/hardware.html">
-              <span class="iconfont icon-yingjian"></span>
-              <span>Hardware</span>
-            </a>
-            <a href="../dry-lab/software.html">
-              <span class="iconfont icon-ruanjian-"></span>
-              <span>Software</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shiyan-L"></span>
-            <span>Wet Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../wet-lab/experiments.html">
-              <span class="iconfont icon-shiyanjilu"></span>
-              <span>Experiments</span>
-            </a>
-            <a href="../wet-lab/result.html">
-              <span class="iconfont icon-shiyanjieguo"></span>
-              <span>Results</span>
-            </a>
-            <a href="../wet-lab/parts.html">
-              <span class="iconfont icon-jiyin"></span>
-              <span>Parts</span>
-            </a>
-            <a href="../wet-lab/safety.html">
-              <span class="iconfont icon-anquan"></span>
-              <span>Safety</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../human-practices/integrated human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>Integrated HP</span>
-            </a>
-            <a href="../human-practices/education.html">
-              <span class="iconfont icon-jiaoyu1"></span>
-              <span>Education</span>
-            </a>
-            <a href="../human-practices/social-groups.html">
-              <span class="iconfont icon-cooperation"></span>
-              <span>Social Groups</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
+<!-- 移动端全屏菜单（独立于 nav 之外）；隐藏态交由 mobile.css 控制（opacity:0 + translateY(100%) + visibility:hidden），以保留底部抽屉滑入动画 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+  <div class="mobile-menu" id="mobile-menu">
+    <ul id="nav-menu">
+      <li>
+        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
   </div>
+</div>
 
-  <nav>
-    <div class="container">
-      <div class="logo">
-      </div>
-    </div>
-
-    <div class="nav-items" id="nav-items">
-      <ul id="nav-menu-desktop">
-        <li>
-          <a href="../index.html">
-            <span class="iconfont icon-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-xiangmu"></span>
-            <span>Project</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../project/description.html">
-              <span class="iconfont icon-jianjie"></span>
-              <span>Description</span>
-            </a>
-            <a href="../project/design.html">
-              <span class="iconfont icon-sheji"></span>
-              <span>Design</span>
-            </a>
-            <a href="../project/engineering.html">
-              <span class="iconfont icon-shezhichilun"></span>
-              <span>Engineering</span>
-            </a>
-            <a href="../project/log.html">
-              <span class="iconfont icon-rizhi"></span>
-              <span>Log</span>
-            </a>
-            <a href="../project/contribution.html">
-              <span class="iconfont icon-gongxian"></span>
-              <span>Contribution</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../team/members.html">
-              <span class="iconfont icon-tuanduichengyuan"></span>
-              <span>Members</span>
-            </a>
-            <a href="../team/attributions.html">
-              <span class="iconfont icon-guishu"></span>
-              <span>Attributions</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-cplus"></span>
-            <span>Dry Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../dry-lab/model.html">
-              <span class="iconfont icon-wumoxing"></span>
-              <span>Model</span>
-            </a>
-            <a href="../dry-lab/hardware.html">
-              <span class="iconfont icon-yingjian"></span>
-              <span>Hardware</span>
-            </a>
-            <a href="../dry-lab/software.html">
-              <span class="iconfont icon-ruanjian-"></span>
-              <span>Software</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shiyan-L"></span>
-            <span>Wet Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../wet-lab/experiments.html">
-              <span class="iconfont icon-shiyanjilu"></span>
-              <span>Experiments</span>
-            </a>
-            <a href="../wet-lab/result.html">
-              <span class="iconfont icon-shiyanjieguo"></span>
-              <span>Results</span>
-            </a>
-            <a href="../wet-lab/parts.html">
-              <span class="iconfont icon-jiyin"></span>
-              <span>Parts</span>
-            </a>
-            <a href="../wet-lab/safety.html">
-              <span class="iconfont icon-anquan"></span>
-              <span>Safety</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../human-practices/integrated human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>Integrated HP</span>
-            </a>
-            <a href="../human-practices/education.html">
-              <span class="iconfont icon-jiaoyu1"></span>
-              <span>Education</span>
-            </a>
-            <a href="../human-practices/social-groups.html">
-              <span class="iconfont icon-cooperation"></span>
-              <span>Social Groups</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  <div class="nav-search" id="nav-search" data-base-path="..">
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      <li>
+        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path="../">
     <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
       <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -734,11 +587,21 @@
         <div class="nav-search__empty">Start typing to search pages...</div>
       </div>
     </div>
-  </div></nav>
+  </div>
+</nav>
 
-  <!-- iGEM Layout Strategy: 使用 description-container 匹配 sidebar-progress.js 的容器检测逻辑，内容结构对齐 description.html 模板 -->
-  <main>
-    <div class="description-container">
+  <!-- 阅读进度条 -->
+<div class="page-progress-bar" id="page-progress-bar">
+  <div class="page-progress-fill" id="page-progress-fill"></div>
+</div>
+<!-- 侧边滚动进度条 -->
+<div class="scroll-progress-bar" id="scroll-progress-bar">
+  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
+</div>
+
+  <main class="">
+    
+<div class="description-container">
       <!-- 侧边导航栏（已注释，当前页面由 3D 轮播直接导航）
       <aside class="description-sidebar">
         ...
@@ -748,50 +611,22 @@
       <!-- 内容区域 -->
       <div class="description-content" id="content">
 
-        <!-- ===== 3D 时间轴导航：照搬自 communication/demos/demo-3d-timeline.html ===== -->
+        <!-- 传统分步导航：替代 3D 轮播，点击切换内容板块 -->
         <div class="hp3d-root">
-            <div class="timeline-orbit-container">
-              <!-- 单一共享 3D 舞台：卡片环与日期环同处一个透视空间，靠固定几何定位 -->
-              <div class="dual-stage" id="dualStage">
-              <div class="dual-scene" id="dualScene">
-                <div class="cards-group" id="cardsGroup">
-                  <div class="orbit-ring"></div>
-                </div>
-                <div class="timeline-group" id="timelineGroup">
-                  <div class="timeline-ring"></div>
-                </div>
-              </div>
-              </div>
-            <div class="slider-control">
-              <div class="slider-wrapper">
-                <div class="slider-track"><div class="slider-fill" id="sliderFill"></div></div>
-                <input type="range" class="slider-input" id="sliderInput" min="0" max="3600" value="0" step="1">
-              </div>
-            </div>
-            <div class="detail-panel" id="detailPanel">
-              <div class="detail-viewport"><div class="detail-track" id="detailTrack">
-        <div class="detail-slide">
-<div id="section-overview" class="content-card hp-overview-card">
-          <div class="hp-section-header">
-            <span class="hp-section-number">00</span>
-            <h2 class="hp-section-title">概述</h2>
-          </div>
-          <!-- 内容 -->
-          <p class="hp-section-intro">下面这张交互地图记录了团队在项目过程中接触过的部分 Human Practices 合作者与专家。点击图钉即可查看每位专家的方向与贡献。</p>
+            <nav class="hp-stepper" id="hpStepper" aria-label="人类实践板块导航">
+              <button class="hp-step active" data-index="0" type="button"><b>00</b><span>项目概述</span></button>
+              <button class="hp-step" data-index="1" type="button"><b>01</b><span>清华参赛交流</span></button>
+              <button class="hp-step" data-index="2" type="button"><b>02</b><span>华南交流会</span></button>
+              <button class="hp-step" data-index="3" type="button"><b>03</b><span>中学生科普</span></button>
+            </nav>
+        <div class="detail-slide detail-slide--map" id="mapSlideStandalone">
   <div class="app hz-map" id="hzMap">
-    <div class="hz-header">
-      <div>
-        <h1>全球专家交互地图</h1>
-        <div class="hz-hint">点击图钉查看专家详情</div>
-      </div>
-    </div>
-
   <div class="hz-container" id="hzMapContainer">
 
 
     <!-- 中国地图层：省份路径来自 MapSVG CC0 china.svg -->
     <div class="hz-layer hz-china" id="hzChinaLayer">
-      <svg id="chinaSvg" viewBox="0 0 774.04419 569.65088" preserveAspectRatio="none" aria-label="中国地图">
+      <svg id="chinaSvg" viewBox="0 0 774.04419 569.65088" preserveAspectRatio="xMidYMid meet" aria-label="中国地图">
         <g id="chinaProvinces"><path
      d="m 541.23752,336.50016 0.69,-0.2 0.83,1.29 1.23,0.89 -0.24,0.31 2.39,0.41 0.84,1.13 1.02,-0.3 0.66,0.24 0.11,1.7 1.07,0.62 -0.38,0.97 1.29,0.77 0.05,0.42 0.77,0.44 1.47,0.02 0.56,-0.34 0.79,0.97 1.2,-0.55 0.83,1.2 0.6,-0.68 0.57,0.52 0.45,1.61 0.69,0.03 -0.34,2.39 2.63,-0.03 0.32,-0.51 1.85,-0.01 0.92,0.34 -0.41,0.27 0.12,0.94 -0.62,0.69 0.01,2.1 -0.71,-0.26 -0.22,0.29 -0.19,1.52 -0.74,0.39 0.25,0.53 -0.61,1.31 0.56,0.01 0.08,0.69 0.65,0.58 1.43,-0.5 0.26,-0.65 0.42,0.24 0.47,3.1 0.88,0.49 -1.01,0.53 0.16,1.17 0.5,-0.17 0.18,1.2 0.84,0.12 0.04,0.76 1.03,-0.29 1.73,0.25 0.64,-0.34 0.93,0.39 0.52,-0.34 -0.13,-1.61 0.85,-0.11 -0.01,-0.9 0.39,-0.06 0.16,-0.56 1.03,0.3 1.05,-0.31 0,0.81 0.33,-0.07 0.79,1.26 0.98,-0.08 0.33,1.6 -0.22,0.77 0.49,0.98 -0.2,0.5 -0.44,-0.37 -0.41,1.58 -0.8,0.59 -0.64,-0.94 -0.68,0.14 -0.57,-0.76 -0.57,0.01 0.17,-0.51 -0.82,0.33 -0.24,-0.55 -0.41,0.33 -0.89,-0.39 -1.83,0.33 -0.1,0.41 0.63,0.67 -0.21,0.55 1.15,0.06 -0.12,1.29 0.33,0.72 -0.63,0.6 0.09,1.2 -1.96,0.36 -0.1,1.05 -1.34,0.62 -0.3,2.17 1.24,1.25 0.5,0.09 -0.26,0.68 0.55,0.81 1.25,-0.32 0.61,0.51 0.19,0.34 -0.56,0.45 0.14,0.5 0.86,0.14 0.6,-0.73 0.33,0.87 0.81,0.04 0.31,1.48 -0.22,1.4 -0.75,0.82 -0.82,0.09 -0.56,0.92 0.72,0.37 0.36,0.69 3.81,-0.05 1.14,-1.01 0.25,0.46 1.02,0.29 0.8,-0.16 0.17,-0.55 0.36,0.5 -0.27,0.84 0.51,0.11 -0.18,0.32 3.12,0.62 0,0 -0.07,1.8 -0.86,1.47 0.14,1.14 -0.55,0.85 -0.52,-0.03 -0.01,1.02 -0.57,0.88 -0.37,0.06 -0.37,-0.58 -0.88,0.94 -0.92,0.09 0.32,0.52 -0.31,0.62 0.39,0.36 0.67,-0.27 0.29,1.66 0.64,0.71 -0.48,0.24 -0.45,-0.31 -0.94,0.43 -0.3,0.74 -1.77,-0.49 -0.54,0.28 -1.13,-0.79 -0.92,0.64 0.13,1.25 0.39,0.29 -0.94,0.76 0.57,0.1 -0.33,0.69 0.41,1.18 -0.08,1.1 -0.69,0.17 -0.17,0.79 -0.9,0.57 -0.2,1.6 -1.13,1.21 -1.27,0.53 -0.82,1.5 -0.83,0 -0.24,0.45 -1.08,-0.24 -0.11,1.03 -0.79,-0.14 -0.64,0.57 0,0 -0.8,-0.43 0.07,-1.2 -1.56,-1.03 -1.01,0.4 -1.54,-0.36 -1.32,0.37 -0.64,-0.94 -0.85,0.42 -0.62,-0.18 -0.34,-0.4 0.21,-0.42 -0.97,-0.49 0.02,-0.89 -0.58,-0.66 0.14,-0.78 -0.78,0.52 -0.28,-0.54 -0.56,0.4 -0.43,-0.13 -0.06,-1.12 -0.52,-0.27 -0.98,0.34 -0.06,0.58 -0.72,0.46 0.79,0.74 -0.29,1 -1.47,0.41 -1.96,1.63 -0.57,0.06 -0.44,-0.47 -0.5,0.49 -0.87,-1.04 0.37,-0.56 -0.35,-0.27 1.24,-1.49 0.76,-0.21 1.11,-2 -0.4,-0.44 -0.49,0.13 -0.04,-0.55 -0.36,0.07 -0.18,-0.45 -1.47,-0.56 -0.97,0.29 -0.67,2.27 -0.85,-0.01 -2.64,1.68 -0.72,-0.71 -0.88,0.13 0,0 -0.03,-0.96 -0.74,-1.08 0.22,-1.06 -0.33,-2.45 -0.89,-0.73 -0.17,-0.6 -0.97,-0.21 0.15,-0.36 -0.41,-0.69 0.76,-0.62 -0.62,-0.41 0.24,-0.95 -0.55,-1.03 -0.74,-0.1 -0.08,-0.72 -0.58,-0.57 0.26,-1.03 1.1,-0.3 -0.32,-0.87 0.32,-0.46 2.61,-1.44 -0.36,-0.75 -1.33,-0.42 -0.84,-1.51 -1.31,0.5 -0.88,-1.3 -0.57,-0.14 -0.97,0.94 -0.65,-1.57 -0.8,-0.25 -0.04,-0.66 -0.34,-0.51 -0.59,0.07 -0.22,-0.85 0,0 0.08,-1.42 1.39,-1.63 0.14,-0.94 2.26,-1.57 0.61,0.27 0.53,-0.35 0.6,0.38 1.23,-0.53 -0.25,-1.18 0.37,-0.59 0.2,-3.69 -0.37,-0.83 -0.34,-4 -0.48,-0.29 1.04,-0.92 -0.38,-0.12 -1.46,1.67 -0.19,-0.58 -0.15,0.42 -0.78,-0.28 -0.38,1.26 -0.87,-0.26 -0.52,0.37 0.17,-0.23 -1.98,-2.32 -1.32,0.33 -0.01,-0.5 -1.33,-0.05 0,-3.98 -0.77,-0.68 -1.32,-0.09 -0.26,-0.48 -0.9,0.06 -0.74,-0.73 0.61,-0.55 -0.43,-0.96 0.11,-0.66 0.41,-0.46 1.2,1.08 1.44,0.03 0.52,-0.55 1.32,-0.19 0.92,-2.9 -0.63,-0.79 0.39,-1.85 0.36,-0.27 0.31,0.25 0.19,-0.82 1.82,0 1.02,-0.41 -0.9,-2.87 0.63,-0.12 0.2,-1.33 -1.07,-0.15 0.66,-2.3 0.64,-0.51 1.99,-0.09 0.57,1.03 0.44,-0.44 1.01,0.47 0.41,0.56 -0.2,0.89 0.95,0.66 -0.17,0.47 0.36,0.75 1.1,1.13 3.47,-1.46 0.07,-0.74 1.01,-0.27 0.54,-0.56 0.97,0.27 0.09,-1.27 -1.52,-2.15 0.52,-0.89 -0.34,-0.82 0.47,-0.76 -0.96,-0.28 -0.59,0.42 -0.14,-0.36 -0.99,0.33 -0.05,-0.7 -1.89,-1 -0.68,-1.22 0.51,-0.8 -0.11,-0.97 0,0 0.59,0.41 0.54,-0.85 0.47,0.1 z"
      title="Anhui"
@@ -976,12 +811,9 @@
     </div>
   </div>
 </div>
-</div>
 
-
-
-        </div>
-        </div>
+            <div class="detail-panel" id="detailPanel">
+              <div class="detail-viewport"><div class="detail-track" id="detailTrack">
 
         <div class="detail-slide">
 <div id="section-carousel" class="content-card">
@@ -1194,105 +1026,146 @@
 
 </div>
     </div>
-  </main>
 
-  <section id="footer" class="fullscreen-section section-footer">
-    <picture>
-      <source srcset="../static/image/bc/画板+7.webp" type="image/webp">
-      <img loading="lazy" class="section-bg-img" src="../static/image/bc/画板+7.jpg" alt="">
-    </picture>
-    <div class="component-container">
-      <div class="footer-wrapper">
-        <!-- 顶部内容：图片滚动 + Contact Us -->
-        <div class="footer-top">
-          <!-- 滚动图片展示区域 -->
-          <div class="footer-scroller">
-            <div class="image-scroller">
-              <div class="scroller-track">
-                <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                  <picture>
-                    <source srcset="../static/image/SZPU(notext).webp" type="image/webp">
-                    <img loading="lazy" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
-                  </picture>
-                </a>
-                <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                  <picture>
-                    <source srcset="../static/image/shiyao(notext).webp" type="image/webp">
-                    <img loading="lazy" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
-                  </picture>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Contact Us 区域 -->
-          <div class="footer-contact">
-            <h4>Contact Us:</h4>
-            <div class="contact-icons">
-              <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-                <span class="iconfont icon-youxiang"></span>
-              </div>
-              <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
-                class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-                <span class="iconfont icon-bilibili-fill"></span>
+  </main>
+  <section id="footer" class="section-footer">
+  
+  <div class="component-container">
+    <div class="footer-wrapper">
+      <div class="footer-top">
+        <div class="footer-scroller">
+          <div class="image-scroller">
+            <div class="scroller-track">
+              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
               </a>
-              <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-                <span class="iconfont icon-weixin"></span>
-                <div class="wechat-qr-container">
-                  <div class="wechat-qr-arrow"></div>
-                  <picture>
-                    <source srcset="../static/image/other/echoyeast_social.webp" type="image/webp">
-                    <img src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-                  </picture>
-                </div>
+              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
               </a>
             </div>
           </div>
         </div>
-        <!-- 特色分界线1 -->
-        <div class="footer-divider">
-          <span class="divider-line"></span>
-          <span class="divider-icon" aria-hidden="true">
-            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-              focusable="false">
-              <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)"
-                stroke-width="2" />
-              <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-              <circle cx="20" cy="20" r="4" fill="white" />
-            </svg>
-          </span>
-          <span class="divider-line"></span>
-        </div>
-        <!-- 版权信息区域 -->
-        <div class="footer-bottom-section">
-          <p>&copy; 2026 - Content on this site is licensed under a Attribution 4.0 International license.</p>
-          <p>The repository used to create this website is available at <a href="#">gitlab.igem.org/2026/szpu-china</a>.
-          </p>
+        <div class="footer-contact">
+          <h4>Contact Us:</h4>
+          <div class="contact-icons">
+            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+              <span class="iconfont icon-youxiang"></span>
+            </div>
+            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <span class="iconfont icon-bilibili-fill"></span>
+            </a>
+            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+              <span class="iconfont icon-weixin"></span>
+              <div class="wechat-qr-container">
+                <div class="wechat-qr-arrow"></div>
+                <img loading="lazy" decoding="async" src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
+              </div>
+            </a>
+          </div>
         </div>
       </div>
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+            <circle cx="20" cy="20" r="4" fill="white" />
+          </svg>
+        </span>
+        <span class="divider-line"></span>
+      </div>
+      <div class="footer-navigation">
+        <div class="footer-content-box">
+          <div class="footer-columns">
+            <div class="footer-column">
+              <h4>Project</h4>
+              <ul>
+                <li><a href="../project/description.html">Description</a></li>
+                <li><a href="../project/design.html">Design</a></li>
+                <li><a href="../project/engineering.html">Engineering</a></li>
+                <li><a href="../project/log.html">Log</a></li>
+                <li><a href="../project/contribution.html">Contribution</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Wet Lab</h4>
+              <ul>
+                <li><a href="../wet-lab/experiments.html">Experiments</a></li>
+                <li><a href="../wet-lab/result.html">Results</a></li>
+                <li><a href="../wet-lab/parts.html">Parts</a></li>
+                <li><a href="../wet-lab/safety.html">Safety</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Dry Lab</h4>
+              <ul>
+                <li><a href="../dry-lab/model.html">Model</a></li>
+                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
+                <li><a href="../dry-lab/software.html">Software</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Human Practices</h4>
+              <ul>
+                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+                <li><a href="../human-practices/education.html">Education</a></li>
+                <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Team</h4>
+              <ul>
+                <li><a href="../team/members.html">Members</a></li>
+                <li><a href="../team/attributions.html">Attributions</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider divider-simple">
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-line-short"></span>
+        <span class="divider-text">Synthetic Biology</span>
+        <span class="divider-line-short"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+      </div>
+      <div class="footer-bottom-section">
+        <p>&copy; 2026 - Content on this site is licensed under a Attribution 4.0 International license.</p>
+        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- iGEM Layout Strategy: 引用完整的脚本集合，保持与其他页面一致 -->
+
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先，详见 front matter 的 js 数组与 search.js / search-index.js 的 defer 加载） -->
+  <script src="../static/js/core/utils.js"></script>
+  <script src="../static/js/core/mobile-menu.js"></script>
+  <script src="../static/js/core/nav-scroll-behavior.js"></script>
+  <script src="../static/js/core/page-progress-bar.js"></script>
+  <script src="../static/js/core/scroll-progress-bar.js"></script>
+  <script src="../static/js/core/search-index.js" defer></script>
+  <script src="../static/js/core/search.js" defer></script>
+  <script src="../static/js/components/sidebar-progress.js"></script><script src="../static/js/components/hp-carousel.js"></script><script src="../static/js/components/hp-reveal-box.js"></script>
   
-  
-  
-  
-  
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
       // PageProgressBar 脚本已注释，避免未定义报错
       // new PageProgressBar().startAutoProgress();
     });
-  </script>
-
-  <!-- 3D 时间轴导航脚本：基于 demo-3d-timeline.html 正确架构修复 -->
+</script>
 <script>
 (function () {
   'use strict';
 
-  // 轨道元数据：仅用于生成 3D 卡片与时间轴节点
-  // time 字段显示在时间轴节点下方，建议格式：YY/MM/DD
+  /* 3D 时间轴轮播已停用：完整可运行代码已封装于 对话归档/tests/hp3d-carousel-archive.html，
+     方便以后整段迁移复用。以下旧逻辑置于 if (false) 内，永不执行。 */
+  if (false) {
   var articles = [
     { time: '', title: '项目概述', img: '../static/image/any-icon/home.webp' },
     { time: '26/07/31', title: '清华参赛交流', img: '../static/image/HP/tsinghua/1.webp' },
@@ -1472,11 +1345,14 @@
     renderCards();
     renderTimelineNodes();
     renderDetailSlides();
+    updateDetailPanel(0);   // 初始化时设置面板高度
 
     bindEvents();
+    // 图片/字体加载完成后高度可能变化，再校正一次
+    window.addEventListener('load', function () { updateDetailPanel(currentFrontIdx || 0); });
     startLoop();
 
-    window.addEventListener('resize', function () { applyLayout(); kick(); });
+    window.addEventListener('resize', function () { applyLayout(); kick(); updateDetailPanel(currentFrontIdx || 0); });
 
     requestAnimationFrame(function () {
       dualScene.style.opacity = '1';
@@ -1609,6 +1485,14 @@
     idx = Math.max(0, Math.min(slideCount - 1, idx));
     detailTrack.style.transform = 'translateX(' + (-idx * 100) + '%)';
     detailCounter.textContent = (idx + 1) + ' / ' + slideCount;
+    // 核心修复：让 viewport 高度 = 当前 slide 的真实高度，
+    // 所有 slide 仍留在轨道上（translateX 机制不受影响），
+    // 只是面板可视区域高度跟随当前内容，不会留下大片空白。
+    var slides = detailTrack.children;
+    if (slides[idx]) {
+      var vp = detailTrack.parentElement; // .detail-viewport
+      if (vp) vp.style.height = slides[idx].offsetHeight + 'px';
+    }
   }
 
   function syncSliderFill() {
@@ -1704,13 +1588,62 @@
     }
   };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  } /* end disabled 3D block */
 })();
 </script>
 
 <script>
+/* 传统分步导航控制器：点击 hp-stepper 切换 detailTrack 内容板块 */
+(function () {
+  'use strict';
+  var stepper = document.getElementById('hpStepper');
+  var detailTrack = document.getElementById('detailTrack');
+  var detailPanel = document.getElementById('detailPanel');
+  var detailCounter = document.getElementById('detailCounter');
+  if (!stepper || !detailTrack) return;
 
+  var slides = detailTrack.children;
+  var count = slides.length;
+  var current = 0;
+
+  function goTo(idx) {
+    idx = Math.max(0, Math.min(count - 1, idx));
+    current = idx;
+    detailTrack.style.transform = 'translateX(' + (-idx * 100) + '%)';
+    if (detailCounter) detailCounter.textContent = (idx + 1) + ' / ' + count;
+    var vp = detailTrack.parentElement;
+    if (vp && slides[idx]) vp.style.height = slides[idx].offsetHeight + 'px';
+    var steps = stepper.querySelectorAll('.hp-step');
+    for (var i = 0; i < steps.length; i++) steps[i].classList.toggle('active', i === idx);
+  }
+
+  var stepBtns = stepper.querySelectorAll('.hp-step');
+  for (var s = 0; s < stepBtns.length; s++) {
+    (function (b) {
+      b.addEventListener('click', function () { goTo(parseInt(b.getAttribute('data-index'), 10)); });
+    })(stepBtns[s]);
+  }
+
+  document.querySelectorAll('a[data-hp-slide]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var idx = parseInt(a.getAttribute('data-hp-slide'), 10);
+      if (!isNaN(idx)) goTo(idx);
+    });
+  });
+
+  window.HP3D = { goTo: goTo };
+
+  function init() {
+    if (detailPanel) detailPanel.classList.add('show');
+    goTo(0);
+    window.addEventListener('resize', function () { goTo(current); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<script>
 (function () {
   "use strict";
   // 所有元素都在 .hz-map 根容器内查找，迁移到其它页面不与宿主 DOM 冲突
@@ -1853,9 +1786,7 @@
 
   renderPins();
 })();
-
 </script>
-</body>
 
+</body>
 </html>
-<!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->

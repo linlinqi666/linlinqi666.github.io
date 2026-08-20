@@ -1,0 +1,17 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ title | default("SZPU-China · iGEM 2026") }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ description | default("") }}{% endblock %}">
+<meta name="author" content="SZPU-China 2026">
+<meta name="theme-color" content="#8B5A2B">
+<meta name="msapplication-TileColor" content="#8B5A2B">
+<link rel="dns-prefetch" href="{{ basePath | default('') }}static/iconfont">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/iconfont/iconfont.css">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/navigation/navigation.css">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/index.css">
+{% for c in (css or []) %}<link rel="stylesheet" href="{{ basePath | default('') }}{{ c }}">
+{% endfor %}
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/page-progress-bar.css">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/scroll-progress-bar.css">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/mobile.css">
+{% if headExtraPartial %}{% include headExtraPartial %}{% endif %}

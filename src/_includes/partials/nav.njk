@@ -1,0 +1,135 @@
+<!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
+<button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- 移动端全屏菜单（独立于 nav 之外）；隐藏态交由 mobile.css 控制（opacity:0 + translateY(100%) + visibility:hidden），以保留底部抽屉滑入动画 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+  <div class="mobile-menu" id="mobile-menu">
+    <ul id="nav-menu">
+      <li>
+        <a href="{{ basePath | default('') }}index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="{{ basePath | default('') }}project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="{{ basePath | default('') }}project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="{{ basePath | default('') }}project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="{{ basePath | default('') }}project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="{{ basePath | default('') }}team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="{{ basePath | default('') }}dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="{{ basePath | default('') }}dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="{{ basePath | default('') }}wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="{{ basePath | default('') }}wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="{{ basePath | default('') }}wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="{{ basePath | default('') }}human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="{{ basePath | default('') }}human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      <li>
+        <a href="{{ basePath | default('') }}index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="{{ basePath | default('') }}project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="{{ basePath | default('') }}project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="{{ basePath | default('') }}project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="{{ basePath | default('') }}project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="{{ basePath | default('') }}team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="{{ basePath | default('') }}dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="{{ basePath | default('') }}dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="{{ basePath | default('') }}wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="{{ basePath | default('') }}wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="{{ basePath | default('') }}wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="{{ basePath | default('') }}human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="{{ basePath | default('') }}human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="{{ basePath | default('') }}human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path="{{ basePath | default('.', true) }}">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    </button>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..." autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
+    </div>
+  </div>
+</nav>

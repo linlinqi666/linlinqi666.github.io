@@ -377,70 +377,6 @@
   /**
    * 内置测试工具。
    */
-  const Tester = {
-    /**
-     * 运行快速自检。
-     * @returns {Promise<boolean>} 是否全部通过
-     */
-    runQuickTest: function () {
-      const self = this;
-      return Promise.resolve().then(function () {
-        console.group('🔍 iGEM Sidebar Progress System - Quick Test');
-
-        const el = Elements.getCachedElements();
-
-        const checks = {
-          stickyPosition: el.descriptionSidebar ?
-            window.getComputedStyle(el.descriptionSidebar).position === 'sticky' &&
-            window.getComputedStyle(el.descriptionSidebar).top === '120px' : false,
-          elementsExist: !!(el.progressPercentage && el.flaskLiquid && el.bubbling),
-          scrollContainer: !!state.scrollInfo
-        };
-
-        console.log('📍 Sticky Position:', checks.stickyPosition ? '✅ PASS' : '❌ FAIL');
-        console.log('📊 Elements Exist:', checks.elementsExist ? '✅ PASS' : '❌ FAIL');
-        console.log('🔄 Scroll Container:', checks.scrollContainer ? '✅ PASS' : '❌ FAIL');
-
-        window.scrollTo(0, 0);
-        return self.wait(100).then(function () {
-          const topPercent = el.progressPercentage ? parseInt(el.progressPercentage.textContent) : 0;
-          console.log('⬆️ Scroll to Top:', topPercent <= 5 ? '✅ PASS' : '❌ FAIL', '(' + topPercent + '%)');
-
-          window.scrollTo(0, document.documentElement.scrollHeight);
-          return self.wait(150).then(function () {
-            const bottomPercent = el.progressPercentage ? parseInt(el.progressPercentage.textContent) : 0;
-            console.log('⬇️ Scroll to Bottom:', bottomPercent >= 95 ? '✅ PASS' : '❌ FAIL', '(' + bottomPercent + '%)');
-
-            window.scrollTo(0, 0);
-
-            const allPass = Object.values(checks).every(Boolean) && topPercent <= 5 && bottomPercent >= 95;
-            console.log('📋 Overall:', allPass ? '✅ ALL TESTS PASSED' : '⚠️ SOME TESTS FAILED');
-
-            console.groupEnd();
-            return allPass;
-          });
-        });
-      });
-    },
-
-    /**
-     * 等待指定毫秒。
-     * @param {number} ms - 等待时间
-     * @returns {Promise<void>}
-     */
-    wait: function (ms) {
-      return new Promise(function (resolve) { return setTimeout(resolve, ms); });
-    },
-
-    /**
-     * 验证布局完整性。
-     * @returns {boolean}
-     */
-    validateLayout: function () {
-      return LayoutValidator.validateLayoutIntegrity();
-    }
-  };
-
   /**
    * 公开 API。
    */
@@ -460,23 +396,6 @@
      */
     validate: function () {
       return LayoutValidator.validateLayoutIntegrity();
-    },
-
-    /**
-     * 运行快速测试。
-     * @returns {Promise<boolean>}
-     */
-    runTest: function () {
-      return Tester.runQuickTest();
-    },
-
-    /**
-     * 设置调试模式。
-     * @param {boolean} enabled - 是否启用
-     */
-    setDebugMode: function (enabled) {
-      CONFIG.debugMode = enabled;
-      console.log('调试模式:', enabled ? '已启用' : '已禁用');
     },
 
     /**
@@ -563,7 +482,6 @@
     MainLoop.updateScrollProgress();
 
     log('系统初始化完成');
-    console.log('💡 提示: 在控制台运行 SidebarProgress.runTest() 进行完整测试');
   }
 
   if (document.readyState === 'loading') {

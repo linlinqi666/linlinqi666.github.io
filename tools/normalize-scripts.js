@@ -19,7 +19,10 @@
  *
  * 脚本集合由各页面文件名规则生成（而非读取现有 src），以保证路径与顺序永远正确。
  *
- * 用法：node tools/normalize-scripts.js   （可重复运行，幂等）
+ * 注意：根目录 HTML 已改为由 Eleventy 从 `src/` 构建的产物；该工具仅用于历史迁移，
+ * 不属于默认构建流程。不要对当前源码或构建产物运行它。
+ *
+ * 用法：node tools/normalize-scripts.js   （仅历史迁移，需先核对模板）
  * ---------------------------------------------------------------------------
  */
 'use strict';
@@ -51,30 +54,29 @@ function scriptsFor(file) {
   const base = isRoot ? 'static/' : '../static/';
   const core = (p) => `${base}js/${p}`;
   const comp = (p) => `${base}js/components/${p}`;
+  const page = (p) => `${base}js/pages/${p}`;
+  const list = [
+    { order: 0, src: core('core/utils.js') },
+    { order: 1, src: core('core/search.js') }
+  ];
 
-  const list = [];
-  list.push({ order: 0, src: core('core/utils.js') });
-  if (!NO_SIDEBAR.has(fname)) {
-    list.push({ order: 1, src: comp('sidebar-progress.js') });
-  }
-  list.push({ order: 2, src: core('core/mobile-menu.js') });
-  list.push({ order: 3, src: core('core/page-progress-bar.js') });
-  list.push({ order: 4, src: core('core/scroll-progress-bar.js') });
-  list.push({ order: 5, src: core('core/nav-scroll-behavior.js') });
-
-  if (fname === 'integrated human-practices.html') {
-    list.push({ order: 99, src: comp('hp-reveal-box.js') });
-    list.push({ order: 99, src: comp('hp-carousel.js') });
+  if (fname === 'index.html') {
+    list.push({ order: 99, src: page('index.js') });
   } else if (fname === 'members.html') {
-    list.push({ order: 99, src: core('pages/members.js') });
-  } else if (fname === 'attributions.html') {
-    list.push({ order: 99, src: core('pages/attributions.js') });
-  } else if (fname === 'index.html') {
-    list.push({ order: 99, src: comp('executive-summary-animation.js') });
+    list.push({ order: 99, src: page('members.js') });
+  } else if (fname === 'integrated human-practices.html') {
+    list.push({ order: 99, src: comp('hp-reveal-box.js') });
+  } else if (fname === 'education.html' || fname === 'social-groups.html') {
+    list.push({ order: 99, src: comp('reveal.js') });
+  } else if (fname === 'engineering.html') {
+    list.push({ order: 99, src: comp('toc.js') });
+    list.push({ order: 100, src: comp('reveal.js') });
+  } else if (!['attributions.html', 'log.html'].includes(fname)) {
+    list.push({ order: 99, src: comp('toc.js') });
+    list.push({ order: 100, src: comp('reveal.js') });
   }
 
-  list.sort((a, b) => a.order - b.order || a.src.localeCompare(b.src));
-  return list.map((x) => x.src);
+  return list.sort((a, b) => a.order - b.order || a.src.localeCompare(b.src)).map((x) => x.src);
 }
 
 function normalize(file) {

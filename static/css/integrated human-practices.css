@@ -31,38 +31,10 @@
   --hp-layer-top: 4;
 }
 
-/* 内容区背景：多层径向渐变 + 柔焦光斑营造纵深空间 */
 .description-content {
   position: relative;
   z-index: var(--hp-layer-base);
-}
-
-.description-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(ellipse at 20% 10%, rgba(139, 90, 43, 0.035) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 90%, rgba(212, 165, 116, 0.05) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 55%, rgba(139, 90, 43, 0.02) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.description-content::after {
-  content: '';
-  position: absolute;
-  top: 12%;
-  right: -6%;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(212, 165, 116, 0.09) 0%, transparent 65%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -2;
+  background-color: var(--bg-page);
 }
 
 /* 卡片层级：章节卡片作为主要信息层，悬浮于背景之上 */
@@ -1612,12 +1584,8 @@
     --hz-accent: var(--hz-accent, #8b7355);
     font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     color: var(--hz-fg, #4a3b2a);
-    max-width: 1100px; margin: 0 auto;
-    /* 自带深色画框，保证迁移到任意页面观感一致、可直接复现 */
-    background: var(--hz-bg, linear-gradient(180deg, #efe8db 0%, #f5f0e6 100%));
-    padding: 24px 18px 36px;
-    border-radius: 20px;
-    box-shadow: 0 24px 70px rgba(0,0,0,.45);
+    width: 100%;
+    max-width: 100%; margin: 0 auto;
     /* 隔离层叠与布局，避免影响宿主页面 */
     isolation: isolate;
   }
@@ -1637,12 +1605,7 @@
   .hz-map .hz-container {
     position: relative; width: 100%;
     aspect-ratio: 774.044 / 569.651;        /* 中国地图 natural ratio */
-    background: linear-gradient(180deg, #d4cbb8 0%, #ebe5d9 100%);
-    border: 1px solid rgba(139,115,85,0.2);
-    border-radius: 18px;
-    /* 用 padding 给边缘 pin 留出安全区，避免被圆角背景裁切 */
-    padding: 18px; box-sizing: border-box;
-    box-shadow: 0 12px 40px rgba(74,59,42,0.18);
+    max-height: 600px;
     contain: layout paint style;              /* 加强 containment */
   }
 
@@ -1676,11 +1639,17 @@
   .hz-map #chinaProvinces path:focus,
   .hz-map #chinaProvinces path:focus-visible { outline: none; }
 
-  /* 中国地图：省份路径 - 暖棕主题，静态填充，无 hover 动画 */
+  /* 中国地图：省份路径 - 暖棕主题，悬停高亮 */
   .hz-map #chinaProvinces path {
     fill: var(--hz-china-fill, #c9b99a); stroke: var(--hz-china-stroke, #a8997d); stroke-width: .8;
-    /* 仅在父容器可见时才渲染（配合 content-visibility） */
     contain: layout paint;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: fill .2s ease, stroke .2s ease;
+  }
+  .hz-map #chinaProvinces path:hover {
+    fill: var(--hz-province-hover, #b8a883);
+    stroke: var(--hz-china-stroke, #a8997d);
   }
 
   /* ===== 筛选面板 ===== */

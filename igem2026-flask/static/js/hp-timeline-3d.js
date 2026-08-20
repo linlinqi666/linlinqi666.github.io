@@ -1,6 +1,6 @@
 /* =================================================================
    hp-timeline-3d.js
-   移植自 communication/demos/demo-3d-timeline.html 的 3D 圆环引擎。
+   移植自 对话归档/tests/demo-3d-timeline.html 的 3D 圆环引擎。
    行为严格遵循 demo 逻辑：
      - 拖动滑块 / 点按 ‹ › ：只旋转 3D 圆环（orbit + timeline），
        不切换、不滚动任何文章正文；

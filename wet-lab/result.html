@@ -1,292 +1,141 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Results - iGEM SZPU-2026</title>
-  <link rel="stylesheet" href="../static/iconfont/iconfont.css">
-  <link rel="stylesheet" href="../static/css/navigation/navigation.css">
-  <link rel="stylesheet" href="../static/css/index.css">
-  <link rel="stylesheet" href="../static/css/description.css">
-  <link rel="stylesheet" href="../static/css/result.css">
-  <link rel="stylesheet" href="../static/css/mobile.css">
-  <link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
-  <link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">  
-  
-  
-  
-  
-  
-  <!-- 标准化脚本：统一置于 head 并以 defer 加载（utils 最先，DOM 解析后按序执行） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/search-index.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Results - iGEM SZPU-2026</title>
+<meta name="description" content="">
+<meta name="author" content="SZPU-China 2026">
+<meta name="theme-color" content="#8B5A2B">
+<meta name="msapplication-TileColor" content="#8B5A2B">
+<link rel="dns-prefetch" href="../static/iconfont">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css">
+<link rel="stylesheet" href="../static/css/index.css">
+<link rel="stylesheet" href="../static/css/description.css">
+<link rel="stylesheet" href="../static/css/result.css">
+
+<link rel="stylesheet" href="../static/css/components/page-progress-bar.css">
+<link rel="stylesheet" href="../static/css/components/scroll-progress-bar.css">
+<link rel="stylesheet" href="../static/css/mobile.css">
+
+
 </head>
+<body class="">
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
+<button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
 
-<body>
-  <header>
-  </header>
-
-  <!-- 汉堡菜单按钮（仅移动端显示，独立于nav之外） -->
-  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-
-  <!-- 移动端全屏菜单（独立于nav之外） -->
-  <div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
-    <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
-      <ul id="nav-menu">
-        <li>
-          <a href="../index.html">
-            <span class="iconfont icon-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-xiangmu"></span>
-            <span>Project</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../project/description.html">
-              <span class="iconfont icon-jianjie"></span>
-              <span>Description</span>
-            </a>
-            <a href="../project/design.html">
-              <span class="iconfont icon-sheji"></span>
-              <span>Design</span>
-            </a>
-            <a href="../project/engineering.html">
-              <span class="iconfont icon-shezhichilun"></span>
-              <span>Engineering</span>
-            </a>
-            <a href="../project/log.html">
-              <span class="iconfont icon-rizhi"></span>
-              <span>Log</span>
-            </a>
-            <a href="../project/contribution.html">
-              <span class="iconfont icon-gongxian"></span>
-              <span>Contribution</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../team/members.html">
-              <span class="iconfont icon-tuanduichengyuan"></span>
-              <span>Members</span>
-            </a>
-            <a href="../team/attributions.html">
-              <span class="iconfont icon-guishu"></span>
-              <span>Attributions</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-cplus"></span>
-            <span>Dry Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../dry-lab/model.html">
-              <span class="iconfont icon-wumoxing"></span>
-              <span>Model</span>
-            </a>
-            <a href="../dry-lab/hardware.html">
-              <span class="iconfont icon-yingjian"></span>
-              <span>Hardware</span>
-            </a>
-            <a href="../dry-lab/software.html">
-              <span class="iconfont icon-ruanjian-"></span>
-              <span>Software</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shiyan-L"></span>
-            <span>Wet Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="experiments.html">
-              <span class="iconfont icon-shiyanjilu"></span>
-              <span>Experiments</span>
-            </a>
-            <a href="result.html">
-              <span class="iconfont icon-shiyanjieguo"></span>
-              <span>Results</span>
-            </a>
-            <a href="parts.html">
-              <span class="iconfont icon-jiyin"></span>
-              <span>Parts</span>
-            </a>
-            <a href="safety.html">
-              <span class="iconfont icon-anquan"></span>
-              <span>Safety</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../human-practices/integrated human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>Integrated HP</span>
-            </a>
-            <a href="../human-practices/education.html">
-              <span class="iconfont icon-jiaoyu1"></span>
-              <span>Education</span>
-            </a>
-            <a href="../human-practices/social-groups.html">
-              <span class="iconfont icon-cooperation"></span>
-              <span>Social Groups</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
+<!-- 移动端全屏菜单（独立于 nav 之外）；隐藏态交由 mobile.css 控制（opacity:0 + translateY(100%) + visibility:hidden），以保留底部抽屉滑入动画 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+  <div class="mobile-menu" id="mobile-menu">
+    <ul id="nav-menu">
+      <li>
+        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
   </div>
+</div>
 
-  <nav>
-    <div class="container">
-      <div class="logo">
-      </div>
-    </div>
-
-    <div class="nav-items" id="nav-items">
-      <ul id="nav-menu-desktop">
-        <li>
-          <a href="../index.html">
-            <span class="iconfont icon-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-xiangmu"></span>
-            <span>Project</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../project/description.html">
-              <span class="iconfont icon-jianjie"></span>
-              <span>Description</span>
-            </a>
-            <a href="../project/design.html">
-              <span class="iconfont icon-sheji"></span>
-              <span>Design</span>
-            </a>
-            <a href="../project/engineering.html">
-              <span class="iconfont icon-shezhichilun"></span>
-              <span>Engineering</span>
-            </a>
-            <a href="../project/log.html">
-              <span class="iconfont icon-rizhi"></span>
-              <span>Log</span>
-            </a>
-            <a href="../project/contribution.html">
-              <span class="iconfont icon-gongxian"></span>
-              <span>Contribution</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../team/members.html">
-              <span class="iconfont icon-tuanduichengyuan"></span>
-              <span>Members</span>
-            </a>
-            <a href="../team/attributions.html">
-              <span class="iconfont icon-guishu"></span>
-              <span>Attributions</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-cplus"></span>
-            <span>Dry Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../dry-lab/model.html">
-              <span class="iconfont icon-wumoxing"></span>
-              <span>Model</span>
-            </a>
-            <a href="../dry-lab/hardware.html">
-              <span class="iconfont icon-yingjian"></span>
-              <span>Hardware</span>
-            </a>
-            <a href="../dry-lab/software.html">
-              <span class="iconfont icon-ruanjian-"></span>
-              <span>Software</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shiyan-L"></span>
-            <span>Wet Lab</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="experiments.html">
-              <span class="iconfont icon-shiyanjilu"></span>
-              <span>Experiments</span>
-            </a>
-            <a href="result.html">
-              <span class="iconfont icon-shiyanjieguo"></span>
-              <span>Results</span>
-            </a>
-            <a href="parts.html">
-              <span class="iconfont icon-jiyin"></span>
-              <span>Parts</span>
-            </a>
-            <a href="safety.html">
-              <span class="iconfont icon-anquan"></span>
-              <span>Safety</span>
-            </a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <div class="dropdown-content">
-            <a href="../human-practices/integrated human-practices.html">
-              <span class="iconfont icon-shehuishijian"></span>
-              <span>Integrated HP</span>
-            </a>
-            <a href="../human-practices/education.html">
-              <span class="iconfont icon-jiaoyu1"></span>
-              <span>Education</span>
-            </a>
-            <a href="../human-practices/social-groups.html">
-              <span class="iconfont icon-cooperation"></span>
-              <span>Social Groups</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  <div class="nav-search" id="nav-search" data-base-path="..">
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      <li>
+        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
+          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../wet-lab/experiments.html"><span class="iconfont icon-shiyanjilu"></span><span>Experiments</span></a>
+          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path="../">
     <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
       <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -306,10 +155,21 @@
         <div class="nav-search__empty">Start typing to search pages...</div>
       </div>
     </div>
-  </div></nav>
+  </div>
+</nav>
 
-  <main>
-    <div class="description-container">
+  <!-- 阅读进度条 -->
+<div class="page-progress-bar" id="page-progress-bar">
+  <div class="page-progress-fill" id="page-progress-fill"></div>
+</div>
+<!-- 侧边滚动进度条 -->
+<div class="scroll-progress-bar" id="scroll-progress-bar">
+  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
+</div>
+
+  <main class="">
+    
+<div class="description-container">
 
       <!-- 左侧导航栏 -->
       <aside class="description-sidebar">
@@ -543,146 +403,135 @@
         </div>
       </div>
     </div>
-  </main>
 
-  <section id="footer" class="fullscreen-section section-footer">
-    <picture>
-      <source srcset="../static/image/bc/画板+7.webp" type="image/webp">
-      <img loading="lazy" class="section-bg-img" src="../static/image/bc/画板+7.jpg" alt="Footer background">
-    </picture>
-    <div class="component-container">
-      <div class="footer-wrapper">
-        <!-- 顶部内容：图片滚动 + Contact Us -->
-        <div class="footer-top">
-          <!-- 滚动图片展示区域 -->
-          <div class="footer-scroller">
-            <div class="image-scroller">
-              <div class="scroller-track">
-                <a href="https://www.szpu.edu.cn/" target="_blank">
-                  <picture>
-                    <source srcset="../static/image/SZPU(notext).webp" type="image/webp">
-                    <img loading="lazy" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
-                  </picture>
-                </a>
-                <a href="https://fd.szpu.edu.cn/" target="_blank">
-                  <picture>
-                    <source srcset="../static/image/shiyao(notext).webp" type="image/webp">
-                    <img loading="lazy" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
-                  </picture>
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Contact Us 区域 -->
-          <div class="footer-contact">
-            <h4>Contact Us:</h4>
-            <div class="contact-icons">
-              <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-                <span class="iconfont icon-youxiang"></span>
-              </div>
-              <a href="https://space.bilibili.com/3706970825558875" target="_blank" class="contact-icon-wrapper"
-                data-tooltip="Bilibili: SZPU-2026">
-                <span class="iconfont icon-bilibili-fill"></span>
+  </main>
+  <section id="footer" class="section-footer">
+  
+  <div class="component-container">
+    <div class="footer-wrapper">
+      <div class="footer-top">
+        <div class="footer-scroller">
+          <div class="image-scroller">
+            <div class="scroller-track">
+              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
               </a>
-              <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-                <span class="iconfont icon-weixin"></span>
-                <div class="wechat-qr-container">
-                  <div class="wechat-qr-arrow"></div>
-                  <picture>
-                    <source srcset="../static/image/other/echoyeast_social.webp" type="image/webp">
-                    <img src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-                  </picture>
-                </div>
+              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
               </a>
             </div>
           </div>
         </div>
-        <!-- 特色分界线1 -->
-        <div class="footer-divider">
-          <span class="divider-line"></span>
-          <span class="divider-icon">
-            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)"
-                stroke-width="2" />
-              <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-              <circle cx="20" cy="20" r="4" fill="white" />
-            </svg>
-          </span>
-          <span class="divider-line"></span>
-        </div>
-        <!-- 导航链接区域 -->
-        <div class="footer-navigation">
-          <div class="footer-content-box">
-            <div class="footer-columns">
-              <div class="footer-column">
-                <h4>Project</h4>
-                <ul>
-                  <li><a href="../project/description.html">Description</a></li>
-                  <li><a href="../project/design.html">Design</a></li>
-                  <li><a href="../project/engineering.html">Engineering</a></li>
-                  <li><a href="../project/log.html">Log</a></li>
-                  <li><a href="../project/contribution.html">Contribution</a></li>
-                </ul>
-              </div>
-              <div class="footer-column">
-                <h4>Wet Lab</h4>
-                <ul>
-                  <li><a href="experiments.html">Experiments</a></li>
-                  <li><a href="result.html">Results</a></li>
-                  <li><a href="parts.html">Parts</a></li>
-                  <li><a href="safety.html">Safety</a></li>
-                </ul>
-              </div>
-              <div class="footer-column">
-                <h4>Dry Lab</h4>
-                <ul>
-                  <li><a href="../dry-lab/model.html">Model</a></li>
-                  <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-                  <li><a href="../dry-lab/software.html">Software</a></li>
-                </ul>
-              </div>
-              <div class="footer-column">
-                <h4>Human Practices</h4>
-                <ul>
-                  <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
-                  <li><a href="../human-practices/education.html">Education</a></li>
-                  <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
-                </ul>
-              </div>
-              <div class="footer-column">
-                <h4>Team</h4>
-                <ul>
-                  <li><a href="../team/members.html">Members</a></li>
-                  <li><a href="../team/attributions.html">Attributions</a></li>
-                </ul>
-              </div>
+        <div class="footer-contact">
+          <h4>Contact Us:</h4>
+          <div class="contact-icons">
+            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+              <span class="iconfont icon-youxiang"></span>
             </div>
+            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <span class="iconfont icon-bilibili-fill"></span>
+            </a>
+            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+              <span class="iconfont icon-weixin"></span>
+              <div class="wechat-qr-container">
+                <div class="wechat-qr-arrow"></div>
+                <img loading="lazy" decoding="async" src="../static/image/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
+              </div>
+            </a>
           </div>
-        </div>
-        <!-- 特色分界线2 -->
-        <div class="footer-divider divider-simple">
-          <span class="divider-dot"></span>
-          <span class="divider-dot"></span>
-          <span class="divider-dot"></span>
-          <span class="divider-line-short"></span>
-          <span class="divider-text">Synthetic Biology</span>
-          <span class="divider-line-short"></span>
-          <span class="divider-dot"></span>
-          <span class="divider-dot"></span>
-          <span class="divider-dot"></span>
-        </div>
-        <!-- 版权信息区域 -->
-        <div class="footer-bottom-section">
-          <p>&copy; 2026 - Content on this site is licensed under a Attribution 4.0 International license.</p>
-          <p>The repository used to create this website is available at <a href="#">gitlab.igem.org/2026/szpu-china</a>.
-          </p>
         </div>
       </div>
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+            <circle cx="20" cy="20" r="4" fill="white" />
+          </svg>
+        </span>
+        <span class="divider-line"></span>
+      </div>
+      <div class="footer-navigation">
+        <div class="footer-content-box">
+          <div class="footer-columns">
+            <div class="footer-column">
+              <h4>Project</h4>
+              <ul>
+                <li><a href="../project/description.html">Description</a></li>
+                <li><a href="../project/design.html">Design</a></li>
+                <li><a href="../project/engineering.html">Engineering</a></li>
+                <li><a href="../project/log.html">Log</a></li>
+                <li><a href="../project/contribution.html">Contribution</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Wet Lab</h4>
+              <ul>
+                <li><a href="../wet-lab/experiments.html">Experiments</a></li>
+                <li><a href="../wet-lab/result.html">Results</a></li>
+                <li><a href="../wet-lab/parts.html">Parts</a></li>
+                <li><a href="../wet-lab/safety.html">Safety</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Dry Lab</h4>
+              <ul>
+                <li><a href="../dry-lab/model.html">Model</a></li>
+                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
+                <li><a href="../dry-lab/software.html">Software</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Human Practices</h4>
+              <ul>
+                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+                <li><a href="../human-practices/education.html">Education</a></li>
+                <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Team</h4>
+              <ul>
+                <li><a href="../team/members.html">Members</a></li>
+                <li><a href="../team/attributions.html">Attributions</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider divider-simple">
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-line-short"></span>
+        <span class="divider-text">Synthetic Biology</span>
+        <span class="divider-line-short"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+      </div>
+      <div class="footer-bottom-section">
+        <p>&copy; 2026 - Content on this site is licensed under a Attribution 4.0 International license.</p>
+        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
+
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先，详见 front matter 的 js 数组与 search.js / search-index.js 的 defer 加载） -->
+  <script src="../static/js/core/utils.js"></script>
+  <script src="../static/js/core/mobile-menu.js"></script>
+  <script src="../static/js/core/nav-scroll-behavior.js"></script>
+  <script src="../static/js/core/page-progress-bar.js"></script>
+  <script src="../static/js/core/scroll-progress-bar.js"></script>
+  <script src="../static/js/core/search-index.js" defer></script>
+  <script src="../static/js/core/search.js" defer></script>
+  <script src="../static/js/components/sidebar-progress.js"></script>
+  
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
     // 移动端汉堡菜单切换
     const hamburgerMenu = document.getElementById('hamburger-menu');
@@ -735,19 +584,13 @@
   
   });
 </script>
-  
-  
-  
-  
-  
-  
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
     new PageProgressBar().startAutoProgress();
   
   });
 </script>
-</body>
 
+</body>
 </html>
