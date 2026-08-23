@@ -1,19 +1,22 @@
----
+﻿---
 permalink: "human-practices/integrated human-practices.html"
 title: "Human Practices - iGEM SZPU-2026"
 lang: "zh-CN"
 headExtraPartial: "head-extra/human-practices-integrated-human-practices.njk"
 basePath: "../"
 css:
-  - static/css/description.css
   - static/css/integrated human-practices.css
 js:
   - static/js/components/hp-reveal-box.js
+  - static/js/components/hp-flat-carousel.js
+
 ---
 
 {% extends "layouts/base.njk" %}
 
 {% block main %}
+<!-- hp-map-script-marker -->
+<script src="../static/js/components/hp-map.js" defer></script>
 <div class="description-container">
       <!-- 侧边导航栏（已注释，当前页面由 3D 轮播直接导航）
       <aside class="description-sidebar">
@@ -24,41 +27,36 @@ js:
       <!-- 内容区域 -->
       <div class="description-content" id="content">
 
-        <!-- ===== 3D 时间轴导航：照搬自 对话归档/tests/demo-3d-timeline.html ===== -->
-        <div class="hp3d-root">
-            <div class="timeline-orbit-container">
-              <!-- 单一共享 3D 舞台：卡片环与日期环同处一个透视空间，靠固定几何定位 -->
-              <div class="dual-stage" id="dualStage">
-              <div class="dual-scene" id="dualScene">
-                <div class="cards-group" id="cardsGroup">
-                  <div class="orbit-ring"></div>
-                </div>
-                <div class="timeline-group" id="timelineGroup">
-                  <div class="timeline-ring"></div>
-                </div>
-              </div>
-              </div>
-            <div class="slider-control">
-              <div class="slider-wrapper">
-                <div class="slider-track"><div class="slider-fill" id="sliderFill"></div></div>
-                <input type="range" class="slider-input" id="sliderInput" min="0" max="3600" value="0" step="1">
-              </div>
+        <!-- 平面长条带轮播：活动图片固定在可裁切视口中，新增条目不会越界。 -->
+        <section class="hp-flat-root" aria-label="综合人类实践活动导航">
+          <div class="hp-flat-carousel" id="hpFlatCarousel" tabindex="0">
+            <button class="hp-flat-button hp-flat-prev" type="button" aria-label="查看上一项">←</button>
+            <div class="hp-flat-viewport">
+              <div class="hp-flat-track" id="hpFlatTrack"></div>
             </div>
-            <div class="detail-panel" id="detailPanel">
+            <button class="hp-flat-button hp-flat-next" type="button" aria-label="查看下一项">→</button>
+          </div>
+          <div class="hp-flat-intro" id="hpFlatIntro" aria-live="polite">
+            <span class="hp-flat-intro-date"></span>
+            <p class="hp-flat-intro-title"></p>
+            <span class="hp-flat-intro-count"></span>
+          </div>
+        </section>
+        <div class="detail-panel hp-flat-detail-panel" id="detailPanel">
               <div class="detail-viewport"><div class="detail-track" id="detailTrack">
-        <div class="detail-slide">
-<div id="section-overview" class="content-card hp-overview-card">
+        <div class="detail-slide" data-hp-article="section-overview">
+<section id="section-overview" class="content-card hp-overview-map-card">
           <div class="hp-section-header">
-            <span class="hp-section-number">00</span>
+            <span class="hp-section-number">01</span>
             <h2 class="hp-section-title">概述</h2>
           </div>
-          <!-- 内容 -->
           <p class="hp-section-intro">下面这张交互地图记录了团队在项目过程中接触过的部分 Human Practices 合作者与专家。点击图钉即可查看每位专家的方向与贡献。</p>
+
   <div class="app hz-map" id="hzMap">
     <div class="hz-header">
       <div>
         <h1>全球专家交互地图</h1>
-        <div class="hz-hint">点击图钉查看专家详情</div>
+        <div class="hz-hint">悬停或聚焦集合点查看专家；点击专家姓名查看访谈详情</div>
       </div>
     </div>
 
@@ -226,67 +224,105 @@ js:
   <div class="hz-legend">
     <span class="hz-note">底图：MapSVG CC0 中国地图</span>
   </div>
+</div>
+</section>
 
-<div class="hz-modal" id="hzModal">
-  <div class="hz-modal-card" role="dialog" aria-modal="true" aria-labelledby="mName">
-    <button class="hz-modal-close" id="hzModalClose" aria-label="关闭">×</button>
-    <div class="hz-modal-body">
-      <div class="hz-modal-photo-col">
-        <div class="hz-modal-photo" id="mPhoto">
-          <img class="hz-modal-photo-img" id="mPhotoImg" src="" alt="">
-          <span class="hz-photo-ph" id="mPhotoPh"></span>
+  <section class="content-card hz-details-card hz-details" aria-labelledby="hzDetailsTitle">
+    <div class="hz-details-intro" id="hzDetailsIntro">
+      <p class="hz-detail-card__eyebrow">Human Practices · Stakeholder interviews</p>
+      <h2 id="hzDetailsTitle">访谈对象与项目反馈</h2>
+
+      <div class="hz-intro-grid">
+        <div class="hz-intro-block">
+          <h3>这张地图是什么？</h3>
+          <p>上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。每一位受访者都从各自的专业视角——临床医学、检验诊断、学术研究或公共卫生——为我们的甲型流感病毒生物传感器项目提供了宝贵反馈。</p>
         </div>
-        <div class="hz-photo-bio" id="mPhotoBio">
-          <div class="hz-photo-name" id="mPhotoName"></div>
-          <div class="hz-photo-org" id="mPhotoOrg"></div>
-          <div class="hz-photo-desc" id="mPhotoDesc"></div>
+        <div class="hz-intro-block">
+          <h3>图钉代表什么？</h3>
+          <p>不同颜色的图钉对应不同领域：<span class="hz-legend-dot science"></span> 科学与学术界 <span class="hz-legend-dot industry"></span> 产业与临床 <span class="hz-legend-dot policy"></span> 政策与监管 <span class="hz-legend-dot public"></span> 公众与社会。点击任意图钉，下方就会切换到对应人物的详细访谈记录。</p>
         </div>
-      </div>
-      <div class="hz-modal-content">
-        <h2 id="mName"></h2>
-        <p class="hz-modal-role" id="mRole"></p>
-        <div class="hz-modal-section" id="mWhy"></div>
-        <div class="hz-modal-section" id="mWhat"></div>
-        <div class="hz-modal-section" id="mHow"></div>
+        <div class="hz-intro-block">
+          <h3>我们为什么做这些访谈？</h3>
+          <p> Human Practices 的核心是把实验室里的技术设想放到真实社会场景中去检验。通过与一线医生、研究人员和潜在使用者交流，我们不断确认项目是否真正解决了临床痛点、是否符合监管与社会期待，并据此迭代设计。</p>
+        </div>
+        <div class="hz-intro-block">
+          <h3>如何使用？</h3>
+          <p>你可以通过右上角筛选面板按类别过滤图钉；点击图钉后，下方信息区会切换为对应人物的访谈记录，地图仍保留在上方，方便对照人物所在位置。</p>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
+    <div class="hz-detail-panel" id="hzDetailPanel" hidden>
+      <div class="hz-detail-viewport" id="hzDetailViewport" aria-live="polite" aria-label="访谈对象详情">
+      <div class="hz-detail-track" id="hzDetailTrack">
+        <div class="hz-detail-slide" data-hz-expert="wang-wenjie">
+    <article class="hz-detail-card" id="hz-detail-wang-wenjie">
+      <img class="hz-detail-card__photo" src="../static/image/HP/expert_img/wangwenjie.jpg" alt="王文杰" loading="lazy">
+      <div>
+        <p class="hz-detail-card__eyebrow">Industry · Shenzhen, Guangdong</p>
+        <h3>王文杰</h3>
+        <p class="hz-detail-card__meta">深圳市妇幼保健院 · 南方科技大学医学院｜检验科主任 · 教学督导</p>
+        <p class="hz-detail-card__copy"><strong>人物介绍：</strong>长期从事新型生物学诊断标志物、肿瘤与自噬等方向研究；担任多个医学检验相关专业委员会职务，在临床检验与体外诊断领域具有丰富经验。</p>
+        <p class="hz-detail-card__copy"><strong>访谈内容：</strong>为了解甲型流感病毒检测在真实医疗环境中的需求，团队与临床检验专家讨论病毒变异、现有检测局限、抗病毒治疗策略及检测设备的发展方向。访谈提示我们，检测目标应更关注广谱、快速、低门槛的病毒监测，并在后续实验中控制环境变量、明确应用场景。</p>
+        <p class="hz-detail-card__copy"><strong>对项目的影响：</strong>团队据此重新审视传感器的检测目标，减少对病毒亚型识别的依赖，转向更广谱、更快速且更易部署的监测方案，并将医疗需求和公共卫生挑战纳入工程设计。</p>
+      </div>
+    </article>
+        </div>
+        <div class="hz-detail-slide" data-hz-expert="gu-kai">
+    <article class="hz-detail-card" id="hz-detail-gu-kai">
+      <img class="hz-detail-card__photo" src="../static/image/HP/expert_img/fukai.jpg" alt="顾凯" loading="lazy">
+      <div>
+        <p class="hz-detail-card__eyebrow">Science and academia · Guangzhou, Guangdong</p>
+        <h3>顾凯</h3>
+        <p class="hz-detail-card__meta">中山大学｜临床医学博士</p>
+        <p class="hz-detail-card__copy"><strong>人物介绍：</strong>研究方向涉及肺部疾病、呼吸道感染与临床诊断，就本项目的技术可行性与临床应用场景提出了系统性建议。</p>
+        <p class="hz-detail-card__copy"><strong>访谈内容：</strong>团队介绍信号识别、信号传导、信号报告三大模块，以及环境被动吸入和单人主动呼气两种装置形态。专家从响应时间、呼气样本、肺癌标志物、使用成本和临床场景等方面提出具体反馈。</p>
+        <p class="hz-detail-card__copy"><strong>对项目的影响：</strong>团队据此优化信号通路以缩短响应时间，聚焦单人主动呼气的低成本方案，暂缓肺癌检测方向，并将临床适配性与硬件成本列为后续设计的重点。</p>
+      </div>
+    </article>
+        </div>
+        <div class="hz-detail-slide" data-hz-expert="zhejiang-expert">
+    <article class="hz-detail-card" id="hz-detail-zhejiang-expert">
+      <div class="hz-detail-card__photo" role="img" aria-label="专家照片待补充"></div>
+      <div>
+        <p class="hz-detail-card__eyebrow">Science and academia · Zhejiang</p>
+        <h3>Zhejiang Expert</h3>
+        <p class="hz-detail-card__meta">浙江｜专家信息待补充</p>
+        <p class="hz-detail-card__copy">该访谈对象的背景、访谈内容与项目反馈将在资料确认后补充。</p>
+      </div>
+    </article>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
 
 
 
         </div>
-        </div>
 
-        <div class="detail-slide">
-<div id="section-carousel" class="content-card">
+        <div class="detail-slide" data-hp-article="section-carousel">
+<div id="section-carousel" class="content-card hp-education-card">
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
             <h2 class="hp-section-title">清华大学合成生物学创意大赛参赛交流</h2>
             <p class="hp-section-subtitle">HP 比赛篇 · 在清华赛场与外界对话</p>
           </div>
-          <!-- 清华交流照片：改为常规网格展示，不再使用 3D 轮播 -->
-          <div class="hp-tsinghua-grid">
+          <div class="hp-photo-grid">
             <figure class="hp-photo-item hp-photo-feature">
-              <img src="../static/image/HP/tsinghua/1.webp" alt="清华交流 1" loading="lazy">
+              <img src="../static/image/HP/tsinghua/1.jpg" alt="清华交流现场" loading="lazy">
+              <figcaption>交流现场</figcaption>
             </figure>
-            <figure class="hp-photo-item">
-              <img src="../static/image/HP/tsinghua/2.webp" alt="清华交流 2" loading="lazy">
-            </figure>
-            <figure class="hp-photo-item">
-              <img src="../static/image/HP/tsinghua/3.webp" alt="清华交流 3" loading="lazy">
-            </figure>
-            <figure class="hp-photo-item">
-              <img src="../static/image/HP/tsinghua/4.webp" alt="清华交流 4" loading="lazy">
-            </figure>
-            <figure class="hp-photo-item">
-              <img src="../static/image/HP/tsinghua/5.webp" alt="清华交流 5" loading="lazy">
-            </figure>
-            <figure class="hp-photo-item">
-              <img src="../static/image/HP/tsinghua/6.webp" alt="清华交流 6" loading="lazy">
-            </figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/tsinghua/2.webp" alt="清华交流展示" loading="lazy"><figcaption>项目展示</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/tsinghua/3.webp" alt="清华交流讨论" loading="lazy"><figcaption>交流讨论</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/tsinghua/4.webp" alt="清华交流活动" loading="lazy"><figcaption>活动记录</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/tsinghua/5.webp" alt="清华交流合影" loading="lazy"><figcaption>团队交流</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/tsinghua/6.webp" alt="清华赛场交流" loading="lazy"><figcaption>赛场交流</figcaption></figure>
           </div>
+          <p class="hp-image-caption">图 1. 团队在清华大学合成生物学创意大赛中进行项目展示与交流</p>
+          <div class="hp-reveal-content">
+            <div class="hp-activity-overview">
+              <p>项目推进到需要对外表达时，团队发现，实验室内部形成的理解未必能被外部观众准确接收。参加清华大学合成生物学创意大赛，正是为了把项目放到跨校、跨学科的环境中，接受陌生同行、评审与师生的检验。</p>
+            </div>
           <div class="hp-interview-context">
 
             <h3 class="hp-subheading">为什么参加这场比赛</h3>
@@ -307,34 +343,23 @@ js:
           </div>
         </div>
         </div>
+        </div>
 
-        <div class="detail-slide">
-<div id="section-southchina" class="content-card">
+        <div class="detail-slide" data-hp-article="section-southchina">
+<div id="section-southchina" class="content-card hp-education-card">
           <div class="hp-section-header">
             <span class="hp-section-number">02</span>
             <h2 class="hp-section-title">HP探险篇—这次我们来到了华南交流会！</h2>
             <p class="hp-section-subtitle">HP 探险篇系列 · 华南地区科普交流活动记录</p>
           </div>
-
-          <!-- 活动照片（预留图片占位槽：已有封面图，其余槽位后续补充真实照片） -->
-          <div class="hp-article-photos">
-            <h3 class="hp-subheading">活动照片</h3>
-            <div class="detail-photos">
-              <div class="detail-photo">
-                <img src="../static/image/HP/southchina/spark3.jpg" alt="华南交流会现场合影" loading="lazy">
-              </div>
-              <div class="detail-photo">
-<img src="../static/image/HP/southchina/spark1.jpg" alt="">
-                </div loading="lazy">
-              <div class="detail-photo">
-<img src="../static/image/HP/southchina/spark2.jpg" alt="">
-                </div loading="lazy">
-              <div class="detail-photo">
-<img src="../static/image/HP/southchina/spark4.jpg" alt="">
-                </div loading="lazy">
-            </div>
+          <div class="hp-photo-grid">
+            <figure class="hp-photo-item hp-photo-feature"><img src="../static/image/HP/southchina/SZU.jpg" alt="华南交流会现场合影" loading="lazy"><figcaption>交流会合影</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/southchina/spark1.jpg" alt="华南交流会现场" loading="lazy"><figcaption>活动现场</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/southchina/spark2.jpg" alt="华南交流展示" loading="lazy"><figcaption>项目展示</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/HP/southchina/spark4.jpg" alt="华南交流讨论" loading="lazy"><figcaption>交流讨论</figcaption></figure>
           </div>
-
+          <p class="hp-image-caption">图 1. 团队在华南地区 iGEM 交流会中进行项目展示与讨论</p>
+          <div class="hp-reveal-content">
           <div class="hp-interview-context">
 
             <h3 class="hp-subheading">为什么参加华南交流会</h3>
@@ -367,11 +392,10 @@ js:
           </div>
         </div>
         </div>
+        </div>
 
-        <div class="detail-slide">
+        <div class="detail-slide" data-hp-article="section-education">
 <div id="section-education" class="content-card hp-education-card hp-section-offset-2">
-          <p>我们走进职业高中做科普宣讲，把合成生物学从实验室里带出来；而学生们对便携性和检测速度的那几句反馈，也把"负责任的研究与创新"这个理念，落成了具体的产品优化方向。</p>
-
           <div class="hp-section-header">
             <span class="hp-section-number">03</span>
             <h2 class="hp-section-title">面向中学生的科学传播与项目交流：让合成生物学走近未来的探索者</h2>
@@ -460,8 +484,6 @@ js:
               </div>
           </div>
         </div>
-        </div>
-        </div></div>
               <div class="detail-counter" id="detailCounter"></div>
             </div>
           </div>
@@ -470,578 +492,4 @@ js:
 
 </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-      // PageProgressBar 脚本已注释，避免未定义报错
-      // new PageProgressBar().startAutoProgress();
-    });
-</script>
-<script>
-(function () {
-  'use strict';
-
-  // 轨道元数据：仅用于生成 3D 卡片与时间轴节点
-  // time 字段显示在时间轴节点下方，建议格式：YY/MM/DD
-  var articles = [
-    { time: '', title: '项目概述', img: '../static/image/any-icon/home.webp' },
-    { time: '26/07/31', title: '清华参赛交流', img: '../static/image/HP/tsinghua/1.webp' },
-    { time: '26/08/01', title: '华南交流会', img: '../static/image/HP/southchina/SZU.jpg' },
-    { time: '26/08/03', title: '中学生科普', img: '../static/image/HP/school1.jpg' }
-  ];
-
-  var dualScene = document.getElementById('dualScene');
-  var dualStage = document.getElementById('dualStage');
-  var cardsGroup = document.getElementById('cardsGroup');
-  var timelineGroup = document.getElementById('timelineGroup');
-  var sliderInput = document.getElementById('sliderInput');
-  var sliderFill = document.getElementById('sliderFill');
-  var detailPanel = document.getElementById('detailPanel');
-  var detailTrack = document.getElementById('detailTrack');
-  var detailCounter = document.getElementById('detailCounter');
-
-  var n = articles.length;
-  var slideCount = (detailTrack && detailTrack.children.length) || n;
-  var step = 360 / n;          // 图片轴为真正闭合圆环：每张 360/n，首尾相接
-  var DEG = Math.PI / 180;
-  var TILT_ORBIT = 0;          // 图片轴：完全水平（统一水平面，无倾斜）
-  var TILT_TL = 18;            // 时间轴：保留 3D 椭圆纵深
-  var rOrbit = 280;
-  var rTimeline = 300;
-  var cardW = 250, cardH = 175;
-  var VISIBLE = Math.min(5, n);
-
-  var targetAngle = 0, currentAngle = 0, LERP = 0.11;
-  var cards = [], tlnodes = [];
-  var currentFrontIdx = -1;
-  var snapActive = false;
-  var rafId = null;
-  var defaultImg = '../static/image/HP/tsinghua/1.webp';
-  var imageCache = new Map();
-
-  function mod(a, m) { return ((a % m) + m) % m; }
-
-  /* ---- 卡片尺寸：集中在此调整，环半径会按文章数自动缩放以避免重叠 ---- */
-  var CARD_W = 350;            // 桌面端卡片宽度（想变大就改这里一个数）
-  var CARD_H_RATIO = 0.7;     // 卡片高度 = 宽度 × 此比例
-  var CARD_GAP = 26;          // 环上相邻卡片的最小间距
-  var CARD_MOBILE_SCALE = 0.6;// 移动端缩放系数
-  var R_MAX_DESKTOP = 420;    // 桌面端环半径上限
-  // —— 日期环与卡片环的对齐只由下面两个值决定，纯几何、确定性的，无任何运行时测量 ——
-  var DATE_GAP = -60;          // 正对卡片的日期底部，与卡片顶部的间距（px）
-  var DATE_LABEL_H = 20;      // 日期文字高度（与 CSS .timeline-node 高度一致，用于几何定位）
-  var timelineLift = 0;       // 日期环整体上抬量（由卡片高度几何推导，applyLayout 中计算）
-
-  function computeLayout(count) {
-    var isMobile = window.innerWidth <= 768;
-    var mobileFactor = isMobile ? CARD_MOBILE_SCALE : 1;
-    var s = 360 / count;
-    // 由目标卡宽反推所需环半径：单卡弧长 = 卡宽 + 间距，保证任意文章数都不重叠
-    var arc = CARD_W * mobileFactor + CARD_GAP;
-    var r = arc * count / (2 * Math.PI);
-    var rMax = isMobile ? Math.max(150, (window.innerWidth - 50) * 0.95) : R_MAX_DESKTOP;
-    r = Math.max(170, Math.min(r, rMax));
-    var w = (2 * Math.PI * r / count) - CARD_GAP;
-    w = Math.max(82, w);
-    var h = w * CARD_H_RATIO;
-    return { step: s, r: r, cardW: w, cardH: h, isMobile: isMobile };
-  }
-
-  function applyLayout() {
-    var L = computeLayout(n);
-    step = L.step;
-    rOrbit = L.r;
-    rTimeline = rOrbit * (L.isMobile ? 1.04 : 1.06);
-    cardW = L.cardW; cardH = L.cardH;
-
-    dualScene.style.setProperty('--r', rOrbit + 'px');
-    dualScene.style.setProperty('--tr', rTimeline + 'px');
-
-    // 日期环相对卡片环的整体上抬量（纯几何、确定性，无运行时测量）：
-    // 正对的那张日期贴在"卡片顶部上方 DATE_GAP"，其余日期随 3D 椭圆自然排布
-    timelineLift = cardH / 2 + DATE_GAP + DATE_LABEL_H / 2;
-    timelineGroup.style.transform =
-      'translateY(' + (-timelineLift) + 'px) rotateX(' + TILT_TL + 'deg) rotateY(' + currentAngle + 'deg)';
-
-    // 舞台高度只需足够容纳上抬的日期环 + 卡片环；overflow 为 visible，绝不会被裁切
-    var tV = rTimeline * Math.sin(TILT_TL * DEG);
-    dualStage.style.height = (timelineLift + tV + cardH / 2 + 120) + 'px';
-
-    layoutCards();
-    if (tlnodes.length) layoutNodes();
-  }
-
-  function layoutCards() {
-    cards.forEach(function (c) {
-      c.style.width = cardW + 'px';
-      c.style.height = cardH + 'px';
-      c.style.marginLeft = (-cardW / 2) + 'px';
-      c.style.marginTop = (-cardH / 2) + 'px';
-      c._baseAngle = (c._slotOffset || 0) * step;
-      c.style.transform = 'rotateY(' + c._baseAngle + 'deg) translateZ(' + rOrbit + 'px)';
-    });
-  }
-
-  function layoutNodes() {
-    tlnodes.forEach(function (node, i) {
-      node._baseAngle = i * step;
-      node._baseTransform =
-        'rotateY(' + (i * step) + 'deg) translateZ(' + rTimeline + 'px) rotateX(' + (-TILT_TL) + 'deg)';
-      node.style.transform = node._baseTransform;
-    });
-  }
-
-  function valueToAngle(v) {
-    var f = parseFloat(v) / parseFloat(sliderInput.max);
-    return -f * (n - 1) * step;
-  }
-
-  function angleToValue(a) {
-    return (-a / ((n - 1) * step)) * parseFloat(sliderInput.max);
-  }
-
-  function preloadOne(src) {
-    if (imageCache.has(src)) return;
-    var img = new Image();
-    img.decoding = 'async';
-    img.src = src;
-    function mark(ok) { imageCache.set(src, ok); }
-    if (img.decode) {
-      img.onload = function () { img.decode().then(function () { mark(true); }).catch(function () { mark(true); }); };
-      img.onerror = function () { mark(false); };
-    } else {
-      img.onload = function () { mark(true); };
-      img.onerror = function () { mark(false); };
-    }
-  }
-
-  function assignCard(card, idx) {
-    if (card._articleIdx === idx) return;
-    card._articleIdx = idx;
-    card.dataset.index = idx;
-    var a = articles[idx];
-    var imgSrc = a.img || defaultImg;
-    card.style.backgroundImage = 'url("' + imgSrc + '")';
-    var im = card.querySelector('img');
-    if (!im) {
-      im = document.createElement('img');
-      im.loading = 'eager';
-      im.decoding = 'async';
-      card.appendChild(im);
-    }
-    im.alt = a.title;
-    im.onload = null;
-    im.onerror = null;
-    if (imageCache.get(imgSrc)) {
-      im.style.opacity = '1';
-    } else {
-      im.style.opacity = '0';
-      im.style.transition = 'opacity 0.35s ease';
-      im.onload = function () { im.style.opacity = '1'; };
-      im.onerror = function () { im.style.opacity = '1'; };
-    }
-    im.src = imgSrc;
-    preloadOne(imgSrc);
-  }
-
-  function updateVirtualCards(activeFloat) {
-    var activeInt = Math.round(activeFloat);
-    if (n <= VISIBLE) {
-      if (cards.length && cards[0]._articleIdx === undefined) {
-        cards.forEach(function (c) { assignCard(c, mod(activeInt + c._slotOffset, n)); });
-      }
-      return;
-    }
-    cards.forEach(function (c) { assignCard(c, mod(activeInt + c._slotOffset, n)); });
-  }
-
-  function init() {
-    if (!dualScene || !dualStage || !timelineGroup || !detailTrack) return;
-    slideCount = detailTrack.children.length || n;
-    applyLayout();
-    renderCards();
-    renderTimelineNodes();
-    renderDetailSlides();
-
-    bindEvents();
-    startLoop();
-
-    window.addEventListener('resize', function () { applyLayout(); kick(); });
-
-    requestAnimationFrame(function () {
-      dualScene.style.opacity = '1';
-      detailPanel.classList.add('show');
-    });
-  }
-
-  function renderCards() {
-    var half = Math.floor(VISIBLE / 2);
-    for (var slot = 0; slot < VISIBLE; slot++) {
-      var card = document.createElement('figure');
-      card.className = 'orbit-card';
-      card._slotOffset = slot - half;
-      cardsGroup.appendChild(card);
-      cards.push(card);
-    }
-    updateVirtualCards(0);
-    layoutCards();
-  }
-
-  function renderTimelineNodes() {
-    articles.forEach(function (a, i) {
-      var node = document.createElement('div');
-      node.className = 'timeline-node' + (i === 0 ? ' active' : '');
-      node.dataset.index = i;
-      var label = document.createElement('span');
-      label.className = 'timeline-node-label';
-      label.textContent = a.time;
-      node.appendChild(label);
-      timelineGroup.appendChild(node);
-      tlnodes.push(node);
-    });
-    layoutNodes();
-  }
-
-  // detailTrack 已经预渲染了真实文章结构，不要清空重建；只同步计数器
-  function renderDetailSlides() {
-    slideCount = detailTrack.children.length || n;
-    detailCounter.textContent = '1 / ' + slideCount;
-  }
-
-  function kick() {
-    if (rafId === null) rafId = requestAnimationFrame(loop);
-  }
-
-  function loop() {
-    var d = targetAngle - currentAngle;
-
-    if (snapActive) {
-      // 代码驱动跳转（点击卡片、节点、键盘、释放后吸附）：轨道与拖动条一起做 LERP 平滑动画
-      if (Math.abs(d) > 0.05) {
-        currentAngle += d * LERP;
-      } else {
-        currentAngle = targetAngle;
-        snapActive = false;
-      }
-      var sv = angleToValue(currentAngle);
-      sv = Math.max(0, Math.min(parseFloat(sliderInput.max), sv));
-      sliderInput.value = sv.toFixed(0);
-      syncSliderFill();
-    } else {
-      // 用户直接拖动拖动条：轨道实时同步，无延迟
-      currentAngle = targetAngle;
-    }
-
-    var activeFloat = -currentAngle / step;
-    updateVirtualCards(activeFloat);
-    layoutCards();
-    // 两个环同步旋转：卡片环只绕 Y 转；日期环在"上抬 + 世界稳定倾角"基础上同步绕 Y 转
-    cardsGroup.style.transform = 'rotateY(' + currentAngle + 'deg)';
-    timelineGroup.style.transform =
-      'translateY(' + (-timelineLift) + 'px) rotateX(' + TILT_TL + 'deg) rotateY(' + currentAngle + 'deg)';
-
-    updateAllPerspective();
-
-    // 性能优化：仅在吸附动画进行中（snapActive）持续循环；圆环静止后停止 rAF，
-    // 避免每帧重写全部卡片/节点 transform、opacity、zIndex 及逐帧改写 label fontSize/color 造成的持续卡顿
-    if (snapActive) {
-      rafId = requestAnimationFrame(loop);
-    } else {
-      rafId = null;
-    }
-  }
-
-  function startLoop() {
-    kick();
-  }
-
-  function getFrontIndex() {
-    return Math.max(0, Math.min(n - 1, Math.round(-currentAngle / step)));
-  }
-
-  function updateAllPerspective() {
-    var fi = getFrontIndex();
-    var changed = fi !== currentFrontIdx;
-    currentFrontIdx = fi;
-
-    cards.forEach(function (c) {
-      var norm = (((c._baseAngle + currentAngle) % 360) + 360) % 360;
-      var t = (1 - Math.cos(norm * DEG)) / 2;
-      var op = 1 - t * t;
-      if (norm > 120 && norm < 240) op = 0;
-      else if (norm > 90) op *= 0.4;
-      else if (norm > 60) op *= 0.85;
-      op = Math.max(0, op);
-      c.style.opacity = op.toFixed(3);
-      c.style.zIndex = Math.round(100 - 100 * t);
-      c.classList.toggle('front', c._articleIdx === fi && norm < 30);
-      c.style.pointerEvents = op > 0.15 ? '' : 'none';
-    });
-
-    if (changed) {
-      tlnodes.forEach(function (node, i) { node.classList.toggle('active', i === fi); });
-      updateDetailPanel(fi);
-    }
-
-    tlnodes.forEach(function (node, i) {
-      var norm = (((node._baseAngle + currentAngle) % 360) + 360) % 360;
-      var t = (1 - Math.cos(norm * DEG)) / 2;
-      var prox = Math.cos(norm * DEG); // 1 = 正对页面, -1 = 背面
-      node.style.opacity = Math.max(0.12, 1 - t * 0.7).toFixed(3);
-      node.style.zIndex = Math.round(50 - 50 * t);
-      var label = node.querySelector('.timeline-node-label');
-      label.style.fontSize = (0.75 + 0.07 * Math.max(0, prox)).toFixed(3) + 'rem';
-      label.style.color = prox > 0.2 ? 'var(--color-primary)' : 'var(--color-accent)';
-    });
-  }
-
-  function updateDetailPanel(idx) {
-    idx = Math.max(0, Math.min(slideCount - 1, idx));
-    detailTrack.style.transform = 'translateX(' + (-idx * 100) + '%)';
-    detailCounter.textContent = (idx + 1) + ' / ' + slideCount;
-  }
-
-  function syncSliderFill() {
-    sliderFill.style.width = (parseFloat(sliderInput.value) / parseFloat(sliderInput.max) * 100) + '%';
-  }
-
-  function bindEvents() {
-    sliderInput.addEventListener('input', function () {
-      snapActive = false;
-      targetAngle = valueToAngle(sliderInput.value);
-      currentAngle = targetAngle; // 拖动时实时同步，避免拖动条先到、轨道后到的"闪现"感
-      syncSliderFill();
-      kick();
-    });
-    sliderInput.addEventListener('change', snapToNearest);
-    sliderInput.addEventListener('keyup', function (e) {
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') snapToNearest();
-    });
-
-    tlnodes.forEach(function (nd, i) {
-      nd.addEventListener('click', function () { goTo(i); updateDetailPanel(i); });
-    });
-    cards.forEach(function (c) {
-      c.addEventListener('click', function () { var idx = parseInt(c.dataset.index, 10); goTo(idx); updateDetailPanel(idx); });
-    });
-
-    /* 轨道舞台全局点击：即使鼠标落在 3D 压缩后的卡片视觉区域但未命中元素本身，
-       也根据最近卡片的屏幕中心进行跳转，解决两侧卡片难点击的问题 */
-    dualStage.addEventListener('click', function (e) {
-      if (e.target.closest('.orbit-card') || e.target.closest('.timeline-node') || e.target.closest('.slider-control')) return;
-      var stageRect = dualStage.getBoundingClientRect();
-      var clickX = e.clientX - stageRect.left;
-      var clickY = e.clientY - stageRect.top;
-      var nearest = -1, minDist = Infinity;
-      cards.forEach(function (card) {
-        var rect = card.getBoundingClientRect();
-        var cx = rect.left + rect.width / 2 - stageRect.left;
-        var cy = rect.top + rect.height / 2 - stageRect.top;
-        var d = Math.sqrt(Math.pow(clickX - cx, 2) + Math.pow(clickY - cy, 2));
-        if (d < minDist) { minDist = d; nearest = parseInt(card.dataset.index, 10); }
-      });
-      if (nearest >= 0 && minDist < 260) {
-        goTo(nearest);
-        updateDetailPanel(nearest);
-      }
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (!dualStage.matches(':hover')) return;
-      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
-    });
-  }
-
-  function goTo(idx) {
-    targetAngle = -idx * step;
-    snapActive = true;
-    kick();
-  }
-
-  function snapToNearest() {
-    var f = parseFloat(sliderInput.value) / parseFloat(sliderInput.max);
-    var idx = Math.max(0, Math.min(n - 1, Math.round(f * (n - 1))));
-    targetAngle = -idx * step;
-    snapActive = true;
-    kick();
-    updateDetailPanel(idx);
-  }
-
-  function go(dir) {
-    // 滚动轴只能到末篇为止：到两端即停，不再首尾环绕
-    var idx = currentFrontIdx + dir;
-    if (idx < 0) idx = 0;
-    if (idx > n - 1) idx = n - 1;
-    goTo(idx);
-    updateDetailPanel(idx);
-  }
-
-  // 侧边导航链接直接驱动 3D 轮播（即使 sidebar-progress.js 未加载也能工作）
-  document.querySelectorAll('a[data-hp-slide]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      e.preventDefault();
-      var idx = parseInt(a.getAttribute('data-hp-slide'), 10);
-      if (!isNaN(idx) && window.HP3D) window.HP3D.goTo(idx);
-    });
-  });
-
-  window.HP3D = {
-    goTo: function (idx) {
-      idx = Math.max(0, Math.min(slideCount - 1, idx));
-      goTo(idx);
-      updateDetailPanel(idx);
-    }
-  };
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-<script>
-(function () {
-  "use strict";
-  // 所有元素都在 .hz-map 根容器内查找，迁移到其它页面不与宿主 DOM 冲突
-  const root = document.getElementById("hzMap");
-
-  /* 中国专家（坐标按 china.svg viewBox 百分比，由各市省会经纬度换算）
-     category 用于筛选面板与头像边框着色 */
-  const categoryNames = {
-    science: "Science and academia",
-    policy: "Policy",
-    industry: "Industry",
-    public: "Public"
-  };
-  const categoryColors = {
-    science: "#4A90E2",
-    policy: "#E94B3C",
-    industry: "#9013FE",
-    public: "#F5A623"
-  };
-  const chinaExperts = [
-    {
-      name: "王文杰",
-      region: "Shenzhen, Guangdong",
-      category: "industry",
-      coord: { top: 88.5, left: 67.5 },
-      photo: "../static/image/HP/expert_img/wangwenjie.jpg",
-      org: "深圳市妇幼保健院 · 南方科技大学医学院",
-      role: "检验科主任 · 教学督导",
-      desc: "长期从事新型生物学诊断标志物、肿瘤与自噬等方向研究；担任多个医学检验相关专业委员会职务，在临床检验与体外诊断领域具有丰富经验。",
-      why: `为了弄清甲型流感病毒检测在真实医疗环境里到底需要满足哪些需求，也为了进一步确认我们"基于工程化酵母的甲型流感病毒生物传感器"项目究竟有什么用，我们访谈了一位临床检验专家。访谈里，我们聊了甲型流感病毒的变异特点、现有检测技术的局限、抗病毒治疗策略，以及检测设备往后的发展方向。`,
-      what: `甲型流感病毒主要通过血凝素（HA）和神经氨酸酶（NA）蛋白发生变异，而当前医院检测的重点主要在于判断病毒感染情况，而非区分具体亚型。现有核酸检测和快速抗原检测通常需要在患者出现症状并达到一定病毒载量后才能发挥作用，检测技术的发展仍存在一定滞后性。未来检测技术的重点不只是认出病毒种类，而是在更早就发现病毒的存在；如果在学校、幼儿园、地铁这类人员密集场所做环境监测、提前捕捉传播迹象，公共卫生管理就有机会从"被动治疗"转向"主动预防"。专家也提醒我们充分考虑实际应用中的限制因素，例如检测范围、环境变量以及病毒浓度变化等问题，并建议在后续实验设计中进一步控制变量、明确应用场景。`,
-      how: "这次交流把实验室里的工程设计和真实的临床需求连了起来。专家的话让我们重新打量传感器的检测目标：与其死磕病毒亚型识别，不如去做更广谱、更快、更省事的病毒监测方案。和一线临床专家聊过之后我们也更清楚了，一个真正用得上的生物技术产品，光在实验室里把性能磨好还不够，得先接住现实里的医疗需求和公共健康挑战。"
-    },
-    {
-      name: "付凯",
-      region: "Guangzhou, Guangdong",
-      category: "science",
-      coord: { top: 80.5, left: 63.5 },
-      photo: "../static/image/HP/expert_img/fukai.jpg",
-      org: "中山大学",
-      role: "临床医学博士",
-      desc: "研究方向涉及肺部疾病、呼吸道感染与临床诊断，就本项目的技术可行性与临床应用场景提出了系统性建议。",
-      why: `为验证我们"基于工程化酵母的甲型流感病毒生物传感器"项目的技术可行性与临床适配性，团队向一位中山大学临床医学博士介绍了项目的三大模块（信号识别、信号传导、信号报告）与两种装置形态（环境被动吸入 / 单人主动呼气），并就技术方案、临床应用场景及未来拓展方向展开深入交流。`,
-      what: `专家围绕核心技术提出了荧光是否实时上传、能否裸眼观察、荧光（1-2 小时）与蓝白斑表达时间差异、酵母存活周期（复苏后 2-3 天活性高峰、可维持 1-2 周）与培养基更换、装置整体成本（主动呼气模式预计约 10 元）等关键问题，并比较了项目相对 PCR / 试纸条"操作便捷、灵敏度高、假阳性率低"的差异化优势。在团队请教部分，专家解答：呼吸道感染者呼出气体含病毒气溶胶，本装置对该人群检测效果更好；呼吸道黏膜受损后病毒更易侵入但会被免疫清除，呈动态变化；甲流不诱发肺癌但会加重已患肺癌者病情；肺癌标志物特异性不足、低剂量螺旋 CT 仍是金标准，呼气检测肺癌尚处实验阶段；基层推广的关键在于成本可控。专家综合评价该技术"用有机生物检测另一有机生物"构思新颖，并给出四点建议：提升检测时效性、坚定单人呼气模式、成本决定基层可行性、与呼吸科及生物医学工程等多领域专家交叉访谈。`,
-      how: `这次交流形成了明确的项目反馈闭环：检测响应 1-2 小时偏长 → 优化信号通路缩短响应时间；呼气样本病毒更富集 → 主推单人呼气模式并辅以富集装置；肿瘤标志物特异性不足 → 暂缓肺癌检测、聚焦呼吸道病毒；成本是基层推广的决定因素 → 聚焦主动呼气低成本方案。专家认可了项目技术方向，并使"单人呼气模式在临床可行性上优于环境采样"成为后续设计的核心依据，后续将着力压缩检测响应时间、控制硬件成本，并审慎评估应用场景的临床适配性。`
-    },
-    {
-      name: "Zhejiang Expert",
-      region: "Zhejiang",
-      category: "science",
-      coord: { top: 72.0, left: 79.0 },
-      photo: "",
-      org: "Zhejiang",
-      role: "Placeholder: expert title will be added here.",
-      desc: "Placeholder: expert bio will be added here.",
-      why: "Placeholder: why we reached out will be added here.",
-      what: "Placeholder: what the expert said will be added here.",
-      how: "Placeholder: how the expert influenced us will be added here."
-    }
-  ];
-
-  /* 姓名首字母（去掉 Dr./Prof. 前缀） */
-  function getInitial(name) {
-    return name.replace(/^(Dr\.|Prof\.)\s*/, "").charAt(0).toUpperCase();
-  }
-
-
-
-  /* 图钉用 <button>，自带键盘可聚焦；悬停/聚焦显示姓名提示，中心落在坐标点 */
-  function createPin(expert, container) {
-    const pin = document.createElement("button");
-    pin.type = "button";
-    pin.className = "hz-pin";
-    pin.dataset.category = expert.category;
-    pin.style.left = expert.coord.left + "%";
-    pin.style.top = expert.coord.top + "%";
-    pin.style.setProperty("--pin-color", categoryColors[expert.category]);
-    pin.setAttribute("aria-label", expert.name + " · " + expert.region + " · " + categoryNames[expert.category]);
-    const initial = getInitial(expert.name);
-    pin.innerHTML =
-      '<span class="avatar">' + initial + '</span>' +
-      '<span class="tip">' + expert.name + '</span>';
-    pin.addEventListener("click", () => openModal(expert));
-    container.appendChild(pin);
-  }
-
-  function renderPins() {
-    const chinaPins = root.querySelector("#chinaPins");
-    chinaPins.innerHTML = "";
-    const active = Array.from(root.querySelectorAll('#hzFilter input[type="checkbox"]:checked')).map(cb => cb.value);
-    chinaExperts.forEach(e => {
-      if (active.includes(e.category)) createPin(e, chinaPins);
-    });
-  }
-
-  root.querySelector("#hzFilter").addEventListener("change", renderPins);
-
-  /* 筛选面板收起/展开 */
-  const filterEl = root.querySelector("#hzFilter");
-  const filterToggle = root.querySelector("#hzFilterToggle");
-  filterToggle.addEventListener("click", () => {
-    const isCollapsed = filterEl.classList.toggle("collapsed");
-    filterToggle.setAttribute("aria-expanded", String(!isCollapsed));
-    filterToggle.textContent = isCollapsed ? "+" : "−";
-    filterToggle.setAttribute("aria-label", isCollapsed ? "展开筛选面板" : "收起筛选面板");
-  });
-
-  const modal = root.querySelector("#hzModal");
-  function openModal(expert) {
-    const photoBox = root.querySelector("#mPhoto");
-    const photoImg = root.querySelector("#mPhotoImg");
-    const photoPh = root.querySelector("#mPhotoPh");
-    if (expert.photo) {
-      photoImg.src = expert.photo;
-      photoImg.alt = expert.name;
-      photoPh.textContent = "";
-      photoBox.classList.remove("hz-placeholder");
-    } else {
-      photoImg.removeAttribute("src");
-      photoPh.textContent = "照片待补充";
-      photoBox.classList.add("hz-placeholder");
-    }
-    root.querySelector("#mName").textContent = expert.name;
-    root.querySelector("#mRole").textContent = expert.role || expert.region;
-    root.querySelector("#mWhy").innerHTML = "<strong>Why we reached out:</strong> " + (expert.why || "");
-    root.querySelector("#mWhat").innerHTML = "<strong>Main takeaways:</strong> " + (expert.what || "");
-    root.querySelector("#mHow").innerHTML = "<strong>Reflection & integration:</strong> " + (expert.how || "");
-    root.querySelector("#mPhotoName").textContent = expert.name;
-    root.querySelector("#mPhotoOrg").textContent = expert.org || expert.region;
-    root.querySelector("#mPhotoDesc").textContent = expert.desc || "";
-    modal.classList.add("show");
-    root.querySelector("#hzModalClose").focus();
-  }
-  function closeModal() { modal.classList.remove("show"); }
-  root.querySelector("#hzModalClose").addEventListener("click", closeModal);
-  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
-
-
-
-  renderPins();
-})();
-</script>
 {% endblock %}

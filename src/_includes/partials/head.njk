@@ -8,10 +8,8 @@
 <link rel="dns-prefetch" href="{{ basePath | default('') }}static/iconfont">
 <link rel="stylesheet" href="{{ basePath | default('') }}static/iconfont/iconfont.css">
 <link rel="stylesheet" href="{{ basePath | default('') }}static/css/navigation/navigation.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/index.css">
-{% for c in (css or []) %}<link rel="stylesheet" href="{{ basePath | default('') }}{{ c }}">
+{% if page.filePathStem == '/index' %}<link rel="stylesheet" href="{{ basePath | default('') }}static/css/index.css">
+{% endif %}{% for c in (css or []) %}<link rel="stylesheet" href="{{ basePath | default('') }}{{ c }}">
 {% endfor %}
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/page-progress-bar.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/scroll-progress-bar.css">
 <link rel="stylesheet" href="{{ basePath | default('') }}static/css/mobile.css">
 {% if headExtraPartial %}{% include headExtraPartial %}{% endif %}

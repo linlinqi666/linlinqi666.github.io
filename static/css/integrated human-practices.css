@@ -1431,150 +1431,32 @@
 
 /* iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined [ ] Color Universal Design Verified [ ] High Contrast Mode Tested */
 
-/* ===== 第一篇 HP 文章：3D 等轴测旋转木马图集 ===== */
-.hp-carousel {
-  --r: 270px;            /* 圆环半径，移动端自动缩小 */
-  position: relative;
-  margin: 2.6rem auto;
-  max-width: 900px;
-}
-.hp-carousel-stage {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  margin: 0 auto;
-  perspective: 850px;          /* 父级透视：值越小变形越大、纵深越夸张 */
-  perspective-origin: 50% 50%;
-}
-.hp-carousel-scene {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transform: translateY(0px) rotateX(18deg);   /* 静态等轴测倾斜；卡片在 JS 中公转 */
-  will-change: transform;
-  /* 公转由 JS 只更新一次 transform，这里交给 GPU 合成过渡，避免逐帧重绘 */
-  transition: opacity 0.3s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-  /* 初始隐藏整个场景：JS 未初始化时静态 HTML 卡片会平铺堆叠造成 FOUC；
-     JS 完成全部设置后移除此隐藏，一次性揭示正确的 3D 布局 */
-  opacity: 0;
-}
-/* 用 2D 虚线椭圆环替代"实体轨道"，随场景倾斜成倾斜椭圆轨迹 */
-.hp-carousel-ring {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: calc(2 * var(--r));
-  height: calc(2 * var(--r));
-  margin-left: calc(-1 * var(--r));
-  margin-top: calc(-1 * var(--r));
-  border-radius: 50%;
-  border: 2px dashed rgba(74, 59, 42, 0.45);
-  transform: rotateX(90deg);    /* 躺在圆环所在水平面 */
-  pointer-events: none;
-}
-.hp-carousel-card {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 270px;
-  height: 200px;
-  margin-left: -135px;
-  margin-top: -100px;
-  border-radius: 12px;
+/* 外层文章分页：顶部图片轮播是唯一导航入口，详情轨道一次只展示一篇文章。 */
+.hp-flat-detail-panel > .detail-viewport {
   overflow: hidden;
-  cursor: pointer;
-  background: #e9e2d2;
-  border: 3px solid rgba(246, 241, 231, 0.9);
-  box-shadow: 0 10px 24px -10px rgba(74, 59, 42, 0.5);
-  /* 空气透视（opacity/blur/阴影）由 JS 在每次点击时设置"目标值"，此处做平滑过渡，
-     不再逐帧重写，避免 60fps 卡顿 */
-  transition: opacity 0.65s ease, filter 0.65s ease, box-shadow 0.65s ease;
-  /* 防止背面卡片穿透正面卡片：隐藏背面 + 独立合成层 */
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform-style: preserve-3d;
-}
-.hp-carousel-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  pointer-events: none;
-}
-.hp-carousel-card figcaption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 6px 10px;
-  font-size: 0.76rem;
-  line-height: 1.3;
-  color: var(--color-cream, #f6f1e7);
-  background: linear-gradient(to top, rgba(31, 38, 26, 0.8), rgba(31, 38, 26, 0));
-  font-family: var(--font-serif, Georgia, "Times New Roman", serif);
-  letter-spacing: 0.02em;
-  /* 暂时隐藏左下角文字（2026-08-02），需要时删除此行即可恢复 */
-  display: none;
-}
-.hp-carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid rgba(74, 59, 42, 0.3);
-  background: rgba(246, 241, 231, 0.92);
-  color: var(--color-primary, #4a3b2a);
-  font-size: 1.7rem;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.35);
-  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
-}
-.hp-carousel-arrow:hover:not(:disabled) {
-  background: var(--color-primary, #4a3b2a);
-  color: #fff;
-  transform: translateY(-50%) scale(1.08);
-}
-.hp-carousel-arrow:active:not(:disabled) {
-  transform: translateY(-50%) scale(0.95);
-}
-.hp-carousel-arrow:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-.hp-carousel-arrow.left { left: 6px; }
-.hp-carousel-arrow.right { right: 6px; }
-.hp-carousel-caption {
-  margin-top: 1.2rem;
-  text-align: center;
-  font-size: 0.92rem;
-  color: rgba(74, 59, 42, 0.72);
-  font-family: var(--font-serif, Georgia, "Times New Roman", serif);
-  letter-spacing: 0.02em;
-}
-@media (max-width: 720px) {
-  .hp-carousel { --r: 175px; }
-  .hp-carousel-stage { height: 400px; perspective: 760px; }
-  .hp-carousel-card { width: 140px; height: 95px; margin-left: -70px; margin-top: -47px; }
-  .hp-carousel-arrow { width: 40px; height: 40px; font-size: 1.3rem; }
-  .hp-carousel-card figcaption { font-size: 0.68rem; }
+  transition: height .42s cubic-bezier(.22, 1, .36, 1);
 }
 
-/* 尊重"减少动态效果"无障碍偏好：关闭轮播旋转与纵深渐变 */
+.hp-flat-detail-panel > .detail-viewport > .detail-track {
+  display: flex;
+  align-items: flex-start;
+  transition: transform .42s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+
+.hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hp-carousel-scene,
-  .hp-carousel-card {
+  .hp-flat-detail-panel > .detail-viewport,
+  .hp-flat-detail-panel > .detail-viewport > .detail-track {
     transition: none;
   }
 }
 
-/* ================================================== */
 /* Interactive Expert Map Component (from communication/demos/map.html)
    Scope: .hz-map root namespace | Theme: HP warm brown/cream palette */
 /* ================================================== */  /* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
@@ -1606,14 +1488,11 @@
     position: relative; width: 100%;
     aspect-ratio: 774.044 / 569.651;        /* 中国地图 natural ratio */
     max-height: 600px;
-    contain: layout paint style;              /* 加强 containment */
   }
 
   .hz-map .hz-layer {
     position: absolute; inset: 18px;
-    /* 性能优化：CSS contain 限制浏览器重排/重绘范围 */
-    contain: layout style paint size;
-    content-visibility: auto;
+    z-index: 1;
   }
   /* 中国地图层：默认始终可见 */
   .hz-map .hz-china { 
@@ -1625,12 +1504,10 @@
 
   .hz-map .hz-layer > svg { 
     width: 100%; height: 100%; display: block;
-    /* SVG 渲染优化：限制重绘范围 */
-    contain: layout paint; 
   }
 
   .hz-map .hz-pins {
-    position: absolute; inset: 0;
+    position: absolute; top: 18px; left: 18px; right: 18px; bottom: 18px;
     pointer-events: none;
     z-index: 5;
   }
@@ -1642,7 +1519,6 @@
   /* 中国地图：省份路径 - 暖棕主题，悬停高亮 */
   .hz-map #chinaProvinces path {
     fill: var(--hz-china-fill, #c9b99a); stroke: var(--hz-china-stroke, #a8997d); stroke-width: .8;
-    contain: layout paint;
     pointer-events: auto;
     cursor: pointer;
     transition: fill .2s ease, stroke .2s ease;
@@ -1654,7 +1530,7 @@
 
   /* ===== 筛选面板 ===== */
   .hz-map .hz-filter {
-    position: absolute; top: 14px; right: 14px; z-index: 20;
+    position: absolute; top: 14px; left: 14px; z-index: 20;
     background: rgba(255,255,255,.92);
     color: #3d342b;
     border: 1px solid rgba(139,115,85,.25);
@@ -1705,7 +1581,7 @@
   .hz-map .hz-filter .hz-dot.public { background: #F5A623; }
   @media (max-width: 640px) {
     .hz-map .hz-filter {
-      position: relative; top: auto; right: auto;
+      position: relative; top: auto; left: auto;
       margin: 10px 0 0;
       border-radius: 10px;
       box-shadow: none;
@@ -1720,8 +1596,6 @@
     cursor: pointer; z-index: 5;
     appearance: none; border: none; background: none; padding: 0;
     transition: transform .18s cubic-bezier(.4,0,.2,1), filter .18s ease;
-    /* 图钉独立合成层，避免影响地图层 */
-    contain: layout style paint;
     will-change: transform, filter;
   }
   .hz-map .hz-pin:hover,

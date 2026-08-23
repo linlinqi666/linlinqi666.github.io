@@ -1,134 +1,39 @@
-<!-- 3D 时间轴样式：照搬自 对话归档/tests/demo-3d-timeline.html，
-       作用域限定在 .hp3d-root，不污染站点全局样式 -->
+<!-- 页面专用样式；新轮播使用 .hp-flat-root 命名空间，不污染站点全局样式。 -->
   <style>
-  .hp3d-root, .hp3d-root *, .hp3d-root *::before, .hp3d-root *::after { box-sizing: border-box; }
-  .hp3d-root {
-    --color-primary: #4a3b2a;
-    --color-cream: #f6f1e7;
-    --color-bg: #faf8f3;
-    --color-accent: #8b7355;
-  }
-  .hp3d-root .timeline-orbit-container { max-width: 1200px; margin: 5rem auto 2rem; padding: 0 24px; overflow: visible; }
-  .hp3d-root .container-header { text-align: center; margin-bottom: 0.6rem; }
-  .hp3d-root .container-header h1 { font-size: 1.7rem; font-weight: 600; }
-  .hp3d-root .container-header .subtitle { font-size: 0.9rem; color: var(--color-accent); opacity: 0.75; }
-
-  /* 单一共享 3D 舞台：卡片环与日期环同处一个透视空间，靠固定几何定位，
-     不再有跨舞台运行时测量，整条时间环也绝不会因调参而整体平移 */
-  .hp3d-root .dual-stage { position: relative; width: 100%; perspective: 1100px; perspective-origin: 50% 55%; overflow: visible; }
-  .hp3d-root .dual-scene { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; opacity: 0; }
-  .hp3d-root .cards-group { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
-  .hp3d-root .orbit-ring { position: absolute; left: 50%; top: 50%; width: calc(2 * var(--r, 280px)); height: calc(2 * var(--r, 280px)); margin-left: calc(-1 * var(--r, 280px)); margin-top: calc(-1 * var(--r, 280px)); border-radius: 50%; border: 2px dashed rgba(74,59,42,0.22); transform: rotateX(90deg); pointer-events: none; }
-  .hp3d-root .timeline-group { position: absolute; inset: 0; transform-style: preserve-3d; }
-  .hp3d-root .timeline-ring { position: absolute; left: 50%; top: 50%; width: calc(2 * var(--tr, 300px)); height: calc(2 * var(--tr, 300px)); margin-left: calc(-1 * var(--tr, 300px)); margin-top: calc(-1 * var(--tr, 300px)); border-radius: 50%; border: 1.5px dashed rgba(139,115,85,0.25); transform: rotateX(90deg); pointer-events: none; }
-  .hp3d-root .timeline-node { position: absolute; width: 80px; height: 20px; left: 47%; top: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; will-change: transform, opacity; transform-style: preserve-3d; }
-  .hp3d-root .timeline-node-label { font-size: 0.75rem; white-space: nowrap; color: var(--color-accent); font-weight: 600; letter-spacing: 0.03em; opacity: 0.8; transition: all 0.3s ease; font-variant-numeric: tabular-nums; }
-  .hp3d-root .timeline-node.active .timeline-node-label { color: var(--color-primary); }
-  .hp3d-root .orbit-card { position: absolute; left: 50%; top: 50%; border-radius: 16px; cursor: pointer; background-color: #c9b89c; background-size: cover; background-position: center; border: 3px solid rgba(246,241,231,0.95); box-shadow: 0 16px 38px -12px rgba(74,59,42,0.45); transform-style: preserve-3d; will-change: transform, opacity; transition: box-shadow 0.4s ease; }
-  .hp3d-root .orbit-card .orbit-card-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(74,59,42,0.4); font-size: 0.85rem; letter-spacing: 0.05em; border-radius: 16px; }
-  .hp3d-root .orbit-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; border-radius: 16px; }
-  /* 透明扩展热区：让转到两侧（被 3D 压缩、视觉较小的）卡片更容易点击跳转，
-     不影响视觉尺寸，仅扩大可点击范围（inset 负值向外延伸） */
-  .hp3d-root .orbit-card::after { content: ""; position: absolute; inset: -22px; border-radius: 20px; }
-  .hp3d-root .orbit-card.front { box-shadow: 0 28px 52px -14px rgba(74,59,42,0.55), 0 0 0 1px rgba(74,59,42,0.15); }
-
-  .hp3d-root .slider-control { position: relative; height: 56px; display: flex; align-items: center; justify-content: center; padding: 0 40px; margin-top: 2px; }
-  .hp3d-root .slider-wrapper { position: relative; width: 100%; max-width: 760px; height: 40px; display: flex; align-items: center; }
-  .hp3d-root .slider-track { position: absolute; width: 100%; height: 5px; background: linear-gradient(90deg, rgba(139,115,85,0.1), rgba(139,115,85,0.28), rgba(139,115,85,0.1)); border-radius: 3px; overflow: hidden; }
-  .hp3d-root .slider-fill { position: absolute; left: 0; height: 100%; background: linear-gradient(90deg, var(--color-accent), var(--color-primary)); border-radius: 3px; width: 0%; }
-  .hp3d-root .slider-input { position: relative; width: 100%; height: 40px; -webkit-appearance: none; appearance: none; background: transparent; cursor: grab; z-index: 2; margin: 0; }
-  .hp3d-root .slider-input:active { cursor: grabbing; }
-  .hp3d-root .slider-input::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--color-cream), #fff); border: 3px solid var(--color-primary); box-shadow: 0 4px 14px rgba(74,59,42,0.32), inset 0 1px 0 rgba(255,255,255,0.8); cursor: grab; transition: transform 0.16s ease; }
-  .hp3d-root .slider-input::-webkit-slider-thumb:hover { transform: scale(1.12); }
-  .hp3d-root .slider-input::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.03); }
-  .hp3d-root .slider-input::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--color-cream), #fff); border: 3px solid var(--color-primary); box-shadow: 0 4px 14px rgba(74,59,42,0.32); cursor: grab; }
-
-  .hp3d-root .detail-panel { margin-top: 8px; background: var(--color-cream); border-radius: 14px; border: 1px solid rgba(74,59,42,0.1); box-shadow: 0 10px 36px -14px rgba(74,59,42,0.26); overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1); }
-  .hp3d-root .detail-panel.show { opacity: 1; transform: translateY(0); }
-  .hp3d-root .detail-viewport { overflow: hidden; }
-  .hp3d-root .detail-track { display: flex; transition: transform 0.42s cubic-bezier(0.22,1,0.36,1); will-change: transform; }
-  .hp3d-root .detail-slide { flex: 0 0 100%; padding: 26px 30px 30px; }
-
-  .hp3d-root .detail-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
-  .hp3d-root .detail-num { flex-shrink: 0; font-size: 1.45rem; font-weight: 700; color: var(--color-accent); line-height: 1; padding-top: 2px; font-variant-numeric: tabular-nums; }
-  .hp3d-root .detail-headtext h3 { font-size: 1.2rem; font-weight: 700; line-height: 1.4; }
-  .hp3d-root .detail-sub { font-size: 0.82rem; color: var(--color-accent); opacity: 0.78; margin-top: 4px; }
-  .hp3d-root .detail-intro { font-size: 0.92rem; line-height: 1.72; color: rgba(74,59,42,0.8); margin-bottom: 16px; }
-  .hp3d-root .detail-expert { display: flex; gap: 16px; align-items: center; background: rgba(74,59,42,0.05); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
-  .hp3d-root .detail-expert-avatar { width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, #cbb89a, #a8906f); display: flex; align-items: center; justify-content: center; color: rgba(246,241,231,0.9); font-size: 1.3rem; font-weight: 700; overflow: hidden; }
-  .hp3d-root .detail-expert-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .hp3d-root .detail-expert-name { font-size: 1rem; font-weight: 700; }
-  .hp3d-root .detail-expert-title { font-size: 0.8rem; color: var(--color-accent); margin: 2px 0 4px; }
-  .hp3d-root .detail-expert-field { font-size: 0.8rem; line-height: 1.55; color: rgba(74,59,42,0.7); }
-  .hp3d-root .detail-photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
-  .hp3d-root .detail-photo { position: relative; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, #ddd0b8, #c3b291); display: flex; align-items: flex-end; justify-content: center; }
-  .hp3d-root .detail-photo img { width: 100%; height: 100%; object-fit: cover; }
-  .hp3d-root .detail-photo span { position: absolute; bottom: 0; left: 0; right: 0; font-size: 0.68rem; color: rgba(74,59,42,0.55); background: rgba(246,241,231,0.7); padding: 2px 4px; text-align: center; }
-  .hp3d-root .detail-insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
-  .hp3d-root .detail-insight { background: rgba(74,59,42,0.04); border-left: 3px solid var(--color-accent); border-radius: 7px; padding: 11px 13px; }
-  .hp3d-root .detail-insight h4 { font-size: 0.88rem; margin-bottom: 5px; display: flex; align-items: center; gap: 7px; }
-  .hp3d-root .detail-insight h4::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--color-accent); flex-shrink: 0; }
-  .hp3d-root .detail-insight p { font-size: 0.8rem; line-height: 1.58; color: rgba(74,59,42,0.7); }
-  .hp3d-root .detail-counter { text-align: center; font-size: 0.76rem; color: var(--color-accent); letter-spacing: 0.1em; padding: 8px 0 2px; opacity: 0.65; }
-
-  /* 取消 reveal-box 后，内容块不再需要为把手预留底部空间 */
-  .hp3d-root .detail-slide .hp-reveal-content { padding-bottom: var(--desc-spacing-2xl, 1.5rem); }
-
-  /* 清华交流：用常规网格替代 3D 轮播 */
-  .hp3d-root .hp-tsinghua-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 200px);
-    gap: 14px;
-    margin: 18px 0 10px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 12px 30px rgba(74, 59, 42, 0.1);
-  }
-  .hp3d-root .hp-tsinghua-grid .hp-photo-item {
-    position: relative;
-    margin: 0;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(74, 59, 42, 0.08);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-  }
-  .hp3d-root .hp-tsinghua-grid .hp-photo-item:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 10px 24px rgba(74, 59, 42, 0.16);
-  }
-  .hp3d-root .hp-tsinghua-grid .hp-photo-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.5s ease;
-  }
-  .hp3d-root .hp-tsinghua-grid .hp-photo-item:hover img { transform: scale(1.05); }
-  .hp3d-root .hp-tsinghua-grid .hp-photo-item figcaption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 8px 12px;
-    background: linear-gradient(transparent, rgba(74, 55, 40, 0.75));
-    color: white;
-    font-size: 0.82rem;
-    pointer-events: none;
-  }
-
-  @media (max-width: 768px) {
-    .hp3d-root .timeline-orbit-container { padding: 0 14px; }
-    .hp3d-root .dual-stage { perspective: 760px; }
-    .hp3d-root .slider-input::-webkit-slider-thumb { width: 24px; height: 24px; }
-    .hp3d-root .detail-slide { padding: 18px 16px 20px; }
-    .hp3d-root .detail-slide .detail-headtext h3 { font-size: 1.08rem; }
-    .hp3d-root .detail-photos { grid-template-columns: repeat(2, 1fr); }
-    .hp3d-root .hp-tsinghua-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 150px); gap: 10px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hp3d-root .dual-scene, .hp3d-root .orbit-card, .hp3d-root .timeline-node,
-    .hp3d-root .detail-panel, .hp3d-root .detail-track, .hp3d-root .slider-fill { transition: none !important; }
+  .description-container { width: min(85vw, 1440px); margin-inline: auto; }
+  .description-content { width: 100%; }
+  .hp-flat-root { margin: 0 0 2.2rem; }
+  .hp-flat-carousel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(.55rem, 1.5vw, 1.25rem); }
+  .hp-flat-viewport { overflow: hidden; min-width: 0; }
+  .hp-flat-track { display: flex; flex-wrap: nowrap; transition: transform .42s ease; }
+  .hp-flat-track.is-moving { will-change: transform; }
+  .hp-flat-track > * { min-width: 0; }
+  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: #1d2d2f; color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, outline-color .28s ease; }
+  .hp-flat-card + .hp-flat-card { border-left: 1rem solid transparent; background-clip: padding-box; }
+  .hp-flat-card:nth-child(n + 5) { display: none; }
+  .hp-flat-card.is-active { opacity: 1; outline: 2px solid #143e3a; outline-offset: -2px; }
+  .hp-flat-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .42s ease; }
+  .hp-flat-card:hover img, .hp-flat-card:focus-visible img { transform: scale(1.025); }
+  .hp-flat-card span { position: absolute; left: .75rem; bottom: .65rem; font-size: clamp(.82rem, 1.3vw, 1.05rem); font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.45); }
+  .hp-flat-button { width: 2.5rem; height: 2.5rem; padding: 0; border: 1px solid rgba(20,62,58,.65); border-radius: 50%; background: transparent; color: #143e3a; font: 1.25rem/1 serif; cursor: pointer; }
+  .hp-flat-button:hover, .hp-flat-button:focus-visible { background: #143e3a; color: #fff; }
+  .hp-flat-intro { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: baseline; gap: 1rem; padding: 1rem 0 0; border-top: 1px solid rgba(20,62,58,.28); color: #143e3a; }
+  .hp-flat-intro-date, .hp-flat-intro-count { font-size: .78rem; letter-spacing: .1em; white-space: nowrap; }
+  .hp-flat-intro-title { margin: 0; font-size: clamp(.95rem,1.35vw,1.1rem); line-height: 1.65; }
+  .hp-flat-detail-panel { margin-top: 0; }
+  .hp-flat-detail-panel > .detail-viewport { overflow: hidden; transition: height .42s cubic-bezier(.22, 1, .36, 1); }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track { display: flex; align-items: flex-start; transition: transform .42s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide[aria-hidden="false"] { visibility: visible; }
+  @media (prefers-reduced-motion: reduce) { .hp-flat-detail-panel > .detail-viewport, .hp-flat-detail-panel > .detail-viewport > .detail-track { transition: none; } }
+  @media (max-width: 700px) {
+    .description-container { width: min(92vw, 1440px); }
+    .hp-flat-carousel { gap: .45rem; }
+    .hp-flat-button { width: 2rem; height: 2rem; }
+    .hp-flat-card { aspect-ratio: 1.75 / 1; }
+    .hp-flat-intro { grid-template-columns: 1fr auto; gap: .5rem .8rem; }
+    .hp-flat-intro-title { grid-column: 1 / -1; grid-row: 2; }
   }
   </style>
   
@@ -163,6 +68,9 @@
   /* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
   .hz-map * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  /* 该页面包含全屏地图与角色模态框；确保全局固定导航始终位于页面内容之上。 */
+  nav { z-index: 200 !important; }
+
   .hz-map {
     --hz-accent: #a67c52;
     --hz-filter-bg: rgba(255,255,255,.92);
@@ -185,6 +93,38 @@
     isolation: isolate;
   }
 
+  /* 页面只保留两个主容器：概述+地图，以及人物信息；信息区内部不再绘制套盒子。 */
+  .hp-overview-map-card { margin-top: var(--desc-spacing-3xl); }
+  .hz-details-card { margin-top: var(--desc-spacing-3xl); }
+  .hz-details-card.hz-details { width: 100%; max-width: none; margin: var(--desc-spacing-3xl) 0 0; scroll-margin-top: 6rem; padding: 1.75rem 2rem; }
+  .hz-details-intro { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+  .hz-details-intro h2 { margin: 0 0 1.25rem; color: #5c4d3c; }
+  .hz-details-intro p { max-width: 760px; line-height: 1.7; color: #6f604e; }
+  .hz-detail-panel { margin-top: 1.75rem; border-radius: 0; }
+  .hz-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.75rem; }
+  .hz-intro-block { padding-top: 1rem; border-top: 1px solid rgba(139,115,85,.2); }
+  .hz-intro-block h3 { margin: 0 0 .45rem; font-size: .95rem; color: #5c4d3c; }
+  .hz-intro-block p { margin: 0; font-size: .9rem; line-height: 1.75; color: #6f604e; }
+  .hz-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 .25rem 0 .5rem; vertical-align: middle; }
+  .hz-legend-dot.science { background: #4A90E2; }
+  .hz-legend-dot.industry { background: #9013FE; }
+  .hz-legend-dot.policy { background: #E94B3C; }
+  .hz-legend-dot.public { background: #F5A623; }
+  @media (max-width: 680px) { .hz-intro-grid { grid-template-columns: 1fr; } }
+  .hz-detail-viewport { overflow: hidden; border-radius: 18px; }
+  .hz-detail-track { display: flex; align-items: flex-start; transition: transform .5s cubic-bezier(.22,1,.36,1); will-change: transform; }
+  .hz-detail-slide { flex: 0 0 100%; min-width: 100%; }
+  .hz-detail-card { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 1.5rem; align-items: start; padding: 1.5rem; border: 1px solid rgba(139,115,85,.2); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 14px 36px rgba(74,59,42,.14); }
+  .hz-detail-card__photo { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
+  .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+  .hz-detail-card h3 { margin: 0; color: #5c4d3c; }
+  .hz-detail-card__meta { margin: .4rem 0 1rem; color: #7d6d5a; }
+  .hz-detail-card__copy { margin: 0 0 .9rem; line-height: 1.75; color: #4a3f33; }
+  .hz-map .hz-cluster.is-active { transform: translate(-50%, -50%) scale(1.1); z-index: 30; filter: drop-shadow(0 0 8px rgba(74,59,42,.45)); }
+  .hz-detail-card:focus { outline: 3px solid rgba(139,115,85,.45); outline-offset: 3px; }
+  @media (max-width: 680px) { .hz-details-intro, .hz-detail-card { padding: 1.15rem; } .hz-detail-card { grid-template-columns: 1fr; } .hz-detail-card__photo { max-width: 260px; } }
+  @media (prefers-reduced-motion: reduce) { .hz-detail-track { transition: none; } }
+
   .hz-map .hz-header {
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: wrap; gap: 12px; margin-bottom: 18px;
@@ -206,14 +146,16 @@
     /* 用 padding 给边缘 pin 留出安全区，避免被圆角背景裁切 */
     padding: 18px; box-sizing: border-box;
     box-shadow: 0 20px 60px rgba(74,59,42,.18);
-    contain: layout paint style;              /* 加强 containment */
+    /* 覆盖 static CSS 中的 contain，避免创建额外 stacking context 导致图钉被地图层覆盖 */
+    contain: none !important;
   }
 
   .hz-map .hz-layer {
     position: absolute; inset: 18px;
-    /* 性能优化：CSS contain 限制浏览器重排/重绘范围 */
-    contain: layout style paint size;
-    content-visibility: auto;
+    z-index: 1;
+    /* 覆盖 static CSS 中的 contain/content-visibility */
+    contain: none !important;
+    content-visibility: visible !important;
   }
   /* 中国地图层：默认始终可见 */
   .hz-map .hz-china { 
@@ -225,16 +167,16 @@
 
   .hz-map .hz-layer > svg { 
     width: 100%; height: 100%; display: block;
-    /* SVG 渲染优化：限制重绘范围 */
-    contain: layout paint; 
+    contain: none !important;
   }
 
   .hz-map .hz-pins {
-    position: absolute; inset: 0;
+    position: absolute; top: 18px; left: 18px; right: 18px; bottom: 18px;
     pointer-events: none;
     z-index: 5;
   }
-  .hz-map .hz-pins .hz-pin { pointer-events: auto; }
+  .hz-map .hz-pins .hz-cluster,
+  .hz-map .hz-pins .hz-cluster-popover { pointer-events: auto; }
 
   .hz-map #chinaProvinces path:focus,
   .hz-map #chinaProvinces path:focus-visible { outline: none; }
@@ -242,10 +184,10 @@
   /* 中国地图：省份路径 - 暖棕主题，悬停高亮 */
   .hz-map #chinaProvinces path {
     fill: var(--hz-province-fill); stroke: var(--hz-province-stroke); stroke-width: .8;
-    contain: layout paint;
     pointer-events: auto;
     cursor: pointer;
     transition: fill .2s ease, stroke .2s ease;
+    contain: none !important;
   }
   .hz-map #chinaProvinces path:hover {
     fill: var(--hz-province-hover);
@@ -254,7 +196,7 @@
 
   /* ===== 筛选面板 ===== */
   .hz-map .hz-filter {
-    position: absolute; top: 14px; right: 14px; z-index: 20;
+    position: absolute; top: 14px; left: 14px; z-index: 20;
     background: var(--hz-filter-bg);
     color: var(--hz-filter-text);
     border: 1px solid var(--hz-filter-border);
@@ -314,39 +256,46 @@
     }
   }
 
-  /* 图钉：圆形头像 + 分类色边框，中心落在坐标点 */
-  .hz-map .hz-pin {
-    position: absolute; width: 32px; height: 32px;
-    transform: translate(-50%, -50%);
-    cursor: pointer; z-index: 5;
-    appearance: none; border: none; background: none; padding: 0;
-    transition: transform .18s cubic-bezier(.4,0,.2,1), filter .18s ease;
-    /* 图钉独立合成层，避免影响地图层 */
-    contain: layout style paint;
-    will-change: transform, filter;
+  /* 省份集合点：数量优先，使用较大的触控区域降低密集地图上的误触 */
+  .hz-map .hz-cluster {
+    position: absolute; width: 40px; min-height: 40px; padding: 3px;
+    transform: translate(-50%, -50%); z-index: 25; cursor: pointer;
+    appearance: none; border: 0;
+    border-radius: 50%; background: rgba(255,248,231,.96); color: #4a3f33;
+    box-shadow: 0 5px 14px rgba(74,59,42,.28); display: flex;
+    flex-direction: column; align-items: center; justify-content: center;
+    transition: transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s ease;
+    contain: none !important;
   }
-  .hz-map .hz-pin:hover,
-  .hz-map .hz-pin:focus-visible {
-    transform: translate(-50%, -50%) scale(1.14);
-    z-index: 9; outline: none; filter: drop-shadow(0 0 6px rgba(74,59,42,.35));
+  .hz-map .hz-cluster:hover,
+  .hz-map .hz-cluster:focus-visible,
+  .hz-map .hz-cluster.is-active {
+    transform: translate(-50%, -50%) scale(1.1); z-index: 30; outline: 3px solid rgba(255,255,255,.8);
+    box-shadow: 0 8px 20px rgba(74,59,42,.38);
   }
-  .hz-map .hz-pin .avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: #eaddcf; color: #4a3f33; font-size: 11px; font-weight: 700;
-    border: 2px solid var(--pin-color, var(--hz-accent)); box-sizing: border-box;
-    box-shadow: 0 3px 8px rgba(74,59,42,.25);
-    overflow: hidden;
+  .hz-map .hz-cluster__count { font-size: 20px; line-height: 1; font-weight: 800; }
+  .hz-map .hz-cluster__name { margin-top: 3px; font-size: 10px; font-weight: 700; }
+  .hz-map .hz-cluster-popover {
+    position: absolute; left: 0; top: 0; z-index: 40; width: min(280px, calc(100% - 24px));
+    padding: 14px; border: 1px solid rgba(139,115,85,.36); border-radius: 14px;
+    background: rgba(255,250,240,.98); color: #4a3f33; box-shadow: 0 14px 34px rgba(74,59,42,.24);
   }
-  .hz-map .hz-pin .tip {
-    position: absolute; bottom: 118%; left: 50%; transform: translateX(-50%);
-    white-space: nowrap; padding: 4px 8px; border-radius: 6px;
-    background: rgba(74,59,42,.92); color: #fff; font-size: 11px;
-    opacity: 0; pointer-events: none; transition: opacity .15s ease;
-    box-shadow: 0 4px 12px rgba(74,59,42,.25); z-index: 10;
+  .hz-cluster-popover[hidden] { display: none; }
+  .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+  .hz-cluster-popover__header span { color:#8b7355; font-size:12px; }
+  .hz-cluster-popover ul { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; list-style:none; max-height:240px; overflow:auto; }
+  .hz-cluster-expert { width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; }
+  .hz-cluster-expert:hover, .hz-cluster-expert:focus-visible { border-color:#8b7355; background:#f3e8d8; outline:none; }
+  .hz-cluster-expert__name, .hz-cluster-expert__meta { display:block; }
+  .hz-cluster-expert__name { font-weight:700; font-size:13px; }
+  .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size:11px; line-height:1.4; }
+  @media (max-width: 640px) {
+    .hz-map .hz-cluster-popover { position: relative; left:auto; top:auto; width:100%; margin-top:10px; }
+    .hz-map .hz-cluster { width:32px; min-height:32px; }
   }
-  .hz-map .hz-pin:hover .tip,
-  .hz-map .hz-pin:focus-visible .tip { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .hz-map .hz-cluster { transition:none; }
+  }
 
   .hz-map .hz-legend {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
@@ -354,28 +303,29 @@
   }
   .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
 
+  /* 旧版弹窗（modal）样式已弃用，保留注释以便后续彻底清理。
   .hz-map .hz-modal {
     position: fixed; inset: 0;
-    background: rgba(6,12,22,.6); backdrop-filter: blur(4px);
+    background: rgba(6,12,22,.72);
     display: none; align-items: center; justify-content: center;
     z-index: 99; padding: 16px;
-    /* 模态框隔离，避免影响底层地图渲染 */
     contain: strict;
+    isolation: isolate;
   }
-  .hz-map .hz-modal.show { display: flex; animation: hzFade .2s ease-out; }
+  .hz-map .hz-modal.show { display: flex; animation: hzFade .2s ease-out; will-change: opacity; }
   @keyframes hzFade { from { opacity: 0; } to { opacity: 1; } }
-
   .hz-map .hz-modal-card {
     width: min(760px, 92vw);
     max-height: calc(100vh - 48px);
     overflow: auto;
+    overscroll-behavior: contain;
     background: #f5f0e8; color: #3d342b;
     border-radius: 20px; padding: 28px 30px 26px;
     position: relative; box-shadow: 0 30px 80px rgba(0,0,0,.5);
     animation: hzPop .28s cubic-bezier(.2,.9,.3,1.3);
+    will-change: transform, opacity;
   }
   @keyframes hzPop { from { transform: translateY(14px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
-
   .hz-map .hz-modal-close {
     position: absolute; top: 14px; right: 16px;
     width: 32px; height: 32px; border: none; border-radius: 50%;
@@ -383,7 +333,6 @@
     transition: background .15s;
   }
   .hz-map .hz-modal-close:hover { background: rgba(139,115,85,.28); }
-
   .hz-map .hz-modal-body { display: flex; gap: 24px; align-items: flex-start; }
   .hz-map .hz-modal-photo-col {
     flex: 0 0 150px; display: flex; flex-direction: column; gap: 12px;
@@ -421,7 +370,6 @@
   .hz-map .hz-modal-section strong {
     display: inline; color: #3d342b; font-weight: 700;
   }
-
   @media (max-width: 640px) {
     .hz-map .hz-modal-card { padding: 22px 18px 20px; }
     .hz-map .hz-modal-body { flex-direction: column; align-items: center; gap: 16px; }
@@ -430,13 +378,12 @@
     .hz-map .hz-photo-bio { text-align: center; max-width: 280px; }
     .hz-map .hz-modal-content h2 { font-size: 19px; }
   }
+  */
 
   /* 尊重用户的减弱动效偏好 */
   @media (prefers-reduced-motion: reduce) {
     .hz-map .hz-layer,
-    .hz-map .hz-pin,
-    .hz-map .hz-modal,
-    .hz-map .hz-modal-card,
+    .hz-map .hz-cluster,
     .hz-map .hz-container,
     .hz-map #chinaProvinces path { 
       transition: none !important; 
