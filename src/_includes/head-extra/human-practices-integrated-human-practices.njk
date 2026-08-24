@@ -8,10 +8,10 @@
   .hp-flat-track { display: flex; flex-wrap: nowrap; transition: transform .42s ease; }
   .hp-flat-track.is-moving { will-change: transform; }
   .hp-flat-track > * { min-width: 0; }
-  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: #1d2d2f; color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, outline-color .28s ease; }
+  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, outline-color .28s ease; }
   .hp-flat-card + .hp-flat-card { border-left: 1rem solid transparent; background-clip: padding-box; }
   .hp-flat-card:nth-child(n + 5) { display: none; }
-  .hp-flat-card.is-active { opacity: 1; outline: 2px solid #143e3a; outline-offset: -2px; }
+  .hp-flat-card.is-active { opacity: 1; }
   .hp-flat-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .42s ease; }
   .hp-flat-card:hover img, .hp-flat-card:focus-visible img { transform: scale(1.025); }
   .hp-flat-card span { position: absolute; left: .75rem; bottom: .65rem; font-size: clamp(.82rem, 1.3vw, 1.05rem); font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.45); }
@@ -36,32 +36,6 @@
     .hp-flat-intro-title { grid-column: 1 / -1; grid-row: 2; }
   }
   </style>
-  
-  
-  
-    
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <!-- 侧边栏已注释，相关组件在当前页面无需加载
-  
-  -->
-  
-  
-  <!-- 当前页面主要由 3D 轮播导航，进度条组件在 file:// 测试环境报错且非必需
-  
-  
-  -->
-  <!-- 以下组件在当前页面未使用，注释以减少请求与滚动监听开销
-  
-  
-  -->
 
 <style>
 
@@ -115,11 +89,19 @@
   .hz-detail-track { display: flex; align-items: flex-start; transition: transform .5s cubic-bezier(.22,1,.36,1); will-change: transform; }
   .hz-detail-slide { flex: 0 0 100%; min-width: 100%; }
   .hz-detail-card { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 1.5rem; align-items: start; padding: 1.5rem; border: 1px solid rgba(139,115,85,.2); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 14px 36px rgba(74,59,42,.14); }
-  .hz-detail-card__photo { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
+  .hz-detail-card:not(:has(.hz-detail-card__photo)) { grid-template-columns: 1fr; }
+  .hz-detail-card__photo { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
   .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
   .hz-detail-card h3 { margin: 0; color: #5c4d3c; }
   .hz-detail-card__meta { margin: .4rem 0 1rem; color: #7d6d5a; }
   .hz-detail-card__copy { margin: 0 0 .9rem; line-height: 1.75; color: #4a3f33; }
+  .hz-detail-card__list { margin: 0 0 1rem; padding-left: 1.25rem; display: grid; gap: .55rem; }
+  .hz-detail-card__list li { line-height: 1.7; color: #4a3f33; }
+  .hz-detail-card__list li strong { color: #5c4d3c; }
+  .hz-detail-card__table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: .92rem; background: rgba(255,255,255,.6); border: 1px solid rgba(139,115,85,.28); border-radius: 12px; overflow: hidden; }
+  .hz-detail-card__table th, .hz-detail-card__table td { padding: .6rem .8rem; border-bottom: 1px solid rgba(139,115,85,.18); text-align: left; vertical-align: top; line-height: 1.55; }
+  .hz-detail-card__table th { background: rgba(139,115,85,.14); color: #5c4d3c; font-weight: 700; }
+  .hz-detail-card__table tr:last-child td { border-bottom: none; }
   .hz-map .hz-cluster.is-active { transform: translate(-50%, -50%) scale(1.1); z-index: 30; filter: drop-shadow(0 0 8px rgba(74,59,42,.45)); }
   .hz-detail-card:focus { outline: 3px solid rgba(139,115,85,.45); outline-offset: 3px; }
   @media (max-width: 680px) { .hz-details-intro, .hz-detail-card { padding: 1.15rem; } .hz-detail-card { grid-template-columns: 1fr; } .hz-detail-card__photo { max-width: 260px; } }
@@ -256,25 +238,30 @@
     }
   }
 
-  /* 省份集合点：数量优先，使用较大的触控区域降低密集地图上的误触 */
+  /* 省份集合点：形状调试阶段——先不放任何内容，仅展示小尺寸图钉形状以便调整大小 */
   .hz-map .hz-cluster {
-    position: absolute; width: 40px; min-height: 40px; padding: 3px;
+    position: absolute; width: 18px; min-height: 18px; padding: 0;
     transform: translate(-50%, -50%); z-index: 25; cursor: pointer;
-    appearance: none; border: 0;
-    border-radius: 50%; background: rgba(255,248,231,.96); color: #4a3f33;
-    box-shadow: 0 5px 14px rgba(74,59,42,.28); display: flex;
-    flex-direction: column; align-items: center; justify-content: center;
+    appearance: none; border: none;
+    border-radius: 50%; background: var(--cluster-color, #b94a48); color: transparent;
+    box-shadow: 0 3px 8px rgba(74,59,42,.35), 0 0 0 1px rgba(74,59,42,.18);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s ease;
     contain: none !important;
+    overflow: hidden;
+  }
+  .hz-map .hz-cluster--single {
+    border-color: #ffffff;
+    box-shadow: 0 3px 8px rgba(74,59,42,.35), 0 0 0 1px rgba(74,59,42,.18);
   }
   .hz-map .hz-cluster:hover,
   .hz-map .hz-cluster:focus-visible,
   .hz-map .hz-cluster.is-active {
-    transform: translate(-50%, -50%) scale(1.1); z-index: 30; outline: 3px solid rgba(255,255,255,.8);
-    box-shadow: 0 8px 20px rgba(74,59,42,.38);
+    transform: translate(-50%, -50%) scale(1.25); z-index: 30; outline: none;
+    box-shadow: 0 6px 14px rgba(74,59,42,.45), 0 0 0 1px rgba(74,59,42,.18);
   }
-  .hz-map .hz-cluster__count { font-size: 20px; line-height: 1; font-weight: 800; }
-  .hz-map .hz-cluster__name { margin-top: 3px; font-size: 10px; font-weight: 700; }
+  .hz-map .hz-cluster__count,
+  .hz-map .hz-cluster__name { display: none; }
   .hz-map .hz-cluster-popover {
     position: absolute; left: 0; top: 0; z-index: 40; width: min(280px, calc(100% - 24px));
     padding: 14px; border: 1px solid rgba(139,115,85,.36); border-radius: 14px;
@@ -284,14 +271,21 @@
   .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; }
   .hz-cluster-popover__header span { color:#8b7355; font-size:12px; }
   .hz-cluster-popover ul { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; list-style:none; max-height:240px; overflow:auto; }
-  .hz-cluster-expert { width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; }
-  .hz-cluster-expert:hover, .hz-cluster-expert:focus-visible { border-color:#8b7355; background:#f3e8d8; outline:none; }
+  .hz-cluster-expert { width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
+  .hz-cluster-expert[data-category="science"]:hover,
+  .hz-cluster-expert[data-category="science"]:focus-visible { border-color:#4A90E2; background:#eaf2fb; outline:none; }
+  .hz-cluster-expert[data-category="policy"]:hover,
+  .hz-cluster-expert[data-category="policy"]:focus-visible { border-color:#E94B3C; background:#fcebe9; outline:none; }
+  .hz-cluster-expert[data-category="industry"]:hover,
+  .hz-cluster-expert[data-category="industry"]:focus-visible { border-color:#9013FE; background:#f4e8fb; outline:none; }
+  .hz-cluster-expert[data-category="public"]:hover,
+  .hz-cluster-expert[data-category="public"]:focus-visible { border-color:#F5A623; background:#fbeed6; outline:none; }
   .hz-cluster-expert__name, .hz-cluster-expert__meta { display:block; }
   .hz-cluster-expert__name { font-weight:700; font-size:13px; }
   .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size:11px; line-height:1.4; }
   @media (max-width: 640px) {
     .hz-map .hz-cluster-popover { position: relative; left:auto; top:auto; width:100%; margin-top:10px; }
-    .hz-map .hz-cluster { width:32px; min-height:32px; }
+    .hz-map .hz-cluster { width:14px; min-height:14px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hz-map .hz-cluster { transition:none; }
@@ -302,83 +296,6 @@
     margin-top: 16px; font-size: 13px; color: #7d6d5a;
   }
   .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
-
-  /* 旧版弹窗（modal）样式已弃用，保留注释以便后续彻底清理。
-  .hz-map .hz-modal {
-    position: fixed; inset: 0;
-    background: rgba(6,12,22,.72);
-    display: none; align-items: center; justify-content: center;
-    z-index: 99; padding: 16px;
-    contain: strict;
-    isolation: isolate;
-  }
-  .hz-map .hz-modal.show { display: flex; animation: hzFade .2s ease-out; will-change: opacity; }
-  @keyframes hzFade { from { opacity: 0; } to { opacity: 1; } }
-  .hz-map .hz-modal-card {
-    width: min(760px, 92vw);
-    max-height: calc(100vh - 48px);
-    overflow: auto;
-    overscroll-behavior: contain;
-    background: #f5f0e8; color: #3d342b;
-    border-radius: 20px; padding: 28px 30px 26px;
-    position: relative; box-shadow: 0 30px 80px rgba(0,0,0,.5);
-    animation: hzPop .28s cubic-bezier(.2,.9,.3,1.3);
-    will-change: transform, opacity;
-  }
-  @keyframes hzPop { from { transform: translateY(14px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
-  .hz-map .hz-modal-close {
-    position: absolute; top: 14px; right: 16px;
-    width: 32px; height: 32px; border: none; border-radius: 50%;
-    background: rgba(139,115,85,.15); color: #5a4d3f; font-size: 20px; cursor: pointer; line-height: 1;
-    transition: background .15s;
-  }
-  .hz-map .hz-modal-close:hover { background: rgba(139,115,85,.28); }
-  .hz-map .hz-modal-body { display: flex; gap: 24px; align-items: flex-start; }
-  .hz-map .hz-modal-photo-col {
-    flex: 0 0 150px; display: flex; flex-direction: column; gap: 12px;
-  }
-  .hz-map .hz-modal-photo {
-    position: relative;
-    width: 150px; height: 180px; border-radius: 14px; overflow: hidden;
-    background: #e0d2c1; border: 2px solid rgba(139,115,85,.25);
-  }
-  .hz-map .hz-modal-photo-img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-  }
-  .hz-map .hz-photo-ph {
-    position: absolute; inset: 0; display: none;
-    align-items: center; justify-content: center;
-    color: #8b7d6b; font-size: 14px; text-align: center; padding: 8px;
-  }
-  .hz-map .hz-modal-photo.hz-placeholder .hz-photo-ph { display: flex; }
-  .hz-map .hz-modal-photo.hz-placeholder .hz-modal-photo-img { display: none; }
-  .hz-map .hz-photo-bio { font-size: 13px; line-height: 1.6; color: #5a4d3f; }
-  .hz-map .hz-photo-name { font-weight: 700; font-size: 14px; color: #3d342b; margin-bottom: 2px; }
-  .hz-map .hz-photo-org { color: #8b7355; font-size: 12px; margin-bottom: 6px; }
-  .hz-map .hz-photo-desc { color: #5a4d3f; font-size: 12.5px; }
-  .hz-map .hz-modal-content { flex: 1 1 auto; min-width: 0; }
-  .hz-map .hz-modal-content h2 {
-    margin: 0 0 4px; font-size: 22px; color: #6b8c42; font-weight: 700;
-  }
-  .hz-map .hz-modal-role {
-    margin: 0 0 12px; font-size: 14px; color: #5a4d3f; line-height: 1.5;
-  }
-  .hz-map .hz-modal-section {
-    margin-top: 14px; font-size: 14px; line-height: 1.75; color: #4a4035;
-  }
-  .hz-map .hz-modal-section:first-of-type { margin-top: 6px; }
-  .hz-map .hz-modal-section strong {
-    display: inline; color: #3d342b; font-weight: 700;
-  }
-  @media (max-width: 640px) {
-    .hz-map .hz-modal-card { padding: 22px 18px 20px; }
-    .hz-map .hz-modal-body { flex-direction: column; align-items: center; gap: 16px; }
-    .hz-map .hz-modal-photo-col { flex: 0 0 auto; align-items: center; width: 100%; }
-    .hz-map .hz-modal-photo { width: 120px; height: 150px; }
-    .hz-map .hz-photo-bio { text-align: center; max-width: 280px; }
-    .hz-map .hz-modal-content h2 { font-size: 19px; }
-  }
-  */
 
   /* 尊重用户的减弱动效偏好 */
   @media (prefers-reduced-motion: reduce) {

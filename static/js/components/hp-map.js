@@ -23,8 +23,9 @@
     public: "#F5A623"
   };
   const provinceCoordinates = {
-    "CN-44": { top: 83.5, left: 66.0 },
-    "CN-33": { top: 70.0, left: 78.0 }
+    "CN-44": { top: 87.0, left: 66.0 },
+    "CN-33": { top: 62.0, left: 75.5 },
+    "CN-43": { top: 71.0, left: 58.5 }
   };
   const chinaExperts = [
     {
@@ -60,20 +61,36 @@
       how: `这次交流形成了明确的项目反馈闭环：检测响应 1-2 小时偏长 → 优化信号通路缩短响应时间；呼气样本病毒更富集 → 主推单人呼气模式并辅以富集装置；肿瘤标志物特异性不足 → 暂缓肺癌检测、聚焦呼吸道病毒；成本是基层推广的决定因素 → 聚焦主动呼气低成本方案。专家认可了项目技术方向，并使"单人呼气模式在临床可行性上优于环境采样"成为后续设计的核心依据，后续将着力压缩检测响应时间、控制硬件成本，并审慎评估应用场景的临床适配性。`
     },
     {
-      slug: "zhejiang-expert",
-      name: "Zhejiang Expert",
+      slug: "qiu-xinyuan",
+      name: "邱鑫源",
+      provinceId: "CN-43",
+      provinceName: "湖南省",
+      region: "Changsha, Hunan",
+      category: "science",
+      coord: { top: 69.0, left: 59.5 },
+      photo: "",
+      org: "国防科技大学",
+      role: "副研究员 · 多年 iGEM 参赛与指导经验",
+      desc: "拥有多年 iGEM 参赛与团队指导经验，在基因线路设计与合成生物学竞赛评审方面具有专业视角；本次为项目中期指导访谈。",
+      why: `为走出实验与 iGEM 事项上的瓶颈，团队邀请国防科技大学副研究员邱鑫源老师进行中期指导，就底盘选择、技术路线、数学模型与人类实践反馈等方面获取专业 critique 与优化建议。`,
+      what: `专家指出：酵母细胞壁较厚，病毒颗粒能否穿透到达 GPCR 受体尚未验证，建议优先验证该前提，否则考虑更换底盘；现有 PAGERs 的 GPCR 人源化过于复杂，可改酵母自身 RTK 胞外区识别甲流蛋白并以 Western Blot 验证磷酸化；灵敏度应按实际病毒颗粒数定义，团队缺定量数据；需补充 MAPK 磷酸化等分子证据、降低 FUS1 启动子泄漏、CRISPR 改用 Golden Gate。模型方面，参数须来自实验或文献、不可随意设定，宜用 ODE 并让模型反过来指导实验。HP 方面，评审看重"为什么做"，专家访谈不能替代事实数据、应避免诉诸权威；HP 价值在反馈是否真实影响决策且可追溯；当前优先级是完成第一个简单清楚的 DBTL 循环。`,
+      how: `访谈后，团队将项目背景论证与底盘/受体验证列为最高优先级，明确先完成第一个能工作的 DBTL 循环、再推进下游；并以"越简单越好"的减法思维重新审视技术路线。需说明：以上为专家 critique 与团队后续计划，属设计调整方向，不代表实验已验证或底盘已更换。`
+    },
+    {
+      slug: "luo-juan",
+      name: "罗娟",
       provinceId: "CN-33",
       provinceName: "浙江省",
-      region: "Zhejiang",
-      category: "science",
-      coord: { top: 54.0, left: 81.0 },
+      region: "Hangzhou, Zhejiang",
+      category: "industry",
+      coord: { top: 57.5, left: 80.0 },
       photo: "",
-      org: "Zhejiang",
-      role: "Placeholder: expert title will be added here.",
-      desc: "Placeholder: expert bio will be added here.",
-      why: "Placeholder: why we reached out will be added here.",
-      what: "Placeholder: what the expert said will be added here.",
-      how: "Placeholder: how the expert influenced us will be added here."
+      org: "杭州三甲医院",
+      role: "重症监护室一线护理人员",
+      desc: "重症监护室（ICU）一线护理人员，日常执行呼吸机管理、气管插管/切开患者吸痰等高频操作，对医院空气管理、防护流程与院感防控具有一线视角。",
+      why: `为验证甲流病毒环境检测装置在临床场景中的实际需求与落地可行性，团队邀请杭州三甲医院重症监护室一线护理人员进行深度访谈，从院感防控一线视角确认装置的应用价值与产品化挑战。`,
+      what: `医院现有空气消毒无法全面消杀气溶胶病毒；吸痰等高危操作需分级防护，确诊传染病用密闭式吸痰。防控最头疼"有病而不自知"的探视家属。若入口/病房实时显示空气病毒指标并按低/中/高危分级，可减轻家属顾虑；将装置微缩集成至呼吸机呼气阀可实现个体化监测。临床检测以咽/鼻拭子为主、约 2-4 小时，居家快检易假阳性仅作初筛。医院引进设备质量首位且操作不宜繁琐，定期更换酵母干粉与培养基方案可接受。医院存在鲍曼不动杆菌、肺炎克雷伯菌等耐药菌，酵母传感器换纳米抗体可拓展多病原体；但公立医院设备须公开招标、纳入诊断须权威认证，需对接疾控中心并争取学校背书。`,
+      how: `访谈后，团队将呼吸机呼气阀集成与结果分级显示纳入应用设计重点，并把权威认证、招标流程、监管沟通及模块化多病原体拓展列为产品化落地后续方向。需说明：装置尚未进入医院体系，相关准入与认证均为待办，非已达成结果。`
     }
   ];
 
@@ -109,14 +126,26 @@
 
   let activeCluster = null;
   let closeClusterTimer = null;
+  let closeGeneration = 0;
 
   function scheduleCloseCluster() {
+    if (!activeCluster) return;
     window.clearTimeout(closeClusterTimer);
-    closeClusterTimer = window.setTimeout(() => closeCluster(false), 80);
+    const generation = closeGeneration;
+    closeClusterTimer = window.setTimeout(function () {
+      if (generation !== closeGeneration) return;
+      closeCluster(false);
+    }, 80);
+  }
+
+  function cancelCloseCluster() {
+    window.clearTimeout(closeClusterTimer);
+    closeClusterTimer = null;
   }
 
   function closeCluster(returnFocus) {
     if (!activeCluster) return;
+    cancelCloseCluster();
     const { button, popover } = activeCluster;
     button.setAttribute("aria-expanded", "false");
     popover.hidden = true;
@@ -152,6 +181,10 @@
     const clusters = new Map();
     chinaExperts.forEach(expert => {
       if (!expert.provinceId || !active.has(expert.category)) return;
+      if (!expert.slug || !detailSlidesByExpert.has(expert.slug)) {
+        console.warn("[HP map] 专家 “" + (expert.name || expert.slug) + "” 缺少可映射的详情卡，已跳过渲染。");
+        return;
+      }
       if (!clusters.has(expert.provinceId)) {
         clusters.set(expert.provinceId, {
           id: expert.provinceId,
@@ -169,12 +202,17 @@
   }
 
   function openCluster(cluster, button, mode) {
-    window.clearTimeout(closeClusterTimer);
-    if (activeCluster && activeCluster.button !== button) closeCluster(false);
-    if (activeCluster && activeCluster.button === button && mode === "click") {
-      closeCluster(false);
+    closeGeneration += 1;
+    if (activeCluster && activeCluster.button === button) {
+      if (mode === "click") {
+        closeCluster(false);
+        return;
+      }
+      cancelCloseCluster();
       return;
     }
+    if (activeCluster) closeCluster(false);
+    cancelCloseCluster();
     const popover = document.createElement("div");
     popover.className = "hz-cluster-popover";
     popover.id = "hz-cluster-popover-" + cluster.id;
@@ -187,6 +225,7 @@
       const expertButton = document.createElement("button");
       expertButton.type = "button";
       expertButton.className = "hz-cluster-expert";
+      expertButton.dataset.category = expert.category;
       expertButton.innerHTML = '<span class="hz-cluster-expert__name">' + expert.name + '</span><span class="hz-cluster-expert__meta">' + categoryNames[expert.category] + ' · ' + expert.region + '</span>';
       expertButton.addEventListener("click", () => {
         closeCluster(false);
@@ -205,10 +244,10 @@
     const popoverHeight = popover.offsetHeight;
     popover.style.left = Math.max(12, Math.min(mapWidth - popover.offsetWidth - 12, buttonLeft - popover.offsetWidth / 2)) + "px";
     popover.style.top = buttonTop > popoverHeight + 20 ? buttonTop - popoverHeight - 20 + "px" : Math.min(mapHeight - popoverHeight - 12, buttonTop + 38) + "px";
-    popover.addEventListener("mouseenter", () => window.clearTimeout(closeClusterTimer));
+    popover.addEventListener("mouseenter", cancelCloseCluster);
     popover.addEventListener("mouseleave", scheduleCloseCluster);
+    button.addEventListener("mouseenter", cancelCloseCluster);
     button.addEventListener("mouseleave", scheduleCloseCluster);
-    root.querySelector("#chinaPins").addEventListener("mouseleave", scheduleCloseCluster);
     button.setAttribute("aria-expanded", "true");
     button.setAttribute("aria-controls", popover.id);
     popover.hidden = false;
@@ -224,11 +263,22 @@
     button.style.left = cluster.coord.left + "%";
     button.style.top = cluster.coord.top + "%";
     button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-label", cluster.name + "，" + cluster.experts.length + " 位专家");
+    const onlyExpert = cluster.experts.length === 1 ? cluster.experts[0] : null;
+    if (onlyExpert) {
+      button.setAttribute("aria-label", onlyExpert.name + "，1 位专家");
+    } else {
+      button.setAttribute("aria-label", cluster.name + "，" + cluster.experts.length + " 位专家");
+    }
     const categoryList = Array.from(cluster.categories.keys());
-    button.style.setProperty("--cluster-color", categoryColors[categoryList[0]] || "#8B7355");
+    const primaryColor = onlyExpert ? categoryColors[onlyExpert.category] || "#8B7355" : categoryColors[categoryList[0]] || "#8B7355";
+    button.style.setProperty("--cluster-color", primaryColor);
     button.classList.remove("hz-cluster--mixed");
-    button.innerHTML = '<span class="hz-cluster__count">' + cluster.experts.length + '</span><span class="hz-cluster__name">' + cluster.name.replace("省", "") + '</span>';
+    if (onlyExpert) button.classList.add("hz-cluster--single");
+    if (onlyExpert) {
+      button.innerHTML = '<span class="hz-cluster__count">1</span><span class="hz-cluster__name">' + onlyExpert.name + '</span>';
+    } else {
+      button.innerHTML = '<span class="hz-cluster__count">' + cluster.experts.length + '</span><span class="hz-cluster__name">' + cluster.name.replace("省", "") + '</span>';
+    }
     button.addEventListener("mouseenter", () => openCluster(cluster, button, "hover"));
     button.addEventListener("mouseleave", scheduleCloseCluster);
     button.addEventListener("keydown", event => {
@@ -242,6 +292,8 @@
 
   function renderPins() {
     const chinaPins = root.querySelector("#chinaPins");
+    closeGeneration += 1;
+    cancelCloseCluster();
     closeCluster(false);
     chinaPins.innerHTML = "";
     getVisibleClusters().forEach(cluster => createCluster(cluster, chinaPins));

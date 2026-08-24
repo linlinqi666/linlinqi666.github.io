@@ -24,10 +24,10 @@
   .hp-flat-track { display: flex; flex-wrap: nowrap; transition: transform .42s ease; }
   .hp-flat-track.is-moving { will-change: transform; }
   .hp-flat-track > * { min-width: 0; }
-  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: #1d2d2f; color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, outline-color .28s ease; }
+  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, outline-color .28s ease; }
   .hp-flat-card + .hp-flat-card { border-left: 1rem solid transparent; background-clip: padding-box; }
   .hp-flat-card:nth-child(n + 5) { display: none; }
-  .hp-flat-card.is-active { opacity: 1; outline: 2px solid #143e3a; outline-offset: -2px; }
+  .hp-flat-card.is-active { opacity: 1; }
   .hp-flat-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .42s ease; }
   .hp-flat-card:hover img, .hp-flat-card:focus-visible img { transform: scale(1.025); }
   .hp-flat-card span { position: absolute; left: .75rem; bottom: .65rem; font-size: clamp(.82rem, 1.3vw, 1.05rem); font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.45); }
@@ -52,32 +52,6 @@
     .hp-flat-intro-title { grid-column: 1 / -1; grid-row: 2; }
   }
   </style>
-  
-  
-  
-    
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <!-- 侧边栏已注释，相关组件在当前页面无需加载
-  
-  -->
-  
-  
-  <!-- 当前页面主要由 3D 轮播导航，进度条组件在 file:// 测试环境报错且非必需
-  
-  
-  -->
-  <!-- 以下组件在当前页面未使用，注释以减少请求与滚动监听开销
-  
-  
-  -->
 
 <style>
 
@@ -131,11 +105,19 @@
   .hz-detail-track { display: flex; align-items: flex-start; transition: transform .5s cubic-bezier(.22,1,.36,1); will-change: transform; }
   .hz-detail-slide { flex: 0 0 100%; min-width: 100%; }
   .hz-detail-card { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 1.5rem; align-items: start; padding: 1.5rem; border: 1px solid rgba(139,115,85,.2); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 14px 36px rgba(74,59,42,.14); }
+  .hz-detail-card:not(:has(.hz-detail-card__photo)) { grid-template-columns: 1fr; }
   .hz-detail-card__photo { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
   .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
   .hz-detail-card h3 { margin: 0; color: #5c4d3c; }
   .hz-detail-card__meta { margin: .4rem 0 1rem; color: #7d6d5a; }
   .hz-detail-card__copy { margin: 0 0 .9rem; line-height: 1.75; color: #4a3f33; }
+  .hz-detail-card__list { margin: 0 0 1rem; padding-left: 1.25rem; display: grid; gap: .55rem; }
+  .hz-detail-card__list li { line-height: 1.7; color: #4a3f33; }
+  .hz-detail-card__list li strong { color: #5c4d3c; }
+  .hz-detail-card__table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: .92rem; background: rgba(255,255,255,.6); border: 1px solid rgba(139,115,85,.28); border-radius: 12px; overflow: hidden; }
+  .hz-detail-card__table th, .hz-detail-card__table td { padding: .6rem .8rem; border-bottom: 1px solid rgba(139,115,85,.18); text-align: left; vertical-align: top; line-height: 1.55; }
+  .hz-detail-card__table th { background: rgba(139,115,85,.14); color: #5c4d3c; font-weight: 700; }
+  .hz-detail-card__table tr:last-child td { border-bottom: none; }
   .hz-map .hz-cluster.is-active { transform: translate(-50%, -50%) scale(1.1); z-index: 30; filter: drop-shadow(0 0 8px rgba(74,59,42,.45)); }
   .hz-detail-card:focus { outline: 3px solid rgba(139,115,85,.45); outline-offset: 3px; }
   @media (max-width: 680px) { .hz-details-intro, .hz-detail-card { padding: 1.15rem; } .hz-detail-card { grid-template-columns: 1fr; } .hz-detail-card__photo { max-width: 260px; } }
@@ -272,25 +254,30 @@
     }
   }
 
-  /* 省份集合点：数量优先，使用较大的触控区域降低密集地图上的误触 */
+  /* 省份集合点：形状调试阶段——先不放任何内容，仅展示小尺寸图钉形状以便调整大小 */
   .hz-map .hz-cluster {
-    position: absolute; width: 40px; min-height: 40px; padding: 3px;
+    position: absolute; width: 18px; min-height: 18px; padding: 0;
     transform: translate(-50%, -50%); z-index: 25; cursor: pointer;
-    appearance: none; border: 0;
-    border-radius: 50%; background: rgba(255,248,231,.96); color: #4a3f33;
-    box-shadow: 0 5px 14px rgba(74,59,42,.28); display: flex;
-    flex-direction: column; align-items: center; justify-content: center;
+    appearance: none; border: none;
+    border-radius: 50%; background: var(--cluster-color, #b94a48); color: transparent;
+    box-shadow: 0 3px 8px rgba(74,59,42,.35), 0 0 0 1px rgba(74,59,42,.18);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s ease;
     contain: none !important;
+    overflow: hidden;
+  }
+  .hz-map .hz-cluster--single {
+    border-color: #ffffff;
+    box-shadow: 0 3px 8px rgba(74,59,42,.35), 0 0 0 1px rgba(74,59,42,.18);
   }
   .hz-map .hz-cluster:hover,
   .hz-map .hz-cluster:focus-visible,
   .hz-map .hz-cluster.is-active {
-    transform: translate(-50%, -50%) scale(1.1); z-index: 30; outline: 3px solid rgba(255,255,255,.8);
-    box-shadow: 0 8px 20px rgba(74,59,42,.38);
+    transform: translate(-50%, -50%) scale(1.25); z-index: 30; outline: none;
+    box-shadow: 0 6px 14px rgba(74,59,42,.45), 0 0 0 1px rgba(74,59,42,.18);
   }
-  .hz-map .hz-cluster__count { font-size: 20px; line-height: 1; font-weight: 800; }
-  .hz-map .hz-cluster__name { margin-top: 3px; font-size: 10px; font-weight: 700; }
+  .hz-map .hz-cluster__count,
+  .hz-map .hz-cluster__name { display: none; }
   .hz-map .hz-cluster-popover {
     position: absolute; left: 0; top: 0; z-index: 40; width: min(280px, calc(100% - 24px));
     padding: 14px; border: 1px solid rgba(139,115,85,.36); border-radius: 14px;
@@ -300,14 +287,21 @@
   .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; }
   .hz-cluster-popover__header span { color:#8b7355; font-size:12px; }
   .hz-cluster-popover ul { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; list-style:none; max-height:240px; overflow:auto; }
-  .hz-cluster-expert { width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; }
-  .hz-cluster-expert:hover, .hz-cluster-expert:focus-visible { border-color:#8b7355; background:#f3e8d8; outline:none; }
+  .hz-cluster-expert { width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
+  .hz-cluster-expert[data-category="science"]:hover,
+  .hz-cluster-expert[data-category="science"]:focus-visible { border-color:#4A90E2; background:#eaf2fb; outline:none; }
+  .hz-cluster-expert[data-category="policy"]:hover,
+  .hz-cluster-expert[data-category="policy"]:focus-visible { border-color:#E94B3C; background:#fcebe9; outline:none; }
+  .hz-cluster-expert[data-category="industry"]:hover,
+  .hz-cluster-expert[data-category="industry"]:focus-visible { border-color:#9013FE; background:#f4e8fb; outline:none; }
+  .hz-cluster-expert[data-category="public"]:hover,
+  .hz-cluster-expert[data-category="public"]:focus-visible { border-color:#F5A623; background:#fbeed6; outline:none; }
   .hz-cluster-expert__name, .hz-cluster-expert__meta { display:block; }
   .hz-cluster-expert__name { font-weight:700; font-size:13px; }
   .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size:11px; line-height:1.4; }
   @media (max-width: 640px) {
     .hz-map .hz-cluster-popover { position: relative; left:auto; top:auto; width:100%; margin-top:10px; }
-    .hz-map .hz-cluster { width:32px; min-height:32px; }
+    .hz-map .hz-cluster { width:14px; min-height:14px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hz-map .hz-cluster { transition:none; }
@@ -318,83 +312,6 @@
     margin-top: 16px; font-size: 13px; color: #7d6d5a;
   }
   .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
-
-  /* 旧版弹窗（modal）样式已弃用，保留注释以便后续彻底清理。
-  .hz-map .hz-modal {
-    position: fixed; inset: 0;
-    background: rgba(6,12,22,.72);
-    display: none; align-items: center; justify-content: center;
-    z-index: 99; padding: 16px;
-    contain: strict;
-    isolation: isolate;
-  }
-  .hz-map .hz-modal.show { display: flex; animation: hzFade .2s ease-out; will-change: opacity; }
-  @keyframes hzFade { from { opacity: 0; } to { opacity: 1; } }
-  .hz-map .hz-modal-card {
-    width: min(760px, 92vw);
-    max-height: calc(100vh - 48px);
-    overflow: auto;
-    overscroll-behavior: contain;
-    background: #f5f0e8; color: #3d342b;
-    border-radius: 20px; padding: 28px 30px 26px;
-    position: relative; box-shadow: 0 30px 80px rgba(0,0,0,.5);
-    animation: hzPop .28s cubic-bezier(.2,.9,.3,1.3);
-    will-change: transform, opacity;
-  }
-  @keyframes hzPop { from { transform: translateY(14px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
-  .hz-map .hz-modal-close {
-    position: absolute; top: 14px; right: 16px;
-    width: 32px; height: 32px; border: none; border-radius: 50%;
-    background: rgba(139,115,85,.15); color: #5a4d3f; font-size: 20px; cursor: pointer; line-height: 1;
-    transition: background .15s;
-  }
-  .hz-map .hz-modal-close:hover { background: rgba(139,115,85,.28); }
-  .hz-map .hz-modal-body { display: flex; gap: 24px; align-items: flex-start; }
-  .hz-map .hz-modal-photo-col {
-    flex: 0 0 150px; display: flex; flex-direction: column; gap: 12px;
-  }
-  .hz-map .hz-modal-photo {
-    position: relative;
-    width: 150px; height: 180px; border-radius: 14px; overflow: hidden;
-    background: #e0d2c1; border: 2px solid rgba(139,115,85,.25);
-  }
-  .hz-map .hz-modal-photo-img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-  }
-  .hz-map .hz-photo-ph {
-    position: absolute; inset: 0; display: none;
-    align-items: center; justify-content: center;
-    color: #8b7d6b; font-size: 14px; text-align: center; padding: 8px;
-  }
-  .hz-map .hz-modal-photo.hz-placeholder .hz-photo-ph { display: flex; }
-  .hz-map .hz-modal-photo.hz-placeholder .hz-modal-photo-img { display: none; }
-  .hz-map .hz-photo-bio { font-size: 13px; line-height: 1.6; color: #5a4d3f; }
-  .hz-map .hz-photo-name { font-weight: 700; font-size: 14px; color: #3d342b; margin-bottom: 2px; }
-  .hz-map .hz-photo-org { color: #8b7355; font-size: 12px; margin-bottom: 6px; }
-  .hz-map .hz-photo-desc { color: #5a4d3f; font-size: 12.5px; }
-  .hz-map .hz-modal-content { flex: 1 1 auto; min-width: 0; }
-  .hz-map .hz-modal-content h2 {
-    margin: 0 0 4px; font-size: 22px; color: #6b8c42; font-weight: 700;
-  }
-  .hz-map .hz-modal-role {
-    margin: 0 0 12px; font-size: 14px; color: #5a4d3f; line-height: 1.5;
-  }
-  .hz-map .hz-modal-section {
-    margin-top: 14px; font-size: 14px; line-height: 1.75; color: #4a4035;
-  }
-  .hz-map .hz-modal-section:first-of-type { margin-top: 6px; }
-  .hz-map .hz-modal-section strong {
-    display: inline; color: #3d342b; font-weight: 700;
-  }
-  @media (max-width: 640px) {
-    .hz-map .hz-modal-card { padding: 22px 18px 20px; }
-    .hz-map .hz-modal-body { flex-direction: column; align-items: center; gap: 16px; }
-    .hz-map .hz-modal-photo-col { flex: 0 0 auto; align-items: center; width: 100%; }
-    .hz-map .hz-modal-photo { width: 120px; height: 150px; }
-    .hz-map .hz-photo-bio { text-align: center; max-width: 280px; }
-    .hz-map .hz-modal-content h2 { font-size: 19px; }
-  }
-  */
 
   /* 尊重用户的减弱动效偏好 */
   @media (prefers-reduced-motion: reduce) {
@@ -565,12 +482,6 @@
 <!-- hp-map-script-marker -->
 <script src="../static/js/components/hp-map.js" defer></script>
 <div class="description-container">
-      <!-- 侧边导航栏（已注释，当前页面由 3D 轮播直接导航）
-      <aside class="description-sidebar">
-        ...
-      </aside>
-      -->
-
       <!-- 内容区域 -->
       <div class="description-content" id="content">
 
@@ -782,19 +693,19 @@
       <div class="hz-intro-grid">
         <div class="hz-intro-block">
           <h3>这张地图是什么？</h3>
-          <p>上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。每一位受访者都从各自的专业视角——临床医学、检验诊断、学术研究或公共卫生——为我们的甲型流感病毒生物传感器项目提供了宝贵反馈。</p>
+          <p>上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。我们的项目“基于工程化酿酒酵母的甲型流感病毒生物传感器”从一套实验室技术设想出发，需要回到真实场景中去接受检验；每一位受访者都从各自的专业视角——临床检验、临床医学、一线护理或竞赛指导——为项目的检测目标、应用场景与风险边界提供了反馈。当前地图已收录检验诊断、临床医学、重症监护一线护理与 iGEM 中期指导四类访谈，更多领域将在资料确认后补充。</p>
         </div>
         <div class="hz-intro-block">
           <h3>图钉代表什么？</h3>
-          <p>不同颜色的图钉对应不同领域：<span class="hz-legend-dot science"></span> 科学与学术界 <span class="hz-legend-dot industry"></span> 产业与临床 <span class="hz-legend-dot policy"></span> 政策与监管 <span class="hz-legend-dot public"></span> 公众与社会。点击任意图钉，下方就会切换到对应人物的详细访谈记录。</p>
+          <p>不同颜色的图钉对应不同领域：<span class="hz-legend-dot science"></span> 科学与学术界 <span class="hz-legend-dot industry"></span> 产业与临床 <span class="hz-legend-dot policy"></span> 政策与监管 <span class="hz-legend-dot public"></span> 公众与社会。点击任意图钉，下方就会切换到对应人物的详细访谈记录，其中每条记录聚焦该专家最相关的反馈，以及这些反馈与项目设计和实验计划的联系。</p>
         </div>
         <div class="hz-intro-block">
           <h3>我们为什么做这些访谈？</h3>
-          <p> Human Practices 的核心是把实验室里的技术设想放到真实社会场景中去检验。通过与一线医生、研究人员和潜在使用者交流，我们不断确认项目是否真正解决了临床痛点、是否符合监管与社会期待，并据此迭代设计。</p>
+          <p>Human Practices 的核心是把实验室里的技术设想放到真实社会场景中去检验，并让反馈真正进入项目决策。通过与一线医生、研究人员和潜在使用者交流，我们持续确认：检测目标是否回应了临床痛点、使用场景是否符合现实条件、性能与成本边界是否被合理评估，并据此迭代设计——例如重新聚焦“检测到空气病毒而非区分亚型”、明确密闭空间有效范围与变量控制。</p>
         </div>
         <div class="hz-intro-block">
-          <h3>如何使用？</h3>
-          <p>你可以通过右上角筛选面板按类别过滤图钉；点击图钉后，下方信息区会切换为对应人物的访谈记录，地图仍保留在上方，方便对照人物所在位置。</p>
+          <h3>如何阅读这些访谈？</h3>
+          <p>你可以通过右上角筛选面板按类别过滤图钉；点击图钉后，下方信息区会切换为对应人物的访谈记录，地图仍保留在上方，方便对照人物所在位置。页面按不同访谈对象的关注重点呈现反馈，并说明其与项目设计和实验计划的联系。</p>
         </div>
       </div>
     </div>
@@ -802,39 +713,97 @@
       <div class="hz-detail-viewport" id="hzDetailViewport" aria-live="polite" aria-label="访谈对象详情">
       <div class="hz-detail-track" id="hzDetailTrack">
         <div class="hz-detail-slide" data-hz-expert="wang-wenjie">
-    <article class="hz-detail-card" id="hz-detail-wang-wenjie">
+    <article class="hz-detail-card" id="hz-detail-wang-wenjie" data-module-id="HP-INTERVIEW-WANGWENJIE" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
       <img class="hz-detail-card__photo" src="../static/image/HP/expert_img/wangwenjie.jpg" alt="王文杰" loading="lazy">
       <div>
         <p class="hz-detail-card__eyebrow">Industry · Shenzhen, Guangdong</p>
         <h3>王文杰</h3>
         <p class="hz-detail-card__meta">深圳市妇幼保健院 · 南方科技大学医学院｜检验科主任 · 教学督导</p>
-        <p class="hz-detail-card__copy"><strong>人物介绍：</strong>长期从事新型生物学诊断标志物、肿瘤与自噬等方向研究；担任多个医学检验相关专业委员会职务，在临床检验与体外诊断领域具有丰富经验。</p>
-        <p class="hz-detail-card__copy"><strong>访谈内容：</strong>为了解甲型流感病毒检测在真实医疗环境中的需求，团队与临床检验专家讨论病毒变异、现有检测局限、抗病毒治疗策略及检测设备的发展方向。访谈提示我们，检测目标应更关注广谱、快速、低门槛的病毒监测，并在后续实验中控制环境变量、明确应用场景。</p>
-        <p class="hz-detail-card__copy"><strong>对项目的影响：</strong>团队据此重新审视传感器的检测目标，减少对病毒亚型识别的依赖，转向更广谱、更快速且更易部署的监测方案，并将医疗需求和公共卫生挑战纳入工程设计。</p>
+        <p class="hz-detail-card__copy">作为团队成立后的第一次正式社会实践，我们带着一套还停留在纸面构想的酵母传感器去找了王文杰老师，最想弄明白两件事：真实医疗场景里甲流到底是怎么被检、怎么被治的，以及我们的装置究竟该瞄准“区分亚型”还是“先检得到空气里的病毒”。这次一线对话让我们第一次真切感到，实验室技术与现实需求之间隔着一道必须跨越的鸿沟。</p>
+
+        <p class="hz-detail-card__copy"><strong>检测目标：先“检得到”，再谈广谱</strong></p>
+        <p class="hz-detail-card__copy">我们原本在纳米抗体该靶向 HA 哪一区段上犹豫。王老师帮我们理清了临床实际：医院以阴阳性诊断治疗为导向、并不区分亚型，亚型信息由疾控发布；HA 与 NA 确实高度变异，但 H1N1/H3N2 这类季节性亚型不需要每年更换抗体，只是存在“病毒已变异而检测未及跟上”的漏检不确定性。顺着这条线，我们重新审视了传感器的识别策略，倾向选择 HA 茎部相对保守的区域以实现更广谱的检测——但这仍是基于专家判断的设计方向，能否真正覆盖变异毒株有待后续实验验证，不能写成已确认的广谱性能。</p>
+
+        <p class="hz-detail-card__copy"><strong>48 小时窗口与 IVD 的“滞后性”</strong></p>
+        <p class="hz-detail-card__copy">我们想搞清楚治疗与检测之间的时间关系。王老师指出甲流呈爆发性，应抓住发病 48 小时内确认病因、用奥司他韦或玛巴洛沙韦等特效药，普通抗病毒口服液几乎无效，错过窗口则转对症处理；潜伏期传染性弱但已有传染性，爆发期最强。更关键的一点在于，他直言现有 IVD 产业总在病毒于人体内爆发、达到检测阈值之后才发挥作用。这句话直接校准了我们的价值坐标：一个能在病毒尚未侵入人体时就主动预警的活体空气传感器，意义不只是提升某项指标，而是把传染病防控逻辑从“被动诊治”推向“主动预防”——这也是我们把项目锚定在环境/呼气监测、而非仅做居家确诊工具的原因。</p>
+
+        <p class="hz-detail-card__copy"><strong>应用场景：密闭空间优先，变量控制是硬仗</strong></p>
+        <p class="hz-detail-card__copy">我们请教了装置该落在哪些场景。王老师建议在幼儿园、学校、地铁站等人员密集处应用，但提醒大场景空气扩散会使病毒浓度很低，应先在密闭空间测清有效范围，并明确有效测量范围、环境大小、病毒所处阶段等限制条件；对准咳嗽或收集唾液的居家便携自检类似医院免疫层析法、是发展方向，但空气变量太多，须先固化不变量再处理变量，研发可联系试剂厂商。这些边界条件被我们纳入了后续实验方案的规划——例如优先设计密闭空间有效范围与变量控制测试，而不是一上来铺开大场景。团队反思中也记录到，抗原检测敏感性约 50%–70%、居家自检假阳性可达 50%–70%，这反过来说明灵敏度和特异性优化必须作为后续重点，而非已有结论。</p>
+
+        <p class="hz-detail-card__copy"><strong>一线认可与团队认知转变</strong></p>
+        <p class="hz-detail-card__copy">王老师评价酵母生物传感器“题目很好、很有意义，可作为前沿技术提升人民福祉”，这份来自临床专业的认可让团队更清楚自己肩上的责任。但需要如实说明：这次访谈主要改变的是我们的应用定位、问题优先级和团队判断（属于应用定位与团队学习的层面），并没有直接改动实验路线或参数；HA 保守区靶向、密闭空间测试与变量控制 currently 仍是设计计划，等待后续功能测试与一手数据复核。把课堂上的理想化模型拉回真实公共卫生难题，是这次实践留给团队最持久的影响。</p>
+
+
       </div>
     </article>
         </div>
         <div class="hz-detail-slide" data-hz-expert="gu-kai">
-    <article class="hz-detail-card" id="hz-detail-gu-kai">
+    <article class="hz-detail-card" id="hz-detail-gu-kai" data-module-id="HP-INTERVIEW-GUKAI" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
       <img class="hz-detail-card__photo" src="../static/image/HP/expert_img/fukai.jpg" alt="顾凯" loading="lazy">
       <div>
         <p class="hz-detail-card__eyebrow">Science and academia · Guangzhou, Guangdong</p>
         <h3>顾凯</h3>
         <p class="hz-detail-card__meta">中山大学｜临床医学博士</p>
-        <p class="hz-detail-card__copy"><strong>人物介绍：</strong>研究方向涉及肺部疾病、呼吸道感染与临床诊断，就本项目的技术可行性与临床应用场景提出了系统性建议。</p>
-        <p class="hz-detail-card__copy"><strong>访谈内容：</strong>团队介绍信号识别、信号传导、信号报告三大模块，以及环境被动吸入和单人主动呼气两种装置形态。专家从响应时间、呼气样本、肺癌标志物、使用成本和临床场景等方面提出具体反馈。</p>
-        <p class="hz-detail-card__copy"><strong>对项目的影响：</strong>团队据此优化信号通路以缩短响应时间，聚焦单人主动呼气的低成本方案，暂缓肺癌检测方向，并将临床适配性与硬件成本列为后续设计的重点。</p>
+        <p class="hz-detail-card__copy">我们带着一套还停留在草图阶段的装置设想去请教了顾凯老师：用工程化酵母分信号识别、传导、报告三模块检测空气中的甲流 HA 蛋白，形态上既有环境被动吸入，也有放在桌边的单人主动呼气两种。当时我们最不确定的是，这台装置到底该主打哪种采样场景、响应时间会不会拖垮实用性，以及它在 PCR、酶联免疫和试纸条之外到底凭什么站得住脚。</p>
+
+        <p class="hz-detail-card__copy"><strong>采样场景：从环境空气转向单人呼气</strong></p>
+        <p class="hz-detail-card__copy">我们最初把环境空气监测当成主路径，但顾老师点出一个关键前提：环境中的病毒会被稀释，而人体呼出气体里的病毒明显更富集、检测也更顺手。其实在更早的病毒学专家访谈里，我们就已得知甲流在空气中只能维持几个小时、浓度与精准性都受限，于是已经把方案调整为针对单人检测、并给环境装置增加了富集环节再通入酵母。顾老师的临床视角帮我们确认了这一步方向是对的——呼吸道感染者咳出的气溶胶本就带病毒颗粒，单人呼气模式对这类样本反而更有优势。这直接作用在装置的形态设计上：主动呼气版只需维持酵母生长温度、省去荧光激发与识别模块，与我们 <code>yEGFP/lacZ</code> 双报告输出的设想相衔接。</p>
+
+        <p class="hz-detail-card__copy"><strong>响应时间：决定时效性的硬约束</strong></p>
+        <p class="hz-detail-card__copy">我们很关心“能不能实时监测并上传”。顾老师帮我们厘清了时间线：酵母天然信号通路从接收抗原到表达荧光需要约 1–2 小时，结果其实是对约一小时前状态的定时反映，存在延迟但窗口可确定；蓝白斑报告还要等酵母生成报告蛋白并扩散到液体显色，更慢、具体时间尚未确定。他直言若表达时间过长，装置的时效性就会打折。这一点把优化优先级摆到了台面上——缩短 <code>hM1Dq → Gpa1 → MAPK → FUS1</code> 信号链的响应时间，被我们列为后续功能测试的重点之一，而非已经完成。荧光经光电转换后可在软件端定量查看，蓝白斑则能裸眼判断，两种报告体系的取舍也由此更清楚。</p>
+
+        <p class="hz-detail-card__copy"><strong>临床定位与差异化：不替性能背书，先讲清边界</strong></p>
+        <p class="hz-detail-card__copy">我们想确认相比 PCR、酶联免疫和试纸条的优势。顾老师没有对团队陈述的灵敏度、假阳性等数值作独立确认，而是把讨论拉回应用边界：项目真正的差异化在操作便捷与低门槛——鼻拭准确率约 70%–80% 且操作要求高，而我们的装置若能主动或被动直接检测，可能让本无检测意识的人更愿意用。他也提醒，酵母干粉复苏后约 2–3 天进入活性高峰、可维持 1–2 周，需定期更换；主动呼气版预计终产品成本可压到约 10 元，但研发阶段成本更高，基层推广的可行性最终由成本决定。顺着这个判断，我们暂缓了肺癌呼气标志物这类特异性尚不充分的拓展方向——生物标志物目前只能作为辅助诊断、低剂量螺旋 CT 才是金标准，装置潜力要等发现高度特异的差异呼气分子才可能释放。</p>
+
+        <p class="hz-detail-card__copy"><strong>呼吸道场景的价值与下一步对话</strong></p>
+        <p class="hz-detail-card__copy">我们还就肺部感染患者呼气差异、呼吸道损伤后甲流复制、以及甲流与肺癌的关系请教了顾老师。他的判断是：呼吸道受损者屏障破坏后病毒更易侵入、复制更强但会被免疫清除，呈动态变化；甲流本身不诱发肺癌，却会加重已患肺癌者病情，对高危人群反复感染相当不利。这些回答让我们更确信装置在“呼吸道感染人群”这一具体场景下的价值，而非泛化的环境监测。顾老师最后肯定“用一个有机生物检测另一个有机生物”的构思新颖，并建议我们继续与呼吸科、生物医学工程等多领域专家交叉访谈。目前这些反馈来自团队访谈纪要，团队将其作为设计参考，尚未用一手临床数据验证；涉及检测性能、成本与适用人群的表述均需后续实验与临床评估复核。</p>
       </div>
     </article>
         </div>
-        <div class="hz-detail-slide" data-hz-expert="zhejiang-expert">
-    <article class="hz-detail-card" id="hz-detail-zhejiang-expert">
-      <div class="hz-detail-card__photo" role="img" aria-label="专家照片待补充"></div>
+        <div class="hz-detail-slide" data-hz-expert="qiu-xinyuan">
+    <article class="hz-detail-card" id="hz-detail-qiu-xinyuan" data-module-id="HP-INTERVIEW-QIUXINYUAN" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
       <div>
-        <p class="hz-detail-card__eyebrow">Science and academia · Zhejiang</p>
-        <h3>Zhejiang Expert</h3>
-        <p class="hz-detail-card__meta">浙江｜专家信息待补充</p>
-        <p class="hz-detail-card__copy">该访谈对象的背景、访谈内容与项目反馈将在资料确认后补充。</p>
+        <p class="hz-detail-card__eyebrow">Science and academia · iGEM mentor</p>
+        <h3>邱鑫源</h3>
+        <p class="hz-detail-card__meta">副研究员 · 经验丰富的 iGEMer，多次以队长与评审视角参与合成生物学竞赛</p>
+
+        <p class="hz-detail-card__copy">团队以酿酒酵母为底盘、基于 PAGERs 技术构建空气甲型流感病毒生物传感器，已完成部分基因元件构建，但在实验内容、底盘改造与 iGEM 评审策略上接连遇到瓶颈。当时我们最不确定的，是改造菌株空白对照组仍有强本底荧光、<code>FUS1</code> 启动子泄漏明显，而完整病毒颗粒能否穿透酵母厚细胞壁到达胞膜 <code>hM1Dq</code> 受体这件事一直没有验证。带着这些具体困惑，我们邀请了邱鑫源老师进行中期指导，希望借其长期带队与评审的视角，帮我们判断路线是否走偏。</p>
+
+        <p class="hz-detail-card__copy"><strong>底盘与路线：先确认前提，再做减法</strong></p>
+        <p class="hz-detail-card__copy">我们最担心的是整套系统建立在“病毒能接触胞膜受体”这一假设上。邱老师指出，这正是整个装置能否工作的物理前提：酵母细胞壁较厚，目前缺少完整病毒颗粒穿透并抵达 <code>hM1Dq</code> 的证据；若验证不通过，应果断转向爪蟾卵母细胞等替代底盘，而不是继续在复杂改造上投入。顺着这个判断，他给我们的核心建议是“越简单越好”——我们原本纠结于 GPCR 人源化、跨物种糖基化与 Gα 兼容性，而他更倾向改造酵母自身 RTK 系统、仅改胞外区识别甲流蛋白，用 Western Blot 验证下游磷酸化即可；唐老师提出的 STE2 受体加装门控方案也可作为中间路线参考。针对本底泄漏，他给出了两条并行路径：调整 PRE 数量或更换更弱启动子来压低 <code>FUS1</code> 基础表达，同时必须用 MAPK 磷酸化的 Western Blot 补上分子层面证据，不能只靠生长表型间接判断信号是否激活。我们还就灵敏度和构建效率请教了他：他明确“抗原抗体特异性强”不等于“检测灵敏度高”，灵敏度必须按实际样本中可检出的病毒颗粒数定义，而团队恰恰缺单位体积最低可检测颗粒数的定量依据；多基因连续敲除的质粒构建则建议改用 Golden Gate Cloning，以提高 sgRNA 短片段克隆成功率。</p>
+
+        <p class="hz-detail-card__copy"><strong>模型：用得巧，而非建得全</strong></p>
+        <p class="hz-detail-card__copy">我们一度在“是否要建一条从抗原到 GFP 的全链条 ODE、哪怕多数参数只能拟合”上犹豫。邱老师认为多步反应近似成单个希尔函数在评审中可接受，但参数必须来自实验拟合或文献引用、严禁随意设定，且要在 Wiki 写清近似推导；模型真正的价值在于先用预测曲线与实验数据匹配完成验证，再用参数敏感性分析反推最敏感的元件来指导实验。对我们把 PAGERs 看作“抗原识别→解除抑制→GPCR 激活”的串联、并尝试用三态门或 BUFIF1 缓冲器做逻辑封装的想法，他的判断是：用 ODE 描述输入输出与动态响应比三态门逻辑更贴合，sgRNA 已有成熟算法，不必在傅里叶等过度设计上耗费精力。他特别提醒，评委看重模型能否解决实验问题，而非形式是否高级；与其堆砌模块，不如让模型具备“响应—恢复”全过程的预测力——例如用 5 个抗原浓度建模型、预测第 6 个，或先加抗原再洗脱、看模型能否预测信号回落过程。</p>
+
+        <p class="hz-detail-card__copy"><strong>HP 与参赛：必要性优先，闭环要真实</strong></p>
+        <p class="hz-detail-card__copy">我们曾把人类实践做成“访谈集锦”，也困惑于如何包装项目意义。邱老师直接点出，评审最常追问的就是“为什么做”——专家口述和社会实践不能替代事实证据，要避免“诉诸权威”，应当用流行病学与文献数据证明空气检测的价值和酵母底盘的不可替代性。HP 的评分不看活动数量或形式，只看反馈是否真正改变了基因线路或底盘选择；硬件层面的访谈反馈须落到设备设计改进并验证，AREA 框架重在可追溯影响而非形式。他给的推进策略很明确：当前优先级是先做出能识别甲流蛋白的功能性受体、跑通第一个简单清楚的 DBTL 循环，再推下游；并建议研读 Judge Handbook，以提交新部件或教育项目贡献社区。</p>
+
+        <p class="hz-detail-card__copy"><strong>访谈带给我们的三点转向</strong></p>
+        <p class="hz-detail-card__copy">（1）<strong>必要性优先：</strong>空气检测的流行病学依据、酵母底盘的不可替代性、与现有技术的差异化优势，本质上都是“项目为什么存在”的问题，目前尚未用数据证成。（2）<strong>减法思维：</strong>我们一度聚焦 GPCR 人源化，却忽略了病毒能否穿透细胞壁这一前提；RTK/STE2 这种“只改胞外区”的简化路线值得在后续决策中反复自省。（3）<strong>数据是唯一论证语言：</strong>背景不能靠专家口头认可，模型参数不能凭经验设定，灵敏度必须有定量指标。邱老师也肯定了 PAGERs 移植到酵母（文献尚无成功先例）的创新价值。访谈后，我们把项目背景调研与底盘/受体验证列为最高优先级。需注意：以上为专家 critique 与团队后续计划，属于设计调整方向，不代表实验已验证、底盘已更换或 RTK/STE2 替代方案已实施。</p>
+
+      </div>
+    </article>
+        </div>
+        <div class="hz-detail-slide" data-hz-expert="luo-juan">
+    <article class="hz-detail-card" id="hz-detail-luo-juan" data-module-id="HP-INTERVIEW-LUOJUAN" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
+      <div>
+        <p class="hz-detail-card__eyebrow">Healthcare frontline · Hangzhou, Zhejiang</p>
+        <h3>ICU 一线护理</h3>
+        <p class="hz-detail-card__meta">重症监护室（ICU）一线护理人员</p>
+        <p class="hz-detail-card__copy">我们想确认这台环境检测装置到底能不能扎进真实的医院感染防控链条里，于是请一位每天做呼吸机管理、吸痰、插管等高频操作的 ICU 一线护理从落地角度帮我们把关。她既是最清楚空气里藏着什么风险的人，也是离“设备好不好用”最近的人。</p>
+
+        <p class="hz-detail-card__copy"><strong>最薄弱的环节：探视家属“有病而不自知”</strong></p>
+        <p class="hz-detail-card__copy">我们原以为装置的重心在病房内部净化。她却提醒我们，ICU 虽有层流、单间负压、空气不外循环和空气消毒机，但常规空调滤网只挡灰尘粉尘、挡不住气溶胶病毒，而真正让她头疼的是“有病而不自知”——不适的家属仍来探视、握手、摘口罩近距离交谈，公众对甲流严重性认知不足、常误当普通感冒。顺着这个判断，我们重新理解了装置的价值锚点：与其只做病房净化指标，不如在入口、病房实时显示空气病毒浓度，既减轻家属顾虑、也增强信任。这把我们的应用定位从“环境净化配套”拉回到“无症状传播的预警哨点”。</p>
+
+        <p class="hz-detail-card__copy"><strong>呼吸机呼气阀：被确认的理想哨点</strong></p>
+        <p class="hz-detail-card__copy">我们请教装置该以什么形态嵌入 ICU。她的反馈很具体：把传感器微缩集成到呼吸机呼气阀，就能对每位患者呼出气体做个体化监测、精准筛查感染者，这尤其契合 ICU 需求；而结果若只显示“有/无”不够，按低/中/高危分级呈现才更具临床指导意义。这一点直接落到我们的报告输出设计上——<code>yEGFP/lacZ</code> 双报告体系需要被重构成可分级量化的显示逻辑，而非单一阈值报警；呼气阀集成也由此从设想变成值得优先评估的部署方案。</p>
+
+        <p class="hz-detail-card__copy"><strong>产品化落地的真实壁垒：准入、认证与监管沟通</strong></p>
+        <p class="hz-detail-card__copy">我们问“进医院”到底要跨过什么。她给出的答案很现实：公立医院设备必须公开招标，要用途明确、价格合理、符合实际需求；若要纳入诊断体系，还需权威认证、对接疾控中心并争取学校函件背书。这也让我们清醒——定期更换酵母干粉与培养基的维护方案在临床频率上可接受、操作不算繁琐，但“好用”和“能进院”之间还隔着一整套合规与治理流程。这部分影响的是我们项目的应用边界与推进路径（属于风险治理与产品化规划层面），而非实验参数本身；目前装置尚未进入任何医院体系，相关准入与认证均为待办，不能写成已达成结果。</p>
+
+        <p class="hz-detail-card__copy"><strong>多病原体拓展的想象与边界</strong></p>
+        <p class="hz-detail-card__copy">我们还聊到装置的远期可能。她指出医院里鲍曼不动杆菌、肺炎克雷伯菌等耐药菌快速检测需求迫切，若装置能区分识别对精准用药很有帮助；而病原体持续变异，检测系统必须可迭代。由于我们的酵母传感器基于抗原–抗体特异性结合，理论上更换表面纳米抗体即可拓展到其他病原体，这条“模块化替换”路线被我们列入后续路线图——但同样要说明，这属于面向未来的设计方向，跨病原体的识别性能与临床适配仍待验证，不能当作已具备的能力。整体而言，这次访谈主要来自一线护理视角的需求反馈与团队后续计划，团队将其作为产品化与场景设计的参考，待后续与监管和临床进一步对接复核。</p>
+
       </div>
     </article>
         </div>
