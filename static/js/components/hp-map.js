@@ -25,7 +25,7 @@
   const provinceCoordinates = {
     "CN-44": { top: 87.0, left: 66.0 },
     "CN-33": { top: 62.0, left: 75.5 },
-    "CN-43": { top: 71.0, left: 58.5 }
+    "CN-43": { top: 76.0, left: 62.5 }
   };
   const chinaExperts = [
     {
