@@ -2015,127 +2015,409 @@ window.iGEMSearchIndex = [
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "← → 01 概述 下面这张交互地图记录了团队在项目过程中接触过的部分 Human Practices 合作者与专家。点击图钉即可查看每位专家的方向与贡献。 全球专家交互地图 悬停或聚焦集合点查看专家；点击专家姓名查看访谈详情 Filter by sector − Science and academia Policy Industry Public 底图：MapSVG CC0 中国地图 Human Practices · Stakeholder interviews 访谈对象与项目反馈 这张地图是什么？ 上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。每一位受访者都从各自的专业视角——临床医学、检验诊断、学术研究或"
+    "content": "← → 01 概述 下面这张交互地图记录了团队在项目过程中接触过的部分 Human Practices 合作者与专家。点击图钉即可查看每位专家的方向与贡献。 全球专家交互地图 悬停或聚焦集合点查看专家；点击专家姓名查看访谈详情 海南 Filter by sector − Science and academia Policy Industry Public 底图：MapSVG CC0 中国地图 Human Practices · Stakeholder interviews 访谈对象与项目反馈 这张地图是什么？ 上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。我们的项目“基于工程化酿酒酵母的甲型流感病毒生物传感器”从"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "象与项目反馈 这张地图是什么？ 上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。每一位受访者都从各自的专业视角——临床医学、检验诊断、学术研究或公共卫生——为我们的甲型流感病毒生物传感器项目提供了宝贵反馈。 图钉代表什么？ 不同颜色的图钉对应不同领域： 科学与学术界 产业与临床 政策与监管 公众与社会。点击任意图钉，下方就会切换到对应人物的详细访谈记录。 我们为什么做这些访谈？ Human Practices 的核心是把实验室里的技术设想放到真实社会场景中去检验。通过与一线医生、研究人员和潜在使用者交流，我们不断确认项目是否真正解决了临床痛点、是否符合监管与社会期待，并据此迭代设计。 如何使用？ 你可以通过右上角筛选"
+    "content": "访谈对象与项目反馈 这张地图是什么？ 上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。我们的项目“基于工程化酿酒酵母的甲型流感病毒生物传感器”从一套实验室技术设想出发，需要回到真实场景中去接受检验；每一位受访者都从各自的专业视角——临床检验、临床医学、一线护理或竞赛指导——为项目的检测目标、应用场景与风险边界提供了反馈。当前地图已收录检验诊断、临床医学、重症监护一线护理与 iGEM 中期指导四类访谈，更多领域将在资料确认后补充。 图钉代表什么？ 不同颜色的图钉对应不同领域： 科学与学术界 产业与临床 政策与监管 公众与社会。点击任意图钉，下方就会切换到对应人物的详细访谈记录，其中每条记录聚焦该专家最相关的反馈，以及这"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "验。通过与一线医生、研究人员和潜在使用者交流，我们不断确认项目是否真正解决了临床痛点、是否符合监管与社会期待，并据此迭代设计。 如何使用？ 你可以通过右上角筛选面板按类别过滤图钉；点击图钉后，下方信息区会切换为对应人物的访谈记录，地图仍保留在上方，方便对照人物所在位置。 Industry · Shenzhen, Guangdong 王文杰 深圳市妇幼保健院 · 南方科技大学医学院｜检验科主任 · 教学督导 人物介绍：长期从事新型生物学诊断标志物、肿瘤与自噬等方向研究；担任多个医学检验相关专业委员会职务，在临床检验与体外诊断领域具有丰富经验。 访谈内容：为了解甲型流感病毒检测在真实医疗环境中的需求，团队与临床检验专家讨论病毒变异、现有"
+    "content": "对应不同领域： 科学与学术界 产业与临床 政策与监管 公众与社会。点击任意图钉，下方就会切换到对应人物的详细访谈记录，其中每条记录聚焦该专家最相关的反馈，以及这些反馈与项目设计和实验计划的联系。 我们为什么做这些访谈？ Human Practices 的核心是把实验室里的技术设想放到真实社会场景中去检验，并让反馈真正进入项目决策。通过与一线医生、研究人员和潜在使用者交流，我们持续确认：检测目标是否回应了临床痛点、使用场景是否符合现实条件、性能与成本边界是否被合理评估，并据此迭代设计——例如重新聚焦“检测到空气病毒而非区分亚型”、明确密闭空间有效范围与变量控制。 如何阅读这些访谈？ 你可以通过右上角筛选面板按类别过滤图钉；点击图钉后，"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "医学检验相关专业委员会职务，在临床检验与体外诊断领域具有丰富经验。 访谈内容：为了解甲型流感病毒检测在真实医疗环境中的需求，团队与临床检验专家讨论病毒变异、现有检测局限、抗病毒治疗策略及检测设备的发展方向。访谈提示我们，检测目标应更关注广谱、快速、低门槛的病毒监测，并在后续实验中控制环境变量、明确应用场景。 对项目的影响：团队据此重新审视传感器的检测目标，减少对病毒亚型识别的依赖，转向更广谱、更快速且更易部署的监测方案，并将医疗需求和公共卫生挑战纳入工程设计。 Science and academia · Guangzhou, Guangdong 顾凯 中山大学｜临床医学博士 人物介绍：研究方向涉及肺部疾病、呼吸道感染与临床诊断，就"
+    "content": "代设计——例如重新聚焦“检测到空气病毒而非区分亚型”、明确密闭空间有效范围与变量控制。 如何阅读这些访谈？ 你可以通过右上角筛选面板按类别过滤图钉；点击图钉后，下方信息区会切换为对应人物的访谈记录，地图仍保留在上方，方便对照人物所在位置。页面按不同访谈对象的关注重点呈现反馈，并说明其与项目设计和实验计划的联系。 Industry · Shenzhen, Guangdong 王文杰 深圳市妇幼保健院 · 南方科技大学医学院｜检验科主任 · 教学督导 作为团队成立后的第一次正式社会实践，我们带着一套还停留在纸面构想的酵母传感器去找了王文杰老师，最想弄明白两件事：真实医疗场景里甲流到底是怎么被检、怎么被治的，以及我们的装置究竟该瞄准“区分"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "and academia · Guangzhou, Guangdong 顾凯 中山大学｜临床医学博士 人物介绍：研究方向涉及肺部疾病、呼吸道感染与临床诊断，就本项目的技术可行性与临床应用场景提出了系统性建议。 访谈内容：团队介绍信号识别、信号传导、信号报告三大模块，以及环境被动吸入和单人主动呼气两种装置形态。专家从响应时间、呼气样本、肺癌标志物、使用成本和临床场景等方面提出具体反馈。 对项目的影响：团队据此优化信号通路以缩短响应时间，聚焦单人主动呼气的低成本方案，暂缓肺癌检测方向，并将临床适配性与硬件成本列为后续设计的重点。 Science and academia · Zhejiang Zhejiang Expert 浙江｜专家"
+    "content": "会实践，我们带着一套还停留在纸面构想的酵母传感器去找了王文杰老师，最想弄明白两件事：真实医疗场景里甲流到底是怎么被检、怎么被治的，以及我们的装置究竟该瞄准“区分亚型”还是“先检得到空气里的病毒”。这次一线对话让我们第一次真切感到，实验室技术与现实需求之间隔着一道必须跨越的鸿沟。 检测目标：先“检得到”，再谈广谱 我们原本在纳米抗体该靶向 HA 哪一区段上犹豫。王老师帮我们理清了临床实际：医院以阴阳性诊断治疗为导向、并不区分亚型，亚型信息由疾控发布；HA 与 NA 确实高度变异，但 H1N1/H3N2 这类季节性亚型不需要每年更换抗体，只是存在“病毒已变异而检测未及跟上”的漏检不确定性。顺着这条线，我们重新审视了传感器的识别策略，倾向"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "测方向，并将临床适配性与硬件成本列为后续设计的重点。 Science and academia · Zhejiang Zhejiang Expert 浙江｜专家信息待补充 该访谈对象的背景、访谈内容与项目反馈将在资料确认后补充。 01 清华大学合成生物学创意大赛参赛交流 HP 比赛篇 · 在清华赛场与外界对话 交流现场 项目展示 交流讨论 活动记录 团队交流 赛场交流 图 1. 团队在清华大学合成生物学创意大赛中进行项目展示与交流 项目推进到需要对外表达时，团队发现，实验室内部形成的理解未必能被外部观众准确接收。参加清华大学合成生物学创意大赛，正是为了把项目放到跨校、跨学科的环境中，接受陌生同行、评审与师生的检验。 为什么参加这场比"
+    "content": "，但 H1N1/H3N2 这类季节性亚型不需要每年更换抗体，只是存在“病毒已变异而检测未及跟上”的漏检不确定性。顺着这条线，我们重新审视了传感器的识别策略，倾向选择 HA 茎部相对保守的区域以实现更广谱的检测——但这仍是基于专家判断的设计方向，能否真正覆盖变异毒株有待后续实验验证，不能写成已确认的广谱性能。 48 小时窗口与 IVD 的“滞后性” 我们想搞清楚治疗与检测之间的时间关系。王老师指出甲流呈爆发性，应抓住发病 48 小时内确认病因、用奥司他韦或玛巴洛沙韦等特效药，普通抗病毒口服液几乎无效，错过窗口则转对症处理；潜伏期传染性弱但已有传染性，爆发期最强。更关键的一点在于，他直言现有 IVD 产业总在病毒于人体内爆发、达到检测阈"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "部形成的理解未必能被外部观众准确接收。参加清华大学合成生物学创意大赛，正是为了把项目放到跨校、跨学科的环境中，接受陌生同行、评审与师生的检验。 为什么参加这场比赛 项目推进到需要对外表达时，团队发现一个在实验室里不容易察觉的问题：我们自以为了解的项目，和外部观众——其他合成生物学团队、评审、跨学科师生——眼里的项目，未必是一回事。封闭环境里的讨论容易走进思维定势，而一场跨校比赛正好把项目摆到\"陌生人\"面前接受检验。 第一届清华大学合成生物学创意大赛由清华主办，主打\"创意为核心、零门槛为底色\"，吸引了清华、北大、同济、南方科技大学等 44 所高校团队参加。这样一个跨校、跨背景的赛场，让项目第一次不再只面对熟悉的实验室同伴，而是要向陌生"
+    "content": "通抗病毒口服液几乎无效，错过窗口则转对症处理；潜伏期传染性弱但已有传染性，爆发期最强。更关键的一点在于，他直言现有 IVD 产业总在病毒于人体内爆发、达到检测阈值之后才发挥作用。这句话直接校准了我们的价值坐标：一个能在病毒尚未侵入人体时就主动预警的活体空气传感器，意义不只是提升某项指标，而是把传染病防控逻辑从“被动诊治”推向“主动预防”——这也是我们把项目锚定在环境/呼气监测、而非仅做居家确诊工具的原因。 应用场景：密闭空间优先，变量控制是硬仗 我们请教了装置该落在哪些场景。王老师建议在幼儿园、学校、地铁站等人员密集处应用，但提醒大场景空气扩散会使病毒浓度很低，应先在密闭空间测清有效范围，并明确有效测量范围、环境大小、病毒所处阶段等"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "、零门槛为底色\"，吸引了清华、北大、同济、南方科技大学等 44 所高校团队参加。这样一个跨校、跨背景的赛场，让项目第一次不再只面对熟悉的实验室同伴，而是要向陌生同行讲清楚\"我们在做什么、为什么值得做\"。 赛场上的收获与反馈 团队凭项目的新意和现场展示互动，拿到了赛事设置的\"最具人气魅力奖\"。不过比起奖项，更值得记下来的是成员在交流中的真实反思——这些反思才是这次活动最核心的 HP 价值。 不少同学在赛后总结里不约而同地提到\"表达\"和\"理解\"：反复改稿、模拟答辩，让成员把项目彻底吃透，介绍时从生疏变得顺手；而在向不同团队讲解的过程中，成员也反过来加深了对自己工作的理解。其他团队提出的问题，常常能点出那些由于我们内部思维惯性而被忽略的新"
+    "content": "王老师建议在幼儿园、学校、地铁站等人员密集处应用，但提醒大场景空气扩散会使病毒浓度很低，应先在密闭空间测清有效范围，并明确有效测量范围、环境大小、病毒所处阶段等限制条件；对准咳嗽或收集唾液的居家便携自检类似医院免疫层析法、是发展方向，但空气变量太多，须先固化不变量再处理变量，研发可联系试剂厂商。这些边界条件被我们纳入了后续实验方案的规划——例如优先设计密闭空间有效范围与变量控制测试，而不是一上来铺开大场景。团队反思中也记录到，抗原检测敏感性约 50%–70%、居家自检假阳性可达 50%–70%，这反过来说明灵敏度和特异性优化必须作为后续重点，而非已有结论。 一线认可与团队认知转变 王老师评价酵母生物传感器“题目很好、很有意义，可作为"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "底吃透，介绍时从生疏变得顺手；而在向不同团队讲解的过程中，成员也反过来加深了对自己工作的理解。其他团队提出的问题，常常能点出那些由于我们内部思维惯性而被忽略的新角度。 更关键的是，跨团队的平行交流暴露了项目在应用层面的薄弱。有成员想到，团队此前对\"项目落地场景\"\"社会价值需求\"这类现实问题的思考还比较浅；也有成员说，看了其他队伍的改造路线，才意识到许多此前没设想过的创新角度，给后续研发打开了新思路。这些反馈没有直接指向某个实验改动，但一致地把团队引向同一个问题：技术方案之外，项目还得认真回答\"它将在什么场景下、被谁、为了解决什么问题而使用\"。 对项目的意义 这场比赛没有改变我们的技术路线，却从几个不同层面重塑了团队对项目的理解。 在"
+    "content": "达 50%–70%，这反过来说明灵敏度和特异性优化必须作为后续重点，而非已有结论。 一线认可与团队认知转变 王老师评价酵母生物传感器“题目很好、很有意义，可作为前沿技术提升人民福祉”，这份来自临床专业的认可让团队更清楚自己肩上的责任。但需要如实说明：这次访谈主要改变的是我们的应用定位、问题优先级和团队判断（属于应用定位与团队学习的层面），并没有直接改动实验路线或参数；HA 保守区靶向、密闭空间测试与变量控制 currently 仍是设计计划，等待后续功能测试与一手数据复核。把课堂上的理想化模型拉回真实公共卫生难题，是这次实践留给团队最持久的影响。 Science and academia · Guangzhou, Guangdong"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "项目还得认真回答\"它将在什么场景下、被谁、为了解决什么问题而使用\"。 对项目的意义 这场比赛没有改变我们的技术路线，却从几个不同层面重塑了团队对项目的理解。 在表达上，外部反馈印证了\"把项目讲清楚\"本身就是一门要专门打磨的能力——奖项认可的风采展示和生动表达，本质上是项目叙事对观众的吸引力。这让团队在后续工作里更舍得在表达策略上下功夫，而不只盯着技术细节。 在应用上，队员自省和其他团队的提问这两个独立来源，指向了同一个盲区：项目对真实使用场景和社会需求的思考还不够深。团队据此把\"调研真实使用需求、完善落地方案\"列为了后续重点推进的方向，同时也如实说明，配套的硬件目前还停留在构想阶段，欢迎外部合作。 在协作上，和同行的碰撞让团队尝到了"
+    "content": "课堂上的理想化模型拉回真实公共卫生难题，是这次实践留给团队最持久的影响。 Science and academia · Guangzhou, Guangdong 顾凯 中山大学｜临床医学博士 我们带着一套还停留在草图阶段的装置设想去请教了顾凯老师：用工程化酵母分信号识别、传导、报告三模块检测空气中的甲流 HA 蛋白，形态上既有环境被动吸入，也有放在桌边的单人主动呼气两种。当时我们最不确定的是，这台装置到底该主打哪种采样场景、响应时间会不会拖垮实用性，以及它在 PCR、酶联免疫和试纸条之外到底凭什么站得住脚。 采样场景：从环境空气转向单人呼气 我们最初把环境空气监测当成主路径，但顾老师点出一个关键前提：环境中的病毒会被稀释，而人体呼出"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "把\"调研真实使用需求、完善落地方案\"列为了后续重点推进的方向，同时也如实说明，配套的硬件目前还停留在构想阶段，欢迎外部合作。 在协作上，和同行的碰撞让团队尝到了开放交流的甜头，也补足了项目在创意来源和创新角度上的外部输入。这些体会让团队相信：HP 不该是赛后才补的材料，而是贯穿项目始终、不断修正团队判断的过程。 02 HP探险篇—这次我们来到了华南交流会！ HP 探险篇系列 · 华南地区科普交流活动记录 交流会合影 活动现场 项目展示 交流讨论 图 1. 团队在华南地区 iGEM 交流会中进行项目展示与讨论 为什么参加华南交流会 项目推进到中期，团队意识到一个绕不开的问题：我们自己对项目的理解，和外部受众——尤其是其他 iGEM 团"
+    "content": "和试纸条之外到底凭什么站得住脚。 采样场景：从环境空气转向单人呼气 我们最初把环境空气监测当成主路径，但顾老师点出一个关键前提：环境中的病毒会被稀释，而人体呼出气体里的病毒明显更富集、检测也更顺手。其实在更早的病毒学专家访谈里，我们就已得知甲流在空气中只能维持几个小时、浓度与精准性都受限，于是已经把方案调整为针对单人检测、并给环境装置增加了富集环节再通入酵母。顾老师的临床视角帮我们确认了这一步方向是对的——呼吸道感染者咳出的气溶胶本就带病毒颗粒，单人呼气模式对这类样本反而更有优势。这直接作用在装置的形态设计上：主动呼气版只需维持酵母生长温度、省去荧光激发与识别模块，与我们 yEGFP/lacZ 双报告输出的设想相衔接。 响应时间：决"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "EM 交流会中进行项目展示与讨论 为什么参加华南交流会 项目推进到中期，团队意识到一个绕不开的问题：我们自己对项目的理解，和外部受众——尤其是其他 iGEM 团队和评审——对项目的理解，可能并不一致。实验室里的讨论容易形成思维定势，我们觉得已经讲清楚的话，在别人听来未必如此。 华南地区 iGEM 交流会正好给了团队一个外部评价环境，到场的有华南多所高校的 iGEM 团队，也有经验丰富的评审嘉宾。我们决定参加，就是想在同行的互动里检验项目表达是否清晰，并从外部视角捞出那些团队此前没太在意的问题。 交流中的发现 整场交流按自己的节奏推进，但比流程更值钱的是其中浮现的几类反馈。 海报展示：一次即时的表达测试 交流会以线下海报展示开场。团队"
+    "content": "优势。这直接作用在装置的形态设计上：主动呼气版只需维持酵母生长温度、省去荧光激发与识别模块，与我们 yEGFP/lacZ 双报告输出的设想相衔接。 响应时间：决定时效性的硬约束 我们很关心“能不能实时监测并上传”。顾老师帮我们厘清了时间线：酵母天然信号通路从接收抗原到表达荧光需要约 1–2 小时，结果其实是对约一小时前状态的定时反映，存在延迟但窗口可确定；蓝白斑报告还要等酵母生成报告蛋白并扩散到液体显色，更慢、具体时间尚未确定。他直言若表达时间过长，装置的时效性就会打折。这一点把优化优先级摆到了台面上——缩短 hM1Dq → Gpa1 → MAPK → FUS1 信号链的响应时间，被我们列为后续功能测试的重点之一，而非已经完成。荧光"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "前没太在意的问题。 交流中的发现 整场交流按自己的节奏推进，但比流程更值钱的是其中浮现的几类反馈。 海报展示：一次即时的表达测试 交流会以线下海报展示开场。团队带着项目海报，向其他队伍和评审介绍 SZPU-ECHOYeast 的方向和技术路线。海报不只是往外倒信息，更像一个即时反馈窗口——看驻足的人最先盯哪里、问什么，就能直接判断项目表达里哪些部分最抓人、哪些最让人犯迷糊。 展示过程中，团队注意到多数来访者对项目的实际应用场景很感兴趣，反而很少追着问技术细节。这给团队提了个醒：后面的项目表达，应该先把\"解决什么问题\"讲明白，而不是一上来就堆方法。 队际交流：平行视角的对照 海报之后是自由的队际交流时间。团队和其他参赛队伍一对一线下聊"
+    "content": "点把优化优先级摆到了台面上——缩短 hM1Dq → Gpa1 → MAPK → FUS1 信号链的响应时间，被我们列为后续功能测试的重点之一，而非已经完成。荧光经光电转换后可在软件端定量查看，蓝白斑则能裸眼判断，两种报告体系的取舍也由此更清楚。 临床定位与差异化：不替性能背书，先讲清边界 我们想确认相比 PCR、酶联免疫和试纸条的优势。顾老师没有对团队陈述的灵敏度、假阳性等数值作独立确认，而是把讨论拉回应用边界：项目真正的差异化在操作便捷与低门槛——鼻拭准确率约 70%–80% 且操作要求高，而我们的装置若能主动或被动直接检测，可能让本无检测意识的人更愿意用。他也提醒，酵母干粉复苏后约 2–3 天进入活性高峰、可维持 1–2 周，需"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "：后面的项目表达，应该先把\"解决什么问题\"讲明白，而不是一上来就堆方法。 队际交流：平行视角的对照 海报之后是自由的队际交流时间。团队和其他参赛队伍一对一线下聊，各自讲进展、说瓶颈、谈解法。这种平行视角的对照尤其有用——别的队踩的坑（实验进度管理、跨学科协作效率、HP 活动设计等）常常和我们的高度重合，但应对路子各不相同。 和好几支队伍对比下来，团队发现大家在项目叙事结构上的差别很大：有人以技术突破为主线，有人从社会需求切入，还有人从伦理讨论开场。这种差别让团队忍不住回头想，自己的叙事是不是真的把项目的核心价值讲清楚了。 提问环节：来自评审的反馈 提问环节是整场信息密度最高的部分。评审和其他团队抛来不少问题，其中有三类最值得我们记下"
+    "content": "% 且操作要求高，而我们的装置若能主动或被动直接检测，可能让本无检测意识的人更愿意用。他也提醒，酵母干粉复苏后约 2–3 天进入活性高峰、可维持 1–2 周，需定期更换；主动呼气版预计终产品成本可压到约 10 元，但研发阶段成本更高，基层推广的可行性最终由成本决定。顺着这个判断，我们暂缓了肺癌呼气标志物这类特异性尚不充分的拓展方向——生物标志物目前只能作为辅助诊断、低剂量螺旋 CT 才是金标准，装置潜力要等发现高度特异的差异呼气分子才可能释放。 呼吸道场景的价值与下一步对话 我们还就肺部感染患者呼气差异、呼吸道损伤后甲流复制、以及甲流与肺癌的关系请教了顾老师。他的判断是：呼吸道受损者屏障破坏后病毒更易侵入、复制更强但会被免疫清除，呈"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "自己的叙事是不是真的把项目的核心价值讲清楚了。 提问环节：来自评审的反馈 提问环节是整场信息密度最高的部分。评审和其他团队抛来不少问题，其中有三类最值得我们记下来： 关于检测目标的界定：有提问指出，团队对\"广谱病毒监测\"的覆盖范围讲得偏宽，建议先明确优先针对的病毒类别和应用场景（比如医疗机构、公共场所、家庭自测三者的区分）。这让我们意识到，\"广谱\"不等于模糊——在保持技术通用性的同时，也得给出具体的应用入口。 关于生物安全性的考量：不止一位参会者关心项目里生物材料处理的安全性，尤其是放到非实验室环境里用的可能。这个问题团队内部其实聊过，但一直没放到项目表达的核心位置。交流会的反馈说明，安全性论证得成为项目可信度的一块基石。 关于 H"
+    "content": "我们还就肺部感染患者呼气差异、呼吸道损伤后甲流复制、以及甲流与肺癌的关系请教了顾老师。他的判断是：呼吸道受损者屏障破坏后病毒更易侵入、复制更强但会被免疫清除，呈动态变化；甲流本身不诱发肺癌，却会加重已患肺癌者病情，对高危人群反复感染相当不利。这些回答让我们更确信装置在“呼吸道感染人群”这一具体场景下的价值，而非泛化的环境监测。顾老师最后肯定“用一个有机生物检测另一个有机生物”的构思新颖，并建议我们继续与呼吸科、生物医学工程等多领域专家交叉访谈。目前这些反馈来自团队访谈纪要，团队将其作为设计参考，尚未用一手临床数据验证；涉及检测性能、成本与适用人群的表述均需后续实验与临床评估复核。 Science and academia · iGE"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "，尤其是放到非实验室环境里用的可能。这个问题团队内部其实聊过，但一直没放到项目表达的核心位置。交流会的反馈说明，安全性论证得成为项目可信度的一块基石。 关于 HP 与项目的关联性：有评审追问，团队的 Human Practices 活动到底怎么具体回过头影响了项目设计。这个问题点醒我们，HP 不是独立于技术工作的\"附加模块\"，要在叙述里把\"HP 反馈 → 技术决策\"的逻辑链摆明白。 此次交流对项目的意义 华南交流会没有直接改动实验方案或技术路线，但帮团队在好几个层面重新理解了项目： 表达层面的优化：外部反馈显示，项目叙述的优先级得重排——从\"先讲技术再讲应用\"改成\"先点明问题再引出方案\"。这不动技术本身，却会影响评审和公众对项目的第"
+    "content": "队将其作为设计参考，尚未用一手临床数据验证；涉及检测性能、成本与适用人群的表述均需后续实验与临床评估复核。 Science and academia · iGEM mentor Xinyuan Qiu Our team uses Saccharomyces cerevisiae as the chassis and, based on the PAGERs system, is building a biosensor for airborne influenza A. We have completed part of the genetic components, but we keep encountering bottlen"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "项目： 表达层面的优化：外部反馈显示，项目叙述的优先级得重排——从\"先讲技术再讲应用\"改成\"先点明问题再引出方案\"。这不动技术本身，却会影响评审和公众对项目的第一印象，以及他们能理解到多深。 安全性认知的强化：生物安全这条反馈来自多个独立来源，说明它不是团队自己在吓自己，而是外部受众普遍在意的议题。团队打算在后续补上和安全性相关的实验设计与论证材料。 HP 叙事结构的反思：被问到\"HP 怎么和项目挂钩\"之后，团队重新打量了现在 HP 页面的组织方式——每篇 HP 文章，是不是都清楚体现了\"拿到反馈 → 调整理解\"这条链。而这次交流本身的记录，也正是照着这个思路写的。 03 面向中学生的科学传播与项目交流：让合成生物学走近未来的探索者"
+    "content": "have completed part of the genetic components, but we keep encountering bottlenecks in experimental design, chassis engineering, and our iGEM judging strategy. We therefore invited Professor Xinyuan Qiu to advise us on our current experimental plan and iGEM-related matters. The expert identified issues in our project,"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "都清楚体现了\"拿到反馈 → 调整理解\"这条链。而这次交流本身的记录，也正是照着这个思路写的。 03 面向中学生的科学传播与项目交流：让合成生物学走近未来的探索者 深圳市第一职业技术学校坪山校区 · 高二学生科普交流活动 活动合影 课堂全景 项目讲解 科普展示 图 2. 校园宣讲现场：团队向高二学生介绍 iGEM 理念与工程化酵母生物传感器项目 为了践行 iGEM 所提倡的科学传播与社会责任，也为了摸清普通学生对甲型流感病毒检测技术到底知道多少、又盼着什么，我们走进深圳市第一职业技术学校坪山校区，和一群高二学生做了一次项目科普交流。活动一方面向非专业听众讲清国际基因工程机器大赛（iGEM）的理念和价值，另一方面展示我们的\"基于工程化酵"
+    "content": "ntal plan and iGEM-related matters. The expert identified issues in our project, pointed out missing critical validations, and offered valuable suggestions. Chassis and roadmap: validate the premise before discussing simplification The expert raised a key question we had long overlooked: “Can intact virions pass throug"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "业技术学校坪山校区，和一群高二学生做了一次项目科普交流。活动一方面向非专业听众讲清国际基因工程机器大赛（iGEM）的理念和价值，另一方面展示我们的\"基于工程化酵母的甲型流感病毒生物传感器\"项目，让更多年轻学生看到，合成生物学怎样靠跨学科创新去碰现实里的社会问题。 我们分享了什么 从 iGEM 比赛的来由、团队的组建方式，到项目的研究意义、实验原理和往后的应用场景，我们试着打破\"科研只关在实验室里\"的刻板印象，让学生看到：生命科学研究同样离不开编程、设计、传播这些跨领域的本事。 同学们关心什么 学生们站在实际使用者那头，问得很直接：检测设备能不能更便携？出结果能不能更快？这些来自潜在用户的反馈，逼着团队重新去想，传感器在做成产品时，到"
+    "content": "rt raised a key question we had long overlooked: “Can intact virions pass through the cell wall and reach the plasma membrane?” The expert pointed out that this is the physical prerequisite for the device to work: the yeast cell wall is thick, and there is currently no evidence that intact viral particles can penetrate"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "同学们关心什么 学生们站在实际使用者那头，问得很直接：检测设备能不能更便携？出结果能不能更快？这些来自潜在用户的反馈，逼着团队重新去想，传感器在做成产品时，到底该在便捷性、响应速度和场景适配上做到什么程度。 双向学习与成长 对学生来说，这是一次近距离碰合成生物学和科研创新的机会；对团队来说，把绕来绕去的生物学原理翻成听得懂的话，也逼着我们自己把项目逻辑再理一遍，反而对技术路线和社会价值想得更透。 Responsible Research and Innovation 这次活动不只是一次项目展示，更是一次双向的学习和沟通。我们越发明白，一个有社会价值的生物技术项目，光靠实验室里的技术突破不够，还得和公众把话讲通、把真实需求听进去，再"
+    "content": "ck, and there is currently no evidence that intact viral particles can penetrate the wall and bind to antibodies on hM1Dq. If this validation fails, we should decisively switch the chassis (e.g., Xenopus laevis oocytes) rather than continue investing in complex modifications. Based on this judgment, the core recommenda"
   },
   {
     "type": "text",
     "pageUrl": "human-practices/integrated human-practices.html",
     "pageTitle": "Human Practices - iGEM SZPU-2026",
-    "content": "动不只是一次项目展示，更是一次双向的学习和沟通。我们越发明白，一个有社会价值的生物技术项目，光靠实验室里的技术突破不够，还得和公众把话讲通、把真实需求听进去，再不断调整。这次实践把项目从单纯的技术研发，推到了更开放、也更负责任的创新路径上，正好呼应了 iGEM 提倡的\"负责任的研究与创新\"理念。"
+    "content": "investing in complex modifications. Based on this judgment, the core recommendation is “the simpler, the better.” While we had been stuck on knocking out endogenous interfering genes and validating gating systems, the expert prefers modifying yeast’s own RTK (receptor tyrosine kinase) system by replacing the extracell"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "ing yeast’s own RTK (receptor tyrosine kinase) system by replacing the extracellular domain with an influenza A surface antibody protein, and verifying downstream phosphorylation via Western blot. For the reporter system, two paths were suggested: adjust the number of PREs or use a weaker promoter to reduce leakage. At"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "gested: adjust the number of PREs or use a weaker promoter to reduce leakage. At the same time, molecular-level evidence must be added—use Western blots of MAPK phosphorylation to demonstrate signal activation, rather than relying solely on indirect growth phenotypes. The expert also emphasized that “strong antigen–ant"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "indirect growth phenotypes. The expert also emphasized that “strong antigen–antibody specificity” does not equal “high detection sensitivity”: sensitivity must be defined by the minimal number of viral particles detectable per unit volume, and our team currently lacks quantitative evidence for this minimal detectable"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "and our team currently lacks quantitative evidence for this minimal detectable particle count per unit volume. For serial multi-gene knockouts, we were advised to use Golden Gate cloning for plasmid construction to improve success rates when cloning short sgRNA fragments. Modeling: use it smartly, not try to cover eve"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "en cloning short sgRNA fragments. Modeling: use it smartly, not try to cover everything We had hesitated about building a full ODE (ordinary differential equations) chain from antigen to GFP, even though most parameters would need to be fitted. The expert believes it is acceptable to approximate multistep reactions wit"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "ted. The expert believes it is acceptable to approximate multistep reactions with a Hill function, provided parameters come from experimental fitting or literature sources—never arbitrary settings. The derivation of this approximation should be clearly documented on the wiki. The real value of the model is to first val"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "d be clearly documented on the wiki. The real value of the model is to first validate it by matching curves to experimental data, then run parameter sensitivity analysis to trace back the most sensitive steps that guide experiments. Because we viewed PAGERs as a cascade of “antigen recognition → release of MT1 inhibiti"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "we viewed PAGERs as a cascade of “antigen recognition → release of MT1 inhibition → GPCR activation” and tried to encapsulate it with a three-state gate, the expert judged that describing input–output and dynamic responses with ODEs is more appropriate than three-state logic. For sgRNA, mature algorithms already exist"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "e appropriate than three-state logic. For sgRNA, mature algorithms already exist; there is no need to spend effort on over-engineered forms like Fourier transforms. The expert reminded us that judges care whether the model solves experimental problems, not whether it looks flashy; rather than stacking modules, enable t"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "al problems, not whether it looks flashy; rather than stacking modules, enable the model to predict the entire response–recovery trajectory. Human Practices and competition: necessity first, and the loop must be genuine The expert emphasized the need to answer “why,” building a complete project background and rationale"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "d the need to answer “why,” building a complete project background and rationale. They also noted that expert statements and social practice cannot substitute for evidence; we should avoid appeals to authority. Instead, we should use epidemiological and literature data to demonstrate the value of airborne detection and"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "iological and literature data to demonstrate the value of airborne detection and the irreplaceability of the yeast chassis. Human Practices does not reward quantity or format; it emphasizes whether the activities truly influence the project and drive improvements. For example, feedback from hardware interviews must tra"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "and drive improvements. For example, feedback from hardware interviews must translate into changes in device design and be validated. The expert’s advancement strategy is clear: the immediate priority is to produce a functional receptor that can recognize influenza A antigens, complete the first simple, clear DBTL (De"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "at can recognize influenza A antigens, complete the first simple, clear DBTL (Design-Build-Test-Learn) loop, and then iterate. We are also advised to study the judging handbook and contribute to the community by submitting new parts or education projects. Three shifts brought by the interview (1) Necessity first: the e"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "ation projects. Three shifts brought by the interview (1) Necessity first: the epidemiological basis for airborne detection, the irreplaceability of the yeast chassis, and differentiated advantages over existing technologies are essentially the question of “why this project exists,” and we currently lack data to substa"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "the question of “why this project exists,” and we currently lack data to substantiate them. (2) Retrospective reflection: we had focused on GPCR humanization while neglecting the premise of whether virions can pass through the cell wall; simplified routes like RTK that only modify the extracellular domain deserve repe"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "implified routes like RTK that only modify the extracellular domain deserve repeated self-examination in subsequent decision-making. (3) Data is the only language of argumentation: the background cannot rest on verbal expert endorsement; model parameters cannot be set by experience; sensitivity must have quantitative m"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "del parameters cannot be set by experience; sensitivity must have quantitative metrics. The expert also affirmed the value of porting PAGERs into yeast. Following the interview, we elevated background research and feasibility validation of the chassis/receptor to our top priority, and, on that basis, will continuously"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "the chassis/receptor to our top priority, and, on that basis, will continuously iterate to optimize the project. Healthcare frontline · Hangzhou, Zhejiang 杭州三甲医院护理 重症监护室（ICU）一线护理人员 我们想确认这台环境检测装置到底能不能扎进真实的医院感染防控链条里，于是请一位每天做呼吸机管理、吸痰、插管等高频操作的 ICU 一线护理从落地角度帮我们把关。她既是最清楚空气里藏着什么风险的人，也是离“设备好不好用”最近的人。 最薄弱的环节：探视家属“有病而不自知” 我们原以为装"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "ICU 一线护理从落地角度帮我们把关。她既是最清楚空气里藏着什么风险的人，也是离“设备好不好用”最近的人。 最薄弱的环节：探视家属“有病而不自知” 我们原以为装置的重心在病房内部净化。她却提醒我们，ICU 虽有层流、单间负压、空气不外循环和空气消毒机，但常规空调滤网只挡灰尘粉尘、挡不住气溶胶病毒，而真正让她头疼的是“有病而不自知”——不适的家属仍来探视、握手、摘口罩近距离交谈，公众对甲流严重性认知不足、常误当普通感冒。顺着这个判断，我们重新理解了装置的价值锚点：与其只做病房净化指标，不如在入口、病房实时显示空气病毒浓度，既减轻家属顾虑、也增强信任。这把我们的应用定位从“环境净化配套”拉回到“无症状传播的预警哨点”。 呼吸机呼气阀：被"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "化指标，不如在入口、病房实时显示空气病毒浓度，既减轻家属顾虑、也增强信任。这把我们的应用定位从“环境净化配套”拉回到“无症状传播的预警哨点”。 呼吸机呼气阀：被确认的理想哨点 我们请教装置该以什么形态嵌入 ICU。她的反馈很具体：把传感器微缩集成到呼吸机呼气阀，就能对每位患者呼出气体做个体化监测、精准筛查感染者，这尤其契合 ICU 需求；而结果若只显示“有/无”不够，按低/中/高危分级呈现才更具临床指导意义。这一点直接落到我们的报告输出设计上——yEGFP/lacZ 双报告体系需要被重构成可分级量化的显示逻辑，而非单一阈值报警；呼气阀集成也由此从设想变成值得优先评估的部署方案。 产品化落地的真实壁垒：准入、认证与监管沟通 我们问“进"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "系需要被重构成可分级量化的显示逻辑，而非单一阈值报警；呼气阀集成也由此从设想变成值得优先评估的部署方案。 产品化落地的真实壁垒：准入、认证与监管沟通 我们问“进医院”到底要跨过什么。她给出的答案很现实：公立医院设备必须公开招标，要用途明确、价格合理、符合实际需求；若要纳入诊断体系，还需权威认证、对接疾控中心并争取学校函件背书。这也让我们清醒——定期更换酵母干粉与培养基的维护方案在临床频率上可接受、操作不算繁琐，但“好用”和“能进院”之间还隔着一整套合规与治理流程。这部分影响的是我们项目的应用边界与推进路径（属于风险治理与产品化规划层面），而非实验参数本身；目前装置尚未进入任何医院体系，相关准入与认证均为待办，不能写成已达成结果。 多"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "是我们项目的应用边界与推进路径（属于风险治理与产品化规划层面），而非实验参数本身；目前装置尚未进入任何医院体系，相关准入与认证均为待办，不能写成已达成结果。 多病原体拓展的想象与边界 我们还聊到装置的远期可能。她指出医院里鲍曼不动杆菌、肺炎克雷伯菌等耐药菌快速检测需求迫切，若装置能区分识别对精准用药很有帮助；而病原体持续变异，检测系统必须可迭代。由于我们的酵母传感器基于抗原–抗体特异性结合，理论上更换表面纳米抗体即可拓展到其他病原体，这条“模块化替换”路线被我们列入后续路线图——但同样要说明，这属于面向未来的设计方向，跨病原体的识别性能与临床适配仍待验证，不能当作已具备的能力。整体而言，这次访谈主要来自一线护理视角的需求反馈与团队后"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "——但同样要说明，这属于面向未来的设计方向，跨病原体的识别性能与临床适配仍待验证，不能当作已具备的能力。整体而言，这次访谈主要来自一线护理视角的需求反馈与团队后续计划，团队将其作为产品化与场景设计的参考，待后续与监管和临床进一步对接复核。 Clinical · Shenzhen, Guangdong 邓蔓青 深圳市第二人民医院｜儿科临床专家 · 研究方向涵盖儿科临床用药与妊娠期用药 我们一直担心一件事：流感传染性强，而很多感染者——尤其是孩子——在出现明显症状前就已经在传播病毒了。如果装置只能等病毒载量升高后才报警，它作为预防性检测的意义就会大打折扣。带着\"低载量呼气检测到底靠不靠谱\"\"病毒碎片会不会造成假阳性\"\"这样一台预防性检测"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "毒了。如果装置只能等病毒载量升高后才报警，它作为预防性检测的意义就会大打折扣。带着\"低载量呼气检测到底靠不靠谱\"\"病毒碎片会不会造成假阳性\"\"这样一台预防性检测装置到底谁会买单\"三个问题，我们请教了深圳市第二人民医院的儿科临床专家邓蔓青老师。邓老师的日常是处理儿科呼吸道感染与流感患儿的用药管理，研究方向覆盖儿科临床用药与妊娠期用药，恰好能把\"技术能不能测出来\"和\"临床上到底需不需要\"两件事放在一起看。 低载量呼气检测：决定产品价值的第一道关口 我们最想确认的是灵敏度到底够不够。邓老师提醒，市售咽拭子、鼻拭子试纸即便在高浓度取样时仍存在假阴性，因为取样操作要求高、很容易失手；而我们的装置检测的是呼出气体中的低载量病毒，潜伏期的载量还要"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "。邓老师提醒，市售咽拭子、鼻拭子试纸即便在高浓度取样时仍存在假阴性，因为取样操作要求高、很容易失手；而我们的装置检测的是呼出气体中的低载量病毒，潜伏期的载量还要更低，能否被识别是最大的技术难点。顺着这句话，我们把\"低载量检测灵敏度\"明确为研发的第一关口：后续功能测试将围绕 anti-H1N1_HA nanobody 识别 HA 后经 hM1Dq → Gpa1 → MAPK → FUS1 触发 yEGFP/lacZ 报告的完整链路，先回答\"最低能检到多低的病毒载量\"，再谈其他。邓老师同时点出，正因为流感传染性强，能在低载量阶段识别病毒、及早隔离，恰恰是产品最有价值的地方——这为我们的\"预防性预警\"定位补上了临床侧的依据。 活病毒还是病"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "邓老师同时点出，正因为流感传染性强，能在低载量阶段识别病毒、及早隔离，恰恰是产品最有价值的地方——这为我们的\"预防性预警\"定位补上了临床侧的依据。 活病毒还是病毒碎片：假阳性风险必须正视 第二个必须停下来想清楚的问题是\"检测对象是什么\"。流感痊愈后，体内核酸片段可以存留两到三个月；病毒破裂后的碎片同样可能与抗体结合，如果我们的抗原–抗体识别分不清完整病毒和碎片，假阳性就会成为硬伤，邓老师明确建议区分活病毒与死病毒/碎片。这直接关系到受体设计：PAGER 融合受体靠膜表面纳米抗体结合 HA 来解除 MT1 对 hM1Dq 的抑制，若游离的 HA 片段也能触发门控解除，报告输出就会失真。我们把\"完整病毒与抗原碎片的区分\"列入后续验证必须"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "体结合 HA 来解除 MT1 对 hM1Dq 的抑制，若游离的 HA 片段也能触发门控解除，报告输出就会失真。我们把\"完整病毒与抗原碎片的区分\"列入后续验证必须设计的对照项，但必须说明：这目前仍是待回答的问题，团队尚未用实验验证。 预防定位与\"谁会买单\"：B 端优先、零操作门槛、价格红线 我们还请教了产品定位与目标人群。邓老师认可它本质是检测手段、属于\"预防\"环节而非药品；奥司他韦对儿童仍是甲流一线用药、耐药率低，但患儿呕吐剧烈时难以口服，替代的帕拉米韦需静脉滴注数日，治疗侧的空间有限，早识别、早隔离反而更关键。市场方面，流感疫苗多数免费、抗流感药物只要几十元，检测装置定价过高就没有竞争力；她建议优先做 B 端——学校、医疗机构与政"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "的空间有限，早识别、早隔离反而更关键。市场方面，流感疫苗多数免费、抗流感药物只要几十元，检测装置定价过高就没有竞争力；她建议优先做 B 端——学校、医疗机构与政府公共卫生项目——再考虑家庭市场，因为普通家长往往分不清流感、支原体、细菌感染和新冠，可能直接去医院查 CRP。对儿童使用，一两岁幼儿无法配合复杂的呼气动作，装置必须做到\"只需自然呼气\"的零操作门槛；校园推广同样以无生物泄漏风险和\"非专业人员也能操作\"为前提。这些都被我们纳入了硬件形态与部署场景的后续设计——主动呼气版应支持自然呼气的无特殊要求采样，而不是要求用户按节奏执行动作。 临床转化、真实世界数据与多病原体拓展 最后我们请教从产品到临床要走过哪些路。邓老师介绍了 GCP"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "应支持自然呼气的无特殊要求采样，而不是要求用户按节奏执行动作。 临床转化、真实世界数据与多病原体拓展 最后我们请教从产品到临床要走过哪些路。邓老师介绍了 GCP（药物临床试验机构）对接、Ⅰ–Ⅲ期临床试验到上市后研究的路径，以及进入医院需经历医保目录、设备科采购、临床指南推荐等环节，推广要靠宣传和真实世界数据（如使用前后流感发生率的对比）。在疾病谱上，她指出儿童领域最棘手的耐药问题在支原体——8 岁以下超说明书使用多西环素、阿奇霉素效果不佳，耐药检测手段匮乏；这让我们更确信把表面纳米抗体做成可替换模块、从甲流拓展向支原体/细菌/其他病毒，不只是商业延展，也回应儿科感染的真实需求。团队把 GCP 对接调研与流调对比实验方案设计列为会后待"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "面纳米抗体做成可替换模块、从甲流拓展向支原体/细菌/其他病毒，不只是商业延展，也回应儿科感染的真实需求。团队把 GCP 对接调研与流调对比实验方案设计列为会后待办，尚未开展；邓老师对生物安全的看法是，只要不向人体内喷洒、仅作环境与呼气检测，生物危害可控，但伦理审查与合成生物学安全材料仍需齐备。 这次访谈没有推翻我们已经确定的技术框架，但把三个悬而未决的问题摆到了前台：低载量灵敏度、活病毒与碎片的区分、预防性检测的定价与受众现实。它们分别对应 PAGER 信号链的功能验证重点、受体识别对象的界定，以及装置形态与市场策略的设计边界。目前这些反馈来自团队访谈纪要，团队将其作为后续实验与产品设计的参考；涉及检测性能、临床可用性与市场表现的表"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "受体识别对象的界定，以及装置形态与市场策略的设计边界。目前这些反馈来自团队访谈纪要，团队将其作为后续实验与产品设计的参考；涉及检测性能、临床可用性与市场表现的表述均需一手数据复核。 01 清华大学合成生物学创意大赛参赛交流 HP 比赛篇 · 在清华赛场与外界对话 交流现场 项目展示 交流讨论 活动记录 团队交流 赛场交流 图 1. 团队在清华大学合成生物学创意大赛中进行项目展示与交流 项目推进到需要对外表达时，团队发现，实验室内部形成的理解未必能被外部观众准确接收。参加清华大学合成生物学创意大赛，正是为了把项目放到跨校、跨学科的环境中，接受陌生同行、评审与师生的检验。 为什么参加这场比赛 项目推进到需要对外表达时，团队发现一个在实验"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "学合成生物学创意大赛，正是为了把项目放到跨校、跨学科的环境中，接受陌生同行、评审与师生的检验。 为什么参加这场比赛 项目推进到需要对外表达时，团队发现一个在实验室里不容易察觉的问题：我们自以为了解的项目，和外部观众——其他合成生物学团队、评审、跨学科师生——眼里的项目，未必是一回事。封闭环境里的讨论容易走进思维定势，而一场跨校比赛正好把项目摆到\"陌生人\"面前接受检验。 第一届清华大学合成生物学创意大赛由清华主办，主打\"创意为核心、零门槛为底色\"，吸引了清华、北大、同济、南方科技大学等 44 所高校团队参加。这样一个跨校、跨背景的赛场，让项目第一次不再只面对熟悉的实验室同伴，而是要向陌生同行讲清楚\"我们在做什么、为什么值得做\"。 赛场"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "技大学等 44 所高校团队参加。这样一个跨校、跨背景的赛场，让项目第一次不再只面对熟悉的实验室同伴，而是要向陌生同行讲清楚\"我们在做什么、为什么值得做\"。 赛场上的收获与反馈 团队凭项目的新意和现场展示互动，拿到了赛事设置的\"最具人气魅力奖\"。不过比起奖项，更值得记下来的是成员在交流中的真实反思——这些反思才是这次活动最核心的 HP 价值。 不少同学在赛后总结里不约而同地提到\"表达\"和\"理解\"：反复改稿、模拟答辩，让成员把项目彻底吃透，介绍时从生疏变得顺手；而在向不同团队讲解的过程中，成员也反过来加深了对自己工作的理解。其他团队提出的问题，常常能点出那些由于我们内部思维惯性而被忽略的新角度。 更关键的是，跨团队的平行交流暴露了项目在"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "的过程中，成员也反过来加深了对自己工作的理解。其他团队提出的问题，常常能点出那些由于我们内部思维惯性而被忽略的新角度。 更关键的是，跨团队的平行交流暴露了项目在应用层面的薄弱。有成员想到，团队此前对\"项目落地场景\"\"社会价值需求\"这类现实问题的思考还比较浅；也有成员说，看了其他队伍的改造路线，才意识到许多此前没设想过的创新角度，给后续研发打开了新思路。这些反馈没有直接指向某个实验改动，但一致地把团队引向同一个问题：技术方案之外，项目还得认真回答\"它将在什么场景下、被谁、为了解决什么问题而使用\"。 对项目的意义 这场比赛没有改变我们的技术路线，却从几个不同层面重塑了团队对项目的理解。 在表达上，外部反馈印证了\"把项目讲清楚\"本身就是一"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "决什么问题而使用\"。 对项目的意义 这场比赛没有改变我们的技术路线，却从几个不同层面重塑了团队对项目的理解。 在表达上，外部反馈印证了\"把项目讲清楚\"本身就是一门要专门打磨的能力——奖项认可的风采展示和生动表达，本质上是项目叙事对观众的吸引力。这让团队在后续工作里更舍得在表达策略上下功夫，而不只盯着技术细节。 在应用上，队员自省和其他团队的提问这两个独立来源，指向了同一个盲区：项目对真实使用场景和社会需求的思考还不够深。团队据此把\"调研真实使用需求、完善落地方案\"列为了后续重点推进的方向，同时也如实说明，配套的硬件目前还停留在构想阶段，欢迎外部合作。 在协作上，和同行的碰撞让团队尝到了开放交流的甜头，也补足了项目在创意来源和创新角度"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "点推进的方向，同时也如实说明，配套的硬件目前还停留在构想阶段，欢迎外部合作。 在协作上，和同行的碰撞让团队尝到了开放交流的甜头，也补足了项目在创意来源和创新角度上的外部输入。这些体会让团队相信：HP 不该是赛后才补的材料，而是贯穿项目始终、不断修正团队判断的过程。 02 HP探险篇—这次我们来到了华南交流会！ HP 探险篇系列 · 华南地区科普交流活动记录 交流会合影 活动现场 项目展示 交流讨论 图 1. 团队在华南地区 iGEM 交流会中进行项目展示与讨论 为什么参加华南交流会 项目推进到中期，团队意识到一个绕不开的问题：我们自己对项目的理解，和外部受众——尤其是其他 iGEM 团队和评审——对项目的理解，可能并不一致。实验室里"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "交流会 项目推进到中期，团队意识到一个绕不开的问题：我们自己对项目的理解，和外部受众——尤其是其他 iGEM 团队和评审——对项目的理解，可能并不一致。实验室里的讨论容易形成思维定势，我们觉得已经讲清楚的话，在别人听来未必如此。 华南地区 iGEM 交流会正好给了团队一个外部评价环境，到场的有华南多所高校的 iGEM 团队，也有经验丰富的评审嘉宾。我们决定参加，就是想在同行的互动里检验项目表达是否清晰，并从外部视角捞出那些团队此前没太在意的问题。 交流中的发现 整场交流按自己的节奏推进，但比流程更值钱的是其中浮现的几类反馈。 海报展示：一次即时的表达测试 交流会以线下海报展示开场。团队带着项目海报，向其他队伍和评审介绍 SZPU-E"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "的节奏推进，但比流程更值钱的是其中浮现的几类反馈。 海报展示：一次即时的表达测试 交流会以线下海报展示开场。团队带着项目海报，向其他队伍和评审介绍 SZPU-ECHOYeast 的方向和技术路线。海报不只是往外倒信息，更像一个即时反馈窗口——看驻足的人最先盯哪里、问什么，就能直接判断项目表达里哪些部分最抓人、哪些最让人犯迷糊。 展示过程中，团队注意到多数来访者对项目的实际应用场景很感兴趣，反而很少追着问技术细节。这给团队提了个醒：后面的项目表达，应该先把\"解决什么问题\"讲明白，而不是一上来就堆方法。 队际交流：平行视角的对照 海报之后是自由的队际交流时间。团队和其他参赛队伍一对一线下聊，各自讲进展、说瓶颈、谈解法。这种平行视角的对照"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "，而不是一上来就堆方法。 队际交流：平行视角的对照 海报之后是自由的队际交流时间。团队和其他参赛队伍一对一线下聊，各自讲进展、说瓶颈、谈解法。这种平行视角的对照尤其有用——别的队踩的坑（实验进度管理、跨学科协作效率、HP 活动设计等）常常和我们的高度重合，但应对路子各不相同。 和好几支队伍对比下来，团队发现大家在项目叙事结构上的差别很大：有人以技术突破为主线，有人从社会需求切入，还有人从伦理讨论开场。这种差别让团队忍不住回头想，自己的叙事是不是真的把项目的核心价值讲清楚了。 提问环节：来自评审的反馈 提问环节是整场信息密度最高的部分。评审和其他团队抛来不少问题，其中有三类最值得我们记下来： 关于检测目标的界定：有提问指出，团队对\"广"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "提问环节：来自评审的反馈 提问环节是整场信息密度最高的部分。评审和其他团队抛来不少问题，其中有三类最值得我们记下来： 关于检测目标的界定：有提问指出，团队对\"广谱病毒监测\"的覆盖范围讲得偏宽，建议先明确优先针对的病毒类别和应用场景（比如医疗机构、公共场所、家庭自测三者的区分）。这让我们意识到，\"广谱\"不等于模糊——在保持技术通用性的同时，也得给出具体的应用入口。 关于生物安全性的考量：不止一位参会者关心项目里生物材料处理的安全性，尤其是放到非实验室环境里用的可能。这个问题团队内部其实聊过，但一直没放到项目表达的核心位置。交流会的反馈说明，安全性论证得成为项目可信度的一块基石。 关于 HP 与项目的关联性：有评审追问，团队的 Huma"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "内部其实聊过，但一直没放到项目表达的核心位置。交流会的反馈说明，安全性论证得成为项目可信度的一块基石。 关于 HP 与项目的关联性：有评审追问，团队的 Human Practices 活动到底怎么具体回过头影响了项目设计。这个问题点醒我们，HP 不是独立于技术工作的\"附加模块\"，要在叙述里把\"HP 反馈 → 技术决策\"的逻辑链摆明白。 此次交流对项目的意义 华南交流会没有直接改动实验方案或技术路线，但帮团队在好几个层面重新理解了项目： 表达层面的优化：外部反馈显示，项目叙述的优先级得重排——从\"先讲技术再讲应用\"改成\"先点明问题再引出方案\"。这不动技术本身，却会影响评审和公众对项目的第一印象，以及他们能理解到多深。 安全性认知的强化"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "优先级得重排——从\"先讲技术再讲应用\"改成\"先点明问题再引出方案\"。这不动技术本身，却会影响评审和公众对项目的第一印象，以及他们能理解到多深。 安全性认知的强化：生物安全这条反馈来自多个独立来源，说明它不是团队自己在吓自己，而是外部受众普遍在意的议题。团队打算在后续补上和安全性相关的实验设计与论证材料。 HP 叙事结构的反思：被问到\"HP 怎么和项目挂钩\"之后，团队重新打量了现在 HP 页面的组织方式——每篇 HP 文章，是不是都清楚体现了\"拿到反馈 → 调整理解\"这条链。而这次交流本身的记录，也正是照着这个思路写的。 03 面向中学生的科学传播与项目交流：让合成生物学走近未来的探索者 深圳市第一职业技术学校坪山校区 · 高二学生科"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "这次交流本身的记录，也正是照着这个思路写的。 03 面向中学生的科学传播与项目交流：让合成生物学走近未来的探索者 深圳市第一职业技术学校坪山校区 · 高二学生科普交流活动 活动合影 课堂全景 项目讲解 科普展示 图 2. 校园宣讲现场：团队向高二学生介绍 iGEM 理念与工程化酵母生物传感器项目 为了践行 iGEM 所提倡的科学传播与社会责任，也为了摸清普通学生对甲型流感病毒检测技术到底知道多少、又盼着什么，我们走进深圳市第一职业技术学校坪山校区，和一群高二学生做了一次项目科普交流。活动一方面向非专业听众讲清国际基因工程机器大赛（iGEM）的理念和价值，另一方面展示我们的\"基于工程化酵母的甲型流感病毒生物传感器\"项目，让更多年轻学生"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "普交流。活动一方面向非专业听众讲清国际基因工程机器大赛（iGEM）的理念和价值，另一方面展示我们的\"基于工程化酵母的甲型流感病毒生物传感器\"项目，让更多年轻学生看到，合成生物学怎样靠跨学科创新去碰现实里的社会问题。 我们分享了什么 从 iGEM 比赛的来由、团队的组建方式，到项目的研究意义、实验原理和往后的应用场景，我们试着打破\"科研只关在实验室里\"的刻板印象，让学生看到：生命科学研究同样离不开编程、设计、传播这些跨领域的本事。 同学们关心什么 学生们站在实际使用者那头，问得很直接：检测设备能不能更便携？出结果能不能更快？这些来自潜在用户的反馈，逼着团队重新去想，传感器在做成产品时，到底该在便捷性、响应速度和场景适配上做到什么程度。"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "很直接：检测设备能不能更便携？出结果能不能更快？这些来自潜在用户的反馈，逼着团队重新去想，传感器在做成产品时，到底该在便捷性、响应速度和场景适配上做到什么程度。 双向学习与成长 对学生来说，这是一次近距离碰合成生物学和科研创新的机会；对团队来说，把绕来绕去的生物学原理翻成听得懂的话，也逼着我们自己把项目逻辑再理一遍，反而对技术路线和社会价值想得更透。 Responsible Research and Innovation 这次活动不只是一次项目展示，更是一次双向的学习和沟通。我们越发明白，一个有社会价值的生物技术项目，光靠实验室里的技术突破不够，还得和公众把话讲通、把真实需求听进去，再不断调整。这次实践把项目从单纯的技术研发，推到了"
+  },
+  {
+    "type": "text",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "content": "我们越发明白，一个有社会价值的生物技术项目，光靠实验室里的技术突破不够，还得和公众把话讲通、把真实需求听进去，再不断调整。这次实践把项目从单纯的技术研发，推到了更开放、也更负责任的创新路径上，正好呼应了 iGEM 提倡的\"负责任的研究与创新\"理念。"
   },
   {
     "type": "image",
@@ -2150,6 +2432,13 @@ window.iGEMSearchIndex = [
     "pageTitle": "Human Practices - iGEM SZPU-2026",
     "src": "static/image/HP/expert_img/fukai.jpg",
     "content": "顾凯"
+  },
+  {
+    "type": "image",
+    "pageUrl": "human-practices/integrated human-practices.html",
+    "pageTitle": "Human Practices - iGEM SZPU-2026",
+    "src": "static/image/HP/expert_img/dengmanqing.png",
+    "content": "邓蔓青"
   },
   {
     "type": "image",
