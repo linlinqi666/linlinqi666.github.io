@@ -1,6 +1,15 @@
 /* ===== 通用移动端响应式样式 ===== */
 /* iGEM Layout Strategy: Shared mobile responsive styles for all pages. Optimized for compatibility, UX, and accessibility. */
 
+@media (max-width: 1024px) {
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+}
+
 /* ================================================== */
 /* 统一移动端动画系统 - Mobile Animation System v2.0 */
 /* iGEM Design: 符合移动端平台特性的统一动效规范 */
@@ -664,14 +673,11 @@ img[data-srcset] {
   background: var(--mobile-bg-fallback);
   min-height: 6.25rem;
   opacity: 0.7;
-  filter: blur(0.3125rem);
-  transition: opacity var(--anim-duration-medium) var(--anim-easing-decelerate),
-    filter var(--anim-duration-medium) var(--anim-easing-decelerate);
+  transition: opacity var(--anim-duration-medium) var(--anim-easing-decelerate);
 }
 
 img.loaded {
   opacity: 1;
-  filter: blur(0);
 }
 
 /* ================================================== */
@@ -940,8 +946,6 @@ img.loaded {
     border-radius: var(--mobile-radius-md);
     margin: var(--mobile-spacing-sm) 0;
     padding: var(--mobile-spacing-xs) 0;
-    backdrop-filter: blur(0.3125rem);
-    -webkit-backdrop-filter: blur(0.3125rem);
     background: var(--mobile-dropdown-bg);
     max-height: 0;
     overflow: hidden;

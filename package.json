@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "eleventy",
-    "build:all": "eleventy && node static/js/core/search-index-generator.js",
-    "serve": "eleventy --serve"
+    "build:all": "eleventy && node static/js/core/search-index-generator.js && node tools/check-static-assets.js && node tools/check-performance-budget.js",
+    "serve": "eleventy --serve",
+    "test:smoke": "node tools/smoke-test.js"
   }
 }

@@ -12,29 +12,26 @@
       <!-- 内容区域 -->
       <div class="description-content" id="content">
 
-        <!-- ===== 3D 时间轴导航：照搬自 对话归档/tests/demo-3d-timeline.html ===== -->
+        <!-- 平面长条带轮播：卡片在可裁切视口内横向平移，取代旧的 3D 等轴测旋转木马。 -->
         <div class="hp3d-root">
             <div class="timeline-orbit-container">
-              <!-- 单一共享 3D 舞台：卡片环与日期环同处一个透视空间，靠固定几何定位 -->
-              <div class="dual-stage" id="dualStage">
-              <div class="dual-scene" id="dualScene">
-                <div class="cards-group" id="cardsGroup">
-                  <div class="orbit-ring"></div>
+            <section class="hp-flat-root" aria-label="综合人类实践活动导航">
+              <div class="hp-flat-carousel" id="hpFlatCarousel" tabindex="0">
+                <button class="hp-flat-button hp-flat-prev" type="button" aria-label="查看上一项">←</button>
+                <div class="hp-flat-viewport">
+                  <div class="hp-flat-track" id="hpFlatTrack"></div>
                 </div>
-                <div class="timeline-group" id="timelineGroup">
-                  <div class="timeline-ring"></div>
-                </div>
+                <button class="hp-flat-button hp-flat-next" type="button" aria-label="查看下一项">→</button>
               </div>
+              <div class="hp-flat-intro" id="hpFlatIntro" aria-live="polite">
+                <span class="hp-flat-intro-date"></span>
+                <p class="hp-flat-intro-title"></p>
+                <span class="hp-flat-intro-count"></span>
               </div>
-            <div class="slider-control">
-              <div class="slider-wrapper">
-                <div class="slider-track"><div class="slider-fill" id="sliderFill"></div></div>
-                <input type="range" class="slider-input" id="sliderInput" min="0" max="3600" value="0" step="1">
-              </div>
-            </div>
-            <div class="detail-panel" id="detailPanel">
+            </section>
+            <div class="detail-panel hp-flat-detail-panel" id="detailPanel">
               <div class="detail-viewport"><div class="detail-track" id="detailTrack">
-        <div class="detail-slide">
+        <div class="detail-slide" data-hp-article="section-overview">
 <div id="section-overview" class="content-card hp-overview-card">
           <div class="hp-section-header">
             <span class="hp-section-number">00</span>
@@ -247,7 +244,7 @@
         </div>
         </div>
 
-        <div class="detail-slide">
+        <div class="detail-slide" data-hp-article="section-carousel">
 <div id="section-carousel" class="content-card">
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
@@ -296,7 +293,7 @@
         </div>
         </div>
 
-        <div class="detail-slide">
+        <div class="detail-slide" data-hp-article="section-southchina">
 <div id="section-southchina" class="content-card">
           <div class="hp-section-header">
             <span class="hp-section-number">02</span>
@@ -356,7 +353,7 @@
         </div>
         </div>
 
-        <div class="detail-slide">
+        <div class="detail-slide" data-hp-article="section-education">
 <div id="section-education" class="content-card hp-education-card hp-section-offset-2">
           <p>我们走进职业高中做科普宣讲，把合成生物学从实验室里带出来；而学生们对便携性和检测速度的那几句反馈，也把"负责任的研究与创新"这个理念，落成了具体的产品优化方向。</p>
 
@@ -466,11 +463,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated human-practices.css') }}">
 {% endblock %}
 {% block scripts %}
-  <script src="{{ url_for('static', filename='data/hp-timeline-data.js') }}" defer></script>
   <script src="{{ url_for('static', filename='data/hp-map-data.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/components/hp-carousel.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/hp-flat-carousel.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/hp-reveal-box.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/components/hp-timeline.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/hp-map.js') }}" defer></script>
 {% endblock %}

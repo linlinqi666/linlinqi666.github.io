@@ -94,6 +94,7 @@ ehthumbs.db
 !static/**/*.csv
 !static/**/*.ps1
 !static/**/*.py
+!static/**/*.json
 
 #工具状态与配置
 .superpowers/
@@ -167,11 +168,13 @@ Gemfile.lock
 !Requirements/**
 !Decisions/
 !Decisions/**
-!Progress/
-!Progress/**
+# Progress/ 改为 git 忽略（物理保留，入库干净），不再强制跟踪
 
 # 对话归档必须始终忽略；此规则置于 README 例外之后以覆盖其内部说明文件
 /对话归档/
+
+# 根目录工程化脚本（构建/验证工具）git 忽略，物理保留供 npm 脚本调用
+/tools/
 
 # 保留 Node 依赖声明，便于重新生成搜索索引
 !package.json
@@ -179,3 +182,4 @@ Gemfile.lock
 
 # 本地预览产物（非源码，不入库）
 site-preview/
+.originkit/

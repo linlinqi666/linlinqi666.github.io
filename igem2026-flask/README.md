@@ -66,3 +66,30 @@ prefix) via the iGEM upload tool, then delete the local `static/image/` copy. Un
 uploaded, local `flask run` preview will show broken images (expected) — the live
 GitLab Pages site serves them from the CDN. See `IGEM2026_WIKI_COMPLIANCE.md` for the full
 rule set and pre-commit checklist.
+
+## Performance & JS optimization (parity with root static site)
+
+The vendored JS under `static/js/` mirrors the performance optimizations applied to the
+root static site — see root `README.md` **§14 性能分析与优化** and **§5.11 搜索子系统**
+for the full rationale. The two workspaces are kept in sync on these points:
+
+- **Search index as JSON + `fetch`** — `core/search.js` loads `core/search-index.json` via
+  same-origin `fetch()` on first open (no per-page `<script>` injection, no global
+  `window.iGEMSearchIndex`). Results render with `document.createElement` + `textContent` +
+  a controlled `<mark>` (no `innerHTML`). Rebuild with
+  `python tools/search_index_generator.py` **after** `flask freeze` — it scans the
+  flat `public/*.html` output (skips `index.html`, the `/` duplicate of `home.html`).
+- **Reduced motion** — `core/utils.js` exposes `prefersReducedMotion()`; the
+  executive-summary animation (yeast float / typewriter / reveal / smooth scroll) respects it.
+- **Lean components** — `components/sidebar-progress.js` and `pages/attributions.js` dropped
+  their test/debug code and init `console.log`.
+- **HP map clustering** — `components/hp-map.js` groups experts by province into a single
+  `.hz-cluster` pin (fewer DOM pins than one-pin-per-expert), with a hover popover listing
+  that province's experts; the detail still opens in the existing `#hzModal`. Data source
+  remains `static/data/hp-map-data.js` (`window.HPMapExperts`), now carrying `slug` /
+  `provinceId` / `provinceName` fields.
+
+Note: the search index generator is pure Python (stdlib `html.parser`), so it runs in the
+Python-only GitLab CI image — `.gitlab-ci.yml` invokes `python tools/search_index_generator.py`
+right after `flask freeze`. It writes both `static/js/core/search-index.json` (committed
+source) and `public/static/js/core/search-index.json` (deployed artifact).

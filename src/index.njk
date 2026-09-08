@@ -9,18 +9,29 @@ bodyClass: "home-page"
 mainClass: "long-page"
 js:
   - static/js/components/executive-summary-animation.js
+  - static/js/components/index-intro-gif.js
 ---
 
 {% extends "layouts/base.njk" %}
 
 {% block main %}
+<!-- 模块 0: GIF 开场动画（默认不显示、不下载；由 index-intro-gif.js 激活。
+     无 JS / prefers-reduced-motion / 脚本加载失败时自动跳过，导航栏照常显示） -->
+    <div class="intro-gif" id="intro-gif">
+      <div class="intro-gif__stage">
+        <img class="intro-gif__frame" alt="" data-gif-src="static/image/Animation/index/overlook.GIF"
+          data-duration="9300">
+        <img class="intro-gif__frame" alt="" data-gif-src="static/image/Animation/index/up.GIF"
+          data-duration="8500">
+      </div>
+      <p class="intro-gif__loading">Loading…</p>
+      <button type="button" class="intro-gif__skip" id="intro-gif-skip">跳过动画<span
+          aria-hidden="true">→</span></button>
+    </div>
+
 <!-- 模块 1: Hero 标题页 -->
     <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
       <div class="yeast-screen__inner">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast1.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="eager" fetchpriority="high" decoding="async" style="animation-name: floatYeast1;">
-        </div>
         <div class="yeast-screen__content">
           <p class="yeast-screen__eyebrow reveal">iGEM SZPU-2026</p>
           <h1 class="yeast-screen__title reveal">
@@ -38,10 +49,6 @@ js:
     <!-- 模块 2: 背景 -->
     <section id="public-health" class="presentation-section yeast-screen yeast-screen--reverse " data-title="背景">
       <div class="yeast-screen__inner yeast-screen--reverse">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast2.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast2;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">为什么是 H1N1？面向快速广谱监测</h2>
           <p class="reveal">
@@ -67,10 +74,6 @@ js:
     <!-- 模块 3: 设计 -->
     <section id="project-intro" class="presentation-section yeast-screen" data-title="设计">
       <div class="yeast-screen__inner">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast3.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast3;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">设计策略：PAGER 重布线人源 GPCR</h2>
           <p class="reveal">
@@ -108,10 +111,6 @@ js:
     <!-- 模块 4: 湿实验 / DBTL -->
     <section id="dbtl-cycle" class="presentation-section yeast-screen yeast-screen--reverse" data-title="构建与测试">
       <div class="yeast-screen__inner yeast-screen--reverse">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast4.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast4;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">构建与测试：模块化湿实验流程</h2>
           <p class="reveal">
@@ -160,10 +159,6 @@ js:
     <!-- 模块 5: 结果 -->
     <section id="statistics" class="presentation-section yeast-screen " data-title="结果">
       <div class="yeast-screen__inner">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast5.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast1;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">实验进展与待表征数据</h2>
           <p class="reveal">
@@ -187,10 +182,6 @@ js:
     <!-- 模块 6: 安全 -->
     <section id="safety" class="presentation-section yeast-screen yeast-screen--reverse" data-title="安全">
       <div class="yeast-screen__inner yeast-screen--reverse">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast6.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast2;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">安全与结构验证</h2>
           <p class="reveal">
@@ -216,10 +207,6 @@ js:
     <!-- 模块 7: 人类实践 -->
     <section id="human-practices" class="presentation-section yeast-screen" data-title="人类实践">
       <div class="yeast-screen__inner">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast7.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast3;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">人类实践：从专家到公众</h2>
           <p class="reveal">
@@ -243,10 +230,6 @@ js:
     <!-- 模块 8: 未来愿景 -->
     <section id="future-vision" class="presentation-section yeast-screen yeast-screen--reverse" data-title="未来愿景">
       <div class="yeast-screen__inner yeast-screen--reverse">
-        <div class="yeast-screen__visual">
-          <img src="static/image/Animation/index/yeast8.svg" alt="" aria-hidden="true" class="yeast-screen__svg"
-            loading="lazy" decoding="async" style="animation-name: floatYeast4;">
-        </div>
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">未来愿景：从 H1N1 到广谱平台</h2>
           <p class="reveal">
@@ -267,8 +250,9 @@ js:
     </section>
 
     <!-- 模块 9: 团队亮点（文字摘要卡片） -->
-    <section id="team-highlight" class="presentation-section section-summary" data-title="团队介绍">
-      <div class="summary-inner">
+    <section id="team-highlight" class="presentation-section yeast-screen" data-title="团队介绍">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__content">
         <h2 class="section-summary__title reveal">团队亮点</h2>
         <div class="summary-grid">
           <article class="summary-card reveal">
@@ -288,13 +272,15 @@ js:
           </article>
         </div>
       </div>
+      </div>
       <!-- iGEM Check: [x] Team strengths summarized [x] No fabricated member details [x] Links to subpages below -->
     </section>
 
     <!-- 模块 10: 8-Portal 导航 -->
-    <section id="final-cta" class="presentation-section section-summary" data-title="探索更多">
-      <div class="summary-inner">
-        <h2 class="section-summary__title reveal">探索我们的 Wiki</h2>
+    <section id="final-cta" class="presentation-section yeast-screen" data-title="探索更多">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">探索我们的 Wiki</h2>
         <div class="portal-grid" role="navigation" aria-label="子页面导航">
           <a href="project/description.html" class="portal-card reveal">
             <span class="iconfont icon-jianjie"></span>
@@ -329,6 +315,7 @@ js:
             <span>Team</span>
           </a>
         </div>
+      </div>
       </div>
       <!-- iGEM Check: [x] 8 portals to subpages [x] Accessible nav markup [x] No external broken links -->
     </section>

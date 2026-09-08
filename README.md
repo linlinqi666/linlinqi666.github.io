@@ -17,7 +17,7 @@
 **模板架构（单一事实源）**：源文件在 `src/`，构建产物回写根目录原路径（部署结构不变）。
 - `src/_includes/layouts/base.njk`：页面骨架（`<head>` 槽 + 导航槽 + 进度条 + `<main>` + 页脚槽 + 核心脚本）。
 - `src/_includes/partials/`：`head.njk`（meta + 标准 CSS 顺序，按 front matter 注入页级 CSS）、`nav.njk`（桌面导航 + 移动菜单 + 搜索框，唯一事实源）、`footer.njk`（全站页脚唯一事实源）、`progress.njk`（进度条组件）。
-- 页面改为 `src/**/*.njk` 内容文件，front matter 声明 `title`/`description`/`lang`/`css`/`js`/`htmlClass`/`bodyClass`/`mainClass`/`footer`/`basePath`/`headExtraPartial`/`permalink`，正文放在 `{% block main %}`；子页面 `basePath: "../"`（根相对路径），`headExtraPartial` 指向 `src/_includes/head-extra/*.njk`（页级 `<head>` 额外内容如内联 `<style>`/`<noscript>`/preconnect）。构建命令 `npm run build`（仅 Eleventy，回写根目录）或 `npm run build:all`（Eleventy + 搜索索引生成 `static/js/core/search-index-generator.js`）；本地预览 `npm run serve`（`eleventy --serve`）。**根目录 `*.html` 现已由 `src/**/*.njk` 生成，手工 HTML 为旧产物，新增/修改页面请改 `.njk` 后构建。**
+- 页面改为 `src/**/*.njk` 内容文件，front matter 声明 `title`/`description`/`lang`/`css`/`js`/`htmlClass`/`bodyClass`/`mainClass`/`footer`/`basePath`/`headExtraPartial`/`permalink`，正文放在 `{% block main %}`；子页面 `basePath: "../"`（根相对路径），`headExtraPartial` 指向 `src/_includes/head-extra/*.njk`（页级 `<head>` 额外内容如内联 `<style>`/`<noscript>`/preconnect）。构建命令 `npm run build`（仅 Eleventy，回写根目录）或 `npm run build:all`（Eleventy + 运行搜索索引生成器 `static/js/core/search-index-generator.js`，产出 `search-index.json` 并执行资源/性能门禁）；本地预览 `npm run serve`（`eleventy --serve`）。**根目录 `*.html` 现已由 `src/**/*.njk` 生成，手工 HTML 为旧产物，新增/修改页面请改 `.njk` 后构建。**
 - 一次性迁移脚本 `tools/migrate-to-njk.js`：从 `对话归档/backups/backup-pre-refactor/` 读取原始手写 HTML，自动抽取 head 元数据/页级 CSS·JS/`<main>` 正文/内联脚本/head 额外内容，生成对应 `.njk`；仅在初始迁移或批量重建时使用，日常维护勿直接运行。
 
 **冻结区（禁止修改）与可变更区（本次范围）边界 manifest**：
@@ -27,7 +27,7 @@
 
 **新增页面流程（替代旧第九节的手写 HTML）**：在对应板块目录新建 `xxx.njk`，填 front matter + `{% extends "layouts/base.njk" %}` + `{% block main %}…{% endblock %}`，运行 `npm run build` 即生成 `xxx.html`。勿再手动复制 `<head>`/导航/页脚。
 
-**搜索功能**：`nav-search` 标记在 `nav.njk`，索引数据 `static/js/core/search-index.js` 已由 `search-index-generator.js` 真实生成（`window.iGEMSearchIndex`）。`search.js` 在 `base.njk` 以 `defer` 加载，用户首次打开搜索时才异步请求索引，避免每页预载约 189KB 数据；`build:all` 自动重生成索引（随内容刷新）。旧 `normalize-scripts.js`/`inject-search.js` 因与 Eleventy 模板冲突已停用（不再调用）。
+**搜索功能**：`nav-search` 标记在 `nav.njk`，索引数据 `static/js/core/search-index.json` 已由 `search-index-generator.js` 真实生成（JSON 文件，约 217KB）。`search.js` 在 `base.njk` 以 `defer` 加载，用户首次打开搜索时通过同源 `fetch()` 异步请求该 JSON 索引，避免每页预载数据；索引结果以 `document.createElement` + `textContent` + 受控 `<mark>` 安全渲染（不使用 `innerHTML`，杜绝索引内容注入 HTML 解析器）。`build:all` 自动重生成索引（随内容刷新）。旧 `normalize-scripts.js`/`inject-search.js` 因与 Eleventy 模板冲突已停用（不再调用）。
 
 **迁移进度（2026-08-09）**：阶段 0–7 已完成、阶段 8 功能验收通过、阶段 6 按用户要求暂缓。18 个根站手写 HTML 已全部迁移为 `src/**/*.njk` 内容文件并由 `npm run build` 回写根目录；正文与原始备份逐页一致（差异 ≤11 字符，<0.02%）。`src/_includes/`（base.njk + partials + head-extra）为唯一事实源。Playwright 冒烟测试 18 页全部 nav/main/search/footer 齐全、零控制台错误。`description.css` 经复核为 11 页真实共用（非误包含），保留。`normalize-scripts.js`/`inject-search.js` 停用（冲突）。
 
@@ -92,7 +92,8 @@ SZPU-2026 wiki/
     │   │   └── navigation.css      # 全局导航栏 + 全部 :root 设计令牌
     │   ├── components/             # 组件级 CSS
     │   │   ├── page-progress-bar.css
-    │   │   └── scroll-progress-bar.css
+    │   │   ├── scroll-progress-bar.css
+    │   │   └── index-intro-gif.css   # 首页 GIF 开场动画（见 5.13）
     │   └── ...（各页面专属 CSS，部分为占位空文件）
     ├── js/
     │   ├── core/                   # 核心脚本
@@ -102,13 +103,14 @@ SZPU-2026 wiki/
     │   │   ├── scroll-progress-bar.js
     │   │   ├── nav-scroll-behavior.js
     │   │   ├── search.js           # 全站搜索模块（见 5.11）
-    │   │   ├── search-index.js     # 由 search-index-generator.js 生成的搜索索引（首次打开搜索时按需加载，约 189KB）
-    │   │   └── search-index-generator.js  # Node 脚本，扫描全站页面生成 search-index.js
+    │   │   ├── search-index.json   # 由 search-index-generator.js 生成的搜索索引（首次打开搜索时 fetch 按需加载，约 217KB）
+    │   │   └── search-index-generator.js  # Node 脚本，扫描全站页面生成 search-index.json
     │   ├── components/             # 页面组件脚本（位于 static/js/ 下，与 core/、pages/ 同级）
     │   │   ├── sidebar-progress.js # 侧边栏烧瓶进度 + TOC 高亮（内容页）
     │   │   ├── hp-carousel.js      # 3D 圆环轮播（见第十二节）
     │   │   ├── hp-reveal-box.js    # HP 下拉揭示盒
-    │   │   └── executive-summary-animation.js  # 首页 Executive Summary 滚动驱动 + 酵母浮动 + 打字机
+    │   │   ├── executive-summary-animation.js  # 首页 10 屏滚动驱动 + 酵母浮动 + 打字机（见 5.12 首页分屏）
+    │   │   └── index-intro-gif.js              # 首页 GIF 开场动画控制器（见 5.13）
     │   ├── pages/                  # 页面专属脚本
     │   │   ├── members.js
     │   │   └── attributions.js
@@ -155,7 +157,7 @@ static/js/core/nav-scroll-behavior.js
 
 | 页面 | 专属 CSS | 是否 description.css | 是否侧边栏 | 额外 JS |
 |---|---|---|---|---|
-| index.html | — | 否 | 否 | executive-summary-animation.js |
+| index.html | — | 否 | 否 | executive-summary-animation.js + index-intro-gif.js |
 | dry-lab/hardware.html | hardware.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/model.html | model.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/software.html | software.css(空) | 是 | 是 | sidebar-progress.js |
@@ -250,11 +252,11 @@ static/js/core/nav-scroll-behavior.js
 
 ### 5.1 整体布局骨架
 
-`body` 采用 `display:flex; flex-direction:column; min-height:100vh`。所有页面统一包含：固定顶栏 `<nav>`（高 100px，背景米黄 `var(--bg-dropdown)` 毛玻璃模糊）、顶部阅读进度条（page-progress）、侧边滚动进度条（scroll-progress，部分页）、`<main>` 主内容区、底部 `<section id="footer" class="section-footer">`（背景 `#4A90E2` 蓝，footer 专属）。
+`body` 采用 `display:flex; flex-direction:column; min-height:100vh`。所有页面统一包含：固定顶栏 `<nav>`（高 100px，背景米黄 `var(--bg-dropdown)`，已移除背景模糊）、顶部阅读进度条（page-progress）、侧边滚动进度条（scroll-progress，部分页）、`<main>` 主内容区、底部 `<section id="footer" class="section-footer">`（背景 `#4A90E2` 蓝，footer 专属）。
 
 ### 5.2 顶部导航栏（navigation.css + nav-scroll-behavior.js）
 
-- `nav`：`position:fixed; top:0; z-index:9999; height:6.25rem`（滚动后 `.scrolled` 缩为 `5rem` 并加阴影）；背景 `var(--bg-dropdown)`（米黄主色）+ `backdrop-filter:blur`。
+- `nav`：`position:fixed; top:0; z-index:9999; height:6.25rem`（滚动后 `.scrolled` 缩为 `5rem` 并加阴影）；背景 `var(--bg-dropdown)`（米黄主色），不使用 `filter` / `backdrop-filter`。
 - 采用"图标字体 + 下拉"的 mega-menu 结构：主栏目（Home/Project/Team/Dry Lab/Wet Lab/Human Practices）用 iconfont 字形，每个主栏目下挂子页面图标/链接。
 - 行为脚本 `nav-scroll-behavior.js` 实现：下滑隐藏（`.nav-hidden`）、上滑显示、滚动到一定位置加 `.scrolled`。**该脚本为全局必需，禁止移除。**
 
@@ -287,6 +289,7 @@ static/js/core/nav-scroll-behavior.js
 ### 5.8 HP 特殊交互组件
 
 - `hp-reveal-box.js`：滚动揭示盒子（淡入/位移）。
+- `hp-flat-carousel.js`：根目录历史静态站点 HP 页顶部平面轮播导航；读取 `#detailTrack` 下四个带 `data-hp-article` 的详情 slide，动态生成可点击跳转卡片。官方 Flask HP 页使用 `hp-timeline.js` 与 `hp3d-root` / `dual-stage` / `cardsGroup` 容器，二者不可混用。
 - `hp-carousel.js`：历史 3D 圆环轮播组件。当前 `integrated human-practices.html` 未输出 `.hp-carousel` DOM，因此该页不加载此脚本；如需恢复，须同时补齐有效标题、`alt` 与键盘交互的轮播结构，并复核图片路径。
 
 ### 5.9 JavaScript 架构原则
@@ -306,27 +309,103 @@ static/js/core/nav-scroll-behavior.js
 | `core/page-progress-bar.js` | 顶部加载进度条 | 单 rAF 批处理 width 写入 + trickle 定时器 + 自动隐藏 | 良好 |
 | `core/scroll-progress-bar.js` | 侧边滚动进度条 | `utils.rafThrottle` + passive + resize debounce；**`init`/`resize`/`load` 时缓存 `scrollHeight`/`clientHeight`，热路径只读 scrollY** | 已优化（原每帧读 scrollHeight/clientHeight 为重排主因之一，见十四） |
 | `core/mobile-menu.js` | 移动端汉堡菜单 | rAF 开关、body overflow 锁、debounced resize、ARIA | 良好 |
-| `components/sidebar-progress.js` | 侧边栏烧瓶进度 + TOC 高亮 | rAF 节流；**init/resize/load 时缓存各 section 绝对偏移**，滚动期仅比对 scrollY（不再每帧 `getBoundingClientRect`） | 已优化（原每帧读布局为重排主因之一，见十四） |
+| `components/sidebar-progress.js` | 侧边栏烧瓶进度 + TOC 高亮 | rAF 节流；**init/resize/load 时缓存各 section 绝对偏移**，滚动期仅比对 scrollY（不再每帧 `getBoundingClientRect`） | 已优化（原每帧读布局为重排主因之一，见十四）；**可识别 section 由 `sectionIdPrefixes` 白名单控制**，新增页面或新层级（如 Experiments 页 Protocol）必须把对应 `id` 前缀追加进白名单，否则 TOC 只能高亮到模块级而无法下钻到具体 Protocol。 |
+| `components/hp-flat-carousel.js` | HP 顶部平面轮播导航 | 从 `#detailTrack` 注册四张 `.detail-slide[data-hp-article]`，动态生成可点击文章卡片并通过 `goTo` 切换详情 | 仅 HP 页加载；使用属性选择器兼容嵌套结构，避免因首项元数据缺失导致整组卡片不初始化 |
 | `components/hp-carousel.js` | 历史 3D 圆环轮播 | 卡片径向排列 + `will-change` 提升合成层；交互透视计算合并进单个 rAF；过渡期临时提升 filter 层、结束释放 | 当前未被页面引用；恢复前须先补齐 DOM 与可访问性文本 |
 | `components/hp-reveal-box.js` | HP 下拉揭示盒 | Pointer 事件、尊重 `prefers-reduced-motion`、高度动画、debounced resize | 良好 |
-| `components/executive-summary-animation.js` | 首页 Executive Summary 滚动驱动 + 酵母浮动 + 打字机 + 滚动渐入 | 用 IntersectionObserver 仅在接近视口时挂 scroll 监听；酵母浮动 SVG **离屏时 `animation-play-state:paused`** | 已优化（见十四） |
+| `components/executive-summary-animation.js` | 首页 10 屏滚动驱动 + 酵母浮动 + 打字机 + 滚动渐入 | 用 IntersectionObserver 仅在接近视口时挂 scroll 监听；酵母浮动 SVG **离屏时 `animation-play-state:paused`**；`prefers-reduced-motion` 时跳过浮动/打字机/渐入，直接显示内容 | 已优化（见十四、见 5.12） |
+| `components/index-intro-gif.js` | 首页 GIF 开场动画（第一屏全屏，播完才显示导航栏） | IIFE；时长写在 `data-duration` 上（GIF 无限循环，无播放结束事件）；下一帧用 `new Image()` 预取进 HTTP 缓存，切帧时才赋 `src` 以保证从第 1 帧起播；每帧 20s 下载超时兜底 | 仅首页加载；无 JS / reduced-motion / 脚本 404 时整段跳过（见 5.13） |
 | `pages/members.js` | 成员页数据驱动渲染 + 双图背景交叉淡入 | DocumentFragment 渲染、ResizeObserver、rAF 节流 resize/scroll、rail 仅在可见时更新 | 良好 |
 | `pages/attributions.js` | 卡片筛选 + 时间线双面板 + Tooltip + ScrollSpy | 筛选/面板切换、Tooltip 用 MutationObserver、`ScrollSpy` 用 rAF 节流 | 基本良好；MutationObserver 在全站 body 上略有开销 |
 | `core/search.js` | 全站搜索 | 懒加载索引、debounced 输入、Esc/外部点击关闭 | 良好 |
-| `core/search-index.js` | 搜索索引（生成物） | 全站页面分块文本 + 图片记录，**约 189KB** | 用户首次打开搜索时由 `search.js` 按需加载 |
-| `core/search-index-generator.js` | 索引生成器（Node） | 扫描 `PAGES` 生成 `search-index.js` | 构建期运行 |
+| `core/search-index.json` | 搜索索引（生成物） | 全站页面分块文本 + 图片记录，**约 217KB** | 用户首次打开搜索时由 `search.js` 经 `fetch()` 按需加载 |
+| `core/search-index-generator.js` | 索引生成器（Node） | 扫描 `PAGES` 生成 `search-index.json` | 构建期运行 |
 | `hp-timeline-3d.js` | 3D 时间轴圆环引擎 | 3D 径向编排；**rAF 收敛即停、交互时 `kick()` 重启** | 已优化；当前未被任何页面引用（孤儿，见十四） |
 
-### 5.11 搜索子系统（search.js + search-index.js）
+### 5.11 搜索子系统（search.js + search-index.json）
 
-`search.js` 在导航栏提供搜索入口，首次打开时通过动态注入 `<script>` 异步加载 `static/js/core/search-index.js`。索引不再由页面 `<head>` 预置，以避免每个页面预载约 189KB 数据；索引由 `static/js/core/search-index-generator.js` 在构建期扫描全站页面正文与图片生成：
+`search.js` 在导航栏提供搜索入口，首次打开时通过同源 `fetch()` 异步加载 `static/js/core/search-index.json`（约 217KB）：索引不再由页面 `<head>` 预置，也不再以 `<script>` 注入全局变量，以避免每个页面预载数据且消除 XSS 风险；索引由 `static/js/core/search-index-generator.js` 在构建期扫描全站页面正文与图片生成：
 
 ```powershell
 cd "f:\IGEM\SZPU-2026 wiki"
 node static/js/core/search-index-generator.js
 ```
 
-搜索逻辑为本地线性匹配（含图片文件名/alt），结果按页面分组、支持高亮，点击跳转对应页面。该索引体积较大（约 189KB），保持按需懒加载，禁止同步阻塞 `<head>`（见十四）。
+搜索逻辑为本地线性匹配（含图片文件名/alt），结果按页面分组、以 `document.createElement` + `textContent` + 受控 `<mark>` 安全渲染（**不使用 `innerHTML`**），支持高亮，点击跳转对应页面。重复搜索复用同一加载 Promise，JSON 失败回退空索引。索引体积较大，保持按需懒加载，禁止同步阻塞 `<head>`（见十四）。
+
+### 5.12 首页分屏结构（index.njk + index.css）
+
+首页 `index.njk` 为**全屏滚动叙事页**，由 10 个 `presentation-section`（`.yeast-screen`）分屏组成，每屏 `min-height:100vh` 且 flex 垂直水平居中：
+
+| 屏 ID | 内容 | 背景（`--section-bg-img`） |
+|---|---|---|
+| `#hero` | 标题 + 副标题 + Start Journey | `画板+1.webp` |
+| `#public-health` | 背景/痛点 | `画板+2.webp` |
+| `#project-intro` | 项目简介 | `画板+3.webp` |
+| `#dbtl-cycle` | 设计-构建-测试-学习 | `画板+4.webp` |
+| `#statistics` | 实验结果 | `画板+5.webp` |
+| `#safety` | 生物安全 | `画板+6.webp` |
+| `#human-practices` | 人类实践 | `画板+7.webp` |
+| `#future-vision` | 未来愿景 | 复用 `画板+7.webp` |
+| `#team-highlight` | 团队亮点 | 暖棕渐变（无画板） |
+| `#final-cta` | 8 个 Wiki 门户导航（`.portal-grid`/`.portal-card` 毛玻璃卡片） | 暖棕渐变（无画板） |
+
+**关键布局约定：**
+- `.yeast-screen` 基础规则：`min-height:100vh; display:flex; align-items:center; justify-content:center`（**务必保留，否则内容贴顶**——2026-08-26 曾因该选择器缺失导致全屏内容贴顶）。
+- 背景统一由 `#hero,...,#final-cta` 组选择器施加：`linear-gradient(rgba(255,255,255,0.55),rgba(255,255,255,0.55))` 浅遮罩 + `var(--section-bg-img)`，`background-size:cover` 居中、`background-attachment:scroll`（移动端避免 fixed 渲染问题）。
+- `.yeast-screen__content` 单栏居中（最大宽 760px），移动端改为左对齐满宽。
+- 动画由 `executive-summary-animation.js` 驱动（酵母浮动、打字机、滚动渐入），`prefers-reduced-motion` 时跳过浮动/打字机/渐入，直接显示内容并即时定位锚点。
+- 背景图缺失 `}` 或嵌套语法错误会导致浏览器丢弃后续规则（见第七.9 关联修复）；任何 CSS 改动须保持括号配对。
+
+### 5.13 首页 GIF 开场动画（index.njk 模块 0 + index-intro-gif.css / index-intro-gif.js）
+
+首页进入时先播放一段占满第一屏的 GIF 开场动画，**两张 GIF 依次播完后导航栏才出现**。
+
+| 素材 | 尺寸 | 单轮时长 | 顺序 |
+|---|---|---|---|
+| `static/image/Animation/index/overlook.GIF` | 712×400 | 9.3s | 第 1 段 |
+| `static/image/Animation/index/up.GIF` | 712×400 | 8.5s | 第 2 段 |
+
+**状态机（全部由 `<html>` 上的类驱动）：**
+
+| 类 | 添加者 | 作用 |
+|---|---|---|
+| 无类 | — | 不播放，导航栏按原逻辑显示（无 JS / 降级场景） |
+| `intro-gif-armed` | `<head>` 内同步脚本 | 锁定滚动，隐藏 `nav`、汉堡菜单、两条进度条、移动端菜单 |
+| `intro-gif-running` | `index-intro-gif.js` | 显示 GIF 覆盖层（`.intro-gif`，`z-index:100002`） |
+| `intro-gif-finished` | `index-intro-gif.js`（播完 / 跳过） | 解锁滚动、导航栏淡入、移除覆盖层并释放 `img` 的 `src` |
+
+**关键约定：**
+
+- **同步 arm 脚本必须留在 `<head>`**：它需要在 `<body>` 渲染前完成导航栏隐藏，否则导航栏会先闪现再消失。
+- 两张 GIF 均为**无限循环**，没有"播放结束"事件可监听，因此时长由 `data-duration` 显式声明；更换素材时必须同步改这两个值。
+- 覆盖层 `position:fixed` + `object-fit:cover` 占满视口；素材仅 712×400，全屏会放大，如需更清晰须重新导出高分辨率素材（或转 WebP/视频）。
+- 下一帧用 `new Image()` 预取进 HTTP 缓存，切帧时才把 `src` 赋给 `<img>`，保证从第 1 帧起播，同时不与当前帧争抢带宽。
+- **降级红线（不可回退）**：JS 禁用、`prefers-reduced-motion: reduce`、组件脚本 404、单帧下载超 20s，任一情况都必须让导航栏正常显示；`<head>` 内另设 6s 看门狗兜底。
+- 用户可随时点击「跳过动画」或按 `Esc` 立即收尾；该按钮为无边框、无背景的纯文字按钮，直接压在 GIF 画面上。
+- 组件 CSS 经 `head-extra/index.njk` 在 `mobile.css` 之后加载，保证响应式覆盖顺序（第八.1）。
+
+### 5.14 Experiments 页四模块结构（2026-09-06）
+
+`src/wet-lab/experiments.njk` 按项目 Design 页（`src/project/description.njk`）定义的**四个功能模块**组织全部湿实验，不再按"实验 1、2、3…"平铺：
+
+| 模块 | 锚点 | 内容 | 对应素材目录 |
+|---|---|---|---|
+| 模块一 底盘细胞改造 | `#module-one` | Protocol 1.1 CRISPR-Cas9 三基因敲除 | `static/expriments/底盘酵母改造/` |
+| 模块二 报告体系构建 | `#module-two` | 通用前处理 + Protocol 2.1–2.5 | `static/expriments/报告体系构建/` |
+| 模块三 Gpa1-Gα 人源化 | `#module-three` | Protocol 3.1 Gpa1 C 端人源化同源重组 | `static/expriments/信号传达/` |
+| 模块四 PAGER 识别融合蛋白 | `#module-four` | 元件来源 + Protocol 4.1–4.3 | `static/expriments/信号识别模块/` |
+
+**约定：**
+- 每个模块一张 `content-card` 作导语（Objective + Protocol 索引），模块内每个 Protocol 一张独立 `content-card`，卡片 id 为 `#p{m}-{n}`。
+- Protocol 卡片的统一小标题顺序：`Objective → Principle（可选）→ Design → Materials → Protocol → Key Parameters → Data Analysis → Notes → Expected Results → Progress Status`，末尾附 `<!-- iGEM Check: … -->` 自检注释（不渲染）。
+- **同类步骤必须汇总**：模块二把 6 份方案中重复的"菌种活化 + OD600 校准"提取为模块级"通用前处理"，各 Protocol 只写特有步骤并引用它；两种菌落 PCR 裂解法（高温 / NaOH）合并为同一 Protocol 下的方法 A / B。新增方案时先判断是否可并入既有 Protocol，不要一味新增卡片。
+- 侧边栏 TOC 为两级：`<li class="level1">`（模块 + 公共区块）内嵌 `<ul class="level2"><li class="level3">`（Protocol）；现有一级 9 项、二级 10 项，新增卡片须同步追加，否则 TOC 与锚点脱节。
+- 参数表格沿用页面既有的内联写法（与既有表格视觉一致），新增表格须保持同一套 `border/padding` 写法。
+
+> 注意：`.gitignore` 的 `*.md` 规则会连带忽略 `static/expriments/` 下的方案文档与页面模板；如需入库，须追加 `!static/expriments/**/*.md` 例外（同 11.2 的既有做法）。
+
+---
 
 ## 六、图片与资源约定
 
@@ -348,15 +427,16 @@ node static/js/core/search-index-generator.js
 7. **根目录 stray 二次清理（2026-08-04）：** 此前误生成的 `AppData/` 已移至 `对话归档/backups/`；演示/调试文件 `demo-3d-timeline.html`（根目录为与 `对话归档/tests/` 同名的重复副本，已删除）、`map.html`、`static/iconfont/demo_index.html` 已移至 `对话归档/tests/`。本批又将所有散落在根目录的验证截图（`verify-*.png`、`hero-final.png` 等共 14 张）、调试脚本（`screenshot.js`/`shot.js`/`verify.js`/`restructure.js`）与运行日志（`*.log`）、测试页（`test-css.html`/`test-timeline.html`）分别归集至 `对话归档/screenshots/`、`对话归档/temporary-tools/`、`对话归档/tests/`，并删除了空垃圾文件夹 `.dbg/`。根目录现仅保留 `index.html`、`README.md`、`.gitignore`、`package.json`/`package-lock.json` 及正式栏目目录，部署目录保持干净（详见第十一节）。
 
 8. **脚本路径 404 已修复（2026-08-07）：** 文档与 `normalize-scripts.js` 曾把组件脚本写成 `static/components/*`、把 `executive-summary-animation.js` 写成 `static/js/core/*`，而真实目录为 `static/js/components/`，导致 `sidebar-progress.js`、`hp-reveal-box.js`、`executive-summary-animation.js` 在相关页面 404（交互静默失效）。现已统一修正：18 个页面的引用与 `normalize-scripts.js` 生成器路径均已改为 `static/js/components/*`；如新增页面请用第九节模板（路径已正确），不要手写错误路径。
-9. **首屏渲染阻塞已修复（2026-08-07）：** `search-index.js`（约 189KB）原在每个页面 `<head>` 内**同步**加载，阻塞 HTML 解析与首屏渲染（LCP）。已改为 `defer`，停止阻塞；其懒加载由 `search.js` 兜底。
-10. **性能问题清单（2026-08-07，详见十四）：** 全站卡顿的根因包括：(a) 多页面并存多个独立 `scroll` 监听各自触发 rAF；(b) `sidebar-progress.js` 原每帧对全部 section 调用 `getBoundingClientRect()` 造成强制同步布局（已改为缓存偏移）；(c) `hp-timeline-3d.js` 原永久 rAF 循环（已改为收敛即停）；(d) CSS 的 `backdrop-filter` 滚动重绘、首页酵母 SVG 常驻 `will-change` + 无限动画、懒加载图 `filter:blur` 占位、多处大 `box-shadow`。上述 (b)(c) 已修复，(d) 中酵母动画已加离屏暂停，`backdrop-filter` 等既定视觉效果予以保留。
-11. **根目录散落脚本已收纳（2026-08-07）：** `inject-search.js` 原散落在仓库根目录，已移入 `tools/`（与 `normalize-scripts.js` 同为正式工程化 Node 脚本，不属于浏览器运行时资源，故不入 `static/js/`）。搬运时一并修正：①`ROOT` 由 `path.resolve(__dirname)` 改为 `path.resolve(__dirname, '..')`（`__dirname` 现指向 `tools/`，须回退一级到仓库根，否则页面路径拼接错位导致全部跳过）；②其注入的 `search-index.js` 原不带 `defer`，重跑会回退第七.9 的首屏优化，已改为 `defer`。`package.json` 新增 `npm run inject-search`（并补齐缺失的 `npm run normalize`）；运行请用 `node tools/inject-search.js` 或 `npm run inject-search`，不要再在根目录直接 `node inject-search.js`。
+9. **搜索索引重构（2026-08-26）：** 原 `search-index.js`（约 189KB，`window.iGEMSearchIndex`）在每个页面 `<head>` 内同步/defer 加载，既阻塞首屏又携带 XSS 风险（索引内容经 `innerHTML` 注入）。已彻底重构为 `search-index.json`（约 217KB）经同源 `fetch()` 按需加载（仅首次打开搜索时请求），搜索结果以 `document.createElement` + `textContent` + 受控 `<mark>` 安全渲染，**不使用 `innerHTML`**；重复搜索复用同一加载 Promise，JSON 失败回退空索引。公开页面结构、搜索 CSS 类、页面链接均保持不变。
+10. **性能问题清单（2026-08-07，详见十四）：** 全站卡顿的根因包括：(a) 多页面并存多个独立 `scroll` 监听各自触发 rAF；(b) `sidebar-progress.js` 原每帧对全部 section 调用 `getBoundingClientRect()` 造成强制同步布局（已改为缓存偏移）；(c) `hp-timeline-3d.js` 原永久 rAF 循环（已改为收敛即停）；(d) CSS 的 `backdrop-filter` 滚动重绘、首页酵母 SVG 常驻 `will-change` + 无限动画、懒加载图 `filter:blur` 占位、多处大 `box-shadow`。上述 (b)(c) 已修复；2026-08-28 已移除全站 `filter` / `backdrop-filter`，并删除自定义光标动画；酵母动画保留离屏暂停。
+11. **根目录散落脚本已收纳（2026-08-07）：** `inject-search.js` 原散落在仓库根目录，已移入 `tools/`（与 `normalize-scripts.js` 同为正式工程化 Node 脚本，不属于浏览器运行时资源，故不入 `static/js/`）。搬运时一并修正：①`ROOT` 由 `path.resolve(__dirname)` 改为 `path.resolve(__dirname, '..')`（`__dirname` 现指向 `tools/`，须回退一级到仓库根，否则页面路径拼接错位导致全部跳过）；②其注入的 `search-index.js` 原不带 `defer`，重跑会回退第七.9 的首屏优化，已改为 `defer`。`package.json` 新增 `npm run inject-search`（并补齐缺失的 `npm run normalize`）；运行请用 `node tools/inject-search.js` 或 `npm run inject-search`，不要再在根目录直接 `node inject-search.js`。注：2026-08-26 搜索索引已重构为 `search-index.json` + `fetch`，`inject-search.js` 注入 `search-index.js` 的职责已不再使用，该脚本保留仅为历史兼容，**不应再执行**。
 12. **图片路径重构（2026-08-07）：** `static/image` 目录重组后，全站共 20 个页面/CSS 的图片引用失效。已按磁盘真实位置重构：①`SZPU(notext).png`、`shiyao(notext).jpg` 由 `static/image/` 根移至 `static/image/any-icon/`；②`nav_bc.webp`（CSS 内 `../image/nav_bc.webp`、`../../image/nav_bc.webp`）移至 `static/image/wikiStructure/`；③页脚背景图 `bc/index_bc7.jpg`/`.webp`（15 页 `<picture>` 页脚背景）重命名为同目录 `bc/画板+7.jpg`/`.webp`。共 38+30 处替换；`index.css` 第 2151 行 `xx.jpg` 仅为注释示例、非真实引用，`project/description.html` 与 `wet-lab/experiments.html` 中 `%E7%94%BB%E6%9D%BF+7.webp` 为 `画板+7.webp` 的 URL 编码写法（文件真实存在，浏览器解码后正常），二者均无需改动。最终解码感知复扫：**全站 0 个真实失效图片引用**。
 
 13. **底部页脚图标统一为 .webp（2026-08-07）：** 依 index.html 底部示例（`static/image/any-icon/SZPU(notext).webp` / `shiyao(notext).webp`），将全站 18 个页面底部页脚 SZPU/shiyao 图标引用由 `.png`/`.jpg` 改为 `.webp`（共 36 处），位置仍保留 `any-icon/`，文件均存在。integrated human-practices.html 第 1297 行时间轴数据 `img: '../static/image/any-icon/home.webp'`（15.77KB）经核对已正确，无需改动，一并记录备查。
 14. **integrated HP 内联 3D 时间轴 rAF 收敛即停（2026-08-07）：** 该页 3D 时间轴由**内联脚本**（非外置 `hp-timeline-3d.js`，该页未加载外置文件）驱动，原 `startLoop→loop` 在 1551 行**无条件 `requestAnimationFrame(loop)` 永久循环**，即使圆环静止也每帧重写全部卡片/节点的 transform、opacity、zIndex，并逐帧改写每个时间节点 label 的 `fontSize`/`color` → 持续占用主线程，为 integrated HP 页卡顿**头号原因**。已改为收敛即停（kick/rafId 模式：仅 `snapActive` 吸附动画进行中持续循环，静止即 `rafId=null` 停；滑块/点击/键盘/窗口缩放经 `kick()` 重启），视觉不变。另发现时间轴封面引用 `static/image/HP/southchina/SZU.jpg`（**13.5MB**）、`static/image/HP/school1.jpg`（3.6MB）等巨型图片，且 `assignCard` 用 `loading='eager'` + `preloadOne` 主动预解码全部 4 张，建议转 webp 并缩图（数 MB 的 JPG 作小封面会瞬间占满主线程解码）。详见第十四节。
 15. **`scroll-progress-bar.js` 缓存布局尺寸（2026-08-07）：** 原 `calculateProgress()` 每帧滚动都调用 `getClientHeight()` + `getScrollHeight()`（读取 `documentElement.scrollHeight/offsetHeight/clientHeight`），与每帧 `style.height` 写入交错形成**强制同步布局**；`scrollHeight/clientHeight` 仅在 resize 或资源加载时才变化，滚动期恒定。已改为在 `init`/`onResize`/`load` 时缓存 `clientHeight`、`totalHeight`（新增 `state.metrics` + `refreshMetrics()`），热路径只读取 `getScrollPosition()`（scrollY，不触发重排）并写高度——消除进度条的每帧重排。视觉/进度数值完全不变。
 16. **`project/log.html` 滚动高亮缓存偏移（2026-08-07）：** 该页内联 `updateNavHighlight` 原每 100ms（本地 `throttle`）对全部 `section` 调用 `getBoundingClientRect()` 计算可见比例，与 sidebar-progress 旧 bug 同类——**每帧强制同步布局**，为 log 页滚动卡顿的主因。已改为在 `init`（`buildSectionOffsets`）+ `resize`（防抖）+ `load` 时一次性缓存各 section 绝对偏移（`rect.top + scrollY`），滚动期仅用 `window.scrollY + innerHeight*0.3` 探针与缓存偏移做数值比较后切换 `.active` 类，彻底消除每帧 `getBoundingClientRect`。视觉/高亮行为不变。`sections`/`navItems` 与本地 `throttle` 均保留。
+17. **igem2026-flask 工程 JS 性能优化已同步（2026-09-02）：** 根站 JS 性能优化已同步至 `igem2026-flask/`，两工程 JS 实现保持对齐——搜索索引 `search-index.json` + 同源 `fetch()` 按需加载与 DOM API 安全渲染、`utils.prefersReducedMotion()` 及 executive-summary 动效降载、`sidebar-progress.js` / `attributions.js` 精简测试死代码、HP 地图同省专家聚类图钉（`.hz-cluster`）减少 DOM 图钉数量。flask 侧搜索索引由 `flask freeze` 后运行 `static/js/core/search-index-generator.js` 扫描 `public/*.html` 平铺结构生成，与根站扫描根目录页面同构不同源；联动说明见 `igem2026-flask/README.md` 的 "Performance & JS optimization" 一节。
 
 ---
 
@@ -381,7 +461,7 @@ node static/js/core/search-index-generator.js
 14. **脚本路径必须真实存在：** 所有 `<script src>` 指向的文件必须位于磁盘（组件在 `static/js/components/`、核心在 `static/js/core/`、页面在 `static/js/pages/`）。改动路径后须用 `npm run normalize` 重新生成并本地起服务验证无 404（历史教训见七.8）。
 15. **滚动监听必须节流：** 任何 `scroll` 监听须用 `utils.rafThrottle` 或单 rAF 合并 + `passive:true`；**禁止在滚动回调中同步读取布局**（`getBoundingClientRect`/`offsetTop`/`clientHeight` 等），应在 init/resize 时缓存偏移，滚动期只做样式写入（见十四.3）。
 16. **禁止永久 rAF 循环：** 动画/轮询类逻辑（如 3D 圆环）必须在达到目标态后停止 `requestAnimationFrame`，仅在交互时重启；不得每帧无条件重写 transform（见十四.3）。
-17. **大体积数据脚本不得阻塞首屏：** 索引/数据类脚本（如 `search-index.js`）一律 `defer` 或按需懒加载，禁止在 `<head>` 内同步加载（见十四.3）。
+17. **大体积数据脚本不得阻塞首屏：** 索引/数据类脚本（如 `search-index.json`）一律按需懒加载（同源 `fetch()`），禁止在 `<head>` 内同步加载（见十四.3）。
 18. **谨慎使用高成本 CSS：** `backdrop-filter`、`filter:blur`、`position:fixed` 全屏层、过多/过大 `box-shadow` 会显著增加绘制与合成开销；`will-change` 仅作临时提升并尽快释放，不要永久堆在大量元素上；无限 `@keyframes` 动画须离屏暂停（`IntersectionObserver` 设 `animation-play-state:paused`）或尊重 `prefers-reduced-motion`。
 19. **性能预算：** 单页并存独立 `scroll` 监听不超过必要数量；新增持续动画前先评估其合成/绘制成本，长页面尤甚。
 
@@ -566,7 +646,7 @@ python -m http.server 8080 --bind 127.0.0.1
 
 ## 十三、工程化脚本统一工具（tools/normalize-scripts.js）
 
-为消除手工维护 18 个页面脚本顺序/路径的出错风险，项目引入零依赖 Node 脚本 `tools/normalize-scripts.js`，统一所有页面的外部脚本加载方式。另有一同属工程化的 `tools/inject-search.js`，负责批量注入导航搜索按钮与 `search.js`/`search-index.js` 引用（见第七.11）；两者均须从 `tools/` 目录运行，不得放回仓库根。
+为消除手工维护 18 个页面脚本顺序/路径的出错风险，项目引入零依赖 Node 脚本 `tools/normalize-scripts.js`，统一所有页面的外部脚本加载方式。另有一同属工程化的 `tools/inject-search.js`（历史脚本，负责批量注入导航搜索按钮与 `search.js`/`search-index.js` 引用，2026-08-26 索引重构为 `search-index.json` 后已弃用，见第七.11）；两者均须从 `tools/` 目录运行，不得放回仓库根。
 
 **它做什么：**
 - 移除每个页面里散落的外部 `<script src>`（无论位于 `<head>` 还是 `</body>` 前），重新按固定顺序写入 `<head>` 并加 `defer`：`utils.js` 最先，其次 `sidebar-progress.js`（仅内容页），随后四个核心行为脚本，最后按文件名追加页面/组件脚本（`hp-carousel.js` / `hp-reveal-box.js` / `members.js` / `attributions.js` / `executive-summary-animation.js`）。
@@ -597,7 +677,7 @@ npm run normalize        # 等价于 node tools/normalize-scripts.js
 
 **1) 关键渲染路径 / 资源加载维度**
 - 多处脚本路径错误导致 404：`static/components/*`（应为 `static/js/components/*`）、`executive-summary-animation.js` 写成 `static/js/core/*`。后果是 `sidebar-progress.js`、`hp-reveal-box.js`、`executive-summary-animation.js` 在相关页面静默失效——侧边栏烧瓶进度与 TOC 高亮不工作、HP 揭示盒无响应、首页酵母浮动/打字机/滚动渐入不运行。
-- `search-index.js`（约 189KB）在每个页面 `<head>` 内**同步**加载，阻塞 HTML 解析与首屏渲染（LCP 明显变慢）。
+- 原 `search-index.js`（约 189KB）在每个页面 `<head>` 内同步加载，阻塞 HTML 解析与首屏渲染（LCP 明显变慢）；现已重构为 `search-index.json`（约 217KB）经 `fetch()` 按需加载（见第七.9），不再阻塞首屏。
 
 **2) JS 渲染线程 / 事件监听维度**
 - 内容页并存 3~4 个独立 `window` `scroll` 监听（nav / page-progress / scroll-progress / sidebar），各触发自身 rAF；attributions 页更多（再加 Tooltip、ScrollSpy）。每帧最多数个 rAF 回调。
@@ -614,7 +694,7 @@ npm run normalize        # 等价于 node tools/normalize-scripts.js
 ### 14.3 已实施的优化（均维持原有效果）
 
 - **路径修正（恢复被 404 静默失效的交互）：** `static/components/*` → `static/js/components/*`（18 个页面 + `normalize-scripts.js`）；`executive-summary-animation.js` 路径修正（首页 + `normalize`）。侧边栏烧瓶/TOC 高亮、HP reveal、首页酵母浮动/打字机/滚动渐入现已正常。
-- **停止首屏阻塞：** `search-index.js` 改为 `defer`（停止阻塞解析，保留 `search.js` 懒加载兜底）。
+- **搜索索引重构（停止首屏阻塞 + 安全渲染）：** 原 `search-index.js`（约 189KB）内联 `window.iGEMSearchIndex` 并同步/defer 加载，已重构为 `search-index.json`（约 217KB）经同源 `fetch()` 按需加载（仅首次打开搜索时请求）；搜索结果以 `createElement` + `textContent` + 受控 `<mark>` 渲染，**移除 `innerHTML`**，杜绝索引内容（标题/正文/图片路径）进入 HTML 解析器；重复搜索复用同一 Promise，JSON 失败回退空索引（详见第七.9）。
 - **`sidebar-progress.js` 去重排：** 在 init / resize / `load` 时一次性缓存各 section 的绝对偏移（`getBoundingClientRect().top + scrollY`），滚动期仅用 `scrollY` 与缓存偏移比对，彻底消除每帧 `getBoundingClientRect` 强制重排。
 - **`hp-timeline-3d.js` 收敛即停：** `render` 在 `currentAngle` 收敛到 `targetAngle`（误差 < 0.01°）时停止 rAF 循环，仅在交互（滑块 `input`/`change`、‹ › 按钮、点击节点/卡片）时 `kick()` 重启，视觉完全不变。
 - **`executive-summary-animation.js` 酵母离屏暂停：** 8 个酵母浮动 SVG 用 `IntersectionObserver` 在离屏时设 `animation-play-state:paused`、入屏恢复，视觉无差异，后台/长页滚动时大幅减少合成开销。

@@ -1,6 +1,9 @@
 const chinaExperts = [
     {
+      slug: "wang-wenjie",
       name: "王文杰",
+      provinceId: "CN-44",
+      provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "industry",
       coord: { top: 88.5, left: 67.5 },
@@ -13,7 +16,10 @@ const chinaExperts = [
       how: "这次交流把实验室里的工程设计和真实的临床需求连了起来。专家的话让我们重新打量传感器的检测目标：与其死磕病毒亚型识别，不如去做更广谱、更快、更省事的病毒监测方案。和一线临床专家聊过之后我们也更清楚了，一个真正用得上的生物技术产品，光在实验室里把性能磨好还不够，得先接住现实里的医疗需求和公共健康挑战。"
     },
     {
+      slug: "fu-kai",
       name: "付凯",
+      provinceId: "CN-44",
+      provinceName: "广东省",
       region: "Guangzhou, Guangdong",
       category: "science",
       coord: { top: 80.5, left: 63.5 },
@@ -26,7 +32,10 @@ const chinaExperts = [
       how: `这次交流形成了明确的项目反馈闭环：检测响应 1-2 小时偏长 → 优化信号通路缩短响应时间；呼气样本病毒更富集 → 主推单人呼气模式并辅以富集装置；肿瘤标志物特异性不足 → 暂缓肺癌检测、聚焦呼吸道病毒；成本是基层推广的决定因素 → 聚焦主动呼气低成本方案。专家认可了项目技术方向，并使"单人呼气模式在临床可行性上优于环境采样"成为后续设计的核心依据，后续将着力压缩检测响应时间、控制硬件成本，并审慎评估应用场景的临床适配性。`
     },
     {
+      slug: "zhejiang-expert",
       name: "Zhejiang Expert",
+      provinceId: "CN-33",
+      provinceName: "浙江省",
       region: "Zhejiang",
       category: "science",
       coord: { top: 72.0, left: 79.0 },

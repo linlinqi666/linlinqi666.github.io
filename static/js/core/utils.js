@@ -231,6 +231,11 @@
     return throttled;
   }
 
+  function prefersReducedMotion() {
+    return typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
   // 暴露到全局命名空间
   window.iGEMUtils = {
     debounce,
@@ -241,6 +246,7 @@
     supportsPassiveEvents,
     safeRequestAnimationFrame,
     safeCancelAnimationFrame,
-    rafThrottle
+    rafThrottle,
+    prefersReducedMotion
   };
 })();

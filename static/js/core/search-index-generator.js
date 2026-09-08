@@ -139,9 +139,8 @@ function buildIndex() {
     });
   });
 
-  const outPath = path.join(ROOT, 'static/js/core/search-index.js');
-  const jsContent = `/* 由 search-index-generator.js 自动生成，请勿手动修改 */\nwindow.iGEMSearchIndex = ${JSON.stringify(records, null, 2)};\n`;
-  fs.writeFileSync(outPath, jsContent, 'utf-8');
+  const outPath = path.join(ROOT, 'static/js/core/search-index.json');
+  fs.writeFileSync(outPath, JSON.stringify(records), 'utf-8');
   console.log(`已生成索引：${outPath}`);
   console.log(`页面数：${PAGES.length}，记录数：${records.length}`);
 }

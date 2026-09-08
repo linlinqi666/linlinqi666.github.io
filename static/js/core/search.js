@@ -15,7 +15,8 @@
   'use strict';
 
   const SEARCH_CONTAINER_SELECTOR = '#nav-search';
-  const SEARCH_INDEX_FILE = 'search-index.js';
+  const SEARCH_INDEX_FILE = 'search-index.json';
+  const MAX_QUERY_LENGTH = 80;
 
   let basePath = '.';
 
@@ -54,63 +55,69 @@
     return '';
   }
 
-  function loadIndexScript() {
-    return new Promise((resolve) => {
-      if (window.iGEMSearchIndex) {
-        state.index = window.iGEMSearchIndex;
-        resolve(state.index);
-        return;
-      }
+  let indexPromise = null;
 
-      const scriptUrl = getScriptUrl();
-      let url = SEARCH_INDEX_FILE;
-      if (scriptUrl) {
-        const lastSlash = scriptUrl.lastIndexOf('/');
-        if (lastSlash !== -1) {
-          url = scriptUrl.slice(0, lastSlash + 1) + SEARCH_INDEX_FILE;
-        }
-      }
+  function getIndexUrl() {
+    const scriptUrl = getScriptUrl();
+    if (!scriptUrl) return SEARCH_INDEX_FILE;
+    const lastSlash = scriptUrl.lastIndexOf('/');
+    return lastSlash === -1
+      ? SEARCH_INDEX_FILE
+      : scriptUrl.slice(0, lastSlash + 1) + SEARCH_INDEX_FILE;
+  }
 
-      const script = document.createElement('script');
-      script.src = url;
-      script.async = true;
-      script.onload = () => {
-        state.index = window.iGEMSearchIndex || [];
-        resolve(state.index);
-      };
-      script.onerror = () => {
-        console.warn('[Search] 加载索引脚本失败：', url);
+  function loadIndex() {
+    if (state.index.length) return Promise.resolve(state.index);
+    if (indexPromise) return indexPromise;
+
+    const url = getIndexUrl();
+    indexPromise = fetch(url, {
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' }
+    })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(index => {
+        state.index = Array.isArray(index) ? index : [];
+        return state.index;
+      })
+      .catch(error => {
+        console.warn('[Search] 加载索引失败：', url, error);
         state.index = [];
-        resolve(state.index);
-      };
-      document.head.appendChild(script);
+        return state.index;
+      });
+
+    return indexPromise;
+  }
+
+  function appendHighlightedText(container, text, query) {
+    const source = String(text || '');
+    const normalizedQuery = query.trim();
+    if (!normalizedQuery) {
+      container.textContent = source;
+      return;
+    }
+
+    const regex = new RegExp(normalizedQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    let cursor = 0;
+    source.replace(regex, (match, offset) => {
+      container.append(document.createTextNode(source.slice(cursor, offset)));
+      const mark = document.createElement('mark');
+      mark.textContent = match;
+      container.append(mark);
+      cursor = offset + match.length;
+      return match;
     });
-  }
-
-  async function loadIndex() {
-    if (state.index.length) return state.index;
-    return loadIndexScript();
-  }
-
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function highlight(text, query) {
-    const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp('(' + safeQuery + ')', 'gi');
-    return escapeHtml(text).replace(regex, '<mark>$1</mark>');
+    container.append(document.createTextNode(source.slice(cursor)));
   }
 
   /**
    * 执行本地搜索，返回按页面分组的结果。
    */
   function performSearch(query) {
-    const q = query.trim().toLowerCase();
+    const q = query.trim().slice(0, MAX_QUERY_LENGTH).toLowerCase();
     if (!q || !state.index.length) return [];
 
     const pageMap = new Map();
@@ -140,42 +147,56 @@
   function renderResults(results, query) {
     const resultsEl = document.getElementById('nav-search-results');
     if (!resultsEl) return;
+    resultsEl.replaceChildren();
 
     if (!query.trim()) {
-      resultsEl.innerHTML = '<div class="nav-search__empty">Start typing to search pages...</div>';
+      const empty = document.createElement('div');
+      empty.className = 'nav-search__empty';
+      empty.textContent = 'Start typing to search pages...';
+      resultsEl.append(empty);
       return;
     }
 
     if (!results.length) {
-      resultsEl.innerHTML = '<div class="nav-search__empty">No results found.</div>';
+      const empty = document.createElement('div');
+      empty.className = 'nav-search__empty';
+      empty.textContent = 'No results found.';
+      resultsEl.append(empty);
       return;
     }
 
-    const html = results.map(group => {
+    results.forEach(group => {
       const pageUrl = resolveUrl(group.pageUrl);
       const pageTitle = group.items[0].pageTitle || group.pageUrl;
+      const groupEl = document.createElement('div');
+      groupEl.className = 'nav-search__group';
 
-      const itemsHtml = group.items.map(item => {
-        const contentHtml = highlight(item.content, query);
-        const isImage = item.type === 'image' && item.src;
-        if (isImage) {
-          return `<a href="${escapeHtml(pageUrl)}" class="nav-search__result nav-search__result--image">
-            <img src="${escapeHtml(resolveUrl(item.src))}" alt="" loading="lazy">
-            <span class="nav-search__result-context">${contentHtml}</span>
-          </a>`;
+      const titleEl = document.createElement('div');
+      titleEl.className = 'nav-search__group-title';
+      titleEl.textContent = pageTitle;
+      groupEl.append(titleEl);
+
+      group.items.forEach(item => {
+        const resultLink = document.createElement('a');
+        resultLink.href = pageUrl;
+        resultLink.className = 'nav-search__result';
+        const contextEl = document.createElement('span');
+        contextEl.className = 'nav-search__result-context';
+        appendHighlightedText(contextEl, item.content, query);
+
+        if (item.type === 'image' && item.src) {
+          resultLink.classList.add('nav-search__result--image');
+          const image = document.createElement('img');
+          image.src = resolveUrl(item.src);
+          image.alt = '';
+          image.loading = 'lazy';
+          resultLink.append(image);
         }
-        return `<a href="${escapeHtml(pageUrl)}" class="nav-search__result">
-          <span class="nav-search__result-context">${contentHtml}</span>
-        </a>`;
-      }).join('');
-
-      return `<div class="nav-search__group">
-        <div class="nav-search__group-title">${escapeHtml(pageTitle)}</div>
-        ${itemsHtml}
-      </div>`;
-    }).join('');
-
-    resultsEl.innerHTML = html;
+        resultLink.append(contextEl);
+        groupEl.append(resultLink);
+      });
+      resultsEl.append(groupEl);
+    });
   }
 
   function openSearch(focusInput = true) {
@@ -214,8 +235,8 @@
   }
 
   /**
-   * 悬停展开 / 延迟收起。
-   * 仅在搜索按钮上悬停时展开，鼠标离开搜索区域后延迟 350ms 收起；
+   * 已打开搜索面板的悬停保持与延迟收起。
+   * 鼠标离开搜索区域后延迟 350ms 收起；
    * 如果输入框或其内部任意元素聚焦，则不自动收起。
    */
   function bindHoverKeepOpen(container, toggle, input) {
@@ -228,14 +249,6 @@
         leaveTimer = null;
       }
     }
-
-    // 仅按钮悬停触发自动展开，避免大区域误触；悬停展开时不自动聚焦输入框
-    toggle.addEventListener('mouseenter', () => {
-      clearLeaveTimer();
-      if (!state.isOpen) {
-        openSearch(false);
-      }
-    });
 
     // 在搜索区域内悬停时保持打开
     container.addEventListener('mouseenter', () => {
@@ -289,7 +302,7 @@
     }
 
     const runSearch = debounce(() => {
-      const query = input.value;
+      const query = input.value.slice(0, MAX_QUERY_LENGTH);
       loadIndex().then(() => {
         renderResults(performSearch(query), query);
       });

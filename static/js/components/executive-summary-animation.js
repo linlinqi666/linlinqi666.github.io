@@ -171,6 +171,17 @@
 
   function initScreenFloats() {
     const svgs = document.querySelectorAll('.yeast-screen__svg');
+    const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+
+    if (reducedMotion) {
+      svgs.forEach(function (svg) {
+        svg.style.animation = 'none';
+      });
+      return;
+    }
+
     svgs.forEach(function (svg, index) {
       const floatIndex = (index % 4) + 1;
       svg.style.animationName = 'floatYeast' + floatIndex;
@@ -217,6 +228,14 @@
     if (!el) return;
 
     const text = el.getAttribute('data-text') || '';
+    const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+    if (reducedMotion) {
+      el.textContent = text;
+      return;
+    }
+
     el.textContent = '';
 
     let i = 0;
@@ -234,6 +253,16 @@
   function initReveal() {
     const revealElements = document.querySelectorAll('.reveal');
     if (revealElements.length === 0) return;
+
+    const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      revealElements.forEach(function (el) {
+        el.classList.add('reveal--visible');
+      });
+      return;
+    }
 
     const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -263,7 +292,10 @@
       const target = document.querySelector(targetSelector);
       if (target) {
         event.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
+        const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+          ? window.iGEMUtils.prefersReducedMotion()
+          : false;
+        target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
       }
     });
   }
