@@ -173,8 +173,7 @@ Gemfile.lock
 # 对话归档必须始终忽略；此规则置于 README 例外之后以覆盖其内部说明文件
 /对话归档/
 
-# 根目录工程化脚本（构建/验证工具）git 忽略，物理保留供 npm 脚本调用
-/tools/
+# 根目录工程化脚本（构建/验证工具）需入库：package.json 的 build:all / test:smoke 直接调用，CI 需要这些文件才能构建，不能再忽略
 
 # 保留 Node 依赖声明，便于重新生成搜索索引
 !package.json
