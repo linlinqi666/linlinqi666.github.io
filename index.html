@@ -29,6 +29,8 @@
 
   <!-- 首页 GIF 开场动画：在 <body> 渲染前同步给 <html> 打标记，
        避免导航栏在 GIF 播放期间先闪现再隐藏。
+       触发条件：仅当访客从「站外 / 直接访问」进入首页时播放。
+       站内跳转（如页脚、导航点回首页）referrer 与本站同源，不重复播放；
        无 JS 或 prefers-reduced-motion 时不打标记，导航栏按原逻辑直接显示；
        6s 看门狗兜底：若组件脚本未启动（加载失败/被拦截），强制恢复导航与滚动。 -->
   <script>
@@ -36,6 +38,20 @@
       try {
         var root = document.documentElement;
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        // 仅从站外（或空 referrer 的直接访问）进入时才播放开场动画；
+        // 站内跳转（referrer 与本站同源）不重复触发，导航栏与滚动保持原样。
+        var isExternal = true;
+        var ref = document.referrer;
+        if (ref) {
+          try {
+            isExternal = new URL(ref).origin !== location.origin;
+          } catch (e) {
+            isExternal = true;
+          }
+        }
+        if (!isExternal) return;
+
         root.classList.add('intro-gif-armed');
         setTimeout(function () {
           if (!root.classList.contains('intro-gif-running')) {

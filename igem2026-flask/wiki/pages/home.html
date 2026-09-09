@@ -8,6 +8,21 @@
 {% block main_class %}long-page{% endblock %}
 
 {% block page_content %}
+<!-- 首页 GIF 开场动画（默认不显示、不下载；由 index-intro-gif.js 激活。
+     无 JS / prefers-reduced-motion / 脚本加载失败时自动跳过，导航栏照常显示。
+     图片走 iGEM Uploads CDN（规则：static/ 仅含 JS/CSS，不存图；上线前需上传至 CDN）。 -->
+<div class="intro-gif" id="intro-gif">
+  <div class="intro-gif__stage">
+    <img class="intro-gif__frame" alt="" data-gif-src="https://static.igem.wiki/2026/szpu-china/image/Animation/index/overlook.GIF"
+      data-duration="9300">
+    <img class="intro-gif__frame" alt="" data-gif-src="https://static.igem.wiki/2026/szpu-china/image/Animation/index/up.GIF"
+      data-duration="8500">
+  </div>
+  <p class="intro-gif__loading">Loading…</p>
+  <button type="button" class="intro-gif__skip" id="intro-gif-skip">跳过动画<span
+      aria-hidden="true">→</span></button>
+</div>
+
 <!-- 模块 1: Hero 标题页 -->
 <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
   <div class="yeast-screen__inner">

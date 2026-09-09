@@ -100,12 +100,16 @@
   white-space: nowrap;
 }
 
-.hp-section-subtitle {
+/* 选择器需带 .content-card p 前缀：navigation.css 的 `.content-card p`（特异性 0,1,1）
+   会覆盖裸 `.hp-section-subtitle`（0,1,0），把 text-align 改为 justify、text-indent 改为 2em，
+   单行 nowrap 文本在 justify 下视觉表现为左对齐，导致副标题不居中。 */
+.content-card p.hp-section-subtitle {
   font-size: var(--desc-font-size-md);
   color: var(--desc-color-primary-lightest);
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto;
+  text-align: center;
   text-indent: 0;
   white-space: nowrap;
 }
@@ -421,6 +425,9 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 240px);
+  /* 超出 2 行的图片落入隐式行，默认 auto 高度会让第 5、6 张塌陷为图片原始高度；
+     统一隐式行高，保证 6 图（3 行）与 4 图（2 行）的每格尺寸一致。 */
+  grid-auto-rows: 240px;
   gap: var(--desc-spacing-md);
   margin: var(--desc-spacing-lg) 0 var(--desc-spacing-xs);
   border-radius: var(--desc-radius-lg);
@@ -1142,6 +1149,7 @@
   .hp-photo-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 200px);
+    grid-auto-rows: 200px;
   }
 
   .hp-photo-feature {
@@ -1167,7 +1175,7 @@
     font-size: 1.25rem;
   }
 
-  .hp-section-subtitle {
+  .content-card p.hp-section-subtitle {
     font-size: var(--desc-font-size-sm);
   }
 
@@ -1208,6 +1216,7 @@
   .hp-photo-grid {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 200px);
+    grid-auto-rows: 200px;
   }
 
   .hp-photo-feature {

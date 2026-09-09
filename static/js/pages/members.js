@@ -50,7 +50,17 @@
         directions: ['Idealist'],
         bio: 'From the School of Food and Drug Administration, Class of 2025 Pharmaceutical Engineering. INTP, I enjoy playing badminton, listening to music and playing the guitar. I’m a bit quiet and socially reserved. As a member of the wet lab team, I assist with experiments and support the team’s research.',
         photoPosition: 'center 10%',
-        photoSize: '60% auto'
+        photoSize: '60% auto',
+        // gyf 的 _kt.jpg 缺失，原解析链路（_kt.jpg → 404 → fallback _kt.png）不稳定，
+        // 直接以存在的 webp/png 作为条带头像（strip-avatar）源。
+        images: {
+          avatar: {
+            candidates: [
+              '../static/image/character/webp/gyf_kt.webp',
+              '../static/image/character/源图片/gyf_kt.png'
+            ]
+          }
+        }
       },
       {
         id: 'lcx',
@@ -202,16 +212,16 @@
 
     const IMAGE_PATH_TEMPLATES = {
       photo: {
-        template: '../static/image/character/${id}.jpg',
-        ext: 'jpg',
-        candidates: ['../static/image/character/${id}.jpg', '../static/image/character/${id}.webp'],
-        wildcardExtensions: ['jpg', 'webp', 'png']
+        template: '../static/image/character/webp/${id}.webp',
+        ext: 'webp',
+        candidates: ['../static/image/character/webp/${id}.webp', '../static/image/character/源图片/${id}.jpg'],
+        wildcardExtensions: ['webp', 'jpg', 'png']
       },
       avatar: {
-        template: '../static/image/character/${id}_kt.jpg',
-        ext: 'jpg',
-        candidates: ['../static/image/character/${id}_kt.jpg', '../static/image/character/${id}_kt.png'],
-        wildcardExtensions: ['jpg', 'webp', 'png']
+        template: '../static/image/character/webp/${id}_kt.webp',
+        ext: 'webp',
+        candidates: ['../static/image/character/webp/${id}_kt.webp', '../static/image/character/源图片/${id}_kt.jpg', '../static/image/character/源图片/${id}_kt.png'],
+        wildcardExtensions: ['webp', 'jpg', 'png']
       }
     };
 

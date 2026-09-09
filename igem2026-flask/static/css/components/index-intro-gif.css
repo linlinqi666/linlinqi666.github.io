@@ -1,0 +1,143 @@
+/* 首页 GIF 开场动画（#intro-gif）
+   状态机由 <html> 上的类驱动：
+   无类 = 不播放（无 JS / 降级）；intro-gif-armed = 播放期隐藏导航并锁滚动；
+   intro-gif-running = 显示 GIF 层；intro-gif-finished = 解锁并淡入导航。
+   脚本见 static/js/components/index-intro-gif.js */
+.intro-gif {
+  display: none;
+}
+
+.intro-gif[hidden] {
+  display: none !important;
+}
+
+html.intro-gif-running .intro-gif {
+  position: fixed;
+  inset: 0;
+  /* 高于 #page-progress-bar(100001)、nav(9999)、移动端汉堡菜单(100000) */
+  z-index: 100002;
+  display: block;
+  overflow: hidden;
+  background: var(--bg-sidebar);
+}
+
+html.intro-gif-running .intro-gif.intro-gif--hiding {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-slow) var(--ease-smooth);
+}
+
+.intro-gif__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.intro-gif__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-smooth);
+}
+
+.intro-gif__frame.is-active {
+  opacity: 1;
+}
+
+/* 首帧下载提示：GIF 体积较大，弱网下避免长时间空白 */
+.intro-gif__loading {
+  position: absolute;
+  inset: auto 0 50%;
+  margin: 0;
+  text-align: center;
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+  letter-spacing: 0.08em;
+  animation: introGifPulse 1.4s var(--ease-smooth) infinite;
+}
+
+.intro-gif.is-playing .intro-gif__loading {
+  display: none;
+}
+
+@keyframes introGifPulse {
+
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 跳过按钮：无边框、无背景，直接压在 GIF 上，仅保留暖棕文字 */
+.intro-gif__skip {
+  position: absolute;
+  right: max(var(--spacing-xl), env(safe-area-inset-right, 0px) + var(--spacing-xl));
+  bottom: max(var(--spacing-3xl), env(safe-area-inset-bottom, 0px) + var(--spacing-3xl));
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--color-primary-dark);
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.intro-gif__skip:hover {
+  transform: translateY(-2px);
+}
+
+.intro-gif__skip:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 播放期间锁定页面滚动 */
+html.intro-gif-armed:not(.intro-gif-finished),
+html.intro-gif-armed:not(.intro-gif-finished) body {
+  overflow: hidden;
+}
+
+/* 播放期间隐藏导航栏、汉堡菜单、进度条与移动端菜单 */
+html.intro-gif-armed:not(.intro-gif-finished) nav,
+html.intro-gif-armed:not(.intro-gif-finished) .hamburger-menu,
+html.intro-gif-armed:not(.intro-gif-finished) #page-progress-bar,
+html.intro-gif-armed:not(.intro-gif-finished) .scroll-progress-bar,
+html.intro-gif-armed:not(.intro-gif-finished) .mobile-menu-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 播放结束后导航栏淡入。
+   刻意不设 animation-fill-mode：动画结束即回落到基础态，
+   避免长期覆盖 nav-scroll-behavior.js 的 .nav-hidden 位移。 */
+html.intro-gif-finished nav {
+  animation: introGifNavIn var(--duration-slow) var(--ease-smooth);
+}
+
+@keyframes introGifNavIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

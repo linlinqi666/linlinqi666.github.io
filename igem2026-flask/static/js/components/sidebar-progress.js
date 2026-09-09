@@ -35,7 +35,10 @@
       'pager-', 'gpcr-', 'g-protein-', 'dual-', 'sensing-',
       'display-', 'virus-', 'overview', 'sensing-system',
       'signal-transduction', 'reporter-system', 'reporter',
-      'surface-display', 'proof-of-concept'
+      'surface-display', 'proof-of-concept',
+      // Experiments 页四模块结构（Protocol 与公共区块）
+      'p1-', 'p2-', 'p3-', 'p4-',
+      'reagents-', 'safety-', 'progress-', 'troubleshooting'
     ]
   };
 

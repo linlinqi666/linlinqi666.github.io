@@ -35,7 +35,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/components/page-progress-bar.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/components/scroll-progress-bar.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+  <!-- 首页 GIF 开场动画样式（与根站 components/index-intro-gif.css 同款） -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/index-intro-gif.css') }}">
   {% block styles %}{% endblock %}
+
+  <!-- 首页 GIF 开场 arm：与根站 head-extra/index.njk 同款，vendored 本地、由 layout.html 一次性加载。
+       仅首页(/)且站外进入/直接访问、非 reduced-motion 时给 <html> 打 intro-gif-armed，避免导航栏在
+       GIF 播放前闪现；6s 看门狗兜底强制恢复。无 defer 以确保 <body> 渲染前执行（不引第三方 CDN，符合规则）。 -->
+  <script src="{{ url_for('static', filename='js/components/intro-gif-arm.js') }}"></script>
 
   <!-- JavaScript 禁用回退 -->
   <noscript>
@@ -53,6 +60,8 @@
   <script src="{{ url_for('static', filename='js/core/nav-scroll-behavior.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/executive-summary-animation.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/core/search.js') }}" defer></script>
+  <!-- 首页 GIF 开场动画控制器（与根站 components/index-intro-gif.js 同款，defer 加载） -->
+  <script src="{{ url_for('static', filename='js/components/index-intro-gif.js') }}" defer></script>
   {% block scripts %}{% endblock %}
 </head>
 

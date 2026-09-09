@@ -87,7 +87,15 @@ for the full rationale. The two workspaces are kept in sync on these points:
   `.hz-cluster` pin (fewer DOM pins than one-pin-per-expert), with a hover popover listing
   that province's experts; the detail still opens in the existing `#hzModal`. Data source
   remains `static/data/hp-map-data.js` (`window.HPMapExperts`), now carrying `slug` /
-  `provinceId` / `provinceName` fields.
+  `provinceId` / `provinceName` fields. The 7 interviewed experts (full `why`/`what`/`how`
+  notes) live in that file; expert photos reference the iGEM Uploads CDN.
+
+- **Homepage GIF intro** — `components/index-intro-gif.js` + `css/components/index-intro-gif.css`,
+  with a tiny vendored `intro-gif-arm.js` (non-defer, from `layout.html`) arming `<html>` before
+  first paint so the nav is hidden during playback without a flash. Triggers only on external /
+  direct homepage visits (not in-site navigation) and respects `prefers-reduced-motion`; a 6s
+  watchdog force-recovers the nav. GIF sources point at the iGEM Uploads CDN, and the controller
+  skips gracefully on a missing frame, so the nav never stays locked.
 
 Note: the search index generator is pure Python (stdlib `html.parser`), so it runs in the
 Python-only GitLab CI image — `.gitlab-ci.yml` invokes `python tools/search_index_generator.py`
