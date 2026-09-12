@@ -38,7 +38,9 @@
       'surface-display', 'proof-of-concept',
       // Experiments 页四模块结构（Protocol 与公共区块）
       'p1-', 'p2-', 'p3-', 'p4-',
-      'reagents-', 'safety-', 'progress-', 'troubleshooting'
+      'reagents-', 'safety-', 'progress-', 'troubleshooting',
+      // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）
+      'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution'
     ]
   };
 

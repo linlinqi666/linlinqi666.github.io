@@ -1,0 +1,74 @@
+/**
+ * Contribution 页面专属样式（仅本页加载）
+ *
+ * 两项目的：
+ * 1. 补齐内容区链接样式。navigation.css 只定义了导航、侧栏与页脚链接，
+ *    .content-card 内的 <a> 此前退回浏览器默认蓝下划线，与米黄/棕主题不符。
+ * 2. 约束长序列与长词，避免撑破表格与卡片，并保证窄屏下的可读性。
+ *
+ * 仅调整视觉与布局，不改动页面结构与功能。
+ */
+
+/* ===== 内容区链接 ===== */
+.content-card a {
+  color: var(--color-blue-link, #4285F4);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  transition: color var(--desc-duration-fast, 0.2s) ease,
+              border-color var(--desc-duration-fast, 0.2s) ease;
+}
+
+.content-card a:hover {
+  color: var(--color-blue-link-dark, #1A73E8);
+}
+
+.content-card a:focus-visible {
+  outline: 2px solid var(--color-blue-link-dark, #1A73E8);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ===== 长文本与长序列：不溢出容器 ===== */
+.content-card {
+  overflow-wrap: anywhere;
+}
+
+.content-card p,
+.content-card li,
+.content-card td,
+.content-card th,
+.content-card code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* DNA / 蛋白序列为连续无空格长串，按任意位置断行 */
+.content-card code {
+  white-space: normal;
+  word-break: break-all;
+}
+
+/* ===== 表格：限制在卡片宽度内 ===== */
+.content-card table {
+  max-width: 100%;
+}
+
+.content-card table th,
+.content-card table td {
+  vertical-align: top;
+}
+
+/* ===== 窄屏：收紧表格内边距与字号，长序列继续换行 ===== */
+@media (max-width: 768px) {
+  .content-card table th,
+  .content-card table td {
+    padding: 6px;
+    font-size: var(--desc-font-size-sm, 0.8rem);
+    line-height: 1.6;
+  }
+
+  .content-card table code {
+    font-size: var(--desc-font-size-sm, 0.8rem);
+  }
+}
