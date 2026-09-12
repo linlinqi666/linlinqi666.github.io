@@ -103,7 +103,9 @@ function buildIndex() {
       '#footer',
       'footer',
       '.mobile-menu-overlay',
-      '.mobile-menu'
+      '.mobile-menu',
+      // 双语页面：英文段落是中文的译文，只索引中文，避免重复命中并控制索引体积
+      '.i18n-en'
     ];
 
     excludeSelectors.forEach(selector => {
