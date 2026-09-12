@@ -9,7 +9,7 @@ const missing = [];
 
 function visit(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.codebuddy' || entry.name === 'igem2026-flask') continue;
+    if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.codebuddy' || entry.name === 'igem2026-flask' || entry.name === '对话归档') continue;
     const entryPath = path.join(directory, entry.name);
     if (entry.isDirectory()) {
       visit(entryPath);

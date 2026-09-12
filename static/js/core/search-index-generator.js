@@ -33,7 +33,10 @@ const PAGES = [
 ];
 
 const TEXT_CHUNK_SIZE = 320;
-const TEXT_CHUNK_OVERLAP = 80;
+// 重叠仅用于覆盖跨分块边界的查询词；40 字符足以覆盖常规查询，
+// 相比 80 可减少约 14% 的重复文本，控制 search-index.json 体积。
+// 注意：search.js 直接渲染整条 content 作为结果片段，因此不要增大 TEXT_CHUNK_SIZE。
+const TEXT_CHUNK_OVERLAP = 40;
 
 /**
  * 从站点根相对路径解析为当前页面可访问的相对路径。
