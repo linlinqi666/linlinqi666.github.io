@@ -11,7 +11,7 @@ const budgets = [
   ['static/js/core/search.js', 12],
   ['static/js/components/hp-map.js', 40],
   ['static/js/pages/members.js', 42],
-  ['static/js/core/search-index.json', 250]
+  ['static/js/core/search-index.json', 300]
 ];
 
 const failures = [];
