@@ -10,7 +10,15 @@ const budgets = [
   ['static/css/integrated human-practices.css', 48],
   ['static/js/core/search.js', 12],
   ['static/js/components/hp-map.js', 40],
-  ['static/js/pages/members.js', 42],
+  // members.js 同时承载全队成员数据（16 人 × 7 字段，含 photoPosition/photoSize 取景微调）
+  // 与渲染/交互逻辑，体积随名册与功能增长：
+  //   42 KB（13 人时代）→ 46 KB（16 人 + 数据格式统一）→ 48 KB（2026-09-16 响应式重构：
+  //   堆叠断点切换、条带展开实测高度、移动端默认选中与详情带入）。
+  // 若希望维持更低上限，应把成员数据拆为独立数据文件（需同步改两工程页面加载与预算条目）。
+  ['static/js/pages/members.js', 48],
+  ['static/css/members.css', 26],
+  ['static/js/components/members-intro.js', 6],
+  ['static/css/components/members-intro.css', 7],
   ['static/js/core/search-index.json', 300]
 ];
 

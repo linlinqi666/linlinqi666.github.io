@@ -152,17 +152,30 @@
     }, FADE_DURATION);
   }
 
-  function init() {
-    if (prefersReducedMotion()) return;
+  /**
+   * 与全站加载遮罩（page-loader.js）交接：先播页面加载动画，收尾后再播 GIF 开场。
+   * 遮罩未启用时立即开始；另设硬兜底（HANDOFF_MAX），
+   * 即使 pageloader:done 事件丢失（脚本缺失/异常）也不会永久卡住。
+   */
+  function whenLoaderReady(cb) {
+    var started = false;
+    var HANDOFF_MAX = 10000;
+    function go() {
+      if (started) return;
+      started = true;
+      cb();
+    }
 
-    overlay = document.getElementById('intro-gif');
-    if (!overlay) return;
+    if (root.classList.contains('page-loader-armed')) {
+      document.addEventListener('pageloader:done', go);
+      setTimeout(go, HANDOFF_MAX);
+      return;
+    }
+    go();
+  }
 
-    // head 内同步脚本未 armed，或看门狗已判定降级：不播放
-    if (!root.classList.contains(ARMED) || root.classList.contains(FINISHED)) return;
-
-    collectFrames();
-    if (!frames.length) return;
+  function start() {
+    if (finished) return;
 
     root.classList.add(RUNNING);
 
@@ -182,6 +195,21 @@
     masterFinishTimer = setTimeout(finish, total);
 
     play(0);
+  }
+
+  function init() {
+    if (prefersReducedMotion()) return;
+
+    overlay = document.getElementById('intro-gif');
+    if (!overlay) return;
+
+    // head 内同步脚本未 armed，或看门狗已判定降级：不播放
+    if (!root.classList.contains(ARMED) || root.classList.contains(FINISHED)) return;
+
+    collectFrames();
+    if (!frames.length) return;
+
+    whenLoaderReady(start);
   }
 
   if (document.readyState === 'loading') {

@@ -15,11 +15,29 @@
 <link rel="stylesheet" href="../static/css/parts.css">
 
 <link rel="stylesheet" href="../static/css/mobile.css">
+<link rel="stylesheet" href="../static/css/components/page-loader.css">
+<!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
+     置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
+<script src="../static/js/components/page-loader-arm.js"></script>
 >
 
 
 </head>
 <body class="">
+      <!-- 全站页级加载遮罩：默认 display:none，仅当 head 内同步脚本
+         page-loader-arm.js 给 <html> 打上 .page-loader-armed 后显示；
+         由 static/js/components/page-loader.js 在首屏关键插画就绪后收尾。 -->
+    <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+      <div class="page-loader__inner">
+        <div class="page-loader__stage">
+          <span class="page-loader__halo" aria-hidden="true"></span>
+          <div class="page-loader__frames" aria-hidden="true"></div>
+          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <p class="page-loader__text" aria-hidden="true">Loading</p>
+      </div>
+    </div>
+
   <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
 <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
   <span></span>
@@ -40,7 +58,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -66,6 +83,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -73,7 +91,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -95,7 +113,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -121,6 +138,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -128,7 +146,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -169,9 +187,288 @@
 
   <main class="">
     
-<section id="wet-lab-parts">
-      <h2>Parts</h2>
-      <p>这里展示了项目中使用的生物元件信息。</p>
+<section id="wet-lab-parts" class="parts-page">
+      <header class="parts-hero">
+        <h1>Parts</h1>
+        <p class="parts-hero__sub"><span class="i18n-en">This page lists every biological part used in PAGER-Yeast, grouped into three functional modules: signal recognition, signal transduction optimisation, and signal reporter. Each part carries its identifier, name and description, with long sequences available to expand.</span><span class="i18n-zh">本页列出 PAGER-Yeast 项目中使用的全部生物元件，按信号识别、信号转导优化、信号报告三个功能模块归置。每个元件给出编号、名称与描述，长序列可展开查看。</span></p>
+        <div class="parts-hero__rule" aria-hidden="true"></div>
+      </header>
+
+      <div class="content-card parts-summary">
+        <p class="parts-count"><span class="i18n-en">18 parts across 3 functional modules</span><span class="i18n-zh">18 个元件，分布于 3 个功能模块</span></p>
+        <p class="parts-note"><span class="i18n-en">Part identifiers are filled in once registration is complete; each identifier on the left then links to its Registry page.</span><span class="i18n-zh">元件编号将在完成登记后填入，届时每一条目左侧的编号即指向 Registry 页面。</span></p>
+      </div>
+
+      
+      <section class="content-card parts-group" id="signal-recognition">
+        <h2><span class="i18n-en">Signal Recognition Module</span><span class="i18n-zh">信号识别模块</span></h2>
+        <p class="parts-desc"><span class="i18n-en">Recognises the influenza A HA antigen; built from a signal peptide, an inhibitory domain, a nanobody, a cleavage site and a receptor joined in sequence.</span><span class="i18n-zh">负责识别甲型流感病毒 HA 抗原，由信号肽、抑制域、纳米抗体、酶切位点与受体依次串成。</span></p>
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-id"><span class="i18n-en">Part ID</span><span class="i18n-zh">元件 ID</span></th>
+              <th scope="col" class="col-name"><span class="i18n-en">Part name</span><span class="i18n-zh">元件名称</span></th>
+              <th scope="col"><span class="i18n-en">Description</span><span class="i18n-zh">元件描述</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">α-factor signal peptide (SP)</span><span class="i18n-zh">α-factor 信号肽（SP）</span></td>
+              <td class="col-fn"><span class="i18n-en">Signal peptide. Guides the fusion protein into the secretory pathway and anchors it on the yeast plasma membrane.</span><span class="i18n-zh">信号肽。引导融合蛋白进入分泌途径并锚定在酵母细胞膜上。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGAGATTTCCTTCTATTTTTACTGCTGTTTTGTTTGCTGCTTCTTCTGCTTTAGCA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">MT1 (muscarinic toxin 1), C-terminally truncated fragment</span><span class="i18n-zh">MT1（毒蕈碱毒素 1）C 端截短片段</span></td>
+              <td class="col-fn"><span class="i18n-en">Inhibitory domain. Self-inhibition switch that binds and blocks hM1Dq when no antigen is present.</span><span class="i18n-zh">抑制域。自抑制开关，无抗原时结合并抑制 hM1Dq。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">TTGACTTGTGTTACTTCTAAATCAATTTTTGGTATTACTACTGAAAATTGTCCTGATGGTCAAAATTTGTGTTTTAAAAAATGGTATTATATAGTTCCTAGATATTCTGATATAACATGGGGTTGTGCAGCTACTTGTCCTAAACCAACTAATGTTAGAGAAACTATTAGATGTTGTGAAACAGAT</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">H1N1 HA nanobody R1a-B6 (stem-binding)</span><span class="i18n-zh">H1N1 HA 纳米抗体 R1a-B6（结合茎部）</span></td>
+              <td class="col-fn"><span class="i18n-en">Nanobody. Binds the influenza A HA stem specifically; the core recognition unit of the whole cascade.</span><span class="i18n-zh">纳米抗体。特异性结合甲型流感病毒 HA 茎部，是整条链路的核心识别单元。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">CAAGTTCAATTAGTTGAATCTGGTGGTGGTTTAGTTCAACCAGGTGGTTCTTTAAGATTATCATGTGCTGCTTCAGGTTCATTTTTCTCTAGATATAGGATGGGTTGGTACAGACAAGCTCCTGGTGAACAAAGAGAATTAGTTGCTTCAATTGCTTATGATGGTTCTACATCATACGCTGATCCTGTTAAAGGTAGATTCACTATTTCTAGAGATAATGCAAATACAGTTCATTTGCAAATGTATTCTTTAAAACCAGATGATACAGCTGTTTATTACTGTAACTTGGACCCACCTGGTATTTTGTATTGGGGTCAAGGTACTCAAGTGACAGTTAGTAGT</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">TEV protease cleavage site (TEVcs)</span><span class="i18n-zh">TEV 蛋白酶切位点（TEVcs）</span></td>
+              <td class="col-fn"><span class="i18n-en">Protease cleavage site. Molecular switch for in-vitro verification, used to mimic antigen unlocking.</span><span class="i18n-zh">蛋白酶切位点。体外功能验证用的分子开关，可模拟抗原解锁。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GAAAATTTGTACTTTCAATCA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">hM1Dq (human M1 DREADD receptor)</span><span class="i18n-zh">hM1Dq（人源 M1 DREADD 受体）</span></td>
+              <td class="col-fn"><span class="i18n-en">Receptor. Receives the upstream signal and couples to the downstream G-protein pathway; activated by DCZ.</span><span class="i18n-zh">受体。接收上游信号并偶联下游 G 蛋白通路，可被 DCZ 激活。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGAATACTAGTGCTCCTCCTGCAGTATCTCCTAATATAACAGTTTTAGCACCAGGCAAGGGTCCATGGCAAGTTGCTTTTATTGGTATTACTACTGGTTTACTTAGCTTAGCTACTGTTACAGGTAATTTGTTAGTTTTAATTAGTTTTAAAGTTAACACTGAACTTAAAACTGTTAATAATTACTTTTTACTAAGTTTAGCTTGTGCTGATTTGATAATTGGTACTTTTTCTATGAACTTATACACAACTTACTTATTAATGGGTCATTGGGCTTTAGGTACTTTAGCTTGTGATCTTTGGTTAGCTTTAGATTGTGTTGCTTCTAATGCATCTGTTATGAATTTGCTATTAATTTCCTTTGATAGATATTTTTCCGTAACTAGGCCTTTAAGTTATAGAGCTAAAAGAACTCCTAGGAGAGCTGCTTTAATGATTGGTTTAGCATGGTTAGTTTCTTTTGTCTTGTGGGCTCCAGCAATTTTATTTTGGCAATATCTGGTTGGTGAAAGAACTGTTTTAGCTGGTCAATGTTATATTCAATTTTTATCACAACCAATAATTACATTTGGAACAGCTATGGCTGGTTTTTATCTTCCTGTTACTGTTATGTGTACTTTATATTGGAGAATATATAGAGAAACAGAAAATAGAGCTAGAGAATTAGCTGCTTTACAAGGTAGTGAAACTCCAGGTAAAGGTGGTGGTAGTTCTTCATCTTCTGAAAGATCTCAACCAGGTGCTGAAGGTTCTCCTGAAACACCACCAGGTAGATGTTGTAGATGTTGTAGAGCTCCAAGATTATTGCAAGCTTACTCATGGAAAGAAGAAGAAGAGGAAGATGAAGGTTCTATGGAATCATTAACATCATCTGAAGGTGAAGAACCAGGTTCTGAAGTTGTTATTAAGATGCCAATGGTTGATCCTGAAGCTCAAGCTCCAACTAAACAACCACCTAGGTCCTCTCCAAACACTGTTAAAAGACCAACTAAAAAAGGTAGAGATAGAGCTGGTAAAGGTCAAAAACCTAGGGGTAAAGAACAATTAGCTAAAAGAAAAACTTTTTCATTAGTTAAAGAAAAGAAAGCTGCTAGAACTTTGAGTGCTATTTTATTAGCTTTTATTCTAACTTGGACACCATATAATATAATGGTTTTAGTTTCTACATTTTGTAAAGATTGTGTTCCTGAAACTCTTTGGGAATTAGGTTACTGGTTATGTTATGTTAATAGTACTATTAATCCAATGTGTTATGCATTGTGTAATAAGGCTTTTAGAGATACTTTTAGATTATTGTTATTATGTAGATGGGATAAAAGAAGATGGAGAAAAATTCCAAAAAGACCTGGTTCTGTTCATAGAACTCCTAGTAGACAATGT</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">HA protein (influenza A hemagglutinin)</span><span class="i18n-zh">HA 蛋白（甲型流感病毒血凝素）</span></td>
+              <td class="col-fn"><span class="i18n-en">Antigen. The detection target of this project, used for antigen stimulation in functional assays.</span><span class="i18n-zh">抗原。本项目的检测目标，用于功能测试中的抗原刺激。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGAAGGCCATCCTGGTGGTGATGCTGTACACCTTCACCACCGCCAACGCCGACACCCTGTGCATCGGCTACCACGCCAACAACAGCACCGACACCGTGGACACCGTGCTGGAGAAGAACGTGACCGTGACCCACAGCGTGAACCTGCTGGAGGACAAGCACAACGGCAAGCTGTGCAAGCTGCGCGGCGTGGCCCCCCTGCACCTGGGCCAGTGCAACATCGCCGGCTGGATCCTGGGCAACCCCGAGTGCGAGAGCCTGAGCACCGCCCGCAGCTGGAGCTACATCGTGGAGACCAGCAACAGCGACAACGGCACCTGCTACCCCGGCGACTTCATCAACTACGAGGAGCTGCGCGAGCAGCTGAGCAGCGTGAGCAGCTTCGAGCGCTTCGAGATCTTCCCCAAGACCAGCAGCTGGCCCAACCACGACAGCGACAACGGCGTGACCGCCGCCTGCAGCCACGCCGGCGCCCGCAGCTTCTACAAGAACCTGATCTGGCTGGTGAAGAAGGGCAAGAGCTACCCCAAGATCAACCAGACCTACATCAACGACAAGGGCAAGGAGGTGCTGGTGCTGTGGGGCATCCACCACCCCCCCACCATCACCGACCAGGAGAGCCTGTACCAGAACGCCGACGCCTACGTGTTCGTGGGCACCAGCCGCTACAGCAAGAAGTTCAAGCCCGAGATCGCCGCCCGCCCCAAGGTGCGCGACCAGGCCGGCCGCATGAACTACTACTGGACCCTGGTGGAGCCCGGCGACAAGATCACCTTCGAGGCCACCGGCAACCTGGTGGCCCCCCGCTACGCCTTCACCATGGAGAAGGAGGCCGGCAGCGGCATCATCATCAGCGACACCCCCGTGCACGACTGCAACGCCACCTGCCAGACCCCCGAGGGCGCCATCAACACCAGCCTGCCCTTCCAGAACGTGCACCCCATCACCATCGGCAAGTGCCCCAAGTACGTGCGCAGCACCAAGCTGCGCCTGGCCACCGGCCTGCGCAACGTGCCCAGCATCCAGAGCCGCGGCCTGTTCGGCGCCATCGCCGGCTTCATCGAGGGCGGCTGGACCGGCATGGTGGACGGCTGGTACGGCTACCACCACCAGAACGACCAGGGCAGCGGCTACGCCGCCGACCTGAAGAGCACCCAGAACGCCATCGACAAGATCACCAACAAGGTGAACAGCGTGATCGAGAAGATGAACACCCAGTTCACCGCCGTGGGCAAGGAGTTCAACCACCTGGAGAAGCGCATCGAGAACCTGAACAAGAAGGTGGACGACGGCTTCCTGGACGTGTGGACCTACAACGCCGAGCTGCTGGTGCTGCTGGAGAACGAGCGCACCCTGGACTACCACGACAGCAACGTGAAGAACCTGTACGAGAAGGTGCGCCACCAGCTGAAGAACAACGCCAAGGAGATCGGCAACGGCTGCTTCGAGTTCTACCACAAGTGCGACAACACCTGCATGGAGAGCGTGAAGAACGGCACCTACGACTACCCCAAGTACAGCGAGGAGGCCAAGCTGAACCGCGAGAAGATCGACGGCGTGAAGCTGGACAGCACCCGCATCTACCAGATCCTGGCCATCTACAGCACCGTGGCCAGCAGCCTGGTGCTGGTGGTGAGCCTGGGCGCCATCAGCTTCTGGATGTGCAGCAACGGCAGCCTGCAGTGCCGCATCTGCATC</code></details>
+              </td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </section>
+      
+      <section class="content-card parts-group" id="signal-transduction">
+        <h2><span class="i18n-en">Signal Transduction Optimization Module</span><span class="i18n-zh">信号转导优化模块</span></h2>
+        <p class="parts-desc"><span class="i18n-en">Cuts background, releases growth and amplifies the signal; holds the three-gene knockout elements and the Gpa1 humanisation fragment.</span><span class="i18n-zh">负责降低背景、释放生长、放大信号，包含三基因敲除元件与 Gpa1 人源化改造片段。</span></p>
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-id"><span class="i18n-en">Part ID</span><span class="i18n-zh">元件 ID</span></th>
+              <th scope="col" class="col-name"><span class="i18n-en">Part name</span><span class="i18n-zh">元件名称</span></th>
+              <th scope="col"><span class="i18n-en">Description</span><span class="i18n-zh">元件描述</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">URA3 (with promoter and terminator)</span><span class="i18n-zh">URA3（含启动子与终止子）</span></td>
+              <td class="col-fn"><span class="i18n-en">Selection marker. Uracil selection marker for picking positive integrants on SD-Ura plates.</span><span class="i18n-zh">筛选标记。尿嘧啶营养筛选标记，在 SD-Ura 平板上筛选阳性整合克隆。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">TTCAATTCAATTCATCATTTTTTTTTTATTCTTTTTTTTGATTTCGGTTTCTTTGAAATTTTTTTGATTCGGTAATCTCCGAACAGAAGGAAGAACGAAGGAAGGAGCACAGACTTAGATTGGTATATATACGCATATGTAGTGTTGAAGAAACATGAAATTGCCCAGTATTCTTAACCCAACTGCACAGAACAAAAACCTGCAGGAAACGAAGATAAATCATGTCGAAAGCTACATATAAGGAACGTGCTGCTACTCATCCTAGTCCTGTTGCTGCCAAGCTATTTAATATCATGCACGAAAAGCAAACAAACTTGTGTGCTTCATTGGATGTTCGTACCACCAAGGAATTACTGGAGTTAGTTGAAGCATTAGGTCCCAAAATTTGTTTACTAAAAACACATGTGGATATCTTGACTGATTTTTCCATGGAGGGCACAGTTAAGCCGCTAAAGGCATTATCCGCCAAGTACAATTTTTTACTCTTCGAAGACAGAAAATTTGCTGACATTGGTAATACAGTCAAATTGCAGTACTCTGCGGGTGTATACAGAATAGCAGAATGGGCAGACATTACGAATGCACACGGTGTGGTGGGCCCAGGTATTGTTAGCGGTTTGAAGCAGGCGGCAGAAGAAGTAACAAAGGAACCTAGAGGCCTTTTGATGTTAGCAGAATTGTCATGCAAGGGCTCCCTATCTACTGGAGAATATACTAAGGGTACTGTTGACATTGCGAAGAGCGACAAAGATTTTGTTATCGGCTTTATTGCTCAAAGAGACATGGGTGGAAGAGATGAAGGTTACGATTGGTTGATTATGACACCCGGTGTGGGTTTAGATGACAAGGGAGACGCATTGGGTCAACAGTATAGAACCGTGGATGATGTGGTCTCTACAGGATCTGACATTATTATTGTTGGAAGAGGACTATTTGCAAAGGGAAGGGATGCTAAGGTAGAGGGTGAACGTTACAGAAAAGCAGGCTGGGAAGCATATTTGAGAAGATGCGGCCAGCAAAACTAAAAAACTGTATTATAAGTAAATGCATGTATACTAAACTCACAAATTAGAGCTTCAATTTAATTATATCAGTTATTACCCTATGCGGTGTGAAATACCGCACAGATGCGTAAGGAGAAAATACCGCATCAGGAAATTGTAAACGTTAATATTTTGTTAAAATTCGCGTTAAATTTTTGTTAAATCAGCTCATTTTTTAACCAATAGGCCGAAATCGG</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">500 bp upstream homology arm at the GPA1 edit site</span><span class="i18n-zh">GPA1 改造位点前 500 bp 上游同源臂</span></td>
+              <td class="col-fn"><span class="i18n-en">Homology arm. Upstream arm of the integration fragment, used for site-directed replacement of the Gpa1 C-terminus.</span><span class="i18n-zh">同源臂。同源重组整合片段的上游臂，用于定点替换 Gpa1 C 端。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ACAGGCATTACAGAAACCGAATTTAACATCGGCTCGTCCAAATTCAAGGTTCTCGACGCTGGTGGGCAGCGTTCTGAACGTAAGAAGTGGATTCATTGTTTCGAAGGAATTACAGCAGTTTTATTTGTTTTAGCAATGAGTGAATACGACCAGATGTTGTTTGAGGATGAAAGAGTGAACAGAATGCATGAATCAATAATGCTATTTGACACGTTATTGAACTCTAAGTGGTTCAAAGATACACCGTTTATTTTGTTTTTAAATAAAATTGATTTGTTCGAGGAAAAGGTAAAAAGCATGCCCATAAGAAAGTACTTTCCTGATTACCAGGGACGTGTCGGCGATGCAGAAGCGGGTCTAAAATATTTTGAGAAGATATTTTTGAGCTTGAATAAGACAAACAAACCAATCTACGTGAAACGAACCTGCGCTACCGATACCCAAACTATGAAGTTCGTATTGAGTGCAGTCACCGATCTAATCATCCAGCAAAACCTTAA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">Humanised replacement sequence (EYNLV + stop codon)</span><span class="i18n-zh">人源化替换序列（EYNLV + 终止密码子）</span></td>
+              <td class="col-fn"><span class="i18n-en">Edit site. Replaces the Gpa1 C-terminal KIGII with EYNLV so hM1Dq can couple to the yeast MAPK pathway.</span><span class="i18n-zh">改造位点。把 Gpa1 C 端 KIGII 换成 EYNLV，使 hM1Dq 能与酵母 MAPK 通路偶联。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GAATATAATTTGGTTTGA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">500 bp downstream homology arm at the GPA1 edit site</span><span class="i18n-zh">GPA1 改造位点后 500 bp 下游同源臂</span></td>
+              <td class="col-fn"><span class="i18n-en">Homology arm. Downstream arm of the integration fragment; together with the upstream arm it defines the replaced region.</span><span class="i18n-zh">同源臂。同源重组整合片段的下游臂，与上游臂共同界定替换区间。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">AGGAACTGTATAATTAAAGTAGTGTTTAGATACGTAAATTCTGTTTCCGAAGATGCAAGAAGGAGCAGCAGCACCAGAAAAAATTACTATTTTTCTTCTCCATTAGAGTCTATGATGGAATGCCAAATGAAAAAGCCATTTTGTTCAACAGTTCTTGATCTCGTTAAATCGTTCCGGGTTTTCAATTGAAAAACAAGGGTAATAAAATCGCATGAGAAAAAAAAGGTCCAGACACTTTTTTAGAAGAAAAACTCTTGAAAACAATTGATTCTTCTACGTAAGGACAGGGTATTATCTCGAATTCTTCTCCCTGGTAAATACTCGGGATATATAGAACCTATTTTGCATCCTATTCTCACTTTTCTTTATTGTTGTTAATTTCTGGACATTGTTTCATTAATTGAATGAATGCCCTAAAATATTTCTCAAATCATTTAATAACTACAAAGAAACAAAAAAAAATCAATGTTGAGGTGACAAAGAATCAAGATCTACTAGGC</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">SpCas9 (from pML104)</span><span class="i18n-zh">SpCas9（来自 pML104）</span></td>
+              <td class="col-fn"><span class="i18n-en">Nuclease. CRISPR nuclease guided by the sgRNA to create a double-strand break at the target site.</span><span class="i18n-zh">核酸酶。CRISPR 编辑用核酸酶，由 sgRNA 引导在靶位点产生双链断裂。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGGACAAGAAGTATTCTATCGGACTGGACATCGGGACTAATAGCGTCGGGTGGGCCGTCATCACTGACGAGTACAAGGTGCCCTCTAAGAAGTTCAAGGTGCTCGGGAACACCGACCGGCATTCCATCAAGAAAAATCTGATCGGAGCTCTCCTCTTTGATTCAGGGGAGACCGCTGAAGCAACCCGCCTCAAGCGGACTGCTAGACGGCGGTACACCAGGAGGAAGAACCGGATTTGTTACCTTCAAGAGATATTCTCCAACGAAATGGCAAAGGTCGACGACAGCTTCTTCCATAGGCTGGAAGAATCATTCCTCGTGGAAGAGGATAAGAAGCATGAACGGCATCCCATCTTCGGTAATATCGTCGACGAGGTGGCCTATCACGAGAAATACCCAACCATCTACCATCTTCGCAAAAAGCTGGTGGACTCAACCGACAAGGCAGACCTCCGGCTTATCTACCTGGCCCTGGCCCACATGATTAAGTTCAGAGGCCACTTCCTGATCGAGGGCGACCTCAATCCTGACAATAGCGATGTGGATAAACTGTTCATCCAGCTGGTGCAGACTTACAACCAGCTCTTTGAAGAGAACCCCATCAATGCAAGCGGAGTCGATGCCAAGGCCATTCTGTCAGCCCGGCTGTCAAAGAGCCGCAGACTTGAGAATCTTATCGCTCAGCTGCCGGGTGAAAAGAAAAATGGACTGTTCGGGAACCTGATTGCTCTTTCACTTGGGCTGACTCCCAATTTCAAGTCTAATTTCGACCTGGCAGAGGATGCCAAGCTGCAACTGTCCAAGGACACCTATGATGACGATCTCGACAACCTCCTGGCCCAGATCGGTGACCAATACGCCGACCTTTTCCTTGCTGCTAAGAATCTTTCTGACGCCATCCTGCTGTCTGACATTCTCCGCGTGAACACTGAAATCACCAAGGCCCCTCTTTCAGCTTCAATGATTAAGCGGTATGATGAGCACCACCAGGACCTGACCCTGCTTAAGGCACTCGTCCGGCAGCAGCTTCCGGAGAAGTACAAGGAAATCTTCTTTGACCAGTCAAAGAATGGATACGCCGGCTACATCGACGGAGGTGCCTCCCAAGAGGAATTTTATAAGTTTATCAAACCTATCCTTGAGAAGATGGACGGCACCGAAGAGCTCCTCGTGAAACTGAATCGGGAGGATCTGCTGCGGAAGCAGCGCACTTTCGACAATGGGAGCATTCCCCACCAGATCCATCTTGGGGAGCTTCACGCCATCCTTCGGCGCCAAGAGGACTTCTACCCCTTTCTTAAGGACAACAGGGAGAAGATTGAGAAAATTCTCACTTTCCGCATCCCCTACTACGTGGGACCCCTCGCCAGAGGAAATAGCCGGTTTGCTTGGATGACCAGAAAGTCAGAAGAAACTATCACTCCCTGGAACTTCGAAGAGGTGGTGGACAAGGGAGCCAGCGCTCAGTCATTCATCGAACGGATGACTAACTTCGATAAGAACCTCCCCAATGAGAAGGTCCTGCCGAAACATTCCCTGCTCTACGAGTACTTTACCGTGTACAACGAGCTGACCAAGGTGAAATATGTCACCGAAGGGATGAGGAAGCCCGCATTCCTGTCAGGCGAACAAAAGAAGGCAATTGTGGACCTTCTGTTCAAGACCAATAGAAAGGTGACCGTGAAGCAGCTGAAGGAGGACTATTTCAAGAAAATTGAA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">sgRNA (FAR1)</span><span class="i18n-zh">sgRNA（FAR1）</span></td>
+              <td class="col-fn"><span class="i18n-en">Guide RNA. Guides SpCas9 to cut the FAR1 locus for knockout of that gene.</span><span class="i18n-zh">向导 RNA。引导 SpCas9 切割 FAR1 位点，实现该基因敲除。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GCAGTGAAAGATAAATGATCACCAAGTTTGAAGAAAACAGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">sgRNA (STE2)</span><span class="i18n-zh">sgRNA（STE2）</span></td>
+              <td class="col-fn"><span class="i18n-en">Guide RNA. Guides SpCas9 to cut the STE2 locus for knockout of that gene.</span><span class="i18n-zh">向导 RNA。引导 SpCas9 切割 STE2 位点，实现该基因敲除。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GCAGTGAAAGATAAATGATCTCACCTCTACTGATGAACTGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">sgRNA (Sst2)</span><span class="i18n-zh">sgRNA（Sst2）</span></td>
+              <td class="col-fn"><span class="i18n-en">Guide RNA. Guides SpCas9 to cut the Sst2 locus for knockout of that gene.</span><span class="i18n-zh">向导 RNA。引导 SpCas9 切割 Sst2 位点，实现该基因敲除。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GCAGTGAAAGATAAATGATCACACCGCAGGACAGAACTCGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></details>
+              </td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </section>
+      
+      <section class="content-card parts-group" id="signal-reporter">
+        <h2><span class="i18n-en">Signal Reporter Module</span><span class="i18n-zh">信号报告模块</span></h2>
+        <p class="parts-desc"><span class="i18n-en">Turns pathway activation into a readable signal; holds the promoter plus fluorescent and colourimetric reporters.</span><span class="i18n-zh">把通路激活转成可读出信号，含启动子与荧光、显色两类报告基因。</span></p>
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-id"><span class="i18n-en">Part ID</span><span class="i18n-zh">元件 ID</span></th>
+              <th scope="col" class="col-name"><span class="i18n-en">Part name</span><span class="i18n-zh">元件名称</span></th>
+              <th scope="col"><span class="i18n-en">Description</span><span class="i18n-zh">元件描述</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">yEGFP (yeast-optimised enhanced GFP)</span><span class="i18n-zh">yEGFP（酵母优化型绿色荧光蛋白）</span></td>
+              <td class="col-fn"><span class="i18n-en">Reporter. Green fluorescent reporter read out quantitatively by flow cytometry.</span><span class="i18n-zh">报告基因。绿色荧光报告基因，用流式细胞术做定量读数。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GAATTCATGTCTAAAGGTGAAGAATTATTCACTGGTGTTGTCCCAATTTTGGTTGAATTAGATGGTGATGTTAATGGTCACAAATTTTCTGTCTCCGGTGAAGGTGAAGGTGATGCTACTTACGGTAAATTGACCTTAAAATTTATTTGTACTACTGGTAAATTGCCAGTTCCATGGCCAACCTTAGTCACTACTTTCGGTTATGGTGTTCAATGTTTTGCTAGATACCCAGATCATATGAAACAACATGACTTTTTCAAGTCTGCCATGCCAGAAGGTTATGTTCAAGAAAGAACTATTTTTTTCAAAGATGACGGTAACTACAAGACCAGAGCTGAAGTCAAGTTTGAAGGTGATACCTTAGTTAATAGAATCGAATTAAAAGGTATTGATTTTAAAGAAGATGGTAACATTTTAGGTCACAAATTGGAATACAACTATAACTCTCACAATGTTTACATCATGGCTGACAAACAAAAGAATGGTATCAAAGTTAACTTCAAAATTAGACACAACATTGAAGATGGTTCTGTTCAATTAGCTGACCATTATCAACAAAATACTCCAATTGGTGATGGTCCAGTCTTGTTACCAGACAACCATTACTTATCCACTCAATCTGCCTTATCCAAAGATCCAAACGAAAAGAGAGACCACATGGTCTTGTTAGAATTTGTTACTGCTGCTGGTATTACCCATGGTATGGATGAATTGTACAAATAAGGATCC</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">FUS1 promoter</span><span class="i18n-zh">FUS1 启动子</span></td>
+              <td class="col-fn"><span class="i18n-en">Promoter. G-protein-responsive promoter that drives reporter transcription once the pathway is activated.</span><span class="i18n-zh">启动子。G 蛋白响应启动子，通路激活后启动下游报告基因转录。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ACGATGATTCAGTTCGCCTTCTATCCTTTGTTTACGTATTTGTTTATATATATAACTTTATTTTTTTTTATTAATTGGGCTGCAAGACAATTTTGTTGTCAGTGATGCCTCAATCCTTCTTTTGCTTCCATATTTACCATGTGGACCCTTTCAAAACAGAGTTGTATCTCTGCAGGATGCCCTTTTTGACGTATTGAATGGCATAATTGCACTGTCACTTTTCGCGCTGTCTCATTTTGGTGCGATGATGAAACAAACATGAAACGTCTGTAATTTGAAACAAATAACGTAATTCTCGGGATTGGTTTTATTTAAATGACAATGTAAGAGTGGCTTTGTAAGGTATGTGTTGCTCTTAAAATATTTGGATACGACATCCTTTATCTTTTTTCCTTTAAGAGCAGGATATAAGCCATCAAGTTTCTGAAAATCAAA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">MEL1 (alpha-galactosidase)</span><span class="i18n-zh">MEL1（α-半乳糖苷酶）</span></td>
+              <td class="col-fn"><span class="i18n-en">Reporter. Secreted reporter kept as an alternative readout for the output stage.</span><span class="i18n-zh">报告基因。分泌型报告基因，用于报告输出的备选读出方式。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGTTTGCTTTCTACTTTCTCACCGCATGCATCAGTTTGAAGGGCGTTTTTGGGGTGTCTCCGAGTTACAATGGCCTTGGTCTCACTCCACAGATGGGTTGGGACAACTGGAATACGTTTGCCTGCGATGTCAGTGAACAGCTACTTCTAGACACCGCTGATAGAATTTCTGACTTGGGGCTAAAGGATATGGGTTACAAGTATATCATTCTGGATGACTGCTGGTCTAGCGGCAGAGATTCCGACGGTTTCCTCGTTGCAGATGAACAAAAATTTCCCAATGGTATGGGCCATGTTGCAGACCACCTGCATAATAACAGCTTTCTTTTCGGTATGTATTCGTCTGCTGGTGAGTACACCTGTGCTGGATATCCTGGGTCTCTGGGTCGTGAGGAAGAAGATGCACAGTTCTTTGCAAATAACCGCGTTGACTACTTGAAGTACGATAATTGTTACAATAAGGGTCAGTTTGGTACACCGGAAATTTCTTACCACCGTTACAAGGCCATGTCAGATGCTTTGAATAAAACTGGTAGGCCTATATTCTATTCTCTATGTAACTGGGGTCAGGATTTAACATTTTACTGGGGCTCTGGTATCGCCAATTCTTGGAGAATGAGTGGAGATGTTACTGCTGAGTTCACTCGTCCAGATAGCAGATGTCCCTGTGATGGCGATGAATACGATTGCAAGTACGCCGGTTTCCATTGTTCTATTATGAATATTCTTAACAAGGCAGCTCCAATGGGGCAAAATGCAGGTGTTGGTGGTTGGAATGATCTGGACAATCTAGAGGTTGGTGTCGGGAATTTGACTGACGATGAGGAAAAGGCACATTTCTCTATGTGGGCAATGGTAAAGTCTCCACTTATCATTGGTGCCAATGTGAATAACTTAAAGGCATCTTCGTACTCAATCTATAGTCAAGCCTCTGTCATCGCAATTAATCAAGATTCAAATGGTATTCCAGCAACAAGAGTCTGGAGATATTATGTTTCAGACACAGATGAATATGGACAAGGTGAAATTCAAATGTGGAGTGGTCCTCTTGACAATGGTGATCAAGTGGTTGCTTTATTGAATGGAGGAAGCGTATCTAGACCAATGAACACGACCTTGGAAGAGATTTTTTTTGACAGCAATCTGGGTTCAAAGAAACTGACATCGACTTGGGATATCTACGACCTATGGGCCAACAGAGTTGACAACTCGACAGCGTCTGCTATCCTTGGACGGAATAAGACAGCCACCGGTATTCTCTACAATGCTACGGAGCAATCCTACAAAGACGGTTTGTCTAAGAATGATACAAGACTGTTTGGTCAGAAAATTGGTAGTCTTTCTCCAAATGCTATACTTAACACGACTGTTCCAGCTCACGGTATCGCCTTCTATAGGTTGAGACCCTCTTCTTGA</code></details>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="col-id">
+                <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>
+              </td>
+              <td class="col-name"><span class="i18n-en">LACZα (with multiple cloning site)</span><span class="i18n-zh">LACZα（含多克隆位点）</span></td>
+              <td class="col-fn"><span class="i18n-en">Reporter. β-galactosidase α fragment carrying a multiple cloning site; read out by X-Gal staining.</span><span class="i18n-zh">报告基因。β-半乳糖苷酶 α 片段，带多克隆位点，可用 X-Gal 显色判读。</span>
+                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGTTGCATCATCATCATCATCATAGCATGCATATGCTGCAGCTCGAGTCGACGGATCCGAATTCACTGGCCGTCGTTTTACAACGTCGTGACTGGGAAAACCCTGGCGTTACCCAACTTAATCGCCTTGCAGCACATCCCCCTTTCGCCAGCTGGCGTAATAGCGAAGAGGCCCGCACCGATCGCCCTTCCCAACAGTTGCGCAGCCTGAATGGCGAATGGCGCCTGATGCGGTATTTTCTCCTTACGCATCTGTGCGGTATTTCACACCGTATATGGTGCACTCTCAGTACAATCTGCTCTGATGCCGCATAG</code></details>
+              </td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </section>
+      
+
+      <section class="content-card parts-group" id="backbones">
+        <h2><span class="i18n-en">Vectors and backbones</span><span class="i18n-zh">载体骨架</span></h2>
+        <p class="parts-desc"><span class="i18n-en">Backbones used to carry the parts above. No sequence is listed for these because they were used as received.</span><span class="i18n-zh">承载上述元件的载体骨架。这些骨架按原样使用，故不列出序列。</span></p>
+        <ul class="parts-list">
+          
+          
+          <li><span class="i18n-en">pGADT7 (ZB56914)</span><span class="i18n-zh">pGADT7（ZB56914）</span> — <span class="i18n-en">Cloning backbone for the PAGER fusion protein gene.</span><span class="i18n-zh">PAGER 融合蛋白基因的克隆骨架。</span></li>
+          
+          
+          <li><span class="i18n-en">PUC57</span><span class="i18n-zh">PUC57</span> — <span class="i18n-en">Delivery vector for the synthesised gene fragment.</span><span class="i18n-zh">基因合成片段的递送载体。</span></li>
+          
+          
+          <li><span class="i18n-en">pRS426</span><span class="i18n-zh">pRS426</span> — <span class="i18n-en">Yeast episomal vector.</span><span class="i18n-zh">酵母用附加体型载体。</span></li>
+          
+          
+          <li><span class="i18n-en">pML104</span><span class="i18n-zh">pML104</span> — <span class="i18n-en">CRISPR-Cas9 yeast knockout plasmid, expressing Cas9 and the sgRNA.</span><span class="i18n-zh">CRISPR-Cas9 酵母敲除质粒，表达 Cas9 与 sgRNA。</span></li>
+          
+          
+          <li><span class="i18n-en">pESC-HIS</span><span class="i18n-zh">pESC-HIS</span> — <span class="i18n-en">Yeast reporter backbone carrying the FUS1 reporter cassette.</span><span class="i18n-zh">酵母报告骨架，承载 FUS1 报告盒。</span></li>
+          
+          
+          <li><span class="i18n-en">pRS415</span><span class="i18n-zh">pRS415</span> — <span class="i18n-en">Yeast centromeric vector.</span><span class="i18n-zh">酵母用着丝粒型载体。</span></li>
+          
+        </ul>
+      </section>
+
+      <section class="content-card parts-group" id="reagents">
+        <h2><span class="i18n-en">Antibodies and reagents</span><span class="i18n-zh">抗体与试剂</span></h2>
+        <p class="parts-desc"><span class="i18n-en">Reagents used for detection. These are not biological parts and are listed for completeness of the experimental record.</span><span class="i18n-zh">检测用试剂。这些不属于生物元件，列出是为了实验记录的完整性。</span></p>
+        <ul class="parts-list">
+          
+          <li><span class="i18n-en">Goat anti-rabbit IgG H&L (HRP)</span><span class="i18n-zh">山羊抗兔 IgG H&L（HRP 标记）</span> — <span class="i18n-en">Secondary antibody for Western blot.</span><span class="i18n-zh">Western blot 二抗。</span></li>
+          
+          <li><span class="i18n-en">CoraLite® Plus 488-conjugated 6×His, His-Tag monoclonal antibody</span><span class="i18n-zh">CoraLite® Plus 488 标记 6×His 单克隆抗体</span> — <span class="i18n-en">Primary antibody for immunofluorescence, detecting His-tagged fusion protein.</span><span class="i18n-zh">免疫荧光用一抗，检测带 His 标签的融合蛋白。</span></li>
+          
+        </ul>
+      </section>
     </section>
 
   </main>
@@ -231,7 +528,6 @@
                 <li><a href="../project/description.html">Description</a></li>
                 <li><a href="../project/design.html">Design</a></li>
                 <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/log.html">Log</a></li>
                 <li><a href="../project/contribution.html">Contribution</a></li>
               </ul>
             </div>
@@ -242,6 +538,7 @@
                 <li><a href="../wet-lab/result.html">Results</a></li>
                 <li><a href="../wet-lab/parts.html">Parts</a></li>
                 <li><a href="../wet-lab/safety.html">Safety</a></li>
+                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -257,7 +554,7 @@
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
                 <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
+                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -292,6 +589,7 @@
 
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/js/components/page-loader.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>

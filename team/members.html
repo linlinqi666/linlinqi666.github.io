@@ -15,10 +15,61 @@
 <link rel="stylesheet" href="../static/css/members.css">
 
 <link rel="stylesheet" href="../static/css/mobile.css">
+<link rel="stylesheet" href="../static/css/components/page-loader.css">
+<!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
+     置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
+<script src="../static/js/components/page-loader-arm.js"></script>
+<!-- 成员页专属 head 片段：在 partials/head.njk 中由 front matter 的 headExtraPartial 引入，
+     位置在 mobile.css 之后，确保组件样式能覆盖全局响应式规则。 -->
+
+<!-- 全屏引导封面样式（与首页 GIF 开场同为 components/ 下的页级组件） -->
+<link rel="stylesheet" href="../static/css/components/members-intro.css">
+
+<!-- 引导封面 arm：必须在 <body> 渲染前同步执行，否则会先闪出成员页再被封面盖住。
+     - 触发：直接访问 / 站内跳转 / 站外进入都显示（用户要求"进入成员页先看整队照片"）；
+       如需改为"每个会话只显示一次"，把 ONCE_PER_SESSION 改为 true 即可。
+     - 降级：无 JS 时不 arm，.members-intro 默认 display:none，页面照常可用。
+     - 看门狗：控制器（members-intro.js）未启动时 8s 后强制收尾，页面不会被封面永久遮挡。 -->
+<script>
+  (function () {
+    try {
+      var ONCE_PER_SESSION = false;
+      var SESSION_KEY = 'szpu-members-intro-seen';
+      var root = document.documentElement;
+
+      if (ONCE_PER_SESSION) {
+        try {
+          if (window.sessionStorage && sessionStorage.getItem(SESSION_KEY) === '1') return;
+        } catch (e) { /* 隐私模式下忽略 */ }
+      }
+
+      root.classList.add('members-intro-armed');
+
+      setTimeout(function () {
+        if (root.classList.contains('members-intro-ready')) return;
+        root.classList.add('members-intro-finished');
+      }, 8000);
+    } catch (e) { /* 降级：封面不显示，成员页正常运行 */ }
+  })();
+</script>
 
 
 </head>
 <body class="">
+      <!-- 全站页级加载遮罩：默认 display:none，仅当 head 内同步脚本
+         page-loader-arm.js 给 <html> 打上 .page-loader-armed 后显示；
+         由 static/js/components/page-loader.js 在首屏关键插画就绪后收尾。 -->
+    <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+      <div class="page-loader__inner">
+        <div class="page-loader__stage">
+          <span class="page-loader__halo" aria-hidden="true"></span>
+          <div class="page-loader__frames" aria-hidden="true"></div>
+          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <p class="page-loader__text" aria-hidden="true">Loading</p>
+      </div>
+    </div>
+
   <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
 <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
   <span></span>
@@ -39,7 +90,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -65,6 +115,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -72,7 +123,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -94,7 +145,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -120,6 +170,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -127,7 +178,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -168,6 +219,32 @@
 
   <main class="">
     
+<!-- 页面唯一 h1：视觉上由条带标题 / 引导封面承担，这里为屏幕阅读器保留语义标题 -->
+<h1 class="members-sr-only">Team Members</h1>
+
+<!-- 全屏引导封面（默认 display:none；由 <head> 内同步 arm 脚本给 <html> 加
+     members-intro-armed 后才显示）。点击任意处 / Enter / Space / Esc 进入成员页。
+     无 JS 时不 arm，页面内容直接可见；脚本失败时由 arm 脚本内 8s 看门狗兜底。 -->
+<div class="members-intro" id="members-intro" role="dialog" aria-modal="true" aria-label="Team introduction">
+  <div class="members-intro__media" aria-hidden="true">
+    <span class="members-intro__backdrop"></span>
+    <img class="members-intro__photo" id="members-intro-photo" data-critical loading="eager" fetchpriority="high"
+      decoding="async" alt="SZPU-China 2026 team photo"
+      src="../static/image/character/webp/total.webp"
+      srcset="../static/image/character/webp/total-960.webp 960w, ../static/image/character/webp/total.webp 1919w"
+      sizes="100vw">
+    <span class="members-intro__shade"></span>
+  </div>
+  <div class="members-intro__panel">
+    <p class="members-intro__eyebrow">SZPU-China · iGEM 2026</p>
+    <p class="members-intro__title">Meet the Team</p>
+    <button type="button" class="members-intro__enter" id="members-intro-enter">
+      Enter the team<span aria-hidden="true">→</span>
+    </button>
+    <p class="members-intro__hint">Click anywhere · or press Enter</p>
+  </div>
+</div>
+
 <div id="members-redesign-app" class="members-redesign-app">
       <!-- 中间人物大背景图容器：由 JS updateBackground() 切换 -->
       <div class="members-bg-layer" aria-hidden="true">
@@ -270,7 +347,6 @@
                 <li><a href="../project/description.html">Description</a></li>
                 <li><a href="../project/design.html">Design</a></li>
                 <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/log.html">Log</a></li>
                 <li><a href="../project/contribution.html">Contribution</a></li>
               </ul>
             </div>
@@ -281,6 +357,7 @@
                 <li><a href="../wet-lab/result.html">Results</a></li>
                 <li><a href="../wet-lab/parts.html">Parts</a></li>
                 <li><a href="../wet-lab/safety.html">Safety</a></li>
+                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -296,7 +373,7 @@
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
                 <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
+                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -331,12 +408,13 @@
 
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/js/components/page-loader.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
   <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/pages/members.js" defer></script>
+  <script src="../static/js/pages/members.js" defer></script><script src="../static/js/components/members-intro.js" defer></script>
   
 <script>
 document.addEventListener('DOMContentLoaded', function () {

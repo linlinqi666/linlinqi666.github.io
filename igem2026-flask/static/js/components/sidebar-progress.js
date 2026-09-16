@@ -38,7 +38,9 @@
       'surface-display', 'proof-of-concept',
       // Experiments 页四模块结构（Protocol 与公共区块）
       'p1-', 'p2-', 'p3-', 'p4-',
-      'reagents-', 'safety-', 'progress-', 'troubleshooting'
+      'reagents-', 'safety-', 'progress-', 'troubleshooting',
+      // Contribution 页卡片：部件 / 协议 / 其他 / 获取与许可 / 归属
+      'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution'
     ]
   };
 
@@ -113,7 +115,13 @@
    * 缓存可导航章节元素，仅在 resize 或初始化时调用以减少滚动时的 DOM 查询。
    */
   function buildSectionCache() {
-    state.cachedSections = document.querySelectorAll(getSectionSelector());
+    // 侧栏自身的 id（如进度百分比 #progress-percentage）不应被当成正文章节
+    state.cachedSections = Array.prototype.filter.call(
+      document.querySelectorAll(getSectionSelector()),
+      function (el) {
+        return !el.closest('.description-sidebar, .sidebar');
+      }
+    );
     // 在初始化/resize（低频）时一次性计算各章节的绝对顶部偏移，滚动期直接比对 scrollY，
     // 避免在 rAF 中反复调用 getBoundingClientRect 造成强制同步布局（卡顿主因之一）。
     var scrollY = window.scrollY || window.pageYOffset || 0;

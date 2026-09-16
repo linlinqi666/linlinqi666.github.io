@@ -31,6 +31,16 @@
      alt="{{ alt }}" class="{{ cls }}" loading="lazy">
 {% endmacro %}
 
+{# 媒体统一取址宏（唯一合规宿主机 = iGEM 自有 Uploads CDN）：
+   用法：{{ media("image/HP/expert.jpg") }}
+   产出：https://static.igem.wiki/2026/szpu-china/image/HP/expert.jpg
+   说明：禁止第三方 CDN；flask 的 static/ 仅放 JS/CSS。JS 侧同源基址见
+        static/js/core/utils.js 暴露的 window.MEDIA_BASE 与 wiki/README。
+   参数：
+     rel  相对路径，需带 image/ 前缀（与上传到 CDN 的目录结构一致）
+#}
+{% macro media(rel) %}https://static.igem.wiki/2026/szpu-china/{{ rel }}{% endmacro %}
+
 {# 图片占位宏：正式图片就位前，用纯主题色块（内联 SVG，无外部资源，iGEM 合规）
    占位，保留 <img> 标签结构与 alt 描述，便于后续直接替换为真实图片。
    用法：{{ img_placeholder("H1N1 监测背景插画", "yeast-screen__svg") }}

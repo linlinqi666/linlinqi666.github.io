@@ -16,7 +16,7 @@ const PAGES = [
   'project/description.html',
   'project/design.html',
   'project/engineering.html',
-  'project/log.html',
+  'wet-lab/notebook.html',
   'project/contribution.html',
   'team/members.html',
   'team/attributions.html',
@@ -29,7 +29,7 @@ const PAGES = [
   'wet-lab/safety.html',
   'human-practices/integrated human-practices.html',
   'human-practices/education.html',
-  'human-practices/social-groups.html'
+  'human-practices/sustainability.html'
 ];
 
 const TEXT_CHUNK_SIZE = 320;

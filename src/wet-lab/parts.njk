@@ -10,10 +10,75 @@ css:
 
 {% extends "layouts/base.njk" %}
 
+{# 版式约定：英文在上为主视觉（.i18n-en），中文在下为辅助（.i18n-zh）。
+   表格三列：元件 ID / 元件名称 / 元件描述。
+   核验类信息不进入页面可见内容，只以 ⚠ 注释标注在源码中。 #}
+
+{% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span><span class="i18n-zh">{{ zh | safe }}</span>{% endmacro %}
+
 {% block main %}
-<section id="wet-lab-parts">
-      <h2>Parts</h2>
-      <p>这里展示了项目中使用的生物元件信息。</p>
+<section id="wet-lab-parts" class="parts-page">
+      <header class="parts-hero">
+        <h1>Parts</h1>
+        <p class="parts-hero__sub">{{ pair(parts.overview.intro.en, parts.overview.intro.zh) }}</p>
+        <div class="parts-hero__rule" aria-hidden="true"></div>
+      </header>
+
+      <div class="content-card parts-summary">
+        <p class="parts-count">{{ pair(parts.overview.totalParts + ' parts across ' + parts.overview.groupCount + ' functional modules', parts.overview.totalParts + ' 个元件，分布于 ' + parts.overview.groupCount + ' 个功能模块') }}</p>
+        <p class="parts-note">{{ pair(parts.overview.note.en, parts.overview.note.zh) }}</p>
+      </div>
+
+      {% for g in parts.groups %}
+      <section class="content-card parts-group" id="{{ g.id }}">
+        <h2>{{ pair(g.en, g.zh) }}</h2>
+        <p class="parts-desc">{{ pair(g.desc.en, g.desc.zh) }}</p>
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-id">{{ pair('Part ID', '元件 ID') }}</th>
+              <th scope="col" class="col-name">{{ pair('Part name', '元件名称') }}</th>
+              <th scope="col">{{ pair('Description', '元件描述') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in g.parts %}
+            <tr>
+              <td class="col-id">
+                {% if p.id %}<a class="part-id" href="https://registry.igem.org/parts/{{ p.id | lower }}">{{ p.id }}</a>
+                {% else %}{# ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） #}<a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>{% endif %}
+              </td>
+              <td class="col-name">{{ pair(p.en, p.zh) }}</td>
+              <td class="col-fn">{{ pair(p.fn.en, p.fn.zh) }}
+                {% if p.seq %}<details class="seq-block"><summary>{{ pair('Sequence', '序列') }}</summary><code class="seq">{{ p.seq }}</code></details>{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+      {% endfor %}
+
+      <section class="content-card parts-group" id="backbones">
+        <h2>{{ pair('Vectors and backbones', '载体骨架') }}</h2>
+        <p class="parts-desc">{{ pair('Backbones used to carry the parts above. No sequence is listed for these because they were used as received.', '承载上述元件的载体骨架。这些骨架按原样使用，故不列出序列。') }}</p>
+        <ul class="parts-list">
+          {% for b in parts.backbones %}
+          {# ⚠ 核验：Registry 状态见 src/_data/parts.js 同行注释 #}
+          <li>{{ pair(b.en, b.zh) }} — {{ pair(b.fn.en, b.fn.zh) }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="content-card parts-group" id="reagents">
+        <h2>{{ pair('Antibodies and reagents', '抗体与试剂') }}</h2>
+        <p class="parts-desc">{{ pair('Reagents used for detection. These are not biological parts and are listed for completeness of the experimental record.', '检测用试剂。这些不属于生物元件，列出是为了实验记录的完整性。') }}</p>
+        <ul class="parts-list">
+          {% for r in parts.reagents %}
+          <li>{{ pair(r.en, r.zh) }} — {{ pair(r.fn.en, r.fn.zh) }}</li>
+          {% endfor %}
+        </ul>
+      </section>
     </section>
 {% endblock %}
 

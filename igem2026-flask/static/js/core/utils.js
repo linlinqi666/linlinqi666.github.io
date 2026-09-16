@@ -10,6 +10,17 @@
   'use strict';
 
   /**
+   * 图片/媒体统一取址基址（iGEM 自有 Uploads CDN）。
+   *
+   * 硬约束：flask 生产站的 static/ 只允许存放 JS/CSS，所有图片媒体必须托管在
+   * iGEM 自有 CDN 并以 https://static.igem.wiki/2026/szpu-china/image/... 引用；
+   * 禁止任何第三方 CDN。模板侧等价助手见 wiki/macros.html 的 media() / igem_img()。
+   *
+   * @type {string}
+   */
+  window.MEDIA_BASE = window.MEDIA_BASE || 'https://static.igem.wiki/2026/szpu-china';
+
+  /**
    * 被动事件监听支持缓存。
    * @type {boolean|null}
    */

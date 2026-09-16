@@ -18,10 +18,10 @@
   // 文章索引：id 对应原页面中的真实章节。img 为轨道卡片封面（可空）。
   var articles = [
     { id: 'section-overview',   time: '00', title: '概述',            img: '' },
-    { id: 'section-carousel',   time: '01', title: '清华参赛交流',    img: '../static/image/HP/tsinghua/1.webp' },
-    { id: 'section-southchina', time: '02', title: '华南交流会',      img: '../static/image/HP/southchina/cover.jpg' },
-    { id: 'section-dialogues',  time: '03', title: '临床检验专家交流', img: '../static/image/HP/expert.jpg' },
-    { id: 'section-education',  time: '04', title: '中学生科学传播',   img: '../static/image/HP/school1.jpg' }
+    { id: 'section-carousel',   time: '01', title: '清华参赛交流',    img: 'https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/1.webp' },
+    { id: 'section-southchina', time: '02', title: '华南交流会',      img: 'https://static.igem.wiki/2026/szpu-china/image/HP/southchina/cover.jpg' },
+    { id: 'section-dialogues',  time: '03', title: '临床检验专家交流', img: 'https://static.igem.wiki/2026/szpu-china/image/HP/expert.jpg' },
+    { id: 'section-education',  time: '04', title: '中学生科学传播',   img: 'https://static.igem.wiki/2026/szpu-china/image/HP/school1.jpg' }
   ];
 
   var hero = document.getElementById('hp-timeline-hero');

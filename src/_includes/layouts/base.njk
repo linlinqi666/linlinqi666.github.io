@@ -5,6 +5,7 @@
   {% include "partials/head.njk" %}
 </head>
 <body class="{{ bodyClass | default('') }}">
+  {% include "partials/page-loader.njk" %}
   {% include "partials/nav.njk" %}
   {% include "partials/progress.njk" %}
   <main class="{{ mainClass | default('') }}">
@@ -14,6 +15,7 @@
 
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="{{ basePath | default('') }}static/js/core/utils.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/page-loader.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/mobile-menu.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/page-progress-bar.js" defer></script>

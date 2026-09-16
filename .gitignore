@@ -185,3 +185,25 @@ site-preview/
 
 # 第三方 PDF.js 库：由 iGEM 官方 CDN 提供，不入库（本地物理保留供开发调试）
 static/js/pdfjs/
+
+# 加载遮罩插画（page-loader）：CSS 实际只加载 loader-sprite@2x.webp，
+# 逐帧导出 loader-frame-*.webp 与 1x 雪碧图 loader-sprite.webp 是同源冗余副本（全仓库 0 引用），不入库（本地物理保留）。
+# 若连 @2x 也不入库（部署站加载动画退回纯 CSS 三点兜底），取消下一行注释即可：
+/static/image/loader/loader-frame-*.webp
+/static/image/loader/loader-sprite.webp
+# /static/image/loader/loader-sprite@2x.webp
+
+# 团队活动照片池：106 MB / 346 张，全仓库 0 引用（不为任何页面/CSS/JS 加载），不入库（本地物理保留）
+/static/image/team-photo/
+
+# 源图片工作区：`static/image/**/源图片/` 存放原图（character 下 38 个 / 48.5 MB），
+# 是页面引用资源的**上游素材**，不是运行资源本身。页面只引用同素材目录 `webp/` 下的
+# 转换产物（长边 ≤ 1920px、质量 82–88）。原图不入库（本地物理保留），
+# 与 §17.2「只入库被引用且唯一的那一份」一致。见 README 第 17.2 / 17.3 节。
+/static/image/**/源图片/
+
+# 实验方案素材目录：`static/expriments/` 存放各功能模块的方案文档（.md）、原始 docx
+# 与实验影像素材，是**分析材料**而非站点运行资源——全仓库 0 引用，且不经 Eleventy
+# 构建（input 只到 `src/`）。整目录不入库，本地物理保留。
+# 见 README 第 5.14 节（四模块映射）与第 17.2 节（入库边界）。
+/static/expriments/

@@ -27,7 +27,7 @@ igem2026-flask/
 
 Home, Description, Design, Engineering, Results, Contribution, Experiments, Notebook,
 Parts, Measurement, Alternative Platform, Safety and Security, Model, Software, Hardware,
-Entrepreneurship, Human Practices, Education, Inclusivity, Sustainability, Team.
+Entrepreneurship, Human Practices, Education, Sustainability, Team.
 
 ## Local preview
 
@@ -66,6 +66,81 @@ prefix) via the iGEM upload tool, then delete the local `static/image/` copy. Un
 uploaded, local `flask run` preview will show broken images (expected) — the live
 GitLab Pages site serves them from the CDN. See `IGEM2026_WIKI_COMPLIANCE.md` for the full
 rule set and pre-commit checklist.
+
+**Media base in code:** templates should use `{{ media("image/...") }}` (macro in
+`wiki/macros.html`, next to `igem_img()`); JS should read `window.MEDIA_BASE`, exposed by
+`static/js/core/utils.js`. The local `static/image/` folder has been removed — `static/`
+now contains JS/CSS only (verified: 0 remaining local image references).
+
+**Page loading animation (page-loader):** every page shows a full-screen cream/warm-brown
+loader whose pseudo-animation is a 6-frame sprite flip-book (`steps(6)`). The overlay is
+released only after the page's declared first-screen illustrations settle
+(`window.PageLoader.register(...)` — e.g. the Team Leader's large portrait on Members).
+Files: arm `js/components/page-loader-arm.js` (synchronous, in `<head>`),
+controller `js/components/page-loader.js`, styles `css/components/page-loader.css`.
+The loader sprite lives on the CDN at `image/loader/loader-sprite[@2x].webp` (source of
+truth: root workspace `static/image/loader/`) — **upload these with the other images**;
+until then the loader falls back to a pure-CSS breathing-dots animation, so nothing breaks.
+The homepage GIF intro now starts only after `pageloader:done`, and its watchdog is
+loader-aware (fixes the occasional "GIF gets killed" race).
+
+## Team page: member categories and order (parity with root site)
+
+`wiki/pages/members.html` renders entirely from `static/js/pages/members.js`; the single
+source of truth for the left strip groups is its `ROLE_ORDER` array, kept identical to the
+root static site (root is authoritative — see root `README.md` **§5.15**):
+
+`PI → Adviser → Wet Lab → Dry Lab → WIKI → HP → Art → Designer`
+
+- A member is grouped by the **first** `ROLE_ORDER` entry present in their `roles`; the other
+  non-classification roles render as detail/rail tags. Display labels such as `Primary PI` /
+  `Secondary PI` therefore sit in `roles` next to the classification role `PI`
+  (e.g. `['Primary PI', 'PI']`).
+- Empty groups are skipped by the renderer — `Designer` currently has no member, so it shows
+  no header.
+- Adding a category needs three edits in lockstep: `ROLE_ORDER`, `ROLE_COLORS` in
+  `members.js`, and `.group-indicator[data-role="…"]` in `static/css/members.css`.
+- This file mirrors the root version with the `https://static.igem.wiki/2026/szpu-china/image/...`
+  prefix, so every new member photo (`webp/<id>.webp`, optionally `webp/<id>_kt.webp`) must be
+  uploaded to the iGEM Uploads CDN before it shows on the live site.
+- Each member carries the same 7 fields in a fixed order —
+  `id → name → roles → directions → bio → photoPosition → photoSize` — plus an optional
+  trailing `images` override. `photoPosition` / `photoSize` are the only knobs for re-framing
+  a member's full-bleed background photo (they map to CSS `background-position` /
+  `background-size`); the current value for every member is tabulated in root `README.md` §5.15.
+- Members **without** a `_kt` cartoon avatar must set
+  `images: { avatar: { candidates: ['…/webp/<id>.webp', '…/源图片/<id>.<ext>'] } }` with their
+  own photo first, otherwise the browser probes the missing `_kt` paths and logs guaranteed
+  404s (the root template chain keeps a photo fallback as a last resort).
+- Members whose text is still pending keep `directions: []` and `bio: ''` — no placeholder
+  tokens, which must never reach the frozen build.
+- Re-runnable structural check (validates field order, group hit, framing fields and that every
+  `images` first candidate exists on disk, in both projects):
+  `node 对话归档/temporary-tools/2026-09-15-check-members-format.js`.
+
+## Members page: responsive layout + full-screen intro cover (2026-09-16)
+
+Mirrors the root site (root is authoritative — see root `README.md` **§5.16**):
+
+- **Breakpoint `1100px`** (`members.js` `DESKTOP_BREAKPOINT`, `members.css` `max-width: 1099px`):
+  above it the page is a desktop split view (left strip + full-bleed photo + right bio rail, all
+  fluid widths); at or below it the layout stacks — the photo becomes a top hero band, the strip
+  collapses into a switcher, the rail is hidden and the bio lives in the detail card.
+- The first member is selected on **every** breakpoint (previously mobile opened with no member
+  content at all), and the expanded member list is sized from a measured `scrollHeight`
+  (`--strip-groups-max`) instead of a fixed cap that used to clip the last members.
+- **Intro cover:** `#members-intro` shows the team photo (CDN `image/character/webp/total.webp`,
+  width variants `total.webp` / `total-960.webp` — **upload both**) before the page is revealed.
+  Arming is synchronous: `static/js/components/members-intro-arm.js`, pulled in per page from
+  `wiki/pages/members.html` `{% block head_extra %}` (not from `layout.html`), so it stays
+  page-scoped. Controller: `static/js/components/members-intro.js` (defer). Classes on `<html>`:
+  `members-intro-armed` → `members-intro-ready` → `members-intro-finished`.
+- Failure modes: without JS the cover never arms (`.members-intro { display: none }`); if the
+  controller fails to load, the arm script's 8 s watchdog force-finishes so the page can never be
+  blocked. Set `ONCE_PER_SESSION = true` in the arm script to show the cover only once per session.
+- Temporary/dev verification needs a **no-cache** server (`对话归档/temporary-tools/2026-09-16-dev-server-nostore.py`);
+  `python -m http.server` sends no `Cache-Control`, and Chromium's heuristic freshness once made a
+  stale `members.css` look like a broken change.
 
 ## Performance & JS optimization (parity with root static site)
 

@@ -1,0 +1,342 @@
+/**
+ * Parts 页面专属样式（Flask 与根站两站保持一致）
+ *
+ * 设计基准：对齐站内其他内容页的 .content-card 卡片体系（米棕主题、圆角、阴影、标题下划线），
+ * 避免本页单独一套观感。由于本页只加载 parts.css（不含 description.css / design.css），
+ * 因此这里把所需的主题规则一次性写全。
+ *
+ * 排版要点（针对「字体换行造成的视觉偏差」）：
+ * - 表格使用 table-layout: fixed + 明确列宽，换行位置可预期，行高不会被长词突刺撑开
+ * - 中英文字号差距收窄（0.9rem / 0.86rem），行高统一 1.55，避免上下两行松紧不一
+ * - 单元格一律 vertical-align: top，取消两端对齐（窄列 justify 会拉出难看的字距）
+ * - 序列折叠块与描述共用同一基线节奏，不再额外占一行
+ */
+
+/* ==========================================================
+   1. 页面容器与页首
+   ========================================================== */
+.parts-page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 3rem;
+  overflow-wrap: anywhere;
+}
+
+.parts-hero {
+  margin: 0 0 1.5rem;
+}
+
+.parts-hero h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.parts-hero__sub {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--desc-color-primary-dark, #5D4632);
+}
+
+/* 与贡献页标题分隔线保持同款（短横条） */
+.parts-hero__rule {
+  margin: 0.6rem auto 0;
+  height: 3px;
+  width: 4.5rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--desc-color-primary, #8B5A2B) 0%, var(--desc-color-primary-light, #D4A574) 100%);
+}
+
+/* ==========================================================
+   2. 卡片：对齐 .content-card 标准
+   ========================================================== */
+.parts-page .content-card {
+  background: var(--bg-card, #ffffff);
+  border-radius: var(--desc-radius-lg, 0.75rem);
+  border: 1px solid rgba(139, 90, 43, 0.16);
+  box-shadow: 0 2px 12px rgba(93, 58, 26, 0.07);
+  padding: 1.5rem 1.75rem;
+  margin: 0 0 1.5rem;
+}
+
+.parts-page .content-card h2 {
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+/* 模块说明段 */
+.parts-page .parts-desc {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--desc-color-primary-dark, #5D4632);
+}
+
+/* ==========================================================
+   3. 总览卡
+   ========================================================== */
+/* 计数行：整句双语对照（英文一行、中文一行），不拆成行内碎片 */
+.parts-page .parts-summary .parts-count {
+  margin: 0 0 0.6rem;
+}
+
+.parts-page .parts-summary .parts-count .i18n-en,
+.parts-page .parts-summary .parts-count .i18n-zh {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-weight: 700;
+  color: var(--desc-color-primary, #8B5A2B);
+}
+
+.parts-page .parts-summary .parts-note {
+  margin: 0;
+  padding-left: 0.9rem;
+  border-left: 3px solid rgba(139, 90, 43, 0.25);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--desc-color-primary-dark, #5D4632);
+}
+
+/* ==========================================================
+   4. 元件表：固定布局，换行可预期
+   ========================================================== */
+.parts-page .parts-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.parts-page .parts-table th {
+  padding: 0.6rem 0.75rem;
+  background: rgba(139, 90, 43, 0.06);
+  border-bottom: 2px solid var(--desc-color-primary, #8B5A2B);
+  text-align: left;
+  font-weight: 700;
+  color: var(--desc-color-primary-darker, #4A3728);
+  vertical-align: bottom;
+}
+
+.parts-page .parts-table td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid rgba(139, 90, 43, 0.14);
+  vertical-align: top;
+}
+
+.parts-page .parts-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.parts-page .parts-table tbody tr:hover {
+  background: rgba(139, 90, 43, 0.035);
+}
+
+/* 列宽：固定后换行位置稳定，行与行之间不会忽宽忽窄 */
+.parts-page .parts-table .col-id {
+  width: 14%;
+}
+
+.parts-page .parts-table .col-name {
+  width: 26%;
+}
+
+/* 末列自动占满剩余宽度 */
+
+/* ==========================================================
+   5. 双语排版：收窄字号差、统一行高
+   ========================================================== */
+.parts-page .i18n-en,
+.parts-page .i18n-zh {
+  display: block;
+  line-height: 1.55;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.parts-page .i18n-en {
+  font-size: 0.9rem;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.parts-page .i18n-zh {
+  margin-top: 0.15rem;
+  font-size: 0.86rem;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+/* 表头双语紧凑，避免表头过高 */
+.parts-page .parts-table th .i18n-en {
+  font-size: 0.88rem;
+}
+
+.parts-page .parts-table th .i18n-zh {
+  margin-top: 0.1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ==========================================================
+   6. 元件 ID 链接（当前为占位，登记后填入编号与 href）
+   ========================================================== */
+.parts-page .part-id {
+  display: inline-block;
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--desc-color-primary, #8B5A2B);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(139, 90, 43, 0.4);
+  word-break: break-all;
+}
+
+.parts-page .part-id:hover {
+  color: var(--desc-color-primary-darker, #4A3728);
+  border-bottom-color: currentColor;
+}
+
+.parts-page .part-id--pending {
+  color: var(--desc-color-primary-lightest, #6B5B45);
+  border-bottom: none;
+  opacity: 0.6;
+  cursor: default;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================
+   7. 序列折叠块：与描述共用同一节奏，不额外占视觉行
+   ========================================================== */
+.parts-page .seq-block {
+  margin-top: 0.5rem;
+}
+
+.parts-page .seq-block > summary {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  cursor: pointer;
+  padding: 0.15rem 0;
+  list-style: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--desc-color-primary, #8B5A2B);
+}
+
+.parts-page .seq-block > summary::-webkit-details-marker {
+  display: none;
+}
+
+.parts-page .seq-block > summary::before {
+  content: '▸';
+  font-size: 0.72rem;
+}
+
+.parts-page .seq-block[open] > summary::before {
+  content: '▾';
+}
+
+/* summary 内双语并排，不各占一行 */
+.parts-page .seq-block > summary .i18n-en,
+.parts-page .seq-block > summary .i18n-zh {
+  display: inline;
+  margin-top: 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.parts-page .seq-block > summary .i18n-zh {
+  font-weight: 400;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+.parts-page .seq-block code.seq {
+  display: block;
+  margin-top: 0.4rem;
+  padding: 0.55rem 0.65rem;
+  background: rgba(139, 90, 43, 0.06);
+  border: 1px solid rgba(139, 90, 43, 0.14);
+  border-radius: 0.375rem;
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--desc-color-primary-dark, #4A3525);
+  word-break: break-all;
+  white-space: pre-wrap;
+  max-height: 9rem;
+  overflow-y: auto;
+}
+
+/* ==========================================================
+   8. 骨架与试剂列表
+   ========================================================== */
+.parts-page .parts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.parts-page .parts-list > li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(139, 90, 43, 0.12);
+}
+
+.parts-page .parts-list > li:last-child {
+  border-bottom: none;
+}
+
+.parts-page .parts-list .i18n-en {
+  font-size: 0.92rem;
+}
+
+.parts-page .parts-list .i18n-zh {
+  font-size: 0.86rem;
+}
+
+/* ==========================================================
+   9. 窄屏：表格横向滚动，列宽保持不变
+   ========================================================== */
+@media (max-width: 768px) {
+  .parts-page {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .parts-page .content-card {
+    padding: 1.1rem 1rem;
+  }
+
+  .parts-page .parts-table {
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+
+  .parts-page .parts-table thead,
+  .parts-page .parts-table tbody,
+  .parts-page .parts-table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .parts-page .parts-table .col-id {
+    width: 22%;
+  }
+
+  .parts-page .parts-table .col-name {
+    width: 34%;
+  }
+
+  .parts-page .parts-table th,
+  .parts-page .parts-table td {
+    padding: 0.55rem 0.5rem;
+  }
+}

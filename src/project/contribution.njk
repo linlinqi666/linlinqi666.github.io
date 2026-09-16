@@ -3,6 +3,7 @@ permalink: "project/contribution.html"
 title: "Contribution - iGEM SZPU-2026"
 lang: "zh-CN"
 basePath: "../"
+mainClass: "contribution-page"
 css:
   - static/css/contribution.css
 js:
@@ -11,9 +12,19 @@ js:
 
 {% extends "layouts/base.njk" %}
 
-{# 页面内容全部来自 src/_data/contribution.js（中英双语源），此处只负责渲染结构。 #}
+{# 页面内容全部来自 src/_data/contribution.js（中英双语源），此处只负责渲染结构。
+   版式约定：英文在上为主视觉（.i18n-en），中文在下为辅助（.i18n-zh）。
+   表格样式全部交给 contribution.css，模板内不再写内联样式。 #}
+
+{% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span><span class="i18n-zh">{{ zh | safe }}</span>{% endmacro %}
 
 {% block main %}
+<header class="contribution-hero">
+  <h1>Contribution</h1>
+  <p class="contribution-hero__sub">{{ pair('Reusable parts, protocols and records that the PAGER-Yeast project is handing to the next iGEM team', 'PAGER-Yeast 项目交给下一支 iGEM 队伍的可复用部件、协议与记录') }}</p>
+  <div class="contribution-hero__rule" aria-hidden="true"></div>
+</header>
+
 <div class="description-container">
 
       <!-- 左侧导航栏 -->
@@ -32,12 +43,21 @@ js:
             {% for item in contribution.nav %}
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#{{ item.id }}" class="nav-main-link">{{ item.zh }}<span class="i18n-en">{{ item.en }}</span></a>
+                <a href="#{{ item.id }}" class="nav-main-link">{{ pair(item.en, item.zh) }}</a>
               </div>
               {% if item.children %}
               <ul class="level2">
                 {% for child in item.children %}
-                <li class="level3"><a href="#{{ child.id }}">{{ child.zh }}<span class="i18n-en">{{ child.en }}</span></a></li>
+                <li class="{{ 'level2-has-sub' if child.children else 'level3' }}">
+                  <a href="#{{ child.id }}">{{ pair(child.en, child.zh) }}</a>
+                  {% if child.children %}
+                  <ul class="level3">
+                    {% for sub in child.children %}
+                    <li><a href="#{{ sub.id }}">{{ pair(sub.en, sub.zh) }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </li>
                 {% endfor %}
               </ul>
               {% endif %}
@@ -73,57 +93,59 @@ js:
       <div class="description-content">
         {% for card in contribution.cards %}
         <div id="{{ card.id }}" class="content-card">
-          <h2>{{ card.title.zh | safe }}<span class="i18n-en">{{ card.title.en | safe }}</span></h2>
-          <div class="content-text-frame">
+          <h2>{{ pair(card.title.en, card.title.zh) }}</h2>
+          <div class="content-body">
             {% if card.summary %}
-            <p class="executive-summary">{{ card.summary.zh | safe }}<span class="i18n-en">{{ card.summary.en | safe }}</span></p>
+            <p class="executive-summary">{{ pair(card.summary.en, card.summary.zh) }}</p>
             {% endif %}
 
             {% for block in card.blocks %}
               {% if block.type == 'p' %}
-            <p{% if block.cls %} class="{{ block.cls }}"{% endif %}>{{ block.text.zh | safe }}<span class="i18n-en">{{ block.text.en | safe }}</span></p>
+            <p{% if block.cls %} class="{{ block.cls }}"{% endif %}>{{ pair(block.text.en, block.text.zh) }}</p>
 
               {% elif block.type == 'ul' %}
-            <ul>
+            <ul class="field-list">
               {% for it in block.items %}
-              <li>{% if it.label %}<strong>{{ it.label.zh }}<span class="i18n-en">{{ it.label.en }}</span></strong>{% endif %}{{ it.text.zh | safe }}<span class="i18n-en">{{ it.text.en | safe }}</span></li>
+              <li><span class="field-label">{{ pair(it.label.en, it.label.zh) }}</span><span class="field-value">{{ pair(it.text.en, it.text.zh) }}</span></li>
               {% endfor %}
             </ul>
 
               {% elif block.type == 'fields' %}
-            <ul>
+            <ul class="field-list">
               {% for f in block.items %}
-              <li><strong>{{ f.label.zh }}<span class="i18n-en">{{ f.label.en }}</span></strong>{{ f.value.zh | safe }}<span class="i18n-en">{{ f.value.en | safe }}</span></li>
+              <li><span class="field-label">{{ pair(f.label.en, f.label.zh) }}</span><span class="field-value">{{ pair(f.value.en, f.value.zh) }}</span></li>
               {% endfor %}
             </ul>
 
               {% elif block.type == 'links' %}
-            <ul>
+            <ul class="link-list">
               {% for a in block.items %}
-              <li><a href="{{ a.href }}">{{ a.zh }}<span class="i18n-en">{{ a.en }}</span></a></li>
+              <li><a href="{{ a.href }}">{{ pair(a.en, a.zh) }}</a></li>
               {% endfor %}
             </ul>
 
               {% elif block.type == 'table' %}
-            <h3>{{ block.heading.zh }}<span class="i18n-en">{{ block.heading.en }}</span></h3>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="border-bottom:2px solid #333;">
-                  {% for h in block.head %}
-                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">{{ h.zh }}<span class="i18n-en">{{ h.en }}</span></th>
+            <h3>{{ pair(block.heading.en, block.heading.zh) }}</h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    {% for h in block.head %}
+                    <th scope="col">{{ pair(h.en, h.zh) }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in block.rows %}
+                  <tr>
+                    {% for cell in row %}
+                    <td>{% if cell.en %}{{ pair(cell.en, cell.zh) }}{% else %}<span class="i18n-zh">{{ cell.zh | safe }}</span>{% endif %}</td>
+                    {% endfor %}
+                  </tr>
                   {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in block.rows %}
-                <tr style="border-bottom:1px solid #ddd;">
-                  {% for cell in row %}
-                  <td style="border:1px solid #ccc; padding:8px;">{{ cell.zh | safe }}{% if cell.en %}<span class="i18n-en">{{ cell.en | safe }}</span>{% endif %}</td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
               {% endif %}
             {% endfor %}
           </div>
@@ -131,14 +153,4 @@ js:
         {% endfor %}
       </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    new PageProgressBar().startAutoProgress();
-
-  });
-</script>
 {% endblock %}

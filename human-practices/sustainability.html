@@ -4,7 +4,7 @@
   <link rel="icon" type="image/png" href="../static/image/any-icon/SZPU(notext).png">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Social Groups - iGEM SZPU-2026</title>
+<title>Sustainability - iGEM SZPU-2026</title>
 <meta name="description" content="">
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
@@ -14,10 +14,28 @@
 <link rel="stylesheet" href="../static/css/navigation/navigation.css">
 
 <link rel="stylesheet" href="../static/css/mobile.css">
+<link rel="stylesheet" href="../static/css/components/page-loader.css">
+<!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
+     置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
+<script src="../static/js/components/page-loader-arm.js"></script>
 
 
 </head>
 <body class="">
+      <!-- 全站页级加载遮罩：默认 display:none，仅当 head 内同步脚本
+         page-loader-arm.js 给 <html> 打上 .page-loader-armed 后显示；
+         由 static/js/components/page-loader.js 在首屏关键插画就绪后收尾。 -->
+    <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+      <div class="page-loader__inner">
+        <div class="page-loader__stage">
+          <span class="page-loader__halo" aria-hidden="true"></span>
+          <div class="page-loader__frames" aria-hidden="true"></div>
+          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <p class="page-loader__text" aria-hidden="true">Loading</p>
+      </div>
+    </div>
+
   <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
 <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
   <span></span>
@@ -38,7 +56,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -64,6 +81,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -71,7 +89,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -93,7 +111,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -119,6 +136,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -126,7 +144,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -167,10 +185,9 @@
 
   <main class="">
     
-<section id="human-practices-social-groups">
-      <h2>社会群体</h2>
-      <p>这里介绍了项目与社会群体的互动，包括社区调研、公众参与等内容。</p>
-    </section>
+<section id="human-practices-sustainability">
+  <h1>Sustainability</h1>
+</section>
 
   </main>
   <section id="footer" class="section-footer">
@@ -229,7 +246,6 @@
                 <li><a href="../project/description.html">Description</a></li>
                 <li><a href="../project/design.html">Design</a></li>
                 <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/log.html">Log</a></li>
                 <li><a href="../project/contribution.html">Contribution</a></li>
               </ul>
             </div>
@@ -240,6 +256,7 @@
                 <li><a href="../wet-lab/result.html">Results</a></li>
                 <li><a href="../wet-lab/parts.html">Parts</a></li>
                 <li><a href="../wet-lab/safety.html">Safety</a></li>
+                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -255,7 +272,7 @@
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
                 <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
+                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -290,6 +307,7 @@
 
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/js/components/page-loader.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
@@ -297,71 +315,5 @@
   <script src="../static/js/core/search.js" defer></script>
   
   
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    // 移动端汉堡菜单切换
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const mobileOverlay = document.getElementById('mobile-menu-overlay');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (hamburgerMenu && mobileOverlay && mobileMenu) {
-      hamburgerMenu.addEventListener('click', function (e) {
-        e.stopPropagation();
-        this.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-
-        if (mobileOverlay.classList.contains('active')) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
-      });
-
-      // 点击遮罩层关闭菜单
-      mobileOverlay.addEventListener('click', function (e) {
-        if (e.target === mobileOverlay) {
-          hamburgerMenu.classList.remove('active');
-          mobileOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-
-          document.querySelectorAll('.dropdown-open').forEach(function (item) {
-            item.classList.remove('dropdown-open');
-          });
-        }
-      });
-
-      // 点击导航链接后关闭菜单
-      const navLinks = mobileMenu.querySelectorAll('a:not(.dropdown-toggle)');
-      navLinks.forEach(function (link) {
-        link.addEventListener('click', function () {
-          hamburgerMenu.classList.remove('active');
-          mobileOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
-
-      // 移动端下拉菜单切换
-      const dropdownToggles = mobileMenu.querySelectorAll('.dropdown-toggle');
-      dropdownToggles.forEach(function (toggle) {
-        toggle.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const parent = this.parentElement;
-          parent.classList.toggle('dropdown-open');
-        });
-      });
-    }
-  
-  });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    new PageProgressBar().startAutoProgress();
-  
-  });
-</script>
-
 </body>
 </html>

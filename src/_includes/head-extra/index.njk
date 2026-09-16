@@ -36,11 +36,26 @@
         if (!isExternal) return;
 
         root.classList.add('intro-gif-armed');
-        setTimeout(function () {
-          if (!root.classList.contains('intro-gif-running')) {
-            root.classList.add('intro-gif-finished');
-          }
-        }, 6000);
+
+        // 看门狗：组件脚本始终未启动时强制结束开场（恢复导航与滚动）。
+        // 页面加载遮罩（page-loader）先播、GIF 后播：遮罩期间不计时，
+        // 等 pageloader:done 或硬上限后再开始 6s 计时，避免把 GIF 卡没。
+        var watchdogStarted = false;
+        function startWatchdogOnce() {
+          if (watchdogStarted) return;
+          watchdogStarted = true;
+          setTimeout(function () {
+            if (!root.classList.contains('intro-gif-running')) {
+              root.classList.add('intro-gif-finished');
+            }
+          }, 6000);
+        }
+        if (root.classList.contains('page-loader-armed')) {
+          document.addEventListener('pageloader:done', startWatchdogOnce);
+          setTimeout(startWatchdogOnce, 12000);
+        } else {
+          startWatchdogOnce();
+        }
       } catch (e) { /* 降级：保持导航栏可见 */ }
     })();
   </script>

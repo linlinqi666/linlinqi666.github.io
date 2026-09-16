@@ -1,0 +1,33 @@
+<!-- 成员页专属 head 片段：在 partials/head.njk 中由 front matter 的 headExtraPartial 引入，
+     位置在 mobile.css 之后，确保组件样式能覆盖全局响应式规则。 -->
+
+<!-- 全屏引导封面样式（与首页 GIF 开场同为 components/ 下的页级组件） -->
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/members-intro.css">
+
+<!-- 引导封面 arm：必须在 <body> 渲染前同步执行，否则会先闪出成员页再被封面盖住。
+     - 触发：直接访问 / 站内跳转 / 站外进入都显示（用户要求"进入成员页先看整队照片"）；
+       如需改为"每个会话只显示一次"，把 ONCE_PER_SESSION 改为 true 即可。
+     - 降级：无 JS 时不 arm，.members-intro 默认 display:none，页面照常可用。
+     - 看门狗：控制器（members-intro.js）未启动时 8s 后强制收尾，页面不会被封面永久遮挡。 -->
+<script>
+  (function () {
+    try {
+      var ONCE_PER_SESSION = false;
+      var SESSION_KEY = 'szpu-members-intro-seen';
+      var root = document.documentElement;
+
+      if (ONCE_PER_SESSION) {
+        try {
+          if (window.sessionStorage && sessionStorage.getItem(SESSION_KEY) === '1') return;
+        } catch (e) { /* 隐私模式下忽略 */ }
+      }
+
+      root.classList.add('members-intro-armed');
+
+      setTimeout(function () {
+        if (root.classList.contains('members-intro-ready')) return;
+        root.classList.add('members-intro-finished');
+      }, 8000);
+    } catch (e) { /* 降级：封面不显示，成员页正常运行 */ }
+  })();
+</script>

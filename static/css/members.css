@@ -15,15 +15,19 @@
   --photo-edge-fade: 12%;
 
   /* Role accent stripe colors */
+  --role-pi: #FEE2E2;
   --role-wet: #DBEAFE;
   --role-dry: #D1FAE5;
   --role-hp: #FFEDD5;
+  --role-art: #CFFAFE;
   --role-designer: #F3E8FF;
 
   /* Derived role text colors */
+  --role-pi-text: #991B1B;
   --role-wet-text: #1E40AF;
   --role-dry-text: #065F46;
   --role-hp-text: #9A3412;
+  --role-art-text: #0E7490;
   --role-designer-text: #7E22CE;
 }
 
@@ -44,11 +48,18 @@ body>header {
 }
 
 .members-redesign-app {
+  /* 布局标尺：顶栏留白由全站 `body:not(.home-page) main { padding-top: 6.25rem }` 提供，
+     此处只做记录与 calc 复用，绝不再叠加第二份，否则首屏会出现双倍空白。 */
+  --members-nav-offset: 6.25rem;
+  --members-strip-w: clamp(300px, 30vw, 390px);
+  --members-rail-w: clamp(272px, 24vw, 380px);
+  --members-gutter: clamp(16px, 4vw, 32px);
   position: relative;
   z-index: 1;
   display: flex;
   align-items: stretch;
-  min-height: 100vh;
+  /* 顶栏已占 100px，这里减掉，避免内容本就装得下却仍多出一条滚动缝 */
+  min-height: calc(100vh - var(--members-nav-offset));
   height: auto;
   background: var(--page-bg);
   padding: 0;
@@ -126,15 +137,17 @@ body>header {
 
 /* ---------- Left navigation strip ---------- */
 .members-strip {
-  flex: 0 0 35%;
-  max-width: 390px;
+  flex: 0 0 var(--members-strip-w);
+  max-width: var(--members-strip-w);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: 100px 0 0 0;
+  /* 顶栏留白由 main 的 padding-top 提供（见 .members-redesign-app 注释），此处不再叠加 */
+  margin: 0;
   padding: 24px 0 48px 0;
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - var(--members-nav-offset));
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .strip-header {
@@ -223,6 +236,10 @@ body>header {
   flex-shrink: 0;
 }
 
+.group-indicator[data-role="PI"] {
+  background: var(--role-pi-text);
+}
+
 .group-indicator[data-role="Wet Lab"] {
   background: var(--role-wet-text);
 }
@@ -233,6 +250,10 @@ body>header {
 
 .group-indicator[data-role="HP"] {
   background: var(--role-hp-text);
+}
+
+.group-indicator[data-role="Art"] {
+  background: var(--role-art-text);
 }
 
 .group-indicator[data-role="Designer"] {
@@ -266,7 +287,9 @@ body>header {
   margin-top: 8px;
   overflow: visible;
   transition: max-height var(--transition), opacity var(--transition);
-  max-height: 800px;
+  /* 展开态留足上限：单组超过该值时展开仍不裁剪（overflow: visible），
+     上限只影响过渡终点，故给足冗余而不做精确测算。 */
+  max-height: 2000px;
   opacity: 1;
 }
 
@@ -335,6 +358,21 @@ body>header {
   border-color: var(--primary-blue);
 }
 
+/* 键盘焦点：统一用品牌色，且只在 :focus-visible 时出现，
+   避免鼠标点击或程序化聚焦时出现浏览器默认黑框 */
+.member-strip:focus,
+.members-strip:focus {
+  outline: none;
+}
+
+.member-strip:focus-visible,
+.group-header:focus-visible,
+.strip-toggle:focus-visible,
+.rail-toggle:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
 .strip-avatar {
   width: var(--avatar-diameter);
   height: var(--avatar-diameter);
@@ -366,7 +404,8 @@ body>header {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 24px 404px 48px 0;
+  /* 右侧预留信息条宽度（随视口收缩），保证照片可视带宽不被挤成一条缝 */
+  padding: 24px calc(var(--members-rail-w) + 24px) 48px 0;
 }
 
 .detail-card {
@@ -514,7 +553,8 @@ body>header {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 380px;
+  /* 宽度继承 .members-redesign-app 上的 --members-rail-w（同一容器内） */
+  width: var(--members-rail-w, 380px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -530,7 +570,7 @@ body>header {
 .bio-rail-inner {
   width: 100%;
   height: 100%;
-  padding: 32px 28px 32px 110px;
+  padding: 32px 28px 32px clamp(56px, 8vw, 110px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -691,12 +731,59 @@ body>header {
   z-index: 2;
 }
 
+/* ---------- 工具类 ---------- */
+/* 屏幕阅读器可见、视觉隐藏（用于页面唯一的 h1） */
+.members-sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- Responsive ---------- */
-@media (max-width: 1024px) {
+/* 断点策略（2026-09-16 重构）：
+   ≥1100px  桌面分栏：左条带 + 全幅人像背景 + 右侧信息条（宽度随视口收缩，照片可视带宽不再被挤成细缝）
+   ≤1099px  堆叠布局：人像改为顶部 hero 条，条带折叠为切换器，信息条收起、简介进入详情卡
+   该断点数值必须与 static/js/pages/members.js 的 DESKTOP_BREAKPOINT 一致。 */
+@media (max-width: 1099px) {
   .members-redesign-app {
     flex-direction: column;
     align-items: stretch;
-    padding: 20px 24px 40px 0;
+    gap: 20px;
+    padding: 0 var(--members-gutter) 40px;
+    min-height: 0;
+  }
+
+  /* 人像从"背景层"改为"顶部 hero"：窄屏也能看到成员照片，
+     同时不再与正文抢可读性（这是此前手机端整页无图的原因）。 */
+  .members-bg-layer {
+    position: relative;
+    inset: auto;
+    order: -1;
+    height: clamp(200px, 30vh, 340px);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .bg-slide {
+    /* hero 用底部渐隐替代桌面端的径向淡化，避免圆角与径向 mask 相互削弱 */
+    -webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
+  }
+
+  .bg-mask {
+    background:
+      linear-gradient(to bottom,
+        rgba(247, 241, 228, 0.85) 0%,
+        rgba(247, 241, 228, 0) 34%),
+      linear-gradient(to top,
+        rgba(247, 241, 228, 1) 0%,
+        rgba(247, 241, 228, 0) 42%);
   }
 
   .members-strip,
@@ -705,6 +792,12 @@ body>header {
     max-width: none;
     width: 100%;
     padding: 0;
+  }
+
+  /* 取消条带自身的滚动条（移动端嵌套滚动极易误触），列表随页面滚动 */
+  .members-strip {
+    max-height: none;
+    overflow: visible;
   }
 
   .strip-header {
@@ -722,10 +815,11 @@ body>header {
     transition: max-height var(--transition), opacity var(--transition);
   }
 
+  /* 展开上限由 JS 实测 scrollHeight 写入 --strip-groups-max；
+     不再使用固定 1200px，避免成员增多后列表末尾被裁掉、点不到。 */
   .members-strip.is-expanded .strip-groups {
-    max-height: 1200px;
+    max-height: var(--strip-groups-max, 2400px);
     opacity: 1;
-    overflow: hidden;
   }
 
   /* On smaller screens the strip becomes a top switcher; drop the flag tail
@@ -750,9 +844,16 @@ body>header {
     max-width: 100%;
   }
 
+  .detail-content::before {
+    background: linear-gradient(to right,
+        rgba(247, 241, 228, 0.96) 0%,
+        rgba(247, 241, 228, 0.86) 60%,
+        rgba(247, 241, 228, 0.55) 100%);
+  }
+
   .detail-card {
-    min-height: 420px;
-    padding: 24px;
+    min-height: 0;
+    padding: 20px clamp(14px, 4vw, 24px) 24px;
   }
 
   /* The vertical bio rail is hidden on tablet/mobile to avoid overlapping the
@@ -762,38 +863,52 @@ body>header {
   }
 }
 
-@media (max-width: 768px) {
-
-  /* On narrow screens the photo background is hidden so the frameless text
-     remains readable without competing with a full-bleed image. */
-  .members-bg-layer {
-    display: none;
-  }
-
-  .detail-content {
-    max-width: 100%;
-  }
-
-  .detail-content::before {
-    background: linear-gradient(to right,
-        rgba(247, 241, 228, 0.95) 0%,
-        rgba(247, 241, 228, 0.75) 70%,
-        rgba(247, 241, 228, 0.4) 100%);
-  }
-}
-
 @media (max-width: 640px) {
   .members-redesign-app {
-    padding: 16px 16px 32px 0;
     gap: 16px;
+    padding-bottom: 32px;
   }
 
-  .detail-card {
-    min-height: auto;
-    padding: 20px 16px 24px;
+  .members-bg-layer {
+    height: clamp(172px, 26vh, 260px);
+    border-radius: 14px;
+  }
+
+  .strip-title {
+    font-size: 18px;
   }
 
   .detail-name {
     font-size: 22px;
+  }
+
+  .detail-bio {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+}
+
+/* 动效降载：尊重 prefers-reduced-motion（标签默认 opacity:0 依赖动画，必须显式恢复） */
+@media (prefers-reduced-motion: reduce) {
+  .bg-slide,
+  .member-strip,
+  .strip-avatar,
+  .group-members,
+  .strip-groups,
+  .group-header,
+  .strip-toggle,
+  .bio-rail-inner,
+  .rail-toggle,
+  .rail-edge-filler {
+    transition: none !important;
+  }
+
+  .detail-card.is-animating {
+    animation: none;
+  }
+
+  .detail-tag {
+    opacity: 1;
+    animation: none;
   }
 }

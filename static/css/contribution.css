@@ -1,119 +1,575 @@
 /**
- * Contribution 页面专属样式（仅本页加载）
+ * Contribution 页面专属样式（仅 Contribution 页加载；根站与 Flask 两站保持一致）
  *
- * 两项目的：
- * 1. 补齐内容区链接样式。navigation.css 只定义了导航、侧栏与页脚链接，
- *    .content-card 内的 <a> 此前退回浏览器默认蓝下划线，与米黄/棕主题不符。
- * 2. 约束长序列与长词，避免撑破表格与卡片，并保证窄屏下的可读性。
+ * 三项目的：
+ * 1. 补齐此前缺失的内容页主题。本页只加载本文件，卡片、段落、标题、代码、表格
+ *    此前没有任何主题规则，正文退回浏览器默认样式。
+ * 2. 双语版式：英文在上为主视觉（.i18n-en），中文在下为辅助（.i18n-zh）。
+ * 3. 表格样式全部收归本文件，模板不再内联写边框与内边距。
  *
- * 仅调整视觉与布局，不改动页面结构与功能。
+ * 作用域：所有规则统一收敛在 .contribution-page 之下（该类挂在 <main class="..."> 上），
+ * 因此本文件虽然被多个内容页引用，视觉改动只对 Contribution 页生效，不波及其他页面。
+ *
+ * 另：本文件需覆盖 index.css 中 .executive-summary 的首页 300vh 规则（首页滚动动画区），
+ * 否则本页每条摘要会被撑成三屏高。
  */
 
-/* ===== 内容区链接 ===== */
-.content-card a {
+/* ==========================================================
+   1. 页面作用域与两栏布局
+   ========================================================== */
+/* 锚点跳转偏移：与全站其他内容页保持一致，由滚动容器统一承担。 */
+html {
+  scroll-padding-top: 120px;
+}
+
+.contribution-page .description-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ==========================================================
+   2. 页首标题区（本页唯一 h1）
+   ========================================================== */
+.contribution-hero {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 0.25rem;
+}
+
+.contribution-hero h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.contribution-hero__sub {
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--desc-color-primary-dark, #5D4632);
+  text-indent: 0;
+}
+
+.contribution-hero__rule {
+  margin-top: 0.6rem;
+  height: 3px;
+  width: 4.5rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--desc-color-primary, #8B5A2B) 0%, var(--desc-color-primary-light, #D4A574) 100%);
+}
+
+/* ==========================================================
+   3. 内容卡片
+   ========================================================== */
+.contribution-page .content-card {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin: 0 0 1.5rem;
+  box-shadow: 0 2px 10px rgba(93, 58, 26, 0.06);
+  overflow-wrap: anywhere;
+}
+
+.contribution-page .content-card h2 {
+  margin: 0 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.contribution-page .content-card h3 {
+  margin: 1.25rem 0 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-left: 3px solid var(--desc-color-primary, #8B5A2B);
+  border-radius: 0 0.25rem 0.25rem 0;
+  background: rgba(139, 90, 43, 0.04);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.contribution-page .content-card p {
+  margin: 0 0 0.75rem;
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  text-indent: 0;
+  text-align: justify;
+}
+
+.contribution-page .content-card p:last-child {
+  margin-bottom: 0;
+}
+
+.contribution-page .content-card code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  background: rgba(139, 90, 43, 0.06);
+  color: var(--desc-color-primary-dark, #5D4632);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85em;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+/* 导语段 */
+.contribution-page .content-intro {
+  padding-left: 0.9rem;
+  border-left: 3px solid rgba(139, 90, 43, 0.25);
+  color: var(--desc-color-primary-dark, #5D4632);
+}
+
+/* ==========================================================
+   4. 双语版式：英文在上为主，中文在下为辅
+   ========================================================== */
+.contribution-page .i18n-en {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.contribution-page .i18n-zh {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+.contribution-page .content-card h2 .i18n-en {
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.contribution-page .content-card h2 .i18n-zh {
+  margin-top: 0.25rem;
+  font-size: 0.62em;
+  font-weight: 500;
+}
+
+.contribution-page .content-card h3 .i18n-en {
+  font-size: inherit;
+  font-weight: 600;
+}
+
+.contribution-page .content-card h3 .i18n-zh {
+  margin-top: 0.15rem;
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+/* ==========================================================
+   5. 摘要条：覆盖 index.css 的首页 300vh 版本
+   ========================================================== */
+.contribution-page .executive-summary {
+  position: static;
+  height: auto;
+  min-height: 0;
+  width: auto;
+  padding: 0.85rem 1.1rem;
+  margin: 0 0 1.25rem;
+  border-left: 3px solid var(--desc-color-primary, #8B5A2B);
+  border-radius: 0 0.375rem 0.375rem 0;
+  background: linear-gradient(90deg, rgba(139, 90, 43, 0.07) 0%, rgba(139, 90, 43, 0.02) 100%);
+  display: block;
+}
+
+.contribution-page .executive-summary::before {
+  content: none;
+}
+
+.contribution-page .executive-summary .i18n-en {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--desc-color-primary-dark, #5D4632);
+}
+
+.contribution-page .executive-summary .i18n-zh {
+  font-size: 0.82rem;
+}
+
+/* ==========================================================
+   6. 字段列表与链接列表
+   ========================================================== */
+.contribution-page .field-list,
+.contribution-page .link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+/* 列表自带圆点（根站 navigation.css 会给 .content-card ul>li 加 ::before 圆点），
+   这里的分栏布局文字紧贴左边界，圆点会压在字上，因此显式去掉 */
+.contribution-page .field-list > li::before,
+.contribution-page .link-list > li::before {
+  content: none;
+}
+
+.contribution-page .link-list > li {
+  list-style: none;
+}
+
+.contribution-page .field-list > li {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 13rem) 1fr;
+  gap: 0.35rem 1.25rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed rgba(139, 90, 43, 0.16);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.contribution-page .field-list > li:last-child {
+  border-bottom: none;
+}
+
+.contribution-page .field-label {
+  color: var(--desc-color-primary, #8B5A2B);
+  font-weight: 600;
+}
+
+.contribution-page .field-label .i18n-en {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--desc-color-primary, #8B5A2B);
+}
+
+.contribution-page .field-label .i18n-zh {
+  margin-top: 0.05rem;
+  font-size: 0.74rem;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+.contribution-page .field-value .i18n-en {
+  font-size: 0.95rem;
+}
+
+.contribution-page .field-value .i18n-zh {
+  font-size: 0.82rem;
+}
+
+.contribution-page .link-list > li {
+  padding: 0.35rem 0;
+  font-size: 0.95rem;
+}
+
+.contribution-page .link-list a {
+  display: inline-block;
+}
+
+.contribution-page .link-list a .i18n-en {
+  font-size: 0.95rem;
+}
+
+.contribution-page .link-list a .i18n-zh {
+  font-size: 0.8rem;
+}
+
+/* 正文链接：常态带下划线，读者一眼能认出是可点的链接 */
+.contribution-page .content-card a {
   color: var(--color-blue-link, #4285F4);
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 1px;
+  text-decoration: underline;
+  text-decoration-color: rgba(66, 133, 244, 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
   transition: color var(--desc-duration-fast, 0.2s) ease,
-              border-color var(--desc-duration-fast, 0.2s) ease;
+              text-decoration-color var(--desc-duration-fast, 0.2s) ease;
 }
 
-.content-card a:hover {
+.contribution-page .content-card a:hover,
+.contribution-page .content-card a:focus-visible {
   color: var(--color-blue-link-dark, #1A73E8);
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
 }
 
-.content-card a:focus-visible {
+.contribution-page .content-card a:focus-visible {
   outline: 2px solid var(--color-blue-link-dark, #1A73E8);
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* ===== 长文本与长序列：不溢出容器 ===== */
-.content-card {
-  overflow-wrap: anywhere;
+/* ==========================================================
+   7. 状态标签（占位信息统一形态）
+   ========================================================== */
+.status-badge {
+  display: inline-block;
+  margin: 0 0.15rem;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  white-space: nowrap;
+  vertical-align: 0.1em;
 }
 
-.content-card p,
-.content-card li,
-.content-card td,
-.content-card th,
-.content-card code {
+.status-badge--register {
+  color: #B07D2B;
+  background: rgba(176, 125, 43, 0.1);
+  border-color: rgba(176, 125, 43, 0.35);
+}
+
+.status-badge--verify {
+  color: var(--desc-color-primary, #8B5A2B);
+  background: rgba(139, 90, 43, 0.08);
+  border-color: rgba(139, 90, 43, 0.25);
+}
+
+.status-badge--add {
+  color: #2E7D32;
+  background: rgba(52, 168, 83, 0.1);
+  border-color: rgba(52, 168, 83, 0.3);
+}
+
+/* ==========================================================
+   8. 数据表格（替代原内联样式）
+   ========================================================== */
+.contribution-page .table-scroll {
+  overflow-x: auto;
+  margin: 0.5rem 0 1.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.contribution-page .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card, #ffffff);
+  font-size: 0.9rem;
+}
+
+.contribution-page .data-table th {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 2px solid var(--desc-color-primary, #8B5A2B);
+  background: rgba(139, 90, 43, 0.07);
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-weight: 600;
+  text-align: left;
+  vertical-align: top;
+}
+
+.contribution-page .data-table td {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid rgba(139, 90, 43, 0.15);
+  border-top: none;
+  color: var(--desc-color-primary-darker, #4A3728);
+  vertical-align: top;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
-/* DNA / 蛋白序列为连续无空格长串，按任意位置断行 */
-.content-card code {
-  white-space: normal;
-  word-break: break-all;
+.contribution-page .data-table tbody tr:nth-child(even) {
+  background: rgba(139, 90, 43, 0.03);
 }
 
-/* ===== 表格：限制在卡片宽度内 ===== */
-.content-card table {
-  max-width: 100%;
+.contribution-page .data-table .i18n-en {
+  font-size: 0.88rem;
 }
 
-.content-card table th,
-.content-card table td {
-  vertical-align: top;
+.contribution-page .data-table .i18n-zh {
+  font-size: 0.78rem;
 }
 
-/* ===== 窄屏：收紧表格内边距与字号，长序列继续换行 ===== */
-@media (max-width: 768px) {
-  .content-card table th,
-  .content-card table td {
-    padding: 6px;
-    font-size: var(--desc-font-size-sm, 0.8rem);
-    line-height: 1.6;
-  }
-
-  .content-card table code {
-    font-size: var(--desc-font-size-sm, 0.8rem);
-  }
+.contribution-page .data-table code {
+  font-size: 0.78rem;
 }
 
-/* ===== 双语：英文段落（逐段对照，中文在前、英文在后） ===== */
-.i18n-en {
-  display: block;
-  margin-top: 0.2rem;
-  font-size: 0.86em;
-  font-weight: 400;
-  line-height: 1.6;
-  color: var(--desc-color-primary-lightest, #6B5B45);
-  text-indent: 0;
-  text-align: left;
+/* ==========================================================
+   9. 侧栏目录双语与发酵进度（补齐此前无定义的类）
+   ========================================================== */
+.contribution-page .description-nav .i18n-en {
+  font-size: 0.82rem;
+  color: var(--desc-color-primary-darker, #4A3728);
 }
 
-h2 .i18n-en {
-  margin-top: 0.3rem;
-  font-size: 0.62em;
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-h3 .i18n-en {
-  margin-top: 0.2rem;
-  font-size: 0.8em;
-  font-weight: 500;
-}
-
-.content-card ul > li .i18n-en {
-  margin-top: 0.15rem;
-}
-
-.executive-summary .i18n-en {
-  font-size: 0.9em;
-}
-
-table .i18n-en {
-  margin-top: 0.15rem;
-  font-size: 0.85em;
-}
-
-/* 左侧目录：英文缩小排在第二行，避免拉宽侧栏 */
-.description-nav .i18n-en {
+.contribution-page .description-nav .i18n-zh {
   margin-top: 0.1rem;
-  font-size: 0.76em;
-  opacity: 0.85;
+  font-size: 0.72rem;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+  opacity: 0.9;
+}
+
+.contribution-page .flask-progress {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.contribution-page .progress-percentage {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--desc-color-primary, #8B5A2B);
+}
+
+/* 三级目录：Other contributions → Dry Lab / HP → O1-O4 */
+.contribution-page .level2-has-sub > a {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--desc-color-primary-dark, #4A3525);
+  text-decoration: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--desc-radius-xs, 0.25rem);
+}
+
+.contribution-page .level2-has-sub > a:hover {
+  background: rgba(122, 74, 26, 0.06);
+}
+
+/* level3 作为 <ul>（第三级列表容器） */
+.contribution-page ul.level3 {
+  list-style: none;
+  padding: 0;
+  margin: 0.1rem 0 0.1rem 1rem;
+}
+
+.contribution-page ul.level3 li {
+  margin-bottom: 0.08rem;
+}
+
+.contribution-page ul.level3 li a {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+  text-decoration: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--desc-radius-xs, 0.25rem);
+  transition: background 0.2s ease;
+}
+
+.contribution-page ul.level3 li a:hover {
+  background: rgba(122, 74, 26, 0.08);
+}
+
+.contribution-page ul.level3 li a.active {
+  background: rgba(122, 74, 26, 0.06);
+  color: var(--desc-color-primary-dark, #4A3525);
+}
+
+.contribution-page .liquid-fill {
+  position: absolute;
+  inset: 0;
+}
+
+.contribution-page .ferment-bubble.f-bubble-4 {
+  width: 0.25rem;
+  height: 0.25rem;
+  bottom: 15%;
+  left: 78%;
+  animation-delay: 1.5s;
+}
+
+/* ==========================================================
+   10. 侧栏：限制展开高度，目录内部滚动，发酵容器常驻可见
+   —— 目录展开后总高会超过视口，把发酵进度顶出屏幕；这里把侧栏锁在视口内，
+      目录自己承担滚动，发酵容器固定在侧栏底部。
+   ========================================================== */
+.contribution-page .description-container {
+  align-items: flex-start;
+}
+
+.contribution-page .description-sidebar {
+  position: sticky;
+  top: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 12rem);
+  overflow: hidden;
+}
+
+.contribution-page .description-nav-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 0.35rem;
+  scrollbar-width: thin;
+  scrollbar-color: #A9743A rgba(139, 90, 43, 0.08);
+}
+
+/* 主题化滚动条：米黄轨道 + 棕色滑块，可拖动 */
+.contribution-page .description-nav-wrapper::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.contribution-page .description-nav-wrapper::-webkit-scrollbar-track {
+  background: rgba(139, 90, 43, 0.08);
+  border-radius: 999px;
+}
+
+.contribution-page .description-nav-wrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #D4A574 0%, #A9743A 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+}
+
+.contribution-page .description-nav-wrapper::-webkit-scrollbar-thumb:hover,
+.contribution-page .description-nav-wrapper::-webkit-scrollbar-thumb:active {
+  background: #8B5A2B;
+}
+
+/* 发酵容器固定在侧栏底部，不参与目录滚动 */
+.contribution-page .progress-section {
+  flex: 0 0 auto;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+}
+
+/* ==========================================================
+   11. 窄屏适配
+   ========================================================== */
+
+/* 平板及以下侧栏回到文档流，解除视口锁高与内部滚动 */
+@media (max-width: 1023px) {
+  .contribution-page .description-sidebar {
+    position: relative;
+    top: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .contribution-page .description-nav-wrapper {
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .contribution-page .content-card {
+    padding: 1rem;
+  }
+
+  .contribution-page .content-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .contribution-page .field-list > li {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .contribution-page .data-table {
+    font-size: 0.8rem;
+  }
+
+  .contribution-page .data-table th,
+  .contribution-page .data-table td {
+    padding: 0.4rem;
+  }
+
+  .contribution-hero {
+    padding: 1.25rem 1rem 0.25rem;
+  }
 }

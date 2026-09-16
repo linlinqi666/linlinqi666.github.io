@@ -4,7 +4,7 @@
   <link rel="icon" type="image/png" href="../static/image/any-icon/SZPU(notext).png">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Log - iGEM SZPU-2026</title>
+<title>Notebook - iGEM SZPU-2026</title>
 <meta name="description" content="">
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
@@ -15,10 +15,28 @@
 <link rel="stylesheet" href="../static/css/log.css">
 
 <link rel="stylesheet" href="../static/css/mobile.css">
+<link rel="stylesheet" href="../static/css/components/page-loader.css">
+<!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
+     置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
+<script src="../static/js/components/page-loader-arm.js"></script>
 
 
 </head>
 <body class="">
+      <!-- 全站页级加载遮罩：默认 display:none，仅当 head 内同步脚本
+         page-loader-arm.js 给 <html> 打上 .page-loader-armed 后显示；
+         由 static/js/components/page-loader.js 在首屏关键插画就绪后收尾。 -->
+    <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+      <div class="page-loader__inner">
+        <div class="page-loader__stage">
+          <span class="page-loader__halo" aria-hidden="true"></span>
+          <div class="page-loader__frames" aria-hidden="true"></div>
+          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <p class="page-loader__text" aria-hidden="true">Loading</p>
+      </div>
+    </div>
+
   <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
 <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
   <span></span>
@@ -39,7 +57,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -65,6 +82,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -72,7 +90,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -94,7 +112,6 @@
           <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
           <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/log.html"><span class="iconfont icon-rizhi"></span><span>Log</span></a>
           <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
         </div>
       </li>
@@ -120,6 +137,7 @@
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
           <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -127,7 +145,7 @@
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
           <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/social-groups.html"><span class="iconfont icon-cooperation"></span><span>Social Groups</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -212,7 +230,7 @@
   </aside>
 
   <div class="description-content">
-    <div class="pdf-viewer" id="pdf-viewer" data-pdfjs-base="../static/js/pdfjs/">
+    <div class="pdf-viewer" id="pdf-viewer" data-pdfjs-base="https://static.igem.org/2026/szpu-china/pdfjs/" data-pdfjs-local="../static/js/pdfjs/">
       <div class="pdf-viewer__header">
         <h1 class="pdf-doc-title" id="pdf-doc-title">实验记录</h1>
         <span class="pdf-doc-hint">PDF 文档在线阅读</span>
@@ -317,7 +335,6 @@
                 <li><a href="../project/description.html">Description</a></li>
                 <li><a href="../project/design.html">Design</a></li>
                 <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/log.html">Log</a></li>
                 <li><a href="../project/contribution.html">Contribution</a></li>
               </ul>
             </div>
@@ -328,6 +345,7 @@
                 <li><a href="../wet-lab/result.html">Results</a></li>
                 <li><a href="../wet-lab/parts.html">Parts</a></li>
                 <li><a href="../wet-lab/safety.html">Safety</a></li>
+                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -343,7 +361,7 @@
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
                 <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/social-groups.html">Social Groups</a></li>
+                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -378,6 +396,7 @@
 
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/js/components/page-loader.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>

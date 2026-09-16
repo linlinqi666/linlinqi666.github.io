@@ -1,10 +1,44 @@
 {% extends "layout.html" %}
-{% block title %}Team{% endblock %}
+{% from "macros.html" import media with context %}
+{% block title %}Members{% endblock %}
+{% block head_extra %}
+<!-- 全屏引导封面 arm：必须同步（非 defer）执行，先于 <body> 渲染，
+     否则会先闪出成员页再被封面盖住。逻辑与根站 head-extra/team-members.njk 一致 -->
+<script src="{{ url_for('static', filename='js/components/members-intro-arm.js') }}"></script>
+{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/members.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contribution.css') }}">
+<!-- 引导封面样式：与根站 components/members-intro.css 同款，仅封面图走 CDN -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/members-intro.css') }}">
 {% endblock %}
 {% block page_content %}
-<div class="page-content">
+
+<!-- 页面唯一 h1：视觉标题由条带/封面承担，这里为屏幕阅读器保留语义标题 -->
+<h1 class="members-sr-only">Team Members</h1>
+
+<!-- 全屏引导封面（默认 display:none；由 head 内同步 arm 脚本给 <html> 加
+     members-intro-armed 后显示）。点击任意处 / Enter / Space / Esc 进入成员页。 -->
+<div class="members-intro" id="members-intro" role="dialog" aria-modal="true" aria-label="Team introduction">
+  <div class="members-intro__media" aria-hidden="true">
+    <span class="members-intro__backdrop"></span>
+    <img class="members-intro__photo" id="members-intro-photo" data-critical loading="eager" fetchpriority="high"
+      decoding="async" alt="SZPU-China 2026 team photo"
+      src="{{ media('image/character/webp/total.webp') }}"
+      srcset="{{ media('image/character/webp/total-960.webp') }} 960w, {{ media('image/character/webp/total.webp') }} 1919w"
+      sizes="100vw">
+    <span class="members-intro__shade"></span>
+  </div>
+  <div class="members-intro__panel">
+    <p class="members-intro__eyebrow">SZPU-China · iGEM 2026</p>
+    <p class="members-intro__title">Meet the Team</p>
+    <button type="button" class="members-intro__enter" id="members-intro-enter">
+      Enter the team<span aria-hidden="true">→</span>
+    </button>
+    <p class="members-intro__hint">Click anywhere · or press Enter</p>
+  </div>
+</div>
+
 <div id="members-redesign-app" class="members-redesign-app">
       <!-- 中间人物大背景图容器：由 JS updateBackground() 切换 -->
       <div class="members-bg-layer" aria-hidden="true">
@@ -49,9 +83,8 @@
         </div>
       </aside>
     </div>
-</div>
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/pages/members.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/components/members-intro.js') }}" defer></script>
 {% endblock %}

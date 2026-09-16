@@ -1,0 +1,174 @@
+/* 成员页全屏引导封面（#members-intro）
+   状态机由 <html> 上的类驱动（与首页 GIF 开场同构）：
+     无类                      = 不显示（无 JS 降级 / 未 arm）
+     members-intro-armed       = 封面显示、锁滚动、页面内容 inert
+     members-intro-finished    = 已进入成员页：封面淡出并移除，导航恢复
+   控制器见 static/js/components/members-intro.js，arm 脚本在
+   src/_includes/head-extra/team-members.njk。 */
+
+.members-intro {
+  display: none;
+}
+
+/* 显示期：整屏覆盖，层级低于全站加载遮罩(100003)、高于导航(9999)与进度条(100001)。
+   加载遮罩先播、封面后显，用户不会看到半成品。 */
+html.members-intro-armed:not(.members-intro-finished) .members-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100002;
+  display: block;
+  overflow: hidden;
+  background: #F7F1E4;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 显示期锁定滚动（页面内容在封面下方，避免误滚） */
+html.members-intro-armed:not(.members-intro-finished),
+html.members-intro-armed:not(.members-intro-finished) body {
+  overflow: hidden;
+}
+
+/* 淡出：由 JS 在点击后添加 .is-leaving */
+.members-intro.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- 画面层 ---------- */
+.members-intro__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 背景衬层：同一张图放大后模糊，供竖屏 letterbox 区域填充，避免大片纯色 */
+.members-intro__backdrop {
+  position: absolute;
+  inset: -6%;
+  background-image: url("https://static.igem.wiki/2026/szpu-china/image/character/webp/total-960.webp");
+  background-size: cover;
+  background-position: center 40%;
+  filter: blur(26px) saturate(1.05);
+  transform: scale(1.06);
+  opacity: 0.9;
+}
+
+@media (min-width: 769px) {
+  .members-intro__backdrop {
+    background-image: url("https://static.igem.wiki/2026/szpu-china/image/character/webp/total.webp");
+  }
+}
+
+/* 前景照片：桌面铺满，竖屏/窄屏完整显示（不裁人头） */
+.members-intro__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 生成照片是一行人的全身照，取景略偏上以完整保留头部（cover 会裁上下） */
+  object-position: center 28%;
+}
+
+@media (max-width: 768px),
+(max-aspect-ratio: 4/5) {
+  .members-intro__photo {
+    object-fit: contain;
+    object-position: center center;
+  }
+}
+
+/* 文字可读性遮罩：底部为主，顶部轻压一层让状态栏不刺眼 */
+.members-intro__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top,
+      rgba(31, 22, 12, 0.72) 0%,
+      rgba(31, 22, 12, 0.42) 22%,
+      rgba(31, 22, 12, 0.12) 44%,
+      rgba(31, 22, 12, 0) 62%),
+    linear-gradient(to bottom,
+      rgba(31, 22, 12, 0.28) 0%,
+      rgba(31, 22, 12, 0) 18%);
+}
+
+/* ---------- 文字与入口 ---------- */
+.members-intro__panel {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(20px, 4vh, 48px) clamp(20px, 5vw, 64px);
+  padding-bottom: max(28px, env(safe-area-inset-bottom, 0px) + 24px);
+  text-align: center;
+  color: #FFF8E7;
+}
+
+.members-intro__eyebrow {
+  margin: 0;
+  font-size: clamp(12px, 1.1vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 231, 0.82);
+}
+
+.members-intro__title {
+  margin: 0;
+  font-size: clamp(28px, 4.4vw, 52px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #FFFFFF;
+  text-shadow: 0 2px 18px rgba(31, 22, 12, 0.35);
+}
+
+.members-intro__enter {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 30px;
+  border: 1px solid rgba(255, 248, 231, 0.55);
+  border-radius: 624.9375rem;
+  background: rgba(255, 248, 231, 0.14);
+  color: #FFF8E7;
+  font-family: inherit;
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease;
+}
+
+.members-intro__enter:hover,
+.members-intro__enter:focus-visible {
+  background: rgba(255, 248, 231, 0.26);
+  border-color: rgba(255, 248, 231, 0.9);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.members-intro__enter:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 248, 231, 0.45);
+}
+
+.members-intro__hint {
+  margin: 0;
+  font-size: clamp(12px, 1vw, 13px);
+  color: rgba(255, 248, 231, 0.75);
+}
+
+/* 无 JS 兜底：封面由 <html> 上的类驱动，本身不会显示（.members-intro 默认 display:none），
+   因此 noscript 环境下页面内容不会被遮挡。 */
+@media (prefers-reduced-motion: reduce) {
+  .members-intro,
+  .members-intro__enter {
+    transition: none !important;
+  }
+}

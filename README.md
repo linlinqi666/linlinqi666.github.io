@@ -69,17 +69,17 @@ SZPU-2026 wiki/
 │   ├── experiments.html
 │   ├── parts.html
 │   ├── result.html
-│   └── safety.html
+│   ├── safety.html
+│   └── notebook.html
 ├── human-practices/                # 人类实践板块
 │   ├── education.html
 │   ├── integrated human-practices.html   # 综合 HP（含 3D 圆环轮播等特殊组件）
-│   └── social-groups.html
+│   └── sustainability.html
 ├── project/                        # 项目正文板块
 │   ├── description.html
 │   ├── design.html
 │   ├── engineering.html
-│   ├── contribution.html
-│   └── log.html
+│   └── contribution.html
 ├── team/                           # 团队板块
 │   ├── members.html
 │   └── attributions.html
@@ -164,15 +164,16 @@ static/js/core/nav-scroll-behavior.js
 | wet-lab/experiments.html | experiments.css | 是 | 是 | sidebar-progress.js |
 | wet-lab/result.html | result.css(空) | 是 | 是 | sidebar-progress.js |
 | wet-lab/safety.html | — | 是 | 是 | sidebar-progress.js |
+| wet-lab/notebook.html | log.css(实) | 否 | 否 | — |
 | wet-lab/parts.html | parts.css(空) | 否 | 否 | — |
 | human-practices/education.html | education.css(空) | 是 | 是 | sidebar-progress.js |
 | human-practices/integrated human-practices.html | integrated human-practices.css | 是 | 是 | hp-reveal-box.js |
-| human-practices/social-groups.html | social-groups.css(空) | 否 | 否 | — |
+| human-practices/sustainability.html | — | 否 | 否 | — |
 | project/description.html | — | 是 | 是 | sidebar-progress.js |
 | project/design.html | design.css(实) | 否 | 是 | sidebar-progress.js |
 | project/engineering.html | engineering.css(空) | 是 | 是 | sidebar-progress.js |
 | project/contribution.html | contribution.css(空) | 是 | 是 | sidebar-progress.js |
-| project/log.html | log.css(实) | 否 | 否 | — |
+
 | team/members.html | members.css(实) | 否 | 否 | pages/members.js |
 | team/attributions.html | attributions.css(实) | 否 | 否 | pages/attributions.js |
 
@@ -265,7 +266,7 @@ static/js/core/nav-scroll-behavior.js
 - 标记：`<aside class="description-sidebar">`，实测背景 `rgba(255,252,247,0.95)`、宽度约 `260px`（令牌范围 `min 280px / max 320px`）。
 - 内嵌基于烧瓶液体的阅读进度可视化（`--desc-flask-*` 系列令牌，由 `sidebar-progress.js` 驱动随滚动上升）。
 - `description.css` 中明确标注：`--desc-sidebar-position: sticky`、`--desc-sidebar-top-offset:120px` 等为"绝对不能改（navigation.css 会接管）"的关键配置。
-- 仅"标准内容页"加载此组件；自定义布局页（design/log/members/attributions/social-groups/parts）无侧边栏，也不加载 `sidebar-progress.js`。
+- 仅"标准内容页"加载此组件；自定义布局页（design/notebook/members/attributions/sustainability/parts）无侧边栏，也不加载 `sidebar-progress.js`。
 
 ### 5.4 进度条组件
 
@@ -406,6 +407,113 @@ node static/js/core/search-index-generator.js
 
 > 注意：`.gitignore` 的 `*.md` 规则会连带忽略 `static/expriments/` 下的方案文档与页面模板；如需入库，须追加 `!static/expriments/**/*.md` 例外（同 11.2 的既有做法）。
 
+### 5.15 Team 成员页分类与顺序（2026-09-15 重组）
+
+`team/members.html` 的条带分组、成员卡与详情面板全部由 `static/js/pages/members.js` 的数据驱动渲染，分类顺序的唯一事实源是其中的 `ROLE_ORDER` 数组：
+
+| 顺序 | 分类（`ROLE_ORDER`） | 含义 | 指示点颜色 |
+|---|---|---|---|
+| 1 | `PI` | 项目负责人（Primary / Secondary PI 作为展示标签另行传入 `roles`） | `--role-pi-text #991B1B` |
+| 2 | `Adviser` | 指导教师 | `#92400E`（历史硬编码） |
+| 3 | `Wet Lab` | 湿实验 | `--role-wet-text #1E40AF` |
+| 4 | `Dry Lab` | 干实验 | `--role-dry-text #065F46` |
+| 5 | `WIKI` | 网页与 wiki 建设 | `#2563EB`（历史硬编码） |
+| 6 | `HP` | Human Practices | `--role-hp-text #9A3412` |
+| 7 | `Art` | 视觉与美术 | `--role-art-text #0E7490` |
+| 8 | `Designer` | 设计（当前无成员，空组自动不渲染） | `--role-designer-text #7E22CE` |
+
+**成员数据字段（每人固定顺序）：** `id → name → roles → directions → bio → photoPosition → photoSize`，需要强制指定图片时在**末尾**追加可选的 `images`。
+
+| 字段 | 作用 | 留空的后果 |
+|---|---|---|
+| `id` | 成员 id，同时决定图片文件名（`webp/<id>.webp`、`webp/<id>_kt.webp`） | 无 |
+| `name` | 展示姓名（条带、详情面板、信息条） | 条带显示空白 |
+| `roles` | 首项为展示标签，末项放分类角色（必须命中 `ROLE_ORDER`） | 不进入任何分组 |
+| `directions` | 方向标签 | 不渲染标签行 |
+| `bio` | 详情面板与右侧信息条的简介 | 不渲染简介，无占位文案 |
+| `photoPosition` | 背景大图取景位置（CSS `background-position`） | 回退默认 `center top` |
+| `photoSize` | 背景大图缩放（CSS `background-size`） | 回退默认 `cover` |
+| `images`（可选） | 覆盖 `photo` / `avatar` 的候选路径 | 走下面的默认候选链 |
+
+**照片微调（`photoPosition` / `photoSize`）速查表**（2026-09-15 现状，直接改 `members.js` 对应数值即可，无需动 CSS）：
+
+| 成员 | id | 分组 | photoPosition | photoSize |
+|---|---|---|---|---|
+| Lijun Zhang | `zlj` | PI | `center top` | `80% auto` |
+| Yongjun Tang | `tyj` | PI | `center top` | `80% auto` |
+| Lizhen Zhu | `zlz` | Adviser | `center top` | `80% auto` |
+| Jianhua Zhou | `zjh` | Adviser | `center top` | `80% auto` |
+| Jie Xia | `xj` | Wet Lab | `center 30%` | `100% auto` |
+| Yifan Gao | `gyf` | Wet Lab | `center 10%` | `60% auto` |
+| Chengxi Luo | `lcx` | Wet Lab | `70% 10%` | `70% auto` |
+| Xiaozhen Su | `sxz` | Wet Lab | `55% 10%` | `50% auto` |
+| Aishi Zeng | `zas` | Wet Lab | `55% 10%` | `60% auto` |
+| Yuelin Zheng | `zyl` | Wet Lab | `55% 10%` | `80% auto` |
+| Rui Luo | `lr` | Dry Lab | `60% 30%` | `60% auto` |
+| Qi Xu | `xq` | WIKI | `45% 30%` | `60% auto` |
+| Ruoxi Li | `lrx` | WIKI | `center 20%` | `60% auto` |
+| Rouqing Chen | `crq` | WIKI | `center 20%` | `60% auto` |
+| Yuquan Luo | `lyq` | HP | `60% 30%` | `60% auto` |
+| Siqi Peng | `psq` | Art | `60% 30%` | `90% auto` |
+
+- `photoSize` 用 `xx% auto` 表示"宽度按容器百分比、高度自适应"，人像不会被裁切；改用 `cover` 则铺满并裁切。
+- 微调后需重新构建（`npx eleventy`；本环境 `npm run` 不可用，见第十.1 节），并在 HTTP 下刷新页面查看实际取景效果。
+
+**图片候选链（`ImageResolver`）：**
+- 背景大图：`webp/<id>.webp` → `源图片/<id>.jpg` → `源图片/<id>.png`。
+- 条带头像：`webp/<id>_kt.webp` → `源图片/<id>_kt.jpg` → `源图片/<id>_kt.png` → `webp/<id>.webp` → `源图片/<id>.jpg` → `源图片/<id>.png`（后三项是「没有卡通头像」的兜底，避免 `onerror` 链耗尽出现破图）。
+- **没有 `_kt` 卡通头像的成员**（当前为 `zlj` / `tyj`）必须显式写 `images: { avatar: { candidates: [...] } }`，把本人照片放在首位：否则浏览器会先探测不存在的 `_kt` 路径，产生必然 404 的请求（已实测：不写会新增 12 条 404 控制台报错）。写成一行即可，与其余字段保持同一视觉格式；**补上 `_kt` 素材后应把该字段删掉**，回到默认候选链（否则会继续用本人照片当头像，`lrx` / `crq` 于 2026-09-16 已按此处理）。
+
+**约定：**
+- 成员的归属分类取自 `roles` 数组里**在 `ROLE_ORDER` 中排名最靠前**的一项（`getPrimaryRole`）；`roles` 中其余非分类项会作为标签显示在详情面板与右侧信息条，`ROLE_ORDER` 内的分类项则被 `CLASSIFICATION_ROLES` 过滤掉，不重复显示为标签。因此「Primary PI / Secondary PI」这类展示标签与分类角色 `PI` 必须同时写进 `roles`（如 `['Primary PI', 'PI']`）。
+- 同组内成员顺序 = `members` 数组顺序；空分类组由渲染器跳过，不会出现空标题。
+- 新增分类必须三处同步：`ROLE_ORDER`、`ROLE_COLORS`（`members.js`）与 `static/css/members.css` 的 `.group-indicator[data-role="…"]`，否则指示点无颜色。
+- 新增成员只需补 `roles` / `directions` / `bio` / `photoPosition` / `photoSize`；`directions` 与 `bio` 暂缺时留空数组与空字符串，不写占位文案（遵守 flask 侧「占位符不得进入冻结版本」的同一口径）。
+- **当前填写状态（2026-09-16）**：`zlj` / `tyj` / `lrx` / `crq` 的 `bio` 已填入本人句子（文案由团队成员提供，仅把中文全角逗号规范为英文逗号，其余未改）；四人的 `directions` 仍留空，待团队给出方向标签。`lrx` / `crq` 的源照片于同日替换为 3:4 竖构图，`lrx.webp` 1440×1920 / 263.1 KB、`crq.webp` 1440×1920 / 244.8 KB，取景仍为 `center 20%` / `60% auto`，如需更完整身位可下调到 `50% auto`。同日两人补入 `_kt` 卡通头像：`lrx_kt.webp` 1280×1280 / 62.3 KB、`crq_kt.webp` 1280×1280 / 44.8 KB（源 `lrx_kt.jpg` 108 KB、`crq_kt.jpg` 86.5 KB），条带头像改走默认候选链。
+- `static/js/pages/members.js` 的性能预算已由 42 KB 上调至 46 KB（`tools/check-performance-budget.js`）：该文件同时承载成员数据与渲染逻辑，名册从 13 人增至 16 人并新增取景字段后，42 KB 只剩 71 字节余量，补文案即会触发构建失败；逻辑部分未增长。
+- 生产提交工程 `igem2026-flask` 的同名文件为镜像（根站为权威源），仅图片前缀改为 `https://static.igem.wiki/2026/szpu-china/image/...`，改动须同步两侧；新增 WebP 需由团队上传至 iGEM Uploads CDN 后才在正式站点生效。
+- 结构自检脚本（可重跑）：`node 对话归档/temporary-tools/2026-09-15-check-members-format.js` —— 校验两工程字段顺序、分类命中、取景字段存在、`images` 首个候选文件真实存在，并打印上表。
+
+### 5.16 成员页响应式布局与全屏引导封面（2026-09-16）
+
+成员页此前的问题（多断点实测，见 `对话归档/logs/2026-09-16-members-responsive-before*.txt`）：
+
+| 问题 | 表现 | 根因 |
+|---|---|---|
+| 首屏双倍留白 | 桌面/移动条带顶部均在 200–228px 处才开始 | 全站 `main` 已有 `padding-top: 6.25rem`，`.members-strip` 又加了 `margin: 100px` |
+| 移动端首屏"空白页" | ≤1024px 无任何成员内容、无照片 | 初始化只在 `width > 1024` 时选中首位成员；≤768 又直接 `display:none` 隐藏了背景图层 |
+| 展开列表被裁 | 375px / 1024px 展开后末尾成员点不到 | `.members-strip.is-expanded .strip-groups { max-height: 1200px; overflow: hidden }` 固定上限 |
+| 中段桌面照片被挤成缝 | 1180px 时照片可视带宽仅 410px | 条带固定 390px + 信息条固定 380px，均为固定值 |
+| 嵌套滚动 | 移动端条带内部又出现独立滚动条 | 条带 `max-height: calc(100vh - 100px) + overflow-y: auto` 在堆叠布局下未取消 |
+
+**改造后的布局矩阵（断点与 `members.js` 的 `DESKTOP_BREAKPOINT = 1100` 必须一致）：**
+
+| 视口 | 布局 |
+|---|---|
+| ≥1100px | 桌面分栏：左条带（`clamp(300px,30vw,390px)`）+ 全幅人像背景 + 右侧信息条（`clamp(272px,24vw,380px)`），宽度随视口收缩 |
+| ≤1099px | 堆叠：人像改为**顶部 hero 条**（`clamp(200px,30vh,340px)`，底部渐隐），条带折叠为切换器，信息条收起、简介进入详情卡 |
+| ≤640px | 同上，hero 收窄至 `clamp(172px,26vh,260px)`，正文与标题降一档 |
+
+关键实现点：
+
+- **默认选中首位成员**（所有断点）：桌面展示其背景与信息条，堆叠展示 hero 与详情卡；堆叠布局下选中后自动收起列表，并在详情卡移出视口时平滑带入。
+- **展开高度实测**：`setStripGroupsExpanded()` 把 `scrollHeight` 写进 `--strip-groups-max`，CSS 仅保留 `2400px` 兜底；组内折叠后由事件委托触发 `resyncStripGroupsHeight()` 重测，视口切换时清理。
+- **无缓存验证环境**：`python -m http.server` 不发 `Cache-Control`，Chromium 会按启发式新鲜度直接复用缓存（本项目实测出现过 `members.css` 一小时未重新校验，导致"改了没生效"的假象）。验证请用 `对话归档/temporary-tools/2026-09-16-dev-server-nostore.py`（强制 no-store），并注意重启浏览器会话以清掉旧缓存条目。
+- **预算条目**：`members.js` 46 → 48 KB（新增响应式逻辑），并新增 `members.css` 26 KB、`components/members-intro.js` 6 KB、`components/members-intro.css` 7 KB 三条守护（见 `tools/check-performance-budget.js`）。
+
+**全屏引导封面（`#members-intro`）** —— 用户要求"进入成员页先看整队照片，点击再进入"：
+
+| 项 | 说明 |
+|---|---|
+| 素材 | `static/image/character/源图片/total.jpg`（1919×1279 / 578 KB）→ `webp/total.webp`（1919×1279 / 163.5 KB）+ `webp/total-960.webp`（960×640 / 72.2 KB，供 `srcset`） |
+| 状态机 | `<html>` 上的类驱动：`members-intro-armed`（显示封面、锁滚动、页面 `inert`）→ `members-intro-ready`（控制器就位，看门狗不再强收）→ `members-intro-finished`（收尾） |
+| arm | 根站写在各页 head 片段 `src/_includes/head-extra/team-members.njk`（同步内联）；flask 为 `static/js/components/members-intro-arm.js`，由成员页 `head_extra` 块按页引入 |
+| 进入方式 | 点击任意处 / Enter / Space / Esc / 「Enter the team」按钮；淡出后解锁滚动、恢复 `inert`、焦点交给条带容器（`tabindex="-1"`，不产生默认焦点环） |
+| 降级 | 无 JS 时不 arm，`.members-intro` 默认 `display:none`，页面照常可用；控制器脚本 404/被拦截时 arm 内 8s 看门狗强制 `members-intro-finished` |
+| 展示频率 | 默认**每次进入成员页都显示**；如需"每会话一次"，把 arm 脚本里的 `ONCE_PER_SESSION` 改为 `true`（控制器收尾时写 `sessionStorage`） |
+| 无障碍 | 封面为 `role="dialog" aria-modal="true"`；页面内容置 `inert` + `aria-hidden`，避免 Tab 进入被遮挡区域；`prefers-reduced-motion` 下不做淡入淡出，页面唯一 `h1`（`.members-sr-only`）常驻 |
+| 移动端取景 | 竖屏改用 `object-fit: contain`（整队完整可见，不裁人头）+ 同图模糊衬底；桌面用 `cover` + `object-position: center 28%` 保证头部完整 |
+
 ---
 
 ## 六、图片与资源约定
@@ -419,8 +527,8 @@ node static/js/core/search-index-generator.js
 
 ## 七、已发现的问题与不一致（需警惕）
 
-1. **占位空 CSS 文件：** `contribution.css`、`engineering.css`、`education.css`、`hardware.css`、`model.css`、`parts.css`、`result.css`、`software.css`、`social-groups.css` 均为 0~44 字节占位文件，其页面样式实际来自 `description.css`。新增样式可写入对应文件，但**切勿删除这些占位文件**（HTML 仍引用它们）。
-2. **页面样式模式不一致：** 部分页（design/log/members/attributions/social-groups/parts）未加载 `description.css` 也无侧边栏，与"标准内容页"模式偏离。新增内容页应优先采用标准模式，除非确有自定义布局需求。
+1. **占位空 CSS 文件：** `contribution.css`、`engineering.css`、`education.css`、`hardware.css`、`model.css`、`parts.css`、`result.css`、`software.css` 均为 0~44 字节占位文件，其页面样式实际来自 `description.css`。新增样式可写入对应文件，但**切勿删除这些占位文件**（HTML 仍引用它们）。
+2. **页面样式模式不一致：** 部分页（design/notebook/members/attributions/sustainability/parts）未加载 `description.css` 也无侧边栏，与"标准内容页"模式偏离。新增内容页应优先采用标准模式，除非确有自定义布局需求。
 3. **图片路径风险（历史教训）：** 曾出现将 `expert.jpg` 误写为 `WWJ.png`、将 `school1~4.jpg` 误写为 `lecture-1~4.jpg` 导致全站破图。任何图片改动都需先核对文件存在性。
 4. **`file://` 协议受限：** 本地直接双击打开 HTML 会被浏览器以 `file:` 协议拦截脚本/资源；测试须通过本地 HTTP 服务（如 `python -m http.server`）访问。
 5. **description.css 关键令牌标注：** 其中多处写明"绝对不能改 / navigation.css 会接管"，修改前务必阅读注释。
@@ -436,7 +544,7 @@ node static/js/core/search-index-generator.js
 13. **底部页脚图标统一为 .webp（2026-08-07）：** 依 index.html 底部示例（`static/image/any-icon/SZPU(notext).webp` / `shiyao(notext).webp`），将全站 18 个页面底部页脚 SZPU/shiyao 图标引用由 `.png`/`.jpg` 改为 `.webp`（共 36 处），位置仍保留 `any-icon/`，文件均存在。integrated human-practices.html 第 1297 行时间轴数据 `img: '../static/image/any-icon/home.webp'`（15.77KB）经核对已正确，无需改动，一并记录备查。
 14. **integrated HP 内联 3D 时间轴 rAF 收敛即停（2026-08-07）：** 该页 3D 时间轴由**内联脚本**（非外置 `hp-timeline-3d.js`，该页未加载外置文件）驱动，原 `startLoop→loop` 在 1551 行**无条件 `requestAnimationFrame(loop)` 永久循环**，即使圆环静止也每帧重写全部卡片/节点的 transform、opacity、zIndex，并逐帧改写每个时间节点 label 的 `fontSize`/`color` → 持续占用主线程，为 integrated HP 页卡顿**头号原因**。已改为收敛即停（kick/rafId 模式：仅 `snapActive` 吸附动画进行中持续循环，静止即 `rafId=null` 停；滑块/点击/键盘/窗口缩放经 `kick()` 重启），视觉不变。另发现时间轴封面引用 `static/image/HP/southchina/SZU.jpg`（**13.5MB**）、`static/image/HP/school1.jpg`（3.6MB）等巨型图片，且 `assignCard` 用 `loading='eager'` + `preloadOne` 主动预解码全部 4 张，建议转 webp 并缩图（数 MB 的 JPG 作小封面会瞬间占满主线程解码）。详见第十四节。
 15. **`scroll-progress-bar.js` 缓存布局尺寸（2026-08-07）：** 原 `calculateProgress()` 每帧滚动都调用 `getClientHeight()` + `getScrollHeight()`（读取 `documentElement.scrollHeight/offsetHeight/clientHeight`），与每帧 `style.height` 写入交错形成**强制同步布局**；`scrollHeight/clientHeight` 仅在 resize 或资源加载时才变化，滚动期恒定。已改为在 `init`/`onResize`/`load` 时缓存 `clientHeight`、`totalHeight`（新增 `state.metrics` + `refreshMetrics()`），热路径只读取 `getScrollPosition()`（scrollY，不触发重排）并写高度——消除进度条的每帧重排。视觉/进度数值完全不变。
-16. **`project/log.html` 滚动高亮缓存偏移（2026-08-07）：** 该页内联 `updateNavHighlight` 原每 100ms（本地 `throttle`）对全部 `section` 调用 `getBoundingClientRect()` 计算可见比例，与 sidebar-progress 旧 bug 同类——**每帧强制同步布局**，为 log 页滚动卡顿的主因。已改为在 `init`（`buildSectionOffsets`）+ `resize`（防抖）+ `load` 时一次性缓存各 section 绝对偏移（`rect.top + scrollY`），滚动期仅用 `window.scrollY + innerHeight*0.3` 探针与缓存偏移做数值比较后切换 `.active` 类，彻底消除每帧 `getBoundingClientRect`。视觉/高亮行为不变。`sections`/`navItems` 与本地 `throttle` 均保留。
+16. **`wet-lab/notebook.html` 滚动高亮缓存偏移（2026-08-07）：** 该页内联 `updateNavHighlight` 原每 100ms（本地 `throttle`）对全部 `section` 调用 `getBoundingClientRect()` 计算可见比例，与 sidebar-progress 旧 bug 同类——**每帧强制同步布局**，为 log 页滚动卡顿的主因。已改为在 `init`（`buildSectionOffsets`）+ `resize`（防抖）+ `load` 时一次性缓存各 section 绝对偏移（`rect.top + scrollY`），滚动期仅用 `window.scrollY + innerHeight*0.3` 探针与缓存偏移做数值比较后切换 `.active` 类，彻底消除每帧 `getBoundingClientRect`。视觉/高亮行为不变。`sections`/`navItems` 与本地 `throttle` 均保留。
 17. **igem2026-flask 工程 JS 性能优化已同步（2026-09-02）：** 根站 JS 性能优化已同步至 `igem2026-flask/`，两工程 JS 实现保持对齐——搜索索引 `search-index.json` + 同源 `fetch()` 按需加载与 DOM API 安全渲染、`utils.prefersReducedMotion()` 及 executive-summary 动效降载、`sidebar-progress.js` / `attributions.js` 精简测试死代码、HP 地图同省专家聚类图钉（`.hz-cluster`）减少 DOM 图钉数量。flask 侧搜索索引由 `flask freeze` 后运行 `static/js/core/search-index-generator.js` 扫描 `public/*.html` 平铺结构生成，与根站扫描根目录页面同构不同源；联动说明见 `igem2026-flask/README.md` 的 "Performance & JS optimization" 一节。
 
 ---
@@ -524,6 +632,22 @@ python -m http.server 8080 --bind 127.0.0.1
 # 浏览器访问 http://127.0.0.1:8080/index.html
 ```
 
+### 10.1 构建命令与 npm 退出码陷阱（2026-09-16 实测）
+
+`package.json` 定义的 `build:all` = `eleventy && node static/js/core/search-index-generator.js && node tools/check-static-assets.js && node tools/check-performance-budget.js`。
+
+**注意：在本项目当前的 Windows 沙箱 shell 中，`npm run <script>` 无法执行脚本** —— `npm run build`、`npm run test:smoke` 均静默 `exit 1`、子进程无任何输出，`eleventy` 也未真正运行（产物时间戳不刷新）。此时 `npm run build:all` 的退出码**不能**作为构建结论，请改为逐条执行等价命令并各自核对退出码：
+
+```powershell
+cd "f:\IGEM\SZPU-2026 wiki"
+npx eleventy                                    # 生成各栏目 HTML（当前 18 页）
+node static/js/core/search-index-generator.js   # 生成 static/js/core/search-index.json
+node tools/check-static-assets.js               # 静态资源引用检查
+node tools/check-performance-budget.js          # 性能预算（见 14.5；members.js 现为 46 KB）
+```
+
+在能正常运行 npm 的环境（CI / 正常终端）中，仍以 `npm run build:all` 为准；若它失败，按上面四条逐条定位。
+
 ---
 
 ## 十一、对话产物与 .gitignore 管理约定（强制，最高优先级红线）
@@ -575,7 +699,148 @@ python -m http.server 8080 --bind 127.0.0.1
 
 ---
 
-*文档生成方式：全仓库静态分析 + Playwright(Chromium) 实渲染交叉验证。如后续设计令牌变更，应同步更新本文档第二节至第四节及第八节约束规则；如新增对话产物类型，应同步更新第十一节与 `.gitignore`。*
+---
+
+## 十五、根站→Flask 内容同步决策（2026-09-13）
+
+为让生产提交工程 `igem2026-flask` 的内容与根站保持一致，经逐页对比后确定如下同步策略（工作台账见 `Progress/PROG-20260913-001-root-to-flask-resync.md`）：
+
+- **已整体同步的页面**（根站为权威源，整体覆盖 flask 同名页）：contribution、description、design、engineering、hardware、model、software、experiments、results、safety-and-security、attributions、members。其中 attributions 含成员照（jpg+webp，已处理 `srcset`）并复制 `attributions.css`+`mainClass`+`js/pages/attributions.js`；members 复制 `members.css`+`members.js`。
+- **Human Practices 采用「合并」而非覆盖**（用户拍板，2026-09-13，避免毁掉 flask 专家地图）：保留 flask 已有的交互专家地图（hzMap、`data/hp-map-data.js`、`js/components/hp-map.js`）与「活动照片」子节，**不**整体覆盖；仅把根站 `integrated human-practices.html` 的「访谈对象与项目反馈」可读专家档案段（7 位专家 + 4 个说明子节）以独立 `content-card` 合并进 flask 主 HP 页 `page_content` 末尾，补齐 flask 原"仅有地图、无可读正文"的缺口。education 页两站章节结构已逐一完全一致，无需改动。
+- **新增页面**：`social-groups.html`（根站独有，flask 原缺，新增最小页以修复潜在导航 404）。
+- **跳过 / 待办**：`parts.html` 与 `social-groups.html` 根站本身亦仅为占位（无真实内容），同步无意义，标记待撰写；flask 独有 5 页（alternative-platform / entrepreneurship / inclusivity / measurement / sustainability）无根站源，需另开需求撰写。
+- **约束遵守**：全程复用 flask 现有 `layout.html` 块体系（`{% block page_content %}`/`styles`/`scripts`），不引入第三方 CDN、不写内联 `<script>`（仅 `defer` 外链），正文图片经 `../static/`→`/static/` 改写并 vendored 本地；全站冻结无 `../` 残留、无 404。
+
+---
+
+## 十六、全站页面加载动画（page-loader）与媒体外链策略（2026-09-13）
+
+### 16.1 机制总览（两站同源）
+
+每个页面在加载期间显示统一的加载遮罩，遮罩内是 6 帧雪碧图构成的逐帧伪动画；仅当该页「首屏可见的基础插画」全部就绪后遮罩才收起，其余资源继续懒加载。
+
+| 组件 | 根站 | flask | 作用 |
+|---|---|---|---|
+| arm（同步，置于 head） | `static/js/components/page-loader-arm.js` | 同 | 首屏即给 `<html>` 打 `page-loader-armed`（显示遮罩 + 锁滚动 + 隐藏原生内容），8s 看门狗兜底 |
+| 控制器（defer） | `static/js/components/page-loader.js` | 同 | 收集关键图 → 预加载 → 判定收尾 → 派发 `pageloader:done` |
+| 样式 | `static/css/components/page-loader.css`（本地雪碧图） | 同（雪碧图走 CDN） | 米黄/暖棕遮罩 + `steps(6)` 伪动画 + 纯 CSS 兜底 |
+| 插画 | `static/image/loader/loader-sprite[@2x].webp` | `image/loader/...`（iGEM CDN） | 6 帧雪碧图（240px/帧，@2x 480px）+ 独立帧 |
+
+**对外接口**：`window.PageLoader.register(urls)`（登记首屏关键图，支持候选回退 `[[c1,c2]]`）、`.done(cb)`、`.isDone()`。
+
+### 16.2 判定「加载完成」的条件
+
+- 就绪集合 S = 该页登记的首屏关键图；单图「结清」= `load` / `error` / 单图 3s 超时（error 不阻塞）。
+- **收尾当且仅当**：`DOM 就绪（readyState ≥ interactive）` AND S 全部结清 AND `elapsed ≥ MIN_SHOW(600ms)`。
+- **强制收尾**：`elapsed ≥ MAX_WAIT(8000ms)` 无条件收起；`prefers-reduced-motion` 时跳过 MIN_SHOW。
+- 收尾动作幂等：移除 `armed` → 加 `done`（淡出）→ 解锁滚动 → 派发一次 `pageloader:done`。
+- 无关键图的页面收敛为 `DOM 就绪 + MIN_SHOW`。
+
+### 16.3 首屏关键资源登记
+
+- 声明式：`<img data-critical>` / `[data-critical-bg]`。
+- 命令式：JS 驱动、以 `background-image` 呈现的资源调用 `PageLoader.register()`。
+- **members 页（首批落地）**：桌面端登记默认成员（队长 Jie Xia）的大幅背景形象候选；另登记左侧条带首屏可见的前 6 位成员头像。移动端无大图，故只登记头像。见 `static/js/pages/members.js` 的 `init()`。
+
+### 16.4 首页 GIF 开场交接（修复「卡没」）
+
+- 顺序固定为：**加载动画播完 → GIF 开场**。`index-intro-gif.js` 的 `whenLoaderReady()` 监听 `pageloader:done`（含 10s 硬兜底）后才启动播放。
+- GIF arm 的看门狗改为**感知加载器**：遮罩期间不计时，等 `pageloader:done`（或 12s 硬上限）后再开始 6s 计时 —— 根除「GIF 尚未启动就被看门狗判为 finished」导致的开场丢失。
+- 两站一致：根站见 `src/_includes/head-extra/index.njk`，flask 见 `static/js/components/intro-gif-arm.js`。
+
+### 16.5 媒体外链策略（合规）
+
+- **flask（生产站）**：`static/` 只允许 JS/CSS；**所有图片必须走 iGEM 自有 CDN** `https://static.igem.wiki/2026/szpu-china/image/...`，**禁止任何第三方 CDN**。取址入口：模板用 `wiki/macros.html` 的 `media(rel)` / `igem_img(name,alt,cls)`；JS 用 `window.MEDIA_BASE`（由 `static/js/core/utils.js` 暴露）。本轮已删除 flask 本地 `static/image/`，46 条本地引用全部改为 CDN。
+- **根站（历史参考站）**：按用户确认保留本地 `static/image/`，仅共享同一套加载器逻辑（雪碧图用本地路径）。
+- **根站插画入库边界（2026-09-16）**：`static/image/loader/` 中**只有 CSS 实际加载的 `loader-sprite@2x.webp` 入库**；`loader-frame-1~6.webp`（逐帧导出）与 `loader-sprite.webp`（1x 副本）为同源冗余、全仓库 0 引用，已在 `.gitignore` 排除，本地物理保留供开发预览。
+- **待上传清单**：flask 的加载器插画需上传到 CDN 的 `image/loader/`（`loader-sprite.webp`、`loader-sprite@2x.webp`；源文件在根站 `static/image/loader/`）。未上传前遮罩自动使用纯 CSS 兜底动画，不会破版。
+
+### 16.6 回归验证
+
+`对话归档/temporary-tools/verify_sites.py` 可复跑：真实起本地 HTTP 服务校验关键页与资源状态码、全量审计构建产物的本地资源引用、并断言加载器契约（14 项）。当前结果：根站 1367 条引用 **0 缺失**；flask 1690 条引用仅 1 条为已文档化的注释示例（`index.css` 的 `xx.jpg`）；两站加载器资源全部 200。
+
+---
+
+## 十七、Git 提交与入库规范（2026-09-16）
+
+> 本节是**提交纪律的唯一事实源**，与第十一节互补：第十一节管"对话产物放哪"，本节管"什么能进版本库、怎么提交、提交信息怎么写"。**两个工程（根站 + `igem2026-flask`）同时适用。**
+
+### 17.1 提交前三步自检（强制）
+
+```powershell
+cd "f:\IGEM\SZPU-2026 wiki"
+git status --porcelain --untracked-files=all   # ① 逐条过目，确认没有非本次任务的文件
+git check-ignore -v <路径>                      # ② 新增素材先确认忽略/入库状态符合预期
+git diff --cached --stat                       # ③ 暂存区只含本次任务文件
+```
+
+1. **逐条过目 `git status`**：出现不认识的 `??` / ` M`，先判定归属——对话/工具产物（截图、临时脚本、日志、测试页）→ 当场移入 `对话归档/`（第十一节）；本次任务文件 → 明确纳入或明确忽略，不留"以后再说"。
+2. **只暂存本次文件**：一律 `git add <具体路径>`；**禁止 `git add .` / `git add -A`**（会把截图、逐帧导出、大图一起扫进提交）。
+3. **构建与验证**：根站按 §10.1 分步执行 `npx eleventy` + 搜索索引 + `tools/check-static-assets.js` + `tools/check-performance-budget.js`；flask 执行 `python -m compileall app.py site_nav.py` + `flask freeze`；受影响页面**必须经本地 HTTP 服务**打开确认（`file://` 不算验证）。
+
+### 17.2 入库边界
+
+| 类别 | 必须入库 | 禁止入库 |
+|---|---|---|
+| 源码与规则 | `src/**`、`wiki/pages/**`、`wiki/layout.html`、`static/css/**`、`static/js/**`、`tools/**`、`package.json` / `package-lock.json`、`.gitignore` | — |
+| 运行资源 | 页面/CSS/JS **实际引用**的图片、字体、加载器雪碧图（只存被引用的那一份） | 逐帧导出、雪碧图以外的中间产物、同素材 1x/2x 多份副本、**零引用目录**、**源图工作区 `static/image/**/源图片/`** |
+| 文档治理 | `README.md`、`AGENTS.md`、`DOCUMENT_MAP.md`、`Requirements/**`、`Decisions/**` | 对话报告、审计记录、截图说明（→ `对话归档/`） |
+| 构建产物 | — | `igem2026-flask/public/`、`dist/`、`build/`、`node_modules/`、`static/js/pdfjs/` |
+| 敏感信息 | `.env.example` | `.env*`、密钥、证书、token |
+| 对话产物 | — | `对话归档/`（整目录）、`.playwright-cli/` |
+
+> 判定"某个资源该不该入库"的两条硬标准：① **被引用** —— `git grep -c "<路径或文件名>"` 必须 > 0，0 引用即视为垃圾（现实例：`static/image/team-photo/`，106 MB / 346 张，全仓库 0 引用）；② **唯一** —— 同一素材只保留运行真正加载的那一份，其余作为冗余副本排除（现实例：加载器只保留 `loader-sprite@2x.webp`）。
+
+### 17.3 二进制体积预算
+
+- 单张图片默认目标 **≤ 300 KB**；**> 1 MB 必须在提交信息里写明原因**；单文件 **≥ 10 MB 一律先压缩**（转 WebP / 降采样 / 改视频格式）再入库。
+- 照片统一 `.webp`（长边 ≤ 1920px、质量 82–88、`method=6`、按 EXIF 纠正方向）；源图只放 `static/image/**/源图片/` 且**必须同时提供 webp**，页面只引用 webp。
+- **源图工作区不入库（2026-09-16）**：`static/image/**/源图片/` 存放的是转换产物的**上游素材**，不是运行资源，已在 `.gitignore` 排除，本地物理保留。**页面、页面脚本、数据源一律只引用 `webp/`**；任何指向 `源图片/` 的 `src` / `candidates` 都视为待修缺陷（它会让仓库必须携带原图才能正常显示）。
+  - 现实例：`static/image/character/源图片/` 38 个文件 / 48.5 MB → 不入库；同目录 `character/webp/` 32 个文件入库，是唯一运行副本（每个成员 id 的 `.webp` 与 `_kt.webp` 齐备）。
+  - 落地时的连带动作（缺一不可）：① 改页面引用指向 webp → ② 重建根站产物 → ③ 重建搜索索引 → ④ `.gitignore` 加规则 → ⑤ `git rm -r --cached <路径>`（**只加规则不会停止跟踪**，已跟踪文件必须显式从索引移除）。
+- 超大素材是**已知存量债务**（见 §17.6），清理须单独立项；不得"下次再说"地继续新增。
+
+### 17.4 提交信息格式
+
+采用 Conventional Commits，**说明部分用中文**：
+
+```
+<type>(<scope>): <中文说明>
+```
+
+| type | 用途 | type | 用途 |
+|---|---|---|---|
+| `feat` | 新功能 / 新页面 / 新组件 | `docs` | 文档（README、规则、台账） |
+| `fix` | Bug 修复 | `build` | 构建脚本、依赖、预算阈值 |
+| `perf` | 性能优化 | `ci` | CI / 部署工作流 |
+| `refactor` | 重构（行为不变） | `test` | 测试与校验脚本 |
+| `style` | 格式/样式微调（无逻辑变更） | `chore` | 杂项（重建索引、清理） |
+
+- `scope` 取模块或板块，例：`search` / `members` / `hp` / `loader` / `content` / `i18n` / `ci` / `docs`。
+- 真实历史示例：`feat(i18n): Contribution 页双语化，中英逐段对照且文案抽到 _data`、`fix(ci): 上调 search-index.json 性能预算至 350KB 恢复 Pages 构建`、`perf(search): 压缩搜索索引体积并修正本地资源检查误报`。
+- **一次提交只做一件事**：格式化/重命名不与功能变更混提；正文可补"为什么改 + 影响面 + 验证方式"。
+- **跨工程同步必须同一次提交**：根站改动若需镜像到 flask，两个工程的文件一起提，scope 写 `(root+flask)`。
+- 关联台账时在末尾引用 ID：`refs REQ-20260916-001` / `fixes BUG-20260823-001`。
+
+### 17.5 红线
+
+- 未经明确授权：**不推送、不发布/部署、不创建 PR**。
+- **禁止对 `main` 执行 `git push --force` / `--force-with-lease`**；禁止跳过钩子（`--no-verify`、`--no-gpg-sign`）。
+- **历史重写**（`filter-repo` / BFG、amend 已推送提交）必须先获授权并通知协作者——会让全队需要重新 clone。
+- `.gitignore` 改动影响两个工程，须与 §17.2 表格在同一提交内更新，避免"规则与文档各说各话"。
+
+### 17.6 存量清理（两步走）
+
+| 步骤 | 做法 | 效果 | 可逆性 |
+|---|---|---|---|
+| ① 停止跟踪 | `git rm -r --cached <路径>` + `.gitignore` 加规则 + 提交 | 后续提交与部署产物不再包含该目录 | **可逆**：`git restore --staged <路径>`；文件仍保留在本机磁盘 |
+| ② 历史瘦身 | `git filter-repo --path <路径> --invert-paths`（或 BFG）后 force push | `.git` 真正缩小 | **不可逆**，需授权并通知全队重新 clone |
+
+**当前存量实测（2026-09-16）**：`.git` 约 **954 MB**；`static/image/team-photo/` 106 MB / 346 张（**0 引用**，`.gitignore` 已加入排除规则；因该目录仍在 `HEAD` 中，**必须补跑步骤①命令**才会真正停止跟踪）；`static/image/HP/southchina/spark*.jpg` 单张 9.4–16.0 MB、`SZU.jpg` 13.5 MB、`school1~3.jpg` 2.1–4.4 MB；`static/image/Animation/index/*.GIF` 9.3 / 9.7 MB —— **后两类被页面真实引用，属压缩改造对象，不可一删了之。**
+
+---
+
+*文档生成方式：全仓库静态分析 + Playwright(Chromium) 实渲染交叉验证。如后续设计令牌变更，应同步更新本文档第二节至第四节及第八节约束规则；如新增对话产物类型，应同步更新第十一节与 `.gitignore`；如入库边界或提交纪律变更，应同步更新第十七节。*
 
 ---
 
@@ -683,9 +948,9 @@ npm run normalize        # 等价于 node tools/normalize-scripts.js
 **2) JS 渲染线程 / 事件监听维度**
 - 内容页并存 3~4 个独立 `window` `scroll` 监听（nav / page-progress / scroll-progress / sidebar），各触发自身 rAF；attributions 页更多（再加 Tooltip、ScrollSpy）。每帧最多数个 rAF 回调。
 - `sidebar-progress.js` 原实现每帧对全部 section 调用 `getBoundingClientRect()` 并与样式写入交错，造成**强制同步布局（layout thrash）**，长内容页尤为明显——这是内容页卡顿的主因之一。
-- `scroll-progress-bar.js` 原 `calculateProgress()` 每帧调用 `getClientHeight()` + `getScrollHeight()`（读 `documentElement.scrollHeight/offsetHeight/clientHeight`），与每帧 `style.height` 写入交错形成**强制同步布局**；这些尺寸在滚动期恒定，本应缓存。`project/log.html` 内联 `updateNavHighlight` 同理每 100ms 对全部 `section` 调 `getBoundingClientRect()`，是 log 页滚动卡顿主因。
+- `scroll-progress-bar.js` 原 `calculateProgress()` 每帧调用 `getClientHeight()` + `getScrollHeight()`（读 `documentElement.scrollHeight/offsetHeight/clientHeight`），与每帧 `style.height` 写入交错形成**强制同步布局**；这些尺寸在滚动期恒定，本应缓存。`wet-lab/notebook.html` 内联 `updateNavHighlight` 同理每 100ms 对全部 `section` 调 `getBoundingClientRect()`，是 log 页滚动卡顿主因。
 - `hp-timeline-3d.js` 原 `render` 以 `requestAnimationFrame` **永久循环**，即使圆环已静止也每帧重写所有卡片 `transform`，持续占用主线程（该脚本当前未被任何页面引用，属隐患）。
-- `project/log.html` 的内联滚动高亮、各页 `scroll-progress-bar` 等"加了很多 JS"后，多个独立 `scroll` 监听叠加，任一在回调中同步读布局即放大为持续重排——这是"加了很多 js 开始卡"的直接机制。
+- `wet-lab/notebook.html` 的内联滚动高亮、各页 `scroll-progress-bar` 等"加了很多 JS"后，多个独立 `scroll` 监听叠加，任一在回调中同步读布局即放大为持续重排——这是"加了很多 js 开始卡"的直接机制。
 
 **3) CSS 合成与绘制维度**
 - `nav` 的 `backdrop-filter: blur` 在滚动时强制对背景内容做模糊重绘（fixed 全宽条带，开销持续）。
@@ -700,7 +965,7 @@ npm run normalize        # 等价于 node tools/normalize-scripts.js
 - **`hp-timeline-3d.js` 收敛即停：** `render` 在 `currentAngle` 收敛到 `targetAngle`（误差 < 0.01°）时停止 rAF 循环，仅在交互（滑块 `input`/`change`、‹ › 按钮、点击节点/卡片）时 `kick()` 重启，视觉完全不变。
 - **`executive-summary-animation.js` 酵母离屏暂停：** 8 个酵母浮动 SVG 用 `IntersectionObserver` 在离屏时设 `animation-play-state:paused`、入屏恢复，视觉无差异，后台/长页滚动时大幅减少合成开销。
 - **`scroll-progress-bar.js` 去重排：** 在 `init`/`onResize`/`load` 时缓存 `clientHeight`、`totalHeight`（`state.metrics` + `refreshMetrics()`），热路径每帧只读取 `getScrollPosition()`（scrollY，不触发重排）并写高度，彻底消除进度条的每帧 `scrollHeight/clientHeight` 强制重排。
-- **`project/log.html` 滚动高亮去重排：** 一次性缓存各 `section` 绝对偏移（`buildSectionOffsets` 于 init/resize/load），滚动期仅以 `scrollY + innerHeight*0.3` 探针与缓存偏移比对切换 `.active` 类，彻底消除每帧 `getBoundingClientRect` 强制重排（与 sidebar-progress 同一手法）。
+- **`wet-lab/notebook.html` 滚动高亮去重排：** 一次性缓存各 `section` 绝对偏移（`buildSectionOffsets` 于 init/resize/load），滚动期仅以 `scrollY + innerHeight*0.3` 探针与缓存偏移比对切换 `.active` 类，彻底消除每帧 `getBoundingClientRect` 强制重排（与 sidebar-progress 同一手法）。
 
 ### 14.4 权衡与保留项（视觉效果不变）
 

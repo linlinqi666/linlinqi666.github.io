@@ -1,10 +1,16 @@
 {% extends "layout.html" %}
+{% set mainClass = 'contribution-page' %}
 {% block title %}Contribution{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/contribution.css') }}">
 {% endblock %}
 {% block page_content %}
-<div class="page-content">
+<header class="contribution-hero">
+  <h1>Contribution</h1>
+  <p class="contribution-hero__sub"><span class="i18n-en">Reusable parts, protocols and records that the PAGER-Yeast project is handing to the next iGEM team</span><span class="i18n-zh">PAGER-Yeast 项目交给下一支 iGEM 队伍的可复用部件、协议与记录</span></p>
+  <div class="contribution-hero__rule" aria-hidden="true"></div>
+</header>
+
 <div class="description-container">
 
       <!-- 左侧导航栏 -->
@@ -22,67 +28,49 @@
           <ul class="description-nav">
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#contribution-overview" class="nav-main-link">Contribution 概览</a>
+                <a href="#contribution-overview" class="nav-main-link"><span class="i18n-en">Contribution Overview</span><span class="i18n-zh">Contribution 概览</span></a>
               </div>
             </li>
-            <li class="level1 has-submenu">
+
+            <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#parts-registry" class="nav-main-link">Parts 注册贡献</a>
-                <div class="toggle-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
+                <a href="#parts-overview" class="nav-main-link"><span class="i18n-en">1. Parts</span><span class="i18n-zh">1. 部件（Parts）</span></a>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#new-parts">新增 BioBrick</a></li>
-                <li class="level3"><a href="#improved-parts">改进元件</a></li>
-                <li class="level3"><a href="#characterization">表征数据</a></li>
+                <li class="level3"><a href="#parts-p1"><span class="i18n-en">P1 PAGER fusion receptor</span><span class="i18n-zh">P1 PAGER 融合受体</span></a></li>
+                <li class="level3"><a href="#parts-p2"><span class="i18n-en">P2 Humanised Gpa1 variant</span><span class="i18n-zh">P2 人源化 Gpa1 变体</span></a></li>
+                <li class="level3"><a href="#parts-p3"><span class="i18n-en">P3 FUS1 reporter cassettes</span><span class="i18n-zh">P3 FUS1 报告盒</span></a></li>
+                <li class="level3"><a href="#parts-p4"><span class="i18n-en">P4 sgRNAs for three targets</span><span class="i18n-zh">P4 三靶点 sgRNA</span></a></li>
+                <li class="level3"><a href="#parts-p5"><span class="i18n-en">P5 Triple-knockout chassis strain</span><span class="i18n-zh">P5 三敲底盘菌株</span></a></li>
               </ul>
             </li>
-            <li class="level1 has-submenu">
+
+            <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#protocols-methods" class="nav-main-link">实验方案与方法</a>
-                <div class="toggle-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
+                <a href="#protocols-overview" class="nav-main-link"><span class="i18n-en">2. Protocols and Methods</span><span class="i18n-zh">2. 协议与方法</span></a>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#cloning-protocols">克隆与验证</a></li>
-                <li class="level3"><a href="#yeast-protocols">酵母操作</a></li>
-                <li class="level3"><a href="#assay-protocols">检测方法</a></li>
+                <li class="level3"><a href="#protocols-t1"><span class="i18n-en">T1 E. coli heat-shock transformation</span><span class="i18n-zh">T1 大肠杆菌热激转化</span></a></li>
+                <li class="level3"><a href="#protocols-t2"><span class="i18n-en">T2 Plasmid extraction</span><span class="i18n-zh">T2 质粒提取</span></a></li>
+                <li class="level3"><a href="#protocols-t3"><span class="i18n-en">T3 Double-digestion verification</span><span class="i18n-zh">T3 双酶切验证</span></a></li>
+                <li class="level3"><a href="#protocols-t4"><span class="i18n-en">T4 Yeast LiAc/PEG transformation</span><span class="i18n-zh">T4 酵母 LiAc/PEG 转化</span></a></li>
+                <li class="level3"><a href="#protocols-t5"><span class="i18n-en">T5 CRISPR-Cas9 triple knockout</span><span class="i18n-zh">T5 CRISPR-Cas9 三基因敲除</span></a></li>
+                <li class="level3"><a href="#protocols-t6"><span class="i18n-en">T6 Gpa1 integration by homologous recombination</span><span class="i18n-zh">T6 Gpa1 同源重组整合</span></a></li>
+                <li class="level3"><a href="#protocols-t7"><span class="i18n-en">T7 Total protein extraction and WB</span><span class="i18n-zh">T7 总蛋白提取与 WB</span></a></li>
+                <li class="level3"><a href="#protocols-t8"><span class="i18n-en">T8 DCZ induction and detection</span><span class="i18n-zh">T8 DCZ 诱导与检测</span></a></li>
+                <li class="level3"><a href="#protocols-t9"><span class="i18n-en">T9 Plasmid construction and digestion troubleshooting</span><span class="i18n-zh">T9 质粒构建与酶切排错</span></a></li>
+                <li class="level3"><a href="#protocols-t10"><span class="i18n-en">T10 Three controls for functional testing</span><span class="i18n-zh">T10 功能测试三组对照</span></a></li>
+                <li class="level3"><a href="#protocols-t11"><span class="i18n-en">T11 Double-digestion record for the built plasmid</span><span class="i18n-zh">T11 质粒构建双酶切记录</span></a></li>
               </ul>
             </li>
-            <li class="level1 has-submenu">
+
+            <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#software-tools" class="nav-main-link">软件与工具</a>
-                <div class="toggle-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
+                <a href="#other-overview" class="nav-main-link"><span class="i18n-en">3. Other contributions</span><span class="i18n-zh">3. 其他贡献</span></a>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#analysis-tools">数据分析</a></li>
-                <li class="level3"><a href="#model-code">模型代码</a></li>
-                <li class="level3"><a href="#documentation">文档资源</a></li>
-              </ul>
-            </li>
-            <li class="level1 has-submenu">
-              <div class="nav-link-wrapper">
-                <a href="#collaboration" class="nav-main-link">协作与社区</a>
-                <div class="toggle-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#team-collaboration">队伍合作</a></li>
-                <li class="level3"><a href="#education">科普与教育</a></li>
-                <li class="level3"><a href="#future-teams">致未来队伍</a></li>
+                <li class="level3"><a href="#other-drylab"><span class="i18n-en">3a. Dry Lab</span><span class="i18n-zh">3a. 干实验</span></a></li>
+                <li class="level3"><a href="#other-hp"><span class="i18n-en">3b. Human Practices</span><span class="i18n-zh">3b. 人类实践</span></a></li>
               </ul>
             </li>
           </ul>
@@ -113,123 +101,762 @@
 
       <!-- 右侧内容区域 -->
       <div class="description-content">
+
         <div id="contribution-overview" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>本页面记录 PAGER-Yeast 项目对 iGEM 社区与合成生物学领域的贡献，包括提交至 Registry
-              的元件、共享的实验方案、软件工具、协作成果以及可供未来队伍复用的经验。</p>
-          </div>
-          <h2>Contribution 概览</h2>
-          <p>iGEM Contribution 板块用于展示团队如何回馈社区。贡献形式不限于新元件，也包括优化现有元件、提供详细表征数据、开源代码、标准化协议以及跨队协作。</p>
-          <ul>
-            <li><strong>核心贡献方向：</strong>新型 PAGER 抗原门控受体元件、酵母底盘改造策略、检测流程标准化。</li>
-            <li><strong>可复用成果：</strong>[待补充：列出计划提交或可共享的具体资源，如质粒、菌株、代码仓库链接。]</li>
-            <li><strong>社区影响：</strong>[待补充：与哪些队伍或机构合作，开展了哪些科普与教育活动。]</li>
-          </ul>
-        </div>
+          <h2><span class="i18n-en">Contribution Overview</span><span class="i18n-zh">Contribution 概览</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">PAGER-Yeast uses Saccharomyces cerevisiae BY4741 as the chassis and a PAGER programmable antigen-gated receptor to recognise influenza A virus HA antigen, converting the recognition event into yEGFP and lacZ reporter output under the FUS1 promoter. This page lists, item by item, what this team can already hand to the next team: five parts, eight protocols and methods, and four design and troubleshooting records, each with its status, how to obtain it, and its attribution.</span><span class="i18n-zh">PAGER-Yeast 以酿酒酵母 BY4741 为底盘，用 PAGER 可编程抗原门控受体识别甲型流感病毒 HA 抗原，并把识别事件转成 FUS1 启动子下的 yEGFP 与 lacZ 报告输出。本页把这条链路中已经可以交到下一支队伍手上的部分逐条列出：5 项部件、8 项协议与方法、4 项设计说明与排错记录，并给出每项的状态、获取方式与来源归属。</span></p>
 
-        <div id="parts-registry" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>说明提交至 iGEM Registry 的 BioBrick 元件、改进元件及其表征数据，确保其他队伍能够复现和使用。</p>
-          </div>
-          <h2>Parts 注册贡献</h2>
-          <div id="new-parts">
-            <h3>新增 BioBrick</h3>
-            <ul>
-              <li><strong>PAGER 融合蛋白表达盒：</strong>α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq，克隆于 pGADT7。</li>
-              <li><strong>FUS1-yEGFP 报告盒：</strong>用于定量荧光检测的 G 蛋白响应启动子报告系统。</li>
-              <li><strong>FUS1-lacZ 报告盒：</strong>用于裸眼定性判读的 β-半乳糖苷酶报告系统。</li>
+            <p><span class="i18n-en">If you only take three things, start here: these are complete, have the fullest parameters, and can be repeated as written.</span><span class="i18n-zh">如果只取三样，先看这三条：它们已完成、参数最全，可以直接照着做。</span></p>
+
+            <ul class="link-list">
+              <li><a href="#parts-p1"><span class="i18n-en">P1 full PAGER surface fusion receptor composite part (gene synthesis and full sequencing complete, sequence matches the design)</span><span class="i18n-zh">P1 PAGER 膜表面融合受体全长复合部件（基因合成与全测序已完成，序列与设计一致）</span></a></li>
+              <li><a href="#protocols-t1"><span class="i18n-en">T1 E. coli heat-shock transformation (competent cells, antibiotic, heat-shock and recovery conditions all given)</span><span class="i18n-zh">T1 大肠杆菌热激转化（感受态、抗生素、热激与复苏条件齐全）</span></a></li>
+              <li><a href="#protocols-t3"><span class="i18n-en">T3 double-digestion verification (reaction and electrophoresis conditions given, band sizes match theory)</span><span class="i18n-zh">T3 双酶切验证（体系与电泳条件齐全，条带大小与理论值一致）</span></a></li>
             </ul>
-            <p>[待补充：Registry 上的 Part 编号、物理样本状态、序列验证文件链接。]</p>
-          </div>
-          <div id="improved-parts">
-            <h3>改进元件</h3>
-            <ul>
-              <li>[待补充：是否对现有 Registry 元件进行了优化，例如启动子强度调整、RBS 优化、密码子优化等]</li>
-              <li>[待补充：改进前后的性能对比数据]</li>
+
+            <p class="content-intro"><span class="i18n-en">Most directly usable parts and workflows in synthetic biology come from combinations others published and from records individuals took the trouble to keep. This project also builds on those public results, so the outputs worth reusing are gathered here for later teams to take as they are, or to keep modifying.</span><span class="i18n-zh">合成生物学里能直接用的元件与流程，多数来自前人公开的组合与个人整理。本项目在设计与实验中同样站在这些公开成果之上，因此把自身可复用的产出整理成页，供后续队伍直接取用，或在上面继续改动。</span></p>
+
+            <p><span class="i18n-en">This page serves one purpose: hand what this team built to the next team, and say plainly what use it has for others. Every entry therefore answers the same four questions: what it is, why it helps later teams, how later teams use it, and how to get it. Entries fall into parts, protocols and methods, and dry lab / human practices by nature of the work. This team has produced no software or hardware of its own, so those are left out rather than shown as empty.</span><span class="i18n-zh">本页只为一个目的服务：把本队做过的东西交到下一支队伍手上，并说清它对别人有什么用。因此每条贡献都回答同样的四个问题：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到。按工作性质分为部件、协议与方法、干实验 / 人类实践三类；本队暂无自研软件与硬件产出，相应部分不设，避免留下空节。</span></p>
+
+            <p><span class="i18n-en">Every item carries a status. Work that is finished and documented is marked <code>secondary-source-only</code>; design intent and plans are marked &ldquo;Pending&rdquo;. A small number of open points are flagged with three labels: <span class="status-badge status-badge--register">To register</span> means the entry is filled in after registration (Registry number and link, licence, access point), <span class="status-badge status-badge--verify">To verify</span> means it needs checking against the primary record (source reference, permission status, site coordinates), and <span class="status-badge status-badge--add">To add</span> means the parameters or raw record are added to this page once the experiment is done.</span><span class="i18n-zh">每条都带状态标记。已完成并留有记录的标为 <code>secondary-source-only</code>；属于设计或计划的标为「待定」。少数尚未落实的信息用三个标签提示：<span class="status-badge status-badge--register">待登记</span> 指登记后回填（Registry 编号与链接、License、获取入口），<span class="status-badge status-badge--verify">待核验</span> 指需对照一手记录复核（来源文献、授权状态、位点坐标），<span class="status-badge status-badge--add">待补充</span> 指实验完成后补入本页的参数与原始记录。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Parts</span><span class="i18n-zh">部件</span></span><span class="field-value"><span class="i18n-en">The full PAGER surface fusion receptor composite part and its six sub-components, the humanised Gpa1 variant, FUS1 reporter cassettes, sgRNAs for three targets, and the triple-knockout chassis strain. P1 has completed gene synthesis and full sequencing, and the sequence matches the design.</span><span class="i18n-zh">PAGER 膜表面融合受体全长复合部件及其六个子元件、人源化 Gpa1 变体、FUS1 报告盒、三个靶点的 sgRNA、三敲底盘菌株。其中 P1 已完成基因合成与全序列测序，序列与设计一致。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Protocols and methods</span><span class="i18n-zh">协议与方法</span></span><span class="field-value"><span class="i18n-en">Three completed procedures with full parameters: E. coli heat-shock transformation, plasmid extraction and double-digestion verification, including competent cells, antibiotic, kit, digestion reaction and electrophoresis conditions; plus five protocols whose plans are fixed and whose parameters are added to this page as the work proceeds.</span><span class="i18n-zh">已完成并留有完整参数的三项主推：大肠杆菌热激转化、质粒提取、双酶切验证，含感受态、抗生素、试剂盒、酶切体系与电泳条件；另有五项已定方案的实验流程，参数随实验推进补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Other contributions</span><span class="i18n-zh">其他贡献</span></span><span class="field-value"><span class="i18n-en">Design notes for chassis engineering and Gpa1 humanisation, troubleshooting notes for a failed digestion, the three-control setup, and the plasmid construction and verification record.</span><span class="i18n-zh">底盘改造与人源化 Gpa1 的设计说明、酶切排错经验、三组对照设置方案、质粒构建与验证记录。</span></span></li>
             </ul>
-          </div>
-          <div id="characterization">
-            <h3>表征数据</h3>
-            <p>[待补充：为每个新/改进元件提供的定量表征数据，包括测量条件、重复次数 n ≥ 3、误差定义（SD/SEM）、对照组设置。]</p>
-            <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
           </div>
         </div>
 
-        <div id="protocols-methods" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>公开团队开发或优化的实验协议，包含材料、设备、浓度、温控时间等结构化信息，便于其他研究者复现。</p>
-          </div>
-          <h2>实验方案与方法</h2>
-          <div id="cloning-protocols">
-            <h3>克隆与验证</h3>
-            <ul>
-              <li>PAGER 融合蛋白基因的合成、限制性酶切（NdeI/BamHI）与克隆流程。</li>
-              <li>双酶切验证与 Sanger 测序确认插入片段大小与序列正确性。</li>
+        <div id="parts-overview" class="content-card">
+          <h2><span class="i18n-en">1. Parts</span><span class="i18n-zh">1. 部件（Parts）</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Parts the team intends to submit to the iGEM Registry, plus chassis engineering targets that future iGEM teams can reuse.</span><span class="i18n-zh">本类为本队拟提交至 iGEM Registry 的元件，以及可供后续队伍复用的底盘改造靶点。</span></p>
+
+            <p><span class="i18n-en"><strong>Highlight of this section:</strong> P1, the full PAGER surface fusion receptor composite part. Gene synthesis and full sequencing are complete, so it is the most complete material available for reproducing this team recognition module.</span><span class="i18n-zh"><strong>本类主推：</strong>P1 PAGER 膜表面融合受体全长复合部件。它已完成基因合成与全序列测序，是复现本队识别模块时最完整的一份材料。</span></p>
+
+            <p><span class="i18n-en">Every item below uses the same set of fields: what it is, why it is useful to future iGEM teams, how future iGEM teams use it, how to obtain it, evidence, attribution and source, progress and status. Registry numbers and links are filled in once registration is complete before submission; sequences obtained from third parties are noted in the attribution field, and permission is confirmed before public submission.</span><span class="i18n-zh">以下每条按统一字段列出：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到、证据、归属与来源、进度、状态。Registry 编号与链接在提交前登记后回填；第三方来源的序列已在归属栏注明，公开提交前完成授权确认。</span></p>
+
+            <ul class="link-list">
+              <li><a href="#parts-p1"><span class="i18n-en">P1 Full PAGER surface fusion receptor composite part</span><span class="i18n-zh">P1 PAGER 膜表面融合受体全长复合部件</span></a></li>
+              <li><a href="#parts-p2"><span class="i18n-en">P2 Humanised Gpa1 variant (C-terminus KIGII to EYNLV)</span><span class="i18n-zh">P2 人源化 Gpa1 变体（C 端 KIGII→EYNLV）</span></a></li>
+              <li><a href="#parts-p3"><span class="i18n-en">P3 FUS1-yEGFP and FUS1-lacZ reporter cassettes</span><span class="i18n-zh">P3 FUS1-yEGFP 与 FUS1-lacZ 报告盒</span></a></li>
+              <li><a href="#parts-p4"><span class="i18n-en">P4 sgRNAs targeting STE2 / FAR1 / Sst2</span><span class="i18n-zh">P4 STE2 / FAR1 / Sst2 靶向 sgRNA</span></a></li>
+              <li><a href="#parts-p5"><span class="i18n-en">P5 Triple-knockout chassis strain BY4741 Δste2 Δfar1 Δsst2</span><span class="i18n-zh">P5 三敲底盘菌株 BY4741 Δste2 Δfar1 Δsst2</span></a></li>
             </ul>
-            <p>[待补充：详细的反应体系、循环条件、琼脂糖凝胶参数与测序引物。]</p>
-          </div>
-          <div id="yeast-protocols">
-            <h3>酵母操作</h3>
-            <ul>
-              <li>LiAc/PEG 化学转化法制备 PAGER-Yeast 工程菌株。</li>
-              <li>CRISPR-Cas9 三敲除（STE2/FAR1/Sst2）与 Gpa1 人源化改造方案。</li>
-            </ul>
-            <p>[待补充：选择标记、筛选培养基、菌落 PCR 验证引物与培养条件。]</p>
-          </div>
-          <div id="assay-protocols">
-            <h3>检测方法</h3>
-            <ul>
-              <li>流式细胞术检测 yEGFP 荧光响应。</li>
-              <li>X-Gal 显色法定性检测 lacZ 表达。</li>
-            </ul>
-            <p>[待补充：诱导剂 DCZ 浓度梯度、孵育时间、仪器型号与采集参数。]</p>
           </div>
         </div>
 
-        <div id="software-tools" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>汇总团队开发的软件、模型代码、数据分析脚本及配套文档，并提供访问链接与使用说明。</p>
-          </div>
-          <h2>软件与工具</h2>
-          <div id="analysis-tools">
-            <h3>数据分析</h3>
-            <p>[待补充：用于处理流式数据、计算荧光强度、绘制剂量-反应曲线的脚本或工具；建议提供 GitHub/GitLab 链接与依赖说明。]</p>
-          </div>
-          <div id="model-code">
-            <h3>模型代码</h3>
-            <p>[待补充：G 蛋白信号通路或抗原-抗体结合动力学模型的代码、参数来源与运行环境。]</p>
-          </div>
-          <div id="documentation">
-            <h3>文档资源</h3>
-            <p>[待补充：面向未来队伍的 Wiki 模板、实验记录模板、安全操作清单等可下载资源。]</p>
+        <div id="parts-p1" class="content-card">
+          <h2><span class="i18n-en">P1 Full PAGER surface fusion receptor composite part</span><span class="i18n-zh">P1 PAGER 膜表面融合受体全长复合部件</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">A complete design encoding a surface fusion receptor, consisting of a signal peptide, linkers, an inhibitory domain, a nanobody, a protease cleavage site and a receptor joined in sequence, intended to display the antigen-recognition unit on the yeast cell surface.</span><span class="i18n-zh">一段编码膜表面融合受体的完整设计，由信号肽、连接肽、抑制域、纳米抗体、蛋白酶切位点与受体依次连接，用于在酵母细胞膜表面展示抗原识别单元。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Part</span><span class="i18n-zh">部件</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">The full-length fusion protein expression cassette α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq. Without antigen the MT1 inhibitory domain is designed to keep hM1Dq suppressed, with the suppression released once antigen binds the nanobody. This is a design mechanism and has not been verified in this project.</span><span class="i18n-zh">α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq 的全长融合蛋白表达盒。无抗原时 MT1 抑制域维持对 hM1Dq 的抑制，抗原与纳米抗体结合后解除该抑制，属于设计机制，本项目中尚未验证。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams building an antigen-gated yeast receptor system can take this complete design and its sub-components directly, rather than assembling the functional domains from scratch and iterating on linker design.</span><span class="i18n-zh">后续队伍若要搭建抗原门控的酵母受体系统，可直接取用这条完整设计及其子元件，省去从零组合功能域与反复设计连接肽的工作。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Clone the parts into the target vector in the order given in the sub-component table below; to change the recognition target, replace the nanobody coding region and verify on your own that each domain still folds correctly. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">按本节子元件表依次克隆到目标载体；若要更换识别对象，替换其中的纳米抗体编码区即可，替换后需自行验证各功能域仍能正确折叠。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">Registry number and link <span class="status-badge status-badge--register">To register</span>; the plasmid encoding this fusion protein is ABX63942, the cloning backbone is pGADT7, and the flanking restriction sites are 5&prime;-NdeI and 3&prime;-BamHI.</span><span class="i18n-zh">Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>；编码该融合蛋白的质粒编号为 ABX63942，克隆骨架为 pGADT7，两端酶切位点为 5&#39;-NdeI 与 3&#39;-BamHI。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Gene synthesis and full sequencing are complete; records show the sequence matches the design with no mutations observed. There is no functional characterisation yet, and neither the fluorescence response nor the antigen response has been verified.</span><span class="i18n-zh">已完成基因合成与全序列测序，记录显示序列与设计一致、未见突变。尚无功能表征，荧光响应与抗原响应均未验证。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The fusion protein was designed and assembled by this team. MT1, the anti-H1N1_HA nanobody and TEVcs are third-party sequences, <span class="status-badge status-badge--verify">To verify</span>, and permission must be confirmed before public submission.</span><span class="i18n-zh">融合蛋白由本队设计并组合；MT1、anti-H1N1_HA 纳米抗体与 TEVcs 为第三方来源序列，<span class="status-badge status-badge--verify">待核验</span>，公开提交前需确认授权。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Gene synthesis and full sequencing complete</span><span class="i18n-zh">已完成基因合成与全测序</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">secondary-source-only</span><span class="i18n-zh">secondary-source-only</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Sub-components</span><span class="i18n-zh">子元件</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Sub-component</span><span class="i18n-zh">子元件</span></th>
+                  <th scope="col"><span class="i18n-en">Function</span><span class="i18n-zh">作用</span></th>
+                  <th scope="col"><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></th>
+                  <th scope="col"><span class="i18n-en">Source and attribution</span><span class="i18n-zh">来源与归属</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">α-factor signal peptide</span><span class="i18n-zh">α-factor 信号肽</span></td>
+                  <td><span class="i18n-en">Directs secretion of the fusion protein and its localisation to the yeast cell membrane</span><span class="i18n-zh">引导融合蛋白分泌并定位到酵母细胞膜</span></td>
+                  <td><span class="i18n-zh"><code>MRFPSIFTAVLFAASSALA</code></span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">(GGGS)₃ linker</span><span class="i18n-zh">(GGGS)₃ 连接肽</span></td>
+                  <td><span class="i18n-en">Separates functional domains so they fold relatively independently</span><span class="i18n-zh">分隔功能域，支持相对独立折叠</span></td>
+                  <td><span class="i18n-en">Engineered flexible linker</span><span class="i18n-zh">人工柔性连接肽</span></td>
+                  <td><span class="i18n-en">Designed by this team</span><span class="i18n-zh">本队设计</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">MT1 inhibitory domain</span><span class="i18n-zh">MT1 抑制域</span></td>
+                  <td><span class="i18n-en">Suppresses hM1Dq in the absence of antigen, forming the self-inhibition switch</span><span class="i18n-zh">无抗原时抑制 hM1Dq，构成自抑制开关</span></td>
+                  <td><span class="i18n-zh"><code>LTCVTSKSIFGITTENCPDGQNLCFKKWYYIVPRYSDITWGCAATCPKPTNVRETIRCCETD</code></span></td>
+                  <td><span class="i18n-en">Third-party sequence, <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">第三方序列，<span class="status-badge status-badge--verify">待核验</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">anti-H1N1_HA nanobody</span><span class="i18n-zh">anti-H1N1_HA 纳米抗体</span></td>
+                  <td><span class="i18n-en">Binds influenza A virus HA antigen specifically and is the recognition unit</span><span class="i18n-zh">特异结合甲型流感病毒 HA 抗原，是识别单元</span></td>
+                  <td><span class="i18n-zh"><code>QVQLVESGGGLVQPGGSLRLSCAASGSFFSRYRMGWYRQAPGEQRELVASIAYDGSTSYADPVKGRFTISRDNANTVHLQMYSLKPDDTAVYYCNLDPPGILYWGQGTQVTVSS</code></span></td>
+                  <td><span class="i18n-en">Third-party sequence, <span class="status-badge status-badge--verify">To verify</span>; permission must be confirmed before public submission</span><span class="i18n-zh">第三方序列，<span class="status-badge status-badge--verify">待核验</span>；公开提交前需确认授权</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">TEVcs cleavage site</span><span class="i18n-zh">TEVcs 切点</span></td>
+                  <td><span class="i18n-en">Molecular switch used to mimic antigen unlocking in vitro</span><span class="i18n-zh">用于体外模拟抗原解锁的分子开关</span></td>
+                  <td><span class="i18n-zh"><code>ENLYFQS</code></span></td>
+                  <td><span class="i18n-en">Third-party sequence, <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">第三方序列，<span class="status-badge status-badge--verify">待核验</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">hM1Dq receptor</span><span class="i18n-zh">hM1Dq 受体</span></td>
+                  <td><span class="i18n-en">Receives the upstream state and couples to the downstream G-protein pathway; can be activated by DCZ</span><span class="i18n-zh">接收上游状态并耦联下游 G 蛋白通路，可由 DCZ 激活</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                  <td><span class="i18n-en">Third-party sequence, <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">第三方序列，<span class="status-badge status-badge--verify">待核验</span></span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p><span class="i18n-en">Reproduction notes: whether the codons were optimised for <em>Saccharomyces cerevisiae</em> <span class="status-badge status-badge--verify">To verify</span>; the full sequence file or Registry link <span class="status-badge status-badge--add">To add</span>.</span><span class="i18n-zh">复现提示：该融合蛋白的密码子是否针对酿酒酵母做过优化<span class="status-badge status-badge--verify">待核验</span>；完整序列文件或 Registry 链接<span class="status-badge status-badge--add">待补充</span>。</span></p>
           </div>
         </div>
 
-        <div id="collaboration" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>记录与其他 iGEM 队伍、研究机构、社区组织的协作成果，以及团队开展的科普教育活动。</p>
-          </div>
-          <h2>协作与社区</h2>
-          <div id="team-collaboration">
-            <h3>队伍合作</h3>
-            <p>[待补充：与其他高校 iGEM 队伍的合作内容、共享资源、联合实验或互相验证结果。]</p>
-          </div>
-          <div id="education">
-            <h3>科普与教育</h3>
-            <p>[待补充：面向中学生、公众或基层医务人员的合成生物学与流感检测科普活动；附上活动日期、地点、参与人数与反馈。]</p>
-          </div>
-          <div id="future-teams">
-            <h3>致未来队伍</h3>
-            <ul>
-              <li>[待补充：本项目中最值得复用的经验或教训]</li>
-              <li>[待补充：建议后续队伍优先验证的关键步骤]</li>
-              <li>[待补充：联系人与资源获取方式]</li>
+        <div id="parts-p2" class="content-card">
+          <h2><span class="i18n-en">P2 Humanised Gpa1 variant (C-terminus KIGII to EYNLV)</span><span class="i18n-zh">P2 人源化 Gpa1 变体（C 端 KIGII→EYNLV）</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Replaces the last five residues of the yeast Gpa1 C-terminus, KIGII, with EYNLV from human Gαq, to couple the hM1Dq signal into the yeast MAPK pathway.</span><span class="i18n-zh">把酵母 Gpa1 的 C 端最后 5 个氨基酸由 KIGII 替换为人源 Gαq 对应的 EYNLV，用于把 hM1Dq 的信号接到酵母 MAPK 通路上。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Part</span><span class="i18n-zh">部件</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">A targeted substitution at the Gpa1 C-terminus (KIGII to EYNLV) that aligns the signalling interface between the receptor and the yeast downstream pathway. Gpa1 is the interface being engineered, not a knockout target.</span><span class="i18n-zh">对 Gpa1 的 C 端做定点替换（KIGII → EYNLV），使受体与酵母下游通路之间的信号接口对齐。Gpa1 是接口改造对象，不是敲除对象。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams wanting to connect a human GPCR or DREADD receptor in yeast can refer to this C-terminal substitution and sequence instead of searching for an interface sequence themselves.</span><span class="i18n-zh">后续队伍若要在酵母中接入人源 GPCR 或 DREADD 受体，可直接参考这处 C 端替换的位点与序列，减少自行摸索接口序列的工作。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Replace the Gpa1 C-terminal sequence in your own chassis by homologous recombination, then check whether the downstream reporter is activated by the receptor. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">在自己的底盘上以同源重组方式替换 Gpa1 的 C 端序列，再验证下游报告是否被受体激活。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">Registry number and link <span class="status-badge status-badge--register">To register</span>. The substitution site is the last five residues of the Gpa1 C-terminus, KIGII to EYNLV; the integration fragment is a 500 bp upstream homology arm + humanised Gpa1 + URA3 selection cassette + 500 bp downstream homology arm, and the exact sequence is added once construction is complete.</span><span class="i18n-zh">Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。替换位点为 Gpa1 C 端最后 5 个氨基酸 KIGII→EYNLV；整合片段结构为 500 bp 上游同源臂 + 人源化 Gpa1 + URA3 筛选盒 + 500 bp 下游同源臂，具体序列随构建完成补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Not yet verified. There are no experimental data on whether integration succeeded or whether the pathway is activated.</span><span class="i18n-zh">尚未验证。整合是否成功、通路是否被激活，目前都无实验数据。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The humanised site follows the human Gαq sequence, <span class="status-badge status-badge--verify">To verify</span>.</span><span class="i18n-zh">人源化位点参考人源 Gαq 序列，<span class="status-badge status-badge--verify">待核验</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Not started (depends on the chassis knockouts being finished)</span><span class="i18n-zh">待完成（依赖底盘敲除完成）</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
             </ul>
           </div>
         </div>
+
+        <div id="parts-p3" class="content-card">
+          <h2><span class="i18n-en">P3 FUS1-yEGFP and FUS1-lacZ reporter cassettes</span><span class="i18n-zh">P3 FUS1-yEGFP 与 FUS1-lacZ 报告盒</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Two reporter outputs driven by the FUS1 promoter: green fluorescence for quantification and lacZ for a visual colour readout. This reporter system is planned, not built.</span><span class="i18n-zh">以 FUS1 启动子驱动两种报告输出，绿色荧光用于定量，lacZ 用于显色判读，属于拟构建的报告体系。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Part</span><span class="i18n-zh">部件</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">Two reporter cassettes. FUS1-yEGFP is read as green fluorescence intensity by flow cytometry; FUS1-lacZ is judged qualitatively by X-Gal staining. The backbone is pESC-HIS. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">两个报告盒。FUS1-yEGFP 用流式细胞术读绿色荧光强度，FUS1-lacZ 用 X-Gal 显色做定性判读；骨架使用 pESC-HIS。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams using the yeast G-protein pathway for reporting can take this promoter-plus-reporter combination and get both a quantitative and a visual readout.</span><span class="i18n-zh">后续队伍若要用酵母 G 蛋白通路做报告，可直接取用同一套启动子加报告基因的组合，同时得到定量与肉眼判读两种读出方式。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Clone the cassette into your chassis and reuse the same readout after swapping the upstream receptor; keep the FUS1 promoter region when changing the reporter gene. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">把报告盒克隆到目标底盘，替换上游受体后即可复用同一读出方式；更换报告基因时注意保留 FUS1 启动子区域。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">Registry number and link <span class="status-badge status-badge--register">To register</span>. The cassette backbone is pESC-HIS, the promoter is FUS1, and the reporters are yEGFP and lacZ; the cassette map and sequence are added once construction is complete.</span><span class="i18n-zh">Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。报告盒骨架为 pESC-HIS，启动子为 FUS1，报告基因分别为 yEGFP 与 lacZ；盒结构图与序列随构建完成补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Not yet constructed; no characterisation data.</span><span class="i18n-zh">尚未构建，无任何表征数据。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The FUS1 promoter and reporter genes are public parts; exact source <span class="status-badge status-badge--verify">To verify</span>.</span><span class="i18n-zh">FUS1 启动子与报告基因为公开元件，具体来源<span class="status-badge status-badge--verify">待核验</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">To be constructed</span><span class="i18n-zh">待构建</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="parts-p4" class="content-card">
+          <h2><span class="i18n-en">P4 sgRNAs targeting STE2 / FAR1 / Sst2</span><span class="i18n-zh">P4 STE2 / FAR1 / Sst2 靶向 sgRNA</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">sgRNAs designed against the three chassis engineering targets, for CRISPR-Cas9 knockout. Currently at the vector construction stage.</span><span class="i18n-zh">针对底盘改造三个靶点设计的 sgRNA，用于 CRISPR-Cas9 敲除；目前处于载体构建阶段。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Part</span><span class="i18n-zh">部件</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">Three sgRNAs targeting STE2, FAR1 and Sst2 respectively, to be cloned into the pML104 backbone for triple knockout in the BY4741 chassis. The STE2 knockout is intended to remove the endogenous α-factor receptor, the FAR1 knockout to release the mating-signal-induced cell-cycle arrest, and the Sst2 knockout to remove the G-protein negative regulator.</span><span class="i18n-zh">三条分别靶向 STE2、FAR1、Sst2 的 sgRNA，拟克隆至 pML104 骨架，用于对 BY4741 底盘做三基因敲除。STE2 敲除用于消除内源 α-factor 受体，FAR1 敲除用于解除交配信号诱导的细胞周期停滞，Sst2 敲除用于移除 G 蛋白负调节因子。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams engineering the same chassis can use these three targeting sequences directly instead of redesigning sgRNAs and screening targets.</span><span class="i18n-zh">后续队伍若要改造同一底盘，可直接取用这三条靶向序列，省去重新设计 sgRNA 与筛选靶点的工作。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Clone the sgRNAs into your own CRISPR vector, verify the cutting efficiency of each target separately, then move on to multiplex knockout. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">把 sgRNA 克隆进自己的 CRISPR 载体，按靶点分别验证切割效率后再做多基因敲除。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">Registry number and link <span class="status-badge status-badge--register">To register</span>. The sgRNAs are cloned into pML104 and verified by colony PCR and Sanger sequencing after transformation; sequences and target coordinates are added once the experiment is complete.</span><span class="i18n-zh">Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。sgRNA 克隆入 pML104 载体，转化后以菌落 PCR 与 Sanger 测序验证；序列与靶点坐标随实验完成补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">No cutting-efficiency data and no knockout verification yet. Archived records show the first digestion failed and the sgRNA vector is being rebuilt.</span><span class="i18n-zh">尚无切割效率数据与敲除验证结果。归档记录显示首次酶切失败，正在重建 sgRNA 载体。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The sgRNAs were designed by this team; the target sequences come from the <em>Saccharomyces cerevisiae</em> BY4741 genome, <span class="status-badge status-badge--verify">To verify</span>.</span><span class="i18n-zh">sgRNA 由本队设计，靶点序列来自酿酒酵母 BY4741 基因组，<span class="status-badge status-badge--verify">待核验</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">In progress</span><span class="i18n-zh">进行中</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">sgRNA sequences</span><span class="i18n-zh">sgRNA 序列</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Target gene</span><span class="i18n-zh">靶基因</span></th>
+                  <th scope="col"><span class="i18n-en">Length</span><span class="i18n-zh">长度</span></th>
+                  <th scope="col"><span class="i18n-en">Sequence (5' to 3')</span><span class="i18n-zh">序列（5' → 3'）</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-zh">FAR1</span></td>
+                  <td><span class="i18n-zh">89 bp</span></td>
+                  <td><span class="i18n-zh"><code>GCAGTGAAAGATAAATGATCACCAAGTTTGAAGAAAACAGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-zh">STE2</span></td>
+                  <td><span class="i18n-zh">89 bp</span></td>
+                  <td><span class="i18n-zh"><code>GCAGTGAAAGATAAATGATCTCACCTCTACTGATGAACTGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-zh">Sst2</span></td>
+                  <td><span class="i18n-zh">89 bp</span></td>
+                  <td><span class="i18n-zh"><code>GCAGTGAAAGATAAATGATCACACCGCAGGACAGAACTCGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="parts-p5" class="content-card">
+          <h2><span class="i18n-en">P5 Triple-knockout chassis strain BY4741 Δste2 Δfar1 Δsst2</span><span class="i18n-zh">P5 三敲底盘菌株 BY4741 Δste2 Δfar1 Δsst2</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">A chassis strain obtained by knocking out STE2, FAR1 and Sst2 in BY4741, intended to reduce endogenous signal interference. Whether the knockouts are complete is still being verified.</span><span class="i18n-zh">在 BY4741 上依次敲除 STE2、FAR1 与 Sst2 得到的底盘菌株，拟用于降低内源信号干扰；敲除是否完成尚在验证。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Part or chassis resource <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">部件或底盘资源<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">Knockout of three genes in wild-type BY4741. The STE2 knockout is intended to remove the endogenous α-factor receptor, the FAR1 knockout to release the mating-signal-induced cell-cycle arrest, and the Sst2 knockout to remove the G-protein negative regulator. These changes are design intentions; this project has not finished verifying them and has not shown that they necessarily improve any performance metric.</span><span class="i18n-zh">对野生型 BY4741 做三个基因的敲除。STE2 敲除用于消除内源 α-factor 受体，FAR1 敲除用于解除交配信号诱导的细胞周期停滞，Sst2 敲除用于移除 G 蛋白负调节因子。这些改动是设计意图，本项目尚未完成验证，也未证明它们必然改善任何性能指标。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams wanting to use a heterologous receptor in yeast can refer to these three engineering targets to reduce interference from the endogenous mating pathway first.</span><span class="i18n-zh">后续队伍若要在酵母里使用外源受体，可参考这三处改造靶点，把内源交配通路的干扰先降下来。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Knock out using the sgRNAs in P4 above and verify each locus step by step with colony PCR and sequencing; once double or triple knockouts are obtained, reassess whether all three changes are needed. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">以本页 P4 的 sgRNA 做敲除，用菌落 PCR 与测序逐步验证每个位点；获得双敲或三敲菌株后再评估是否需要全部三处改动。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">Registry number and link <span class="status-badge status-badge--register">To register</span>. The strain is BY4741 Δste2 Δfar1 Δsst2, selected on SD-Ura plates with the URA3 auxotrophic marker; deposit and shipping arrangements are published once verification is complete.</span><span class="i18n-zh">Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。菌株为 BY4741 Δste2 Δfar1 Δsst2，以 SD-Ura 平板与 URA3 营养缺陷标记筛选；保藏与寄送方式随验证完成后公布。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">No knockout verification results yet; it is not confirmed that the strain carries all three knockouts.</span><span class="i18n-zh">尚无敲除验证结果，菌株是否获得三敲未确认。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The chassis is BY4741; the knockout targets were chosen by this team.</span><span class="i18n-zh">底盘为 BY4741，敲除靶点由本队确定。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">In progress</span><span class="i18n-zh">进行中</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="protocols-overview" class="content-card">
+          <h2><span class="i18n-en">2. Protocols and Methods</span><span class="i18n-zh">2. 协议与方法（Protocols &amp; Methods）</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Experimental procedures that either worked or have a recorded protocol, listed by how complete they are. Work not yet done is written as a plan, not as a result.</span><span class="i18n-zh">本类为已走通或有方案记录的实验流程，按完成度列出；未完成的部分只写拟采用的做法，不写成结果。</span></p>
+
+            <p><span class="i18n-en"><strong>Highlight of this section:</strong> T1 to T3. These three steps have the most complete parameters and real records of anything so far, running from plasmid introduction into E. coli to double-digestion readout, so later teams can reproduce them and check their own results.</span><span class="i18n-zh"><strong>本类主推：</strong>T1 至 T3。这三步是目前参数最完整、有实际记录的一串流程，从质粒导入大肠杆菌到双酶切判读，后续队伍可以照此复现并自行核对。</span></p>
+
+            <ul class="link-list">
+              <li><a href="#protocols-t1"><span class="i18n-en">T1 Heat-shock transformation of the PAGER plasmid into E. coli</span><span class="i18n-zh">T1 PAGER 质粒的大肠杆菌热激转化</span></a></li>
+              <li><a href="#protocols-t2"><span class="i18n-en">T2 Plasmid extraction</span><span class="i18n-zh">T2 质粒提取</span></a></li>
+              <li><a href="#protocols-t3"><span class="i18n-en">T3 Double-digestion verification</span><span class="i18n-zh">T3 双酶切验证</span></a></li>
+              <li><a href="#protocols-t4"><span class="i18n-en">T4 LiAc/PEG chemical transformation of yeast (planned)</span><span class="i18n-zh">T4 酵母 LiAc/PEG 化学转化（拟采用）</span></a></li>
+              <li><a href="#protocols-t5"><span class="i18n-en">T5 CRISPR-Cas9 triple knockout and verification (in progress)</span><span class="i18n-zh">T5 CRISPR-Cas9 三基因敲除与验证（进行中）</span></a></li>
+              <li><a href="#protocols-t6"><span class="i18n-en">T6 Site-directed integration of Gpa1 by homologous recombination (planned)</span><span class="i18n-zh">T6 Gpa1 同源重组定点整合（拟采用）</span></a></li>
+              <li><a href="#protocols-t7"><span class="i18n-en">T7 Yeast total protein extraction and Western blot (planned)</span><span class="i18n-zh">T7 酵母总蛋白提取与 WB（拟采用）</span></a></li>
+              <li><a href="#protocols-t8"><span class="i18n-en">T8 DCZ induction and signal detection (planned)</span><span class="i18n-zh">T8 DCZ 诱导与信号检测（拟采用）</span></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="protocols-t1" class="content-card">
+          <h2><span class="i18n-en">T1 Heat-shock transformation of the PAGER plasmid into E. coli</span><span class="i18n-zh">T1 PAGER 质粒的大肠杆菌热激转化</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Introduction of the PAGER plasmid into E. coli Top10 for later amplification and verification. This step is complete and yielded positive clones.</span><span class="i18n-zh">把 PAGER 质粒导入大肠杆菌 Top10，用于后续扩增与验证；本步已完成并得到阳性克隆。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">A standard heat-shock transformation using Top10 competent cells with selection on Amp 100 μg/mL, used to introduce the PAGER plasmid into E. coli for amplification.</span><span class="i18n-zh">常规热激转化流程，感受态为 Top10，抗性筛选用 Amp 100 μg/mL，用于把 PAGER 质粒导入大肠杆菌扩增。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams can follow these conditions to introduce a similar plasmid into E. coli and amplify it, without working out the antibiotic and competent-cell conditions themselves.</span><span class="i18n-zh">后续队伍可直接照此条件把同类质粒导入大肠杆菌完成扩增，省去自行确定抗性与感受态条件的工作。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Carry out the heat shock under the conditions in the key parameters table below, pick single colonies and confirm by colony PCR or miniprep; results matching the record here mean the step worked.</span><span class="i18n-zh">按本节「关键参数」表的条件执行热激，挑取单菌落做菌落 PCR 或提质粒确认；结果与本节记录一致即视为可用。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">This page gives the full parameters and measured results needed to repeat the procedure.</span><span class="i18n-zh">本页给出可直接复现的完整参数与实测结果。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Complete, with positive clones obtained. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">已完成并得到阳性克隆。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">Standard molecular cloning method, carried out by this team following lab procedures.</span><span class="i18n-zh">常规分子克隆方法，本队按实验室流程执行。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Complete</span><span class="i18n-zh">已完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">secondary-source-only</span><span class="i18n-zh">secondary-source-only</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Competent strain</span><span class="i18n-zh">感受态菌株</span></td>
+                  <td><span class="i18n-zh">Top10</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Selection</span><span class="i18n-zh">抗性筛选</span></td>
+                  <td><span class="i18n-zh">Amp 100 μg/mL</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Heat-shock conditions</span><span class="i18n-zh">热激条件</span></td>
+                  <td><span class="i18n-en">30 min on ice, 90 s heat shock at 42 °C, then 2 min on ice</span><span class="i18n-zh">冰浴 30 min → 42 ℃ 热激 90 s → 冰浴 2 min</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Recovery culture</span><span class="i18n-zh">恢复培养</span></td>
+                  <td><span class="i18n-en">1 h recovery in antibiotic-free LB at 37 °C</span><span class="i18n-zh">无抗 LB 培养基 37 ℃ 复苏 1 h</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Replicates</span><span class="i18n-zh">重复数</span></td>
+                  <td><span class="i18n-en">four positive clones</span><span class="i18n-zh">4 个阳性克隆</span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t2" class="content-card">
+          <h2><span class="i18n-en">T2 Plasmid extraction</span><span class="i18n-zh">T2 质粒提取</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Extraction of the PAGER plasmid from E. coli for digestion checks and later yeast transformation. This step is complete and concentration and purity were recorded.</span><span class="i18n-zh">从大肠杆菌中提取 PAGER 质粒，用于酶切验证与后续酵母转化；本步已完成并留下浓度与纯度记录。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">A standard miniprep using the TIANGEN DP103 kit with elution in EB at 65 ℃.</span><span class="i18n-zh">常规质粒小提流程，使用试剂盒 TIANGEN DP103，以 65 ℃ 的 EB 洗脱。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams can use the same kit and elution conditions and compare their concentration and purity with the range recorded here.</span><span class="i18n-zh">后续队伍可按同一试剂盒与洗脱条件提取质粒，并对照本节记录的浓度与纯度范围判断提取是否正常。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Follow the key parameters table below, measure concentration and A260/A280 on 1 to 2 μL, and proceed to digestion once the values fall in the usual usable range.</span><span class="i18n-zh">按本节「关键参数」表执行，取 1 至 2 μL 测浓度与 A260/A280，落在常见可用区间即可进入酶切验证。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">This page gives the full parameters and measured results needed to repeat the procedure.</span><span class="i18n-zh">本页给出可直接复现的完整参数与实测结果。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Concentrations were recorded for four clones as 408.45 / 404.85 / 297.15 / 355.90 ng/μL, with A260/A280 recorded as 1.9. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">4 个克隆的浓度记录为 408.45 / 404.85 / 297.15 / 355.90 ng/μL，A260/A280 记录为 1.9。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">Standard kit protocol from the manufacturer, followed by this team.</span><span class="i18n-zh">试剂盒厂商标准流程，本队按说明执行。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Complete</span><span class="i18n-zh">已完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">secondary-source-only</span><span class="i18n-zh">secondary-source-only</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Extraction kit</span><span class="i18n-zh">提取试剂盒</span></td>
+                  <td><span class="i18n-zh">TIANGEN DP103</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Elution conditions</span><span class="i18n-zh">洗脱条件</span></td>
+                  <td><span class="i18n-en">EB elution at 65 ℃</span><span class="i18n-zh">65 ℃ EB 洗脱</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Elution volume</span><span class="i18n-zh">洗脱体积</span></td>
+                  <td><span class="i18n-en">Eluted with EB buffer pre-warmed to 65 °C, with a second elution to raise the concentration</span><span class="i18n-zh">65 ℃ 预热 EB 缓冲液洗脱，二次洗脱提高浓度</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Replicates</span><span class="i18n-zh">重复数</span></td>
+                  <td><span class="i18n-en">one extraction per clone, four clones</span><span class="i18n-zh">4 个克隆各提取一次</span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t3" class="content-card">
+          <h2><span class="i18n-en">T3 Double-digestion verification</span><span class="i18n-zh">T3 双酶切验证</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Double digestion of the extracted plasmid with NdeI-HF and BamHI-HF, with agarose gel confirmation of the backbone and insert sizes. This step is complete and the bands match the expected sizes.</span><span class="i18n-zh">用 NdeI-HF 与 BamHI-HF 对提取的质粒做双酶切，经琼脂糖凝胶确认骨架与插入片段大小；本步已完成，条带与理论值一致。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">A 50 μL double-digestion reaction incubated at 37 ℃ for 1 h, followed by electrophoresis on a 0.8% agarose gel at 80 V for 70 min to read the bands.</span><span class="i18n-zh">50 μL 双酶切体系，37 ℃ 反应 1 h，随后用 0.8% 琼脂糖凝胶在 80 V 下电泳 70 min 判读条带。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams can use the same enzyme pair and electrophoresis conditions to confirm quickly whether a similar plasmid was built correctly, comparing directly against the expected bands recorded here.</span><span class="i18n-zh">后续队伍可用同一对酶与电泳条件快速确认同类质粒是否构建正确，直接对照本节记录的理论条带判断结果。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Set up the reaction as in the key parameters table below, run the gel and compare with a DNA marker; once the backbone and insert sizes match expectations, move on to the next step.</span><span class="i18n-zh">按本节「关键参数」表配置反应，跑胶后与 DNA Marker 比对；骨架与插入片段大小与理论一致即可进入下一步。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">This page gives the full parameters and measured results needed to repeat the procedure.</span><span class="i18n-zh">本页给出可直接复现的完整参数与实测结果。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">The 7939 bp backbone and 2063 bp insert match the expected sizes. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">骨架 7939 bp 与插入片段 2063 bp，与理论值一致。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">Standard digestion and electrophoresis methods, carried out by this team following lab procedures.</span><span class="i18n-zh">常规酶切与电泳方法，本队按实验室流程执行。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Complete</span><span class="i18n-zh">已完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">secondary-source-only</span><span class="i18n-zh">secondary-source-only</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Restriction enzymes</span><span class="i18n-zh">限制酶</span></td>
+                  <td><span class="i18n-zh">NdeI-HF / BamHI-HF</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Reaction volume</span><span class="i18n-zh">反应体系</span></td>
+                  <td><span class="i18n-zh">50 μL</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Digestion conditions</span><span class="i18n-zh">酶切条件</span></td>
+                  <td><span class="i18n-en">37 ℃ for 1 h</span><span class="i18n-zh">37 ℃，1 h</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Gel and electrophoresis</span><span class="i18n-zh">凝胶与电泳</span></td>
+                  <td><span class="i18n-en">0.8% agarose, 80 V, 70 min</span><span class="i18n-zh">0.8% 琼脂糖，80 V，70 min</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Replicates</span><span class="i18n-zh">重复数</span></td>
+                  <td><span class="i18n-en">four positive-clone plasmids digested separately</span><span class="i18n-zh">4 个阳性克隆质粒分别酶切</span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t4" class="content-card">
+          <h2><span class="i18n-en">T4 LiAc/PEG chemical transformation of yeast</span><span class="i18n-zh">T4 酵母 LiAc/PEG 化学转化</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Introduction of the PAGER plasmid into the yeast chassis, a prerequisite for later protein expression and functional tests. The protocol is decided but not yet verified.</span><span class="i18n-zh">把 PAGER 质粒导入酵母底盘，是后续蛋白表达与功能测试的前置步骤；目前方案已定，尚未验证。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">LiAc/PEG chemical transformation is planned to introduce the plasmid into yeast, with transformants selected on drop-out plates.</span><span class="i18n-zh">拟采用 LiAc/PEG 化学转化把质粒导入酵母，配合营养缺陷平板筛选转化子。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams can follow this team approach to transformation and selection when introducing a foreign plasmid into <em>Saccharomyces cerevisiae</em>.</span><span class="i18n-zh">后续队伍可参考本队的转化与筛选思路，用于把外源质粒导入酿酒酵母。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Carry out transformation under the parameters below, pick single colonies on selection plates, then confirm by colony PCR. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">按本节参数完成转化并在筛选平板上挑取单菌落，再做菌落 PCR 确认。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">LiAc/PEG chemical transformation is planned, with selection on SD-Ura plates using the URA3 marker; the parameters for each step are added as the work proceeds.</span><span class="i18n-zh">拟采用 LiAc/PEG 化学转化，以 SD-Ura 平板与 URA3 标记筛选；各步参数随实验推进补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Not yet verified. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">尚未验证。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">Standard yeast transformation method, carried out by this team following lab procedures.</span><span class="i18n-zh">常规酵母转化方法，本队按实验室流程执行。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">To be verified</span><span class="i18n-zh">待验证</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Transformation method</span><span class="i18n-zh">转化方法</span></td>
+                  <td><span class="i18n-en">LiAc/PEG chemical transformation (planned)</span><span class="i18n-zh">LiAc/PEG 化学转化（拟采用）</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">PEG concentration</span><span class="i18n-zh">PEG 浓度</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Heat-shock duration</span><span class="i18n-zh">热激时间</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Selection marker</span><span class="i18n-zh">筛选标记</span></td>
+                  <td><span class="i18n-en">URA3 (SD-Ura plate)</span><span class="i18n-zh">URA3（SD-Ura 平板）</span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t5" class="content-card">
+          <h2><span class="i18n-en">T5 CRISPR-Cas9 triple knockout and verification</span><span class="i18n-zh">T5 CRISPR-Cas9 三基因敲除与验证</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Knockout of STE2, FAR1 and Sst2 in the chassis with step-by-step verification at each locus. Archived records show the first digestion failed and the vector is being rebuilt; no knockout strain yet.</span><span class="i18n-zh">在底盘上敲除 STE2、FAR1 与 Sst2，并逐步验证每个位点；归档记录显示首次酶切失败后正在重建载体，尚未得到敲除菌株。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">CRISPR-Cas9 knockout using the three sgRNAs from P4, with colony PCR and Sanger sequencing to confirm each locus step by step. The STE2 knockout is intended to remove the endogenous α-factor receptor, the FAR1 knockout to release the mating-signal-induced cell-cycle arrest, and the Sst2 knockout to remove the G-protein negative regulator.</span><span class="i18n-zh">以 P4 的三条 sgRNA 做 CRISPR-Cas9 敲除，敲除后用菌落 PCR 与 Sanger 测序逐步确认每个位点。STE2 敲除用于消除内源 α-factor 受体，FAR1 敲除用于解除交配信号诱导的细胞周期停滞，Sst2 敲除用于移除 G 蛋白负调节因子。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams engineering the same chassis can follow this team target choice and verification order, and see what can go wrong during vector construction.</span><span class="i18n-zh">后续队伍若改造同一底盘，可参考本队的靶点选择与验证顺序，并了解在载体构建阶段可能出现的问题。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Build and verify single knockouts first, then stack them, to avoid having to locate a failure after attempting all three at once. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">先构建并验证单基因敲除，再逐步叠加，避免一次性做三基因敲除后难以定位失败位点。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">The sgRNAs are cloned into pML104 and verified by colony PCR and Sanger sequencing after transformation; sequences and cutting efficiency are added as the work proceeds.</span><span class="i18n-zh">sgRNA 克隆入 pML104，转化后以菌落 PCR 与 Sanger 测序验证；序列与切割效率随实验推进补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Only the first failed digestion is recorded so far; whether the knockout succeeded is unknown. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">目前只有首次酶切失败的记录，敲除是否成功尚无结果。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The method follows common practice for CRISPR-Cas9 knockout in yeast, <span class="status-badge status-badge--verify">To verify</span>.</span><span class="i18n-zh">方法参考 CRISPR-Cas9 酵母敲除的常规做法，<span class="status-badge status-badge--verify">待核验</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">In progress</span><span class="i18n-zh">进行中</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Targets</span><span class="i18n-zh">靶点</span></td>
+                  <td><span class="i18n-zh">STE2 / FAR1 / Sst2</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">sgRNA sequences and target positions</span><span class="i18n-zh">sgRNA 序列与靶点位置</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Cutting efficiency</span><span class="i18n-zh">切割效率</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Verification method</span><span class="i18n-zh">验证方式</span></td>
+                  <td><span class="i18n-en">Colony PCR and Sanger sequencing <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">菌落 PCR 与 Sanger 测序<span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t6" class="content-card">
+          <h2><span class="i18n-en">T6 Site-directed integration of Gpa1 by homologous recombination</span><span class="i18n-zh">T6 Gpa1 同源重组定点整合</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Integrating the humanised Gpa1 into the genome by homologous recombination, a key step in rebuilding the signalling interface. Only a design exists so far; not carried out.</span><span class="i18n-zh">以同源重组把人源化 Gpa1 整合到基因组，是重建信号接口的关键一步；目前只有设计方案，尚未执行。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">The planned construct is a 500 bp upstream homology arm, the humanised Gpa1, a URA3 marker, and a 500 bp downstream homology arm, used for site-directed replacement at the Gpa1 locus.</span><span class="i18n-zh">拟用 500 bp 上游同源臂与人源化 Gpa1 加 URA3 标记再加 500 bp 下游同源臂的构建方式，对 Gpa1 位点做定点替换。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams replacing the G-protein C-terminus in yeast to connect a human receptor can refer to this homology arm and selection marker design.</span><span class="i18n-zh">后续队伍若要在酵母里替换 G 蛋白 C 端以接入人源受体，可参考这套同源臂与筛选标记的设计。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Build the donor fragment as described, transform, pick colonies on selection plates, then sequence to confirm the integration site. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">按本节结构与参数构建供体片段，转化后在筛选平板上挑取转化子，再测序确认整合位点。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">The integration fragment is a 500 bp upstream homology arm + humanised Gpa1 + URA3 selection cassette + 500 bp downstream homology arm, verified by colony PCR and Sanger sequencing; the exact sequence is added once construction is complete.</span><span class="i18n-zh">整合片段为 500 bp 上游同源臂 + 人源化 Gpa1 + URA3 筛选盒 + 500 bp 下游同源臂，验证用菌落 PCR 与 Sanger 测序；具体序列随构建完成后补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Not carried out; no integration results. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">尚未执行，无整合结果。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">The homologous recombination approach was designed by this team following common practice.</span><span class="i18n-zh">同源重组方法为本队按常规做法设计。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Not started</span><span class="i18n-zh">待完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Upstream homology arm</span><span class="i18n-zh">上游同源臂</span></td>
+                  <td><span class="i18n-en">500 bp (planned)</span><span class="i18n-zh">500 bp（拟采用）</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Downstream homology arm</span><span class="i18n-zh">下游同源臂</span></td>
+                  <td><span class="i18n-en">500 bp (planned)</span><span class="i18n-zh">500 bp（拟采用）</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Selection marker</span><span class="i18n-zh">筛选标记</span></td>
+                  <td><span class="i18n-zh">URA3</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Integration verification</span><span class="i18n-zh">整合验证</span></td>
+                  <td><span class="i18n-en">Colony PCR + Sanger sequencing</span><span class="i18n-zh">菌落 PCR + Sanger 测序</span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t7" class="content-card">
+          <h2><span class="i18n-en">T7 Yeast total protein extraction and Western blot</span><span class="i18n-zh">T7 酵母总蛋白提取与 Western Blot</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Used to confirm expression of the PAGER fusion protein in yeast. The protocol is decided but not yet carried out.</span><span class="i18n-zh">用于确认 PAGER 融合蛋白在酵母中的表达，目前方案已定，尚未执行。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">Total protein is to be extracted from yeast, separated by SDS-PAGE, transferred and blocked, then probed with primary and secondary antibodies and developed, to check whether the fusion protein is expressed.</span><span class="i18n-zh">拟从酵母中提取总蛋白，经 SDS-PAGE、转膜与封闭，再孵育一抗与二抗并显色，验证融合蛋白是否表达。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams can follow this team protein extraction and blotting workflow to confirm expression of a surface receptor in yeast.</span><span class="i18n-zh">后续队伍可参考本队的蛋白提取与杂交流程，用于确认膜表面受体在酵母中的表达情况。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Carry out extraction and blotting under the parameters below and judge expression from the band at the expected molecular weight. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">按本节参数完成提取与杂交，用对应分子量的条带判断融合蛋白是否表达。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">The workflow is fixed: yeast total protein extraction, SDS-PAGE separation, transfer and blocking, primary and secondary antibody incubation, then development; antibody and development conditions are added once the experiment is complete.</span><span class="i18n-zh">流程已定：酵母总蛋白提取 → SDS-PAGE 分离 → 转膜封闭 → 一抗与二抗孵育 → 显色；抗体与显色条件随实验完成后补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Not carried out; no development results. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">尚未执行，无显色结果。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">Standard western blotting method, carried out by this team following lab procedures.</span><span class="i18n-zh">常规蛋白免疫印迹方法，本队按实验室流程执行。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Not started</span><span class="i18n-zh">待完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Primary antibody</span><span class="i18n-zh">一抗</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Secondary antibody</span><span class="i18n-zh">二抗</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Membrane and development conditions</span><span class="i18n-zh">膜与显色条件</span></td>
+                  <td><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t8" class="content-card">
+          <h2><span class="i18n-en">T8 DCZ induction and signal detection</span><span class="i18n-zh">T8 DCZ 诱导与信号检测</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">Activating hM1Dq with DCZ and measuring the downstream reporter output, the core step of functional testing. Only a plan exists so far; not carried out.</span><span class="i18n-zh">用 DCZ 激活 hM1Dq 并检测下游报告输出，是功能测试的核心步骤；目前只有方案，尚未执行。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">A DCZ induction gradient is planned, reading yEGFP green fluorescence by flow cytometry or judging lacZ expression by X-Gal staining.</span><span class="i18n-zh">拟设置 DCZ 诱导梯度，用流式细胞术读 yEGFP 绿色荧光，或用 X-Gal 染色判读 lacZ 表达。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Teams testing a similar receptor-gated system can follow these two aligned readouts, one quantitative and one visual.</span><span class="i18n-zh">后续队伍若要测试类似受体门控系统，可参考本队对齐的两个读出方式，一套定量、一套显色判读。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Set up the induction gradient as below, collect fluorescence and staining results, and compare with controls. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">按本节参数设置诱导梯度，分别采集荧光与显色结果，并与对照比较。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en">The inducer is DCZ with a gradient of 10 nM/mL, 100 nM/mL and 1 μM/mL, read out as yEGFP by flow cytometry and lacZ by X-Gal staining; gating and staining conditions are added once the experiment is complete.</span><span class="i18n-zh">诱导剂为 DCZ，梯度设为 10 nM/mL、100 nM/mL、1 μM/mL，读出为流式细胞术测 yEGFP 与 X-Gal 染色判读 lacZ；门限与染色条件随实验完成后补入本页。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Not carried out; no fluorescence or staining results. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">尚未执行，无荧光或显色结果。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">DCZ and the detection methods follow public sources, <span class="status-badge status-badge--verify">To verify</span>.</span><span class="i18n-zh">DCZ 与检测方法参考公开资料，<span class="status-badge status-badge--verify">待核验</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Not started</span><span class="i18n-zh">待完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+
+            <h3><span class="i18n-en">Key parameters</span><span class="i18n-zh">关键参数</span></h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                  <th scope="col"><span class="i18n-en">Parameter</span><span class="i18n-zh">参数</span></th>
+                  <th scope="col"><span class="i18n-en">Value</span><span class="i18n-zh">取值</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><span class="i18n-en">Inducer</span><span class="i18n-zh">诱导剂</span></td>
+                  <td><span class="i18n-zh">DCZ</span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Planned gradient</span><span class="i18n-zh">拟设置梯度</span></td>
+                  <td><span class="i18n-en">10 nM/mL, 100 nM/mL, 1 μM/mL (from the archived protocol, not carried out) <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">10 nM/mL、100 nM/mL、1 μM/mL（归档方案记载，未执行）<span class="status-badge status-badge--verify">待核验</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Fluorescence readout</span><span class="i18n-zh">荧光读出</span></td>
+                  <td><span class="i18n-en">yEGFP read by flow cytometry <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">流式细胞术读 yEGFP<span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                <tr>
+                  <td><span class="i18n-en">Colour readout</span><span class="i18n-zh">显色读出</span></td>
+                  <td><span class="i18n-en">lacZ judged by X-Gal staining <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">X-Gal 染色判读 lacZ<span class="status-badge status-badge--add">待补充</span></span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="protocols-t9" class="content-card">
+          <h2><span class="i18n-en">T9 Plasmid construction and digestion troubleshooting</span><span class="i18n-zh">T9 质粒构建与酶切排错</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">A digestion failure this team hit while building the CRISPR vector, and the check order and follow-up worked out from it.</span><span class="i18n-zh">本队在 CRISPR 载体构建中遇到过一次酶切失败，由此整理出的排查顺序与后续处理方式。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">The symptom of one digestion failure and how it was handled. The archived record concludes that the sgRNA vector had to be rebuilt after the failure.</span><span class="i18n-zh">一次酶切失败的现象与后续处理。归档记录给出的结论是：sgRNA 载体需要在失败后重建。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Digestions fail often during vector construction. Recording the path taken lets others compare first and decide whether a rebuild is really needed.</span><span class="i18n-zh">酶切失败在载体构建里很常见。写下当时的排查路径，别人遇到同样现象时可以先对照，再决定要不要重做。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Rule out template and enzyme first, then touch the reaction conditions. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">按"模板 — 酶 — 体系"的顺序先排除前两项，再动体系参数。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--add">To add</span>.</span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">This team experimental record.</span><span class="i18n-zh">本队实验记录。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">In progress</span><span class="i18n-zh">进行中</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="protocols-t10" class="content-card">
+          <h2><span class="i18n-en">T10 Three controls for functional testing</span><span class="i18n-zh">T10 功能测试三组对照</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">The three controls that must run alongside every induced signal readout, to show whether a signal really comes from the intended pathway.</span><span class="i18n-zh">读诱导后信号时必须同时跑的三组对照，用来判断信号是否真来自目标通路。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">Negative control: untransformed wild-type BY4741. Empty-vector control: strain carrying blank pESC-HIS. Positive control: engineered strain confirmed to activate the pathway stably. The setup is decided but not yet run.</span><span class="i18n-zh">阴性对照为未转化的野生型 BY4741；空载体对照为转入空白 pESC-HIS 的菌株；阳性对照为已确认稳定激活通路的工程菌株。方案已定，尚未执行。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">Induced readouts easily mistake medium background or vector effects for the target signal. With all three controls in place, the origin of a signal can be stated plainly.</span><span class="i18n-zh">这类诱导读数容易把培养基背景、载体本身效应当成目标信号。三组对照齐了，才能说清信号来自哪里。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Run all three alongside the samples in the same batch and compare the readings side by side. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">与样品同批并行设置三组对照，读数后横向比较。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--add">To add</span>.</span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Setup decided, not run; no comparative results yet.</span><span class="i18n-zh">方案已定，未执行，暂无对照比较结果。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">Designed by this team.</span><span class="i18n-zh">本队设计。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Setup decided, not run</span><span class="i18n-zh">方案已定，未执行</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">Pending</span><span class="i18n-zh">待定</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="protocols-t11" class="content-card">
+          <h2><span class="i18n-en">T11 Double-digestion record for the built plasmid</span><span class="i18n-zh">T11 质粒构建双酶切记录</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">bands left from double-digesting the finished PAGER plasmid, usable as a reference for judging whether the same plasmid was built correctly.</span><span class="i18n-zh">PAGER 质粒构建完成后跑双酶切留下的条带记录，可作为判断同一质粒是否构建正确的参照。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Type</span><span class="i18n-zh">类型</span></span><span class="field-value"><span class="i18n-en">Protocol and method</span><span class="i18n-zh">协议与方法</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">What it is</span><span class="i18n-zh">是什么</span></span><span class="field-value"><span class="i18n-en">After digestion the backbone is 7939 bp and the insert 2063 bp, both matching the expected sizes.</span><span class="i18n-zh">双酶切后骨架 7939 bp、插入片段 2063 bp，两者均与理论值一致。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Why it is useful to future iGEM teams</span><span class="i18n-zh">为什么对后续队伍有用</span></span><span class="field-value"><span class="i18n-en">When receiving the same plasmid, checking these two bands first is far quicker than resequencing.</span><span class="i18n-zh">拿到同一质粒时，先看这两个条带对不对，比重新测序快得多。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How future iGEM teams use it</span><span class="i18n-zh">后续队伍怎么用</span></span><span class="field-value"><span class="i18n-en">Digest under the T3 conditions and compare band sizes with this record. <span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh">按 T3 的条件做双酶切，把条带与本条记录比大小。<span class="status-badge status-badge--verify">待核验</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">How to obtain it</span><span class="i18n-zh">怎么拿到</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--add">To add</span>.</span><span class="i18n-zh"><span class="status-badge status-badge--add">待补充</span>。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Evidence</span><span class="i18n-zh">证据</span></span><span class="field-value"><span class="i18n-en">Backbone and insert sizes both match theory. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">骨架与插入片段大小均与理论值一致。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Attribution and source</span><span class="i18n-zh">归属与来源</span></span><span class="field-value"><span class="i18n-en">This team experimental record.</span><span class="i18n-zh">本队实验记录。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Progress</span><span class="i18n-zh">进度</span></span><span class="field-value"><span class="i18n-en">Complete</span><span class="i18n-zh">已完成</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">factStatus</span><span class="i18n-zh">factStatus</span></span><span class="field-value"><span class="i18n-en">secondary-source-only</span><span class="i18n-zh">secondary-source-only</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Verification</span><span class="i18n-zh">核验</span></span><span class="field-value"><span class="i18n-en"><span class="status-badge status-badge--verify">To verify</span></span><span class="i18n-zh"><span class="status-badge status-badge--verify">待核验</span></span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="other-overview" class="content-card">
+          <h2><span class="i18n-en">3. Other contributions</span><span class="i18n-zh">3. 其他贡献（Other）</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">This part holds work that stands without hands-on bench sessions: dry lab design and modelling, and human practices aimed at real settings of use.</span><span class="i18n-zh">这一类收的是不进实验室动手也能成立的工作：干实验的设计与建模，以及面向真实使用场景的人类实践。</span></p>
+
+            <p><span class="i18n-en">Two blocks sit under this heading: dry lab and human practices. Anything requiring hands-on bench work belongs to protocols and methods in section 2, not here. Both blocks are summarised at system level rather than itemised into experimental detail.</span><span class="i18n-zh">本类包含干实验与人类实践两块。凡是需要进实验室动手操作的内容，一律归入第 2 类的协议与方法，不放在这里。两块都只做系统性总结，不逐条铺开实验细节。</span></p>
+          </div>
+        </div>
+
+        <div id="other-drylab" class="content-card">
+          <h2><span class="i18n-en">3a. Dry Lab</span><span class="i18n-zh">3a. 干实验</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">The dry lab part is covered as a whole: what design work was completed, how the pieces fit together, and how far each has got.</span><span class="i18n-zh">干实验部分只做整体交代：完成了哪些设计层面的工作、这些设计之间的逻辑关系，以及目前的落地程度。</span></p>
+
+            <p><span class="i18n-en">Two kinds of output sit on the dry lab side: the chassis engineering design with its internal logic, and the pathway modelling and dose-response simulation planned next. The first is settled and ready to read; the second is still being planned.</span><span class="i18n-zh">干实验这一块包含两类产出：一是底盘改造的设计方案及其内部逻辑，二是后续计划开展的通路建模与剂量反应模拟。前者已经定型，可以交付阅读；后者仍在规划阶段。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Chassis engineering design</span><span class="i18n-zh">底盘改造设计</span></span><span class="field-value"><span class="i18n-en">Following the three aims of cutting background, releasing growth and amplifying signal, this settles on STE2, FAR1 and Sst2 as knockout targets, and the Gpa1 C-terminal change from KIGII to EYNLV as the interface edit. The reasoning behind each of the four choices and what it should achieve are written up, so later teams can judge which changes fit their own goal. All of it is design intent: the engineering is unfinished and no change in performance has been verified.</span><span class="i18n-zh">围绕降低背景、释放生长、放大信号三条主线，确定了 STE2、FAR1、Sst2 三个敲除靶点，以及 Gpa1 C 端 KIGII 换成 EYNLV 这一接口改造位点。四者的取舍理由与预期效果已整理成一份设计说明，供后续队伍判断哪些改动与自身目标相关。以上均为设计意图，改造尚未完成，也未验证相应的性能变化。</span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Pathway modelling and dose-response simulation</span><span class="i18n-zh">通路建模与剂量反应模拟</span></span><span class="field-value"><span class="i18n-en">Planned work covers mathematical modelling of the G-protein signalling pathway and simulation of the antigen-antibody dose-response, to put an order of magnitude on the expected readout. This is still at planning stage with nothing formed yet. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">计划对 G 蛋白信号通路做数学建模，并对抗原抗体结合的剂量反应关系进行模拟，用来给预期读数一个量级判断。此项仍在规划阶段，暂无成型内容。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Current state</span><span class="i18n-zh">当前状态</span></span><span class="field-value"><span class="i18n-en">Design settled, modelling pending; status overall: Pending.</span><span class="i18n-zh">设计方案已定，建模待开展，整体状态为待定。</span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="other-hp" class="content-card">
+          <h2><span class="i18n-en">3b. Human Practices</span><span class="i18n-zh">3b. 人类实践</span></h2>
+          <div class="content-body">
+            <p class="executive-summary"><span class="i18n-en">The Human Practices part is described as a whole: which setting it starts from, who it is aimed at, and where it stands.</span><span class="i18n-zh">人类实践部分只做整体交代：围绕什么场景展开、面向哪些人、目前推进到哪一步。</span></p>
+
+            <p><span class="i18n-en">This line of work starts from where influenza testing actually takes place, so a sensor designed at the bench also holds up in the settings and for the people meant to use it.</span><span class="i18n-zh">人类实践围绕流感检测的落地场景展开，目的是让这枚酵母传感器的设计不只在实验室成立，也能对应真实的使用环境与使用者。</span></p>
+
+            <ul class="field-list">
+              <li><span class="field-label"><span class="i18n-en">Survey and interviews</span><span class="i18n-zh">调研与访谈</span></span><span class="field-value"><span class="i18n-en">Planned surveys on influenza and interviews with frontline medical staff, using accounts from real settings to correct assumptions about product form. Still underway with nothing formed yet. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">计划开展流感相关调研与基层医护人员访谈，用真实场景反馈校正产品形态假设。此项仍在推进，暂无成型成果。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Outreach and community engagement</span><span class="i18n-zh">科普与社区参与</span></span><span class="field-value"><span class="i18n-en">Planned public-facing outreach on synthetic biology. Particulars and outputs are added as activities proceed. <span class="status-badge status-badge--add">To add</span></span><span class="i18n-zh">计划开展面向公众的合成生物学相关科普活动。具体内容与产出随活动推进补充。<span class="status-badge status-badge--add">待补充</span></span></span></li>
+              <li><span class="field-label"><span class="i18n-en">Current state</span><span class="i18n-zh">当前状态</span></span><span class="field-value"><span class="i18n-en">To add.</span><span class="i18n-zh">待补充。</span></span></li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     </div>
-</div>
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>

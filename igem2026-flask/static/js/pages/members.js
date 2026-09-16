@@ -22,17 +22,23 @@
    * Member data, role constants and grouping logic.
    */
   const MemberData = (function () {
-    const ROLE_ORDER = ['Wet Lab', 'Dry Lab', 'WIKI', 'HP', 'Designer', 'Adviser'];
+    // 分类顺序即条带分组顺序：指导层（PI → Adviser）置顶，其后是执行层与视觉层。
+    const ROLE_ORDER = ['PI', 'Adviser', 'Wet Lab', 'Dry Lab', 'WIKI', 'HP', 'Art', 'Designer'];
     const CLASSIFICATION_ROLES = new Set(ROLE_ORDER);
     const ROLE_COLORS = {
+      'PI': '#991B1B',
+      'Adviser': '#92400E',
       'Wet Lab': '#1E40AF',
       'Dry Lab': '#065F46',
       'WIKI': '#2563EB',
       'HP': '#9A3412',
-      'Designer': '#7E22CE',
-      'Adviser': '#92400E'
+      'Art': '#0E7490',
+      'Designer': '#7E22CE'
     };
 
+    /* 成员数据：每人固定 7 个字段，顺序 id → name → roles → directions → bio →
+       photoPosition → photoSize；组内顺序即数组顺序。字段含义、标签规则与取景
+       微调方法见 README §5.15；仅需强制指定图片时才加 images: {...} 覆盖。 */
     const members = [
       {
         id: 'xj',
@@ -100,7 +106,7 @@
       {
         id: 'lyq',
         name: 'Yuquan Luo',
-        roles: ['Dry Lab', 'HP'],
+        roles: ['HP', 'Designer'],
         directions: ['Upper Limb Supremacist', 'Doer'],
         bio: 'I’m into fitness, but I totally skip leg day. I do some cardio occasionally, and I’m obsessed with rice noodles. Here’s to our team marching forward triumphantly — come on, let’s go!',
         photoPosition: '60% 30%',
@@ -109,7 +115,7 @@
       {
         id: 'lr',
         name: 'Rui Luo',
-        roles: ['HP', 'Designer'],
+        roles: ['Dry Lab', 'HP'],
         directions: ['Science Communicator', 'Brand Designer'],
         bio: 'I handle design, writing, and outreach. I aim to make our science clear and engaging. I’m committed to building a strong team brand and supporting every step toward our iGEM success.',
         photoPosition: '60% 30%',
@@ -118,7 +124,7 @@
       {
         id: 'psq',
         name: 'Siqi Peng',
-        roles: ['HP', 'Designer'],
+        roles: ['Art'],
         directions: ['Visual Storyteller', 'Visual Director'],
         bio: 'As a member of the design team of the iGEM group, I use visuals to convey the warmth of scientific research, and with creativity, I build communication bridges. In every layout and picture, I make synthetic biology visible, understandable, and memorable.',
         photoPosition: '60% 30%',
@@ -141,6 +147,50 @@
         bio: 'Keep Pushing',
         photoPosition: 'center top',
         photoSize: '80% auto'
+      },
+      // 2026-09-15 新增 PI 两位与 WIKI 两位；2026-09-16 补入 bio（directions 待团队补标签）。
+      // zlj / tyj 无 _kt 卡通头像，显式指定头像=本人照片，避免探测必然 404 的 _kt 路径；
+      // lrx / crq 已补 _kt 卡通头像，走默认候选链（webp/<id>_kt.webp 优先），无需覆盖。
+      {
+        id: 'zlj',
+        name: 'Lijun Zhang',
+        roles: ['Primary PI', 'PI'],
+        directions: [],
+        bio: 'iGEM is far more than a competition, it is a transformative journey on which students explore the boundless possibilities of synthetic biology.',
+        photoPosition: 'center top',
+        photoSize: '30% auto',
+        images: {
+          photo: { candidates: ['https://static.igem.wiki/2026/szpu-china/image/character/webp/zlj-cream.webp', 'https://static.igem.wiki/2026/szpu-china/image/character/webp/zlj.webp'] },
+          avatar: { candidates: ['https://static.igem.wiki/2026/szpu-china/image/character/webp/zlj.webp'] }
+        }
+      },
+      {
+        id: 'tyj',
+        name: 'Yongjun Tang',
+        roles: ['Secondary PI', 'PI'],
+        directions: [],
+        bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
+        photoPosition: '72% top',
+        photoSize: '72% auto',
+        images: { avatar: { candidates: ['https://static.igem.wiki/2026/szpu-china/image/character/webp/tyj.webp'] } }
+      },
+      {
+        id: 'lrx',
+        name: 'Ruoxi Li',
+        roles: ['WIKI'],
+        directions: [],
+        bio: 'Fortune favours the brave',
+        photoPosition: '60% 20%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'crq',
+        name: 'Rouqing Chen',
+        roles: ['WIKI'],
+        directions: [],
+        bio: 'I have long admired iGEM. After truly participate in it, I realized that it’s not just a contest, but a journey of refining ideas into reality. It reminds me that true synthetic biology is about perseverance.',
+        photoPosition: 'center 34%',
+        photoSize: '70% auto'
       }
     ];
 
@@ -202,21 +252,22 @@
 
     const IMAGE_PATH_TEMPLATES = {
       photo: {
-        template: '../static/image/character/${id}.jpg',
-        ext: 'jpg',
-        candidates: ['../static/image/character/${id}.jpg', '../static/image/character/${id}.webp'],
-        wildcardExtensions: ['jpg', 'webp', 'png']
+        template: 'https://static.igem.wiki/2026/szpu-china/image/character/webp/${id}.webp',
+        ext: 'webp',
+        candidates: ['https://static.igem.wiki/2026/szpu-china/image/character/webp/${id}.webp'],
+        wildcardExtensions: ['webp', 'jpg', 'png']
       },
       avatar: {
-        template: '../static/image/character/${id}_kt.jpg',
-        ext: 'jpg',
-        candidates: ['../static/image/character/${id}_kt.jpg', '../static/image/character/${id}_kt.png'],
-        wildcardExtensions: ['jpg', 'webp', 'png']
+        template: 'https://static.igem.wiki/2026/szpu-china/image/character/webp/${id}_kt.webp',
+        ext: 'webp',
+        // 前三项为 _kt 卡通头像；后三项让没有 _kt 素材的成员（PI、部分新成员）回退到本人照片。
+        candidates: ['https://static.igem.wiki/2026/szpu-china/image/character/webp/${id}_kt.webp', 'https://static.igem.wiki/2026/szpu-china/image/character/webp/${id}.webp'],
+        wildcardExtensions: ['webp', 'jpg', 'png']
       }
     };
 
     const IMAGE_PATH_MAPPINGS = [
-      // Example: { match: { roles: 'Adviser' }, templates: { photo: '../static/image/adviser/${id}.jpg', avatar: '../static/image/adviser/${id}_kt.jpg' } }
+      // Example: { match: { roles: 'Adviser' }, templates: { photo: 'https://static.igem.wiki/2026/szpu-china/image/adviser/${id}.jpg', avatar: 'https://static.igem.wiki/2026/szpu-china/image/adviser/${id}_kt.jpg' } }
     ];
 
     if (typeof window !== 'undefined') {
@@ -747,7 +798,8 @@
    * Application bootstrap, event binding and selection state.
    */
   const App = (function () {
-    const DESKTOP_BREAKPOINT = 1024;
+    /* 必须与 members.css 的堆叠断点(max-width:1099px)一致：> 值为桌面分栏，≤ 值为堆叠布局 */
+    const DESKTOP_BREAKPOINT = 1100;
 
     const domRefs = {
       app: null,
@@ -787,6 +839,7 @@
     let orientationchangeHandler = null;
     let scrollHandler = null;
     let stripToggleHandler = null;
+    let stripGroupsClickHandler = null;
     let railToggleHandler = null;
     let railDragUnbind = null;
 
@@ -885,6 +938,61 @@
       if (domRefs.railInner) domRefs.railInner.style.transform = '';
     }
 
+    /** 堆叠布局：用实测高度驱动展开动画（CSS 只留兜底上限），详情见 README §5.16 */
+    function setStripGroupsExpanded(expanded) {
+      const strip = domRefs.membersStrip;
+      const groups = domRefs.stripGroups;
+      if (!strip || !groups) return;
+
+      if (expanded) {
+        /* 折叠态下子元素仍有布局，scrollHeight 即自然高度 */
+        groups.style.setProperty('--strip-groups-max', `${groups.scrollHeight}px`);
+        strip.classList.add('is-expanded');
+      } else {
+        strip.classList.remove('is-expanded');
+      }
+
+      if (domRefs.stripToggle) {
+        domRefs.stripToggle.setAttribute('aria-expanded', String(expanded));
+      }
+    }
+
+    /** 视口变化或组内折叠后重新测量；切回桌面布局时清理自定义属性 */
+    function resyncStripGroupsHeight() {
+      const strip = domRefs.membersStrip;
+      const groups = domRefs.stripGroups;
+      if (!strip || !groups) return;
+
+      if (window.innerWidth > DESKTOP_BREAKPOINT) {
+        groups.style.removeProperty('--strip-groups-max');
+        strip.classList.remove('is-expanded');
+        if (domRefs.stripToggle) domRefs.stripToggle.setAttribute('aria-expanded', 'false');
+        return;
+      }
+
+      if (!strip.classList.contains('is-expanded')) return;
+      const current = parseFloat(groups.style.getPropertyValue('--strip-groups-max'));
+      const natural = groups.scrollHeight;
+      if (!isFinite(current) || Math.abs(natural - current) > 1) {
+        groups.style.setProperty('--strip-groups-max', `${natural}px`);
+      }
+    }
+
+    /** 堆叠布局下详情卡若完全移出视口则带入，避免"点了没反应"的错觉 */
+    function bringDetailIntoView() {
+      const card = domRefs.detailCard;
+      if (!card || card.hidden) return;
+      const rect = card.getBoundingClientRect();
+      const viewportH = window.innerHeight || 0;
+      if (rect.top >= 0 && rect.top < viewportH) return;
+      const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      try {
+        card.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+      } catch (e) {
+        card.scrollIntoView();
+      }
+    }
+
     /**
      * Select a member by id and update the UI.
      * @param {string} id
@@ -939,7 +1047,13 @@
       }
       if (domRefs.railBio) domRefs.railBio.textContent = member.bio;
 
-      openRail();
+      /* 桌面布局用右侧信息条承载简介；堆叠布局信息条收起，简介在详情卡内 */
+      const stacked = window.innerWidth <= DESKTOP_BREAKPOINT;
+      if (stacked) {
+        closeRail();
+      } else {
+        openRail();
+      }
 
       BackgroundController.updateBackground(
         ImageResolver.resolveImageCandidates(member, 'photo'),
@@ -948,8 +1062,9 @@
         domRefs
       );
 
-      if (domRefs.membersStrip && window.innerWidth <= DESKTOP_BREAKPOINT) {
-        domRefs.membersStrip.classList.remove('is-expanded');
+      if (stacked) {
+        setStripGroupsExpanded(false);
+        bringDetailIntoView();
       }
     }
 
@@ -990,10 +1105,21 @@
 
       if (domRefs.stripToggle && domRefs.membersStrip) {
         stripToggleHandler = function () {
-          const isExpanded = domRefs.membersStrip.classList.toggle('is-expanded');
-          domRefs.stripToggle.setAttribute('aria-expanded', String(isExpanded));
+          const willExpand = !domRefs.membersStrip.classList.contains('is-expanded');
+          setStripGroupsExpanded(willExpand);
         };
         domRefs.stripToggle.addEventListener('click', stripToggleHandler);
+      }
+
+      /* 组内折叠会改变整条列表高度：展开态下重新测量，避免裁掉后面的组 */
+      if (domRefs.stripGroups) {
+        stripGroupsClickHandler = function (e) {
+          const target = e.target;
+          if (!target || typeof target.closest !== 'function') return;
+          if (!target.closest('.group-header')) return;
+          raf(function () { resyncStripGroupsHeight(); });
+        };
+        domRefs.stripGroups.addEventListener('click', stripGroupsClickHandler);
       }
 
       if (domRefs.railToggle && domRefs.rail) {
@@ -1007,10 +1133,27 @@
         });
       }
 
-      if (MemberData.members.length > 0 && window.innerWidth > DESKTOP_BREAKPOINT) {
+      /* 所有断点都默认选中首位成员：桌面端展示其背景与右侧信息条，
+         堆叠布局展示 hero 人像与详情卡（此前移动端不选中导致首屏无任何成员内容） */
+      if (MemberData.members.length > 0) {
         selectMember(MemberData.members[0].id);
       } else {
         closeRail();
+      }
+
+      // 登记首屏关键图给加载遮罩：默认成员形象两种布局都在首屏；条带头像仅桌面端首屏可见
+      if (window.PageLoader && typeof window.PageLoader.register === 'function') {
+        const critical = [];
+        if (MemberData.members.length > 0) {
+          critical.push(ImageResolver.resolveImageCandidates(MemberData.members[0], 'photo'));
+        }
+        if (window.innerWidth > DESKTOP_BREAKPOINT) {
+          MemberData.members.slice(0, 6).forEach(function (member) {
+            const avatars = ImageResolver.resolveImageCandidates(member, 'avatar');
+            if (avatars && avatars.length) critical.push(avatars);
+          });
+        }
+        if (critical.length) window.PageLoader.register(critical);
       }
 
       function scheduleResizeUpdate() {
@@ -1019,13 +1162,16 @@
           resizeRafId = null;
           invalidateScrollbarWidth();
           const width = window.innerWidth;
-          if (!domRefs.rail) return;
-          if (lastWidth > DESKTOP_BREAKPOINT && width <= DESKTOP_BREAKPOINT) {
-            closeRail();
-          } else if (lastWidth <= DESKTOP_BREAKPOINT && width > DESKTOP_BREAKPOINT && selectedId) {
-            openRail();
+          /* 断点切换：桌面 ↔ 堆叠；同时重新测量条带展开高度 */
+          if (domRefs.rail) {
+            if (lastWidth > DESKTOP_BREAKPOINT && width <= DESKTOP_BREAKPOINT) {
+              closeRail();
+            } else if (lastWidth <= DESKTOP_BREAKPOINT && width > DESKTOP_BREAKPOINT && selectedId) {
+              openRail();
+            }
           }
           lastWidth = width;
+          resyncStripGroupsHeight();
           scheduleRailEdgeFillerUpdate();
         });
       }
@@ -1078,6 +1224,10 @@
       if (stripToggleHandler && domRefs.stripToggle) {
         domRefs.stripToggle.removeEventListener('click', stripToggleHandler);
         stripToggleHandler = null;
+      }
+      if (stripGroupsClickHandler && domRefs.stripGroups) {
+        domRefs.stripGroups.removeEventListener('click', stripGroupsClickHandler);
+        stripGroupsClickHandler = null;
       }
       if (railToggleHandler && domRefs.railToggle) {
         domRefs.railToggle.removeEventListener('click', railToggleHandler);

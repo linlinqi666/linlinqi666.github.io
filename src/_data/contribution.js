@@ -17,8 +17,8 @@
 const L = {
   type: { zh: '类型', en: 'Type' },
   what: { zh: '是什么', en: 'What it is' },
-  why: { zh: '为什么对后续队伍有用', en: 'Why it is useful to later teams' },
-  how: { zh: '后续队伍怎么用', en: 'How later teams use it' },
+  why: { zh: '为什么对后续队伍有用', en: 'Why it is useful to future iGEM teams' },
+  how: { zh: '后续队伍怎么用', en: 'How future iGEM teams use it' },
   get: { zh: '怎么拿到', en: 'How to obtain it' },
   evidence: { zh: '证据', en: 'Evidence' },
   attribution: { zh: '归属与来源', en: 'Attribution and source' },
@@ -30,10 +30,11 @@ const L = {
 const V = {
   pending: { zh: '待定', en: 'Pending' },
   secondary: { zh: 'secondary-source-only', en: 'secondary-source-only' },
-  toVerifyPerson: { zh: '【待补：核验人 + 核验日期】', en: '【To obtain: verifier + verification date】' },
-  partCat1: { zh: '部件（官方示例第 1 类）', en: 'Part (iGEM example category 1)' },
-  protoCat3: { zh: '协议（官方示例第 3 类）', en: 'Protocol (iGEM example category 3)' },
-  otherCat4: { zh: '其他贡献（官方示例第 4 类）', en: 'Other contribution (iGEM example category 4)' }
+  toVerifyPerson: { zh: '<span class="status-badge status-badge--verify">待核验</span>', en: '<span class="status-badge status-badge--verify">To verify</span>' },
+  partType: { zh: '部件', en: 'Part' },
+  protoType: { zh: '协议与方法', en: 'Protocol and method' },
+  drylabType: { zh: '干实验记录', en: 'Dry lab record' },
+  hpType: { zh: '人类实践记录', en: 'Human practices record' }
 };
 
 // 关键参数表头（协议卡片复用）
@@ -69,7 +70,10 @@ module.exports = {
         { id: 'protocols-t5', zh: 'T5 CRISPR-Cas9 三基因敲除', en: 'T5 CRISPR-Cas9 triple knockout' },
         { id: 'protocols-t6', zh: 'T6 Gpa1 同源重组整合', en: 'T6 Gpa1 integration by homologous recombination' },
         { id: 'protocols-t7', zh: 'T7 总蛋白提取与 WB', en: 'T7 Total protein extraction and WB' },
-        { id: 'protocols-t8', zh: 'T8 DCZ 诱导与检测', en: 'T8 DCZ induction and detection' }
+        { id: 'protocols-t8', zh: 'T8 DCZ 诱导与检测', en: 'T8 DCZ induction and detection' },
+        { id: 'protocols-t9', zh: 'T9 质粒构建与酶切排错', en: 'T9 Plasmid construction and digestion troubleshooting' },
+        { id: 'protocols-t10', zh: 'T10 功能测试三组对照', en: 'T10 Three controls for functional testing' },
+        { id: 'protocols-t11', zh: 'T11 质粒构建双酶切记录', en: 'T11 Double-digestion record for the built plasmid' }
       ]
     },
     {
@@ -77,14 +81,10 @@ module.exports = {
       zh: '3. 其他贡献',
       en: '3. Other contributions',
       children: [
-        { id: 'other-o1', zh: 'O1 底盘改造设计说明', en: 'O1 Chassis engineering design notes' },
-        { id: 'other-o2', zh: 'O2 酶切排错经验', en: 'O2 Digestion troubleshooting notes' },
-        { id: 'other-o3', zh: 'O3 三组对照设置方案', en: 'O3 Three-control setup' },
-        { id: 'other-o4', zh: 'O4 质粒构建与验证记录', en: 'O4 Plasmid construction and verification record' }
+        { id: 'other-drylab', zh: '3a. 干实验', en: '3a. Dry Lab' },
+        { id: 'other-hp', zh: '3b. 人类实践', en: '3b. Human Practices' }
       ]
-    },
-    { id: 'access-license', zh: '获取与许可', en: 'Access and License' },
-    { id: 'attribution', zh: '归属与致谢', en: 'Attribution' }
+    }
   ],
 
   cards: [
@@ -93,30 +93,45 @@ module.exports = {
       id: 'contribution-overview',
       title: { zh: 'Contribution 概览', en: 'Contribution Overview' },
       summary: {
-        zh: '本页记录 PAGER-Yeast 项目向 iGEM 社区公开的可复用成果，按部件、协议与方法、其他贡献归置，并给出获取方式、来源归属与当前的验证状态。',
-        en: 'This page records the reusable outputs that the PAGER-Yeast project is making public to the iGEM community, organised into parts, protocols and methods, and other contributions, together with how to obtain each item, its attribution and its current verification status.'
+        zh: 'PAGER-Yeast 以酿酒酵母 BY4741 为底盘，用 PAGER 可编程抗原门控受体识别甲型流感病毒 HA 抗原，并把识别事件转成 FUS1 启动子下的 yEGFP 与 lacZ 报告输出。本页把这条链路中已经可以交到下一支队伍手上的部分逐条列出：5 项部件、8 项协议与方法、4 项设计说明与排错记录，并给出每项的状态、获取方式与来源归属。',
+        en: 'PAGER-Yeast uses Saccharomyces cerevisiae BY4741 as the chassis and a PAGER programmable antigen-gated receptor to recognise influenza A virus HA antigen, converting the recognition event into yEGFP and lacZ reporter output under the FUS1 promoter. This page lists, item by item, what this team can already hand to the next team: five parts, eight protocols and methods, and four design and troubleshooting records, each with its status, how to obtain it, and its attribution.'
       },
       blocks: [
         {
           type: 'p',
+          text: {
+            zh: '如果只取三样，先看这三条：它们已完成、参数最全，可以直接照着做。',
+            en: 'If you only take three things, start here: these are complete, have the fullest parameters, and can be repeated as written.'
+          }
+        },
+        {
+          type: 'links',
+          items: [
+            { href: '#parts-p1', zh: 'P1 PAGER 膜表面融合受体全长复合部件（基因合成与全测序已完成，序列与设计一致）', en: 'P1 full PAGER surface fusion receptor composite part (gene synthesis and full sequencing complete, sequence matches the design)' },
+            { href: '#protocols-t1', zh: 'T1 大肠杆菌热激转化（感受态、抗生素、热激与复苏条件齐全）', en: 'T1 E. coli heat-shock transformation (competent cells, antibiotic, heat-shock and recovery conditions all given)' },
+            { href: '#protocols-t3', zh: 'T3 双酶切验证（体系与电泳条件齐全，条带大小与理论值一致）', en: 'T3 double-digestion verification (reaction and electrophoresis conditions given, band sizes match theory)' }
+          ]
+        },
+        {
+          type: 'p',
           cls: 'content-intro',
           text: {
-            zh: 'iGEM 的很多元件、方案与经验来自往届队伍的公开分享，本项目在设计与实验中也使用了公开的元件与协议。把可复用的部分整理在本页，供后续队伍直接取用，或在上面继续改动。',
-            en: 'Much of iGEM parts, protocols and experience comes from previous teams sharing their work openly, and this project also used public parts and protocols during design and experiments. The reusable parts are collected here so that later teams can use them directly or keep modifying them.'
+            zh: '合成生物学里能直接用的元件与流程，多数来自前人公开的组合与个人整理。本项目在设计与实验中同样站在这些公开成果之上，因此把自身可复用的产出整理成页，供后续队伍直接取用，或在上面继续改动。',
+            en: 'Most directly usable parts and workflows in synthetic biology come from combinations others published and from records individuals took the trouble to keep. This project also builds on those public results, so the outputs worth reusing are gathered here for later teams to take as they are, or to keep modifying.'
           }
         },
         {
           type: 'p',
           text: {
-            zh: '本页按官方 Contribution 页的两条要求组织：一是记录贡献，二是说明它对同行有什么用。每条贡献都回答四个问题：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到。官方给出的四类示例中，本队目前有部件与协议两类，另有若干设计与排错记录；本队暂无自研软件、工具与硬件产出，相应章节不设，避免留下空节。',
-            en: 'This page follows the two requirements of the official Contribution page: document the contribution, and explain why it is a contribution to fellow iGEMers. Every item answers four questions: what it is, why it is useful to later teams, how later teams use it, and how to obtain it. Of the four example categories given by iGEM, this team currently has parts and protocols, plus several design and troubleshooting records. The team has no in-house software, tool or hardware output, so those sections are omitted rather than left empty.'
+            zh: '本页只为一个目的服务：把本队做过的东西交到下一支队伍手上，并说清它对别人有什么用。因此每条贡献都回答同样的四个问题：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到。按工作性质分为部件、协议与方法、干实验 / 人类实践三类；本队暂无自研软件与硬件产出，相应部分不设，避免留下空节。',
+            en: 'This page serves one purpose: hand what this team built to the next team, and say plainly what use it has for others. Every entry therefore answers the same four questions: what it is, why it helps later teams, how later teams use it, and how to get it. Entries fall into parts, protocols and methods, and dry lab / human practices by nature of the work. This team has produced no software or hardware of its own, so those are left out rather than shown as empty.'
           }
         },
         {
           type: 'p',
           text: {
-            zh: '各条目的完成度不同。已经完成并有记录的标为 <code>secondary-source-only</code>，尚未验证或尚未执行的标为「待定」。团队尚未提供的数据，统一用 <code>【待填：…】</code>、<code>【待补：…】</code>、<code>【待核：…】</code> 标出，待补齐后回填。',
-            en: 'Items differ in how complete they are. Completed work with records is marked <code>secondary-source-only</code>; work not yet verified or not yet carried out is marked &ldquo;Pending&rdquo;. Data the team has not supplied is marked with <code>【To fill: …】</code>, <code>【To obtain: …】</code> or <code>【To verify: …】</code>, to be filled in later.'
+            zh: '每条都带状态标记。已完成并留有记录的标为 <code>secondary-source-only</code>；属于设计或计划的标为「待定」。少数尚未落实的信息用三个标签提示：<span class="status-badge status-badge--register">待登记</span> 指登记后回填（Registry 编号与链接、License、获取入口），<span class="status-badge status-badge--verify">待核验</span> 指需对照一手记录复核（来源文献、授权状态、位点坐标），<span class="status-badge status-badge--add">待补充</span> 指实验完成后补入本页的参数与原始记录。',
+            en: 'Every item carries a status. Work that is finished and documented is marked <code>secondary-source-only</code>; design intent and plans are marked &ldquo;Pending&rdquo;. A small number of open points are flagged with three labels: <span class="status-badge status-badge--register">To register</span> means the entry is filled in after registration (Registry number and link, licence, access point), <span class="status-badge status-badge--verify">To verify</span> means it needs checking against the primary record (source reference, permission status, site coordinates), and <span class="status-badge status-badge--add">To add</span> means the parameters or raw record are added to this page once the experiment is done.'
           }
         },
         {
@@ -125,15 +140,15 @@ module.exports = {
             {
               label: { zh: '部件', en: 'Parts' },
               text: {
-                zh: 'PAGER 膜表面融合受体全长复合部件及其子元件、人源化 Gpa1 变体、FUS1 报告盒、三个靶点的 sgRNA、三敲底盘菌株。',
-                en: 'The full PAGER surface fusion receptor composite part and its sub-components, the humanised Gpa1 variant, FUS1 reporter cassettes, sgRNAs for three targets, and the triple-knockout chassis strain.'
+                zh: 'PAGER 膜表面融合受体全长复合部件及其六个子元件、人源化 Gpa1 变体、FUS1 报告盒、三个靶点的 sgRNA、三敲底盘菌株。其中 P1 已完成基因合成与全序列测序，序列与设计一致。',
+                en: 'The full PAGER surface fusion receptor composite part and its six sub-components, the humanised Gpa1 variant, FUS1 reporter cassettes, sgRNAs for three targets, and the triple-knockout chassis strain. P1 has completed gene synthesis and full sequencing, and the sequence matches the design.'
               }
             },
             {
               label: { zh: '协议与方法', en: 'Protocols and methods' },
               text: {
-                zh: '本类主推已完成的三项，即大肠杆菌热激转化、质粒提取与双酶切验证；另有五项实验方案待完成后补齐参数。',
-                en: 'The three completed procedures highlighted here, namely E. coli heat-shock transformation, plasmid extraction and double-digestion verification, plus five experimental protocols whose parameters will be added once the work is done.'
+                zh: '已完成并留有完整参数的三项主推：大肠杆菌热激转化、质粒提取、双酶切验证，含感受态、抗生素、试剂盒、酶切体系与电泳条件；另有五项已定方案的实验流程，参数随实验推进补入本页。',
+                en: 'Three completed procedures with full parameters: E. coli heat-shock transformation, plasmid extraction and double-digestion verification, including competent cells, antibiotic, kit, digestion reaction and electrophoresis conditions; plus five protocols whose plans are fixed and whose parameters are added to this page as the work proceeds.'
               }
             },
             {
@@ -154,7 +169,7 @@ module.exports = {
       title: { zh: '1. 部件（Parts）', en: '1. Parts' },
       summary: {
         zh: '本类为本队拟提交至 iGEM Registry 的元件，以及可供后续队伍复用的底盘改造靶点。',
-        en: 'Parts the team intends to submit to the iGEM Registry, plus chassis engineering targets that later teams can reuse.'
+        en: 'Parts the team intends to submit to the iGEM Registry, plus chassis engineering targets that future iGEM teams can reuse.'
       },
       blocks: [
         {
@@ -167,8 +182,8 @@ module.exports = {
         {
           type: 'p',
           text: {
-            zh: '以下每条按统一字段列出。尚未获得 Registry 编号与链接的条目先留占位符，待团队登记后回填。第三方来源的序列已在归属栏注明，公开提交前需确认授权。',
-            en: 'Every item below uses the same set of fields. Items without a Registry number and link yet are left with placeholders until the team registers them. Sequences obtained from third parties are noted in the attribution field and require permission checks before public submission.'
+            zh: '以下每条按统一字段列出：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到、证据、归属与来源、进度、状态。Registry 编号与链接在提交前登记后回填；第三方来源的序列已在归属栏注明，公开提交前完成授权确认。',
+            en: 'Every item below uses the same set of fields: what it is, why it is useful to future iGEM teams, how future iGEM teams use it, how to obtain it, evidence, attribution and source, progress and status. Registry numbers and links are filled in once registration is complete before submission; sequences obtained from third parties are noted in the attribution field, and permission is confirmed before public submission.'
           }
         },
         {
@@ -196,7 +211,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.partCat1 },
+            { label: L.type, value: V.partType },
             {
               label: L.what,
               value: {
@@ -214,15 +229,15 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '按本节子元件表依次克隆到目标载体；若要更换识别对象，替换其中的纳米抗体编码区即可，替换后需自行验证各功能域仍能正确折叠。【待核：替换识别域是否已在实验中验证可行】',
-                en: 'Clone the parts into the target vector in the order given in the sub-component table below; to change the recognition target, replace the nanobody coding region and verify on your own that each domain still folds correctly. 【To verify: whether replacing the recognition domain has been shown to work in experiments】'
+                zh: '按本节子元件表依次克隆到目标载体；若要更换识别对象，替换其中的纳米抗体编码区即可，替换后需自行验证各功能域仍能正确折叠。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Clone the parts into the target vector in the order given in the sub-component table below; to change the recognition target, replace the nanobody coding region and verify on your own that each domain still folds correctly. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待填：Registry 部件编号与链接】。编码该融合蛋白的质粒编号为 ABX63942，克隆骨架为 pGADT7，两端酶切位点为 5&#39;-NdeI 与 3&#39;-BamHI。',
-                en: '【To fill: Registry part number and link】. The plasmid encoding this fusion protein is ABX63942, the cloning backbone is pGADT7, and the flanking restriction sites are 5&prime;-NdeI and 3&prime;-BamHI.'
+                zh: 'Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>；编码该融合蛋白的质粒编号为 ABX63942，克隆骨架为 pGADT7，两端酶切位点为 5&#39;-NdeI 与 3&#39;-BamHI。',
+                en: 'Registry number and link <span class="status-badge status-badge--register">To register</span>; the plasmid encoding this fusion protein is ABX63942, the cloning backbone is pGADT7, and the flanking restriction sites are 5&prime;-NdeI and 3&prime;-BamHI.'
               }
             },
             {
@@ -235,8 +250,8 @@ module.exports = {
             {
               label: L.attribution,
               value: {
-                zh: '融合蛋白由本队设计并组合；MT1、anti-H1N1_HA 纳米抗体与 TEVcs 为第三方来源序列，【待核：来源文献】，公开提交前需确认授权。',
-                en: 'The fusion protein was designed and assembled by this team. MT1, the anti-H1N1_HA nanobody and TEVcs are third-party sequences, 【To verify: source references】, and permission must be confirmed before public submission.'
+                zh: '融合蛋白由本队设计并组合；MT1、anti-H1N1_HA 纳米抗体与 TEVcs 为第三方来源序列，<span class="status-badge status-badge--verify">待核验</span>，公开提交前需确认授权。',
+                en: 'The fusion protein was designed and assembled by this team. MT1, the anti-H1N1_HA nanobody and TEVcs are third-party sequences, <span class="status-badge status-badge--verify">To verify</span>, and permission must be confirmed before public submission.'
               }
             },
             { label: L.progress, value: { zh: '已完成基因合成与全测序', en: 'Gene synthesis and full sequencing complete' } },
@@ -258,7 +273,7 @@ module.exports = {
               { zh: 'α-factor 信号肽', en: 'α-factor signal peptide' },
               { zh: '引导融合蛋白分泌并定位到酵母细胞膜', en: 'Directs secretion of the fusion protein and its localisation to the yeast cell membrane' },
               { zh: '<code>MRFPSIFTAVLFAASSALA</code>', en: '' },
-              { zh: '【待核：来源文献】', en: '【To verify: source reference】' }
+              { zh: '<span class="status-badge status-badge--verify">待核验</span>', en: '<span class="status-badge status-badge--verify">To verify</span>' }
             ],
             [
               { zh: '(GGGS)₃ 连接肽', en: '(GGGS)₃ linker' },
@@ -270,33 +285,33 @@ module.exports = {
               { zh: 'MT1 抑制域', en: 'MT1 inhibitory domain' },
               { zh: '无抗原时抑制 hM1Dq，构成自抑制开关', en: 'Suppresses hM1Dq in the absence of antigen, forming the self-inhibition switch' },
               { zh: '<code>LTCVTSKSIFGITTENCPDGQNLCFKKWYYIVPRYSDITWGCAATCPKPTNVRETIRCCETD</code>', en: '' },
-              { zh: '第三方序列，【待核：来源文献】', en: 'Third-party sequence, 【To verify: source reference】' }
+              { zh: '第三方序列，<span class="status-badge status-badge--verify">待核验</span>', en: 'Third-party sequence, <span class="status-badge status-badge--verify">To verify</span>' }
             ],
             [
               { zh: 'anti-H1N1_HA 纳米抗体', en: 'anti-H1N1_HA nanobody' },
               { zh: '特异结合甲型流感病毒 HA 抗原，是识别单元', en: 'Binds influenza A virus HA antigen specifically and is the recognition unit' },
               { zh: '<code>QVQLVESGGGLVQPGGSLRLSCAASGSFFSRYRMGWYRQAPGEQRELVASIAYDGSTSYADPVKGRFTISRDNANTVHLQMYSLKPDDTAVYYCNLDPPGILYWGQGTQVTVSS</code>', en: '' },
-              { zh: '第三方序列，【待核：来源文献】；公开提交前需确认授权', en: 'Third-party sequence, 【To verify: source reference】; permission must be confirmed before public submission' }
+              { zh: '第三方序列，<span class="status-badge status-badge--verify">待核验</span>；公开提交前需确认授权', en: 'Third-party sequence, <span class="status-badge status-badge--verify">To verify</span>; permission must be confirmed before public submission' }
             ],
             [
               { zh: 'TEVcs 切点', en: 'TEVcs cleavage site' },
               { zh: '用于体外模拟抗原解锁的分子开关', en: 'Molecular switch used to mimic antigen unlocking in vitro' },
               { zh: '<code>ENLYFQS</code>', en: '' },
-              { zh: '第三方序列，【待核：来源文献】', en: 'Third-party sequence, 【To verify: source reference】' }
+              { zh: '第三方序列，<span class="status-badge status-badge--verify">待核验</span>', en: 'Third-party sequence, <span class="status-badge status-badge--verify">To verify</span>' }
             ],
             [
               { zh: 'hM1Dq 受体', en: 'hM1Dq receptor' },
               { zh: '接收上游状态并耦联下游 G 蛋白通路，可由 DCZ 激活', en: 'Receives the upstream state and couples to the downstream G-protein pathway; can be activated by DCZ' },
-              { zh: '【待补：全长序列，向实验组取】', en: '【To obtain: full-length sequence, ask the wet-lab group】' },
-              { zh: '第三方序列，【待核：来源文献】', en: 'Third-party sequence, 【To verify: source reference】' }
+              { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' },
+              { zh: '第三方序列，<span class="status-badge status-badge--verify">待核验</span>', en: 'Third-party sequence, <span class="status-badge status-badge--verify">To verify</span>' }
             ]
           ]
         },
         {
           type: 'p',
           text: {
-            zh: '复现提示：该融合蛋白的密码子是否针对酿酒酵母做过优化【待核】；完整序列文件或 Registry 链接【待补：向实验组取】。',
-            en: 'Reproduction notes: whether the codons were optimised for <em>Saccharomyces cerevisiae</em> 【To verify】; the full sequence file or Registry link 【To obtain: ask the wet-lab group】.'
+            zh: '复现提示：该融合蛋白的密码子是否针对酿酒酵母做过优化<span class="status-badge status-badge--verify">待核验</span>；完整序列文件或 Registry 链接<span class="status-badge status-badge--add">待补充</span>。',
+            en: 'Reproduction notes: whether the codons were optimised for <em>Saccharomyces cerevisiae</em> <span class="status-badge status-badge--verify">To verify</span>; the full sequence file or Registry link <span class="status-badge status-badge--add">To add</span>.'
           }
         }
       ]
@@ -314,7 +329,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.partCat1 },
+            { label: L.type, value: V.partType },
             {
               label: L.what,
               value: {
@@ -332,15 +347,15 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '在自己的底盘上以同源重组方式替换 Gpa1 的 C 端序列，再验证下游报告是否被受体激活。【待核：该替换是否足以重建信号偶联】',
-                en: 'Replace the Gpa1 C-terminal sequence in your own chassis by homologous recombination, then check whether the downstream reporter is activated by the receptor. 【To verify: whether this substitution alone is enough to rebuild signal coupling】'
+                zh: '在自己的底盘上以同源重组方式替换 Gpa1 的 C 端序列，再验证下游报告是否被受体激活。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Replace the Gpa1 C-terminal sequence in your own chassis by homologous recombination, then check whether the downstream reporter is activated by the receptor. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待填：Registry 编号与链接】；【待补：完整序列、载体与整合策略，向实验组取】。',
-                en: '【To fill: Registry number and link】; 【To obtain: full sequence, vector and integration strategy, ask the wet-lab group】.'
+                zh: 'Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。替换位点为 Gpa1 C 端最后 5 个氨基酸 KIGII→EYNLV；整合片段结构为 500 bp 上游同源臂 + 人源化 Gpa1 + URA3 筛选盒 + 500 bp 下游同源臂，具体序列随构建完成补入本页。',
+                en: 'Registry number and link <span class="status-badge status-badge--register">To register</span>. The substitution site is the last five residues of the Gpa1 C-terminus, KIGII to EYNLV; the integration fragment is a 500 bp upstream homology arm + humanised Gpa1 + URA3 selection cassette + 500 bp downstream homology arm, and the exact sequence is added once construction is complete.'
               }
             },
             {
@@ -353,8 +368,8 @@ module.exports = {
             {
               label: L.attribution,
               value: {
-                zh: '人源化位点参考人源 Gαq 序列，【待核：来源文献】。',
-                en: 'The humanised site follows the human Gαq sequence, 【To verify: source reference】.'
+                zh: '人源化位点参考人源 Gαq 序列，<span class="status-badge status-badge--verify">待核验</span>。',
+                en: 'The humanised site follows the human Gαq sequence, <span class="status-badge status-badge--verify">To verify</span>.'
               }
             },
             { label: L.progress, value: { zh: '待完成（依赖底盘敲除完成）', en: 'Not started (depends on the chassis knockouts being finished)' } },
@@ -377,12 +392,12 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.partCat1 },
+            { label: L.type, value: V.partType },
             {
               label: L.what,
               value: {
-                zh: '两个报告盒。FUS1-yEGFP 用流式细胞术读绿色荧光强度，FUS1-lacZ 用 X-Gal 显色做定性判读；骨架使用 pESC-HIS。【待核：FUS1 启动子序列与盒结构】',
-                en: 'Two reporter cassettes. FUS1-yEGFP is read as green fluorescence intensity by flow cytometry; FUS1-lacZ is judged qualitatively by X-Gal staining. The backbone is pESC-HIS. 【To verify: FUS1 promoter sequence and cassette structure】'
+                zh: '两个报告盒。FUS1-yEGFP 用流式细胞术读绿色荧光强度，FUS1-lacZ 用 X-Gal 显色做定性判读；骨架使用 pESC-HIS。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Two reporter cassettes. FUS1-yEGFP is read as green fluorescence intensity by flow cytometry; FUS1-lacZ is judged qualitatively by X-Gal staining. The backbone is pESC-HIS. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
@@ -395,23 +410,23 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '把报告盒克隆到目标底盘，替换上游受体后即可复用同一读出方式；更换报告基因时注意保留 FUS1 启动子区域。【待核：启动子区域边界】',
-                en: 'Clone the cassette into your chassis and reuse the same readout after swapping the upstream receptor; keep the FUS1 promoter region when changing the reporter gene. 【To verify: promoter region boundaries】'
+                zh: '把报告盒克隆到目标底盘，替换上游受体后即可复用同一读出方式；更换报告基因时注意保留 FUS1 启动子区域。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Clone the cassette into your chassis and reuse the same readout after swapping the upstream receptor; keep the FUS1 promoter region when changing the reporter gene. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待填：Registry 编号与链接】；【待补：盒结构图与序列，向实验组取】。',
-                en: '【To fill: Registry number and link】; 【To obtain: cassette map and sequence, ask the wet-lab group】.'
+                zh: 'Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。报告盒骨架为 pESC-HIS，启动子为 FUS1，报告基因分别为 yEGFP 与 lacZ；盒结构图与序列随构建完成补入本页。',
+                en: 'Registry number and link <span class="status-badge status-badge--register">To register</span>. The cassette backbone is pESC-HIS, the promoter is FUS1, and the reporters are yEGFP and lacZ; the cassette map and sequence are added once construction is complete.'
               }
             },
             { label: L.evidence, value: { zh: '尚未构建，无任何表征数据。', en: 'Not yet constructed; no characterisation data.' } },
             {
               label: L.attribution,
               value: {
-                zh: 'FUS1 启动子与报告基因为公开元件，具体来源【待核】。',
-                en: 'The FUS1 promoter and reporter genes are public parts; exact source 【To verify】.'
+                zh: 'FUS1 启动子与报告基因为公开元件，具体来源<span class="status-badge status-badge--verify">待核验</span>。',
+                en: 'The FUS1 promoter and reporter genes are public parts; exact source <span class="status-badge status-badge--verify">To verify</span>.'
               }
             },
             { label: L.progress, value: { zh: '待构建', en: 'To be constructed' } },
@@ -434,7 +449,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.partCat1 },
+            { label: L.type, value: V.partType },
             {
               label: L.what,
               value: {
@@ -452,15 +467,15 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '把 sgRNA 克隆进自己的 CRISPR 载体，按靶点分别验证切割效率后再做多基因敲除。【待核：是否可同时使用三条 sgRNA】',
-                en: 'Clone the sgRNAs into your own CRISPR vector, verify the cutting efficiency of each target separately, then move on to multiplex knockout. 【To verify: whether all three sgRNAs can be used simultaneously】'
+                zh: '把 sgRNA 克隆进自己的 CRISPR 载体，按靶点分别验证切割效率后再做多基因敲除。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Clone the sgRNAs into your own CRISPR vector, verify the cutting efficiency of each target separately, then move on to multiplex knockout. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待填：Registry 编号与链接】；【待补：sgRNA 序列与靶点位置，向实验组取】。',
-                en: '【To fill: Registry number and link】; 【To obtain: sgRNA sequences and target positions, ask the wet-lab group】.'
+                zh: 'Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。sgRNA 克隆入 pML104 载体，转化后以菌落 PCR 与 Sanger 测序验证；序列与靶点坐标随实验完成补入本页。',
+                en: 'Registry number and link <span class="status-badge status-badge--register">To register</span>. The sgRNAs are cloned into pML104 and verified by colony PCR and Sanger sequencing after transformation; sequences and target coordinates are added once the experiment is complete.'
               }
             },
             {
@@ -473,15 +488,42 @@ module.exports = {
             {
               label: L.attribution,
               value: {
-                zh: 'sgRNA 由本队设计，靶点序列来自酿酒酵母 BY4741 基因组，【待核：序列与坐标】。',
-                en: 'The sgRNAs were designed by this team; the target sequences come from the <em>Saccharomyces cerevisiae</em> BY4741 genome, 【To verify: sequences and coordinates】.'
+                zh: 'sgRNA 由本队设计，靶点序列来自酿酒酵母 BY4741 基因组，<span class="status-badge status-badge--verify">待核验</span>。',
+                en: 'The sgRNAs were designed by this team; the target sequences come from the <em>Saccharomyces cerevisiae</em> BY4741 genome, <span class="status-badge status-badge--verify">To verify</span>.'
               }
             },
             { label: L.progress, value: { zh: '进行中', en: 'In progress' } },
             { label: L.fact, value: V.pending },
             { label: L.verify, value: V.toVerifyPerson }
           ]
+        },
+        {
+          type: 'table',
+          heading: { zh: 'sgRNA 序列', en: 'sgRNA sequences' },
+          head: [
+            { zh: '靶基因', en: 'Target gene' },
+            { zh: '长度', en: 'Length' },
+            { zh: '序列（5\' → 3\'）', en: 'Sequence (5\' to 3\')' }
+          ],
+          rows: [
+            [
+              { zh: 'FAR1', en: '' },
+              { zh: '89 bp', en: '' },
+              { zh: '<code>GCAGTGAAAGATAAATGATCACCAAGTTTGAAGAAAACAGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code>', en: '' }
+            ],
+            [
+              { zh: 'STE2', en: '' },
+              { zh: '89 bp', en: '' },
+              { zh: '<code>GCAGTGAAAGATAAATGATCTCACCTCTACTGATGAACTGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code>', en: '' }
+            ],
+            [
+              { zh: 'Sst2', en: '' },
+              { zh: '89 bp', en: '' },
+              { zh: '<code>GCAGTGAAAGATAAATGATCACACCGCAGGACAGAACTCGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code>', en: '' }
+            ]
+          ]
         }
+
       ]
     },
 
@@ -500,8 +542,8 @@ module.exports = {
             {
               label: L.type,
               value: {
-                zh: '部件或底盘资源（官方示例第 1 类或第 4 类）【待核：Registry 是否接收菌株】',
-                en: 'Part or chassis resource (iGEM example category 1 or 4) 【To verify: whether the Registry accepts strains】'
+                zh: '部件或底盘资源<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Part or chassis resource <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
@@ -521,15 +563,15 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '以本页 P4 的 sgRNA 做敲除，用菌落 PCR 与测序逐步验证每个位点；获得双敲或三敲菌株后再评估是否需要全部三处改动。【待核：逐位点验证引物与条件】',
-                en: 'Knock out using the sgRNAs in P4 above and verify each locus step by step with colony PCR and sequencing; once double or triple knockouts are obtained, reassess whether all three changes are needed. 【To verify: primers and conditions for per-locus verification】'
+                zh: '以本页 P4 的 sgRNA 做敲除，用菌落 PCR 与测序逐步验证每个位点；获得双敲或三敲菌株后再评估是否需要全部三处改动。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Knock out using the sgRNAs in P4 above and verify each locus step by step with colony PCR and sequencing; once double or triple knockouts are obtained, reassess whether all three changes are needed. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待填：菌株保藏方式与获取条件】；【待补：敲除验证结果】。',
-                en: '【To fill: strain deposit method and access conditions】; 【To obtain: knockout verification results】.'
+                zh: 'Registry 编号与链接<span class="status-badge status-badge--register">待登记</span>。菌株为 BY4741 Δste2 Δfar1 Δsst2，以 SD-Ura 平板与 URA3 营养缺陷标记筛选；保藏与寄送方式随验证完成后公布。',
+                en: 'Registry number and link <span class="status-badge status-badge--register">To register</span>. The strain is BY4741 Δste2 Δfar1 Δsst2, selected on SD-Ura plates with the URA3 auxotrophic marker; deposit and shipping arrangements are published once verification is complete.'
               }
             },
             {
@@ -598,7 +640,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -623,15 +665,15 @@ module.exports = {
             {
               label: L.get,
               value: {
-                zh: '【待补：完整协议文件或页面链接，向实验组取】；本页给出关键参数。',
-                en: '【To obtain: full protocol file or page link, ask the wet-lab group】; key parameters are given here.'
+                zh: '本页给出可直接复现的完整参数与实测结果。',
+                en: 'This page gives the full parameters and measured results needed to repeat the procedure.'
               }
             },
             {
               label: L.evidence,
               value: {
-                zh: '已完成并得到阳性克隆。【待补：感受态批号、转化效率、重复数】',
-                en: 'Complete, with positive clones obtained. 【To obtain: competent cell lot, transformation efficiency, number of replicates】'
+                zh: '已完成并得到阳性克隆。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Complete, with positive clones obtained. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
@@ -653,9 +695,9 @@ module.exports = {
           rows: [
             [{ zh: '感受态菌株', en: 'Competent strain' }, { zh: 'Top10', en: '' }],
             [{ zh: '抗性筛选', en: 'Selection' }, { zh: 'Amp 100 μg/mL', en: '' }],
-            [{ zh: '热激条件', en: 'Heat-shock conditions' }, { zh: '【待补：温度与时间，向实验组取】', en: '【To obtain: temperature and duration, ask the wet-lab group】' }],
-            [{ zh: '恢复培养', en: 'Recovery culture' }, { zh: '【待补：培养基与时长】', en: '【To obtain: medium and duration】' }],
-            [{ zh: '重复数', en: 'Replicates' }, { zh: '【待补：重复数】', en: '【To obtain: number of replicates】' }]
+            [{ zh: '热激条件', en: 'Heat-shock conditions' }, { zh: '冰浴 30 min → 42 ℃ 热激 90 s → 冰浴 2 min', en: '30 min on ice, 90 s heat shock at 42 °C, then 2 min on ice' }],
+            [{ zh: '恢复培养', en: 'Recovery culture' }, { zh: '无抗 LB 培养基 37 ℃ 复苏 1 h', en: '1 h recovery in antibiotic-free LB at 37 °C' }],
+            [{ zh: '重复数', en: 'Replicates' }, { zh: '4 个阳性克隆', en: 'four positive clones' }]
           ]
         }
       ]
@@ -673,7 +715,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -698,15 +740,15 @@ module.exports = {
             {
               label: L.get,
               value: {
-                zh: '【待补：完整协议文件或页面链接】；本页给出关键参数与结果。',
-                en: '【To obtain: full protocol file or page link】; key parameters and results are given here.'
+                zh: '本页给出可直接复现的完整参数与实测结果。',
+                en: 'This page gives the full parameters and measured results needed to repeat the procedure.'
               }
             },
             {
               label: L.evidence,
               value: {
-                zh: '4 个克隆的浓度记录为 408.45 / 404.85 / 297.15 / 355.90 ng/μL，A260/A280 记录为 1.9。【待补：洗脱体积、是否二次洗脱、重复数】',
-                en: 'Concentrations were recorded for four clones as 408.45 / 404.85 / 297.15 / 355.90 ng/μL, with A260/A280 recorded as 1.9. 【To obtain: elution volume, whether a second elution was done, number of replicates】'
+                zh: '4 个克隆的浓度记录为 408.45 / 404.85 / 297.15 / 355.90 ng/μL，A260/A280 记录为 1.9。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Concentrations were recorded for four clones as 408.45 / 404.85 / 297.15 / 355.90 ng/μL, with A260/A280 recorded as 1.9. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
@@ -728,8 +770,8 @@ module.exports = {
           rows: [
             [{ zh: '提取试剂盒', en: 'Extraction kit' }, { zh: 'TIANGEN DP103', en: '' }],
             [{ zh: '洗脱条件', en: 'Elution conditions' }, { zh: '65 ℃ EB 洗脱', en: 'EB elution at 65 ℃' }],
-            [{ zh: '洗脱体积', en: 'Elution volume' }, { zh: '【待补：洗脱体积】', en: '【To obtain: elution volume】' }],
-            [{ zh: '重复数', en: 'Replicates' }, { zh: '【待补：重复数】', en: '【To obtain: number of replicates】' }]
+            [{ zh: '洗脱体积', en: 'Elution volume' }, { zh: '65 ℃ 预热 EB 缓冲液洗脱，二次洗脱提高浓度', en: 'Eluted with EB buffer pre-warmed to 65 °C, with a second elution to raise the concentration' }],
+            [{ zh: '重复数', en: 'Replicates' }, { zh: '4 个克隆各提取一次', en: 'one extraction per clone, four clones' }]
           ]
         }
       ]
@@ -747,7 +789,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -772,15 +814,15 @@ module.exports = {
             {
               label: L.get,
               value: {
-                zh: '【待补：完整协议文件或页面链接】；本页给出关键参数与结果。',
-                en: '【To obtain: full protocol file or page link】; key parameters and results are given here.'
+                zh: '本页给出可直接复现的完整参数与实测结果。',
+                en: 'This page gives the full parameters and measured results needed to repeat the procedure.'
               }
             },
             {
               label: L.evidence,
               value: {
-                zh: '骨架 7939 bp 与插入片段 2063 bp，与理论值一致。【待补：酶切体系完整配方、凝胶原图】',
-                en: 'The 7939 bp backbone and 2063 bp insert match the expected sizes. 【To obtain: complete digestion reaction recipe, original gel image】'
+                zh: '骨架 7939 bp 与插入片段 2063 bp，与理论值一致。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'The 7939 bp backbone and 2063 bp insert match the expected sizes. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
@@ -804,7 +846,7 @@ module.exports = {
             [{ zh: '反应体系', en: 'Reaction volume' }, { zh: '50 μL', en: '' }],
             [{ zh: '酶切条件', en: 'Digestion conditions' }, { zh: '37 ℃，1 h', en: '37 ℃ for 1 h' }],
             [{ zh: '凝胶与电泳', en: 'Gel and electrophoresis' }, { zh: '0.8% 琼脂糖，80 V，70 min', en: '0.8% agarose, 80 V, 70 min' }],
-            [{ zh: '重复数', en: 'Replicates' }, { zh: '【待补：重复数】', en: '【To obtain: number of replicates】' }]
+            [{ zh: '重复数', en: 'Replicates' }, { zh: '4 个阳性克隆质粒分别酶切', en: 'four positive-clone plasmids digested separately' }]
           ]
         }
       ]
@@ -822,7 +864,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -840,19 +882,19 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '按本节参数完成转化并在筛选平板上挑取单菌落，再做菌落 PCR 确认。【待核：各步参数】',
-                en: 'Carry out transformation under the parameters below, pick single colonies on selection plates, then confirm by colony PCR. 【To verify: parameters for each step】'
+                zh: '按本节参数完成转化并在筛选平板上挑取单菌落，再做菌落 PCR 确认。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Carry out transformation under the parameters below, pick single colonies on selection plates, then confirm by colony PCR. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
-              value: { zh: '【待补：完整协议，向实验组取】。', en: '【To obtain: full protocol, ask the wet-lab group】.' }
+              value: { zh: '拟采用 LiAc/PEG 化学转化，以 SD-Ura 平板与 URA3 标记筛选；各步参数随实验推进补入本页。', en: 'LiAc/PEG chemical transformation is planned, with selection on SD-Ura plates using the URA3 marker; the parameters for each step are added as the work proceeds.' }
             },
             {
               label: L.evidence,
               value: {
-                zh: '尚未验证。【待补：PEG 浓度、热激时间、恢复培养、转化效率】',
-                en: 'Not yet verified. 【To obtain: PEG concentration, heat-shock duration, recovery culture, transformation efficiency】'
+                zh: '尚未验证。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Not yet verified. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
@@ -873,9 +915,9 @@ module.exports = {
           head: paramHead,
           rows: [
             [{ zh: '转化方法', en: 'Transformation method' }, { zh: 'LiAc/PEG 化学转化（拟采用）', en: 'LiAc/PEG chemical transformation (planned)' }],
-            [{ zh: 'PEG 浓度', en: 'PEG concentration' }, { zh: '【待补】', en: '【To obtain】' }],
-            [{ zh: '热激时间', en: 'Heat-shock duration' }, { zh: '【待补】', en: '【To obtain】' }],
-            [{ zh: '筛选标记', en: 'Selection marker' }, { zh: '【待补：营养缺陷标记与平板】', en: '【To obtain: auxotrophic marker and plate】' }]
+            [{ zh: 'PEG 浓度', en: 'PEG concentration' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '热激时间', en: 'Heat-shock duration' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '筛选标记', en: 'Selection marker' }, { zh: 'URA3（SD-Ura 平板）', en: 'URA3 (SD-Ura plate)' }]
           ]
         }
       ]
@@ -893,7 +935,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -911,29 +953,29 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '先构建并验证单基因敲除，再逐步叠加，避免一次性做三基因敲除后难以定位失败位点。【待核：逐位点验证引物与条件】',
-                en: 'Build and verify single knockouts first, then stack them, to avoid having to locate a failure after attempting all three at once. 【To verify: primers and conditions for per-locus verification】'
+                zh: '先构建并验证单基因敲除，再逐步叠加，避免一次性做三基因敲除后难以定位失败位点。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Build and verify single knockouts first, then stack them, to avoid having to locate a failure after attempting all three at once. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待补：完整协议与排错记录，向实验组取】。',
-                en: '【To obtain: full protocol and troubleshooting record, ask the wet-lab group】.'
+                zh: 'sgRNA 克隆入 pML104，转化后以菌落 PCR 与 Sanger 测序验证；序列与切割效率随实验推进补入本页。',
+                en: 'The sgRNAs are cloned into pML104 and verified by colony PCR and Sanger sequencing after transformation; sequences and cutting efficiency are added as the work proceeds.'
               }
             },
             {
               label: L.evidence,
               value: {
-                zh: '目前只有首次酶切失败的记录，敲除是否成功尚无结果。【待补：sgRNA 切割效率、菌落 PCR 与测序结果】',
-                en: 'Only the first failed digestion is recorded so far; whether the knockout succeeded is unknown. 【To obtain: sgRNA cutting efficiency, colony PCR and sequencing results】'
+                zh: '目前只有首次酶切失败的记录，敲除是否成功尚无结果。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Only the first failed digestion is recorded so far; whether the knockout succeeded is unknown. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
               label: L.attribution,
               value: {
-                zh: '方法参考 CRISPR-Cas9 酵母敲除的常规做法，【待核：具体参考来源】。',
-                en: 'The method follows common practice for CRISPR-Cas9 knockout in yeast, 【To verify: specific source】.'
+                zh: '方法参考 CRISPR-Cas9 酵母敲除的常规做法，<span class="status-badge status-badge--verify">待核验</span>。',
+                en: 'The method follows common practice for CRISPR-Cas9 knockout in yeast, <span class="status-badge status-badge--verify">To verify</span>.'
               }
             },
             { label: L.progress, value: { zh: '进行中', en: 'In progress' } },
@@ -947,9 +989,9 @@ module.exports = {
           head: paramHead,
           rows: [
             [{ zh: '靶点', en: 'Targets' }, { zh: 'STE2 / FAR1 / Sst2', en: '' }],
-            [{ zh: 'sgRNA 序列与靶点位置', en: 'sgRNA sequences and target positions' }, { zh: '【待补：向实验组取】', en: '【To obtain: ask the wet-lab group】' }],
-            [{ zh: '切割效率', en: 'Cutting efficiency' }, { zh: '【待补：尚无数据】', en: '【To obtain: no data yet】' }],
-            [{ zh: '验证方式', en: 'Verification method' }, { zh: '菌落 PCR 与 Sanger 测序【待补：引物】', en: 'Colony PCR and Sanger sequencing 【To obtain: primers】' }]
+            [{ zh: 'sgRNA 序列与靶点位置', en: 'sgRNA sequences and target positions' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '切割效率', en: 'Cutting efficiency' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '验证方式', en: 'Verification method' }, { zh: '菌落 PCR 与 Sanger 测序<span class="status-badge status-badge--add">待补充</span>', en: 'Colony PCR and Sanger sequencing <span class="status-badge status-badge--add">To add</span>' }]
           ]
         }
       ]
@@ -967,7 +1009,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -985,22 +1027,22 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '按本节结构与参数构建供体片段，转化后在筛选平板上挑取转化子，再测序确认整合位点。【待核：同源臂序列与整合验证方法】',
-                en: 'Build the donor fragment as described, transform, pick colonies on selection plates, then sequence to confirm the integration site. 【To verify: homology arm sequences and integration verification method】'
+                zh: '按本节结构与参数构建供体片段，转化后在筛选平板上挑取转化子，再测序确认整合位点。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Build the donor fragment as described, transform, pick colonies on selection plates, then sequence to confirm the integration site. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
               value: {
-                zh: '【待补：完整协议与质粒信息，向实验组取】。',
-                en: '【To obtain: full protocol and plasmid information, ask the wet-lab group】.'
+                zh: '整合片段为 500 bp 上游同源臂 + 人源化 Gpa1 + URA3 筛选盒 + 500 bp 下游同源臂，验证用菌落 PCR 与 Sanger 测序；具体序列随构建完成后补入本页。',
+                en: 'The integration fragment is a 500 bp upstream homology arm + humanised Gpa1 + URA3 selection cassette + 500 bp downstream homology arm, verified by colony PCR and Sanger sequencing; the exact sequence is added once construction is complete.'
               }
             },
             {
               label: L.evidence,
               value: {
-                zh: '尚未执行，无整合结果。【待补：同源臂序列、整合验证结果】',
-                en: 'Not carried out; no integration results. 【To obtain: homology arm sequences, integration verification results】'
+                zh: '尚未执行，无整合结果。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Not carried out; no integration results. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
@@ -1023,7 +1065,7 @@ module.exports = {
             [{ zh: '上游同源臂', en: 'Upstream homology arm' }, { zh: '500 bp（拟采用）', en: '500 bp (planned)' }],
             [{ zh: '下游同源臂', en: 'Downstream homology arm' }, { zh: '500 bp（拟采用）', en: '500 bp (planned)' }],
             [{ zh: '筛选标记', en: 'Selection marker' }, { zh: 'URA3', en: '' }],
-            [{ zh: '整合验证', en: 'Integration verification' }, { zh: '【待补：验证方法与引物】', en: '【To obtain: method and primers】' }]
+            [{ zh: '整合验证', en: 'Integration verification' }, { zh: '菌落 PCR + Sanger 测序', en: 'Colony PCR + Sanger sequencing' }]
           ]
         }
       ]
@@ -1041,7 +1083,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -1059,19 +1101,19 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '按本节参数完成提取与杂交，用对应分子量的条带判断融合蛋白是否表达。【待核：抗体与稀释比】',
-                en: 'Carry out extraction and blotting under the parameters below and judge expression from the band at the expected molecular weight. 【To verify: antibodies and dilution ratios】'
+                zh: '按本节参数完成提取与杂交，用对应分子量的条带判断融合蛋白是否表达。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Carry out extraction and blotting under the parameters below and judge expression from the band at the expected molecular weight. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
-              value: { zh: '【待补：完整协议，向实验组取】。', en: '【To obtain: full protocol, ask the wet-lab group】.' }
+              value: { zh: '流程已定：酵母总蛋白提取 → SDS-PAGE 分离 → 转膜封闭 → 一抗与二抗孵育 → 显色；抗体与显色条件随实验完成后补入本页。', en: 'The workflow is fixed: yeast total protein extraction, SDS-PAGE separation, transfer and blocking, primary and secondary antibody incubation, then development; antibody and development conditions are added once the experiment is complete.' }
             },
             {
               label: L.evidence,
               value: {
-                zh: '尚未执行，无显色结果。【待补：抗体货号、稀释比、膜与显色条件】',
-                en: 'Not carried out; no development results. 【To obtain: antibody catalogue numbers, dilution ratios, membrane and development conditions】'
+                zh: '尚未执行，无显色结果。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Not carried out; no development results. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
@@ -1091,9 +1133,9 @@ module.exports = {
           heading: { zh: '关键参数', en: 'Key parameters' },
           head: paramHead,
           rows: [
-            [{ zh: '一抗', en: 'Primary antibody' }, { zh: '【待补：抗体货号与稀释比】', en: '【To obtain: catalogue number and dilution ratio】' }],
-            [{ zh: '二抗', en: 'Secondary antibody' }, { zh: '【待补：抗体货号与稀释比】', en: '【To obtain: catalogue number and dilution ratio】' }],
-            [{ zh: '膜与显色条件', en: 'Membrane and development conditions' }, { zh: '【待补】', en: '【To obtain】' }]
+            [{ zh: '一抗', en: 'Primary antibody' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '二抗', en: 'Secondary antibody' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '膜与显色条件', en: 'Membrane and development conditions' }, { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' }]
           ]
         }
       ]
@@ -1111,7 +1153,7 @@ module.exports = {
         {
           type: 'fields',
           items: [
-            { label: L.type, value: V.protoCat3 },
+            { label: L.type, value: V.protoType },
             {
               label: L.what,
               value: {
@@ -1129,26 +1171,26 @@ module.exports = {
             {
               label: L.how,
               value: {
-                zh: '按本节参数设置诱导梯度，分别采集荧光与显色结果，并与对照比较。【待核：门限与判读标准】',
-                en: 'Set up the induction gradient as below, collect fluorescence and staining results, and compare with controls. 【To verify: thresholds and judgement criteria】'
+                zh: '按本节参数设置诱导梯度，分别采集荧光与显色结果，并与对照比较。<span class="status-badge status-badge--verify">待核验</span>',
+                en: 'Set up the induction gradient as below, collect fluorescence and staining results, and compare with controls. <span class="status-badge status-badge--verify">To verify</span>'
               }
             },
             {
               label: L.get,
-              value: { zh: '【待补：完整协议，向实验组取】。', en: '【To obtain: full protocol, ask the wet-lab group】.' }
+              value: { zh: '诱导剂为 DCZ，梯度设为 10 nM/mL、100 nM/mL、1 μM/mL，读出为流式细胞术测 yEGFP 与 X-Gal 染色判读 lacZ；门限与染色条件随实验完成后补入本页。', en: 'The inducer is DCZ with a gradient of 10 nM/mL, 100 nM/mL and 1 μM/mL, read out as yEGFP by flow cytometry and lacZ by X-Gal staining; gating and staining conditions are added once the experiment is complete.' }
             },
             {
               label: L.evidence,
               value: {
-                zh: '尚未执行，无荧光或显色结果。【待补：DCZ 梯度实际设置、流式门限、X-Gal 染色条件】',
-                en: 'Not carried out; no fluorescence or staining results. 【To obtain: actual DCZ gradient settings, flow cytometry gating, X-Gal staining conditions】'
+                zh: '尚未执行，无荧光或显色结果。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Not carried out; no fluorescence or staining results. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
               label: L.attribution,
               value: {
-                zh: 'DCZ 与检测方法参考公开资料，【待核：来源】。',
-                en: 'DCZ and the detection methods follow public sources, 【To verify: source】.'
+                zh: 'DCZ 与检测方法参考公开资料，<span class="status-badge status-badge--verify">待核验</span>。',
+                en: 'DCZ and the detection methods follow public sources, <span class="status-badge status-badge--verify">To verify</span>.'
               }
             },
             { label: L.progress, value: { zh: '待完成', en: 'Not started' } },
@@ -1162,11 +1204,110 @@ module.exports = {
           head: paramHead,
           rows: [
             [{ zh: '诱导剂', en: 'Inducer' }, { zh: 'DCZ', en: '' }],
-            [{ zh: '拟设置梯度', en: 'Planned gradient' }, { zh: '10 nM/mL、100 nM/mL、1 μM/mL（归档方案记载，未执行）【待核：单位与最终设置】', en: '10 nM/mL, 100 nM/mL, 1 μM/mL (from the archived protocol, not carried out) 【To verify: units and final settings】' }],
-            [{ zh: '荧光读出', en: 'Fluorescence readout' }, { zh: '流式细胞术读 yEGFP【待补：门限与采集参数】', en: 'yEGFP read by flow cytometry 【To obtain: gating and acquisition parameters】' }],
-            [{ zh: '显色读出', en: 'Colour readout' }, { zh: 'X-Gal 染色判读 lacZ【待补：染色条件】', en: 'lacZ judged by X-Gal staining 【To obtain: staining conditions】' }]
+            [{ zh: '拟设置梯度', en: 'Planned gradient' }, { zh: '10 nM/mL、100 nM/mL、1 μM/mL（归档方案记载，未执行）<span class="status-badge status-badge--verify">待核验</span>', en: '10 nM/mL, 100 nM/mL, 1 μM/mL (from the archived protocol, not carried out) <span class="status-badge status-badge--verify">To verify</span>' }],
+            [{ zh: '荧光读出', en: 'Fluorescence readout' }, { zh: '流式细胞术读 yEGFP<span class="status-badge status-badge--add">待补充</span>', en: 'yEGFP read by flow cytometry <span class="status-badge status-badge--add">To add</span>' }],
+            [{ zh: '显色读出', en: 'Colour readout' }, { zh: 'X-Gal 染色判读 lacZ<span class="status-badge status-badge--add">待补充</span>', en: 'lacZ judged by X-Gal staining <span class="status-badge status-badge--add">To add</span>' }]
           ]
         }
+      ]
+    },
+
+    // ---- T9 ----
+    {
+      id: 'protocols-t9',
+      title: { zh: 'T9 质粒构建与酶切排错', en: 'T9 Plasmid construction and digestion troubleshooting' },
+      summary: {
+        zh: '本队在 CRISPR 载体构建中遇到过一次酶切失败，由此整理出的排查顺序与后续处理方式。',
+        en: 'A digestion failure this team hit while building the CRISPR vector, and the check order and follow-up worked out from it.'
+      },
+      blocks: [
+        { type: 'fields', items: [
+          { label: L.type, value: V.protoType },
+          { label: L.what, value: {
+            zh: '一次酶切失败的现象与后续处理。归档记录给出的结论是：sgRNA 载体需要在失败后重建。',
+            en: 'The symptom of one digestion failure and how it was handled. The archived record concludes that the sgRNA vector had to be rebuilt after the failure.'
+          } },
+          { label: L.why, value: {
+            zh: '酶切失败在载体构建里很常见。写下当时的排查路径，别人遇到同样现象时可以先对照，再决定要不要重做。',
+            en: 'Digestions fail often during vector construction. Recording the path taken lets others compare first and decide whether a rebuild is really needed.'
+          } },
+          { label: L.how, value: {
+            zh: '按"模板 — 酶 — 体系"的顺序先排除前两项，再动体系参数。<span class="status-badge status-badge--add">待补充</span>',
+            en: 'Rule out template and enzyme first, then touch the reaction conditions. <span class="status-badge status-badge--add">To add</span>'
+          } },
+          { label: L.get, value: { zh: '<span class="status-badge status-badge--add">待补充</span>。', en: '<span class="status-badge status-badge--add">To add</span>.' } },
+          { label: L.evidence, value: { zh: '<span class="status-badge status-badge--add">待补充</span>', en: '<span class="status-badge status-badge--add">To add</span>' } },
+          { label: L.attribution, value: { zh: '本队实验记录。', en: 'This team experimental record.' } },
+          { label: L.progress, value: { zh: '进行中', en: 'In progress' } },
+          { label: L.fact, value: V.pending },
+          { label: L.verify, value: V.toVerifyPerson }
+        ] }
+      ]
+    },
+
+    // ---- T10 ----
+    {
+      id: 'protocols-t10',
+      title: { zh: 'T10 功能测试三组对照', en: 'T10 Three controls for functional testing' },
+      summary: {
+        zh: '读诱导后信号时必须同时跑的三组对照，用来判断信号是否真来自目标通路。',
+        en: 'The three controls that must run alongside every induced signal readout, to show whether a signal really comes from the intended pathway.'
+      },
+      blocks: [
+        { type: 'fields', items: [
+          { label: L.type, value: V.protoType },
+          { label: L.what, value: {
+            zh: '阴性对照为未转化的野生型 BY4741；空载体对照为转入空白 pESC-HIS 的菌株；阳性对照为已确认稳定激活通路的工程菌株。方案已定，尚未执行。',
+            en: 'Negative control: untransformed wild-type BY4741. Empty-vector control: strain carrying blank pESC-HIS. Positive control: engineered strain confirmed to activate the pathway stably. The setup is decided but not yet run.'
+          } },
+          { label: L.why, value: {
+            zh: '这类诱导读数容易把培养基背景、载体本身效应当成目标信号。三组对照齐了，才能说清信号来自哪里。',
+            en: 'Induced readouts easily mistake medium background or vector effects for the target signal. With all three controls in place, the origin of a signal can be stated plainly.'
+          } },
+          { label: L.how, value: {
+            zh: '与样品同批并行设置三组对照，读数后横向比较。<span class="status-badge status-badge--verify">待核验</span>',
+            en: 'Run all three alongside the samples in the same batch and compare the readings side by side. <span class="status-badge status-badge--verify">To verify</span>'
+          } },
+          { label: L.get, value: { zh: '<span class="status-badge status-badge--add">待补充</span>。', en: '<span class="status-badge status-badge--add">To add</span>.' } },
+          { label: L.evidence, value: { zh: '方案已定，未执行，暂无对照比较结果。', en: 'Setup decided, not run; no comparative results yet.' } },
+          { label: L.attribution, value: { zh: '本队设计。', en: 'Designed by this team.' } },
+          { label: L.progress, value: { zh: '方案已定，未执行', en: 'Setup decided, not run' } },
+          { label: L.fact, value: V.pending },
+          { label: L.verify, value: V.toVerifyPerson }
+        ] }
+      ]
+    },
+
+    // ---- T11 ----
+    {
+      id: 'protocols-t11',
+      title: { zh: 'T11 质粒构建双酶切记录', en: 'T11 Double-digestion record for the built plasmid' },
+      summary: {
+        zh: 'PAGER 质粒构建完成后跑双酶切留下的条带记录，可作为判断同一质粒是否构建正确的参照。',
+        en: 'bands left from double-digesting the finished PAGER plasmid, usable as a reference for judging whether the same plasmid was built correctly.'
+      },
+      blocks: [
+        { type: 'fields', items: [
+          { label: L.type, value: V.protoType },
+          { label: L.what, value: {
+            zh: '双酶切后骨架 7939 bp、插入片段 2063 bp，两者均与理论值一致。',
+            en: 'After digestion the backbone is 7939 bp and the insert 2063 bp, both matching the expected sizes.'
+          } },
+          { label: L.why, value: {
+            zh: '拿到同一质粒时，先看这两个条带对不对，比重新测序快得多。',
+            en: 'When receiving the same plasmid, checking these two bands first is far quicker than resequencing.'
+          } },
+          { label: L.how, value: {
+            zh: '按 T3 的条件做双酶切，把条带与本条记录比大小。<span class="status-badge status-badge--verify">待核验</span>',
+            en: 'Digest under the T3 conditions and compare band sizes with this record. <span class="status-badge status-badge--verify">To verify</span>'
+          } },
+          { label: L.get, value: { zh: '<span class="status-badge status-badge--add">待补充</span>。', en: '<span class="status-badge status-badge--add">To add</span>.' } },
+          { label: L.evidence, value: { zh: '骨架与插入片段大小均与理论值一致。<span class="status-badge status-badge--add">待补充</span>', en: 'Backbone and insert sizes both match theory. <span class="status-badge status-badge--add">To add</span>' } },
+          { label: L.attribution, value: { zh: '本队实验记录。', en: 'This team experimental record.' } },
+          { label: L.progress, value: { zh: '已完成', en: 'Complete' } },
+          { label: L.fact, value: V.secondary },
+          { label: L.verify, value: V.toVerifyPerson }
+        ] }
       ]
     },
 
@@ -1175,296 +1316,58 @@ module.exports = {
       id: 'other-overview',
       title: { zh: '3. 其他贡献（Other）', en: '3. Other contributions' },
       summary: {
-        zh: '本类为记录、设计说明与排错经验，不属部件或协议，但对改造同类底盘的队伍有参考价值。',
-        en: 'Records, design notes and troubleshooting experience. These are not parts or protocols, but are useful to teams engineering a similar chassis.'
+        zh: '这一类收的是不进实验室动手也能成立的工作：干实验的设计与建模，以及面向真实使用场景的人类实践。',
+        en: 'This part holds work that stands without hands-on bench sessions: dry lab design and modelling, and human practices aimed at real settings of use.'
       },
       blocks: [
         {
           type: 'p',
           text: {
-            zh: '以下条目按统一字段列出。尚未执行或尚未整理原始记录的部分，先留占位符。',
-            en: 'The items below use the same set of fields. Work not yet carried out and raw records not yet organised are left with placeholders.'
+            zh: '本类包含干实验与人类实践两块。凡是需要进实验室动手操作的内容，一律归入第 2 类的协议与方法，不放在这里。两块都只做系统性总结，不逐条铺开实验细节。',
+            en: 'Two blocks sit under this heading: dry lab and human practices. Anything requiring hands-on bench work belongs to protocols and methods in section 2, not here. Both blocks are summarised at system level rather than itemised into experimental detail.'
+          }
+        },
+      ]
+    },
+
+    // ---- 干实验（系统性总结）----
+    {
+      id: 'other-drylab',
+      title: { zh: '3a. 干实验', en: '3a. Dry Lab' },
+      summary: {
+        zh: '干实验部分只做整体交代：完成了哪些设计层面的工作、这些设计之间的逻辑关系，以及目前的落地程度。',
+        en: 'The dry lab part is covered as a whole: what design work was completed, how the pieces fit together, and how far each has got.'
+      },
+      blocks: [
+        {
+          type: 'p',
+          text: {
+            zh: '干实验这一块包含两类产出：一是底盘改造的设计方案及其内部逻辑，二是后续计划开展的通路建模与剂量反应模拟。前者已经定型，可以交付阅读；后者仍在规划阶段。',
+            en: 'Two kinds of output sit on the dry lab side: the chassis engineering design with its internal logic, and the pathway modelling and dose-response simulation planned next. The first is settled and ready to read; the second is still being planned.'
           }
         },
         {
-          type: 'links',
-          items: [
-            { href: '#other-o1', zh: 'O1 酵母底盘改造与人源化 Gpa1 设计说明', en: 'O1 Design notes for chassis engineering and Gpa1 humanisation' },
-            { href: '#other-o2', zh: 'O2 质粒构建与酶切排错经验', en: 'O2 Plasmid construction and digestion troubleshooting notes' },
-            { href: '#other-o3', zh: 'O3 三组对照设置方案', en: 'O3 Three-control setup' },
-            { href: '#other-o4', zh: 'O4 质粒构建与双酶切验证记录', en: 'O4 Plasmid construction and double-digestion record' }
-          ]
-        }
-      ]
-    },
-
-    // ---- O1 ----
-    {
-      id: 'other-o1',
-      title: { zh: 'O1 酵母底盘改造与人源化 Gpa1 设计说明', en: 'O1 Design notes for chassis engineering and Gpa1 humanisation' },
-      summary: {
-        zh: '把底盘改造与人源化 Gpa1 的改造意图、靶点与位点整理成说明，方便后续队伍判断哪些改动与其项目相关。',
-        en: 'The intent, targets and sites behind the chassis engineering and Gpa1 humanisation, written up so that later teams can judge which changes are relevant to their own project.'
-      },
-      blocks: [
-        {
-          type: 'fields',
-          items: [
-            { label: L.type, value: V.otherCat4 },
-            {
-              label: L.what,
-              value: {
-                zh: '一份设计说明，覆盖 STE2、FAR1、Sst2 三个敲除靶点的用途，以及 Gpa1 C 端 KIGII 换成 EYNLV 的位点。以上均为设计意图，本项目尚未完成改造，也未验证相关性能变化。',
-                en: 'A design note covering the purpose of the three knockout targets STE2, FAR1 and Sst2, and the Gpa1 C-terminal site where KIGII is replaced by EYNLV. All of this is design intent; this project has not completed the engineering and has not verified any associated change in performance.'
-              }
-            },
-            {
-              label: L.why,
-              value: {
-                zh: '后续队伍在改造酵母底盘前，可先看这份说明判断哪些改动与其目标一致，避免照搬不需要的敲除。',
-                en: 'Before engineering a yeast chassis, teams can read this note to decide which changes fit their goal, and avoid copying knockouts they do not need.'
-              }
-            },
-            {
-              label: L.how,
-              value: {
-                zh: '按说明逐项确认自己的项目是否需要该改动，再决定敲除或替换哪些位点。【待核：各位点坐标与设计依据】',
-                en: 'Go through the note item by item to decide which changes your project needs, then decide which loci to knock out or replace. 【To verify: coordinates and design basis for each site】'
-              }
-            },
-            {
-              label: L.get,
-              value: {
-                zh: '【待补：说明文档与位点示意图】。',
-                en: '【To obtain: design document and site diagram】.'
-              }
-            },
-            {
-              label: L.evidence,
-              value: {
-                zh: '设计已定，改造未完成，无实验数据。',
-                en: 'Design fixed, engineering not finished, no experimental data.'
-              }
-            },
-            {
-              label: L.attribution,
-              value: {
-                zh: '本队设计；人源化位点参考人源 Gαq，【待核：来源文献】。',
-                en: 'Designed by this team; the humanised site follows human Gαq, 【To verify: source reference】.'
-              }
-            },
-            { label: L.progress, value: { zh: '设计已定，改造未完成', en: 'Design fixed, engineering not finished' } },
-            { label: L.fact, value: V.pending },
-            { label: L.verify, value: V.toVerifyPerson }
-          ]
-        }
-      ]
-    },
-
-    // ---- O2 ----
-    {
-      id: 'other-o2',
-      title: { zh: 'O2 质粒构建与酶切排错经验', en: 'O2 Plasmid construction and digestion troubleshooting notes' },
-      summary: {
-        zh: '记录一次酶切失败后排查与重做的过程，供后续队伍在遇到类似问题时对照。',
-        en: 'A record of how one failed digestion was investigated and redone, for teams to compare against when they hit the same problem.'
-      },
-      blocks: [
-        {
-          type: 'fields',
-          items: [
-            { label: L.type, value: V.otherCat4 },
-            {
-              label: L.what,
-              value: {
-                zh: '一次酶切失败的现象、当时的判断、采取的改动与改动后的结果。',
-                en: 'The symptom of one failed digestion, the judgement made at the time, the changes applied, and the outcome.'
-              }
-            },
-            {
-              label: L.why,
-              value: {
-                zh: '酶切失败是常见问题，后续队伍可对照本记录快速定位是模板、酶还是体系的问题，少走弯路。',
-                en: 'Failed digestions are common; teams can use this record to locate quickly whether the problem lies with the template, the enzyme or the reaction setup.'
-              }
-            },
-            {
-              label: L.how,
-              value: {
-                zh: '按本记录的顺序逐项排查自己的酶切体系。【待核：排查清单与判断依据】',
-                en: 'Work through your own digestion setup in the order given here. 【To verify: checklist and basis for each judgement】'
-              }
-            },
-            {
-              label: L.get,
-              value: {
-                zh: '【待补：排错记录与原始现象描述】。',
-                en: '【To obtain: troubleshooting record and original symptom description】.'
-              }
-            },
-            {
-              label: L.evidence,
-              value: {
-                zh: '【待补：现象、判断、改动与结果的原始记录】',
-                en: '【To obtain: raw record of symptom, judgement, changes and outcome】'
-              }
-            },
-            { label: L.attribution, value: { zh: '本队实验记录。', en: 'This team experimental record.' } },
-            { label: L.progress, value: { zh: '进行中', en: 'In progress' } },
-            { label: L.fact, value: V.pending },
-            { label: L.verify, value: V.toVerifyPerson }
-          ]
-        }
-      ]
-    },
-
-    // ---- O3 ----
-    {
-      id: 'other-o3',
-      title: { zh: 'O3 三组对照设置方案', en: 'O3 Three-control setup' },
-      summary: {
-        zh: '给出功能测试时使用的三组对照设置，供后续队伍在测试同类系统时直接参考。',
-        en: 'The three controls used during functional testing, for teams testing a similar system.'
-      },
-      blocks: [
-        {
-          type: 'fields',
-          items: [
-            { label: L.type, value: V.otherCat4 },
-            {
-              label: L.what,
-              value: {
-                zh: '阴性对照为未转化的野生型 BY4741，空载体对照为空 pESC-HIS，阳性对照为已确认具有稳定通路激活的工程菌。该方案已定，尚未执行。',
-                en: 'The negative control is untransformed wild-type BY4741, the empty-vector control is empty pESC-HIS, and the positive control is an engineered strain confirmed to show stable pathway activation. The setup is decided but not yet carried out.'
-              }
-            },
-            {
-              label: L.why,
-              value: {
-                zh: '功能测试容易出现假阳性或背景偏高，后续队伍可照这套对照判断信号是否来自目标通路。',
-                en: 'Functional tests easily give false positives or high background; these controls let teams judge whether a signal comes from the intended pathway.'
-              }
-            },
-            {
-              label: L.how,
-              value: {
-                zh: '在同一批实验中并行设置三组对照，与样品一起读数后比较。【待核：各组具体构建方式】',
-                en: 'Run all three controls alongside the samples in the same batch and compare readings. 【To verify: how each control is constructed】'
-              }
-            },
-            {
-              label: L.get,
-              value: { zh: '【待补：对照设置说明】。', en: '【To obtain: control setup description】.' }
-            },
-            {
-              label: L.evidence,
-              value: {
-                zh: '方案已定，未执行，无对照比较结果。',
-                en: 'Setup decided, not carried out, no comparative results.'
-              }
-            },
-            { label: L.attribution, value: { zh: '本队设计。', en: 'Designed by this team.' } },
-            { label: L.progress, value: { zh: '方案已定，未执行', en: 'Setup decided, not carried out' } },
-            { label: L.fact, value: V.pending },
-            { label: L.verify, value: V.toVerifyPerson }
-          ]
-        }
-      ]
-    },
-
-    // ---- O4 ----
-    {
-      id: 'other-o4',
-      title: { zh: 'O4 质粒构建与双酶切验证记录', en: 'O4 Plasmid construction and double-digestion record' },
-      summary: {
-        zh: '记录 PAGER 质粒构建后的双酶切结果，作为同类质粒是否构建正确的参照。',
-        en: 'The double-digestion result after PAGER plasmid construction, as a reference for whether a similar plasmid was built correctly.'
-      },
-      blocks: [
-        {
-          type: 'fields',
-          items: [
-            { label: L.type, value: V.otherCat4 },
-            {
-              label: L.what,
-              value: {
-                zh: '质粒构建完成后的双酶切验证记录，骨架 7939 bp，插入片段 2063 bp，均与理论值一致。',
-                en: 'The double-digestion verification record after construction, with a 7939 bp backbone and a 2063 bp insert, both matching the expected sizes.'
-              }
-            },
-            {
-              label: L.why,
-              value: {
-                zh: '后续队伍构建或索取同一质粒时，可用这组条带大小确认质粒是否正确。',
-                en: 'Teams constructing or requesting the same plasmid can use these band sizes to confirm it is correct.'
-              }
-            },
-            {
-              label: L.how,
-              value: {
-                zh: '按 T3 的条件做双酶切，将条带与本节记录比对。【待核：酶切图谱文件位置】',
-                en: 'Digest under the conditions in T3 and compare the bands with the record here. 【To verify: location of the digestion map file】'
-              }
-            },
-            {
-              label: L.get,
-              value: {
-                zh: '【待补：凝胶原图与酶切图谱文件】。',
-                en: '【To obtain: original gel image and digestion map file】.'
-              }
-            },
-            {
-              label: L.evidence,
-              value: {
-                zh: '骨架与插入片段大小与理论值一致。【待补：凝胶原图】',
-                en: 'The backbone and insert sizes match the expected values. 【To obtain: original gel image】'
-              }
-            },
-            { label: L.attribution, value: { zh: '本队实验记录。', en: 'This team experimental record.' } },
-            { label: L.progress, value: { zh: '已完成', en: 'Complete' } },
-            { label: L.fact, value: V.secondary },
-            { label: L.verify, value: V.toVerifyPerson }
-          ]
-        }
-      ]
-    },
-
-    // ============ 获取与许可 ============
-    {
-      id: 'access-license',
-      title: { zh: '获取与许可（Access &amp; License）', en: 'Access and License' },
-      summary: {
-        zh: '汇总本页各成果的获取入口与许可说明，未确定的入口先留占位符。',
-        en: 'Access points and licensing for everything on this page. Undecided access points are left as placeholders.'
-      },
-      blocks: [
-        {
           type: 'ul',
           items: [
             {
-              label: { zh: '部件', en: 'Parts' },
+              label: { zh: '底盘改造设计', en: 'Chassis engineering design' },
               text: {
-                zh: '【待填：Registry 部件编号与链接】。登记完成后在此更新。',
-                en: '【To fill: Registry part numbers and links】. This will be updated once registration is complete.'
+                zh: '围绕降低背景、释放生长、放大信号三条主线，确定了 STE2、FAR1、Sst2 三个敲除靶点，以及 Gpa1 C 端 KIGII 换成 EYNLV 这一接口改造位点。四者的取舍理由与预期效果已整理成一份设计说明，供后续队伍判断哪些改动与自身目标相关。以上均为设计意图，改造尚未完成，也未验证相应的性能变化。',
+                en: 'Following the three aims of cutting background, releasing growth and amplifying signal, this settles on STE2, FAR1 and Sst2 as knockout targets, and the Gpa1 C-terminal change from KIGII to EYNLV as the interface edit. The reasoning behind each of the four choices and what it should achieve are written up, so later teams can judge which changes fit their own goal. All of it is design intent: the engineering is unfinished and no change in performance has been verified.'
               }
             },
             {
-              label: { zh: '协议与记录', en: 'Protocols and records' },
-              text: { zh: '【待补：下载或查阅入口】。', en: '【To obtain: download or view access】.' }
-            },
-            {
-              label: { zh: '菌株', en: 'Strains' },
-              text: { zh: '【待补：获取条件与保藏方式】。', en: '【To obtain: access conditions and deposit method】.' }
-            },
-            {
-              label: { zh: '许可', en: 'License' },
-              text: { zh: '【待填：本页及相关资源的 License】。', en: '【To fill: licence for this page and related resources】.' }
-            },
-            {
-              label: { zh: '第三方序列', en: 'Third-party sequences' },
+              label: { zh: '通路建模与剂量反应模拟', en: 'Pathway modelling and dose-response simulation' },
               text: {
-                zh: 'MT1、anti-H1N1_HA 纳米抗体与 TEVcs 为第三方来源，公开提交前需确认授权，【待核：授权状态】。',
-                en: 'MT1, the anti-H1N1_HA nanobody and TEVcs come from third parties; permission must be confirmed before public submission, 【To verify: permission status】.'
+                zh: '计划对 G 蛋白信号通路做数学建模，并对抗原抗体结合的剂量反应关系进行模拟，用来给预期读数一个量级判断。此项仍在规划阶段，暂无成型内容。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Planned work covers mathematical modelling of the G-protein signalling pathway and simulation of the antigen-antibody dose-response, to put an order of magnitude on the expected readout. This is still at planning stage with nothing formed yet. <span class="status-badge status-badge--add">To add</span>'
+              }
+            },
+            {
+              label: { zh: '当前状态', en: 'Current state' },
+              text: {
+                zh: '设计方案已定，建模待开展，整体状态为待定。',
+                en: 'Design settled, modelling pending; status overall: Pending.'
               }
             }
           ]
@@ -1472,49 +1375,51 @@ module.exports = {
       ]
     },
 
-    // ============ 归属与致谢 ============
+    // ---- 人类实践（系统性总结）----
     {
-      id: 'attribution',
-      title: { zh: '归属与致谢（Attribution）', en: 'Attribution' },
+      id: 'other-hp',
+      title: { zh: '3b. 人类实践', en: '3b. Human Practices' },
       summary: {
-        zh: '说明本页各成果的来源归属与致谢对象，区分本队原创与第三方来源。',
-        en: 'Sources, attribution and acknowledgements for everything here, separating this team own work from third-party material.'
+        zh: '人类实践部分只做整体交代：围绕什么场景展开、面向哪些人、目前推进到哪一步。',
+        en: 'The Human Practices part is described as a whole: which setting it starts from, who it is aimed at, and where it stands.'
       },
       blocks: [
+        {
+          type: 'p',
+          text: {
+            zh: '人类实践围绕流感检测的落地场景展开，目的是让这枚酵母传感器的设计不只在实验室成立，也能对应真实的使用环境与使用者。',
+            en: 'This line of work starts from where influenza testing actually takes place, so a sensor designed at the bench also holds up in the settings and for the people meant to use it.'
+          }
+        },
         {
           type: 'ul',
           items: [
             {
-              label: { zh: '本队完成', en: 'Done by this team' },
+              label: { zh: '调研与访谈', en: 'Survey and interviews' },
               text: {
-                zh: 'PAGER 融合蛋白的序列组合与合成、Gpa1 人源化位点的选择、三个靶点的 sgRNA 设计；以上归属栏均标注【待核】的部分有待与原始记录核对。',
-                en: 'Assembling and synthesising the PAGER fusion protein sequence, choosing the Gpa1 humanisation site, and designing the sgRNAs for the three targets. Items marked 【To verify】 in the attribution fields still need checking against the original records.'
+                zh: '计划开展流感相关调研与基层医护人员访谈，用真实场景反馈校正产品形态假设。此项仍在推进，暂无成型成果。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Planned surveys on influenza and interviews with frontline medical staff, using accounts from real settings to correct assumptions about product form. Still underway with nothing formed yet. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
-              label: { zh: '第三方来源', en: 'Third-party material' },
+              label: { zh: '科普与社区参与', en: 'Outreach and community engagement' },
               text: {
-                zh: 'MT1、anti-H1N1_HA 纳米抗体、TEVcs 与 hM1Dq 为第三方序列，来源文献与授权状态【待核】。',
-                en: 'MT1, the anti-H1N1_HA nanobody, TEVcs and hM1Dq are third-party sequences; source references and permission status 【To verify】.'
+                zh: '计划开展面向公众的合成生物学相关科普活动。具体内容与产出随活动推进补充。<span class="status-badge status-badge--add">待补充</span>',
+                en: 'Planned public-facing outreach on synthetic biology. Particulars and outputs are added as activities proceed. <span class="status-badge status-badge--add">To add</span>'
               }
             },
             {
-              label: { zh: '公开资源与工具', en: 'Public resources and tools' },
+              label: { zh: '当前状态', en: 'Current state' },
               text: {
-                zh: '【待补：本项目使用到的公开协议、软件或数据库及其出处】。',
-                en: '【To obtain: public protocols, software or databases used in this project and their sources】.'
-              }
-            },
-            {
-              label: { zh: '联系与获取', en: 'Contact and access' },
-              text: {
-                zh: '【待补：团队联系人、资源索取方式】。',
-                en: '【To obtain: team contact and how to request materials】.'
+                zh: '待补充。',
+                en: 'To add.'
               }
             }
           ]
         }
       ]
-    }
+    },
+
+    // ============ 归其他贡献结束 ============
   ]
 };

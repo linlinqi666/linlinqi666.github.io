@@ -16,12 +16,12 @@
 
     // 1) 6 组数据（图片路径与文案）——之后替换真实照片只改这里
     var dataList = [
-      { img: "../static/image/HP/tsinghua/1.webp" },
-      { img: "../static/image/HP/tsinghua/2.webp" },
-      { img: "../static/image/HP/tsinghua/3.webp" },
-      { img: "../static/image/HP/tsinghua/4.webp" },
-      { img: "../static/image/HP/tsinghua/5.webp" },
-      { img: "../static/image/HP/tsinghua/6.webp" }
+      { img: "https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/1.webp" },
+      { img: "https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/2.webp" },
+      { img: "https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/3.webp" },
+      { img: "https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/4.webp" },
+      { img: "https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/5.webp" },
+      { img: "https://static.igem.wiki/2026/szpu-china/image/HP/tsinghua/6.webp" }
     ];
 
     // 2) 清空旧卡片（保留虚线轨道 div），用 dataList 动态生成，避免手写遗漏

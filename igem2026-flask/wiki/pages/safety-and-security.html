@@ -1,12 +1,11 @@
 {% extends "layout.html" %}
 {% block title %}Safety and Security{% endblock %}
 {% block styles %}
-{# safety-and-security 页面使用 description-container / description-sidebar 类，定义在 description.css；
-   原 safety.css 不存在（404），此处修正。 #}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/description.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contribution.css') }}">
 {% endblock %}
 {% block page_content %}
-<div class="page-content">
+
+    
 <div class="description-container">
 
       <!-- 左侧导航栏 -->
@@ -220,5 +219,7 @@
         </div>
       </div>
     </div>
-</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
 {% endblock %}

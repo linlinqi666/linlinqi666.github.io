@@ -1,0 +1,164 @@
+/* ==========================================================================
+   page-loader.css — 全站页级加载遮罩（根站）
+   米黄/暖棕设计系统；6 帧雪碧图逐帧伪动画 + 纯 CSS 兜底
+   说明：遮罩默认 display:none，仅当 <head> 内同步脚本 page-loader-arm.js
+        给 <html> 打上 .page-loader-armed 后才启用 —— JS 禁用 / 脚本 404
+        时页面完全不受影响（不会永久遮挡）。
+   ========================================================================== */
+
+:root {
+  --pl-bg: #FFF8E7;      /* 米黄主色（与 --color-beige 同值） */
+  --pl-bg-2: #FCE7CB;    /* 次米黄（页面背景） */
+  --pl-line: #8B5A2B;    /* 暖棕 */
+  --pl-dark: #5D3A1A;    /* 深棕 */
+  --pl-soft: #D4A574;    /* 浅棕 */
+  --pl-frame: 240px;     /* 单帧显示尺寸 */
+  --pl-duration: 1.2s;   /* 一轮 6 帧时长 */
+  --pl-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 遮罩默认不显示 */
+.page-loader { display: none; }
+
+html.page-loader-armed,
+html.page-loader-done { background-color: var(--pl-bg); }
+
+/* arm 期间隐藏原生内容，避免半成品闪烁；用 visibility 保持布局稳定不抖动 */
+html.page-loader-armed body > :not(.page-loader) { visibility: hidden; }
+
+/* arm 期间锁定滚动 */
+html.page-loader-armed { overflow: hidden; }
+
+html.page-loader-armed .page-loader,
+html.page-loader-done .page-loader { display: flex; }
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100003;               /* 高于导航(9999) 与首页 GIF 开场层(100002) */
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(120% 90% at 50% 42%, var(--pl-bg-2) 0%, var(--pl-bg) 62%);
+  opacity: 1;
+  transition: opacity 0.34s var(--pl-ease);
+}
+
+/* 收尾：淡出 + 让出交互，随后由 JS 移除 done 类彻底隐藏 */
+html.page-loader-done .page-loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.34s var(--pl-ease), visibility 0s linear 0.36s;
+}
+
+.page-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 24px
+           calc(24px + env(safe-area-inset-bottom, 0px));
+}
+
+.page-loader__stage {
+  position: relative;
+  width: var(--pl-frame);
+  height: var(--pl-frame);
+  display: grid;
+  place-items: center;
+}
+
+/* 柔和光晕，增加纵深（纯 CSS，无额外请求） */
+.page-loader__halo {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+              rgba(212, 165, 116, 0.30) 0%, rgba(212, 165, 116, 0) 68%);
+  animation: page-loader-halo 2.4s var(--pl-ease) infinite;
+}
+
+/* 6 帧雪碧图逐帧伪动画 */
+.page-loader__frames {
+  width: var(--pl-frame);
+  height: var(--pl-frame);
+  background-image: url("../../image/loader/loader-sprite@2x.webp");
+  background-size: calc(var(--pl-frame) * 6) var(--pl-frame);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  opacity: 0;
+  transition: opacity 0.24s var(--pl-ease);
+  animation: page-loader-frames var(--pl-duration) steps(6) infinite;
+}
+
+.page-loader--sprite-ready .page-loader__frames { opacity: 1; }
+
+/* 纯 CSS 兜底：雪碧图未就绪（预览期无图 / 加载失败）时显示的呼吸三点 */
+.page-loader__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity 0.24s var(--pl-ease);
+}
+
+.page-loader--sprite-ready .page-loader__fallback { opacity: 0; }
+
+.page-loader__fallback i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pl-soft);
+  animation: page-loader-dot 1.05s ease-in-out infinite;
+}
+
+.page-loader__fallback i:nth-child(2) { animation-delay: 0.16s; }
+.page-loader__fallback i:nth-child(3) { animation-delay: 0.32s; }
+
+.page-loader__text {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pl-line);
+  opacity: 0.6;
+  animation: page-loader-fade 1.6s var(--pl-ease) infinite alternate;
+}
+
+@keyframes page-loader-frames {
+  from { background-position: 0 0; }
+  to   { background-position: calc(var(--pl-frame) * -6) 0; }
+}
+
+@keyframes page-loader-halo {
+  0%, 100% { transform: scale(0.94); opacity: 0.72; }
+  50%      { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes page-loader-dot {
+  0%, 100% { transform: translateY(0);    opacity: 0.45; }
+  50%      { transform: translateY(-7px); opacity: 1; }
+}
+
+@keyframes page-loader-fade {
+  from { opacity: 0.36; }
+  to   { opacity: 0.72; }
+}
+
+/* 移动端等比缩小 */
+@media (max-width: 640px) {
+  :root { --pl-frame: 184px; }
+  .page-loader__inner { gap: 14px; }
+}
+
+/* 无障碍：尊重减弱动效偏好（定格首帧，去掉一切循环动画与过渡） */
+@media (prefers-reduced-motion: reduce) {
+  .page-loader__frames { animation: none; }
+  .page-loader__halo,
+  .page-loader__fallback i,
+  .page-loader__text { animation: none; }
+  .page-loader,
+  html.page-loader-done .page-loader { transition: none; }
+}

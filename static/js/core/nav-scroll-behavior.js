@@ -60,6 +60,18 @@
     DEBUG: false
   };
 
+  // ===== 站内锚点跳转锁配置 =====
+  // 背景：点击站内 <a href="#xxx"> 会产生一次向下滚动，若不加干预，
+  //       导航栏的"下滚收起"逻辑会把导航收起，导致(a)跳转瞬间导航消失、
+  //       (b)锚点落点与 scroll-padding 计算基准不一致。
+  // 方案：识别站内锚点跳转 → 期间锁定导航栏为可见 → 滚动落位静止后解锁。
+  const ANCHOR_LOCK = {
+    // 跳转后滚动静止多久视为"已落位"（ms）
+    SETTLE_MS: 180,
+    // 最长锁定时长（ms），兜底防止异常情况下永久锁定
+    MAX_MS: 2500
+  };
+
   // 可通过 URL 参数 ?debug=1 临时开启调试
   if (/[?&]debug=1/.test(window.location.search)) {
     CONFIG.DEBUG = true;
@@ -76,7 +88,11 @@
     scrollElement: null,      // 实际滚动容器
     isWindowScroll: true,     // 是否为 window 滚动
     scrollHandler: null,      // scroll 事件 handler 引用
-    resizeHandler: null       // resize 事件 handler 引用
+    resizeHandler: null,      // resize 事件 handler 引用
+    anchorLockActive: false,  // 站内锚点跳转锁是否生效
+    anchorSettleTimer: null,  // 落位静默判定计时器
+    anchorMaxTimer: null,     // 最长锁定兜底计时器
+    anchorClickHandler: null  // 锚点点击委托 handler 引用
   };
 
   // ===== 事件监听选项（根据浏览器 passive 支持能力构建一次） =====
@@ -124,6 +140,17 @@
     state.rafId = raf(function () {
       try {
         const currentScrollY = getScrollY();
+
+        // 站内锚点跳转期间：保持导航栏可见，跳过收起/弹出判定，
+        // 直到滚动静止（见 beginAnchorLock/endAnchorLock）。
+        if (state.anchorLockActive) {
+          if (!state.isNavVisible) showNav();
+          state.lastScrollY = currentScrollY;
+          if (state.anchorSettleTimer) clearTimeout(state.anchorSettleTimer);
+          state.anchorSettleTimer = setTimeout(endAnchorLock, ANCHOR_LOCK.SETTLE_MS);
+          return;
+        }
+
         const scrollDelta = currentScrollY - state.lastScrollY;
 
         if (Math.abs(scrollDelta) > 10) {
@@ -154,6 +181,67 @@
         state.ticking = false;
       }
     });
+  }
+
+  /**
+   * 判断一个链接是否指向当前页面内的锚点。
+   *
+   * 命中两种形式：
+   * - 纯哈希 "#section"
+   * - 同页面路径 + 哈希 "/contribution.html#section"
+   *
+   * @param {HTMLAnchorElement} link 候选链接
+   * @returns {boolean} 是否为站内锚点跳转
+   */
+  function isSamePageAnchor(link) {
+    if (!link || !link.getAttribute) return false;
+    const href = link.getAttribute('href');
+    if (!href || href.indexOf('#') === -1) return false;
+    try {
+      const url = new URL(href, window.location.href);
+      // hash 非空且 pathname 与当前页一致 → 同页锚点
+      return !!url.hash && url.pathname === window.location.pathname;
+    } catch (e) {
+      // URL 解析失败时退化为"纯哈希"判断
+      return href.charAt(0) === '#';
+    }
+  }
+
+  /**
+   * 解除锚点跳转锁，恢复常规滚动收起/弹出行为。
+   * 解除时同步 lastScrollY 基准，避免立刻被判定为大幅滚动而误收起。
+   */
+  function endAnchorLock() {
+    if (!state.anchorLockActive) return;
+    if (state.anchorSettleTimer) clearTimeout(state.anchorSettleTimer);
+    if (state.anchorMaxTimer) clearTimeout(state.anchorMaxTimer);
+    state.anchorSettleTimer = null;
+    state.anchorMaxTimer = null;
+    state.anchorLockActive = false;
+    state.lastScrollY = getScrollY();
+    log('log', '锚点跳转锁已解除，导航栏恢复常规滚动行为');
+  }
+
+  /**
+   * 开始锚点跳转锁：强制显示导航栏并在跳转期间维持可见。
+   */
+  function beginAnchorLock() {
+    const wasActive = state.anchorLockActive;
+    state.anchorLockActive = true;
+    // 跳转期间不允许收起
+    showNav();
+
+    if (state.anchorSettleTimer) clearTimeout(state.anchorSettleTimer);
+    // 滚动静止 SETTLE_MS 后判定落位并解锁
+    state.anchorSettleTimer = setTimeout(endAnchorLock, ANCHOR_LOCK.SETTLE_MS);
+
+    if (!state.anchorMaxTimer) {
+      state.anchorMaxTimer = setTimeout(endAnchorLock, ANCHOR_LOCK.MAX_MS);
+    }
+
+    if (!wasActive) {
+      log('log', '检测到站内锚点跳转，锁定导航栏为可见');
+    }
   }
 
   /**
@@ -229,6 +317,21 @@
     // 绑定窗口大小变化事件
     window.addEventListener('resize', state.resizeHandler, EVENT_LISTENER_OPTIONS);
 
+    // 全局委托：识别站内锚点点击（#xxx / 同页路径#xxx），跳转期间锁定导航栏为可见。
+    // 使用 capture=true 以便在其它处理逻辑之前介入；仅判断是否为同页锚点，不阻止跳转。
+    state.anchorClickHandler = function (event) {
+      const link = event.target && event.target.closest
+        ? event.target.closest('a[href]')
+        : null;
+      if (!link) return;
+      if (link.target && link.target !== '_self') return; // 新窗口打开不干预
+      if (isSamePageAnchor(link)) beginAnchorLock();
+    };
+    document.addEventListener('click', state.anchorClickHandler, true);
+
+    // hashchange 兜底：通过地址栏改 hash 或直接访问含 hash 的 URL 时同样锁定
+    window.addEventListener('hashchange', beginAnchorLock);
+
     log('log', '初始化完成', {
       threshold: CONFIG.SCROLL_THRESHOLD,
       topThreshold: CONFIG.TOP_THRESHOLD,
@@ -283,9 +386,19 @@
     if (state.resizeHandler) {
       window.removeEventListener('resize', state.resizeHandler, EVENT_LISTENER_OPTIONS);
     }
+    if (state.anchorClickHandler) {
+      document.removeEventListener('click', state.anchorClickHandler, true);
+    }
+    window.removeEventListener('hashchange', beginAnchorLock);
+    if (state.anchorSettleTimer) clearTimeout(state.anchorSettleTimer);
+    if (state.anchorMaxTimer) clearTimeout(state.anchorMaxTimer);
 
     state.scrollHandler = null;
     state.resizeHandler = null;
+    state.anchorClickHandler = null;
+    state.anchorSettleTimer = null;
+    state.anchorMaxTimer = null;
+    state.anchorLockActive = false;
     state.scrollElement = null;
     state.navElement = null;
     state.ticking = false;
