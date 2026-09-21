@@ -160,8 +160,8 @@
         photoPosition: 'center top',
         photoSize: '30% auto',
         images: {
-          photo: { candidates: ['../static/image/character/webp/zlj-cream.webp', '../static/image/character/webp/zlj.webp'] },
-          avatar: { candidates: ['../static/image/character/webp/zlj.webp'] }
+          photo: { candidates: ['../../image/any-icon/character/webp/zlj-cream.webp', '../../image/any-icon/character/webp/zlj.webp'] },
+          avatar: { candidates: ['../../image/any-icon/character/webp/zlj.webp'] }
         }
       },
       {
@@ -172,7 +172,7 @@
         bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
         photoPosition: '72% top',
         photoSize: '72% auto',
-        images: { avatar: { candidates: ['../static/image/character/webp/tyj.webp'] } }
+        images: { avatar: { candidates: ['../../image/any-icon/character/webp/tyj.webp'] } }
       },
       {
         id: 'lrx',
@@ -252,16 +252,16 @@
 
     const IMAGE_PATH_TEMPLATES = {
       photo: {
-        template: '../static/image/character/webp/${id}.webp',
+        template: '../static/image/any-icon/character/webp/${id}.webp',
         ext: 'webp',
-        candidates: ['../static/image/character/webp/${id}.webp'],
+        candidates: ['../static/image/any-icon/character/webp/${id}.webp'],
         wildcardExtensions: ['webp', 'jpg', 'png']
       },
       avatar: {
-        template: '../static/image/character/webp/${id}_kt.webp',
+        template: '../static/image/any-icon/character/webp/${id}_kt.webp',
         ext: 'webp',
         // 前三项为 _kt 卡通头像；后三项让没有 _kt 素材的成员（PI、部分新成员）回退到本人照片。
-        candidates: ['../static/image/character/webp/${id}_kt.webp', '../static/image/character/webp/${id}.webp'],
+        candidates: ['../static/image/any-icon/character/webp/${id}_kt.webp', '../static/image/any-icon/character/webp/${id}.webp'],
         wildcardExtensions: ['webp', 'jpg', 'png']
       }
     };

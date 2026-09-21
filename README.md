@@ -360,12 +360,11 @@ node static/js/core/search-index-generator.js
 
 ### 5.13 首页 GIF 开场动画（index.njk 模块 0 + index-intro-gif.css / index-intro-gif.js）
 
-首页进入时先播放一段占满第一屏的 GIF 开场动画，**两张 GIF 依次播完后导航栏才出现**。
+首页进入时先播放一段占满第一屏的 GIF 开场动画，**单张 GIF 播完后导航栏才出现**。
 
 | 素材 | 尺寸 | 单轮时长 | 顺序 |
 |---|---|---|---|
-| `static/image/Animation/index/overlook.GIF` | 712×400 | 9.3s | 第 1 段 |
-| `static/image/Animation/index/up.GIF` | 712×400 | 8.5s | 第 2 段 |
+| `static/image/Animation/index/boot animation.GIF` | 1920×1080 | 9.2s | 第 1 段 |
 
 **状态机（全部由 `<html>` 上的类驱动）：**
 
@@ -380,10 +379,10 @@ node static/js/core/search-index-generator.js
 
 - **同步 arm 脚本必须留在 `<head>`**：它需要在 `<body>` 渲染前完成导航栏隐藏，否则导航栏会先闪现再消失。
 - **触发条件（2026-09-09 调整）**：arm 脚本仅在 `document.referrer` 为**站外**或**空（直接访问 / 书签 / 新标签）**时才给 `<html>` 打 `intro-gif-armed`；**站内跳转**（从本站其它页面点回首页，referrer 与本站同源）不重复播放开场动画，导航栏与滚动保持原样。这样避免了每进入一次首页都重播的问题。
-- 两张 GIF 均为**无限循环**，没有"播放结束"事件可监听，因此时长由 `data-duration` 显式声明；更换素材时必须同步改这两个值。
+- 该 GIF 为**无限循环**，没有"播放结束"事件可监听，因此时长由 `data-duration` 显式声明；更换素材时必须同步改这个值。
 - 覆盖层 `position:fixed` + `object-fit:cover` 占满视口；素材仅 712×400，全屏会放大，如需更清晰须重新导出高分辨率素材（或转 WebP/视频）。
 - 下一帧用 `new Image()` 预取进 HTTP 缓存，切帧时才把 `src` 赋给 `<img>`，保证从第 1 帧起播，同时不与当前帧争抢带宽。
-- **降级红线（不可回退）**：JS 禁用、`prefers-reduced-motion: reduce`、组件脚本 404、单帧下载超 20s，任一情况都必须让导航栏正常显示；`<head>` 内另设 6s 看门狗兜底。末帧（第二段 GIF）若加载/解码失败，不再提前结束整段动画，而是由"各帧时长之和"的总时长兜底收尾，继续展示上一帧直到导航栏淡入，避免"播一半就消失"（超大 GIF 在浏览器/部署环境下较易加载失败）。
+- **降级红线（不可回退）**：JS 禁用、`prefers-reduced-motion: reduce`、组件脚本 404、单帧下载超 20s，任一情况都必须让导航栏正常显示；`<head>` 内另设 6s 看门狗兜底。末帧若加载/解码失败，不再提前结束整段动画，而是由"各帧时长之和"的总时长兜底收尾，继续展示上一帧直到导航栏淡入，避免"播一半就消失"（超大 GIF 在浏览器/部署环境下较易加载失败）。
 - 用户可随时点击「跳过动画」或按 `Esc` 立即收尾；该按钮为无边框、无背景的纯文字按钮，直接压在 GIF 画面上。
 - 组件 CSS 经 `head-extra/index.njk` 在 `mobile.css` 之后加载，保证响应式覆盖顺序（第八.1）。
 
@@ -400,9 +399,9 @@ node static/js/core/search-index-generator.js
 
 **约定：**
 - 每个模块一张 `content-card` 作导语（Objective + Protocol 索引），模块内每个 Protocol 一张独立 `content-card`，卡片 id 为 `#p{m}-{n}`。
-- Protocol 卡片的统一小标题顺序：`Objective → Principle（可选）→ Design → Materials → Protocol → Key Parameters → Data Analysis → Notes → Expected Results → Progress Status`，末尾附 `<!-- iGEM Check: … -->` 自检注释（不渲染）。
+- Protocol 卡片的统一小标题顺序：`Objective → Principle（可选）→ Design → Materials → Protocol → Key Parameters → Data Analysis → Notes → Expected Results`，末尾附 `<!-- iGEM Check: … -->` 自检注释（不渲染）。原第 10 节 `Progress Status` 小节与"官方要求项对照表"已按第八.20 规则全部注释化，**不得恢复渲染**（2026-09-16）。
 - **同类步骤必须汇总**：模块二把 6 份方案中重复的"菌种活化 + OD600 校准"提取为模块级"通用前处理"，各 Protocol 只写特有步骤并引用它；两种菌落 PCR 裂解法（高温 / NaOH）合并为同一 Protocol 下的方法 A / B。新增方案时先判断是否可并入既有 Protocol，不要一味新增卡片。
-- 侧边栏 TOC 为两级：`<li class="level1">`（模块 + 公共区块）内嵌 `<ul class="level2"><li class="level3">`（Protocol）；现有一级 9 项、二级 10 项，新增卡片须同步追加，否则 TOC 与锚点脱节。
+- 侧边栏 TOC 为两级：`<li class="level1">`（模块 + 公共区块）内嵌 `<ul class="level2"><li class="level3">`（Protocol）；现有“实验进度汇总”一级项已按第八.20 规则注释化（一级现为 8 项、二级 10 项），新增卡片须同步追加，否则 TOC 与锚点脱节。
 - 参数表格沿用页面既有的内联写法（与既有表格视觉一致），新增表格须保持同一套 `border/padding` 写法。
 
 > 注意：`.gitignore` 的 `*.md` 规则会连带忽略 `static/expriments/` 下的方案文档与页面模板；如需入库，须追加 `!static/expriments/**/*.md` 例外（同 11.2 的既有做法）。
@@ -547,6 +546,8 @@ node static/js/core/search-index-generator.js
 16. **`wet-lab/notebook.html` 滚动高亮缓存偏移（2026-08-07）：** 该页内联 `updateNavHighlight` 原每 100ms（本地 `throttle`）对全部 `section` 调用 `getBoundingClientRect()` 计算可见比例，与 sidebar-progress 旧 bug 同类——**每帧强制同步布局**，为 log 页滚动卡顿的主因。已改为在 `init`（`buildSectionOffsets`）+ `resize`（防抖）+ `load` 时一次性缓存各 section 绝对偏移（`rect.top + scrollY`），滚动期仅用 `window.scrollY + innerHeight*0.3` 探针与缓存偏移做数值比较后切换 `.active` 类，彻底消除每帧 `getBoundingClientRect`。视觉/高亮行为不变。`sections`/`navItems` 与本地 `throttle` 均保留。
 17. **igem2026-flask 工程 JS 性能优化已同步（2026-09-02）：** 根站 JS 性能优化已同步至 `igem2026-flask/`，两工程 JS 实现保持对齐——搜索索引 `search-index.json` + 同源 `fetch()` 按需加载与 DOM API 安全渲染、`utils.prefersReducedMotion()` 及 executive-summary 动效降载、`sidebar-progress.js` / `attributions.js` 精简测试死代码、HP 地图同省专家聚类图钉（`.hz-cluster`）减少 DOM 图钉数量。flask 侧搜索索引由 `flask freeze` 后运行 `static/js/core/search-index-generator.js` 扫描 `public/*.html` 平铺结构生成，与根站扫描根目录页面同构不同源；联动说明见 `igem2026-flask/README.md` 的 "Performance & JS optimization" 一节。
 
+⚠️ **18. 进度与状态内容渲染警告（2026-09-16，最高优先级警示）：** 实验页（`experiments`）与贡献页（`contribution`）中所有**进度状态显示**（Progress Status 小节、"实验进度汇总"卡片及侧边栏入口、✅/🔄/⏳ 状态标记、`status-badge` 徽章、"每条都带状态标记"说明段、进度/factStatus/核验 字段）与所有**"官方要求项 → 本实验的落实方式"对照表**，一律**不得渲染在页面上**——它们只能存在于源码注释、`对话归档/` 计划文档，或本 README 警告区。当前这些内容已全部以注释形式保留在 `src/wet-lab/experiments.njk`、`src/_data/contribution.js` 中；**任何后续修改不得把它们重新改为渲染内容**。没有资料的条目直接留空（空表格单元格 / 空字段），不要再补"待补充"类占位徽章。页面侧边栏的"发酵进度"烧瓶是全站通用阅读进度组件，不属于本条约束范围。
+
 ---
 
 ## 八、未来开发约束规则（必须遵循）
@@ -573,6 +574,7 @@ node static/js/core/search-index-generator.js
 17. **大体积数据脚本不得阻塞首屏：** 索引/数据类脚本（如 `search-index.json`）一律按需懒加载（同源 `fetch()`），禁止在 `<head>` 内同步加载（见十四.3）。
 18. **谨慎使用高成本 CSS：** `backdrop-filter`、`filter:blur`、`position:fixed` 全屏层、过多/过大 `box-shadow` 会显著增加绘制与合成开销；`will-change` 仅作临时提升并尽快释放，不要永久堆在大量元素上；无限 `@keyframes` 动画须离屏暂停（`IntersectionObserver` 设 `animation-play-state:paused`）或尊重 `prefers-reduced-motion`。
 19. **性能预算：** 单页并存独立 `scroll` 监听不超过必要数量；新增持续动画前先评估其合成/绘制成本，长页面尤甚。
+20. **进度/状态与官方对照内容一律不渲染（2026-09-16，最高优先级）：** 页面上不得出现任何实验进度状态（Progress Status、进度汇总表、✅/🔄/⏳、status-badge 徽章、"已完成/进行中/待进行"类字样）与"官方要求项 → 落实方式"对照表（iGEM Check 自检内容）。此类信息只允许三种去处：① 源码 HTML/JS 注释；② `对话归档/` 计划文档；③ 本 README 第七.18 警告区。实验页与贡献页已按此清理，后续新增内容必须遵守；对外页面没有资料的条目直接留空。
 
 ---
 

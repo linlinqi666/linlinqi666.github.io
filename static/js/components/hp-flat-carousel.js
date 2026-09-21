@@ -2,10 +2,10 @@
   'use strict';
 
   var articleDefinitions = [
-    { id: 'section-overview', time: '', title: '项目概述', img: '../static/image/any-icon/home.webp', summary: '了解项目背景、目标，以及团队如何把人类实践反馈转化为工程设计。' },
-    { id: 'section-carousel', time: '26/07/31', title: '清华参赛交流', img: '../static/image/HP/tsinghua/1.jpg', summary: '与其他 iGEM 团队交流项目思路、实验经验和后续合作方向。' },
-    { id: 'section-southchina', time: '26/08/01', title: '华南交流会', img: '../static/image/HP/southchina/SZU.jpg', summary: '围绕真实应用需求，收集来自高校与产业伙伴的反馈。' },
-    { id: 'section-education', time: '26/08/03', title: '中学生科普', img: '../static/image/HP/school1.jpg', summary: '把合成生物学知识带进校园，让更多学生理解生物传感器的价值。' }
+    { id: 'section-overview', time: '', title: '项目概述', img: '../../image/any-icon/home.webp', summary: '了解项目背景、目标，以及团队如何把人类实践反馈转化为工程设计。' },
+    { id: 'section-carousel', time: '26/07/31', title: '清华参赛交流', img: '../../image/any-icon/HP/tsinghua/1.jpg', summary: '与其他 iGEM 团队交流项目思路、实验经验和后续合作方向。' },
+    { id: 'section-southchina', time: '26/08/01', title: '华南交流会', img: '../../image/any-icon/HP/southchina/SZU.jpg', summary: '围绕真实应用需求，收集来自高校与产业伙伴的反馈。' },
+    { id: 'section-education', time: '26/08/03', title: '中学生科普', img: '../../image/any-icon/HP/school1.jpg', summary: '把合成生物学知识带进校园，让更多学生理解生物传感器的价值。' }
   ];
 
   function wrapIndex(value, length) {
