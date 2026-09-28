@@ -1,0 +1,25 @@
+3Dmol.js —— 自托管第三方三维分子可视化库
+=========================================
+
+来源      https://3dmol.org/build/3Dmol-min.js
+版本      3dmol v2.5.5（文件内许可头声明）
+下载日期  2026-09-27
+体积      545,215 字节
+sha256    4ab374e1830bccec…（完整哈希见 对话归档/2026-09-27-drylab-model-page/logs/2026-09-27-trim-structures.txt 同目录下载记录）
+许可      BSD-3-Clause（Copyright (c) 2014, University of Pittsburgh and contributors）
+          许可全文见同目录 LICENSE；构建产物的许可头见 3Dmol-min.js.LICENSE.txt
+
+修改情况  未做任何修改（未压缩、未裁剪、未改名），仅原样复制入库
+加载方式  dry-lab/model 页面**不默认加载**本文件：只有读者点击「载入三维结构」时，
+          才由 static/js/pages/model-game.js 动态创建 <script> 注入，避免 1 MB 级
+          资源拖慢首屏（项目规则：首屏不得同步加载非首屏资源）。
+
+为什么入库
+  站点的部署目标（含后续官方提交工程）要求完全离线可用，不得依赖外部 CDN。
+  与 static/js/pdfjs/ 的历史做法不同：pdfjs 走 iGEM 官方 CDN 故不入库，本库无同类
+  官方 CDN 可用，且三维视图是本页的核心交互之一，因此随源码入库（单文件 < 1 MB，
+  符合 README 第 17.3 节二进制体积预算）。
+
+升级方式
+  重新下载同一 URL 覆盖本文件，并同步更新本说明的版本、体积、哈希三行；
+  覆盖后必须重新跑一遍页面的三维加载自检（点击载入 → 渲染 → 切换显示模式）。

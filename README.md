@@ -66,7 +66,8 @@ SZPU-2026 wiki/
 │   ├── model.html
 │   └── software.html
 ├── wet-lab/                        # 湿实验板块
-│   ├── experiments.html
+│   ├── design.html                 # 实验设计（2026-09-26 由原 experiments.html 拆出）
+│   ├── protocol.html               # 实验方案：材料 / 配方 / 步骤 / 对照（同上拆出）
 │   ├── parts.html
 │   ├── result.html
 │   ├── safety.html
@@ -161,7 +162,8 @@ static/js/core/nav-scroll-behavior.js
 | dry-lab/hardware.html | hardware.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/model.html | model.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/software.html | software.css(空) | 是 | 是 | sidebar-progress.js |
-| wet-lab/experiments.html | experiments.css | 是 | 是 | sidebar-progress.js |
+| wet-lab/design.html | experiments.css | 是 | 是 | sidebar-progress.js |
+| wet-lab/protocol.html | experiments.css | 是 | 是 | sidebar-progress.js |
 | wet-lab/result.html | result.css(空) | 是 | 是 | sidebar-progress.js |
 | wet-lab/safety.html | — | 是 | 是 | sidebar-progress.js |
 | wet-lab/notebook.html | log.css(实) | 否 | 否 | — |
@@ -310,7 +312,7 @@ static/js/core/nav-scroll-behavior.js
 | `core/page-progress-bar.js` | 顶部加载进度条 | 单 rAF 批处理 width 写入 + trickle 定时器 + 自动隐藏 | 良好 |
 | `core/scroll-progress-bar.js` | 侧边滚动进度条 | `utils.rafThrottle` + passive + resize debounce；**`init`/`resize`/`load` 时缓存 `scrollHeight`/`clientHeight`，热路径只读 scrollY** | 已优化（原每帧读 scrollHeight/clientHeight 为重排主因之一，见十四） |
 | `core/mobile-menu.js` | 移动端汉堡菜单 | rAF 开关、body overflow 锁、debounced resize、ARIA | 良好 |
-| `components/sidebar-progress.js` | 侧边栏烧瓶进度 + TOC 高亮 | rAF 节流；**init/resize/load 时缓存各 section 绝对偏移**，滚动期仅比对 scrollY（不再每帧 `getBoundingClientRect`） | 已优化（原每帧读布局为重排主因之一，见十四）；**可识别 section 由 `sectionIdPrefixes` 白名单控制**，新增页面或新层级（如 Experiments 页 Protocol）必须把对应 `id` 前缀追加进白名单，否则 TOC 只能高亮到模块级而无法下钻到具体 Protocol。 |
+| `components/sidebar-progress.js` | 侧边栏烧瓶进度 + TOC 高亮 | rAF 节流；**init/resize/load 时缓存各 section 绝对偏移**，滚动期仅比对 scrollY（不再每帧 `getBoundingClientRect`） | 已优化（原每帧读布局为重排主因之一，见十四）；**可识别 section 由 `sectionIdPrefixes` 白名单控制**，新增页面或新层级（如 2026-09-26 拆分的 Design / Protocol 页）必须把对应 `id` 前缀追加进白名单，否则 TOC 只能高亮到模块级而无法下钻到具体模块。 |
 | `components/hp-flat-carousel.js` | HP 顶部平面轮播导航 | 从 `#detailTrack` 注册四张 `.detail-slide[data-hp-article]`，动态生成可点击文章卡片并通过 `goTo` 切换详情 | 仅 HP 页加载；使用属性选择器兼容嵌套结构，避免因首项元数据缺失导致整组卡片不初始化 |
 | `components/hp-carousel.js` | 历史 3D 圆环轮播 | 卡片径向排列 + `will-change` 提升合成层；交互透视计算合并进单个 rAF；过渡期临时提升 filter 层、结束释放 | 当前未被页面引用；恢复前须先补齐 DOM 与可访问性文本 |
 | `components/hp-reveal-box.js` | HP 下拉揭示盒 | Pointer 事件、尊重 `prefers-reduced-motion`、高度动画、debounced resize | 良好 |
@@ -386,23 +388,82 @@ node static/js/core/search-index-generator.js
 - 用户可随时点击「跳过动画」或按 `Esc` 立即收尾；该按钮为无边框、无背景的纯文字按钮，直接压在 GIF 画面上。
 - 组件 CSS 经 `head-extra/index.njk` 在 `mobile.css` 之后加载，保证响应式覆盖顺序（第八.1）。
 
-### 5.14 Experiments 页四模块结构（2026-09-06）
+### 5.14 Design / Protocol / Results / Contribution 四页结构（2026-09-22 重建，2026-09-26 拆分）
 
-`src/wet-lab/experiments.njk` 按项目 Design 页（`src/project/description.njk`）定义的**四个功能模块**组织全部湿实验，不再按"实验 1、2、3…"平铺：
+四页按 `static/expriments/The extreme/` 下三套页面资料包（`exepriment/experiments/`、`result/`、`contribution/` 的 `output/15-*内容大纲.md`）重建，内容来源为 `static/expriments/` 四个模块的一手分析。原 `wet-lab/experiments.html` 于 2026-09-26 按用户指令拆分为 `wet-lab/design.html`（实验设计）与 `wet-lab/protocol.html`（实验方案）两页：原页删除，导航（`nav.njk` 移动 + 桌面两处）、页脚（`footer.njk`）、首页页脚与 `src/_data/contribution.js` 引用同步改到新页，搜索索引 `PAGES` 同步（需求 `REQ-20260926-002`）；他队样本分析与拆分方案见 `对话归档/2026-09-26-experiments-split/`。
 
-| 模块 | 锚点 | 内容 | 对应素材目录 |
-|---|---|---|---|
-| 模块一 底盘细胞改造 | `#module-one` | Protocol 1.1 CRISPR-Cas9 三基因敲除 | `static/expriments/底盘酵母改造/` |
-| 模块二 报告体系构建 | `#module-two` | 通用前处理 + Protocol 2.1–2.5 | `static/expriments/报告体系构建/` |
-| 模块三 Gpa1-Gα 人源化 | `#module-three` | Protocol 3.1 Gpa1 C 端人源化同源重组 | `static/expriments/信号传达/` |
-| 模块四 PAGER 识别融合蛋白 | `#module-four` | 元件来源 + Protocol 4.1–4.3 | `static/expriments/信号识别模块/` |
+**Design 页**（`src/wet-lab/design.njk`）五节，承接设计层内容：
 
-**约定：**
-- 每个模块一张 `content-card` 作导语（Objective + Protocol 索引），模块内每个 Protocol 一张独立 `content-card`，卡片 id 为 `#p{m}-{n}`。
-- Protocol 卡片的统一小标题顺序：`Objective → Principle（可选）→ Design → Materials → Protocol → Key Parameters → Data Analysis → Notes → Expected Results`，末尾附 `<!-- iGEM Check: … -->` 自检注释（不渲染）。原第 10 节 `Progress Status` 小节与"官方要求项对照表"已按第八.20 规则全部注释化，**不得恢复渲染**（2026-09-16）。
-- **同类步骤必须汇总**：模块二把 6 份方案中重复的"菌种活化 + OD600 校准"提取为模块级"通用前处理"，各 Protocol 只写特有步骤并引用它；两种菌落 PCR 裂解法（高温 / NaOH）合并为同一 Protocol 下的方法 A / B。新增方案时先判断是否可并入既有 Protocol，不要一味新增卡片。
-- 侧边栏 TOC 为两级：`<li class="level1">`（模块 + 公共区块）内嵌 `<ul class="level2"><li class="level3">`（Protocol）；现有“实验进度汇总”一级项已按第八.20 规则注释化（一级现为 8 项、二级 10 项），新增卡片须同步追加，否则 TOC 与锚点脱节。
-- 参数表格沿用页面既有的内联写法（与既有表格视觉一致），新增表格须保持同一套 `border/padding` 写法。
+| 小节 | 锚点 | 内容 |
+|---|---|---|
+| 项目背景与检测目标 | `#design-overview` | 检测目标、主链四环、本页与 Protocol / Results 页的分工 |
+| 实验总体设计 | `#design-framework` | 模块依赖与技术栈、跨模块 α-factor 体系提醒 |
+| 各模块实验设计 | `#design-chassis` / `#design-pager` / `#design-gpa1` / `#design-reporter` | 底盘 / 受体 / 接口 / 报告，每模块固定三小节：设计目标 → 技术路线 → 判定与对照设计 |
+| 设计迭代与失败 | `#design-iteration` | 卡点按「现象 → 判断 → 改动 → 结果」 |
+| 结果与讨论 | `#design-discussion` | 四段合看的结论与未完成处；完整数值指向 Results 页 |
+
+**Protocol 页**（`src/wet-lab/protocol.njk`，2026-09-27 起改为按实验组原始方案文档生成）：四个模块（`#protocol-chassis` / `#protocol-pager` / `#protocol-gpa1` / `#protocol-reporter`），页内不放导语、使用说明或页间分工说明，直接进入文档内容。每个模块只收录「目的 / 实验材料 / 实验步骤」三类章节，文字照实验组逐字稿录入、不做二次改写；报告体系模块按六份原始实验方案分列。原文档的「实验结果」「数据整理 / 结果判定 / 实验预期结果」章不收录（实测结果归 Results 页）。页面配图 8 张（设计类图谱，PNG 原件复制到 `static/image/protocol/<模块>/docx-media/`）；生成脚本与逐行文本覆盖校验、图片哈希校验记录见 `对话归档/2026-09-27-protocol-from-source/`。2026-09-27 用户确认删除 6 段与 3.3.1 逐字重复的纯化步骤（生成脚本 `SKIP_RANGES` 清单，行号 + 首尾文本校验，源文档未改、可回滚）。两页共用 `experiments.css`。
+
+- 分流规则：材料 / 配方 / 步骤 / 对照与结果判定归 Protocol（直接收录实验组源文档）；设计目的与方案演进的分析归 Design；实测结果归 Results——三页不互相复制数据。新增模块须在 Design 页与 Protocol 页同时补齐对应内容。
+- 侧边栏 TOC 与页内 id 同步更新（Design 页两级：节 + 模块；Protocol 页四个模块一级项）；改锚点须同步 TOC。`sidebar-progress.js` 的 `sectionIdPrefixes` 已加入 `design-` / `protocol-` 前缀，TOC 可下钻到模块级。
+- 内部待核项（KQ- / SQ- / RC- / GC- / RS-）记录在 `static/expriments/` 语料层与各模块分析文档；Protocol 页为源文档直录，不携带此类注释。
+
+**Results 页**（`src/wet-lab/result.njk`，2026-09-26 按四份 result 源重写）六节：`#results-overview` 概览 → `#results-chassis` 底盘改造 → `#results-pager` 受体构建 → `#results-gpa1` 接口改造 → `#results-reporter` 报告体系（FUS1-yEGFP）→ `#results-discussion` 综合讨论。失败与在途不单列成页，穿插在对应模块内。2026-09-27：侧边栏 TOC 升级为两级（四个模块 level1 下各挂小节 `level3`，正文小节标题加锚点 `results-<模块>-<序号>`）；`sidebar-progress.js` 的 `sectionIdPrefixes` 已补 `results-` 前缀（否则高亮失效）；源 docx 的「目录」「在途与下一步」「原始数据清单」等元结构不进正文——目录转侧边导航，其余转模板 HTML 注释。侧边栏二级导航默认折叠，点击模块（level1）才展开其下小节（level3）；已移除 `:hover` 自动展开以避免布局抖动。正文小节由全站组件 `static/js/components/section-fold.js` 收纳条化（见 §5.14.1 / §5.14.2）：脚本运行时把 `.content-card` 内带 id 的 h3 小节包成原生 `<details class="section-fold">`（默认折叠、点击小节标题展开、侧边栏锚点命中自动展开；无 JS 时保持全展开降级），样式在全站 `static/css/components/section-fold.css`。
+
+### 5.14.1 内容页耦合组件与集合测试约束（2026-09-27）
+
+「侧边栏级联导航 + 正文收纳条」的页面存在一组**强耦合**前端组件，任一改动后必须联合验证，禁止「改 A 测 A 过、B 又瘫」式的分开测试：
+
+- 各内容页 `.njk`：小节标题锚点 `<页面前缀>-<语义>` + 侧边栏 `level2/level3` 导航；
+- `static/js/components/section-fold.js`（`base.njk` 全站加载）：把 `.content-card` 内带 id 的 h3 包成 `<details class="section-fold">` 默认折叠（点击展开、锚点命中自动展开）；
+- `static/js/components/sidebar-progress.js`：滚动高亮（视口中线判定）+ 自动展开当前模块，依赖 `sectionIdPrefixes` 含对应页面前缀；
+- `static/css/components/section-fold.css`（`head.njk` 全站加载）：收纳条样式 + 锚点 `scroll-margin-top`；
+- `static/css/navigation/navigation.css`：侧边栏 `level2` 折叠态（默认折叠、点击 level1 展开）。
+
+**耦合点（改动必触发）**：`section-fold.js` 折叠/展开会改变小节高度分布，直接破坏 `sidebar-progress.js` 的高亮区间判定；点击展开收纳条后若不复建章节偏移缓存（见 `recalculate()`），高亮会全错。二者通过 `details` 的 `toggle` 事件 → `SidebarProgress.recalculate()` 联动；加载顺序上 `section-fold.js` 先于页面级 `sidebar-progress.js`，使初始偏移即按折叠后布局计算。
+
+**任一文件改动后，必须一起验证**：① 每个小节默认折叠、内容不丢；② 侧边栏 `level3` 链接的 href 在页面存在且位于收纳条内（点击能定位并展开联动）；③ 滚动时侧边栏高亮跟随正确、点击 `level3` 跳转后自动展开并高亮对应项；④ 页面无 `<p>目录</p>` 残留、无渲染态「在途与下一步」、无重复 id。
+
+**验证命令**（不入库，位于 `对话归档/temporary-tools/`）：
+- 结构/逻辑层（jsdom，无需浏览器）：`npm i jsdom playwright --no-save && node 对话归档/temporary-tools/check-content-pages.js`
+- 几何/交互层（真实浏览器，用系统 Chrome）：`$env:CHROME_PATH='C:\Program Files\Google\Chrome\Application\chrome.exe'; node 对话归档/temporary-tools/e2e-content-pages.js`
+
+### 5.14.2 内容页统一设计规范：小节锚点 + 收纳条 + 二级导航（2026-09-27 起）
+
+凡正文分多个 `<div class="content-card">`、且侧边栏带 `level2/level3` 的页面，统一按 result 页模式设计；**新增页面零配置接入**（`section-fold.js` / `section-fold.css` 已由 `base.njk` / `head.njk` 全站加载）：
+
+1. **小节标题必须有 id**：`<h3 id="<页面前缀>-<语义>">`，前缀取页面名（`results-` / `protocol-` / `design-` / `safety-` …），且该前缀必须登记在 `sidebar-progress.js` 的 `sectionIdPrefixes`，否则滚动高亮失效；
+2. **侧边栏两级**：`li.level1`（模块，指向卡片 div 的 id）下挂 `ul.level2 > li.level3`（小节，指向 h3 的 id），默认折叠、点击 level1 展开；
+3. **收纳条自动生效**：脚本运行时把每个 `.content-card` 内带 id 的 h3 及其后内容（至下一个 h2/h3）包成 `<details>`；数据渲染、正文无 h3 的页面可改用**整卡折叠**——给卡片 div 加 `data-fold-card`，脚本把 `.content-body` 收起、卡片标题 h2 留在收纳条上，锚点仍保留在卡片 div 上供侧边栏链接使用（该形态组件已具备，当前暂无页面启用）。两种情况页面都无需再写任何 JS；
+4. **卡片级 id 与 h3 id 都保留**：滚动高亮按视口中线判定，落在卡片区间高亮 level1，落在小节区间高亮 level3；
+5. 整页关闭折叠用 `<body data-section-fold="off">`；排除个别标题用 `<h3 data-no-fold>`。
+
+**已按本规范改造**（wet-lab，2026-09-27）：`result`（22 小节）/ `safety`（7）/ `protocol`（15）/ `design`（15）。
+
+**protocol 页特别说明（2026-09-27 第三轮）**：`src/wet-lab/protocol.njk` 由生成脚本 `对话归档/2026-09-27-protocol-from-source/temporary-tools/build_protocol_njk.py` 从实验组源文档逐字生成，**锚点与两级导航已写进生成脚本**——正文 h3 为 `protocol-<模块>-purpose|materials|steps`（报告体系 6 份方案为 `protocol-reporter-plan-1..6`），侧边栏四个模块各挂对应 `level3`。维护该页须改脚本并重跑：`python build_protocol_njk.py` → 将 `generated/protocol.njk` 复制到 `src/wet-lab/protocol.njk` → `npx @11ty/eleventy` → 跑 §5.14.1 两套验证。**直接编辑 `src/wet-lab/protocol.njk` 会在下次重跑脚本时被覆盖。**
+
+**已回退（2026-09-27，用户确认改造范围仅湿实验）**：dry-lab `software` / `hardware`、project `description` / `design` / `engineering` / `contribution`、human-practices `education` 共 7 页的锚点与折叠改造已用 git 精确还原（`src/` 下对应 `.njk` 回到改造前状态），为它们新增的 `sectionIdPrefixes` 前缀（`software-` / `hardware-` / `project-` / `engineering-` / `build-` / `test-` / `learn-` / `education-` / `description-` / `biological-` / `modular-` / `innovation-` / `references` 等）已一并撤除。这 7 页恢复原状：侧边栏 `level3` 指向页面中不存在的 id（点击无反应）、滚动高亮不生效。如未来要重启这些页的改造，按本节三步 + §5.14.1 两套验证执行。
+
+**dry-lab `model` 页重新纳入（2026-09-27 重写，`REQ-20260927-001`）**：Model 页正文按干实验建模文档整体重写，同时按本规范重建锚点与两级导航——10 个小节（`model-biological-assumptions` / `model-mathematical-assumptions` / `model-data-targets` / `model-data-nanobodies` / `model-data-scoring` / `model-screening` / `model-haddock` / `model-interface` / `model-kinetics` / `model-ranking`），`sectionIdPrefixes` 已补回 `model-`，两套验证脚本的页面清单已加入 `dry-lab/model.html`（e2e target 由 `model-dose-response` 改为 `model-screening`）。页面结构与数据源见 `static/expriments/drylab/model/plan.md`（含交互演示数据源 `static/data/dry-lab/model/model-docking.json` 与按需加载的自托管三维库 `static/js/3dmol/`）。
+
+**例外与边界（2026-09-27 确认）**：
+
+- `wet-lab/notebook` 是**例外页**：正文仅 PDF 阅读器、无小节，**不做收纳条**；其侧边栏 5 项（`#wet-lab` / `#dry-lab` / `#human-practices` / `#wiki` / `#team-management`）是 **PDF 文档切换器**（清单见 `static/js/pages/log-pdf-data.js` 的 `docs`，`defaultId: 'wet-lab'`，脚本注释明确 `href="#id"` 与文档 id 一一对应、不要随意更改）。点击不跳转（`log-pdf.js` 的 `bindSidebar` 内 `preventDefault`），由 `setActiveNav()` 给当前文档链接加 `.active` + `aria-current="page"` 实现高亮。**不纳入本规范的锚点/收纳条体系，但高亮必须保持工作**（验证脚本 `对话归档/temporary-tools/check-notebook-highlight.js`）。
+- `team/attributions`（自带 `.jump-to-nav` + 独立 scrollspy）与 `human-practices/integrated human-practices`（209 KB 自定义地图结构）结构特殊，用户已确认**不在改造范围，不要改动**。
+- `index`（幻灯式全屏）、`wet-lab/parts`（模板循环 + 原生 `<details>`）、`team/members`（数据驱动）无 `description-nav`，不适用本规范。
+
+新增页面接入照旧三步：① 正文小节 h3 加 `<页面前缀>-<语义>` id（或整卡折叠时给卡片加 `data-fold-card`）② 前缀登记 `sectionIdPrefixes` ③ 侧边栏 level2/level3 指向这些 id；改完必须跑 §5.14.1 的两套验证（两套脚本的页面清单需同步加入新页）。
+
+- 数据来源为四个模块各自的 result 源 docx（语料层见各模块 `md/result-正文逐字对照/`、`md/result-图片提取/`，逐字对账与图片核验记录见 `99-result-逐字校验记录.md`；跨源冲突编号 `RS-` 见 `static/expriments/00-跨模块索引与接口.md` §六）。
+- **页面只呈现已得结果**（2026-09-26 口径）：`在途与下一步`、`原始数据` 两节不进页面；进度、待办、自我审核与跨源冲突一律写入**模板源码的 HTML 注释**（`src/wet-lab/result.njk` 页首的 `RS-` 清单，构建后保留在页面源码中、不对读者渲染），审核与结论交由实验组。
+- 页面配图 18 张，放 `static/image/result/<模块>/`，由内嵌图转 webp（≤150 KB，宽 ≤1400 px）；源图与站点图的映射表在各模块 `md/result-图片提取/02-页面用图映射.md`。新增图沿用「`<figure>` + 句首编号图注」写法，示意图须在图注注明「示意图，非实验结果」。
+
+**Contribution 页**（`src/project/contribution.njk` + `src/_data/contribution.js` 数据源）分章：概览 → 1 部件（`#contribution-parts`，4 条）→ 2 协议与方法（`#contribution-protocols`，4 条）→ 3 其他贡献（`#contribution-others`，3 条）→ 获取与许可（`#contribution-access`）→ 归属与致谢（`#contribution-attribution`）。每条贡献按三件套写：是什么、为什么对后续队伍有用、怎么拿到；卡片 id 规则为 `parts-*` / `protocol-*` / `other-*`。软件、硬件、教育三章无产出，整章不设。
+
+**各页共同约定：**
+- 表格沿用页面既有的内联写法（同一套 `border/padding`），新增表格保持一致。
+- 进度/状态与官方对照内容一律不渲染（第八.20）：资料缺口直接留空，内部待核项（KQ- / SQ- / RC- / GC-）以 HTML 注释留在源码中。
+- 设计 / 计划不写成结果：未完成的写「计划验证 / 尚未」，数据不足写清卡在哪一步。
 
 > 注意：`.gitignore` 的 `*.md` 规则会连带忽略 `static/expriments/` 下的方案文档与页面模板；如需入库，须追加 `!static/expriments/**/*.md` 例外（同 11.2 的既有做法）。
 
@@ -513,6 +574,76 @@ node static/js/core/search-index-generator.js
 | 无障碍 | 封面为 `role="dialog" aria-modal="true"`；页面内容置 `inert` + `aria-hidden`，避免 Tab 进入被遮挡区域；`prefers-reduced-motion` 下不做淡入淡出，页面唯一 `h1`（`.members-sr-only`）常驻 |
 | 移动端取景 | 竖屏改用 `object-fit: contain`（整队完整可见，不裁人头）+ 同图模糊衬底；桌面用 `cover` + `object-position: center 28%` 保证头部完整 |
 
+### 5.17 首页分屏组件拼装与「手动微调区」（2026-09-22）
+
+首页 10 个 `.yeast-screen` 板块里的插画与装饰，由 `static/image/Animation/index/webp/` 的**设计切片**在 `static/css/index.css` 的 `.art-stage--sN` 舞台上拼装而成。成品对照图（7 张，1080×608）、实测数据与全部脚本归档在 `对话归档/2026-09-22-homepage-assembly/`。
+
+#### 装配工作流（顺序不可颠倒）
+
+1. **先核对骨架**：改动落在 `index.html`（产物）与 `static/css/index.css`。调样式前先确认 `index.html` 里对应节点的类名与层级是否符合预期。
+2. **再反向回写源**：`index.html` 由 `src/index.njk` 经 Eleventy 生成，**`src/index.njk` 才是源**。骨架结构调整必须同步回 `.njk`，否则下次 `npx eleventy` 会把改动覆盖掉。
+3. **重建**：`npx eleventy`（见 §10.1）。
+4. 只改 CSS 不需要重建，但**必须免缓存预览**（见下）。
+
+#### 本地调试必须用免缓存服务（否则「改了没变化」）
+
+`python -m http.server` 不发送 `Cache-Control`，Chromium 会按启发式新鲜度直接复用缓存（本项目实测出现过 `members.css` 一小时未重新校验）。改完样式看不到变化时，第一嫌疑是缓存而不是选择器。
+
+```powershell
+python "对话归档/temporary-tools/2026-09-16-dev-server-nostore.py" 8124
+# → http://127.0.0.1:8124/
+```
+
+#### 板块 3 文字条（2026-09-22 定稿）
+
+6 条文字条按 **3 排 × 每排 2 条**摆在成品图红框内，带椭圆描边、左右边缘渐隐与无缝流动。参数集中在 `static/css/index.css` 末尾「板块 3 文字条」段（`--s3-*` 变量），**定位只有这一处**（旧的逐条 `.art--s3-pN` 绝对定位已移除）。
+
+| 参数 | 定稿值 | 作用 |
+|---|---|---|
+| `.s3-pills` inset | `left 1% / top 16.5% / width 98% / height 64%` | 红框范围 |
+| `--s3-pill-h` | `clamp(15px, 3.3vh, 34px)` | 文字条统一高度（图片按比例缩放） |
+| `--s3-pill-line` | `#4c9dd3` | 描边色，与文字同色 |
+| `--s3-pill-lw` | `2px` | 描边粗细 |
+| `--s3-pill-radius` | `999px` | 扁椭圆；写 `50%` 是数学椭圆，但两端会切到文字 |
+| `--s3-fade` | `12%` | 边缘淡化起点，到边缘正好 100% 透明 |
+| `--s3-flow-dur` | `28s` | 流动周期，改 `0s` 即静止 |
+
+结构约定：每排 `.s3-pills__track` 内含**两段完全相同**的 `.s3-pills__group`（第二段 `aria-hidden`），位移 50% 恰好等于一整段宽度；删掉第二段会跳帧。
+
+#### 组件切片的坐标系偏差（板块 4–7 与原图偏差大的根因）
+
+实测差异（`section-verify.json`，数值越小越接近原图）：板块1 = 8.1、板块2 = 9.2、板块3 = 13.1、**板块4 = 15.6**、**板块5 = 14.0**、板块6 = 9.8、板块7 = 8.9 —— 板块 4/5 最差。已确认五条根因：
+
+1. **坐标系错配**：切片导出画布是 **2720×1600（1.700）**，原图是 **1080×608（1.776）**。切片按宽等比缩到 1080 时总高变成 635，比原图高 27px（4.4%）。按原图量出的百分比套到切片上，纵向越往下误差越大；板块 4–7 的内容都在画面下半部，所以偏差最集中。
+2. **画布留白未裁**：`s7-mascot-peek` 的内容只占画布 x 0.14–0.87、y 0.26–0.75。不裁留白就按 `width%` 放置，会整体缩小并错位。放置任何切片前都要先裁到 alpha 边界。
+3. **整幅画布被当单件使用**：`s5-cloud`（2720×1600）、`s5-hill`、`shared-cloud-1`、`shared-wave-2/3` 是未裁剪的整幅画布，却被按「云／山本身」的小宽度（50.4%、60%）摆放，尺寸与位置双错。
+4. **素材被误删**：`s7-mascot-peek.webp` 在抠底时因判定「近乎全挖」被丢弃（`alpha-report.json` 记 minAlpha=0），导致板块 7 缺右下角吉祥物。已从 `backups/webp-original/` 取回并裁到 alpha 边界（1169×795）。
+5. **白色圆角卡片缺失**：原图中板块 4 的流程图与板块 7 的图表都坐在白色圆角卡片上；而 `s4-workflow-diagram.webp` 是 **RGB 无 alpha** 的矩形裁切（白底、直角、无描边），直接平铺会失去卡片观感。
+
+> 动板块 4–7 之前先解决第 1 条。坐标系没定标就调百分比，等于在上一次错误的基准上再调一次。
+
+#### 板块 7 定稿（2026-09-24）
+
+定位只有 `static/css/index.css` 搜「板块 7：FluNet 图表」这一处。
+
+| 元件 | 定稿值 | 说明 |
+|---|---|---|
+| `s7-wave` | `left 0 / bottom 0 / width 100%`（不写 height） | 满宽横条，贴底 |
+| `s7-title` | `left 18.1% / top 5.9% / width 63.3%` | 图表标题（两行） |
+| `s7-chart` | `left 5% / top 20% / width 90%` + `padding 3% 1.2%` + `background #fff` | 原图卡片比例约 2.97，切片本身 3.98，用 padding 撑高 |
+| `s7-axis` | `left 40.9% / top 76% / width 20.4%` | Week start date |
+| `s7-legend-*` | `top 91.4%`（三条） | 图例压在底部蓝波上 |
+| `s7-mascot` | `left 77.6% / top 70.4% / width 15.9%` | 素材曾误删，已从 `backups/webp-original/` 取回并裁留白 |
+
+卡片圆角 / 描边 / 阴影由 CSS 补（切片是直角白底矩形，见根因 5）。
+
+#### 本轮已清掉的死引用（2026-09-24）
+
+- `executive-summary` 吸顶条 section：徽标块删除后只剩空容器，仍是 `100vh + sticky`，会以空白奶油底盖住视口 → 整段已删。
+- `s2-dashed-arrow.webp`（板块2 虚线箭头）与徽标块 5 张图（`Animation/line.svg`、`DNA-transparent.webp`、`Gpa1.webp`、`human-derived genes.webp`）引用已从 `src/index.njk` 移除。
+- `shared-cloud-1.webp` 已把不透明纯白底键成透明（消除奶油底上的补丁块），原图在 `backups/webp-original/`。
+- `static/image/bc/画板+1.webp`（hero 背景）原 404 已修复：源位于 `src/_includes/head-extra/index.njk` 的 `<link rel="preload">`（URL 编码 `%E7%94%BB%E6%9D%BF+1.webp`），图从未存在，已删除该预加载引用（2026-09-27，经 `对话归档/temporary-tools/check-static-assets.js` 复核 0 死链）。
+
 ---
 
 ## 六、图片与资源约定
@@ -546,7 +677,7 @@ node static/js/core/search-index-generator.js
 16. **`wet-lab/notebook.html` 滚动高亮缓存偏移（2026-08-07）：** 该页内联 `updateNavHighlight` 原每 100ms（本地 `throttle`）对全部 `section` 调用 `getBoundingClientRect()` 计算可见比例，与 sidebar-progress 旧 bug 同类——**每帧强制同步布局**，为 log 页滚动卡顿的主因。已改为在 `init`（`buildSectionOffsets`）+ `resize`（防抖）+ `load` 时一次性缓存各 section 绝对偏移（`rect.top + scrollY`），滚动期仅用 `window.scrollY + innerHeight*0.3` 探针与缓存偏移做数值比较后切换 `.active` 类，彻底消除每帧 `getBoundingClientRect`。视觉/高亮行为不变。`sections`/`navItems` 与本地 `throttle` 均保留。
 17. **igem2026-flask 工程 JS 性能优化已同步（2026-09-02）：** 根站 JS 性能优化已同步至 `igem2026-flask/`，两工程 JS 实现保持对齐——搜索索引 `search-index.json` + 同源 `fetch()` 按需加载与 DOM API 安全渲染、`utils.prefersReducedMotion()` 及 executive-summary 动效降载、`sidebar-progress.js` / `attributions.js` 精简测试死代码、HP 地图同省专家聚类图钉（`.hz-cluster`）减少 DOM 图钉数量。flask 侧搜索索引由 `flask freeze` 后运行 `static/js/core/search-index-generator.js` 扫描 `public/*.html` 平铺结构生成，与根站扫描根目录页面同构不同源；联动说明见 `igem2026-flask/README.md` 的 "Performance & JS optimization" 一节。
 
-⚠️ **18. 进度与状态内容渲染警告（2026-09-16，最高优先级警示）：** 实验页（`experiments`）与贡献页（`contribution`）中所有**进度状态显示**（Progress Status 小节、"实验进度汇总"卡片及侧边栏入口、✅/🔄/⏳ 状态标记、`status-badge` 徽章、"每条都带状态标记"说明段、进度/factStatus/核验 字段）与所有**"官方要求项 → 本实验的落实方式"对照表**，一律**不得渲染在页面上**——它们只能存在于源码注释、`对话归档/` 计划文档，或本 README 警告区。当前这些内容已全部以注释形式保留在 `src/wet-lab/experiments.njk`、`src/_data/contribution.js` 中；**任何后续修改不得把它们重新改为渲染内容**。没有资料的条目直接留空（空表格单元格 / 空字段），不要再补"待补充"类占位徽章。页面侧边栏的"发酵进度"烧瓶是全站通用阅读进度组件，不属于本条约束范围。
+⚠️ **18. 进度与状态内容渲染警告（2026-09-16，最高优先级警示）：** 实验两页（`design` / `protocol`，2026-09-26 由 `experiments` 拆出）与贡献页（`contribution`）中所有**进度状态显示**（Progress Status 小节、"实验进度汇总"卡片及侧边栏入口、✅/🔄/⏳ 状态标记、`status-badge` 徽章、"每条都带状态标记"说明段、进度/factStatus/核验 字段）与所有**"官方要求项 → 本实验的落实方式"对照表**，一律**不得渲染在页面上**——它们只能存在于源码注释、`对话归档/` 计划文档，或本 README 警告区。当前这些内容已全部以注释形式保留在 `src/wet-lab/design.njk`、`src/wet-lab/protocol.njk`、`src/_data/contribution.js` 中；**任何后续修改不得把它们重新改为渲染内容**。没有资料的条目直接留空（空表格单元格 / 空字段），不要再补"待补充"类占位徽章。页面侧边栏的"发酵进度"烧瓶是全站通用阅读进度组件，不属于本条约束范围。
 
 ---
 
@@ -574,7 +705,8 @@ node static/js/core/search-index-generator.js
 17. **大体积数据脚本不得阻塞首屏：** 索引/数据类脚本（如 `search-index.json`）一律按需懒加载（同源 `fetch()`），禁止在 `<head>` 内同步加载（见十四.3）。
 18. **谨慎使用高成本 CSS：** `backdrop-filter`、`filter:blur`、`position:fixed` 全屏层、过多/过大 `box-shadow` 会显著增加绘制与合成开销；`will-change` 仅作临时提升并尽快释放，不要永久堆在大量元素上；无限 `@keyframes` 动画须离屏暂停（`IntersectionObserver` 设 `animation-play-state:paused`）或尊重 `prefers-reduced-motion`。
 19. **性能预算：** 单页并存独立 `scroll` 监听不超过必要数量；新增持续动画前先评估其合成/绘制成本，长页面尤甚。
-20. **进度/状态与官方对照内容一律不渲染（2026-09-16，最高优先级）：** 页面上不得出现任何实验进度状态（Progress Status、进度汇总表、✅/🔄/⏳、status-badge 徽章、"已完成/进行中/待进行"类字样）与"官方要求项 → 落实方式"对照表（iGEM Check 自检内容）。此类信息只允许三种去处：① 源码 HTML/JS 注释；② `对话归档/` 计划文档；③ 本 README 第七.18 警告区。实验页与贡献页已按此清理，后续新增内容必须遵守；对外页面没有资料的条目直接留空。
+20. **页面只呈现已得结果，冲突与审核事项写进代码注释（2026-09-26）：** 内容页正文只写已得结果与对应数据，不写进度、待办、自我审核或"还需核对"类陈述；跨源冲突、单位口径、归一化缺口等一律写入**模板源码的 HTML 注释**（构建后保留在页面源码中，读者不可见）。`在途与下一步`、`原始数据` 这类收尾节不进页面。一切审核与结论交由实验组，页面不作自我判定。当前实例：`src/wet-lab/result.njk` 页首的 `RS-1…RS-8` 注释块。
+21. **进度/状态与官方对照内容一律不渲染（2026-09-16，最高优先级）：** 页面上不得出现任何实验进度状态（Progress Status、进度汇总表、✅/🔄/⏳、status-badge 徽章、"已完成/进行中/待进行"类字样）与"官方要求项 → 落实方式"对照表（iGEM Check 自检内容）。此类信息只允许三种去处：① 源码 HTML/JS 注释；② `对话归档/` 计划文档；③ 本 README 第七.18 警告区。实验页与贡献页已按此清理，后续新增内容必须遵守；对外页面没有资料的条目直接留空。
 
 ---
 
@@ -801,6 +933,15 @@ git diff --cached --stat                       # ③ 暂存区只含本次任务
   - 现实例：`static/image/character/源图片/` 38 个文件 / 48.5 MB → 不入库；同目录 `character/webp/` 32 个文件入库，是唯一运行副本（每个成员 id 的 `.webp` 与 `_kt.webp` 齐备）。
   - 落地时的连带动作（缺一不可）：① 改页面引用指向 webp → ② 重建根站产物 → ③ 重建搜索索引 → ④ `.gitignore` 加规则 → ⑤ `git rm -r --cached <路径>`（**只加规则不会停止跟踪**，已跟踪文件必须显式从索引移除）。
 - 超大素材是**已知存量债务**（见 §17.6），清理须单独立项；不得"下次再说"地继续新增。
+
+### 17.3.1 本地辅助检查脚本（不入库，发布前门禁）
+
+以下两项检查脚本位于 `对话归档/temporary-tools/`（已被 `.gitignore` 排除，**不入库、不被推送**），用于提交 / 发布前手动跑一遍质量门禁，**不纳入 `npm run build:all`**（原 `package.json` 中 `build:all` 曾引用 `tools/check-*.js`，脚本随对话产物清理被删、且按本规则不入库，故已从 `build:all` 摘除，避免缺失误报）：
+
+- `node 对话归档/temporary-tools/check-performance-budget.js`：扫描 `static/` 下图片 / JS / CSS 体积，对照本预算（图片 >300 KB 警告、≥1 MB 严重、≥10 MB 阻塞；`members.js` 等已知 JS/CSS 守护项超阈值告警；已跳过 `源图片/`），打印超预算清单，阻塞或严重时以非 0 退出。
+- `node 对话归档/temporary-tools/check-static-assets.js`：扫描页面（生成的 `*.html` + `src/**/*.njk`）对 `static/` 资源的引用，核对文件确实存在（缺失即死链）；并标记任何指向 `static/image/**/源图片/` 的 `src`/`candidates`（按本预算视为待修缺陷）。
+
+> 这类工具脚本一律放 `对话归档/temporary-tools/`（先例见 §5.15 的 `2026-09-15-check-members-format.js`、§5.16 的 `2026-09-16-dev-server-nostore.py`），**不得放入仓库根 `tools/` 或散落业务目录**，否则按对话产物归档红线清理后会丢失并令 `build:all` 误报失败。
 
 ### 17.4 提交信息格式
 

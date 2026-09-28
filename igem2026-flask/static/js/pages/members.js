@@ -149,8 +149,8 @@
         photoSize: '80% auto'
       },
       // 2026-09-15 新增 PI 两位与 WIKI 两位；2026-09-16 补入 bio（directions 待团队补标签）。
-      // zlj / tyj 无 _kt 卡通头像，显式指定头像=本人照片，避免探测必然 404 的 _kt 路径；
-      // lrx / crq 已补 _kt 卡通头像，走默认候选链（webp/<id>_kt.webp 优先），无需覆盖。
+      // 2026-09-21 zjh/tyj/zlj/zlz 四张 _kt 卡通头像到位，统一走默认候选链（webp/<id>_kt.webp 优先，
+      // 缺失时回退 webp/<id>.webp 本人照片），移除此前为 zlj/tyj 显式指定的头像覆盖。
       {
         id: 'zlj',
         name: 'Lijun Zhang',
@@ -158,11 +158,7 @@
         directions: [],
         bio: 'iGEM is far more than a competition, it is a transformative journey on which students explore the boundless possibilities of synthetic biology.',
         photoPosition: 'center top',
-        photoSize: '30% auto',
-        images: {
-          photo: { candidates: ['https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/zlj-cream.webp', 'https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/zlj.webp'] },
-          avatar: { candidates: ['https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/zlj.webp'] }
-        }
+        photoSize: '30% auto'
       },
       {
         id: 'tyj',
@@ -171,8 +167,7 @@
         directions: [],
         bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
         photoPosition: '72% top',
-        photoSize: '72% auto',
-        images: { avatar: { candidates: ['https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/tyj.webp'] } }
+        photoSize: '72% auto'
       },
       {
         id: 'lrx',

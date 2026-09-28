@@ -1,0 +1,601 @@
+{
+  "meta": {
+    "title": "纳米抗体–甲流 HA 对接筛选数据",
+    "sourceOfTruth": "static/expriments/drylab/model/model(1).docx",
+    "corpus": "static/expriments/drylab/model/md/10-一手分析.md",
+    "date": "2026-09-27",
+    "note": "本文件是 Model 页正文表格与交互演示的唯一数据源。数值逐条抄自建模文档 §5.3 / §5.4 / §6，未经二次换算。",
+    "kind": "computational-prediction",
+    "kindNote": "全部为分子对接与模拟的计算预测；建模文档 §9 明确写明「无实验验证」。页面不得表述为已验证结论。",
+    "structureBase": "static/data/dry-lab/model/",
+    "dataAttrBase": "data-base-path",
+    "antigenRoleNote": "特异性指数由目标亚型 H1N1 与对照亚型 H3N2、H5N1 的打分差值构成，对照亚型用于量化特异性，不是检测对象。"
+  },
+  "funnel": {
+    "candidatesScreened": 17,
+    "candidatesRefined": 5,
+    "leads": 1,
+    "fluAntigens": 3,
+    "unrelatedAntigens": 3
+  },
+  "scoring": {
+    "cluspro": {
+      "label": "ClusPro 刚性对接",
+      "formula": "E = 0.40Erep − 0.40Eatt + 600Eelec + 1.00EDARS",
+      "unit": "kcal/mol（文档未标注单位，仅给数值）",
+      "note": "每个「候选 × 抗原」组合保留 Top 10 构象。"
+    },
+    "specificityIndex": {
+      "label": "特异性指数",
+      "formula": "( E_H1N1 − E_H3N2 + E_H1N1 − E_H5N1 ) / 2",
+      "note": "越负表示对 H1N1 的特异性越好。"
+    },
+    "haddock": {
+      "label": "HADDOCK 2.5 半柔性精修",
+      "flow": "刚性对接 it0 → 半柔性精修 it1 → 水精修 itw",
+      "metrics": "HADDOCK score / 聚类大小 / BSA (Å²)",
+      "note": "HADDOCK score 越负表示界面质量越好。"
+    }
+  },
+  "antigens": [
+    {
+      "id": "H1N1",
+      "name": "H1N1 HA",
+      "strain": "A/Puerto Rico/8/1934",
+      "pdbId": "9VH4",
+      "resolution": "2.80 Å",
+      "source": "RCSB",
+      "structure": "structures/9VH4.pdb",
+      "chainMap": "A = HA1, B = HA2",
+      "activeResiduesHA1": [
+        25,
+        45,
+        46,
+        47,
+        48,
+        49,
+        305,
+        306,
+        307,
+        332
+      ],
+      "activeResiduesHA2": [
+        361,
+        362,
+        363,
+        364,
+        381,
+        382,
+        384,
+        385,
+        388,
+        391,
+        392,
+        395,
+        396,
+        399
+      ],
+      "structureNote": "该条目是 HA 与一个单域抗体的共结晶复合物；文件已按建模文档 §5.1 的口径裁剪为「仅 HA 链」。共结晶的结合体不是本项目筛出的 R1aB6。",
+      "role": "target",
+      "roleLabel": "目标亚型"
+    },
+    {
+      "id": "H3N2",
+      "name": "H3N2 HA",
+      "strain": "A/Puerto Rico/8/1934-New York/55/2004",
+      "pdbId": "9VH5",
+      "resolution": "2.70 Å",
+      "source": "RCSB",
+      "structure": "structures/9VH5.pdb",
+      "chainMap": "A = HA1, B = HA2",
+      "activeResiduesHA1": [
+        25,
+        45,
+        46,
+        47,
+        48,
+        49,
+        305,
+        306,
+        307,
+        332
+      ],
+      "activeResiduesHA2": [
+        361,
+        362,
+        363,
+        364,
+        381,
+        382,
+        384,
+        385,
+        388,
+        391,
+        392,
+        395,
+        396,
+        399
+      ],
+      "structureNote": "同 9VH4，已裁剪为仅 HA 链；共结晶结合体不是本项目的 R1aB6。",
+      "role": "control",
+      "roleLabel": "对照亚型"
+    },
+    {
+      "id": "H5N1",
+      "name": "H5N1 HA",
+      "strain": "A/Jiangsu/NJ210/2023",
+      "pdbId": "9MQ2",
+      "resolution": "3.06 Å",
+      "source": "RCSB",
+      "structure": "structures/9MQ2.pdb",
+      "chainMap": "A = HA1（该条目未沉积 HA2）",
+      "activeResiduesHA1": [
+        25,
+        45,
+        46,
+        47,
+        48,
+        49,
+        305,
+        306,
+        307
+      ],
+      "activeResiduesHA2": [],
+      "structureNote": "该条目只沉积了 HA1 链（残基 13–321），因此文档列出的 332 与全部 HA2 活性残基在该结构里不存在，页面标注 H5 时相应收敛。",
+      "role": "control",
+      "roleLabel": "对照亚型"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "R1aB6",
+      "aliases": [
+        "R1aB6"
+      ],
+      "verdict": {
+        "outcome": "lead",
+        "rank": 1,
+        "zh": "H1N1 特异性最优（未处理抗原指数 −93.25），最低 HADDOCK score（−93.2），MD 稳定，交叉反应风险中等，MM-GBSA 结合自由能 −3.74 kcal/mol。文档据此将其选为识别元件。",
+        "en": "Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔG = −3.74 kcal/mol."
+      },
+      "cluspro": {
+        "untreated": {
+          "H1N1": -933.9,
+          "H3N2": -863.4,
+          "H5N1": -817.9,
+          "specificityIndex": -93.25
+        },
+        "treated": {
+          "H1N1": -867.2,
+          "H3N2": -912.0,
+          "H5N1": -922.2,
+          "specificityIndex": 49.9
+        }
+      },
+      "crossReactivity": {
+        "SARS": -754.3,
+        "HIV1": -960.8,
+        "RSVF": -883.6,
+        "mean": -866.2,
+        "risk": "中等",
+        "riskLevel": 3
+      },
+      "haddock": {
+        "score": -93.2,
+        "clusterSize": 16,
+        "bsa": 1890.1
+      },
+      "structure": {
+        "complex": null
+      }
+    },
+    {
+      "id": "R2aF9",
+      "aliases": [
+        "R2aF9"
+      ],
+      "verdict": {
+        "outcome": "lead",
+        "rank": 2,
+        "zh": "HADDOCK score 第二（−89.4），但 ClusPro 特异性指数为正（+23.75），交叉反应风险最低却对 H1N1 特异性差。",
+        "en": "Second-best HADDOCK score (−89.4) but positive ClusPro specificity index (+23.75): lowest cross-reactivity risk yet poor H1N1 specificity."
+      },
+      "cluspro": {
+        "untreated": {
+          "H1N1": -792.4,
+          "H3N2": -764.4,
+          "H5N1": -867.9,
+          "specificityIndex": 23.75
+        },
+        "treated": {
+          "H1N1": -830.6,
+          "H3N2": -785.3,
+          "H5N1": -875.6,
+          "specificityIndex": -0.15
+        }
+      },
+      "crossReactivity": {
+        "SARS": -742.0,
+        "HIV1": -814.0,
+        "RSVF": -713.6,
+        "mean": -756.5,
+        "risk": "最低",
+        "riskLevel": 1
+      },
+      "haddock": {
+        "score": -89.4,
+        "clusterSize": 61,
+        "bsa": 2764.4
+      },
+      "structure": {
+        "complex": null
+      }
+    },
+    {
+      "id": "R1aA5",
+      "aliases": [
+        "R1aXA5"
+      ],
+      "verdict": {
+        "outcome": "lead",
+        "rank": 3,
+        "zh": "HADDOCK score 第三（−84.6），但 ClusPro 特异性指数较弱（−40.75），交叉反应风险最高。",
+        "en": "Third by HADDOCK score (−84.6); weaker ClusPro specificity index (−40.75) and the highest cross-reactivity risk."
+      },
+      "cluspro": {
+        "untreated": {
+          "H1N1": -1022.7,
+          "H3N2": -950.5,
+          "H5N1": -1013.4,
+          "specificityIndex": -40.75
+        },
+        "treated": {
+          "H1N1": -874.6,
+          "H3N2": -953.1,
+          "H5N1": -1050.4,
+          "specificityIndex": 127.1
+        }
+      },
+      "crossReactivity": {
+        "SARS": -905.4,
+        "HIV1": -939.8,
+        "RSVF": -948.5,
+        "mean": -931.2,
+        "risk": "最高",
+        "riskLevel": 5
+      },
+      "haddock": {
+        "score": -84.6,
+        "clusterSize": 26,
+        "bsa": 2634.4
+      },
+      "structure": {
+        "complex": null
+      }
+    },
+    {
+      "id": "R2bE8",
+      "aliases": [
+        "R2bE8"
+      ],
+      "verdict": {
+        "outcome": "rejected",
+        "rank": 4,
+        "zh": "ClusPro 特异性指数中等（−57.35），HADDOCK score 第四（−71.1），交叉反应风险较高。",
+        "en": "Rejected: mid-range specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk."
+      },
+      "cluspro": {
+        "untreated": {
+          "H1N1": -921.7,
+          "H3N2": -915.6,
+          "H5N1": -813.1,
+          "specificityIndex": -57.35
+        },
+        "treated": {
+          "H1N1": -928.1,
+          "H3N2": -897.2,
+          "H5N1": -951.3,
+          "specificityIndex": -3.85
+        }
+      },
+      "crossReactivity": {
+        "SARS": -840.5,
+        "HIV1": -936.6,
+        "RSVF": -894.7,
+        "mean": -890.6,
+        "risk": "较高",
+        "riskLevel": 4
+      },
+      "haddock": {
+        "score": -71.1,
+        "clusterSize": 16,
+        "bsa": 2538.9
+      },
+      "structure": {
+        "complex": null
+      }
+    },
+    {
+      "id": "R2bD9",
+      "aliases": [
+        "R2bXD9"
+      ],
+      "verdict": {
+        "outcome": "rejected",
+        "rank": 5,
+        "zh": "ClusPro 特异性指数第二（−72.55），但 HADDOCK score 最低（−68.8），界面结合质量差。",
+        "en": "Rejected: second-best specificity index (−72.55) but worst HADDOCK score (−68.8), indicating poor interface quality."
+      },
+      "cluspro": {
+        "untreated": {
+          "H1N1": -997.0,
+          "H3N2": -845.0,
+          "H5N1": -1003.9,
+          "specificityIndex": -72.55
+        },
+        "treated": {
+          "H1N1": -842.5,
+          "H3N2": -796.0,
+          "H5N1": -930.3,
+          "specificityIndex": 20.6
+        }
+      },
+      "crossReactivity": {
+        "SARS": -824.1,
+        "HIV1": -937.6,
+        "RSVF": -876.9,
+        "mean": -879.5,
+        "risk": "中等",
+        "riskLevel": 3
+      },
+      "haddock": {
+        "score": -68.8,
+        "clusterSize": 5,
+        "bsa": 2548.0
+      },
+      "structure": {
+        "complex": null
+      }
+    }
+  ],
+  "interface": {
+    "pair": "R1aB6 vs H1N1",
+    "method": "PyMOL 界面分析（残基） + SPICE 相互作用分析（作用类型计数）",
+    "haSide": {
+      "count": 30,
+      "ranges": [
+        "27–32",
+        "44–53",
+        "303–332",
+        "358–396"
+      ],
+      "note": "文档原文记为「HA 侧：30 个残基（27–32, 44–53, 303–332, 358–396）」。"
+    },
+    "nanobodySide": {
+      "count": 24,
+      "cdr": [
+        {
+          "name": "CDR1",
+          "range": "27–37"
+        },
+        {
+          "name": "CDR2",
+          "range": "44–65"
+        },
+        {
+          "name": "CDR3",
+          "range": "101–104"
+        }
+      ]
+    },
+    "interactions": {
+      "contacts": 61,
+      "hbonds": 19,
+      "saltBridges": 3,
+      "hydrophobic": 39
+    },
+    "hotspots": [
+      {
+        "nanobody": "ARGB:31",
+        "ha": "ASNA:27",
+        "type": "氢键",
+        "distance": 2.086
+      },
+      {
+        "nanobody": "ARGB:31",
+        "ha": "SERA:29",
+        "type": "氢键",
+        "distance": 2.18
+      },
+      {
+        "nanobody": "ARGB:31",
+        "ha": "THRA:44",
+        "type": "氢键",
+        "distance": 3.097
+      },
+      {
+        "nanobody": "ARGB:31",
+        "ha": "GLNA:51",
+        "type": "氢键",
+        "distance": 2.086
+      },
+      {
+        "nanobody": "ASPB:55",
+        "ha": "THRA:30",
+        "type": "氢键",
+        "distance": 2.725
+      },
+      {
+        "nanobody": "THRB:54",
+        "ha": "ASPA:31",
+        "type": "盐桥",
+        "distance": 3.48
+      }
+    ],
+    "hotspotNote": "ARGB:31 参与 4 组氢键，是文档提出的热点残基，并被写为后续 R31A 突变体的研究靶点。",
+    "structureGap": {
+      "resolved": false,
+      "zh": "本项目的 R1aB6–H1N1 对接复合物结构未公开（团队未提供 HADDOCK 输出文件）。下方三维视图展示的是抗原来源结构 9VH4，并按文档列出的界面活性残基高亮；它不是本项目的对接结果。",
+      "en": "The project's own R1aB6–H1N1 docked complex is not published yet. The 3D view below shows the antigen source structure 9VH4 with the documented interface residues highlighted; it is not our docking result."
+    }
+  },
+  "md": {
+    "engine": "GROMACS",
+    "forcefield": "Amber99sbildn",
+    "waterModel": "TIP3P",
+    "seed": "gen_seed = 1",
+    "reportedDuration": "10 ns（文档正文口径，见注意事项）",
+    "items": [
+      {
+        "metric": "RMSD",
+        "value": "0.45 nm（文档记为稳定）"
+      },
+      {
+        "metric": "RMSF（界面）",
+        "value": "< 0.17 nm"
+      },
+      {
+        "metric": "Rg",
+        "value": "3.87 nm（稳定）"
+      },
+      {
+        "metric": "氢键",
+        "value": "462.1 ± 9.6"
+      }
+    ],
+    "caveat": "源文档图 5 的 RMSD 横轴只画到约 8 ns，且曲线峰值约 0.70 nm，与正文「10 ns / 0.45 nm 稳定」的表述不一致；页面正文按文档口径呈现，差异记在页面源码注释里（编号 MQ-6）。"
+  },
+  "mmgbsa": {
+    "engine": "gmx_MMPBSA 1.5.0.3",
+    "unit": "kcal/mol",
+    "items": [
+      {
+        "term": "ΔVDWAALS",
+        "value": -59.41
+      },
+      {
+        "term": "ΔEEL",
+        "value": 5.22
+      },
+      {
+        "term": "ΔEGB",
+        "value": 57.69
+      },
+      {
+        "term": "ΔESURF",
+        "value": -7.23
+      },
+      {
+        "term": "ΔTOTAL",
+        "value": -3.74
+      }
+    ],
+    "note": "文档 §9 自述：MM-GBSA 仅基于 10 帧，统计误差较大。"
+  },
+  "pipeline": [
+    {
+      "stage": 1,
+      "question": "哪个抗体结合 H1N1 最好？",
+      "method": "ClusPro 刚性对接（未处理抗原）",
+      "output": "特异性指数排名"
+    },
+    {
+      "stage": 2,
+      "question": "处理后抗原是否影响结合？",
+      "method": "ClusPro 刚性对接（复合物处理后抗原）",
+      "output": "交叉验证结合模式"
+    },
+    {
+      "stage": 3,
+      "question": "是否与无关病毒交叉反应？",
+      "method": "ClusPro 刚性对接（SARS / HIV1 / RSVF）",
+      "output": "交叉反应风险"
+    },
+    {
+      "stage": 4,
+      "question": "结合模式是否稳定？",
+      "method": "HADDOCK 2.5 半柔性精修",
+      "output": "HADDOCK score、BSA"
+    },
+    {
+      "stage": 5,
+      "question": "哪些残基驱动结合？",
+      "method": "PyMOL + SPICE",
+      "output": "界面残基、相互作用类型"
+    },
+    {
+      "stage": 6,
+      "question": "复合物在水中是否稳定？",
+      "method": "GROMACS MD + MM-GBSA",
+      "output": "RMSD、RMSF、Rg、ΔG_bind"
+    },
+    {
+      "stage": 7,
+      "question": "实验上要验证什么？",
+      "method": "综合分析",
+      "output": "热点残基（ARGB:31）"
+    }
+  ],
+  "limitations": [
+    "ClusPro 中受体按刚性处理，可能遗漏诱导契合效应。",
+    "对接使用隐式溶剂，忽略显式水桥。",
+    "HADDOCK 中界面半柔性，允许侧链重排但主链固定。",
+    "10 ns 的 MD 可能无法捕捉慢构象变化。",
+    "MM-GBSA 仅基于 10 帧，统计误差较大。",
+    "全文无实验验证（文档 §9 自述）。"
+  ],
+  "reproducibility": [
+    {
+      "item": "软件版本",
+      "value": "ClusPro、HADDOCK 2.5、GROMACS 2026.3、PyMOL、SPICE、gmx_MMPBSA 1.5.0.3"
+    },
+    {
+      "item": "力场",
+      "value": "Amber99sbildn"
+    },
+    {
+      "item": "水模型",
+      "value": "TIP3P"
+    },
+    {
+      "item": "随机种子",
+      "value": "gen_seed = 1"
+    },
+    {
+      "item": "参数文件",
+      "value": "文档记「已上传 GitHub（mdp_files/）」，仓库链接在文档中仍为待补"
+    }
+  ],
+  "designDecisions": [
+    {
+      "prediction": "R1aB6 具有最高 H1N1 特异性",
+      "decision": "选为识别元件"
+    },
+    {
+      "prediction": "ARGB:31 是热点残基",
+      "decision": "提出 R31A 突变体为后续研究靶点"
+    },
+    {
+      "prediction": "R2bD9 与 R2bE8 交叉反应风险较高",
+      "decision": "降低优先级"
+    }
+  ],
+  "openItems": [
+    {
+      "id": "MQ-1",
+      "zh": "候选命名有两套写法（R1aXA5/R2bXD9 与 R1aA5/R2bD9）。页面统一用不带 X 的写法，另一套待实验组核销。"
+    },
+    {
+      "id": "MQ-5",
+      "zh": "代码仓库、参数文件、输入输出结构的 GitHub 链接在文档中均为待补；页面按实际状态表述。"
+    },
+    {
+      "id": "MQ-6",
+      "zh": "MD 时长与 RMSD 口径：正文 10 ns / 0.45 nm，源图轨迹约 8 ns、峰值约 0.70 nm。"
+    },
+    {
+      "id": "MQ-7",
+      "zh": "源文档两张 17 抗体图表（处理后抗原、交叉反应）的候选编号对照表与筛选图不一致，故不引用该两图，相关结果只用表格呈现。"
+    }
+  ]
+}

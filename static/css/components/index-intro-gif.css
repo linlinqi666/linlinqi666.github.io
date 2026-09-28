@@ -123,10 +123,12 @@ html.intro-gif-armed:not(.intro-gif-finished) .mobile-menu-overlay {
   pointer-events: none !important;
 }
 
-/* 播放结束后导航栏淡入。
+/* 播放结束后导航栏淡入（非首页）。
+   首页（home-scroll-snap）导航改由 hover 接管，intro 结束后不淡入，保持收起，
+   等待用户把鼠标移入顶部触发带呼出。
    刻意不设 animation-fill-mode：动画结束即回落到基础态，
    避免长期覆盖 nav-scroll-behavior.js 的 .nav-hidden 位移。 */
-html.intro-gif-finished nav {
+html.intro-gif-finished:not(.home-scroll-snap) nav {
   animation: introGifNavIn var(--duration-slow) var(--ease-smooth);
 }
 

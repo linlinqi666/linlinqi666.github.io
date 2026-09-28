@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../static/image/any-icon/SZPU(notext).png">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design - iGEM SZPU-2026</title>
+<meta name="description" content="">
+<meta name="author" content="SZPU-China 2026">
+<meta name="theme-color" content="#8B5A2B">
+<meta name="msapplication-TileColor" content="#8B5A2B">
+<link rel="dns-prefetch" href="../static/iconfont">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css">
+<link rel="stylesheet" href="../static/css/experiments.css">
+
+<link rel="stylesheet" href="../static/css/mobile.css">
+<link rel="stylesheet" href="../static/css/components/page-loader.css">
+<link rel="stylesheet" href="../static/css/components/section-fold.css">
+<!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
+     置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
+<script src="../static/js/components/page-loader-arm.js"></script>
+
+
+</head>
+<body class="">
+      <!-- 全站页级加载遮罩：默认 display:none，仅当 head 内同步脚本
+         page-loader-arm.js 给 <html> 打上 .page-loader-armed 后显示；
+         由 static/js/components/page-loader.js 在首屏关键插画就绪后收尾。 -->
+    <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+      <div class="page-loader__inner">
+        <div class="page-loader__stage">
+          <span class="page-loader__halo" aria-hidden="true"></span>
+          <div class="page-loader__frames" aria-hidden="true"></div>
+          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <p class="page-loader__text" aria-hidden="true">Loading</p>
+      </div>
+    </div>
+
+  <!-- 汉堡菜单按钮（仅移动端显示，独立于 nav 之外） -->
+<button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- 移动端全屏菜单（独立于 nav 之外）；隐藏态交由 mobile.css 控制（opacity:0 + translateY(100%) + visibility:hidden），以保留底部抽屉滑入动画 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+  <div class="mobile-menu" id="mobile-menu">
+    <ul id="nav-menu">
+      <li>
+        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../wet-lab/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      <li>
+        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <div class="dropdown-content">
+          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
+          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <div class="dropdown-content">
+          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
+          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <div class="dropdown-content">
+          <a href="../wet-lab/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
+          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <div class="dropdown-content">
+          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
+          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path="../">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    </button>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..." autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <!-- 全站页面加载进度条 -->
+<div id="page-progress-bar" aria-hidden="true">
+  <div class="ppb-track">
+    <div class="ppb-fill"><div class="ppb-glow"></div></div>
+  </div>
+</div>
+<!-- 全站滚动阅读进度条 -->
+<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
+  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
+</div>
+
+  <main class="">
+    
+<div class="description-container">
+      <!-- Left Sidebar -->
+      <aside class="description-sidebar">
+        <!-- 酵母细胞装饰 -->
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-overview" class="nav-main-link">项目背景与检测目标</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-framework" class="nav-main-link">实验总体设计</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-chassis" class="nav-main-link">底盘酵母改造</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#design-chassis-goal">设计目标</a></li>
+                <li class="level3"><a href="#design-chassis-route">技术路线</a></li>
+                <li class="level3"><a href="#design-chassis-controls">判定与对照设计</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-pager" class="nav-main-link">PAGER 受体构建与验证</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#design-pager-goal">设计目标</a></li>
+                <li class="level3"><a href="#design-pager-route">技术路线</a></li>
+                <li class="level3"><a href="#design-pager-controls">判定与对照设计</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-gpa1" class="nav-main-link">GPA1 人源化改造</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#design-gpa1-goal">设计目标</a></li>
+                <li class="level3"><a href="#design-gpa1-route">技术路线</a></li>
+                <li class="level3"><a href="#design-gpa1-controls">判定与对照设计</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-reporter" class="nav-main-link">报告体系构建</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#design-reporter-goal">设计目标</a></li>
+                <li class="level3"><a href="#design-reporter-route">技术路线</a></li>
+                <li class="level3"><a href="#design-reporter-controls">判定与对照设计</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-iteration" class="nav-main-link">设计迭代与失败</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#design-iteration-1">路线一被测序判否</a></li>
+                <li class="level3"><a href="#design-iteration-2">WB 分子量不符</a></li>
+                <li class="level3"><a href="#design-iteration-3">免疫荧光阴性</a></li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#design-discussion" class="nav-main-link">结果与讨论</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+      <!-- Right Content Area -->
+      <div class="description-content">
+
+        <!-- ============ 1. 项目背景与检测目标 ============ -->
+        <div id="design-overview" class="content-card">
+          <h2>项目背景与检测目标</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              本项目用酿酒酵母 BY4741 做底盘，搭建一条「甲型流感病毒 HA 抗原识别 → 下游报告输出」的生物传感主链。本页记录这条主链的实验设计：每一步为什么做、模块之间怎么依赖、哪些方案中途换过。
+            </p>
+            <p class="content-intro">
+              这条主链要落地，必须先把酵母底盘清理干净、把识别受体表达出来、把人和酵母之间的信号接口接通、再把报告读出建好。这四个动作分别对应四个实验模块：底盘酵母改造、PAGER 受体构建与验证、GPA1 人源化改造、报告体系构建。
+            </p>
+            <p class="content-intro">
+              四个模块按「设计、执行、结果」分工到三页：本页写设计层的内容，即每个实验要回答什么问题、方法选择依据是什么、对照与判定怎么设计、哪些方案中途换过；材料清单与分步参数在 <a href="protocol.html">Protocol 页</a>；实测数值与讨论在 <a href="result.html">Results 页</a>。本页不写传感性能，灵敏度、特异性与检出限都没有测过，也不写对 HA 的识别结论。
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 2. 实验总体设计 ============ -->
+        <div id="design-framework" class="content-card">
+          <h2>实验总体设计</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              四个模块按「底盘 → 受体 → 接口 → 报告」的顺序依赖，技术栈彼此独立，唯一的公共项是底盘菌株 BY4741。
+            </p>
+            <p class="content-intro">
+              底盘是后续三步的共同宿主；受体装进底盘后才有蛋白可测；接口改造在受体之后动 GPA1；报告体系评估 FUS1 启动子在被诱导时的输出。四个模块的技术栈几乎正交：底盘用 pML104 与同源臂修复模板，受体用 pGADT7，接口用 pRS426 与多片段融合 PCR，报告用 pESC-HIS。模块划分与项目 Design 页一致。
+            </p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
+              <thead>
+                <tr style="border-bottom:2px solid #333;">
+                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">模块（本页顺序）</th>
+                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">主要载体与元件</th>
+                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">关键读出</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #ddd;">
+                  <td style="border:1px solid #ccc; padding:8px;">底盘酵母改造</td>
+                  <td style="border:1px solid #ccc; padding:8px;">pML104（sgRNA 递送）、同源臂融合修复模板</td>
+                  <td style="border:1px solid #ccc; padding:8px;">菌落 PCR 初筛、Sanger 测序确认；α-factor 梯度生长曲线</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;">
+                  <td style="border:1px solid #ccc; padding:8px;">PAGER 受体构建与验证</td>
+                  <td style="border:1px solid #ccc; padding:8px;">pGADT7、PAGER 融合受体</td>
+                  <td style="border:1px solid #ccc; padding:8px;">质粒浓度与双酶切、菌落 PCR、SDS-PAGE 与 WB、免疫荧光、DCZ 读板</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;">
+                  <td style="border:1px solid #ccc; padding:8px;">GPA1 人源化改造</td>
+                  <td style="border:1px solid #ccc; padding:8px;">pRS426、多片段融合 PCR 线性供体片段</td>
+                  <td style="border:1px solid #ccc; padding:8px;">两轮菌落 PCR 与测序；形态、生长、荧光三层表型</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;">
+                  <td style="border:1px solid #ccc; padding:8px;">报告体系构建</td>
+                  <td style="border:1px solid #ccc; padding:8px;">pESC-HIS、FUS1 启动子突变库、MEL1 与 yEGFP</td>
+                  <td style="border:1px solid #ccc; padding:8px;">X-α-gal 蓝白斑显色、荧光酶标读数、OD₆₀₀ 生长曲线</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="content-intro">
+              <strong>跨模块前提：</strong>α-factor 是底盘、报告、接口三个模块共用的诱导输入，但三套浓度体系并不统一。底盘功能验证用 0 / 1 / 10 μM 三档，报告体系与 GPA1 表型验证用八档梯度。任何跨模块数值比较都必须注明各自的体系，不能直接横向比大小。
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 3.1 底盘酵母改造 ============ -->
+        <div id="design-chassis" class="content-card">
+          <h2>底盘酵母改造</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              用 pML104 递送 CRISPR/Cas9 与 sgRNA，配同源臂融合修复模板，敲除 SST2 与 FAR1 两个内源基因：SST2 敲除以放大下游信号，FAR1 敲除以维持实时监测时细胞持续生长。
+            </p>
+
+            <h3 id="design-chassis-goal">设计目标</h3>
+            <p class="content-intro">
+              敲除两个内源基因：SST2（G 蛋白负调控因子，敲除以放大下游信号）与 FAR1（交配信号诱导的细胞周期阻滞因子，敲除以维持实时监测时细胞持续生长）。这一步对接主链的最前端，为下游受体和接口提供一个干扰更少、能持续分裂的底盘。本模块只解决底盘本身，不碰下游通路输出幅度。
+            </p>
+
+            <h3 id="design-chassis-route">技术路线</h3>
+            <p class="content-intro">
+              用 pML104 载体递送 CRISPR/Cas9 与 sgRNA，配同源臂融合修复模板完成敲除。sgRNA 部分通过反向 PCR 构建到载体上；修复模板由两段同源臂经两轮融合 PCR 拼接，敲除位点设计 4 bp 缺失造成移码，使跨越位点的引物在敲除后无法配对。敲除采用两轮流程：先做 FAR1，再用 5-FOA 反筛去除携带 URA3 标记的 sgRNA 质粒，在无质粒的 FAR1 敲除株基础上做第二基因的敲除。
+            </p>
+
+            <h3 id="design-chassis-controls">判定与对照设计</h3>
+            <p class="content-intro">
+              敲除是否成功采用两级判定：菌落 PCR 初筛，测序确认。菌落 PCR 的判据是「无扩增条带」，即引物在敲除位点找不到可结合的模板；单凭这一条不能排除 PCR 本身失败，因此候选克隆一律送测序，最终结论以测序为准。功能验证设 BY4741 与敲除株两组，各设 0 / 1 / 10 μM α-factor 三档，每组 3 个生物学重复，误差棒为 SEM，30 ℃、200 rpm 下从 0 h 起每小时测一次 OD₆₀₀，连续 6 h。
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 3.2 PAGER 受体构建与验证 ============ -->
+        <div id="design-pager" class="content-card">
+          <h2>PAGER 受体构建与验证</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              把 PAGER 融合受体装进酵母并验证其构建与表达。本模块只验证受体本身的构建与表达，不验证对 HA 的识别性能。
+            </p>
+
+            <h3 id="design-pager-goal">设计目标</h3>
+            <p class="content-intro">
+              把 PAGER 融合受体克隆进 pGADT7 载体，转化大肠杆菌与酵母，验证蛋白表达，并用 DCZ 做功能读出。这一步对接主链的「识别」环节，把抗原识别元件装到酵母里。注意：本模块只验证受体本身的构建与表达，不验证对 HA 的识别性能。
+            </p>
+
+            <h3 id="design-pager-route">技术路线</h3>
+            <p class="content-intro">
+              受体基因合成后先在大肠杆菌里扩增：Top10 转化、扩培、质粒小提、双酶切（NdeI 与 BamHI-HF）与琼脂糖电泳验证；验证通过的质粒转化酵母，再做蛋白层检测与功能读出。蛋白层用 SDS-PAGE 与 Western blot，配合免疫荧光观察定位；功能读出用 DCZ 梯度诱导、酶标仪按时间读板。三段证据的目标不同：酶切与菌落 PCR 验证构建是否正确，WB 验证蛋白是否表达，DCZ 读板验证受体能否被小分子配体激活。
+            </p>
+
+            <h3 id="design-pager-controls">判定与对照设计</h3>
+            <p class="content-intro">
+              构建验证以双酶切条带与理论值比对、菌落 PCR 条带尺寸为判据。蛋白层以分子量为判据，免疫荧光设 BY4741 阴性对照。DCZ 功能验证设 25 / 50 / 100 / 250 / 500 / 1000 nM 六档，配空白与阴性对照，30 ℃ 孵育 2–6 h 每小时读数。重复数按日期记录为流水，未系统给 n。
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 3.3 GPA1 人源化改造 ============ -->
+        <div id="design-gpa1" class="content-card">
+          <h2>GPA1 人源化改造</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              把 GPA1 基因 C 端 5 个氨基酸替换为人源序列（KIGII → EYNLV），并在其后引入终止密码子，使人的 DREADD 受体 hM1Dq 能驱动酵母 MAPK 通路。
+            </p>
+
+            <h3 id="design-gpa1-goal">设计目标</h3>
+            <p class="content-intro">
+              把 GPA1 基因 C 端 5 个氨基酸替换为人源序列（KIGII → EYNLV），并在其后引入终止密码子，使人的 DREADD 受体 hM1Dq 能驱动酵母 MAPK 通路。这一步是人和酵母信号之间的接口。改造本身会改变酵母对 α-factor 的响应，因此要单独测改造后形态、生长、下游表达三层响应有没有变化。
+            </p>
+
+            <h3 id="design-gpa1-route">技术路线</h3>
+            <p class="content-intro">
+              供体片段的制备先后尝试了两条路线：路线一用 pRS426 二次线性化载体与一步克隆组装，把目的片段接到载体上；路线二改用多片段融合 PCR，把 URA3 表达盒与上下游同源臂三段共融成完整线性供体片段，直接转化酵母做同源重组。两条路线的取舍记录在「设计迭代与失败」一节。
+            </p>
+
+            <h3 id="design-gpa1-controls">判定与对照设计</h3>
+            <p class="content-intro">
+              同源重组是否成功用两轮菌落 PCR 初筛，随机挑克隆送测序确认。表型验证分三层：0 / 1 / 10 μM α-factor 下的形态观察；3 株 × 3 浓度 × 3 重复 × 11 时间点的生长曲线；八档 α-factor 梯度的荧光读数。这三层针对的是同一个设计问题：替换 C 端之后，细胞对 α-factor 的响应有没有变。浓度体系与底盘模块不同，并列呈现须各自注明。
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 3.4 报告体系构建 ============ -->
+        <div id="design-reporter" class="content-card">
+          <h2>报告体系构建</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              建立一条「α-factor → FUS1 启动子 → 报告基因」的诱导读出体系，作为下游信号有无的判读手段。
+            </p>
+
+            <h3 id="design-reporter-goal">设计目标</h3>
+            <p class="content-intro">
+              建立一条「α-factor → FUS1 启动子 → 报告基因」的诱导读出体系，作为下游信号有无的判读手段。本模块对 PAGER 受体链路没有直接描写，对外唯一接口是 α-factor 这一层。它只回答「给了 α-factor，报告基因出不出、出多少」。
+            </p>
+
+            <h3 id="design-reporter-route">技术路线</h3>
+            <p class="content-intro">
+              本模块六份方案按用途分三型。A 型（方案 01）建库筛选：对 FUS1 启动子的 PRE1 / PRE2 位点做突变建库，与线性化的 pESC-HIS 载体同源重组共转化，两轮筛选后测序鉴定启动子序列。B 型（方案 02、03）做基因型验证，用两套菌落 PCR 体系确认转化子。C 型（方案 04、05、06）做诱导表征：分别用 MEL1 + X-α-gal 显色、yEGFP 荧光与 OD₆₀₀ 生长曲线三套读出并行。三套读出各自回答不同问题：显色看信号有没有，荧光看信号有多强，生长曲线看诱导剂本身有没有毒性。其中显色读出（方案 04）已执行但未得到可用结果，短期无法优化，本模块现有结果仅来自荧光与生长曲线两条读出，不以显色判读。
+            </p>
+
+            <h3 id="design-reporter-controls">判定与对照设计</h3>
+            <p class="content-intro">
+              建库筛选分两轮：先负选挑无色克隆，再在高浓度 α-factor 下挑诱导变蓝的克隆，FUS1 启动子测序鉴定。诱导表征设 0 μM 阴性组与纯培养基空白组；重复方面，方案 04 给 3 次生物学重复，方案 05、06 各给 3 次生物学重复加 3 次技术重复；方案 01、02、03 未给重复数。荧光读数在黑色 96 孔板上以 Synergy HTX 酶标仪按终点模式逐时点读数，实际执行参数为滤光片组 1：激发 485/20 nm、发射 528/20 nm，顶部光学、增益 35、检测高度 1 mm，每 1 h 读一次、连续 16 h，并以荧光值除以 OD₆₀₀ 归一化；方案文本原标称 488 nm 激发 / 507 nm 发射并注明「可根据仪器参数微调」，页面按实际仪器参数引用。OD₆₀₀ 未按逐小时采样，实际于诱导后 0 h、0 h 33 min、1 h 43 min、2 h 49 min、5 h 31 min、9 h 55 min（约 0、0.55、1.72、2.82、5.52、9.92 h）共 6 个时点测定。<!-- RC-1：方案写 24 → 0 μM 八档，与常规 nM 量级相差 10³–10⁴ 倍，核实前页面不使用该数值 --><!-- RC-4：方案 01 缺退火温度 / 循环数 / 凝胶浓度等参数 --><!-- RC-9 / RC-10：对照定义与重复数分布不均，引用前核对 -->
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 4. 设计迭代与失败 ============ -->
+        <div id="design-iteration" class="content-card">
+          <h2>设计迭代与失败</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              三个卡点按「现象 → 判断 → 改动 → 结果」写。一处直接改变了后续方案（接口模块换路线），两处改了检测与成像条件。
+            </p>
+
+            <h3 id="design-iteration-1">路线一（GPA1 供体）被测序判否</h3>
+            <p class="content-intro">
+              现象：pRS426 二次线性化路线体外组装顺利，但一步克隆产物转 TOP10 试了六种浓度均无目标菌落；线性供体片段送测发现 500 bp 之后大量碱基错配。判断：以质粒 PCR 扩增制备长供体片段的策略可行性较差。改动：放弃路线一，未做酵母转化，改用多片段融合 PCR。结果：路线二拼成完整供体片段并转化酵母，得到 12 号、17 号两株测序一致的工程菌。
+            </p>
+
+            <h3 id="design-iteration-2">WB 分子量不符</h3>
+            <p class="content-intro">
+              现象：7 月 16 日与 7 月 18 日的 SDS-PAGE 与 WB，预期 60 多 kD，条带出现在 40 kD 附近。判断：先排查上样与转膜条件，后续调整了样品处理与检测条件。改动与结果：8 月 30 日至 31 日在 60 kD 附近有条带，但杂带较多，仍需优化。
+            </p>
+
+            <h3 id="design-iteration-3">免疫荧光阴性</h3>
+            <p class="content-intro">
+              现象：7 月 29 日免疫荧光记录，1、2 号为第一次构建的菌，3、4 号为第二次构建，7、8 号为 BY4741 阴性对照，均无明显荧光。判断：信号不足或抗体、破壁条件未优化，未继续深挖。本条按记录照实写为阴性结果。
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ 5. 结果与讨论 ============ -->
+        <div id="design-discussion" class="content-card">
+          <h2>结果与讨论</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              四个模块各自成立，端到端的链路还没有一次完整实测。
+            </p>
+            <p class="content-intro">
+              底盘模块给出经测序确认的敲除株，并观察到敲除改变了菌株对 α-factor 的响应；受体模块的克隆链走通，蛋白层在 60 kD 附近测到条带但杂带较多，功能验证的读板数据以图片形式保存。接口改造得到 12 号、17 号两株测序一致的工程菌，但改造之后细胞对 α-factor 的响应在形态、生长、通路三层都减弱——这是改造本身的后果，需要在页面上讲清，因为项目最终要靠人源受体驱动通路，而不是靠 α-factor。报告体系完成构建，并拿到随 α-factor 浓度变化的荧光响应。
+            </p>
+            <p class="content-intro">
+              把四段并起来看，从识别到输出的完整链路还没有一次端到端实测：识别元件的表达与功能读出仍待完成，底盘与接口两段有明确的单点结果，报告体系拿到了剂量响应。失败记录多数来自这些未完成处，写清卡在哪一步，供后续队伍判断该从哪一段接手。各模块的完整数值、图表与讨论见 <a href="result.html">Results 页</a>。
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+  <section id="footer" class="section-footer">
+  
+  <div class="component-container">
+    <div class="footer-wrapper">
+      <div class="footer-top">
+        <div class="footer-scroller">
+          <div class="image-scroller">
+            <div class="scroller-track">
+              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
+              </a>
+              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us:</h4>
+          <div class="contact-icons">
+            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+              <span class="iconfont icon-youxiang"></span>
+            </div>
+            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <span class="iconfont icon-bilibili-fill"></span>
+            </a>
+            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+              <span class="iconfont icon-weixin"></span>
+              <div class="wechat-qr-container">
+                <div class="wechat-qr-arrow"></div>
+                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+            <circle cx="20" cy="20" r="4" fill="white" />
+          </svg>
+        </span>
+        <span class="divider-line"></span>
+      </div>
+      <div class="footer-navigation">
+        <div class="footer-content-box">
+          <div class="footer-columns">
+            <div class="footer-column">
+              <h4>Project</h4>
+              <ul>
+                <li><a href="../project/description.html">Description</a></li>
+                <li><a href="../project/design.html">Design</a></li>
+                <li><a href="../project/engineering.html">Engineering</a></li>
+                <li><a href="../project/contribution.html">Contribution</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Wet Lab</h4>
+              <ul>
+                <li><a href="../wet-lab/design.html">Design</a></li>
+                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
+                <li><a href="../wet-lab/result.html">Results</a></li>
+                <li><a href="../wet-lab/parts.html">Parts</a></li>
+                <li><a href="../wet-lab/safety.html">Safety</a></li>
+                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Dry Lab</h4>
+              <ul>
+                <li><a href="../dry-lab/model.html">Model</a></li>
+                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
+                <li><a href="../dry-lab/software.html">Software</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Human Practices</h4>
+              <ul>
+                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+                <li><a href="../human-practices/education.html">Education</a></li>
+                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Team</h4>
+              <ul>
+                <li><a href="../team/members.html">Members</a></li>
+                <li><a href="../team/attributions.html">Attributions</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider divider-simple">
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-line-short"></span>
+        <span class="divider-text">Synthetic Biology</span>
+        <span class="divider-line-short"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+        <span class="divider-dot"></span>
+      </div>
+      <div class="footer-bottom-section">
+        <p>&copy; 2026 - Content on this site is licensed under a Attribution 4.0 International license.</p>
+        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
+  <script src="../static/js/core/utils.js" defer></script>
+  <script src="../static/js/components/page-loader.js" defer></script>
+  <script src="../static/js/core/mobile-menu.js" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="../static/js/core/page-progress-bar.js" defer></script>
+  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/core/search.js" defer></script>
+  <script src="../static/js/components/section-fold.js" defer></script>
+  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    new PageProgressBar().startAutoProgress();
+
+  });
+</script>
+
+</body>
+</html>

@@ -1,1428 +1,800 @@
-/**
- * Contribution 页面双语内容源（中文 + 英文）
- *
- * 结构说明：
- * - nav：左侧目录，每项含 id / zh / en，可带 children
- * - cards：正文卡片，每项含 id / title / summary / blocks
- * blocks 支持四种类型：
- * p 单段落（可带 cls）
- * fields 字段列表（label + value 双语）
- * links 页内索引链接
- * table 表格（heading + head + rows，单元格支持 HTML 如 <code>）
- *
- * 术语保持一致：待填 = To fill，待补 = To obtain，待核 = To verify。
- * 英文段落由.i18n-en 包裹，search-index-generator.js 会排除该类，避免双语内容重复进索引。
- */
-
-const L = {
- type: { zh: '类型', en: 'Type' },
- what: { zh: '是什么', en: 'What it is' },
- why: { zh: '为什么对后续队伍有用', en: 'Why it is useful to future iGEM teams' },
- how: { zh: '后续队伍怎么用', en: 'How future iGEM teams use it' },
- get: { zh: '怎么拿到', en: 'How to obtain it' },
- evidence: { zh: '证据', en: 'Evidence' },
- attribution: { zh: '归属与来源', en: 'Attribution and source' },
- progress: { zh: '进度', en: 'Progress' },
- fact: { zh: 'factStatus', en: 'factStatus' },
- verify: { zh: '核验', en: 'Verification' }
-};
-
-const V = {
- pending: { zh: '待定', en: 'Pending' },
- secondary: { zh: 'secondary-source-only', en: 'secondary-source-only' },
- toVerifyPerson: { zh: '', en: '' },
- partType: { zh: '部件', en: 'Part' },
- protoType: { zh: '协议与方法', en: 'Protocol and method' },
- drylabType: { zh: '干实验记录', en: 'Dry lab record' },
- hpType: { zh: '人类实践记录', en: 'Human practices record' }
-};
-
-// 关键参数表头（协议卡片复用）
-const paramHead = [
- { zh: '参数', en: 'Parameter' },
- { zh: '取值', en: 'Value' }
-];
+// Contribution 页内容数据（中英双语源）
+// 结构依据：static/expriments/The extreme/contribution/output/15-Contribution页面内容大纲.md
+// 分章：概览 → 1 部件（4 条）→ 2 协议与方法（4 条）→ 3 其他贡献（3 条）→ 获取与许可 → 归属与致谢
+// 每条贡献按「是什么 / 为什么对后续队伍有用 / 怎么拿到」三件套写，另附证据与归属来源。
+// 内部备注：证据与归属里的待核项以源码注释保留，不渲染（2026-09-16 规则：状态与进度不渲染）。
+// 版式约定：zh 在前为源文本，en 为对照译文；渲染顺序由模板决定（en 主视觉 / zh 辅助）。
 
 module.exports = {
- nav: [
- { id: 'contribution-overview', zh: 'Contribution 概览', en: 'Contribution Overview' },
- {
- id: 'parts-overview',
- zh: '1. 部件（Parts）',
- en: '1. Parts',
- children: [
- { id: 'parts-p1', zh: 'P1 PAGER 融合受体', en: 'P1 PAGER fusion receptor' },
- { id: 'parts-p2', zh: 'P2 人源化 Gpa1 变体', en: 'P2 Humanised Gpa1 variant' },
- { id: 'parts-p3', zh: 'P3 FUS1 报告盒', en: 'P3 FUS1 reporter cassettes' },
- { id: 'parts-p4', zh: 'P4 三靶点 sgRNA', en: 'P4 sgRNAs for three targets' },
- { id: 'parts-p5', zh: 'P5 三敲底盘菌株', en: 'P5 Triple-knockout chassis strain' }
- ]
- },
- {
- id: 'protocols-overview',
- zh: '2. 协议与方法',
- en: '2. Protocols and Methods',
- children: [
- { id: 'protocols-t1', zh: 'T1 大肠杆菌热激转化', en: 'T1 E. coli heat-shock transformation' },
- { id: 'protocols-t2', zh: 'T2 质粒提取', en: 'T2 Plasmid extraction' },
- { id: 'protocols-t3', zh: 'T3 双酶切验证', en: 'T3 Double-digestion verification' },
- { id: 'protocols-t4', zh: 'T4 酵母 LiAc/PEG 转化', en: 'T4 Yeast LiAc/PEG transformation' },
- { id: 'protocols-t5', zh: 'T5 CRISPR-Cas9 三基因敲除', en: 'T5 CRISPR-Cas9 triple knockout' },
- { id: 'protocols-t6', zh: 'T6 Gpa1 同源重组整合', en: 'T6 Gpa1 integration by homologous recombination' },
- { id: 'protocols-t7', zh: 'T7 总蛋白提取与 WB', en: 'T7 Total protein extraction and WB' },
- { id: 'protocols-t8', zh: 'T8 DCZ 诱导与检测', en: 'T8 DCZ induction and detection' },
- { id: 'protocols-t9', zh: 'T9 质粒构建与酶切排错', en: 'T9 Plasmid construction and digestion troubleshooting' },
- { id: 'protocols-t10', zh: 'T10 功能测试三组对照', en: 'T10 Three controls for functional testing' },
- { id: 'protocols-t11', zh: 'T11 质粒构建双酶切记录', en: 'T11 Double-digestion record for the built plasmid' }
- ]
- },
- {
- id: 'other-overview',
- zh: '3. 其他贡献',
- en: '3. Other contributions',
- children: [
- { id: 'other-drylab', zh: '3a. 干实验', en: '3a. Dry Lab' },
- { id: 'other-hp', zh: '3b. 人类实践', en: '3b. Human Practices' }
- ]
- }
- ],
+  nav: [
+    { id: 'contribution-overview', zh: 'Contribution 概览', en: 'Contribution Overview' },
+    {
+      id: 'contribution-parts',
+      zh: '1. 部件（Parts）',
+      en: '1. Parts',
+      children: [
+        { id: 'parts-deltafar1', zh: 'Δfar1 底盘菌株', en: 'Δfar1 chassis strain' },
+        { id: 'parts-pager', zh: 'PAGER 识别融合受体', en: 'PAGER recognition fusion receptor' },
+        { id: 'parts-gpa1', zh: '人源化 Gpa1 接口工程菌', en: 'Humanised Gpa1 interface strain' },
+        { id: 'parts-reporter', zh: 'FUS1 启动子报告盒', en: 'FUS1 promoter reporter cassette' }
+      ]
+    },
+    {
+      id: 'contribution-protocols',
+      zh: '2. 协议与方法',
+      en: '2. Protocols and Methods',
+      children: [
+        { id: 'protocol-crispr', zh: '酵母 CRISPR/Cas9 敲除流程', en: 'Yeast CRISPR/Cas9 knockout workflow' },
+        { id: 'protocol-donor', zh: '长片段供体两条制备路线', en: 'Two routes for long linear donor fragments' },
+        { id: 'protocol-readout', zh: 'α-factor 梯度三种读出', en: 'Three readouts under an α-factor gradient' },
+        { id: 'protocol-pager', zh: 'PAGER 受体表达与功能验证流程', en: 'PAGER receptor expression and functional assay workflow' }
+      ]
+    },
+    {
+      id: 'contribution-others',
+      zh: '3. 其他贡献',
+      en: '3. Other Contributions',
+      children: [
+        { id: 'other-verification', zh: '验证纪律：菌落 PCR + 测序', en: 'Verification discipline: colony PCR plus sequencing' },
+        { id: 'other-afactor', zh: 'α-factor 浓度体系提醒', en: 'Note on α-factor concentration systems' },
+        { id: 'other-mispair', zh: '长片段 PCR 错配教训', en: 'Lesson on long-fragment PCR mispairing' }
+      ]
+    },
+    { id: 'contribution-access', zh: '获取与许可', en: 'Access and Licence' },
+    { id: 'contribution-attribution', zh: '归属与致谢', en: 'Attribution' }
+  ],
 
- cards: [
- // ============ 概览 ============
- {
- id: 'contribution-overview',
- title: { zh: 'Contribution 概览', en: 'Contribution Overview' },
- summary: {
- zh: 'PAGER-Yeast 以酿酒酵母 BY4741 为底盘，用 PAGER 可编程抗原门控受体识别甲型流感病毒 HA 抗原，并把识别事件转成 FUS1 启动子下的 yEGFP 与 lacZ 报告输出。本页把这条链路中已经可以交到下一支队伍手上的部分逐条列出：5 项部件、8 项协议与方法、4 项设计说明与排错记录，并给出每项的获取方式与来源归属。',
- en: 'PAGER-Yeast uses Saccharomyces cerevisiae BY4741 as the chassis and a PAGER programmable antigen-gated receptor to recognise influenza A virus HA antigen, converting the recognition event into yEGFP and lacZ reporter output under the FUS1 promoter. This page lists, item by item, what this team can already hand to the next team: five parts, eight protocols and methods, and four design and troubleshooting records, each with how to obtain it and its attribution.'
- },
- blocks: [
- {
- type: 'p',
- text: {
- zh: '如果只取三样，先看这三条：参数最全，可以直接照着做。',
- en: 'If you only take three things, start here: these have the fullest parameters and can be repeated as written.'
- }
- },
- {
- type: 'links',
- items: [
- { href: '#parts-p1', zh: 'P1 PAGER 膜表面融合受体全长复合部件（全序列测序与设计一致）', en: 'P1 full PAGER surface fusion receptor composite part (full sequencing matches the design)' },
- { href: '#protocols-t1', zh: 'T1 大肠杆菌热激转化（感受态、抗生素、热激与复苏条件齐全）', en: 'T1 E. coli heat-shock transformation (competent cells, antibiotic, heat-shock and recovery conditions all given)' },
- { href: '#protocols-t3', zh: 'T3 双酶切验证（体系与电泳条件齐全，条带大小与理论值一致）', en: 'T3 double-digestion verification (reaction and electrophoresis conditions given, band sizes match theory)' }
- ]
- },
- {
- type: 'p',
- cls: 'content-intro',
- text: {
- zh: '合成生物学里能直接用的元件与流程，多数来自前人公开的组合与个人整理。本项目在设计与实验中同样站在这些公开成果之上，因此把自身可复用的产出整理成页，供后续队伍直接取用，或在上面继续改动。',
- en: 'Most directly usable parts and workflows in synthetic biology come from combinations others published and from records individuals took the trouble to keep. This project also builds on those public results, so the outputs worth reusing are gathered here for later teams to take as they are, or to keep modifying.'
- }
- },
- {
- type: 'p',
- text: {
- zh: '本页只为一个目的服务：把本队做过的东西交到下一支队伍手上，并说清它对别人有什么用。因此每条贡献都回答同样的四个问题：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到。按工作性质分为部件、协议与方法、干实验 / 人类实践三类；本队暂无自研软件与硬件产出，相应部分不设，避免留下空节。',
- en: 'This page serves one purpose: hand what this team built to the next team, and say plainly what use it has for others. Every entry therefore answers the same four questions: what it is, why it helps later teams, how later teams use it, and how to get it. Entries fall into parts, protocols and methods, and dry lab / human practices by nature of the work. This team has produced no software or hardware of its own, so those are left out rather than shown as empty.'
- }
- },
- // 状态标记说明段（2026-09-16 规则：状态显示不渲染，仅存于代码注释）。原文：
- // {
- // type: 'p',
- // text: {
- //   zh: '每条都带状态标记。已完成并留有记录的标为 <code>secondary-source-only</code>；属于设计或计划的标为「待定」。少数尚未落实的信息用三个标签提示： 指登记后回填（Registry 编号与链接、License、获取入口）， 指需对照一手记录复核（来源文献、授权状态、位点坐标）， 指实验完成后补入本页的参数与原始记录。',
- //   en: 'Every item carries a status. Work that is finished and documented is marked <code>secondary-source-only</code>; design intent and plans are marked &ldquo;Pending&rdquo;. A small number of open points are flagged with three labels: means the entry is filled in after registration (Registry number and link, licence, access point), means it needs checking against the primary record (source reference, permission status, site coordinates), and means the parameters or raw record are added to this page once the experiment is done.'
- // }
- // },
- {
- type: 'ul',
- items: [
- {
- label: { zh: '部件', en: 'Parts' },
- text: {
- zh: 'PAGER 膜表面融合受体全长复合部件及其六个子元件、人源化 Gpa1 变体、FUS1 报告盒、三个靶点的 sgRNA、三敲底盘菌株。其中 P1 的全序列测序与设计一致。',
- en: 'The full PAGER surface fusion receptor composite part and its six sub-components, the humanised Gpa1 variant, FUS1 reporter cassettes, sgRNAs for three targets, and the triple-knockout chassis strain. The P1 full sequence matches the design.'
- }
- },
- {
- label: { zh: '协议与方法', en: 'Protocols and methods' },
- text: {
- zh: '记录最全、留有完整参数的三项主推：大肠杆菌热激转化、质粒提取、双酶切验证，含感受态、抗生素、试剂盒、酶切体系与电泳条件；另有五项已定方案的实验流程，参数随实验推进补入本页。',
- en: 'Three highlighted procedures with the fullest parameters and real records: E. coli heat-shock transformation, plasmid extraction and double-digestion verification, including competent cells, antibiotic, kit, digestion reaction and electrophoresis conditions; plus five protocols whose plans are fixed and whose parameters are added to this page as the work proceeds.'
- }
- },
- {
- label: { zh: '其他贡献', en: 'Other contributions' },
- text: {
- zh: '底盘改造与人源化 Gpa1 的设计说明、酶切排错经验、三组对照设置方案、质粒构建与验证记录。',
- en: 'Design notes for chassis engineering and Gpa1 humanisation, troubleshooting notes for a failed digestion, the three-control setup, and the plasmid construction and verification record.'
- }
- }
- ]
- }
- ]
- },
+  cards: [
+    // ============ 概览 ============
+    {
+      id: 'contribution-overview',
+      title: { zh: 'Contribution 概览', en: 'Contribution Overview' },
+      summary: {
+        zh: '我们做的是一个酵母底盘的抗原传感项目，过程中积累了可复用的底盘菌株、构建流程、验证记录与排错经验。本页按部件、协议与方法、其他三类列出，每条给「是什么、为什么对后续队伍有用、怎么拿到」。',
+        en: 'This project builds an antigen-sensing yeast chassis, and along the way it produced reusable strains, construction workflows, verification records and troubleshooting notes. This page lists them under parts, protocols and methods, and other contributions, with what each item is, why it is useful to later teams, and how to obtain it.'
+      },
+      blocks: [
+        {
+          type: 'p',
+          text: {
+            zh: '这些产出不只对本项目有意义，也能帮后续队伍少走弯路。页面里能直接拿走的三样：酵母里做 Gα 亚基 C 端人源化的两条路线对照（含被实测判否的那条）、菌落 PCR 判据必须以测序为准的教训、α-factor 梯度读出的三套浓度体系如何避免混用。',
+            en: 'These outputs are meant to save later teams time. Three things can be taken directly: the side-by-side comparison of two routes for C-terminal humanisation of a yeast Gα subunit (including the one that measurement ruled out), the lesson that colony PCR is only a screening criterion with sequencing as the final word, and how to keep the three α-factor concentration systems from being mixed up.'
+          }
+        },
+        {
+          type: 'links',
+          items: [
+            { href: '#parts-deltafar1', zh: 'Δfar1 底盘菌株（FAR1 敲除，测序确认）', en: 'Δfar1 chassis strain (FAR1 knockout, sequencing-confirmed)' },
+            { href: '#protocol-crispr', zh: '酵母 CRISPR/Cas9 敲除流程（参数齐全）', en: 'Yeast CRISPR/Cas9 knockout workflow (full parameters)' },
+            { href: '#other-verification', zh: '验证纪律：菌落 PCR 初筛 + 测序确认', en: 'Verification discipline: colony PCR screening plus sequencing confirmation' }
+          ]
+        },
+        {
+          type: 'p',
+          cls: 'content-intro',
+          text: {
+            zh: '本页只写本队实际做过的产出与对应记录；第三方来源的序列在归属栏单独注明，不写成自研；未完成的部分按计划表述，不写成已验证。',
+            en: 'This page only covers outputs this team actually produced, together with the matching records. Third-party sequences are marked in the attribution field rather than presented as our own, and unfinished work is described as a plan, not as a verified result.'
+          }
+        }
+      ]
+    },
 
- // ============ 1. 部件 ============
- {
- id: 'parts-overview',
- title: { zh: '1. 部件（Parts）', en: '1. Parts' },
- summary: {
- zh: '本类为本队拟提交至 iGEM Registry 的元件，以及可供后续队伍复用的底盘改造靶点。',
- en: 'Parts the team intends to submit to the iGEM Registry, plus chassis engineering targets that future iGEM teams can reuse.'
- },
- blocks: [
- {
- type: 'p',
- text: {
- zh: '<strong>本类主推：</strong>P1 PAGER 膜表面融合受体全长复合部件。它的全序列测序与设计一致，是复现本队识别模块时最完整的一份材料。',
- en: '<strong>Highlight of this section:</strong> P1, the full PAGER surface fusion receptor composite part. Its full sequence matches the design, so it is the most complete material available for reproducing this team recognition module.'
- }
- },
- {
- type: 'p',
- text: {
- zh: '以下每条按统一字段列出：是什么、为什么对后续队伍有用、后续队伍怎么用、怎么拿到、证据、归属与来源。Registry 编号与链接在提交前登记后回填；第三方来源的序列已在归属栏注明，公开提交前完成授权确认。',
- en: 'Every item below uses the same set of fields: what it is, why it is useful to future iGEM teams, how future iGEM teams use it, how to obtain it, evidence, attribution and source. Registry numbers and links are filled in once registration is complete before submission; sequences obtained from third parties are noted in the attribution field, and permission is confirmed before public submission.'
- }
- },
- {
- type: 'links',
- items: [
- { href: '#parts-p1', zh: 'P1 PAGER 膜表面融合受体全长复合部件', en: 'P1 Full PAGER surface fusion receptor composite part' },
- { href: '#parts-p2', zh: 'P2 人源化 Gpa1 变体（C 端 KIGII→EYNLV）', en: 'P2 Humanised Gpa1 variant (C-terminus KIGII to EYNLV)' },
- { href: '#parts-p3', zh: 'P3 FUS1-yEGFP 与 FUS1-lacZ 报告盒', en: 'P3 FUS1-yEGFP and FUS1-lacZ reporter cassettes' },
- { href: '#parts-p4', zh: 'P4 STE2 / FAR1 / Sst2 靶向 sgRNA', en: 'P4 sgRNAs targeting STE2 / FAR1 / Sst2' },
- { href: '#parts-p5', zh: 'P5 三敲底盘菌株 BY4741 Δste2 Δfar1 Δsst2', en: 'P5 Triple-knockout chassis strain BY4741 Δste2 Δfar1 Δsst2' }
- ]
- }
- ]
- },
+    // ============ 1. 部件（章导语） ============
+    {
+      id: 'contribution-parts',
+      title: { zh: '1. 部件（Parts）', en: '1. Parts' },
+      summary: {
+        zh: '本队拟提交至 iGEM Registry 的元件，以及可供后续队伍复用的底盘改造产物。四条：Δfar1 底盘、PAGER 受体、人源化 Gpa1 工程菌、FUS1 报告盒。',
+        en: 'Parts intended for submission to the iGEM Registry, plus chassis engineering outputs later teams can reuse. Four items: the Δfar1 chassis, the PAGER receptor, the humanised Gpa1 strain and the FUS1 reporter cassette.'
+      },
+      blocks: [
+        {
+          type: 'p',
+          text: {
+            zh: '每条部件卡都回答同样三个问题：是什么、为什么对后续队伍有用、怎么拿到。第三方来源的序列在归属栏单独注明。',
+            en: 'Every part entry answers the same three questions: what it is, why it is useful to later teams, and how to obtain it. Third-party sequences are marked separately in the attribution field.'
+          }
+        }
+      ]
+    },
 
- // ---- P1 ----
- {
- id: 'parts-p1',
- title: { zh: 'P1 PAGER 膜表面融合受体全长复合部件', en: 'P1 Full PAGER surface fusion receptor composite part' },
- summary: {
- zh: '一段编码膜表面融合受体的完整设计，由信号肽、连接肽、抑制域、纳米抗体、蛋白酶切位点与受体依次连接，用于在酵母细胞膜表面展示抗原识别单元。',
- en: 'A complete design encoding a surface fusion receptor, consisting of a signal peptide, linkers, an inhibitory domain, a nanobody, a protease cleavage site and a receptor joined in sequence, intended to display the antigen-recognition unit on the yeast cell surface.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.partType },
- {
- label: L.what,
- value: {
- zh: 'α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq 的全长融合蛋白表达盒。无抗原时 MT1 抑制域维持对 hM1Dq 的抑制，抗原与纳米抗体结合后解除该抑制，属于设计机制，本项目中尚未验证。',
- en: 'The full-length fusion protein expression cassette α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq. Without antigen the MT1 inhibitory domain is designed to keep hM1Dq suppressed, with the suppression released once antigen binds the nanobody. This is a design mechanism and has not been verified in this project.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要搭建抗原门控的酵母受体系统，可直接取用这条完整设计及其子元件，省去从零组合功能域与反复设计连接肽的工作。',
- en: 'Teams building an antigen-gated yeast receptor system can take this complete design and its sub-components directly, rather than assembling the functional domains from scratch and iterating on linker design.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节子元件表依次克隆到目标载体；若要更换识别对象，替换其中的纳米抗体编码区即可，替换后需自行验证各功能域仍能正确折叠。',
- en: 'Clone the parts into the target vector in the order given in the sub-component table below; to change the recognition target, replace the nanobody coding region and verify on your own that each domain still folds correctly. '
- }
- },
- {
- label: L.get,
- value: {
- zh: 'Registry 编号与链接；编码该融合蛋白的质粒编号为 ABX63942，克隆骨架为 pGADT7，两端酶切位点为 5&#39;-NdeI 与 3&#39;-BamHI。',
- en: 'Registry number and link; the plasmid encoding this fusion protein is ABX63942, the cloning backbone is pGADT7, and the flanking restriction sites are 5&prime;-NdeI and 3&prime;-BamHI.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '基因合成产物的全序列测序记录显示与设计一致、未见突变。尚无功能表征，荧光响应与抗原响应均未验证。',
- en: 'The full-sequencing record of the synthesised gene shows the sequence matches the design with no mutations observed. There is no functional characterisation yet, and neither the fluorescence response nor the antigen response has been verified.'
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '融合蛋白由本队设计并组合；MT1、anti-H1N1_HA 纳米抗体与 TEVcs 为第三方来源序列，公开提交前需确认授权。',
- en: 'The fusion protein was designed and assembled by this team. MT1, the anti-H1N1_HA nanobody and TEVcs are third-party sequences,, and permission must be confirmed before public submission.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '已完成基因合成与全测序', en: 'Gene synthesis and full sequencing complete' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.secondary },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '子元件', en: 'Sub-components' },
- head: [
- { zh: '子元件', en: 'Sub-component' },
- { zh: '作用', en: 'Function' },
- { zh: '序列', en: 'Sequence' },
- { zh: '来源与归属', en: 'Source and attribution' }
- ],
- rows: [
- [
- { zh: 'α-factor 信号肽', en: 'α-factor signal peptide' },
- { zh: '引导融合蛋白分泌并定位到酵母细胞膜', en: 'Directs secretion of the fusion protein and its localisation to the yeast cell membrane' },
- { zh: '<code>MRFPSIFTAVLFAASSALA</code>', en: '' },
- { zh: '', en: '' }
- ],
- [
- { zh: '(GGGS)₃ 连接肽', en: '(GGGS)₃ linker' },
- { zh: '分隔功能域，支持相对独立折叠', en: 'Separates functional domains so they fold relatively independently' },
- { zh: '人工柔性连接肽', en: 'Engineered flexible linker' },
- { zh: '本队设计', en: 'Designed by this team' }
- ],
- [
- { zh: 'MT1 抑制域', en: 'MT1 inhibitory domain' },
- { zh: '无抗原时抑制 hM1Dq，构成自抑制开关', en: 'Suppresses hM1Dq in the absence of antigen, forming the self-inhibition switch' },
- { zh: '<code>LTCVTSKSIFGITTENCPDGQNLCFKKWYYIVPRYSDITWGCAATCPKPTNVRETIRCCETD</code>', en: '' },
- { zh: '第三方序列', en: 'Third-party sequence' }
- ],
- [
- { zh: 'anti-H1N1_HA 纳米抗体', en: 'anti-H1N1_HA nanobody' },
- { zh: '特异结合甲型流感病毒 HA 抗原，是识别单元', en: 'Binds influenza A virus HA antigen specifically and is the recognition unit' },
- { zh: '<code>QVQLVESGGGLVQPGGSLRLSCAASGSFFSRYRMGWYRQAPGEQRELVASIAYDGSTSYADPVKGRFTISRDNANTVHLQMYSLKPDDTAVYYCNLDPPGILYWGQGTQVTVSS</code>', en: '' },
- { zh: '第三方序列；公开提交前需确认授权', en: 'Third-party sequence; permission must be confirmed before public submission' }
- ],
- [
- { zh: 'TEVcs 切点', en: 'TEVcs cleavage site' },
- { zh: '用于体外模拟抗原解锁的分子开关', en: 'Molecular switch used to mimic antigen unlocking in vitro' },
- { zh: '<code>ENLYFQS</code>', en: '' },
- { zh: '第三方序列', en: 'Third-party sequence' }
- ],
- [
- { zh: 'hM1Dq 受体', en: 'hM1Dq receptor' },
- { zh: '接收上游状态并耦联下游 G 蛋白通路，可由 DCZ 激活', en: 'Receives the upstream state and couples to the downstream G-protein pathway; can be activated by DCZ' },
- { zh: '', en: '' },
- { zh: '第三方序列', en: 'Third-party sequence' }
- ]
- ]
- },
- {
- type: 'p',
- text: {
- zh: '复现提示：该融合蛋白的密码子是否针对酿酒酵母做过优化；完整序列文件或 Registry 链接。',
- en: 'Reproduction notes: whether the codons were optimised for <em>Saccharomyces cerevisiae</em>; the full sequence file or Registry link.'
- }
- }
- ]
- },
+    // ============ 1.1 Δfar1 底盘菌株 ============
+    {
+      id: 'parts-deltafar1',
+      title: { zh: '1.1 Δfar1 底盘菌株（BY4741 背景）', en: '1.1 Δfar1 chassis strain (BY4741 background)' },
+      summary: {
+        zh: 'FAR1 被 CRISPR/Cas9 敲除的酿酒酵母底盘，经测序确认；不含 SST2 敲除。',
+        en: 'A Saccharomyces cerevisiae chassis with FAR1 knocked out by CRISPR/Cas9 and confirmed by sequencing. It does not carry an SST2 knockout.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '部件', en: 'Part' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '酿酒酵母 BY4741 背景、FAR1 基因被 CRISPR/Cas9 敲除的工程底盘，基因型 <code>MATa his3Δ1 leu2Δ0 met15Δ0 ura3Δ0</code>。FAR1 敲除解除交配信号诱导的细胞周期阻滞，使细胞在监测状态下持续分裂。',
+                en: 'An engineered chassis on a BY4741 background with FAR1 knocked out by CRISPR/Cas9, genotype <code>MATa his3Δ1 leu2Δ0 met15Δ0 ura3Δ0</code>. Removing FAR1 lifts the cell-cycle arrest induced by mating signal, so the cells keep dividing during monitoring.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '任何需要做酵母实时监测、不希望细胞被交配信号拖停的队伍，都可以直接拿这株底盘，省去自己设计 sgRNA、同源臂与验证克隆的功夫。',
+                en: 'Any team that needs real-time monitoring in yeast and does not want its cells stopped by mating signal can take this chassis directly, instead of designing sgRNA, homology arms and verification clones from scratch.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '本页把它列为拟提交 iGEM Registry 的产出，编号与链接以登记结果为准；sgRNA、同源臂与验证参数见 Protocol 页底盘模块。',
+                en: 'It is listed here as an output intended for submission to the iGEM Registry, with numbers and links to follow the registration outcome; sgRNA, homology arms and verification parameters are in the chassis module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: 'F2、F10 两克隆测序确认 4 bp 缺失（CACT → TGGT）造成移码。SST2 敲除十个克隆全部未成功，本株不含 SST2 敲除，不把未成功的部分算进本部件。',
+                en: 'Clones F2 and F10 were sequenced and confirmed to carry a 4 bp deletion (CACT to TGGT) causing a frameshift. Ten SST2 knockout clones all failed, so this strain carries no SST2 knockout and that part is not counted into this item.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队构建；pML104（CRISPR/Cas9 骨架）来自 Addgene #67638。',
+                en: 'Built by this team; the pML104 CRISPR/Cas9 backbone comes from Addgene #67638.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- P2 ----
- {
- id: 'parts-p2',
- title: { zh: 'P2 人源化 Gpa1 变体（C 端 KIGII→EYNLV）', en: 'P2 Humanised Gpa1 variant (C-terminus KIGII to EYNLV)' },
- summary: {
- zh: '把酵母 Gpa1 的 C 端最后 5 个氨基酸由 KIGII 替换为人源 Gαq 对应的 EYNLV，用于把 hM1Dq 的信号接到酵母 MAPK 通路上。',
- en: 'Replaces the last five residues of the yeast Gpa1 C-terminus, KIGII, with EYNLV from human Gαq, to couple the hM1Dq signal into the yeast MAPK pathway.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.partType },
- {
- label: L.what,
- value: {
- zh: '对 Gpa1 的 C 端做定点替换（KIGII → EYNLV），使受体与酵母下游通路之间的信号接口对齐。Gpa1 是接口改造对象，不是敲除对象。',
- en: 'A targeted substitution at the Gpa1 C-terminus (KIGII to EYNLV) that aligns the signalling interface between the receptor and the yeast downstream pathway. Gpa1 is the interface being engineered, not a knockout target.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要在酵母中接入人源 GPCR 或 DREADD 受体，可直接参考这处 C 端替换的位点与序列，减少自行摸索接口序列的工作。',
- en: 'Teams wanting to connect a human GPCR or DREADD receptor in yeast can refer to this C-terminal substitution and sequence instead of searching for an interface sequence themselves.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '在自己的底盘上以同源重组方式替换 Gpa1 的 C 端序列，再验证下游报告是否被受体激活。',
- en: 'Replace the Gpa1 C-terminal sequence in your own chassis by homologous recombination, then check whether the downstream reporter is activated by the receptor. '
- }
- },
- {
- label: L.get,
- value: {
- zh: 'Registry 编号与链接。替换位点为 Gpa1 C 端最后 5 个氨基酸 KIGII→EYNLV；整合片段结构为 500 bp 上游同源臂 + 人源化 Gpa1 + URA3 筛选盒 + 500 bp 下游同源臂，具体序列随构建完成补入本页。',
- en: 'Registry number and link. The substitution site is the last five residues of the Gpa1 C-terminus, KIGII to EYNLV; the integration fragment is a 500 bp upstream homology arm + humanised Gpa1 + URA3 selection cassette + 500 bp downstream homology arm, and the exact sequence is added once construction is complete.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚未验证。整合是否成功、通路是否被激活，目前都无实验数据。',
- en: 'Not yet verified. There are no experimental data on whether integration succeeded or whether the pathway is activated.'
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '人源化位点参考人源 Gαq 序列。',
- en: 'The humanised site follows the human Gαq sequence,.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '待完成（依赖底盘敲除完成）', en: 'Not started (depends on the chassis knockouts being finished)' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- }
- ]
- },
+    // ============ 1.2 PAGER 识别融合受体 ============
+    {
+      id: 'parts-pager',
+      title: { zh: '1.2 PAGER 识别融合受体（pGADT7 载体）', en: '1.2 PAGER recognition fusion receptor (pGADT7 vector)' },
+      summary: {
+        zh: '克隆在 pGADT7 中的抗原门控融合受体；克隆与转化链路走通，蛋白与功能验证未完成。',
+        en: 'An antigen-gated fusion receptor cloned in pGADT7. The cloning and transformation chain works; protein-level and functional verification are not finished.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '部件', en: 'Part' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '克隆在 pGADT7 中的 PAGER 融合受体，序列方向为 α-factor 信号肽 → (GGGS)₃ linker → MT1 抑制毒素 → (GGGS)₃ linker → anti-H1N1_HA 纳米抗体 → TEVcs → hM1Dq 人源 DREADD 受体。',
+                en: 'A PAGER fusion receptor cloned in pGADT7, ordered as α-factor signal peptide → (GGGS)₃ linker → MT1 inhibitory toxin → (GGGS)₃ linker → anti-H1N1_HA nanobody → TEVcs → hM1Dq human DREADD receptor.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '提供了一套「抗原门控受体」的可装配骨架。后续队伍只要替换膜表面纳米抗体识别元件，就能改去识别别的抗原，不必从零设计融合结构与载体。',
+                en: 'It provides an assemblable scaffold for an antigen-gated receptor. By swapping the surface nanobody recognition element, later teams can retarget it to a different antigen without designing the fusion architecture and vector from scratch.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '本页把它列为拟提交 iGEM Registry 的产出，编号与链接以登记结果为准；克隆与转化参数见 Protocol 页受体模块。',
+                en: 'It is listed here as an output intended for submission to the iGEM Registry, with numbers and links to follow the registration outcome; cloning and transformation parameters are in the receptor module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '克隆与转化链路有 472 bp 一步克隆、689 bp 菌落 PCR 正确条带、酵母转化成功等记录。蛋白层（WB 在 60 kD 附近有条带、杂带较多）与 DCZ 功能验证（读板只有图片）尚未完成，因此「能否在酵母中稳定表达并输出信号」未完全验证，页面写明克隆验证完成、蛋白与功能验证未完成。',
+                en: 'The cloning and transformation chain is backed by records: a 472 bp one-step cloning product, a correct 689 bp colony PCR band, and successful yeast transformation. The protein level (a band near 60 kD with many extra bands on WB) and the DCZ functional assay (plate readings available only as images) are not finished, so stable expression and signal output in yeast remain unverified; the page states that cloning is verified while protein and function are not.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: 'MT1 抑制毒素与 anti-H1N1_HA 纳米抗体为第三方序列，来源与授权状态需在提交 Registry 前确认，不写成自研；hM1Dq 为人源 DREADD 受体。',
+                en: 'The MT1 inhibitory toxin and the anti-H1N1_HA nanobody are third-party sequences; their provenance and permission status must be confirmed before Registry submission and they are not presented as our own. hM1Dq is a human DREADD receptor.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- P3 ----
- {
- id: 'parts-p3',
- title: { zh: 'P3 FUS1-yEGFP 与 FUS1-lacZ 报告盒', en: 'P3 FUS1-yEGFP and FUS1-lacZ reporter cassettes' },
- summary: {
- zh: '以 FUS1 启动子驱动两种报告输出，绿色荧光用于定量，lacZ 用于显色判读，属于拟构建的报告体系。',
- en: 'Two reporter outputs driven by the FUS1 promoter: green fluorescence for quantification and lacZ for a visual colour readout. This reporter system is planned, not built.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.partType },
- {
- label: L.what,
- value: {
- zh: '两个报告盒。FUS1-yEGFP 用流式细胞术读绿色荧光强度，FUS1-lacZ 用 X-Gal 显色做定性判读；骨架使用 pESC-HIS。',
- en: 'Two reporter cassettes. FUS1-yEGFP is read as green fluorescence intensity by flow cytometry; FUS1-lacZ is judged qualitatively by X-Gal staining. The backbone is pESC-HIS. '
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要用酵母 G 蛋白通路做报告，可直接取用同一套启动子加报告基因的组合，同时得到定量与肉眼判读两种读出方式。',
- en: 'Teams using the yeast G-protein pathway for reporting can take this promoter-plus-reporter combination and get both a quantitative and a visual readout.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '把报告盒克隆到目标底盘，替换上游受体后即可复用同一读出方式；更换报告基因时注意保留 FUS1 启动子区域。',
- en: 'Clone the cassette into your chassis and reuse the same readout after swapping the upstream receptor; keep the FUS1 promoter region when changing the reporter gene. '
- }
- },
- {
- label: L.get,
- value: {
- zh: 'Registry 编号与链接。报告盒骨架为 pESC-HIS，启动子为 FUS1，报告基因分别为 yEGFP 与 lacZ；盒结构图与序列随构建完成补入本页。',
- en: 'Registry number and link. The cassette backbone is pESC-HIS, the promoter is FUS1, and the reporters are yEGFP and lacZ; the cassette map and sequence are added once construction is complete.'
- }
- },
- { label: L.evidence, value: { zh: '尚未构建，无任何表征数据。', en: 'Not yet constructed; no characterisation data.' } },
- {
- label: L.attribution,
- value: {
- zh: 'FUS1 启动子与报告基因为公开元件，具体来源。',
- en: 'The FUS1 promoter and reporter genes are public parts; exact source.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '待构建', en: 'To be constructed' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- }
- ]
- },
+    // ============ 1.3 人源化 Gpa1 接口工程菌 ============
+    {
+      id: 'parts-gpa1',
+      title: { zh: '1.3 人源化 Gpa1 接口工程菌（12 号 / 17 号）', en: '1.3 Humanised Gpa1 interface strain (clone 12 and 17)' },
+      summary: {
+        zh: 'GPA1 基因 C 端 5 个氨基酸人源化（KIGII → EYNLV）的工程菌，两株测序与设计序列完全一致。',
+        en: 'An engineered strain with the last five residues of the GPA1 C-terminus humanised (KIGII to EYNLV); two clones match the designed sequence exactly.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '部件', en: 'Part' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: 'GPA1 基因 C 端 5 个氨基酸替换为人源序列（KIGII → EYNLV）并引入终止密码子的工程菌，筛选标记 URA3。12 号与 17 号两株测序与设计序列完全一致。',
+                en: 'An engineered strain in which the last five residues of GPA1 are replaced with the human sequence (KIGII to EYNLV) followed by a stop codon, selected with URA3. Clones 12 and 17 match the designed sequence exactly.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '给出一条在酵母里做 Gα 亚基 C 端人源化、接通人源 GPCR 与酵母 MAPK 通路的可用菌株与制备路线（多片段融合 PCR），避开了「用质粒 PCR 制备长供体片段」累积错配的坑。',
+                en: 'It gives later teams a usable strain and a preparation route (multi-fragment fusion PCR) for C-terminal humanisation of a yeast Gα subunit to link a human GPCR to the yeast MAPK pathway, avoiding the mispairing trap of preparing long donor fragments by plasmid PCR.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '本页把它列为拟提交 iGEM Registry 的产出，编号与链接以登记结果为准；融合 PCR 引物与验证参数见 Protocol 页接口模块。',
+                en: 'It is listed here as an output intended for submission to the iGEM Registry, with numbers and links to follow the registration outcome; fusion PCR primers and verification parameters are in the interface module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '12 号、17 号测序一致；表型三层（形态 / 生长 / 荧光）方向一致，显示改造后 α-factor 响应减弱。路线二的最终结论以实验组确认为准，本页不写成已验证通路耦联。<!-- GC-1 菌株口径 / GC-10 方案二结论待核 -->',
+                en: 'Clones 12 and 17 match the design; three phenotypic layers (morphology, growth, fluorescence) point the same way, showing a weakened α-factor response after the edit. The final conclusion of route two is subject to confirmation by the lab team, and this page does not claim a verified pathway coupling.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队构建；pRS426 为实验室常规载体。',
+                en: 'Built by this team; pRS426 is a routine laboratory vector.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- P4 ----
- {
- id: 'parts-p4',
- title: { zh: 'P4 STE2 / FAR1 / Sst2 靶向 sgRNA', en: 'P4 sgRNAs targeting STE2 / FAR1 / Sst2' },
- summary: {
- zh: '针对底盘改造三个靶点设计的 sgRNA，用于 CRISPR-Cas9 敲除；目前处于载体构建阶段。',
- en: 'sgRNAs designed against the three chassis engineering targets, for CRISPR-Cas9 knockout. Currently at the vector construction stage.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.partType },
- {
- label: L.what,
- value: {
- zh: '三条分别靶向 STE2、FAR1、Sst2 的 sgRNA，拟克隆至 pML104 骨架，用于对 BY4741 底盘做三基因敲除。STE2 敲除用于消除内源 α-factor 受体，FAR1 敲除用于解除交配信号诱导的细胞周期停滞，Sst2 敲除用于移除 G 蛋白负调节因子。',
- en: 'Three sgRNAs targeting STE2, FAR1 and Sst2 respectively, to be cloned into the pML104 backbone for triple knockout in the BY4741 chassis. The STE2 knockout is intended to remove the endogenous α-factor receptor, the FAR1 knockout to release the mating-signal-induced cell-cycle arrest, and the Sst2 knockout to remove the G-protein negative regulator.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要改造同一底盘，可直接取用这三条靶向序列，省去重新设计 sgRNA 与筛选靶点的工作。',
- en: 'Teams engineering the same chassis can use these three targeting sequences directly instead of redesigning sgRNAs and screening targets.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '把 sgRNA 克隆进自己的 CRISPR 载体，按靶点分别验证切割效率后再做多基因敲除。',
- en: 'Clone the sgRNAs into your own CRISPR vector, verify the cutting efficiency of each target separately, then move on to multiplex knockout. '
- }
- },
- {
- label: L.get,
- value: {
- zh: 'Registry 编号与链接。sgRNA 克隆入 pML104 载体，转化后以菌落 PCR 与 Sanger 测序验证；序列与靶点坐标随实验完成补入本页。',
- en: 'Registry number and link. The sgRNAs are cloned into pML104 and verified by colony PCR and Sanger sequencing after transformation; sequences and target coordinates are added once the experiment is complete.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚无切割效率数据与敲除验证结果。归档记录显示首次酶切失败，正在重建 sgRNA 载体。',
- en: 'No cutting-efficiency data and no knockout verification yet. Archived records show the first digestion failed and the sgRNA vector is being rebuilt.'
- }
- },
- {
- label: L.attribution,
- value: {
- zh: 'sgRNA 由本队设计，靶点序列来自酿酒酵母 BY4741 基因组。',
- en: 'The sgRNAs were designed by this team; the target sequences come from the <em>Saccharomyces cerevisiae</em> BY4741 genome,.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '进行中', en: 'In progress' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: 'sgRNA 序列', en: 'sgRNA sequences' },
- head: [
- { zh: '靶基因', en: 'Target gene' },
- { zh: '长度', en: 'Length' },
- { zh: '序列（5\' → 3\'）', en: 'Sequence (5\' to 3\')' }
- ],
- rows: [
- [
- { zh: 'FAR1', en: '' },
- { zh: '89 bp', en: '' },
- { zh: '<code>GCAGTGAAAGATAAATGATCACCAAGTTTGAAGAAAACAGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code>', en: '' }
- ],
- [
- { zh: 'STE2', en: '' },
- { zh: '89 bp', en: '' },
- { zh: '<code>GCAGTGAAAGATAAATGATCTCACCTCTACTGATGAACTGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code>', en: '' }
- ],
- [
- { zh: 'Sst2', en: '' },
- { zh: '89 bp', en: '' },
- { zh: '<code>GCAGTGAAAGATAAATGATCACACCGCAGGACAGAACTCGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code>', en: '' }
- ]
- ]
- }
+    // ============ 1.4 FUS1 启动子报告盒 ============
+    {
+      id: 'parts-reporter',
+      title: { zh: '1.4 FUS1 启动子报告盒（pESC-HIS / MEL1 / yEGFP）', en: '1.4 FUS1 promoter reporter cassette (pESC-HIS / MEL1 / yEGFP)' },
+      summary: {
+        zh: '以 FUS1 启动子驱动报告基因的酵母报告盒，两套读出并行；方案就绪，表征未完成。',
+        en: 'A yeast reporter cassette driving reporters from the FUS1 promoter, with two parallel readouts. The plans are ready; characterisation is not finished.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '部件', en: 'Part' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '以 FUS1 启动子驱动报告基因的酵母报告盒，pESC-HIS 载体（HIS3 标记，两端 40 bp 同源臂），两套读出：MEL1 + X-α-gal 蓝白斑显色，以及 yEGFP + 酶标仪荧光。',
+                en: 'A yeast reporter cassette driving reporters from the FUS1 promoter, on a pESC-HIS backbone (HIS3 marker, 40 bp homology arms at both ends), with two readouts: MEL1 with X-α-gal blue-white colouring, and yEGFP read on a plate reader.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '提供一套「G 蛋白响应型启动子 → 报告基因」的即用骨架。后续队伍可以替换报告基因、改浓度梯度，快速搭起自己的诱导读出。',
+                en: 'It provides a ready scaffold from a G-protein-responsive promoter to a reporter gene. Later teams can swap the reporter or change the gradient to build their own induction readout quickly.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '本页把它列为拟提交 iGEM Registry 的产出，编号与链接以登记结果为准；六份方案与参数见 Protocol 页报告模块。',
+                en: 'It is listed here as an output intended for submission to the iGEM Registry, with numbers and links to follow the registration outcome; the six plans and their parameters are in the reporter module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '目前只有六份实验方案与预期结果，尚无实测数据；方案 01 含 PRE1 / PRE2 位点突变建库设计，用两轮筛选挑低泄露、可诱导的突变体。本页写明方案就绪、表征未完成，不把预期写成已验证。<!-- RC-12 -->',
+                en: 'So far there are six experimental plans with expected results and no measured data. Plan 01 includes a PRE1 / PRE2 site-directed mutation library screened in two rounds for low-leakage, inducible mutants. The page states that the plans are ready and characterisation is unfinished, and does not present expectations as verified results.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队设计；两套读出体系（MEL1 + X-α-gal，与团队既有文档的 lacZ + X-Gal / ONPG）并存，引用时须注明是哪一套。<!-- RC-2 -->',
+                en: 'Designed by this team. Two readout systems coexist (MEL1 with X-α-gal here, and lacZ with X-Gal / ONPG in earlier team documents); when citing, state which one is meant.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- ]
- },
+    // ============ 2. 协议与方法（章导语） ============
+    {
+      id: 'contribution-protocols',
+      title: { zh: '2. 协议与方法（Protocols & Methods）', en: '2. Protocols and Methods' },
+      summary: {
+        zh: '本队实际执行过、参数完整的四套流程：酵母 CRISPR/Cas9 敲除、长片段供体两条制备路线、α-factor 梯度三种读出、PAGER 受体表达与功能验证。',
+        en: 'Four workflows actually carried out by this team with full parameters: yeast CRISPR/Cas9 knockout, the two routes for long donor fragments, three readouts under an α-factor gradient, and PAGER receptor expression and functional assays.'
+      },
+      blocks: [
+        {
+          type: 'p',
+          text: {
+            zh: '每条协议卡写清分步参数、改动点与实测卡点；参数细节在 Protocol 页对应模块。',
+            en: 'Each protocol entry gives stepwise parameters, modifications and measured bottlenecks; the parameter details sit in the matching modules of the Protocol page.'
+          }
+        }
+      ]
+    },
 
- // ---- P5 ----
- {
- id: 'parts-p5',
- title: { zh: 'P5 三敲底盘菌株 BY4741 Δste2 Δfar1 Δsst2', en: 'P5 Triple-knockout chassis strain BY4741 Δste2 Δfar1 Δsst2' },
- summary: {
- zh: '在 BY4741 上依次敲除 STE2、FAR1 与 Sst2 得到的底盘菌株，拟用于降低内源信号干扰；敲除是否完成尚在验证。',
- en: 'A chassis strain obtained by knocking out STE2, FAR1 and Sst2 in BY4741, intended to reduce endogenous signal interference. Whether the knockouts are complete is still being verified.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- {
- label: L.type,
- value: {
- zh: '部件或底盘资源',
- en: 'Part or chassis resource '
- }
- },
- {
- label: L.what,
- value: {
- zh: '对野生型 BY4741 做三个基因的敲除。STE2 敲除用于消除内源 α-factor 受体，FAR1 敲除用于解除交配信号诱导的细胞周期停滞，Sst2 敲除用于移除 G 蛋白负调节因子。这些改动是设计意图，本项目尚未完成验证，也未证明它们必然改善任何性能指标。',
- en: 'Knockout of three genes in wild-type BY4741. The STE2 knockout is intended to remove the endogenous α-factor receptor, the FAR1 knockout to release the mating-signal-induced cell-cycle arrest, and the Sst2 knockout to remove the G-protein negative regulator. These changes are design intentions; this project has not finished verifying them and has not shown that they necessarily improve any performance metric.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要在酵母里使用外源受体，可参考这三处改造靶点，把内源交配通路的干扰先降下来。',
- en: 'Teams wanting to use a heterologous receptor in yeast can refer to these three engineering targets to reduce interference from the endogenous mating pathway first.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '以本页 P4 的 sgRNA 做敲除，用菌落 PCR 与测序逐步验证每个位点；获得双敲或三敲菌株后再评估是否需要全部三处改动。',
- en: 'Knock out using the sgRNAs in P4 above and verify each locus step by step with colony PCR and sequencing; once double or triple knockouts are obtained, reassess whether all three changes are needed. '
- }
- },
- {
- label: L.get,
- value: {
- zh: 'Registry 编号与链接。菌株为 BY4741 Δste2 Δfar1 Δsst2，以 SD-Ura 平板与 URA3 营养缺陷标记筛选；保藏与寄送方式随验证完成后公布。',
- en: 'Registry number and link. The strain is BY4741 Δste2 Δfar1 Δsst2, selected on SD-Ura plates with the URA3 auxotrophic marker; deposit and shipping arrangements are published once verification is complete.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚无敲除验证结果，菌株是否获得三敲未确认。',
- en: 'No knockout verification results yet; it is not confirmed that the strain carries all three knockouts.'
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '底盘为 BY4741，敲除靶点由本队确定。',
- en: 'The chassis is BY4741; the knockout targets were chosen by this team.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '进行中', en: 'In progress' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- }
- ]
- },
+    // ============ 2.1 酵母 CRISPR/Cas9 敲除流程 ============
+    {
+      id: 'protocol-crispr',
+      title: { zh: '2.1 酵母 CRISPR/Cas9 双基因敲除流程', en: '2.1 Yeast CRISPR/Cas9 knockout workflow' },
+      summary: {
+        zh: 'pML104 递送 sgRNA、配同源臂融合修复模板，在 BY4741 中敲除目标基因：菌落 PCR 初筛、测序确认。',
+        en: 'pML104 delivers sgRNA together with a fusion homology-arm repair template to knock out target genes in BY4741: colony PCR for screening, sequencing for confirmation.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '协议', en: 'Protocol' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '用 pML104（URA3 标记）递送 sgRNA、配同源臂融合修复模板，在 BY4741 中敲除目标基因，经菌落 PCR 初筛、测序确认的全流程。含质粒提取、反向 PCR 构建 sgRNA、两轮融合 PCR 做修复模板、酵母感受态与转化、菌落 PCR、测序、α-factor 梯度功能验证的参数。',
+                en: 'A complete workflow for knocking out target genes in BY4741 with pML104 (URA3 marker) delivering sgRNA plus a fusion homology-arm repair template, screened by colony PCR and confirmed by sequencing. It covers plasmid extraction, inverse PCR for sgRNA construction, two-round fusion PCR for the repair template, yeast competence and transformation, colony PCR, sequencing, and an α-factor gradient functional test, all with parameters.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '一套可以直接照做的酵母基因敲除 SOP：每一步的温度、时间、体积、浓度、循环数都写死了。它还把「菌落 PCR 无条带不等于一定敲除成功，必须以测序为准」写进流程，帮后续队伍少一次误判。',
+                en: 'A yeast knockout SOP that can be followed as written: temperature, time, volume, concentration and cycle numbers are fixed at every step. It also builds in the rule that a missing colony PCR band does not prove a knockout and sequencing has the final word, which spares later teams a common misreading.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '完整协议与分步参数见 Protocol 页底盘模块；反向引物序列在源文档中缺失，引用前向本队索取。<!-- KQ-2 -->',
+                en: 'The full protocol and stepwise parameters are in the chassis module of the Protocol page; the reverse primer sequences are missing from the source document and should be requested from this team before use.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: 'FAR1 敲除经测序确认成功，SST2 敲除十个克隆未成功。协议本身可复用，单基因结果不代表协议普适。',
+                en: 'The FAR1 knockout was confirmed by sequencing while ten SST2 knockout clones failed. The protocol itself is reusable; a result at one locus does not make it universal.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队实验流程；pML104 来自 Addgene #67638。',
+                en: 'This team workflow; pML104 comes from Addgene #67638.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ============ 2. 协议与方法 ============
- {
- id: 'protocols-overview',
- title: { zh: '2. 协议与方法（Protocols &amp; Methods）', en: '2. Protocols and Methods' },
- summary: {
- zh: '本类为已走通或有方案记录的实验流程，按完成度列出；未完成的部分只写拟采用的做法，不写成结果。',
- en: 'Experimental procedures that either worked or have a recorded protocol, listed by how complete they are. Work not yet done is written as a plan, not as a result.'
- },
- blocks: [
- {
- type: 'p',
- text: {
- zh: '<strong>本类主推：</strong>T1 至 T3。这三步是目前参数最完整、有实际记录的一串流程，从质粒导入大肠杆菌到双酶切判读，后续队伍可以照此复现并自行核对。',
- en: '<strong>Highlight of this section:</strong> T1 to T3. These three steps have the most complete parameters and real records of anything so far, running from plasmid introduction into E. coli to double-digestion readout, so later teams can reproduce them and check their own results.'
- }
- },
- {
- type: 'links',
- items: [
- { href: '#protocols-t1', zh: 'T1 PAGER 质粒的大肠杆菌热激转化', en: 'T1 Heat-shock transformation of the PAGER plasmid into E. coli' },
- { href: '#protocols-t2', zh: 'T2 质粒提取', en: 'T2 Plasmid extraction' },
- { href: '#protocols-t3', zh: 'T3 双酶切验证', en: 'T3 Double-digestion verification' },
- { href: '#protocols-t4', zh: 'T4 酵母 LiAc/PEG 化学转化（拟采用）', en: 'T4 LiAc/PEG chemical transformation of yeast (planned)' },
- { href: '#protocols-t5', zh: 'T5 CRISPR-Cas9 三基因敲除与验证（进行中）', en: 'T5 CRISPR-Cas9 triple knockout and verification (in progress)' },
- { href: '#protocols-t6', zh: 'T6 Gpa1 同源重组定点整合（拟采用）', en: 'T6 Site-directed integration of Gpa1 by homologous recombination (planned)' },
- { href: '#protocols-t7', zh: 'T7 酵母总蛋白提取与 WB（拟采用）', en: 'T7 Yeast total protein extraction and Western blot (planned)' },
- { href: '#protocols-t8', zh: 'T8 DCZ 诱导与信号检测（拟采用）', en: 'T8 DCZ induction and signal detection (planned)' }
- ]
- }
- ]
- },
+    // ============ 2.2 长片段供体两条制备路线 ============
+    {
+      id: 'protocol-donor',
+      title: { zh: '2.2 长片段线性供体片段的两条制备路线对照', en: '2.2 Two routes for preparing a long linear donor fragment' },
+      summary: {
+        zh: '把 C 端人源化供体片段做出来的两种方案：pRS426 二次线性化，与多片段融合 PCR；附实测卡点与结论。',
+        en: 'Two ways to build the C-terminal humanisation donor fragment: second-round linearisation of pRS426, and multi-fragment fusion PCR, with the measured bottlenecks and outcomes.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '协议', en: 'Protocol' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '把 C 端人源化供体片段做出来的两种方案：路线一先把重组环状质粒建出来再 PCR 释放片段，路线二用三段 PCR 产物靠末端重叠直接拼。附两条路线的优缺点、实测卡点与结论。',
+                en: 'Two ways to build the C-terminal humanisation donor fragment: route one builds a recombinant circular plasmid first and then releases the fragment by PCR; route two joins three PCR products directly through terminal overlaps. Pros, cons, measured bottlenecks and outcomes are included for both.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '长片段（超过 2 kb）供体在酵母同源重组里很常见，两条路线的坑都写清楚了：路线一的多轮长片段 PCR 会累积错配，构建完成后需要多对引物做全长测序；否则转化容易失败且难以定位原因。路线二流程短，但产物无法保藏、每次要重做。后续队伍按自己的片段长度与周期选路线时有据可依。',
+                en: 'Long donors above 2 kb are common in yeast homologous recombination, and the pitfalls of both routes are written down. Route one accumulates mispairing over repeated long PCR runs and needs full-length sequencing with several primer pairs once assembled, otherwise transformation tends to fail without a clear cause. Route two is shorter but the product cannot be stored and must be rebuilt each time. Later teams can pick a route based on fragment length and timeline.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '路线对照与参数见 Protocol 页接口模块与 Results 页第三节；引物与切胶回收记录随实验记录归档。',
+                en: 'The route comparison and parameters are in the interface module of the Protocol page and section three of the Results page; primers and gel extraction records are archived with the experimental records.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '路线一被测序判否，原文写「判定该质粒 PCR 扩增制备供体片段的策略可行性较差」，这是一手负面结论，照写不淡化；路线二拼成完整片段并转化酵母，得到 12 号、17 号两株测序一致的工程菌。',
+                en: 'Route one was ruled out by sequencing: the original record judges the strategy of preparing the donor fragment by plasmid PCR as of poor feasibility, and that negative conclusion is reported as written. Route two produced the full fragment, was transformed into yeast, and gave clones 12 and 17 with matching sequences.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队实验方案；pRS426 为实验室常规载体。',
+                en: 'This team protocol; pRS426 is a routine laboratory vector.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T1 ----
- {
- id: 'protocols-t1',
- title: { zh: 'T1 PAGER 质粒的大肠杆菌热激转化', en: 'T1 Heat-shock transformation of the PAGER plasmid into E. coli' },
- summary: {
- zh: '把 PAGER 质粒导入大肠杆菌 Top10，用于后续扩增与验证；已得到阳性克隆。',
- en: 'Introduction of the PAGER plasmid into E. coli Top10 for later amplification and verification. It yielded positive clones.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '常规热激转化流程，感受态为 Top10，抗性筛选用 Amp 100 μg/mL，用于把 PAGER 质粒导入大肠杆菌扩增。',
- en: 'A standard heat-shock transformation using Top10 competent cells with selection on Amp 100 μg/mL, used to introduce the PAGER plasmid into E. coli for amplification.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍可直接照此条件把同类质粒导入大肠杆菌完成扩增，省去自行确定抗性与感受态条件的工作。',
- en: 'Teams can follow these conditions to introduce a similar plasmid into E. coli and amplify it, without working out the antibiotic and competent-cell conditions themselves.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节「关键参数」表的条件执行热激，挑取单菌落做菌落 PCR 或提质粒确认；结果与本节记录一致即视为可用。',
- en: 'Carry out the heat shock under the conditions in the key parameters table below, pick single colonies and confirm by colony PCR or miniprep; results matching the record here mean the step worked.'
- }
- },
- {
- label: L.get,
- value: {
- zh: '本页给出可直接复现的完整参数与实测结果。',
- en: 'This page gives the full parameters and measured results needed to repeat the procedure.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '得到阳性克隆。',
- en: 'Positive clones obtained.'
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '常规分子克隆方法，本队按实验室流程执行。',
- en: 'Standard molecular cloning method, carried out by this team following lab procedures.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '已完成', en: 'Complete' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.secondary },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '感受态菌株', en: 'Competent strain' }, { zh: 'Top10', en: '' }],
- [{ zh: '抗性筛选', en: 'Selection' }, { zh: 'Amp 100 μg/mL', en: '' }],
- [{ zh: '热激条件', en: 'Heat-shock conditions' }, { zh: '冰浴 30 min → 42 ℃ 热激 90 s → 冰浴 2 min', en: '30 min on ice, 90 s heat shock at 42 °C, then 2 min on ice' }],
- [{ zh: '恢复培养', en: 'Recovery culture' }, { zh: '无抗 LB 培养基 37 ℃ 复苏 1 h', en: '1 h recovery in antibiotic-free LB at 37 °C' }],
- [{ zh: '重复数', en: 'Replicates' }, { zh: '4 个阳性克隆', en: 'four positive clones' }]
- ]
- }
- ]
- },
+    // ============ 2.3 α-factor 梯度三种读出 ============
+    {
+      id: 'protocol-readout',
+      title: { zh: '2.3 α-factor 梯度诱导的三种读出协议', en: '2.3 Three readouts under an α-factor gradient' },
+      summary: {
+        zh: '同一浓度梯度下的三套并行读出：MEL1 + X-α-gal 显色、yEGFP 荧光、OD₆₀₀ 生长曲线。',
+        en: 'Three parallel readouts under one concentration gradient: MEL1 with X-α-gal colouring, yEGFP fluorescence, and OD₆₀₀ growth curves.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '协议', en: 'Protocol' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '同一 α-factor 八档浓度梯度下三套并行读出：MEL1 + X-α-gal 蓝白斑显色动态（8 h 每小时观察）、yEGFP 荧光（黑色 96 孔板、488 nm 激发 / 507 nm 发射、以荧光值 / OD₆₀₀ 归一化，连续 16 h）、OD₆₀₀ 生长曲线（8 h，看诱导剂是否抑制生长）。',
+                en: 'Three parallel readouts under one eight-step α-factor gradient: MEL1 with X-α-gal blue-white colouring followed hourly for 8 h, yEGFP fluorescence on black 96-well plates (488 nm excitation, 507 nm emission, normalised to OD₆₀₀, hourly for 16 h), and OD₆₀₀ growth curves over 8 h to see whether the inducer suppresses growth.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '给了一套「诱导剂梯度 + 多读出」的模板。读板与显色的时间点、重复方式、对照设置都写好了，后续队伍可以直接套到自己的诱导系统上：先用显色看有没有，再用荧光看多少，最后用生长曲线判断诱导剂本身的影响。',
+                en: 'It is a template for inducer-gradient plus multi-readout experiments. Time points, replication and control set-ups for both the colour assay and the plate readings are specified, so later teams can port it to their own inducible system: colour first for presence, fluorescence for magnitude, and growth curves to judge the effect of the inducer itself.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '三份方案与分步参数见 Protocol 页报告模块。',
+                en: 'The three plans and stepwise parameters are in the reporter module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '方案层面完整。有四处引用时必须一并注明：α-factor 浓度单位与常规有效浓度相差 10³–10⁴ 倍，数值核实前不引用；两套读出体系（MEL1 与 lacZ）不是同一读出，不得互换；方案 01、02、03 未给重复数；方案 04 的空白组定义与其他方案不同。<!-- RC-1 / RC-2 / RC-4 / RC-9 / RC-10 -->',
+                en: 'The plans are complete at the design level. Four caveats must travel with them: the stated α-factor concentrations differ from typical effective levels by 10³ to 10⁴ fold, so the numbers should not be cited until checked; the two readout systems (MEL1 and lacZ) are not interchangeable; plans 01, 02 and 03 give no replicate numbers; and the blank definition in plan 04 differs from the others.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队撰写的六份实验方案；读出体系的两套口径见 1.4 的归属说明。',
+                en: 'Six experimental plans written by this team; the two readout conventions are described in the attribution of item 1.4.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T2 ----
- {
- id: 'protocols-t2',
- title: { zh: 'T2 质粒提取', en: 'T2 Plasmid extraction' },
- summary: {
- zh: '从大肠杆菌中提取 PAGER 质粒，用于酶切验证与后续酵母转化；提取产物留有浓度与纯度记录。',
- en: 'Extraction of the PAGER plasmid from E. coli for digestion checks and later yeast transformation, with concentration and purity recorded.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '常规质粒小提流程，使用试剂盒 TIANGEN DP103，以 65 ℃ 的 EB 洗脱。',
- en: 'A standard miniprep using the TIANGEN DP103 kit with elution in EB at 65 ℃.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍可按同一试剂盒与洗脱条件提取质粒，并对照本节记录的浓度与纯度范围判断提取是否正常。',
- en: 'Teams can use the same kit and elution conditions and compare their concentration and purity with the range recorded here.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节「关键参数」表执行，取 1 至 2 μL 测浓度与 A260/A280，落在常见可用区间即可进入酶切验证。',
- en: 'Follow the key parameters table below, measure concentration and A260/A280 on 1 to 2 μL, and proceed to digestion once the values fall in the usual usable range.'
- }
- },
- {
- label: L.get,
- value: {
- zh: '本页给出可直接复现的完整参数与实测结果。',
- en: 'This page gives the full parameters and measured results needed to repeat the procedure.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '4 个克隆的浓度记录为 408.45 / 404.85 / 297.15 / 355.90 ng/μL，A260/A280 记录为 1.9。',
- en: 'Concentrations were recorded for four clones as 408.45 / 404.85 / 297.15 / 355.90 ng/μL, with A260/A280 recorded as 1.9. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '试剂盒厂商标准流程，本队按说明执行。',
- en: 'Standard kit protocol from the manufacturer, followed by this team.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '已完成', en: 'Complete' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.secondary },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '提取试剂盒', en: 'Extraction kit' }, { zh: 'TIANGEN DP103', en: '' }],
- [{ zh: '洗脱条件', en: 'Elution conditions' }, { zh: '65 ℃ EB 洗脱', en: 'EB elution at 65 ℃' }],
- [{ zh: '洗脱体积', en: 'Elution volume' }, { zh: '65 ℃ 预热 EB 缓冲液洗脱，二次洗脱提高浓度', en: 'Eluted with EB buffer pre-warmed to 65 °C, with a second elution to raise the concentration' }],
- [{ zh: '重复数', en: 'Replicates' }, { zh: '4 个克隆各提取一次', en: 'one extraction per clone, four clones' }]
- ]
- }
- ]
- },
+    // ============ 2.4 PAGER 受体表达与功能验证流程 ============
+    {
+      id: 'protocol-pager',
+      title: { zh: '2.4 PAGER 受体克隆、表达与功能验证流程', en: '2.4 PAGER receptor cloning, expression and functional assay workflow' },
+      summary: {
+        zh: '从大肠杆菌转化到 DCZ 功能读板的完整链路，含各步温度、时间、酶量与破壁条件。',
+        en: 'The full chain from E. coli transformation to DCZ plate-reader assays, with temperatures, times, enzyme amounts and cell-wall digestion conditions.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '协议', en: 'Protocol' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: 'PAGER 受体从 pGADT7 大肠杆菌转化、质粒提取、双酶切、酵母转化、酵母质粒抽提、菌落 PCR、WB、免疫荧光到 DCZ 功能验证（酶标仪读板）的完整链路，含各步温度、时间、酶量与破壁条件。',
+                en: 'The complete chain for the PAGER receptor: transformation into E. coli from pGADT7, plasmid extraction, double digestion, yeast transformation, yeast plasmid preparation, colony PCR, WB, immunofluorescence, and the DCZ functional assay read on a plate reader, with temperatures, times, enzyme amounts and cell-wall digestion conditions at each step.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '一条「膜受体在酵母里表达并做功能读出」的 SOP。破壁（蜗牛酶、融壁酶）与 DCZ 工作浓度梯度（25 / 50 / 100 / 250 / 500 / 1000 nM）都给了具体值，后续队伍可以少踩表达与检测的坑。',
+                en: 'An SOP for expressing a membrane receptor in yeast and reading its function. Cell-wall digestion (snailase, lyticase) and the DCZ working gradient (25 / 50 / 100 / 250 / 500 / 1000 nM) are given as concrete values, so later teams can avoid common expression and detection pitfalls.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '完整流程与参数见 Protocol 页受体模块。',
+                en: 'The full workflow and parameters are in the receptor module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '克隆链走通（472 bp 一步克隆到酵母转化成功）；WB 分子量不符、免疫荧光阴性、读板结果仅以图片存在——这三条都是真实结果，写进流程的经验部分。另有酵母质粒提取 A260/280 异常、4 月 29 日染菌后处理未记录等缺口一并注明。<!-- SQ-6 / SQ-7 / SQ-10 / SQ-13 -->',
+                en: 'The cloning chain works (from the 472 bp one-step product to successful yeast transformation). The WB molecular weight mismatch, the negative immunofluorescence and the image-only plate readings are all reported as they happened, in the lessons part of the workflow. Two further gaps are noted: abnormal A260/280 values from yeast plasmid preparations, and no record of how the April 29 contamination was handled afterwards.'
+              }
+            },
+            {
+              label: { zh: '归属与来源', en: 'Attribution' },
+              value: {
+                zh: '本队实验方案；pGADT7 来自 Sangon Biotech ZB56914；抗体清单见 Protocol 页受体模块材料表。',
+                en: 'This team protocol; pGADT7 comes from Sangon Biotech ZB56914; the antibody list is in the materials table of the receptor module on the Protocol page.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T3 ----
- {
- id: 'protocols-t3',
- title: { zh: 'T3 双酶切验证', en: 'T3 Double-digestion verification' },
- summary: {
- zh: '用 NdeI-HF 与 BamHI-HF 对提取的质粒做双酶切，经琼脂糖凝胶确认骨架与插入片段大小；条带与理论值一致。',
- en: 'Double digestion of the extracted plasmid with NdeI-HF and BamHI-HF, with agarose gel confirmation that the backbone and insert bands match the expected sizes.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '50 μL 双酶切体系，37 ℃ 反应 1 h，随后用 0.8% 琼脂糖凝胶在 80 V 下电泳 70 min 判读条带。',
- en: 'A 50 μL double-digestion reaction incubated at 37 ℃ for 1 h, followed by electrophoresis on a 0.8% agarose gel at 80 V for 70 min to read the bands.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍可用同一对酶与电泳条件快速确认同类质粒是否构建正确，直接对照本节记录的理论条带判断结果。',
- en: 'Teams can use the same enzyme pair and electrophoresis conditions to confirm quickly whether a similar plasmid was built correctly, comparing directly against the expected bands recorded here.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节「关键参数」表配置反应，跑胶后与 DNA Marker 比对；骨架与插入片段大小与理论一致即可进入下一步。',
- en: 'Set up the reaction as in the key parameters table below, run the gel and compare with a DNA marker; once the backbone and insert sizes match expectations, move on to the next step.'
- }
- },
- {
- label: L.get,
- value: {
- zh: '本页给出可直接复现的完整参数与实测结果。',
- en: 'This page gives the full parameters and measured results needed to repeat the procedure.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '骨架 7939 bp 与插入片段 2063 bp，与理论值一致。',
- en: 'The 7939 bp backbone and 2063 bp insert match the expected sizes. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '常规酶切与电泳方法，本队按实验室流程执行。',
- en: 'Standard digestion and electrophoresis methods, carried out by this team following lab procedures.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '已完成', en: 'Complete' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.secondary },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '限制酶', en: 'Restriction enzymes' }, { zh: 'NdeI-HF / BamHI-HF', en: '' }],
- [{ zh: '反应体系', en: 'Reaction volume' }, { zh: '50 μL', en: '' }],
- [{ zh: '酶切条件', en: 'Digestion conditions' }, { zh: '37 ℃，1 h', en: '37 ℃ for 1 h' }],
- [{ zh: '凝胶与电泳', en: 'Gel and electrophoresis' }, { zh: '0.8% 琼脂糖，80 V，70 min', en: '0.8% agarose, 80 V, 70 min' }],
- [{ zh: '重复数', en: 'Replicates' }, { zh: '4 个阳性克隆质粒分别酶切', en: 'four positive-clone plasmids digested separately' }]
- ]
- }
- ]
- },
+    // ============ 3. 其他贡献（章导语） ============
+    {
+      id: 'contribution-others',
+      title: { zh: '3. 其他贡献（Other）', en: '3. Other Contributions' },
+      summary: {
+        zh: '三条不带实物的产出：验证纪律、α-factor 浓度体系提醒、长片段 PCR 错配教训。它们来自本队走过的弯路，写成条目供后续队伍直接参考。',
+        en: 'Three contributions that are not physical outputs: the verification discipline, the note on α-factor concentration systems, and the lesson on long-fragment PCR mispairing. Each comes from a detour this team took and is written up for later teams.'
+      },
+      blocks: [
+        {
+          type: 'p',
+          text: {
+            zh: '这一章只写本队有实证的经验；每条都指回对应的实验记录或结果页面。',
+            en: 'This chapter only records lessons backed by this team own measurements, and each entry points back to the matching experimental record or results section.'
+          }
+        }
+      ]
+    },
 
- // ---- T4 ----
- {
- id: 'protocols-t4',
- title: { zh: 'T4 酵母 LiAc/PEG 化学转化', en: 'T4 LiAc/PEG chemical transformation of yeast' },
- summary: {
- zh: '把 PAGER 质粒导入酵母底盘，是后续蛋白表达与功能测试的前置步骤；目前方案已定，尚未验证。',
- en: 'Introduction of the PAGER plasmid into the yeast chassis, a prerequisite for later protein expression and functional tests. The protocol is decided but not yet verified.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '拟采用 LiAc/PEG 化学转化把质粒导入酵母，配合营养缺陷平板筛选转化子。',
- en: 'LiAc/PEG chemical transformation is planned to introduce the plasmid into yeast, with transformants selected on drop-out plates.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍可参考本队的转化与筛选思路，用于把外源质粒导入酿酒酵母。',
- en: 'Teams can follow this team approach to transformation and selection when introducing a foreign plasmid into <em>Saccharomyces cerevisiae</em>.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节参数完成转化并在筛选平板上挑取单菌落，再做菌落 PCR 确认。',
- en: 'Carry out transformation under the parameters below, pick single colonies on selection plates, then confirm by colony PCR. '
- }
- },
- {
- label: L.get,
- value: { zh: '拟采用 LiAc/PEG 化学转化，以 SD-Ura 平板与 URA3 标记筛选；各步参数随实验推进补入本页。', en: 'LiAc/PEG chemical transformation is planned, with selection on SD-Ura plates using the URA3 marker; the parameters for each step are added as the work proceeds.' }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚未验证。',
- en: 'Not yet verified. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '常规酵母转化方法，本队按实验室流程执行。',
- en: 'Standard yeast transformation method, carried out by this team following lab procedures.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '待验证', en: 'To be verified' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '转化方法', en: 'Transformation method' }, { zh: 'LiAc/PEG 化学转化（拟采用）', en: 'LiAc/PEG chemical transformation (planned)' }],
- [{ zh: 'PEG 浓度', en: 'PEG concentration' }, { zh: '', en: '' }],
- [{ zh: '热激时间', en: 'Heat-shock duration' }, { zh: '', en: '' }],
- [{ zh: '筛选标记', en: 'Selection marker' }, { zh: 'URA3（SD-Ura 平板）', en: 'URA3 (SD-Ura plate)' }]
- ]
- }
- ]
- },
+    // ============ 3.1 验证纪律 ============
+    {
+      id: 'other-verification',
+      title: { zh: '3.1 「菌落 PCR 初筛 + 测序确认」的验证纪律', en: '3.1 Verification discipline: colony PCR screening plus sequencing confirmation' },
+      summary: {
+        zh: '一条明确的原则：菌落 PCR 无条带只是初筛判据，最终结论必须以测序为准。',
+        en: 'One clear rule: a missing colony PCR band is only a screening criterion, and the final conclusion rests on sequencing.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '其他（经验 / 指南）', en: 'Other (lesson / guidance)' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '酵母基因编辑里「菌落 PCR 无条带 = 敲除成功」只是初筛判据，无条带也可能来自 PCR 本身失败；最终结论必须以测序为准。附 F2 / F10 的实证：两株无条带，测序确认 4 bp 缺失造成移码。',
+                en: 'In yeast genome editing, a missing colony PCR band as a marker of successful knockout is only a screening criterion: an absent band can also come from a failed reaction. Sequencing has the final word. The evidence is clones F2 and F10, which showed no band and were sequenced to confirm a 4 bp deletion causing a frameshift.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '这是酵母编辑里很容易误判的一点。写清它，可以帮后续队伍避免把「PCR 没扩出来」当成「编辑成功了」，也避免像本队 SST2 那样，十个克隆全有条带还以为转化完成就等于敲除成功。',
+                en: 'This is an easy place to misread in yeast editing. Writing it down helps later teams avoid reading a failed PCR as a successful edit, and avoid the inverse mistake seen here with SST2, where all ten clones showed bands and transformation was almost taken as proof of knockout.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '本条依据见 Protocol 页底盘模块的对照与重复表，以及 Results 页第一节。',
+                en: 'The basis for this item is in the controls and replicates table of the chassis module on the Protocol page, and in section one of the Results page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: 'F2 / F10 测序确认 4 bp 缺失；SST2 十个克隆全部有条带即未成功。属本队验证记录。',
+                en: 'Sequencing of F2 and F10 confirmed a 4 bp deletion; ten SST2 clones all showed bands and therefore failed. This is this team own verification record.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T5 ----
- {
- id: 'protocols-t5',
- title: { zh: 'T5 CRISPR-Cas9 三基因敲除与验证', en: 'T5 CRISPR-Cas9 triple knockout and verification' },
- summary: {
- zh: '在底盘上敲除 STE2、FAR1 与 Sst2，并逐步验证每个位点；归档记录显示首次酶切失败后正在重建载体，尚未得到敲除菌株。',
- en: 'Knockout of STE2, FAR1 and Sst2 in the chassis with step-by-step verification at each locus. Archived records show the first digestion failed and the vector is being rebuilt; no knockout strain yet.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '以 P4 的三条 sgRNA 做 CRISPR-Cas9 敲除，敲除后用菌落 PCR 与 Sanger 测序逐步确认每个位点。STE2 敲除用于消除内源 α-factor 受体，FAR1 敲除用于解除交配信号诱导的细胞周期停滞，Sst2 敲除用于移除 G 蛋白负调节因子。',
- en: 'CRISPR-Cas9 knockout using the three sgRNAs from P4, with colony PCR and Sanger sequencing to confirm each locus step by step. The STE2 knockout is intended to remove the endogenous α-factor receptor, the FAR1 knockout to release the mating-signal-induced cell-cycle arrest, and the Sst2 knockout to remove the G-protein negative regulator.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若改造同一底盘，可参考本队的靶点选择与验证顺序，并了解在载体构建阶段可能出现的问题。',
- en: 'Teams engineering the same chassis can follow this team target choice and verification order, and see what can go wrong during vector construction.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '先构建并验证单基因敲除，再逐步叠加，避免一次性做三基因敲除后难以定位失败位点。',
- en: 'Build and verify single knockouts first, then stack them, to avoid having to locate a failure after attempting all three at once. '
- }
- },
- {
- label: L.get,
- value: {
- zh: 'sgRNA 克隆入 pML104，转化后以菌落 PCR 与 Sanger 测序验证；序列与切割效率随实验推进补入本页。',
- en: 'The sgRNAs are cloned into pML104 and verified by colony PCR and Sanger sequencing after transformation; sequences and cutting efficiency are added as the work proceeds.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '目前只有首次酶切失败的记录，敲除是否成功尚无结果。',
- en: 'Only the first failed digestion is recorded so far; whether the knockout succeeded is unknown. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '方法参考 CRISPR-Cas9 酵母敲除的常规做法。',
- en: 'The method follows common practice for CRISPR-Cas9 knockout in yeast,.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '进行中', en: 'In progress' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '靶点', en: 'Targets' }, { zh: 'STE2 / FAR1 / Sst2', en: '' }],
- [{ zh: 'sgRNA 序列与靶点位置', en: 'sgRNA sequences and target positions' }, { zh: '', en: '' }],
- [{ zh: '切割效率', en: 'Cutting efficiency' }, { zh: '', en: '' }],
- [{ zh: '验证方式', en: 'Verification method' }, { zh: '菌落 PCR 与 Sanger 测序', en: 'Colony PCR and Sanger sequencing ' }]
- ]
- }
- ]
- },
+    // ============ 3.2 α-factor 浓度体系提醒 ============
+    {
+      id: 'other-afactor',
+      title: { zh: '3.2 跨模块 α-factor 浓度体系不可直接比较的提醒', en: '3.2 Note: α-factor concentration systems are not directly comparable across modules' },
+      summary: {
+        zh: '底盘用三档、报告与接口用八档梯度，数值不能直接横向比大小；并列呈现须各自注明体系。',
+        en: 'The chassis module uses three steps while the reporter and interface modules use an eight-step gradient; the numbers cannot be compared across modules, and each must be labelled with its own system.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '其他（指南）', en: 'Other (guidance)' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '本项目三套 α-factor 浓度体系并存：底盘功能验证用 0 / 1 / 10 μM 三档，报告体系与接口表型验证用八档梯度。数值不能直接横向比大小，并列呈现时必须各自注明体系。另有边界说明：改造后 α-factor 响应减弱，不等于传感功能已验证。',
+                en: 'Three α-factor concentration systems coexist in this project: the chassis functional test uses three steps (0 / 1 / 10 μM), while the reporter system and the interface phenotyping use an eight-step gradient. Numbers cannot be compared across them and each must be labelled with its own system. One further boundary: a weakened α-factor response after the interface edit is not evidence of sensing performance.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '后续队伍如果复用本项目的任一部分，不会被不同浓度档位误导；也避免把接口改造的副作用误读成检测能力的证据。',
+                en: 'Teams reusing any part of this project will not be misled by different concentration steps, and will not read the side effect of the interface edit as evidence of detection capability.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '三套体系的计数证据见 Design 页实验总体设计与 Protocol 页各模块对照表，以及 Results 页综合讨论。',
+                en: 'The evidence for the three systems is in the overall design on the Design page and the module control tables on the Protocol page, and in the discussion section of the Results page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '底盘模块三档与报告、接口模块八档并存；报告模块的浓度单位与常规有效浓度相差 10³–10⁴ 倍，本页不引用其数值。<!-- RC-1 -->',
+                en: 'Three steps in the chassis module coexist with eight-step gradients in the reporter and interface modules. The concentration units in the reporter plans differ from typical effective levels by 10³ to 10⁴ fold, so their numbers are not cited here.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T6 ----
- {
- id: 'protocols-t6',
- title: { zh: 'T6 Gpa1 同源重组定点整合', en: 'T6 Site-directed integration of Gpa1 by homologous recombination' },
- summary: {
- zh: '以同源重组把人源化 Gpa1 整合到基因组，是重建信号接口的关键一步；目前只有设计方案，尚未执行。',
- en: 'Integrating the humanised Gpa1 into the genome by homologous recombination, a key step in rebuilding the signalling interface. Only a design exists so far; not carried out.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '拟用 500 bp 上游同源臂与人源化 Gpa1 加 URA3 标记再加 500 bp 下游同源臂的构建方式，对 Gpa1 位点做定点替换。',
- en: 'The planned construct is a 500 bp upstream homology arm, the humanised Gpa1, a URA3 marker, and a 500 bp downstream homology arm, used for site-directed replacement at the Gpa1 locus.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要在酵母里替换 G 蛋白 C 端以接入人源受体，可参考这套同源臂与筛选标记的设计。',
- en: 'Teams replacing the G-protein C-terminus in yeast to connect a human receptor can refer to this homology arm and selection marker design.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节结构与参数构建供体片段，转化后在筛选平板上挑取转化子，再测序确认整合位点。',
- en: 'Build the donor fragment as described, transform, pick colonies on selection plates, then sequence to confirm the integration site. '
- }
- },
- {
- label: L.get,
- value: {
- zh: '整合片段为 500 bp 上游同源臂 + 人源化 Gpa1 + URA3 筛选盒 + 500 bp 下游同源臂，验证用菌落 PCR 与 Sanger 测序；具体序列随构建完成后补入本页。',
- en: 'The integration fragment is a 500 bp upstream homology arm + humanised Gpa1 + URA3 selection cassette + 500 bp downstream homology arm, verified by colony PCR and Sanger sequencing; the exact sequence is added once construction is complete.'
- }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚未执行，无整合结果。',
- en: 'Not carried out; no integration results. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '同源重组方法为本队按常规做法设计。',
- en: 'The homologous recombination approach was designed by this team following common practice.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '待完成', en: 'Not started' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '上游同源臂', en: 'Upstream homology arm' }, { zh: '500 bp（拟采用）', en: '500 bp (planned)' }],
- [{ zh: '下游同源臂', en: 'Downstream homology arm' }, { zh: '500 bp（拟采用）', en: '500 bp (planned)' }],
- [{ zh: '筛选标记', en: 'Selection marker' }, { zh: 'URA3', en: '' }],
- [{ zh: '整合验证', en: 'Integration verification' }, { zh: '菌落 PCR + Sanger 测序', en: 'Colony PCR + Sanger sequencing' }]
- ]
- }
- ]
- },
+    // ============ 3.3 长片段 PCR 错配教训 ============
+    {
+      id: 'other-mispair',
+      title: { zh: '3.3 长片段 PCR 累积错配的实证教训', en: '3.3 Lesson: accumulated mispairing in long-fragment PCR' },
+      summary: {
+        zh: '路线一体外组装顺利，但多轮长片段 PCR 累积错配、体内转化失败，最终被测序判否。',
+        en: 'Route one assembled cleanly in vitro, but repeated long-fragment PCR accumulated mispairing, the in vivo step failed, and sequencing finally ruled the route out.'
+      },
+      blocks: [
+        {
+          type: 'fields',
+          items: [
+            { label: { zh: '类型', en: 'Type' }, value: { zh: '其他（经验）', en: 'Other (lesson)' } },
+            {
+              label: { zh: '是什么', en: 'What it is' },
+              value: {
+                zh: '路线一（pRS426 二次线性化）体外组装顺利，但多轮长片段 PCR 累积错配、体内转化失败，最终被测序判否。这是一次「设计预判（长片段 PCR 易错配）与实测结果对上」的实例。',
+                en: 'Route one (second-round linearisation of pRS426) assembled cleanly in vitro, yet repeated long-fragment PCR accumulated mispairing, the in vivo step failed, and sequencing ruled it out. It is a case where a design prediction (long PCR tends to mispair) matched what was measured.'
+              }
+            },
+            {
+              label: { zh: '为什么对后续队伍有用', en: 'Why it helps later teams' },
+              value: {
+                zh: '给「什么时候该放弃建质粒、改用无质粒融合 PCR」提供一个具体判据：体外拼上了不等于能用，先测序再决定要不要继续。后续队伍可以省去在长片段供体上反复试错的时间。',
+                en: 'It offers a concrete criterion for when to abandon plasmid construction and switch to plasmid-free fusion PCR: a product that assembles in vitro is not necessarily usable, so sequence it before deciding to continue. That saves later teams from repeated trial and error on long donor fragments.'
+              }
+            },
+            {
+              label: { zh: '怎么拿到', en: 'How to obtain it' },
+              value: {
+                zh: '过程与数据见 Results 页第三节，以及 Protocol 页接口模块。',
+                en: 'The process and data are in section three of the Results page and the interface module of the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '证据', en: 'Evidence' },
+              value: {
+                zh: '线性片段 500 bp 之后出现大量错配；一步克隆产物转 TOP10 六种浓度均无目标菌落；原文判定「可行性较差」。',
+                en: 'The linear fragment showed extensive mispairing beyond 500 bp; the one-step cloning product gave no target colonies at six different concentrations in TOP10; the original record judges the route as of poor feasibility.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T7 ----
- {
- id: 'protocols-t7',
- title: { zh: 'T7 酵母总蛋白提取与 Western Blot', en: 'T7 Yeast total protein extraction and Western blot' },
- summary: {
- zh: '用于确认 PAGER 融合蛋白在酵母中的表达，目前方案已定，尚未执行。',
- en: 'Used to confirm expression of the PAGER fusion protein in yeast. The protocol is decided but not yet carried out.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '拟从酵母中提取总蛋白，经 SDS-PAGE、转膜与封闭，再孵育一抗与二抗并显色，验证融合蛋白是否表达。',
- en: 'Total protein is to be extracted from yeast, separated by SDS-PAGE, transferred and blocked, then probed with primary and secondary antibodies and developed, to check whether the fusion protein is expressed.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍可参考本队的蛋白提取与杂交流程，用于确认膜表面受体在酵母中的表达情况。',
- en: 'Teams can follow this team protein extraction and blotting workflow to confirm expression of a surface receptor in yeast.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节参数完成提取与杂交，用对应分子量的条带判断融合蛋白是否表达。',
- en: 'Carry out extraction and blotting under the parameters below and judge expression from the band at the expected molecular weight. '
- }
- },
- {
- label: L.get,
- value: { zh: '流程已定：酵母总蛋白提取 → SDS-PAGE 分离 → 转膜封闭 → 一抗与二抗孵育 → 显色；抗体与显色条件随实验完成后补入本页。', en: 'The workflow is fixed: yeast total protein extraction, SDS-PAGE separation, transfer and blocking, primary and secondary antibody incubation, then development; antibody and development conditions are added once the experiment is complete.' }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚未执行，无显色结果。',
- en: 'Not carried out; no development results. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: '常规蛋白免疫印迹方法，本队按实验室流程执行。',
- en: 'Standard western blotting method, carried out by this team following lab procedures.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '待完成', en: 'Not started' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '一抗', en: 'Primary antibody' }, { zh: '', en: '' }],
- [{ zh: '二抗', en: 'Secondary antibody' }, { zh: '', en: '' }],
- [{ zh: '膜与显色条件', en: 'Membrane and development conditions' }, { zh: '', en: '' }]
- ]
- }
- ]
- },
+    // ============ 获取与许可 ============
+    {
+      id: 'contribution-access',
+      title: { zh: '获取与许可（Access & License）', en: 'Access and Licence' },
+      summary: {
+        zh: '部件与协议的获取入口，以及第三方序列的授权说明。',
+        en: 'Where to obtain the parts and protocols, and the permission status of third-party sequences.'
+      },
+      blocks: [
+        {
+          type: 'ul',
+          items: [
+            {
+              label: { zh: '部件', en: 'Parts' },
+              text: {
+                zh: 'Δfar1 底盘、PAGER 受体、人源化 Gpa1 工程菌与 FUS1 报告盒均列为拟提交 iGEM Registry 的产出，编号与下载链接以登记结果为准。',
+                en: 'The Δfar1 chassis, the PAGER receptor, the humanised Gpa1 strain and the FUS1 reporter cassette are all listed as outputs intended for submission to the iGEM Registry; numbers and download links follow the registration outcome.'
+              }
+            },
+            {
+              label: { zh: '协议与方法', en: 'Protocols and methods' },
+              text: {
+                zh: '四条协议的分步参数已在 Protocol 页对应模块完整列出，可查阅、可复现；改动点在各卡写明。',
+                en: 'Stepwise parameters for the four protocols are listed in full in the matching modules of the Protocol page and can be consulted and reproduced; the modifications are noted in each entry.'
+              }
+            },
+            {
+              label: { zh: '第三方序列', en: 'Third-party sequences' },
+              text: {
+                zh: 'MT1 抑制毒素、anti-H1N1_HA 纳米抗体与 hM1Dq 为第三方来源，授权状态在提交 Registry 前确认，不写成自研。',
+                en: 'The MT1 inhibitory toxin, the anti-H1N1_HA nanobody and hM1Dq come from third parties; permission is confirmed before Registry submission and none of them is presented as our own.'
+              }
+            },
+            {
+              label: { zh: '外链口径', en: 'Link policy' },
+              text: {
+                zh: '本页所有外链使用公开可达地址，不使用本机路径。',
+                en: 'All external links on this page point to publicly reachable addresses, never to local paths.'
+              }
+            }
+          ]
+        }
+      ]
+    },
 
- // ---- T8 ----
- {
- id: 'protocols-t8',
- title: { zh: 'T8 DCZ 诱导与信号检测', en: 'T8 DCZ induction and signal detection' },
- summary: {
- zh: '用 DCZ 激活 hM1Dq 并检测下游报告输出，是功能测试的核心步骤；目前只有方案，尚未执行。',
- en: 'Activating hM1Dq with DCZ and measuring the downstream reporter output, the core step of functional testing. Only a plan exists so far; not carried out.'
- },
- blocks: [
- {
- type: 'fields',
- items: [
- { label: L.type, value: V.protoType },
- {
- label: L.what,
- value: {
- zh: '拟设置 DCZ 诱导梯度，用流式细胞术读 yEGFP 绿色荧光，或用 X-Gal 染色判读 lacZ 表达。',
- en: 'A DCZ induction gradient is planned, reading yEGFP green fluorescence by flow cytometry or judging lacZ expression by X-Gal staining.'
- }
- },
- {
- label: L.why,
- value: {
- zh: '后续队伍若要测试类似受体门控系统，可参考本队对齐的两个读出方式，一套定量、一套显色判读。',
- en: 'Teams testing a similar receptor-gated system can follow these two aligned readouts, one quantitative and one visual.'
- }
- },
- {
- label: L.how,
- value: {
- zh: '按本节参数设置诱导梯度，分别采集荧光与显色结果，并与对照比较。',
- en: 'Set up the induction gradient as below, collect fluorescence and staining results, and compare with controls. '
- }
- },
- {
- label: L.get,
- value: { zh: '诱导剂为 DCZ，梯度设为 10 nM/mL、100 nM/mL、1 μM/mL，读出为流式细胞术测 yEGFP 与 X-Gal 染色判读 lacZ；门限与染色条件随实验完成后补入本页。', en: 'The inducer is DCZ with a gradient of 10 nM/mL, 100 nM/mL and 1 μM/mL, read out as yEGFP by flow cytometry and lacZ by X-Gal staining; gating and staining conditions are added once the experiment is complete.' }
- },
- {
- label: L.evidence,
- value: {
- zh: '尚未执行，无荧光或显色结果。',
- en: 'Not carried out; no fluorescence or staining results. '
- }
- },
- {
- label: L.attribution,
- value: {
- zh: 'DCZ 与检测方法参考公开资料。',
- en: 'DCZ and the detection methods follow public sources,.'
- }
- },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '待完成', en: 'Not started' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ]
- },
- {
- type: 'table',
- heading: { zh: '关键参数', en: 'Key parameters' },
- head: paramHead,
- rows: [
- [{ zh: '诱导剂', en: 'Inducer' }, { zh: 'DCZ', en: '' }],
- [{ zh: '拟设置梯度', en: 'Planned gradient' }, { zh: '10 nM/mL、100 nM/mL、1 μM/mL（归档方案记载，未执行）', en: '10 nM/mL, 100 nM/mL, 1 μM/mL (from the archived protocol, not carried out) ' }],
- [{ zh: '荧光读出', en: 'Fluorescence readout' }, { zh: '流式细胞术读 yEGFP', en: 'yEGFP read by flow cytometry ' }],
- [{ zh: '显色读出', en: 'Colour readout' }, { zh: 'X-Gal 染色判读 lacZ', en: 'lacZ judged by X-Gal staining ' }]
- ]
- }
- ]
- },
-
- // ---- T9 ----
- {
- id: 'protocols-t9',
- title: { zh: 'T9 质粒构建与酶切排错', en: 'T9 Plasmid construction and digestion troubleshooting' },
- summary: {
- zh: '本队在 CRISPR 载体构建中遇到过一次酶切失败，由此整理出的排查顺序与后续处理方式。',
- en: 'A digestion failure this team hit while building the CRISPR vector, and the check order and follow-up worked out from it.'
- },
- blocks: [
- { type: 'fields', items: [
- { label: L.type, value: V.protoType },
- { label: L.what, value: {
- zh: '一次酶切失败的现象与后续处理。归档记录给出的结论是：sgRNA 载体需要在失败后重建。',
- en: 'The symptom of one digestion failure and how it was handled. The archived record concludes that the sgRNA vector had to be rebuilt after the failure.'
- } },
- { label: L.why, value: {
- zh: '酶切失败在载体构建里很常见。写下当时的排查路径，别人遇到同样现象时可以先对照，再决定要不要重做。',
- en: 'Digestions fail often during vector construction. Recording the path taken lets others compare first and decide whether a rebuild is really needed.'
- } },
- { label: L.how, value: {
- zh: '按"模板 — 酶 — 体系"的顺序先排除前两项，再动体系参数。',
- en: 'Rule out template and enzyme first, then touch the reaction conditions. '
- } },
- { label: L.get, value: { zh: '。', en: '.' } },
- { label: L.evidence, value: { zh: '', en: '' } },
- { label: L.attribution, value: { zh: '本队实验记录。', en: 'This team experimental record.' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '进行中', en: 'In progress' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ] }
- ]
- },
-
- // ---- T10 ----
- {
- id: 'protocols-t10',
- title: { zh: 'T10 功能测试三组对照', en: 'T10 Three controls for functional testing' },
- summary: {
- zh: '读诱导后信号时必须同时跑的三组对照，用来判断信号是否真来自目标通路。',
- en: 'The three controls that must run alongside every induced signal readout, to show whether a signal really comes from the intended pathway.'
- },
- blocks: [
- { type: 'fields', items: [
- { label: L.type, value: V.protoType },
- { label: L.what, value: {
- zh: '阴性对照为未转化的野生型 BY4741；空载体对照为转入空白 pESC-HIS 的菌株；阳性对照为已确认稳定激活通路的工程菌株。方案已定，尚未执行。',
- en: 'Negative control: untransformed wild-type BY4741. Empty-vector control: strain carrying blank pESC-HIS. Positive control: engineered strain confirmed to activate the pathway stably. The setup is decided but not yet run.'
- } },
- { label: L.why, value: {
- zh: '这类诱导读数容易把培养基背景、载体本身效应当成目标信号。三组对照齐了，才能说清信号来自哪里。',
- en: 'Induced readouts easily mistake medium background or vector effects for the target signal. With all three controls in place, the origin of a signal can be stated plainly.'
- } },
- { label: L.how, value: {
- zh: '与样品同批并行设置三组对照，读数后横向比较。',
- en: 'Run all three alongside the samples in the same batch and compare the readings side by side. '
- } },
- { label: L.get, value: { zh: '。', en: '.' } },
- { label: L.evidence, value: { zh: '方案已定，未执行，暂无对照比较结果。', en: 'Setup decided, not run; no comparative results yet.' } },
- { label: L.attribution, value: { zh: '本队设计。', en: 'Designed by this team.' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '方案已定，未执行', en: 'Setup decided, not run' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.pending },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ] }
- ]
- },
-
- // ---- T11 ----
- {
- id: 'protocols-t11',
- title: { zh: 'T11 质粒构建双酶切记录', en: 'T11 Double-digestion record for the built plasmid' },
- summary: {
- zh: 'PAGER 质粒构建完成后跑双酶切留下的条带记录，可作为判断同一质粒是否构建正确的参照。',
- en: 'bands left from double-digesting the finished PAGER plasmid, usable as a reference for judging whether the same plasmid was built correctly.'
- },
- blocks: [
- { type: 'fields', items: [
- { label: L.type, value: V.protoType },
- { label: L.what, value: {
- zh: '双酶切后骨架 7939 bp、插入片段 2063 bp，两者均与理论值一致。',
- en: 'After digestion the backbone is 7939 bp and the insert 2063 bp, both matching the expected sizes.'
- } },
- { label: L.why, value: {
- zh: '拿到同一质粒时，先看这两个条带对不对，比重新测序快得多。',
- en: 'When receiving the same plasmid, checking these two bands first is far quicker than resequencing.'
- } },
- { label: L.how, value: {
- zh: '按 T3 的条件做双酶切，把条带与本条记录比大小。',
- en: 'Digest under the T3 conditions and compare band sizes with this record. '
- } },
- { label: L.get, value: { zh: '。', en: '.' } },
- { label: L.evidence, value: { zh: '骨架与插入片段大小均与理论值一致。', en: 'Backbone and insert sizes both match theory. ' } },
- { label: L.attribution, value: { zh: '本队实验记录。', en: 'This team experimental record.' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.progress, value: { zh: '已完成', en: 'Complete' } },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.fact, value: V.secondary },
- // 状态字段不渲染（2026-09-16 规则：进度/状态仅存于代码注释）：{ label: L.verify, value: V.toVerifyPerson }
- ] }
- ]
- },
-
- // ============ 3. 其他贡献 ============
- {
- id: 'other-overview',
- title: { zh: '3. 其他贡献（Other）', en: '3. Other contributions' },
- summary: {
- zh: '这一类收的是不进实验室动手也能成立的工作：干实验的设计与建模，以及面向真实使用场景的人类实践。',
- en: 'This part holds work that stands without hands-on bench sessions: dry lab design and modelling, and human practices aimed at real settings of use.'
- },
- blocks: [
- {
- type: 'p',
- text: {
- zh: '本类包含干实验与人类实践两块。凡是需要进实验室动手操作的内容，一律归入第 2 类的协议与方法，不放在这里。两块都只做系统性总结，不逐条铺开实验细节。',
- en: 'Two blocks sit under this heading: dry lab and human practices. Anything requiring hands-on bench work belongs to protocols and methods in section 2, not here. Both blocks are summarised at system level rather than itemised into experimental detail.'
- }
- },
- ]
- },
-
- // ---- 干实验（系统性总结）----
- {
- id: 'other-drylab',
- title: { zh: '3a. 干实验', en: '3a. Dry Lab' },
- summary: {
- zh: '干实验部分只做整体交代：有哪些设计层面的工作、这些设计之间的逻辑关系。',
- en: 'The dry lab part is covered as a whole: what design work exists and how the pieces fit together.'
- },
- blocks: [
- {
- type: 'p',
- text: {
- zh: '干实验这一块包含两类产出：一是底盘改造的设计方案及其内部逻辑，二是后续计划开展的通路建模与剂量反应模拟。前者已经定型，可以交付阅读；后者仍在规划阶段。',
- en: 'Two kinds of output sit on the dry lab side: the chassis engineering design with its internal logic, and the pathway modelling and dose-response simulation planned next. The first is settled and ready to read; the second is still being planned.'
- }
- },
- {
- type: 'ul',
- items: [
- {
- label: { zh: '底盘改造设计', en: 'Chassis engineering design' },
- text: {
- zh: '围绕降低背景、释放生长、放大信号三条主线，确定了 STE2、FAR1、Sst2 三个敲除靶点，以及 Gpa1 C 端 KIGII 换成 EYNLV 这一接口改造位点。四者的取舍理由与预期效果已整理成一份设计说明，供后续队伍判断哪些改动与自身目标相关。以上均为设计意图，改造尚未完成，也未验证相应的性能变化。',
- en: 'Following the three aims of cutting background, releasing growth and amplifying signal, this settles on STE2, FAR1 and Sst2 as knockout targets, and the Gpa1 C-terminal change from KIGII to EYNLV as the interface edit. The reasoning behind each of the four choices and what it should achieve are written up, so later teams can judge which changes fit their own goal. All of it is design intent: the engineering is unfinished and no change in performance has been verified.'
- }
- },
- {
- label: { zh: '通路建模与剂量反应模拟', en: 'Pathway modelling and dose-response simulation' },
- text: {
- zh: '计划对 G 蛋白信号通路做数学建模，并对抗原抗体结合的剂量反应关系进行模拟，用来给预期读数一个量级判断。此项仍在规划阶段，暂无成型内容。',
- en: 'Planned work covers mathematical modelling of the G-protein signalling pathway and simulation of the antigen-antibody dose-response, to put an order of magnitude on the expected readout. This is still at planning stage with nothing formed yet. '
- }
- },
- // 状态字段不渲染（2026-09-16 规则：状态仅存于代码注释）：
- // {
- // label: { zh: '当前状态', en: 'Current state' },
- // text: {
- // zh: '设计方案已定，建模待开展，整体状态为待定。',
- // en: 'Design settled, modelling pending; status overall: Pending.'
- // }
- // }
- ]
- }
- ]
- },
-
- // ---- 人类实践（系统性总结）----
- {
- id: 'other-hp',
- title: { zh: '3b. 人类实践', en: '3b. Human Practices' },
- summary: {
- zh: '人类实践部分只做整体交代：围绕什么场景展开、面向哪些人、目前推进到哪一步。',
- en: 'The Human Practices part is described as a whole: which setting it starts from, who it is aimed at, and where it stands.'
- },
- blocks: [
- {
- type: 'p',
- text: {
- zh: '人类实践围绕流感检测的落地场景展开，目的是让这枚酵母传感器的设计不只在实验室成立，也能对应真实的使用环境与使用者。',
- en: 'This line of work starts from where influenza testing actually takes place, so a sensor designed at the bench also holds up in the settings and for the people meant to use it.'
- }
- },
- {
- type: 'ul',
- items: [
- {
- label: { zh: '调研与访谈', en: 'Survey and interviews' },
- text: {
- zh: '计划开展流感相关调研与基层医护人员访谈，用真实场景反馈校正产品形态假设。此项仍在推进，暂无成型成果。',
- en: 'Planned surveys on influenza and interviews with frontline medical staff, using accounts from real settings to correct assumptions about product form. Still underway with nothing formed yet. '
- }
- },
- {
- label: { zh: '科普与社区参与', en: 'Outreach and community engagement' },
- text: {
- zh: '计划开展面向公众的合成生物学相关科普活动。具体内容与产出随活动推进补充。',
- en: 'Planned public-facing outreach on synthetic biology. Particulars and outputs are added as activities proceed. '
- }
- },
- // 状态字段不渲染（2026-09-16 规则：状态仅存于代码注释；无资料条目直接留空）：
- // {
- // label: { zh: '当前状态', en: 'Current state' },
- // text: {
- // zh: '待补充。',
- // en: 'To add.'
- // }
- // }
- ]
- }
- ]
- },
-
- // ============ 归其他贡献结束 ============
- ]
+    // ============ 归属与致谢 ============
+    {
+      id: 'contribution-attribution',
+      title: { zh: '归属与致谢（Attribution）', en: 'Attribution' },
+      summary: {
+        zh: '各模块的试剂、载体与方案来源；人员与机构致谢见 Attributions 页。',
+        en: 'Sources of reagents, vectors and plans by module; personnel and institutional thanks are on the Attributions page.'
+      },
+      blocks: [
+        {
+          type: 'ul',
+          items: [
+            {
+              label: { zh: '底盘模块', en: 'Chassis module' },
+              text: {
+                zh: 'pML104 来自 Addgene #67638；试剂盒与酶供应商见 Protocol 页底盘模块材料表。',
+                en: 'pML104 comes from Addgene #67638; kit and enzyme suppliers are listed in the materials table of the chassis module on the Protocol page.'
+              }
+            },
+            {
+              label: { zh: '受体模块', en: 'Receptor module' },
+              text: {
+                zh: 'pGADT7 来自 Sangon Biotech ZB56914；抗体清单见受体模块材料表。',
+                en: 'pGADT7 comes from Sangon Biotech ZB56914; the antibody list is in the receptor module materials table.'
+              }
+            },
+            {
+              label: { zh: '接口模块', en: 'Interface module' },
+              text: {
+                zh: 'pRS426 为实验室常规载体；菌株背景口径（S288C 与 BY4741 并存）以实验组统一结果为准。',
+                en: 'pRS426 is a routine laboratory vector; the strain background convention (S288C and BY4741 both appear) follows the lab team unified record.'
+              }
+            },
+            {
+              label: { zh: '报告模块', en: 'Reporter module' },
+              text: {
+                zh: '六份实验方案为本队撰写；两套读出体系并存的说明见 1.4。',
+                en: 'The six experimental plans were written by this team; the coexistence of two readout systems is described in item 1.4.'
+              }
+            }
+          ]
+        },
+        {
+          type: 'links',
+          items: [
+            { href: 'team/attributions.html', zh: '人员与机构致谢见团队 Attributions 页', en: 'Personnel and institutional thanks are on the team Attributions page' },
+            { href: 'wet-lab/protocol.html', zh: '实验参数与材料清单见 Protocol 页', en: 'Experimental parameters and materials lists are on the Protocol page' },
+            { href: 'wet-lab/result.html', zh: '结果与原始数据见 Results 页', en: 'Results and raw data are on the Results page' }
+          ]
+        }
+      ]
+    }
+  ]
 };

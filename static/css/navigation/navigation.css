@@ -30,13 +30,17 @@
   --color-white: #ffffff;
   --color-bg-gray: #f4f4f4;
 
+  /* ECHO 2026 主题色（新增）：米白背景 + 天蓝字色 */
+  --color-echo-bg: #fefaee;
+  --color-echo-blue: #4c9dd3;
+
   /* 背景色系统 */
   --bg-page: rgba(252, 231, 203, 0.9);
   --bg-sidebar: #FFF8E7;
   --bg-card: #ffffff;
   --bg-card-hover: #f8f9fa;
   --bg-dropdown: rgba(252, 231, 203, 0.9);
-  --bg-footer: #4A90E2;
+  --bg-footer: var(--color-echo-blue);
   --bg-footer-light: rgba(255, 255, 255, 0.08);
   --bg-footer-border: rgba(255, 255, 255, 0.15);
 
@@ -106,8 +110,7 @@ nav {
   height: 6.25rem;
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: url(../../image/wikiStructure/nav_bc.webp) no-repeat left center;
-  background-size: cover;
+  background: var(--color-echo-bg);
   transition: height var(--duration-slow) var(--ease-smooth),
     box-shadow var(--duration-slow) var(--ease-smooth),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1566,8 +1569,7 @@ nav ul li:hover .dropdown-content {
   transform: translateY(-0.3125rem);
 }
 
-.level1.expanded .level2,
-.level1:hover .level2 {
+.level1.expanded .level2 {
   max-height: 31.25rem;
   opacity: 1;
   transform: translateY(0);
@@ -3699,7 +3701,7 @@ footer {
 /* Shared footer component: section-footer */
 
 .section-footer {
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.95) 0%, rgba(53, 112, 181, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(76, 157, 211, 0.96) 0%, rgba(58, 120, 166, 0.96) 100%);
   position: relative;
   overflow: visible;
   height: auto;

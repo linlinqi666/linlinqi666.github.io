@@ -21,6 +21,12 @@
     scrollBottomThreshold: 50,
     navVisibleThreshold: 0.1,
     navHighlightOffset: 150,
+    /**
+     * 点击导航项后锁定高亮的时长（毫秒）。期间点击引起的滚动不会改写高亮；
+     * 用户主动滚动（滚轮/触摸/翻页键）会立即解锁。
+     * @type {number}
+     */
+    clickLockMs: 1200,
     debugMode: false,
     enableValidation: true,
     validateOnLoad: true,
@@ -30,15 +36,19 @@
      * @type {string[]}
      */
     sectionIdPrefixes: [
+      'design-', 'protocol-', 'results-',
       'section-', 'module-', 'the-', 'chassis-', 'chassis',
       'gene-', 'nanobody-', 'fusion-', 'fusion-gpa', 'fusion-pager',
       'pager-', 'gpcr-', 'g-protein-', 'dual-', 'sensing-',
       'display-', 'virus-', 'overview', 'sensing-system',
       'signal-transduction', 'reporter-system', 'reporter',
       'surface-display', 'proof-of-concept',
-      // Experiments 页四模块结构（Protocol 与公共区块）
-      'p1-', 'p2-', 'p3-', 'p4-',
+      // 实验页公共区块（材料 / 安全 / 排错）与安全页
       'reagents-', 'safety-', 'progress-', 'troubleshooting',
+      // dry-lab Model 页正文小节（2026-09-27：卡片 model-award / model-overview / model-game /
+      // model-assumptions / model-data-parameters / model-results / model-validation，
+      // 小节 model-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
+      'model-',
       // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）
       'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution'
     ]
@@ -55,7 +65,9 @@
     scrollInfo: null,
     isInitialized: false,
     scrollHandler: null,
-    resizeHandler: null
+    resizeHandler: null,
+    clickLockHash: null,
+    clickLockAt: 0
   };
 
   /**
@@ -256,13 +268,17 @@
      * @returns {string} 当前章节 ID
      */
     findCurrentSection: function (scrollTop) {
-      const offset = CONFIG.navHighlightOffset;
+      // 以视口中线为判定线：原文用「顶部 + navHighlightOffset」，在小节被 result-sections.js
+      // 折叠成 <details> 后，各小节间距坍塌为一行标题，区间判定会高亮跳太远。改用中线判定，
+      // 折叠态（间距小）与展开态（间距大）下都能稳定高亮当前阅读的小节。
+      const viewportHeight = (state.scrollInfo && Utils.getClientHeight(state.scrollInfo.element, state.scrollInfo.isWindow)) || window.innerHeight || 800;
+      const line = scrollTop + viewportHeight / 2;
 
       // 优先使用缓存的绝对偏移（无强制重排）
       if (state.cachedSectionOffsets && state.cachedSectionOffsets.length) {
         let currentSection = '';
         for (let i = state.cachedSectionOffsets.length - 1; i >= 0; i--) {
-          if (state.cachedSectionOffsets[i].top <= scrollTop + offset) {
+          if (state.cachedSectionOffsets[i].top <= line) {
             currentSection = state.cachedSectionOffsets[i].id;
             break;
           }
@@ -273,11 +289,12 @@
         return currentSection;
       }
 
-      // 兜底：缓存缺失时回退到原 getBoundingClientRect 逻辑（极少触发）
+      // 兜底：缓存缺失时回退到 getBoundingClientRect 逻辑（极少触发）
       const sections = state.cachedSections || document.querySelectorAll(getSectionSelector());
+      const sy = window.scrollY || window.pageYOffset || 0;
       let currentSection = '';
       for (let i = sections.length - 1; i >= 0; i--) {
-        if (sections[i].getBoundingClientRect().top <= offset) {
+        if (sections[i].getBoundingClientRect().top + sy <= line) {
           currentSection = sections[i].id;
           break;
         }
@@ -347,6 +364,14 @@
       const result = ProgressCalculator.calculateProgress();
       ProgressCalculator.updateProgressUI(result.progressPercent);
 
+      // 点击导航后短时间内把高亮锁定在被点击项：点击引起的滚动会让目标停在视口顶部，
+      // 若立即按「视口中线」重算，高亮会跳到下一个锚点，与用户点击意图不符。
+      if (state.clickLockHash && Date.now() - state.clickLockAt < CONFIG.clickLockMs) {
+        NavigationHighlighter.highlightNavigation(state.clickLockHash);
+        return;
+      }
+      state.clickLockHash = null;
+
       const currentSection = NavigationHighlighter.findCurrentSection(result.scrollTop);
       NavigationHighlighter.highlightNavigation(currentSection);
     }
@@ -382,6 +407,32 @@
           });
         }
       });
+    },
+
+    /**
+     * 点击导航项后短暂锁定高亮到被点击项，避免点击引起的滚动把高亮带到相邻锚点；
+     * 用户主动滚动（滚轮/触摸/翻页键）时立即解锁，恢复常规滚动高亮。
+     */
+    setupClickHighlight: function () {
+      const el = Elements.getCachedElements();
+
+      el.navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          const href = link.getAttribute('href') || '';
+          if (href.charAt(0) !== '#') return;
+          state.clickLockHash = href.slice(1);
+          state.clickLockAt = Date.now();
+        });
+      });
+
+      const unlock = function () { state.clickLockHash = null; };
+      window.addEventListener('wheel', unlock, { passive: true });
+      window.addEventListener('touchmove', unlock, { passive: true });
+      window.addEventListener('keydown', function (e) {
+        if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].indexOf(e.key) >= 0) {
+          unlock();
+        }
+      });
     }
   };
 
@@ -394,9 +445,12 @@
   window.SidebarProgress = {
     /**
      * 强制重新计算进度并更新 UI。
+     * 同时重建章节偏移缓存——供 result-sections.js 在收纳条展开/收起（改变布局）后调用，
+     * 否则 cachedSectionOffsets 停留在旧布局，高亮会错乱。
      */
     recalculate: function () {
       Elements.clearCache();
+      buildSectionCache();
       MainLoop.updateScrollProgress();
       log('已强制重新计算进度');
     },
@@ -489,6 +543,7 @@
     window.addEventListener('resize', state.resizeHandler, passiveOption);
 
     NavigationInteractions.setupDirectoryToggle();
+    NavigationInteractions.setupClickHighlight();
 
     MainLoop.updateScrollProgress();
 

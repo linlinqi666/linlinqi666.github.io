@@ -1,15 +1,28 @@
 ---
 permalink: "dry-lab/model.html"
 title: "Model - iGEM SZPU-2026"
-lang: "en"
+lang: "zh-CN"
 basePath: "../"
 css:
   - static/css/model.css
 js:
   - static/js/components/sidebar-progress.js
+  - static/js/pages/model-game.js
+# 正文收纳条由全站组件 static/js/components/section-fold.js（base.njk 已加载）统一提供：
+# 本页只需给正文小节 h3 加 id（model-<语义>），侧边栏 level2/level3 指向同一批 id。
 ---
 
 {% extends "layouts/base.njk" %}
+
+{# 页面内容来源：static/expriments/drylab/model/model(1).docx（逐字对照稿见同目录 md/正文逐字对照/）。
+   数据源：static/data/dry-lab/model/model-docking.json —— 正文表格与交互演示读同一份，
+   由 src/_data/modelDocking.js 桥接给模板，并由下方 scripts 块内联给页面脚本。
+   待核项（编号见 static/expriments/drylab/model/md/10-一手分析.md §6）只写在源码注释里，不渲染：
+   MQ-1 候选命名两套写法（R1aXA5/R2bXD9 与 R1aA5/R2bD9），本页统一用不带 X 的写法，待实验组核销；
+   MQ-2 纳米抗体结构预测口径（文档写本地 AlphaFold2 pLDDT>90，HP 专家访谈记录提到 Swiss-Model）；
+   MQ-3 抗原预处理口径（文档写已去水/去糖基化，专家访谈提到未去水/去离子/未加氢）；
+   MQ-4 阳性对照在文档中为「正在使用 9VH4 复合物重对接」，故本页不写「已验证可靠性」；
+   MQ-5 代码与数据可用性链接在文档中为待补，本页按实际状态写「尚未公开」。 #}
 
 {% block main %}
 <div class="description-container">
@@ -35,12 +48,17 @@ js:
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#overview" class="nav-main-link">Overview</a>
+                <a href="#model-overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#model-game" class="nav-main-link">交互演示</a>
               </div>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#assumptions" class="nav-main-link">模型假设</a>
+                <a href="#model-assumptions" class="nav-main-link">模型假设</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -48,18 +66,13 @@ js:
                 </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#biological-assumptions">生物学假设</a></li>
-                <li class="level3"><a href="#mathematical-assumptions">数学假设</a></li>
+                <li class="level3"><a href="#model-biological-assumptions">生物学假设</a></li>
+                <li class="level3"><a href="#model-mathematical-assumptions">计算与数学假设</a></li>
               </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#data-parameters" class="nav-main-link">数据与参数</a>
-              </div>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#results" class="nav-main-link">模型结果</a>
+                <a href="#model-data-parameters" class="nav-main-link">数据与参数</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -67,13 +80,31 @@ js:
                 </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#dose-response">剂量-反应曲线</a></li>
-                <li class="level3"><a href="#kinetics">动力学模拟</a></li>
+                <li class="level3"><a href="#model-data-targets">靶蛋白与抗原处理</a></li>
+                <li class="level3"><a href="#model-data-nanobodies">纳米抗体与结构预测</a></li>
+                <li class="level3"><a href="#model-data-scoring">打分函数与特异性指数</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#model-results" class="nav-main-link">模型结果</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#model-screening">筛选与排名</a></li>
+                <li class="level3"><a href="#model-haddock">HADDOCK 半柔性精修</a></li>
+                <li class="level3"><a href="#model-interface">结合界面与热点残基</a></li>
+                <li class="level3"><a href="#model-kinetics">动力学与结合自由能</a></li>
+                <li class="level3"><a href="#model-ranking">结论与设计决策</a></li>
               </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#validation" class="nav-main-link">模型验证</a>
+                <a href="#model-validation" class="nav-main-link">验证与讨论</a>
               </div>
             </li>
           </ul>
@@ -105,100 +136,543 @@ js:
       <!-- 右侧内容区域 -->
       <div class="description-content">
         <div id="model-award" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>本页面向 iGEM Best Model 奖项要求，展示用于理解、预测和指导 PAGER-Yeast 生物传感器设计的数学模型与计算机模拟工作。</p>
-          </div>
           <h2>Best Model Award</h2>
-          <p>机制模型、机器学习或其他计算方法可以帮助项目设计、预测系统行为或解释实验结果。本页面需以任何人都能理解的方式解释模型的假设、数据、参数和结果。</p>
-          <p>[待补充：说明本队模型工作的核心目标，以及它如何与湿实验结果相互印证。]</p>
+          <p>手上有 17 条纳米抗体序列，一条都没有实验结构。先用分子对接把它们排成序，再决定哪几个值得做实验。</p>
+          <p>ClusPro 刚性对接把 {{ modelDocking.funnel.candidatesScreened }} 个候选对 3 种甲流 HA 抗原（H1N1、H3N2、H5N1）的打分排成序，用特异性指数量化谁更偏向 H1N1；HADDOCK 2.5 半柔性精修给出 HADDOCK score、聚类大小与界面面积，PyMOL 与 SPICE 给出界面残基和相互作用类型；GROMACS 分子动力学与 MM-GBSA 检查复合物在水中是否稳定、结合自由能是多少；候选对无关病毒抗原（SARS、HIV1、RSVF）的对接结果，用来给交叉反应排一个相对高低。最后收敛到 1 个先导候选 R1aB6，并把 ARGB:31 提为后续突变研究的靶点。</p>
+          <p>这些数值来自分子对接与模拟，属于计算预测；建模文档第 9 节写明「无实验验证」。检测灵敏度、特异性、检出限、定量范围与临床可用性均未测量。三维视图显示的是抗原来源结构，不是本项目的对接复合物。</p>
         </div>
 
-        <div id="overview" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>概述建模动机、模型类型（如 ODE、 agent-based、统计模型）及其在 DBTL 循环中的位置。</p>
+        <div id="model-overview" class="content-card">
+          <div class="content-text-frame">
+            <h2>Overview</h2>
+
+            <p>EchoYeast 需要一种能识别 H1N1 HA、同时对其它亚型和无关病毒交叉反应尽量低的纳米抗体，而 17 条候选序列都没有实验结构。逐个做克隆、表达、测结合，代价和周期都高。分子对接先给出排序和结合模式，后续实验就能集中到少数几个候选上。</p>
+
+            <p>核心问题是哪个纳米抗体能以最高的亲和力与特异性结合 H1N1 HA。流程要产出四样东西：候选排序、特异性量化、原子水平的结合模式，以及复合物在生理条件下的稳定性判断。</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-flow-overview.webp" alt="图1 建模流程总览：17 个纳米抗体与 3 种 HA 抗原经 ClusPro 刚性对接筛出 5 个候选，再经 HADDOCK 2.5 半柔性精修得到最佳复合物，之后分两路做界面分析（PyMOL + SPICE）与分子动力学（GROMACS + MM-GBSA），汇合到热点残基与模型指导设计" loading="lazy" width="1381" height="160" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图1 建模流程总览：17 个候选经刚性对接筛选、5 个候选经半柔性精修，再由界面分析与分子动力学两条支路汇合到热点残基与设计决策（示意图，非实验结果）</figcaption>
+            </figure>
+
+            <p>流程按「问题 → 假设 → 方法 → 输出 → 验证 → 设计决策」推进，每一步的输出是下一步的输入。</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-logic-chain.webp" alt="图2 建模流程逻辑链：从「哪个纳米抗体能特异性结合 H1N1 HA」出发，经六种方法分别给出特异性指数、交叉验证、交叉反应风险、HADDOCK score 与 BSA、界面残基、RMSD 与结合自由能，最后得到热点残基与设计决策" loading="lazy" width="1260" height="828" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图2 建模流程逻辑链：方法与输出的对应关系（示意图，非实验结果）</figcaption>
+            </figure>
+
+            <p>七个阶段的问题、方法与输出：</p>
+
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">阶段</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">要回答的问题</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">方法</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">输出</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stage in modelDocking.display.pipeline %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ stage.stage }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ stage.question }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ stage.method }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ stage.output }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p>先导候选 R1aB6 是否能在酵母表面识别 HA、报告通路是否被激活，要靠后续的 PAGER 受体表达与诱导实验回答，读出方式是流式细胞术测 yEGFP 荧光和 X-Gal 显色。这些实验尚未进行。</p>
           </div>
-          <h2>Overview</h2>
-          <ul>
-            <li><strong>建模目的：</strong>预测 PAGER 受体在 HA 抗原存在下的激活效率、信号放大倍数及检测下限。</li>
-            <li><strong>模型类型：</strong>[待补充：常微分方程组 / 随机模拟 / 机器学习 / 组合模型]</li>
-            <li><strong>与湿实验的对应：</strong>模型预测将通过流式细胞术 yEGFP 荧光强度与 X-Gal 显色结果进行验证。</li>
-          </ul>
-          <p>[待补充：建议上传模型流程图或 DBTL 循环图，尺寸 1200×600px，.webp 格式并压缩至 150KB 以下。]</p>
         </div>
 
-        <div id="assumptions" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>明确列出模型简化假设及其适用范围，确保评审能够理解模型的边界条件。</p>
+        <div id="model-game" class="content-card" data-base-path="{{ basePath }}">
+          <h2>交互演示：纳米抗体 × 甲流 HA 对接卡牌</h2>
+          <p>把卡牌拖到中间，或直接点击卡牌选择。选完一个抗体加一种抗原，结果区给出该组合的对接结果，排名区给出 {{ modelDocking.funnel.candidatesRefined }} 个候选按特异性指数的排序。演示只覆盖文档里有数值的 {{ modelDocking.funnel.candidatesRefined }} 个候选。</p>
+
+          <div class="model-game">
+            <div class="model-game__toolbar">
+              <p class="model-game__toolbar-hint">选择方式：点击卡牌，或把卡牌拖进中间的槽位；再次点击已选卡牌可取消。</p>
+              <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">重置演示</button>
+            </div>
+
+            <div class="model-game__board">
+              <section class="model-game__column">
+                <h3 id="model-game-antibodies-title" class="model-game__column-title" data-no-fold>纳米抗体（{{ modelDocking.funnel.candidatesRefined }} 个候选）</h3>
+                <div class="model-game__cards" id="model-game-antibodies"></div>
+              </section>
+
+              <div class="model-game__center">
+                <div class="model-game__slots">
+                  <button type="button" class="model-game__slot" id="model-game-slot-antibody">拖入或点击左侧纳米抗体卡</button>
+                  <span class="model-game__slot-times" aria-hidden="true">×</span>
+                  <button type="button" class="model-game__slot" id="model-game-slot-antigen">拖入或点击右侧抗原卡</button>
+                </div>
+
+                <div class="model-game__panel" id="model-game-result"></div>
+                <div class="model-game__panel" id="model-game-ranking"></div>
+
+                <div class="model-game__viewer-block">
+                  <div class="model-game__viewer-head">
+                    <p class="model-game__viewer-title">三维结构</p>
+                    <div class="model-game__viewer-actions">
+                      <button type="button" id="model-game-load3d" class="model-game__button">载入三维结构</button>
+                      <button type="button" id="model-game-style" class="model-game__button model-game__button--ghost">显示模式：卡通</button>
+                    </div>
+                  </div>
+                  <p class="model-game__viewer-note" id="model-game-viewer-note"></p>
+                  <div class="model-game__viewer" id="model-game-viewer">
+                    <div class="model-game__viewer-empty">
+                      <svg class="model-game__viewer-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                        <circle cx="24" cy="24" r="7"></circle>
+                        <circle cx="10" cy="12" r="3.5"></circle>
+                        <circle cx="38" cy="12" r="3.5"></circle>
+                        <circle cx="10" cy="36" r="3.5"></circle>
+                        <circle cx="38" cy="36" r="3.5"></circle>
+                        <line x1="17" y1="20" x2="12.6" y2="14.6"></line>
+                        <line x1="31" y1="20" x2="35.4" y2="14.6"></line>
+                        <line x1="17" y1="28" x2="12.6" y2="33.4"></line>
+                        <line x1="31" y1="28" x2="35.4" y2="33.4"></line>
+                      </svg>
+                      <p>点击「载入三维结构」后显示抗原结构与文档列出的界面活性残基。</p>
+                    </div>
+                  </div>
+                  <p class="model-game__viewer-message" id="model-game-viewer-message" hidden></p>
+                </div>
+              </div>
+
+              <section class="model-game__column">
+                <h3 id="model-game-antigens-title" class="model-game__column-title" data-no-fold>甲流 HA 抗原（{{ modelDocking.funnel.fluAntigens }} 种）</h3>
+                <div class="model-game__cards" id="model-game-antigens"></div>
+              </section>
+            </div>
+
+            <p class="model-game__fallback" id="model-game-fallback" hidden></p>
+            <p class="model-game__status" id="model-game-status" role="status" aria-live="polite"></p>
+            <p class="model-game__caption">数据来自建模文档第 5.3、5.4 节，属于计算预测。卡牌上的「目标亚型 / 对照亚型」按文档口径：特异性指数由 H1N1 与 H3N2、H5N1 的打分差值构成，对照亚型用来量化特异性，不是检测对象。</p>
           </div>
-          <h2>模型假设</h2>
-          <div id="biological-assumptions">
-            <h3>生物学假设</h3>
+        </div>
+
+        <div id="model-assumptions" class="content-card">
+          <div class="content-text-frame">
+            <h2>模型假设</h2>
+
+            <h3 id="model-biological-assumptions">生物学假设</h3>
+            <p>抗原一侧，我们用 RCSB 沉积的 HA 结构代表天然构象，并且用了两种状态做对照：直接下载的「未处理抗原」，以及从抗体-抗原复合物中提取、代表结合态构象的「复合物处理后抗原」。识别元件一侧没有这样的便利，17 条候选纳米抗体在 PDB 中都没有实验结构，长度约 114–123 个残基，未加 His-tag 或 linker，所以只能用结构预测模型代替晶体结构。</p>
+            <p>结合界面按区域处理：HA 上的活性残基（HA1 25、45–49、305–307、332；HA2 361–364、381、382、384、385、388、391、392、395、396、399）与纳米抗体的 CDR 残基视为参与结合的范围。交叉反应则用候选对无关病毒抗原（SARS、HIV1、RSVF）的对接打分平均值来排相对高低，它不构成定量指标。</p>
+
+            <h3 id="model-mathematical-assumptions">计算与数学假设</h3>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">假设</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">合理性</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">潜在偏差</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">ClusPro 中受体按刚性处理</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">可以快速筛掉大量候选</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">可能遗漏诱导契合效应</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">HADDOCK 中界面按半柔性处理</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">允许侧链重排</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">主链保持固定</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">对接中使用隐式溶剂</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">蛋白-蛋白对接的常规做法</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">忽略显式水桥</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">使用 Amber99sbildn 力场</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">蛋白体系的验证较为充分</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">力场自身的近似</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">10 ns 的分子动力学足以检查稳定性</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">常规的初步验证时长</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">可能遗漏慢构象变化</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p>因此结论只适用于候选之间的相对比较：给出的是排序与界面描述，不涉及绝对结合亲和力与检测性能。</p>
+          </div>
+        </div>
+
+        <div id="model-data-parameters" class="content-card">
+          <div class="content-text-frame">
+            <h2>数据与参数</h2>
+
+            <h3 id="model-data-targets">靶蛋白与抗原处理</h3>
+            <p>三种甲流 HA 抗原均取自 RCSB 已沉积的结构；文档记载的处理为：去除抗体链、去除糖基化与水分子、把 HA1 与 HA2 拆成独立链、统一链 ID（HA 为 A/B，纳米抗体为 C）。</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">抗原</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">毒株</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">PDB ID</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">来源</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">分辨率</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">保留链</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for antigen in modelDocking.display.antigens %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ antigen.name }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ antigen.strain }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ antigen.pdbId }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ antigen.source }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ antigen.resolution }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ antigen.chainMap }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>三维视图用的是这三个结构，已按文档口径裁剪成「仅 HA 链」：去掉抗体链、糖基化与杂原子，坐标未改动。各条目另需说明如下。</p>
             <ul>
-              <li>酵母细胞均匀悬浮，不考虑细胞间异质性（或计划通过单细胞模型引入）。</li>
-              <li>HA 抗原与 anti-HA 纳米抗体结合符合质量作用定律。</li>
-              <li>MT1 抑制肽与 hM1Dq 受体的结合/解离处于快速平衡。</li>
-              <li>DCZ 激动剂浓度在诱导期间保持恒定。</li>
+              {% for antigen in modelDocking.display.antigens %}
+              <li><strong>{{ antigen.pdbId }}（{{ antigen.name }}）：</strong>{{ antigen.structureNote }}</li>
+              {% endfor %}
+            </ul>
+
+            <h3 id="model-data-nanobodies">纳米抗体与结构预测</h3>
+            <p>候选为 17 条全新的纳米抗体序列，PDB 中没有实验结构，长度约 114–123 个残基，未加 His-tag 或 linker；结构预测使用本地部署的 AlphaFold2，取 pLDDT 高于 90 的高置信度模型，配体链 ID 记为 C。</p>
+            <p>打分与精修只对其中 {{ modelDocking.funnel.candidatesRefined }} 个候选给出了可引用的数值（R1aB6、R2aF9、R1aA5、R2bE8、R2bD9），下面的结果小节与交互演示都限定在这 {{ modelDocking.funnel.candidatesRefined }} 个之内。其余 {{ modelDocking.funnel.candidatesScreened }} 个未进入精修阶段，没有可引用的数值。</p>
+
+            <h3 id="model-data-scoring">打分函数与特异性指数</h3>
+            <ul>
+              <li><strong>ClusPro 打分：</strong>{{ modelDocking.scoring.cluspro.formula }}；每个「候选 × 抗原」组合保留 Top 10 构象。</li>
+              <li><strong>特异性指数：</strong>{{ modelDocking.scoring.specificityIndex.formula }}。{{ modelDocking.scoring.specificityIndex.note }}</li>
+              <li><strong>HADDOCK 2.5：</strong>{{ modelDocking.scoring.haddock.flow }}，输出 {{ modelDocking.scoring.haddock.metrics }}。{{ modelDocking.scoring.haddock.note }}</li>
+              <li><strong>动力学与自由能：</strong>GROMACS 分子动力学 + MM-GBSA；力场 {{ modelDocking.md.forcefield }}，水模型 {{ modelDocking.md.waterModel }}，随机种子 {{ modelDocking.md.seed }}。</li>
+              <li><strong>阳性对照：</strong>以实验解析的 9VH4 复合物做重对接，作为对接流程的对照。</li>
             </ul>
           </div>
-          <div id="mathematical-assumptions">
-            <h3>数学假设</h3>
+        </div>
+
+        <div id="model-results" class="content-card">
+          <div class="content-text-frame">
+            <h2>模型结果</h2>
+
+            <h3 id="model-screening">筛选与排名</h3>
+            <p>未处理抗原下，17 个候选对三种甲流 HA 抗原的对接打分与平均特异性优势如下（红旗标记处为特异性最优的候选）。特异性指数越负，表示该候选相对其它亚型越偏向 H1N1。</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-cluspro-screen.webp" alt="图3 左：17 个候选对 H1N1、H3N2、H5N1 的 ClusPro 打分（加权分，越负结合越强）；右：各候选对 H1N1 的平均特异性优势，红旗标记处为最特异者" loading="lazy" width="1400" height="693" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图3 17 个候选的 ClusPro 打分与平均特异性优势：左图为三种甲流 HA 抗原的打分，右图为特异性优势（越负越特异，红旗标记处为最优候选）（计算预测结果）</figcaption>
+            </figure>
+
+            <p>{{ modelDocking.funnel.candidatesRefined }} 个进入精修的候选在未处理抗原下的打分与特异性指数：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">纳米抗体</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">H1N1</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">H3N2</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">H5N1</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">特异性指数</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">结论</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in modelDocking.tables.untreated %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.H1N1 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.H3N2 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.H5N1 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.index }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.outcome }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>排序为 R1aB6 &gt; R2bD9 &gt; R2bE8 &gt; R1aA5 &gt; R2aF9（按特异性指数由负到正）。</p>
+
+            <p>同样的 {{ modelDocking.funnel.candidatesRefined }} 个候选对「复合物处理后抗原」的结果：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">纳米抗体</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">H1N1</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">H3N2</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">H5N1</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">特异性指数</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in modelDocking.tables.treated %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.H1N1 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.H3N2 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.H5N1 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.index }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>改用处理后抗原后，所有候选的特异性指数都变为正值或接近零，说明抗原构象的处理会明显改变特异性排序。文档据此以未处理抗原的结果为主要依据，理由是未处理抗原更接近天然构象。</p>
+
+            <p>交叉反应风险用候选对无关病毒抗原（SARS、HIV1、RSVF）的平均结合能表示，数值越负代表结合越强、交叉反应风险越高：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">纳米抗体</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">SARS</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">HIV1</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">RSVF</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">平均结合能</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">交叉反应风险</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in modelDocking.tables.cross %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.SARS }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.HIV1 }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.RSVF }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.mean }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.risk }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <!-- MQ-7：源文档另有两张 17 抗体图表（处理后抗原、交叉反应）分别位于 5.3.2 / 5.3.3 之后，
+                 其候选编号对照表与筛选图的编号表互相矛盾，无法与本节表格逐条对应，故本页不引用这两张图，
+                 相关结果只用表格呈现。详见 md/10-一手分析.md §5.1、§6。 -->
+
+            <h3 id="model-haddock">HADDOCK 半柔性精修</h3>
+            <p>对进入精修的 {{ modelDocking.funnel.candidatesRefined }} 个候选与 H1N1 HA 做半柔性精修后的结果：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">纳米抗体</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">HADDOCK score</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">聚类大小</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">BSA (Å²)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in modelDocking.tables.haddock %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.score }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.clusterSize }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ row.bsa }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>排序为 R1aB6 &gt; R2aF9 &gt; R1aA5 &gt; R2bE8 &gt; R2bD9。把两个指标画在一起可以看出它们并不总是同向：</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-specificity-vs-haddock.webp" alt="图4 合并视图：横轴为 ClusPro 特异性指数（越负越好），纵轴为 HADDOCK score（越负越好），R1aB6 落在左下角最优区域，R2aF9 落在右侧特异性差的区域" loading="lazy" width="1269" height="952" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图4 两个指标的合并视图：横轴为 ClusPro 特异性指数，纵轴为 HADDOCK score，两者都越负越好；R1aB6 同时落在两个方向的最优位置（计算预测结果）</figcaption>
+            </figure>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-haddock-bars.webp" alt="图5 5 个候选的 HADDOCK score 柱状图，柱上标注 score、BSA 与聚类大小 N" loading="lazy" width="1269" height="793" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图5 {{ modelDocking.funnel.candidatesRefined }} 个候选的 HADDOCK score、界面面积（BSA）与聚类大小（N）（计算预测结果）</figcaption>
+            </figure>
+
+            <h3 id="model-interface">结合界面与热点残基</h3>
+            <p>界面分析针对最优组合 R1aB6 与 H1N1 HA。PyMOL 给出的界面残基为：HA 侧 30 个残基（{{ modelDocking.interface.haSide.ranges | join('、') }}），纳米抗体侧 24 个残基（CDR1 27–37、CDR2 44–65、CDR3 101–104）。SPICE 给出的相互作用类型计数如下：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">相互作用类型</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">数量</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in modelDocking.display.interactions %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.label }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p>其中距离最近、重复出现的那几个残基被提为热点：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">纳米抗体残基</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">HA 残基</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">相互作用</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">距离 (Å)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in modelDocking.display.hotspots %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.nanobody }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.ha }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.type }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.distance }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>{{ modelDocking.interface.hotspotNote }}</p>
+            <!-- 源文档此处有一条「图 4. 结合界面与相互作用网络。3Dmol交互」，但文档并未内嵌该图。
+                 本页以「抗原结构 + 界面残基高亮（交互演示卡）+ 上表」替代；本项目的对接复合物结构尚未公开，
+                 不展示、也不使用任何非本项目的替代结构。 -->
+
+            <h3 id="model-kinetics">动力学与结合自由能</h3>
+            <p>把 R1aB6 与 H1N1 HA 的复合物放进水盒子做分子动力学（{{ modelDocking.md.reportedDuration }}，GROMACS，{{ modelDocking.md.forcefield }} 力场，{{ modelDocking.md.waterModel }} 水模型），观察它是否稳定：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">指标</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">结果</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in modelDocking.display.md %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.metric }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-md-stability.webp" alt="图6 左：R1aB6–H1N1 复合物的 RMSD 随时间变化；右：逐残基 RMSF" loading="lazy" width="1400" height="467" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图6 R1aB6–H1N1 复合物的 RMSD（左）与逐残基 RMSF（右）（计算预测结果）</figcaption>
+            </figure>
+            <!-- MQ-6：文档正文记为 10 ns、RMSD 0.45 nm（稳定），但该图横轴只画到约 8 ns 且曲线峰值约 0.70 nm，
+                 两者口径不一致，待实验组核销；本页正文按文档口径书写，不据图改写数值。 -->
+
+            <p>结合自由能用 MM-GBSA 估算（{{ modelDocking.mmgbsa.engine }}，单位 kcal/mol）：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">能量项</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">数值 (kcal/mol)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in modelDocking.display.mmgbsa %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.term }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>{{ modelDocking.mmgbsa.note }}</p>
+
+            <h3 id="model-ranking">结论与设计决策</h3>
+            <p><strong>入选候选（{{ modelDocking.display.leads | length }} 个）。</strong></p>
             <ul>
-              <li>采用确定性 ODE 描述信号通路的平均行为。</li>
-              <li>忽略细胞生长对报告基因表达的稀释效应（或作为参数纳入）。</li>
-              <li>参数估计基于文献值与湿实验拟合。</li>
+              {% for item in modelDocking.display.leads %}
+              <li><strong>{{ item.id }}：</strong>{{ item.zh }}</li>
+              {% endfor %}
             </ul>
+            <p><strong>淘汰候选（{{ modelDocking.display.rejected | length }} 个）。</strong></p>
+            <ul>
+              {% for item in modelDocking.display.rejected %}
+              <li><strong>{{ item.id }}：</strong>{{ item.zh }}</li>
+              {% endfor %}
+            </ul>
+
+            <p>这些结果对应到具体的设计动作：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">模型预测</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">设计决策</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in modelDocking.designDecisions %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.prediction }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.decision }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>接着要做的是实验验证与模型修正。计算预测和候选选择这两步已经走完，剩下的两步取决于后续的湿实验。</p>
           </div>
-          <p>[待补充：为每条假设标注依据来源（文献 DOI 或实验数据）。]</p>
         </div>
 
-        <div id="data-parameters" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>列出模型所需的输入数据、参数表及其单位，确保可复现性。</p>
-          </div>
-          <h2>数据与参数</h2>
-          <ul>
-            <li><strong>输入数据：</strong>[待补充：HA 抗原浓度范围、DCZ 浓度、酵母接种密度、培养时间等]</li>
-            <li><strong>关键参数：</strong>[待补充：结合速率常数 k<sub>on</sub>/k<sub>off</sub>、受体表达量、G 蛋白激活速率、报告基因表达速率、降解速率等]</li>
-            <li><strong>参数来源：</strong>[待补充：文献值 / 拟合得到 / 待实验测定]</li>
-          </ul>
-          <p>[待补充：建议以表格形式呈现参数名、符号、数值、单位、来源与不确定性。]</p>
-          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
-        </div>
+        <div id="model-validation" class="content-card">
+          <div class="content-text-frame">
+            <h2>验证与讨论</h2>
 
-        <div id="results" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>展示模型输出结果，重点呈现对项目设计有指导意义的预测。</p>
-          </div>
-          <h2>模型结果</h2>
-          <div id="dose-response">
-            <h3>剂量-反应曲线</h3>
-            <p>[待补充：模拟不同 HA 抗原浓度下的 yEGFP 荧光输出曲线；需标注坐标轴单位、误差定义（SD/SEM）、样本量 n、对照组。]</p>
-          </div>
-          <div id="kinetics">
-            <h3>动力学模拟</h3>
-            <p>[待补充：模拟抗原结合、MT1 位移、hM1Dq 激活、报告基因表达随时间变化的过程；建议用动态线图或阶段注释框呈现。]</p>
-          </div>
-          <p>[待补充：所有图表需包含误差棒定义、样本量、对照组说明，并优先使用原生 JS 交互式图表。]</p>
-        </div>
+            <p>ClusPro 的未处理抗原排序与 HADDOCK 精修都把 R1aB6 列为最优，PyMOL 与 SPICE 各自给出同一批界面残基，分子动力学检查复合物在水中的稳定性，MM-GBSA 给出结合自由能，交叉反应评估给出脱靶风险的相对位置。文档还用实验解析的 9VH4 复合物做了重对接，作为整套流程的对照。</p>
 
-        <div id="validation" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>说明模型预测与实验结果或已有文献的对比，评估模型可靠性。</p>
+            {% set totalEnergy = modelDocking.display.mmgbsa | last %}
+            <ul>
+              <li>ClusPro（未处理抗原）与 HADDOCK 都把 R1aB6 列为最优候选。</li>
+              <li>PyMOL 与 SPICE 互相印证了同一批界面残基。</li>
+              <li>分子动力学显示复合物在模拟时间内保持稳定；MM-GBSA 得到的结合自由能为 {{ totalEnergy.value }} kcal/mol，方向与稳定结合一致。</li>
+              <li>交叉反应评估把 R1aB6 放在中等风险水平，未落在最高一档。</li>
+            </ul>
+
+            <p>两处不一致：</p>
+            <ul>
+              <li>R2aF9 的 HADDOCK score 排第二，ClusPro 特异性指数却是正的。只看其中一个指标，结论会反过来。</li>
+              <li>R1aA5 的界面面积（BSA）比 R1aB6 更大，HADDOCK score 反而更低。界面质量比面积大小更说明问题。</li>
+            </ul>
+
+            <p>这轮模型做成了四件事：把 {{ modelDocking.funnel.candidatesScreened }} 个候选收窄到 {{ modelDocking.funnel.leads }} 个先导分子，给出了原子水平的结合模式，提出了可检验的热点残基，并通过交叉反应评估降低了脱靶风险。</p>
+
+            <p><strong>局限性。</strong></p>
+            <ul>
+              {% for item in modelDocking.limitations %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+
+            <p><strong>可重复性。</strong>参数记录如下：</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">项目</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">内容</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in modelDocking.reproducibility %}
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.item }}</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p><strong>代码与数据可用性。</strong>软件版本、力场、水模型与随机种子已列在上一节；分子动力学的参数文件（mdp_files）按文档记载已上传到代码仓库，仓库地址与输入/输出结构文件的公开链接尚未提供。</p>
+            <!-- MQ-5：文档 §9/§10/§11 的 GitHub 链接均为「待补」；核销后在此补链接。
+                 Best Model 自评三问（模型是否帮助理解/预测/设计、是否使用了实验或相关数据、是否为他人提供范例）
+                 属内部自评，按站点口径不进正文，原文见 md/正文逐字对照/ 末尾。 -->
           </div>
-          <h2>模型验证</h2>
-          <ul>
-            <li><strong>实验对照：</strong>[待补充：野生型 BY4741、空载体对照、阳性对照的预测与实测对比]</li>
-            <li><strong>敏感性分析：</strong>[待补充：识别对输出影响最大的关键参数]</li>
-            <li><strong>模型局限：</strong>[待补充：当前未考虑的生物学细节及未来改进方向]</li>
-          </ul>
-          <p>[待补充：建议采用“预测 vs 实测”镜像卡片布局，高亮重合区域。]</p>
-          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
         </div>
       </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
+<script>
+// 交互演示的数据载荷：与正文表格同源（static/data/dry-lab/model/model-docking.json）。
+// 页面脚本 static/js/pages/model-game.js 以 defer 加载，执行时本变量已就绪。
+window.MODEL_DOCKING_DATA = {{ modelDocking.client | dump | safe }};
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -250,14 +724,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
     }
-  
+
   });
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     new PageProgressBar().startAutoProgress();
-  
+
   });
 </script>
 {% endblock %}
