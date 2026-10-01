@@ -1,3 +1,4 @@
+{% from "icons.html" import icon with context %}
 <section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
@@ -7,11 +8,11 @@
           <div class="image-scroller">
             <div class="scroller-track">
               <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="https://static.igem.wiki/2026/szpu-china/image/any-icon/SZPU(notext).webp" alt="SZPU"
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/szpu.avif" alt="SZPU"
                   class="scroll-image">
               </a>
               <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="https://static.igem.wiki/2026/szpu-china/image/any-icon/shiyao(notext).webp" alt="shiyao"
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao.avif" alt="shiyao"
                   class="scroll-image">
               </a>
             </div>
@@ -21,17 +22,17 @@
           <h4>Contact Us:</h4>
           <div class="contact-icons">
             <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
+              {{ icon('youxiang') }}
             </div>
             <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
               class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
+              {{ icon('bilibili-fill') }}
             </a>
             <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
+              {{ icon('weixin') }}
               <div class="wechat-qr-container">
                 <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="https://static.igem.wiki/2026/szpu-china/image/any-icon/other/echoyeast_social.jpg"
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/echoyeast-social.avif"
                   alt="WeChat QR Code" class="wechat-qr-image">
               </div>
             </a>
@@ -52,22 +53,56 @@
         <span class="divider-line"></span>
       </div>
 
-      <!-- 导航链接区域（从 site_nav 循环生成，跳过 Home） -->
+      <!-- 导航链接区域（硬编码，跳过 Home）。
+           栏目顺序与链接名与根站 src/_includes/partials/footer.njk 逐项对齐
+           （2026-09-30 用户决定），href 沿用 flask 的无扩展名相对路由。 -->
       <div class="footer-navigation">
         <div class="footer-content-box">
           <div class="footer-columns">
-            {% for item in site_nav %}
-              {% if item.label != "Home" %}
-                <div class="footer-column">
-                  <h4>{{ item.label }}</h4>
-                  <ul>
-                    {% for sub in item.dropdown %}
-                      <li><a href="{{ sub.href }}">{{ sub.label }}</a></li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              {% endif %}
-            {% endfor %}
+            <div class="footer-column">
+              <h4>Project</h4>
+              <ul>
+                <li><a href="description">Description</a></li>
+                <li><a href="design">Design</a></li>
+                <li><a href="engineering">Engineering</a></li>
+                <li><a href="contribution">Contribution</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Wet Lab</h4>
+              <ul>
+                <li><a href="design">Design</a></li>
+                <li><a href="protocol">Protocol</a></li>
+                <li><a href="results">Results</a></li>
+                <li><a href="parts">Parts</a></li>
+                <li><a href="safety-and-security">Safety</a></li>
+                <li><a href="notebook">Notebook</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Dry Lab</h4>
+              <ul>
+                <li><a href="model">Model</a></li>
+                <li><a href="hardware">Hardware</a></li>
+                <li><a href="software">Software</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Human Practices</h4>
+              <ul>
+                <li><a href="human-practices">Integrated HP</a></li>
+                <li><a href="education">Education</a></li>
+                <li><a href="sustainability">Sustainability</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Team</h4>
+              <ul>
+                <li><a href="team">Members</a></li>
+                <li><a href="attributions">Attributions</a></li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>

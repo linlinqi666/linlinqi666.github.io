@@ -1,3 +1,4 @@
+
 /**
  * HPRevealBox - Pull-to-reveal content box for iGEM Human Practices pages.
  *

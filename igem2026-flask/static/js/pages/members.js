@@ -1,3 +1,4 @@
+
 (function () {
   'use strict';
 
@@ -36,12 +37,13 @@
       'Designer': '#7E22CE'
     };
 
-    /* 成员数据：每人固定 7 个字段，顺序 id → name → roles → directions → bio →
-       photoPosition → photoSize；组内顺序即数组顺序。字段含义、标签规则与取景
-       微调方法见 README §5.15；仅需强制指定图片时才加 images: {...} 覆盖。 */
+    /* 成员数据：顺序 id → index → name → roles → directions → bio →
+       photoPosition → photoSize；组内顺序即数组顺序。index 用于生成 CDN 文件名
+       （如 01-xj-photo.webp）。字段含义、标签规则与取景微调方法见 README §5.15。 */
     const members = [
       {
         id: 'xj',
+        index: '01',
         name: 'Jie Xia',
         roles: ['Team Leader', 'Wet Lab'],
         directions: ['Comprehensive learner', 'Innovative Explorers'],
@@ -51,6 +53,7 @@
       },
       {
         id: 'gyf',
+        index: '02',
         name: 'Yifan Gao',
         roles: ['Wet Lab'],
         directions: ['Idealist'],
@@ -60,6 +63,7 @@
       },
       {
         id: 'lcx',
+        index: '03',
         name: 'Chengxi Luo',
         roles: ['Wet Lab', 'Dry Lab', 'HP'],
         directions: ['Bridge Builder', 'Precision Seeker'],
@@ -69,6 +73,7 @@
       },
       {
         id: 'sxz',
+        index: '04',
         name: 'Xiaozhen Su',
         roles: ['Wet Lab'],
         directions: ['Wet Lab Performer', 'Optimistic Researcher'],
@@ -78,6 +83,7 @@
       },
       {
         id: 'zas',
+        index: '05',
         name: 'Aishi Zeng',
         roles: ['Wet Lab'],
         directions: ['Lively', 'Humorous'],
@@ -87,6 +93,7 @@
       },
       {
         id: 'zyl',
+        index: '06',
         name: 'Yuelin Zheng',
         roles: ['Wet Lab'],
         directions: ['Experimental Explorer'],
@@ -96,6 +103,7 @@
       },
       {
         id: 'xq',
+        index: '07',
         name: 'Qi Xu',
         roles: ['Web Developer', 'WIKI'],
         directions: ['Quiet one minute, wild the next'],
@@ -105,6 +113,7 @@
       },
       {
         id: 'lyq',
+        index: '08',
         name: 'Yuquan Luo',
         roles: ['HP', 'Designer'],
         directions: ['Upper Limb Supremacist', 'Doer'],
@@ -114,6 +123,7 @@
       },
       {
         id: 'lr',
+        index: '09',
         name: 'Rui Luo',
         roles: ['Dry Lab', 'HP'],
         directions: ['Science Communicator', 'Brand Designer'],
@@ -123,6 +133,7 @@
       },
       {
         id: 'psq',
+        index: '10',
         name: 'Siqi Peng',
         roles: ['Art'],
         directions: ['Visual Storyteller', 'Visual Director'],
@@ -132,45 +143,61 @@
       },
       {
         id: 'zlz',
+        index: '11',
         name: 'Lizhen Zhu',
         roles: ['Adviser'],
         directions: ['Scientific Guidance'],
         bio: 'Adhere to the Scientific Outlook on Development',
-        photoPosition: 'center top',
-        photoSize: '80% auto'
+        photoPosition: '100% 25%',
+        photoSize: '68% auto'
       },
       {
         id: 'zjh',
+        index: '12',
         name: 'Jianhua Zhou',
         roles: ['Adviser'],
         directions: ['Scientific Guidance'],
         bio: 'Keep Pushing',
-        photoPosition: 'center top',
-        photoSize: '80% auto'
+        photoPosition: '100% 15%',
+        photoSize: '84% auto'
       },
       // 2026-09-15 新增 PI 两位与 WIKI 两位；2026-09-16 补入 bio（directions 待团队补标签）。
-      // 2026-09-21 zjh/tyj/zlj/zlz 四张 _kt 卡通头像到位，统一走默认候选链（webp/<id>_kt.webp 优先，
-      // 缺失时回退 webp/<id>.webp 本人照片），移除此前为 zlj/tyj 显式指定的头像覆盖。
+      // 2026-09-21 zjh/tyj/zlj/zlz 四张 _kt 卡通头像到位，统一走默认候选链（<index>-<id>-avatar.webp
+      // 优先，缺失时回退 <index>-<id>-photo.webp 本人照片），移除此前为 zlj/tyj 显式指定的头像覆盖。
+      // 2026-09-30 与根站对齐：CDN 上 `13-zlj-photo.webp` 是米黄背景版（152,712 B），原始照片被
+      // 上传为 `13-zlj-photo-alt.webp`（169,456 B）。根站要的是原始照片，故这里显式给出候选顺序：
+      // 原图优先、米黄版兜底。取景同步为 '55% 0%' / '36% auto'（与根站一致）。
       {
         id: 'zlj',
+        index: '13',
         name: 'Lijun Zhang',
         roles: ['Primary PI', 'PI'],
         directions: [],
         bio: 'iGEM is far more than a competition, it is a transformative journey on which students explore the boundless possibilities of synthetic biology.',
-        photoPosition: 'center top',
-        photoSize: '30% auto'
+        photoPosition: '55% 0%',
+        photoSize: '36% auto',
+        images: {
+          photo: {
+            candidates: [
+              'https://static.igem.wiki/teams/6373/wiki/team/13-zlj-photo-alt.webp',
+              'https://static.igem.wiki/teams/6373/wiki/team/13-zlj-photo.webp'
+            ]
+          }
+        }
       },
       {
         id: 'tyj',
+        index: '14',
         name: 'Yongjun Tang',
         roles: ['Secondary PI', 'PI'],
         directions: [],
         bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
-        photoPosition: '72% top',
-        photoSize: '72% auto'
+        photoPosition: '100% 10%',
+        photoSize: '78% auto'
       },
       {
         id: 'lrx',
+        index: '15',
         name: 'Ruoxi Li',
         roles: ['WIKI'],
         directions: [],
@@ -180,6 +207,7 @@
       },
       {
         id: 'crq',
+        index: '16',
         name: 'Rouqing Chen',
         roles: ['WIKI'],
         directions: [],
@@ -245,24 +273,28 @@
     const DEFAULT_PHOTO_POSITION = 'center top';
     const DEFAULT_PHOTO_SIZE = 'cover';
 
+    // 基址 = 队伍实际上传目录 https://static.igem.wiki/teams/6373/wiki/team/。
+    // 旧写法 `2026/szpu-china/image/team/webp/` 在 CDN 上一律 403（iGEM 用 403 表示
+    // 对象不存在），浏览器里只表现为"图不显示"，所以基址必须按实测结果写死，
+    // 不能按根站 static/image/ 的目录结构推算。实测记录见
+    // 对话归档/temporary-tools/2026-09/2026-09-30-probe-team-cdn.py（34/34 可达）。
     const IMAGE_PATH_TEMPLATES = {
       photo: {
-        template: 'https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/${id}.webp',
+        template: 'https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-photo.webp',
         ext: 'webp',
-        candidates: ['https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/${id}.webp'],
+        candidates: ['https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-photo.webp'],
         wildcardExtensions: ['webp', 'jpg', 'png']
       },
       avatar: {
-        template: 'https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/${id}_kt.webp',
+        template: 'https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-avatar.webp',
         ext: 'webp',
-        // 前三项为 _kt 卡通头像；后三项让没有 _kt 素材的成员（PI、部分新成员）回退到本人照片。
-        candidates: ['https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/${id}_kt.webp', 'https://static.igem.wiki/2026/szpu-china/image/any-icon/character/webp/${id}.webp'],
+        candidates: ['https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-avatar.webp'],
         wildcardExtensions: ['webp', 'jpg', 'png']
       }
     };
 
     const IMAGE_PATH_MAPPINGS = [
-      // Example: { match: { roles: 'Adviser' }, templates: { photo: 'https://static.igem.wiki/2026/szpu-china/image/adviser/${id}.jpg', avatar: 'https://static.igem.wiki/2026/szpu-china/image/adviser/${id}_kt.jpg' } }
+      // Example: { match: { roles: 'Adviser' }, templates: { photo: 'https://static.igem.wiki/teams/6373/wiki/team/adviser-${id}.webp' } }
     ];
 
     if (typeof window !== 'undefined') {
@@ -397,6 +429,7 @@
 
       const vars = {
         id: sanitizeImageId(member && member.id),
+        index: sanitizeImageId(member && member.index),
         type: safeType,
         ext: config.ext || 'jpg',
         primaryRole: sanitizePathSegment(MemberData.getPrimaryRole(member))
@@ -620,6 +653,66 @@
   const BackgroundController = (function () {
     let activeSlide = 'a';
     let generation = 0;
+    let lastImg = null;
+    let lastSize = null;
+    let lastPosition = null;
+    let lastDomRefs = null;
+
+    /* 把 "N% auto" 解析为照片相对滑层宽度的百分比 N；cover / 未识别 → null（视为满铺） */
+    function parsePhotoSize(str) {
+      if (!str) return null;
+      const m = /^\s*([\d.]+)%\s+auto\s*$/.exec(str);
+      if (m) return parseFloat(m[1]);
+      if (/cover/i.test(str)) return null;
+      return null;
+    }
+
+    /* 把 "X% Y%" / "center top" 等解析为 [X, Y] 百分比（关键字按浏览器规则映射） */
+    function parsePhotoPosition(str) {
+      const parts = (str || '').trim().split(/\s+/);
+      const map = { center: 50, top: 0, bottom: 100, left: 0, right: 100 };
+      const x = parts[0], y = parts[1] || 'center';
+      const xv = map[x] !== undefined ? map[x] : parseFloat(x);
+      const yv = map[y] !== undefined ? map[y] : parseFloat(y);
+      return [isNaN(xv) ? 50 : xv, isNaN(yv) ? 50 : yv];
+    }
+
+    /* 按照片实际渲染框写入 CSS 变量（.bg-mask 据此做米黄晕影羽化）。
+       纯 O(1) 计算 + 一次 CSS 变量写入，不触发强制同步布局，不参与动画。
+       缺省（无图 / 滑层尺寸为 0）时退回满铺，不绘制晕影。 */
+    function setPhotoBox(img, size, position, domRefs) {
+      const layer = domRefs && domRefs.bgLayer;
+      if (!layer || !img || !img.naturalWidth) return;
+      const rect = layer.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+      if (!W || !H) return;
+
+      const N = parsePhotoSize(size);
+      let leftPct, rightPct, topPct, bottomPct, fadeX, fadeY;
+      if (N === null) {
+        leftPct = 0; rightPct = 100; topPct = 0; bottomPct = 100; fadeX = 0; fadeY = 0;
+      } else {
+        const Xr = parsePhotoPosition(position);
+        const w = W * N / 100;
+        const h = w * img.naturalHeight / img.naturalWidth;
+        const left = (W - w) * (Xr[0] / 100);
+        const top = (H - h) * (Xr[1] / 100);
+        leftPct = left / W * 100;
+        rightPct = (left + w) / W * 100;
+        topPct = top / H * 100;
+        bottomPct = (top + h) / H * 100;
+        const fadePx = Math.min(96, Math.max(24, w * 0.15));
+        fadeX = fadePx / W * 100;
+        fadeY = fadePx / H * 100;
+      }
+      const st = layer.style;
+      st.setProperty('--photo-left', leftPct + '%');
+      st.setProperty('--photo-right', rightPct + '%');
+      st.setProperty('--photo-top', topPct + '%');
+      st.setProperty('--photo-bottom', bottomPct + '%');
+      st.setProperty('--photo-fade-x', fadeX + '%');
+      st.setProperty('--photo-fade-y', fadeY + '%');
+    }
 
     /**
      * Preload and display the next background image.
@@ -640,7 +733,7 @@
       const bgSize = size || ImageResolver.DEFAULT_PHOTO_SIZE;
       const currentGeneration = ++generation;
 
-      function applyLoaded(path) {
+      function applyLoaded(path, img) {
         if (currentGeneration !== generation) return;
         const safePath = path
           ? encodeURI(path)
@@ -654,6 +747,13 @@
         next.classList.add('is-active');
         current.classList.remove('is-active');
         activeSlide = activeSlide === 'a' ? 'b' : 'a';
+        if (img) {
+          lastImg = img;
+          lastSize = bgSize;
+          lastPosition = bgPosition;
+          lastDomRefs = domRefs;
+          setPhotoBox(img, bgSize, bgPosition, domRefs);
+        }
       }
 
       function tryCandidate(index) {
@@ -663,12 +763,17 @@
           return;
         }
         const img = new Image();
-        img.onload = () => applyLoaded(candidates[index]);
+        img.onload = () => applyLoaded(candidates[index], img);
         img.onerror = () => tryCandidate(index + 1);
         img.src = candidates[index];
       }
 
       tryCandidate(0);
+    }
+
+    /* 视口变化时重新计算渲染框（照片百分比随滑层尺寸变化），仅 O(1) 计算 */
+    function refreshPhotoBox() {
+      if (lastImg) setPhotoBox(lastImg, lastSize, lastPosition, lastDomRefs);
     }
 
     /**
@@ -685,7 +790,7 @@
       updateBackgroundWithCandidates(candidates, position, size, domRefs);
     }
 
-    return { updateBackground, updateBackgroundWithCandidates };
+    return { updateBackground, updateBackgroundWithCandidates, refreshPhotoBox };
   })();
 
   /**
@@ -824,7 +929,6 @@
     let selectedId = null;
     let isRailCollapsed = false;
     let cachedScrollbarWidth = null;
-    let lastRailRect = null;
     let railResizeObserver = null;
     let railFillerRafId = null;
     let resizeRafId = null;
@@ -862,38 +966,14 @@
 
     function invalidateScrollbarWidth() {
       cachedScrollbarWidth = null;
-      lastRailRect = null;
     }
 
+    /* 仅把实测滚动条宽度写入 CSS 变量；.rail-edge-filler 的纵向几何已由纯 CSS
+       (top:0;bottom:0) 接管，不再需要 JS 回写 top/height，避免展开动画中同步滞后
+       造成的右缘短暂脱离视口。 */
     function updateRailEdgeFiller() {
-      const filler = domRefs.filler;
-      const rail = domRefs.rail;
-      if (!filler || !rail) return;
-
-      if (!rail.classList.contains('is-visible')) {
-        if (filler.style.top !== '' || filler.style.height !== '') {
-          filler.style.top = '';
-          filler.style.height = '';
-          lastRailRect = null;
-        }
-        return;
-      }
-
       const scrollbarWidth = measureScrollbarWidth();
       document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-
-      const railRect = rail.getBoundingClientRect();
-      if (lastRailRect &&
-        Math.round(lastRailRect.top) === Math.round(railRect.top) &&
-        Math.round(lastRailRect.height) === Math.round(railRect.height)) {
-        return;
-      }
-      lastRailRect = railRect;
-
-      const top = `${Math.round(railRect.top)}px`;
-      const height = `${Math.round(railRect.height)}px`;
-      if (filler.style.top !== top) filler.style.top = top;
-      if (filler.style.height !== height) filler.style.height = height;
     }
 
     function scheduleRailEdgeFillerUpdate() {
@@ -1168,6 +1248,7 @@
           lastWidth = width;
           resyncStripGroupsHeight();
           scheduleRailEdgeFillerUpdate();
+          BackgroundController.refreshPhotoBox();
         });
       }
 
@@ -1238,7 +1319,6 @@
       selectedId = null;
       isRailCollapsed = false;
       cachedScrollbarWidth = null;
-      lastRailRect = null;
       lastWidth = window.innerWidth;
     }
 

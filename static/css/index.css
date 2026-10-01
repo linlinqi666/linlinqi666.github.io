@@ -1,4 +1,4 @@
-* {
+﻿* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -780,37 +780,68 @@ body.home-page {
   75% { transform: translate(3px, -6px) rotate(-0.5deg); }
 }
 
-/* 板块 2–7 的 .art 形象原无动画，直接施加柔和浮动（.art 仅做 left/top/width 定位，transform 不冲突）。
+/* 各内容屏 的 .art 形象原无动画，直接施加柔和浮动（.art 仅做 left/top/width 定位，transform 不冲突）。
    仅对酵母吉祥物与装饰性小元素施加；功能性信息图（title/diagram/chart/圆图/轴/图例）保持静止。 */
-.art--s2-mascot, .art--s2-virus, .art--s2-petri,
-.art--s3-mascot, .art--s3-cloud, .art--s3-sparkle,
-.art--s4-mascot, .art--s4-wave,
-.art--s5-mascot, .art--s5-hill, .art--s5-arc, .art--s5-bulb, .art--s5-sparkle,
-.art--s6-mascot, .art--s6-cloud, .art--s6-sparkle,
-.art--s7-mascot, .art--s7-wave {
+.art--public-health-mascot, .art--public-health-virus, .art--public-health-petri,
+.art--project-intro-mascot, .art--project-intro-cloud, .art--project-intro-sparkle,
+.art--dbtl-cycle-mascot, .art--dbtl-cycle-wave,
+.art--statistics-mascot, .art--statistics-hill, .art--statistics-arc, .art--statistics-bulb, .art--statistics-sparkle,
+.art--safety-mascot, .art--safety-cloud, .art--safety-sparkle,
+.art--human-practices-mascot, .art--human-practices-wave {
   animation: floatYeastSoft 6s ease-in-out infinite;
   will-change: transform;
 }
 
 /* 错开相位，避免整齐划一地同步浮动 */
-.art--s2-petri, .art--s3-sparkle, .art--s4-wave, .art--s5-bulb, .art--s6-sparkle, .art--s7-wave {
+.art--public-health-petri, .art--project-intro-sparkle, .art--dbtl-cycle-wave, .art--statistics-bulb, .art--safety-sparkle, .art--human-practices-wave {
   animation-duration: 7.5s;
   animation-delay: -2.5s;
 }
-.art--s2-virus, .art--s3-cloud, .art--s5-arc, .art--s6-cloud {
+.art--public-health-virus, .art--project-intro-cloud, .art--statistics-arc, .art--safety-cloud {
   animation-duration: 8.5s;
   animation-delay: -4s;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .echo-art,
-  .art--s2-mascot, .art--s2-virus, .art--s2-petri,
-  .art--s3-mascot, .art--s3-cloud, .art--s3-sparkle,
-  .art--s4-mascot, .art--s4-wave,
-  .art--s5-mascot, .art--s5-hill, .art--s5-arc, .art--s5-bulb, .art--s5-sparkle,
-  .art--s6-mascot, .art--s6-cloud, .art--s6-sparkle,
-  .art--s7-mascot, .art--s7-wave {
+  .art--public-health-mascot, .art--public-health-virus, .art--public-health-petri,
+  .art--project-intro-mascot, .art--project-intro-cloud, .art--project-intro-sparkle,
+  .art--dbtl-cycle-mascot, .art--dbtl-cycle-wave,
+  .art--statistics-mascot, .art--statistics-hill, .art--statistics-arc, .art--statistics-bulb, .art--statistics-sparkle,
+  .art--safety-mascot, .art--safety-cloud, .art--safety-sparkle,
+  .art--human-practices-mascot, .art--human-practices-wave {
     animation: none !important;
+  }
+}
+
+/* -------------------------------------------------- */
+/* 移动端适配（C 方案：直接用 CSS 缩放/重定位现有 webp 作备选，不新增素材） */
+/* 用户路线（2026-09-28）：先看 C 效果，再决定是否上 A（美工出移动端专属素材）。 */
+/* 1) 触屏与窄屏停用装饰形象浮动 —— 消除移动端掉帧 / 「粒子抽搐乱动」 */
+/* 2) 缩放装饰形象，缓解窄屏与正文重叠 / 拥挤 */
+/* -------------------------------------------------- */
+
+/* 触屏（手机/平板触摸）：装饰浮动一律停用，仅保留 hero 入场，避免 RAF/合成层过载抖动 */
+@media (pointer: coarse) {
+  .echo-art,
+  .art--public-health-mascot, .art--public-health-virus, .art--public-health-petri,
+  .art--project-intro-mascot, .art--project-intro-cloud, .art--project-intro-sparkle,
+  .art--dbtl-cycle-mascot, .art--dbtl-cycle-wave,
+  .art--statistics-mascot, .art--statistics-hill, .art--statistics-arc, .art--statistics-bulb, .art--statistics-sparkle,
+  .art--safety-mascot, .art--safety-cloud, .art--safety-sparkle,
+  .art--human-practices-mascot, .art--human-practices-wave {
+    animation: none !important;
+  }
+  .echo-art {
+    animation: echoIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+  }
+}
+
+/* 窄屏手机：hero 入场保留；板块装饰形象的「停浮动 + 放大重排」见基础定位规则之后的移动端块
+   （必须用完整选择器且置于 1722+ 基础规则之后，才能覆盖之） */
+@media (max-width: 768px) {
+  .echo-art {
+    animation: echoIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
   }
 }
 
@@ -1538,14 +1569,20 @@ html.home-scroll-snap #footer.section-footer {
 
 @media (max-width: 768px) {
 
+  /* hero 竖屏重排（C 方案）：logo 顶部、标语居中、mascot 右下、波浪满宽贴底。
+     修复旧规则缺陷：mascot 基础 left:52.2%/top:6.6% 未清除，与 right:0/width:78%
+     过约束导致 right 被忽略、图形溢出右缘裁切；且全 % top 在竖屏拉出大片留白。 */
   .echo-art--logo {
-    left: 5%;
-    top: 22%;
-    width: 66%;
+    left: 6%;
+    top: 13%;
+    width: 58%;
   }
 
   .echo-art--dash-a {
-    width: 11%;
+    /* 挪到 O 右上（模拟桌面 dash-b 位置），避免被收起态导航遮挡 */
+    left: 55%;
+    top: 14%;
+    width: 8%;
   }
 
   .echo-art--dash-b {
@@ -1553,22 +1590,33 @@ html.home-scroll-snap #footer.section-footer {
   }
 
   .echo-art--mascot {
+    /* 必须显式清除基础 left/top，right/bottom 才能生效 */
+    left: auto;
+    top: auto;
     right: 0;
-    bottom: 0;
+    bottom: 15%;
     height: auto;
-    width: 78%;
-    max-width: 78%;
+    width: 66%;
+    max-width: 66%;
   }
 
   .echo-stage__tagline {
-    top: 46%;
-    width: 64%;
+    left: 8%;
+    top: 36%;
+    width: 78%;
+  }
+
+  .echo-art--wave {
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
   }
 }
 
 
 /* ================================================== */
-/* 板块 2–7：组件拼装舞台（全视口铺满 + 百分比定位） */
+/* 各内容屏：组件拼装舞台（全视口铺满 + 百分比定位） */
 /* ================================================== */
 .art-stage {
   position: absolute;
@@ -1588,26 +1636,25 @@ html.home-scroll-snap #footer.section-footer {
 /* 组件层级 z-index —— 只放层级，定位一律写在下方「手动微调区」 */
 /* 约定：0=背景(波浪/云/山)  1=被上层压住的装饰  2=默认  3=文字类 */
 /* ================================================== */
-.art-stage--s2 .art--s2-title,
-.art-stage--s3 .art--s3-title,
-.art-stage--s4 .art--s4-title,
-.art-stage--s6 .art--s6-title,
-.art-stage--s7 .art--s7-title { z-index: 3; }
+.art-stage--public-health .art--public-health-title,
+.art-stage--project-intro .art--project-intro-title,
+.art-stage--dbtl-cycle .art--dbtl-cycle-title,
+.art-stage--safety .art--safety-title,
+.art-stage--human-practices .art--human-practices-title { z-index: 3; }
 
-.art-stage--s3 .art--s3-cloud,
-.art-stage--s4 .art--s4-wave,
-.art-stage--s5 .art--s5-cloud,
-.art-stage--s5 .art--s5-hill,
-.art-stage--s6 .art--s6-cloud,
-.art-stage--s7 .art--s7-wave { z-index: 0; }
+.art-stage--project-intro .art--project-intro-cloud,
+.art-stage--dbtl-cycle .art--dbtl-cycle-wave,
+.art-stage--statistics .art--statistics-cloud,
+.art-stage--statistics .art--statistics-hill,
+.art-stage--safety .art--safety-cloud,
+.art-stage--human-practices .art--human-practices-wave { z-index: 0; }
 
-.art-stage--s2 .art--s2-arrow,
-.art-stage--s3 .art--s3-mascot,
-.art-stage--s3 .art--s3-sparkle,
-.art-stage--s5 .art--s5-arc,
-.art-stage--s5 .art--s5-sparkle,
-.art-stage--s6 .art--s6-curve,
-.art-stage--s6 .art--s6-sparkle { z-index: 1; }
+.art-stage--project-intro .art--project-intro-mascot,
+.art-stage--project-intro .art--project-intro-sparkle,
+.art-stage--statistics .art--statistics-arc,
+.art-stage--statistics .art--statistics-sparkle,
+.art-stage--safety .art--safety-curve,
+.art-stage--safety .art--safety-sparkle { z-index: 1; }
 
 /* 主题底色：首页各 section 统一用主题米白。
    注意必须用 background-color：把颜色写进 background-image 会让整条声明失效。 */
@@ -1637,7 +1684,7 @@ html.home-scroll-snap #footer.section-footer {
       height 只在图片"比例不合适、需要按高对齐"时才写（写 height 就要把 width 写成 auto）。
 
    2) 对照基准（成品图）
-      对话归档/2026-09-22-homepage-assembly/mockups/
+      对话归档/2026-09/2026-09-22-homepage-assembly/mockups/
         板块1 = 57a008...jpg    板块2 = 50314a...jpg   板块3 = 588dd7...jpg
         板块4 = 32d8bc...jpg    板块5 = 2c38d1...jpg   板块6 = b6dd40...jpg
         板块7 = 96673f...jpg
@@ -1645,7 +1692,7 @@ html.home-scroll-snap #footer.section-footer {
 
    3) 改完怎么生效 / 怎么验证
       - 生效：CSS 是直出文件，**改完刷新浏览器即可**，不需要重新构建。
-      - 验证：node "对话归档/2026-09-22-homepage-assembly/temporary-tools/verify-sections.js" --sel=#板块id
+      - 验证：node "对话归档/2026-09/2026-09-22-homepage-assembly/temporary-tools/verify-sections.js" --sel=#板块id
               （打印 平均差异 + 最差区块坐标；板块1 目前 8.1，低于它才算达标）
       - 看结构对不对：node "对话归档/.../compare-region.js" --mock <成品图> --sel <板块id> --rect x,y,w,h --out <png>
               （把该区域从成品图和实况图并排放大，并列出元件个数/质心，用来核对"谁在谁里面"）
@@ -1660,31 +1707,30 @@ html.home-scroll-snap #footer.section-footer {
   bottom: auto;
 }
 
-/* ---------- 板块 2：Can We Build a Living Sensor ---------- */
-.art-stage--s2 .art--s2-title { left: 2.2%; top: 5.3%; width: 53.3%; }    /* 标题文字（左上角） */
-.art-stage--s2 .art--s2-petri { left: -7.1%; top: 31.6%; width: 59%; }     /* 培养皿 */
-.art-stage--s2 .art--s2-virus { left: 9.1%; top: 20.4%; width: 33.2%; }   /* 三个病毒 —— 应落在三组信号弧里，重点核对这条 */
-.art-stage--s2 .art--s2-arrow { left: 27%; top: 35%; width: 14%; }         /* 虚线箭头 */
-.art-stage--s2 .art--s2-mascot { left: 52.4%; top: 5.8%; width: 49%; }    /* 拿放大镜的吉祥物（右侧） */
+/* ---------- public-health：Can We Build a Living Sensor ---------- */
+.art-stage--public-health .art--public-health-title { left: 2.2%; top: 5.3%; width: 53.3%; }    /* 标题文字（左上角） */
+.art-stage--public-health .art--public-health-petri { left: -7.1%; top: 31.6%; width: 59%; }     /* 培养皿 */
+.art-stage--public-health .art--public-health-virus { left: 9.1%; top: 20.4%; width: 33.2%; }   /* 三个病毒 —— 应落在三组信号弧里，重点核对这条 */
+.art-stage--public-health .art--public-health-mascot { left: 52.4%; top: 5.8%; width: 49%; }    /* 拿放大镜的吉祥物（右侧） */
 
-/* ---------- 板块 3：WHY EHCO Yeast ---------- */
-.art-stage--s3 .art--s3-cloud { left: 0%; bottom: 0%; width: 100%; }     /* 浅蓝云（贴底锚定） */
-.art-stage--s3 .art--s3-title { left: 22%; top: 9%; width: 56%; }          /* 标题 WHY EHCO Yeast? */
-/* 6 条文字条（原 s3-p1~p6）已改为「3 排 × 2 条 + 椭圆描边 + 边缘渐隐 + 流动轮播」，
-   不再逐个绝对定位，统一由 .s3-pills 盒子控制 → 见文件末尾「板块 3 文字条」段。 */
+/* ---------- project-intro：WHY EHCO Yeast ---------- */
+.art-stage--project-intro .art--project-intro-cloud { left: 0%; bottom: 0%; width: 100%; }     /* 浅蓝云（贴底锚定） */
+.art-stage--project-intro .art--project-intro-title { left: 22%; top: 9%; width: 56%; }          /* 标题 WHY EHCO Yeast? */
+/* 6 条文字条（原设计稿 6 条）已改为「3 排 × 2 条 + 椭圆描边 + 边缘渐隐 + 流动轮播」，
+   不再逐个绝对定位，统一由 .intro-pills 盒子控制 → 见文件末尾「project-intro 文字条」段。 */
 /* 显微镜+书的吉祥物：切片比例 1.44:1，成品图该区域约 1.78:1。
    按高对齐→右侧短一截；按宽对齐→顶部超出。现在"按高对齐"，想改按宽就把 height 换成 width。 */
-.art-stage--s3 .art--s3-mascot { left: 46.7%; top: 45.8%; height: 55.2%; width: auto; }
-.art-stage--s3 .art--s3-sparkle { left: 42.7%; top: 62.8%; width: 5.4%; }  /* 黄色星芒 */
+.art-stage--project-intro .art--project-intro-mascot { left: 46.7%; top: 45.8%; height: 55.2%; width: auto; }
+.art-stage--project-intro .art--project-intro-sparkle { left: 42.7%; top: 62.8%; width: 5.4%; }  /* 黄色星芒 */
 
-/* ---------- 板块 4：Research content（流程图） ---------- */
+/* ---------- dbtl-cycle：Research content（流程图） ---------- */
 /* 满宽横条类：画布即板块画框，按画布高分数定位（方案 B） */
 /* shared-wave-3：画布 2720x602，内容在画布 y 61.12%~98.87%（实测）→ 不能用满框 */
-.art-stage--s4 .art--s4-wave { left: 0; top: 61.12%; width: 100%; height: 37.75%; }
-.art-stage--s4 .art--s4-title { left: 3.7%; top: 7.9%; width: 37.4%; }     /* 标题文字（左上） */
+.art-stage--dbtl-cycle .art--dbtl-cycle-wave { left: 0; top: 61.12%; width: 100%; height: 37.75%; }
+.art-stage--dbtl-cycle .art--dbtl-cycle-title { left: 3.7%; top: 7.9%; width: 37.4%; }     /* 标题文字（左上） */
 /* 流程图：原图里它坐在白色圆角卡片上；切片是 RGB 无 alpha 的白底直角矩形，
    所以圆角与描边必须由 CSS 补，否则会是一块方角白块（见 README §5.17 根因 5） */
-.art-stage--s4 .art--s4-diagram {
+.art-stage--dbtl-cycle .art--dbtl-cycle-diagram {
   left: 46.7%;
   top: 13.2%;
   width: 48.5%;
@@ -1692,45 +1738,157 @@ html.home-scroll-snap #footer.section-footer {
   border: 1px solid rgba(120, 160, 200, 0.35);
   box-shadow: 0 4px 18px rgba(90, 130, 170, 0.10);
 }
-.art-stage--s4 .art--s4-mascot { left: 1%; bottom: 0; width: 30%; }        /* 笔记本吉祥物（贴底锚定） */
+.art-stage--dbtl-cycle .art--dbtl-cycle-mascot { left: 1%; bottom: 0; width: 30%; }        /* 笔记本吉祥物（贴底锚定） */
 
-/* ---------- 板块 5：检测方法 qPCR / ELISA / CGIS ---------- */
-/* s5-cloud 是未裁剪的整幅画布（2720x1600），必须按整幅映射，不能按"云本身"给小宽度 */
-/* s5-cloud 是「上浅蓝 / 下白」的整幅切片，不是整幅画框内容：不能铺满 100%×100%，
+/* ---------- statistics：检测方法 qPCR / ELISA / CGIS ---------- */
+/* statistics-cloud 是未裁剪的整幅画布（2720x1600），必须按整幅映射，不能按"云本身"给小宽度 */
+/* statistics-cloud 是「上浅蓝 / 下白」的整幅切片，不是整幅画框内容：不能铺满 100%×100%，
    否则顶部奶油底被浅蓝盖掉、白色云团被拉大居中（原图顶部约 8% 留奶油底）。 */
-.art-stage--s5 .art--s5-cloud { left: 0; top: 8%; width: 100%; height: 92%; }
-/* s5-hill 采用与你 s3-cloud 相同的写法：满宽 + 贴底 + 不写 height（用素材原始比例） */
-.art-stage--s5 .art--s5-hill { left: 0; right: auto; top: auto; bottom: 0; width: 100%; height: auto; }
+.art-stage--statistics .art--statistics-cloud { left: 0; top: 8%; width: 100%; height: 92%; }
+/* s5-hill 采用与你 project-intro-cloud 相同的写法：满宽 + 贴底 + 不写 height（用素材原始比例） */
+.art-stage--statistics .art--statistics-hill { left: 0; right: auto; top: auto; bottom: 0; width: 100%; height: auto; }
 /* 以下数值按原图（板块5）量取：原图里吉祥物完整坐在桌后，占宽约 38.9%、占高约 76.5%；
    改前是 left 38%/bottom 6%/width 30%，尺寸偏小且下沉，导致下缘被截断。 */
-.art-stage--s5 .art--s5-qpcr { left: 5.8%; top: 12.3%; width: 12%; }       /* 圆：qPCR */
-.art-stage--s5 .art--s5-elisa { left: 21.5%; top: 28.3%; width: 14.4%; }   /* 圆：ELISA */
-.art-stage--s5 .art--s5-cgis { left: 8.8%; top: 51.8%; width: 13%; }       /* 圆：CGIS */
+.art-stage--statistics .art--statistics-qpcr { left: 5.8%; top: 12.3%; width: 12%; }       /* 圆：qPCR */
+.art-stage--statistics .art--statistics-elisa { left: 21.5%; top: 28.3%; width: 14.4%; }   /* 圆：ELISA */
+.art-stage--statistics .art--statistics-cgis { left: 8.8%; top: 51.8%; width: 13%; }       /* 圆：CGIS */
 /* 虚线弧：连接三个圆（原图里 qPCR→ELISA→CGIS 之间）。改前 left 0/top 0/width 7% 被挤在
    左上角外，实际不可见。切片 494x361，一弧一用；若原图需要两段弧，要再加一个 img 节点。 */
-.art-stage--s5 .art--s5-arc { left: 22%; top: 53%; width: 8%; }
-.art-stage--s5 .art--s5-bulb { left: 76.9%; top: 23%; width: 15.7%; }      /* 灯泡（右上） */
-.art-stage--s5 .art--s5-mascot { left: 42.1%; top: 21.4%; width: 38.9%; }  /* 托腮吉祥物（改 top 锚定，避免被下缘截断） */
-.art-stage--s5 .art--s5-sparkle { left: 4.8%; top: 68.4%; width: 3%; }     /* 黄色星芒 */
+.art-stage--statistics .art--statistics-arc { left: 22%; top: 53%; width: 8%; }
+.art-stage--statistics .art--statistics-bulb { left: 76.9%; top: 23%; width: 15.7%; }      /* 灯泡（右上） */
+.art-stage--statistics .art--statistics-mascot { left: 42.1%; top: 21.4%; width: 38.9%; }  /* 托腮吉祥物（改 top 锚定，避免被下缘截断） */
+.art-stage--statistics .art--statistics-sparkle { left: 4.8%; top: 68.4%; width: 3%; }     /* 黄色星芒 */
 
-/* ---------- 板块 6：Influenza A Virus Biosensor（项目标题页） ---------- */
+/* ---------- statistics：检测方法「揭示动画」交互层（REQ-20261001-001） ---------- */
+/* 1) 英文小标题：贴在动画区块顶部左侧（不居中）。无 JS 时静态可见；进入该屏时
+      statistics-reveal.js 拆词做「右先左后」下落（脚本只加类，默认态不做隐藏）。 */
+.art-stage--statistics .statistics-caption {
+  position: absolute;
+  left: 4%;
+  top: 5%;
+  z-index: 4;
+  width: max-content;
+  max-width: 86%;
+  margin: 0;
+  text-align: left;
+  font-size: clamp(13px, 1.15vw, 18px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.05em;
+  color: var(--color-echo-blue);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+  pointer-events: none;
+}
+
+.statistics-caption__word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* 脚本接管后、下落触发前：先把词压住（无 JS 不会加上这个类） */
+.statistics-caption--armed .statistics-caption__word {
+  opacity: 0;
+}
+
+/* 2) 隐藏态：仅当脚本给舞台加上 .js-reveal-armed 才隐藏 ELISA / qPCR / 虚线弧；
+      无 JS 时三者保持原样可见（完整静态布局）。位置与缩放由脚本内联 transform
+      叠合到 CGIS 圆心，并缩到 CGIS 圆盒以内——杜绝"低层级大圆露边"。 */
+.js-reveal-armed .art--statistics-elisa,
+.js-reveal-armed .art--statistics-qpcr {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.js-reveal-armed .art--statistics-arc {
+  /* 虚线弧先整体裁掉，点击后由脚本以 clip-path 从 CGIS 一侧扇形擦出 */
+  clip-path: polygon(0% 100%, 0% 100%, 0% 100%);
+}
+
+/* 3) 隐藏未点击期间 CGIS 可点（.art 基类默认 pointer-events: none） */
+.art-stage--statistics.js-reveal-armed:not(.revealed) .art--statistics-cgis {
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-smooth), filter 0.25s var(--ease-smooth);
+}
+
+.art-stage--statistics.js-reveal-armed:not(.revealed) .art--statistics-cgis:hover,
+.art-stage--statistics.js-reveal-armed:not(.revealed) .art--statistics-cgis:focus-visible {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 8px 14px rgba(76, 157, 211, 0.35));
+  outline: none;
+}
+
+/* 4) 点击提示（箭头 + Click here）：脚本定位到 CGIS 圆正上方；默认不显示 */
+.statistics-hint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  display: none;                     /* 由脚本置为 flex */
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  color: var(--color-echo-blue);
+}
+
+.statistics-hint__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: 50% 100%;
+}
+
+.statistics-hint__label {
+  padding: 0.32em 0.95em;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  border: 2px solid rgba(76, 157, 211, 0.35);
+  box-shadow: 0 6px 16px rgba(76, 157, 211, 0.24);
+  font-size: clamp(12px, 1.05vw, 16px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: var(--color-echo-blue);
+  white-space: nowrap;
+}
+
+.statistics-hint__arrow {
+  width: clamp(16px, 1.7vw, 24px);
+  height: auto;
+  margin-top: 2px;
+  animation: statisticsHintArrow 1.15s ease-in-out infinite;
+}
+
+@keyframes statisticsHintArrow {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statistics-hint__arrow {
+    animation: none;
+  }
+}
+
+/* ---------- safety：Influenza A Virus Biosensor（项目标题页） ---------- */
 /* 按原图（板块6）：浅蓝云满宽铺在上半部；吉祥物居中偏左、占宽约 38.9%、占高约 74%
-   （改前 left 8%/bottom 8%/width 30%，偏小偏下——与你把 s2/s3 吉祥物放大上移的做法一致） */
+   （改前 left 8%/bottom 8%/width 30%，偏小偏下——与你把 public-health/project-intro 吉祥物放大上移的做法一致） */
 /* shared-cloud-1 已键掉不透明白底（纯白 255,255,255 → 透明），蓝波在素材 y 38%~78%。
    按此标定：放大到 260% 宽并把左上负偏，蓝波即落在板块 y 0%~46%，铺满上半部。 */
-.art-stage--s6 .art--s6-cloud { left: 0%; top: 62%; width: 100%; }
-.art-stage--s6 .art--s6-curve { left: 17.8%; top: 58.9%; width: 12.4%; }   /* 蓝色曲线 */
-.art-stage--s6 .art--s6-mascot { left: 5.5%; top: 3%; width: 36.9%; }    /* 披风吉祥物 */
-.art-stage--s6 .art--s6-title { left: 56.1%; top: 30.4%; width: 40.2%; }   /* 标题文字（右侧） */
-.art-stage--s6 .art--s6-sparkle { left: 39.9%; top: 62.5%; width: 6.7%; }  /* 黄色星芒 */
+.art-stage--safety .art--safety-cloud { left: 0%; top: 62%; width: 100%; }
+.art-stage--safety .art--safety-curve { left: 17.8%; top: 58.9%; width: 12.4%; }   /* 蓝色曲线 */
+.art-stage--safety .art--safety-mascot { left: 5.5%; top: 3%; width: 36.9%; }    /* 披风吉祥物 */
+.art-stage--safety .art--safety-title { left: 56.1%; top: 30.4%; width: 40.2%; }   /* 标题文字（右侧） */
+.art-stage--safety .art--safety-sparkle { left: 39.9%; top: 62.5%; width: 6.7%; }  /* 黄色星芒 */
 
-/* ---------- 板块 7：FluNet 图表 ---------- */
+/* ---------- human-practices：FluNet 图表 ---------- */
 /* 满宽横条：画布即画框，贴底锚定（切片宽高比自带正确高度） */
-.art-stage--s7 .art--s7-wave { left: 0; right: auto; top: auto; bottom: 0; width: 100%; height: auto; }
-.art-stage--s7 .art--s7-title { left: 18.1%; top: 5.9%; width: 63.3%; }    /* 图表标题 */
+.art-stage--human-practices .art--human-practices-wave { left: 0; right: auto; top: auto; bottom: 0; width: 100%; height: auto; }
+.art-stage--human-practices .art--human-practices-title { left: 18.1%; top: 5.9%; width: 63.3%; }    /* 图表标题 */
 /* 折线图：原图卡片比例约 2.97，切片本身 3.98 —— 用 padding 撑高卡片、background 补白；
    圆角/描边/阴影由 CSS 补（切片是直角白底矩形） */
-.art-stage--s7 .art--s7-chart {
+.art-stage--human-practices .art--human-practices-chart {
   left: 5%;
   top: 20%;
   width: 90%;
@@ -1742,27 +1900,92 @@ html.home-scroll-snap #footer.section-footer {
 }
 /* 右下角探出头的吉祥物（素材曾被误删，已从 backups/webp-original 取回；
    位置按原图右下角量取） */
-.art-stage--s7 .art--s7-mascot { left: 77.6%; top: 70.4%; width: 15.9%; }
-.art-stage--s7 .art--s7-axis { left: 40.9%; top: 76%; width: 20.4%; }      /* 横轴标题 Week start date */
-.art-stage--s7 .art--s7-legend-subtypes { left: 7.4%; top: 91.4%; width: 15.4%; }  /* 图例：Influenza subtypes */
-.art-stage--s7 .art--s7-legend-h1n1 { left: 29.3%; top: 91.4%; width: 15.9%; }     /* 图例：A(H1N1)pdm09 */
-.art-stage--s7 .art--s7-legend-pos { left: 50%; top: 91.4%; width: 11.9%; }        /* 图例：Influenza percent positive */
+.art-stage--human-practices .art--human-practices-mascot { left: 77.6%; top: 70.4%; width: 15.9%; }
+.art-stage--human-practices .art--human-practices-axis { left: 40.9%; top: 76%; width: 20.4%; }      /* 横轴标题 Week start date */
+.art-stage--human-practices .art--human-practices-legend-subtypes { left: 7.4%; top: 91.4%; width: 15.4%; }  /* 图例：Influenza subtypes */
+.art-stage--human-practices .art--human-practices-legend-h1n1 { left: 29.3%; top: 91.4%; width: 15.9%; }     /* 图例：A(H1N1)pdm09 */
+.art-stage--human-practices .art--human-practices-legend-pos { left: 50%; top: 91.4%; width: 11.9%; }        /* 图例：Influenza percent positive */
 
-/* 说明：板块 3 的药丸文字在成品图里本来就是「大小不一」的设计，
+/* ============================================================ */
+/* 移动端（≤768px）各内容屏 竖屏重排（C 方案：放大吉祥物/条带、拉开竖向分布、 */
+/* 标题内移避免裁切）。设计画布为 1080×607 横构图，竖屏需放大填充以免大面积留白。 */
+/* 本块置于基础定位规则之后，用同等完整选择器覆盖之。REQ-20260928-002 */
+/* ============================================================ */
+@media (max-width: 768px) {
+  /* 停浮动：消除触屏/窄屏掉帧抽搐（触屏另由 pointer:coarse 处理） */
+  .art--public-health-mascot, .art--public-health-virus, .art--public-health-petri,
+  .art--project-intro-mascot, .art--project-intro-cloud, .art--project-intro-sparkle,
+  .art--dbtl-cycle-mascot, .art--dbtl-cycle-wave,
+  .art--statistics-mascot, .art--statistics-hill, .art--statistics-arc, .art--statistics-bulb, .art--statistics-sparkle,
+  .art--safety-mascot, .art--safety-cloud, .art--safety-sparkle,
+  .art--human-practices-mascot, .art--human-practices-wave, .art--human-practices-chart {
+    animation: none !important;
+  }
+
+  /* public-health：标题左上 / 病毒左中 / 吉祥物右(放大) / 培养皿贴底左下(放大) */
+  .art-stage--public-health .art--public-health-title  { left: 4%;  top: 4%;  width: 56%; }
+  .art-stage--public-health .art--public-health-virus  { left: 6%;  top: 45%; width: 40%; }
+  .art-stage--public-health .art--public-health-mascot { left: 39%; top: 5%;  width: 60%; }
+  .art-stage--public-health .art--public-health-petri  { left: -8%; top: auto; bottom: 3%; width: 80%; }
+
+  /* project-intro：标题上 / 吉祥物右中(放大) / 云贴底满宽 / 星芒 */
+  .art-stage--project-intro .art--project-intro-title   { left: 20%; top: 6%;  width: 58%; }
+  .art-stage--project-intro .art--project-intro-mascot  { left: 30%; top: 22%; width: 70%; height: auto; }
+  .art-stage--project-intro .art--project-intro-cloud   { left: 0;   top: auto; bottom: 0; width: 100%; }
+  .art-stage--project-intro .art--project-intro-sparkle { left: 28%; top: 18%; width: 7%; }
+  /* 内容条盒子的竖屏位置与高度变量（图片高度保护已下沉到 mobile.css 全局响应式层，
+     避免 blanket 的 img{height:auto} 后加载覆盖 —— REQ-20260928-002） */
+  .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(14px, 4vw, 22px); }
+
+  /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → 流程图近满宽居中 → 波浪+笔记本吉祥物贴底 */
+  .art-stage--dbtl-cycle .art--dbtl-cycle-title   { left: 4%;  top: 4%;  width: 58%; }
+  .art-stage--dbtl-cycle .art--dbtl-cycle-diagram { left: 6%;  top: 18%; width: 88%; }
+  .art-stage--dbtl-cycle .art--dbtl-cycle-wave    { left: 0;   top: 55%; width: 100%; height: 45%; }
+  .art-stage--dbtl-cycle .art--dbtl-cycle-mascot  { left: 0;   top: auto; bottom: 0; width: 42%; }
+
+  /* statistics：云满宽上(放大) / 吉祥物右中(放大) / 三圆纵列放大(左) / 灯泡右上(放大) / 山贴底 */
+  .art-stage--statistics .art--statistics-cloud   { left: 0; top: 0;   width: 100%; height: 55%; }
+  .art-stage--statistics .art--statistics-mascot  { left: 38%; top: 16%; width: 52%; }
+  .art-stage--statistics .art--statistics-qpcr    { left: 3%;  top: 12%; width: 22%; }
+  .art-stage--statistics .art--statistics-elisa   { left: 15%; top: 32%; width: 25%; }
+  .art-stage--statistics .art--statistics-cgis    { left: 4%;  top: 55%; width: 22%; }
+  .art-stage--statistics .art--statistics-arc     { left: 24%; top: 52%; width: 12%; }
+  .art-stage--statistics .art--statistics-bulb    { left: 74%; top: 18%; width: 22%; }
+  .art-stage--statistics .art--statistics-sparkle { left: 4%;  top: 70%; width: 5%; }
+
+  /* safety：吉祥物左(放大) / 标题右上 / 云满宽贴底(作为底部色块填充) / 曲线+星芒 */
+  .art-stage--safety .art--safety-mascot  { left: 1%;  top: 6%;  width: 56%; }
+  .art-stage--safety .art--safety-title   { left: 52%; top: 20%; width: 46%; }
+  .art-stage--safety .art--safety-cloud   { left: 0;   top: auto; bottom: 0; width: 100%; height: 55%; }
+  .art-stage--safety .art--safety-curve   { left: 16%; top: 40%; width: 14%; }
+  .art-stage--safety .art--safety-sparkle { left: 38%; top: 52%; width: 8%; }
+
+  /* human-practices：竖屏紧凑纵排 —— 标题 → 图表满宽 → 横轴标题+三图例紧跟图表下方 → 吉祥物右中 → 波浪贴底 */
+  .art-stage--human-practices .art--human-practices-title   { left: 8%;  top: 4%;  width: 84%; }
+  .art-stage--human-practices .art--human-practices-chart   { left: 3%;  top: 12%; width: 94%; }
+  .art-stage--human-practices .art--human-practices-axis    { left: 34%; top: 37%; width: 32%; }
+  .art-stage--human-practices .art--human-practices-legend-subtypes { left: 5%;  top: 43%; width: 20%; }
+  .art-stage--human-practices .art--human-practices-legend-h1n1     { left: 30%; top: 43%; width: 21%; }
+  .art-stage--human-practices .art--human-practices-legend-pos      { left: 56%; top: 43%; width: 16%; }
+  .art-stage--human-practices .art--human-practices-mascot  { left: 62%; top: 64%; width: 36%; }
+  .art-stage--human-practices .art--human-practices-wave    { left: 0;   top: auto; bottom: 0; width: 100%; }
+}
+
+/* 说明：project-intro 的药丸文字在成品图里本来就是「大小不一」的设计，
    因此尺寸沿用上方的值，不要改成统一高度（实测会变差 13.1 -> 15.3）。 */
 
 /* ============================================================
-   板块 3 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播
+   project-intro 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播
    ------------------------------------------------------------
-   ▸ 盒子范围（对着成品图红框）：.s3-pills 的 left/top/width/height 四行
-   ▸ 文字条大小：--s3-pill-h（统一高度；图片按原比例缩放，不会变形）
-   ▸ 描边颜色 / 粗细：--s3-pill-line / --s3-pill-lw
-   ▸ 形状：--s3-pill-radius，默认 999px 得到「扁椭圆」胶囊；
+   ▸ 盒子范围（对着成品图红框）：.intro-pills 的 left/top/width/height 四行
+   ▸ 文字条大小：--intro-pill-h（统一高度；图片按原比例缩放，不会变形）
+   ▸ 描边颜色 / 粗细：--intro-pill-line / --intro-pill-lw
+   ▸ 形状：--intro-pill-radius，默认 999px 得到「扁椭圆」胶囊；
             写成 50% 是数学椭圆，但两端会切到文字，需同时把左右内距加大
-   ▸ 边缘淡化：--s3-fade，越大越早开始淡；到最边缘正好 100% 透明
-   ▸ 流动速度：--s3-flow-dur，越小越快；改成 0s 即静止
+   ▸ 边缘淡化：--intro-fade，越大越早开始淡；到最边缘正好 100% 透明
+   ▸ 流动速度：--intro-flow-dur，越小越快；改成 0s 即静止
    ============================================================ */
-.s3-pills {
+.intro-pills {
   position: absolute;
   left: 1%;
   top: 16.5%;
@@ -1774,65 +1997,65 @@ html.home-scroll-snap #footer.section-footer {
   justify-content: space-evenly;
   pointer-events: none;
   /* ↑ 上面 5 行 = 红框范围 ｜ 下面 5 行 = 可调参数 */
-  --s3-pill-h: clamp(15px, 3.3vh, 34px);
-  --s3-pill-line: #4c9dd3;
-  --s3-pill-lw: 2px;
-  --s3-pill-radius: 999px;
-  --s3-fade: 12%;
-  --s3-flow-dur: 28s;
+  --intro-pill-h: clamp(15px, 3.3vh, 34px);
+  --intro-pill-line: #4c9dd3;
+  --intro-pill-lw: 2px;
+  --intro-pill-radius: 999px;
+  --intro-fade: 12%;
+  --intro-flow-dur: 28s;
   /* 左右边缘渐隐：越靠近边缘越透明，边缘处 100% 消失 */
-  -webkit-mask-image: linear-gradient(to right, #0000 0%, #000 var(--s3-fade), #000 calc(100% - var(--s3-fade)), #0000 100%);
-  mask-image: linear-gradient(to right, #0000 0%, #000 var(--s3-fade), #000 calc(100% - var(--s3-fade)), #0000 100%);
+  -webkit-mask-image: linear-gradient(to right, #0000 0%, #000 var(--intro-fade), #000 calc(100% - var(--intro-fade)), #0000 100%);
+  mask-image: linear-gradient(to right, #0000 0%, #000 var(--intro-fade), #000 calc(100% - var(--intro-fade)), #0000 100%);
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
 
-.s3-pills__row {
+.intro-pills__row {
   flex: 0 0 auto;
   overflow: hidden;
 }
 
-/* 流动：每排由两段完全相同的 .s3-pills__group 首尾相接，
+/* 流动：每排由两段完全相同的 .intro-pills__group 首尾相接，
    位移 50% 恰好等于一整段宽度 → 无缝、不跳帧（删掉第二段就会跳） */
-.s3-pills__track {
+.intro-pills__track {
   display: flex;
   width: max-content;
-  animation: s3-pills-flow var(--s3-flow-dur) linear infinite;
+  animation: intro-pills-flow var(--intro-flow-dur) linear infinite;
 }
 
-.s3-pills__group {
+.intro-pills__group {
   display: flex;
   align-items: center;
-  gap: calc(var(--s3-pill-h) * 2.4);
-  padding-right: calc(var(--s3-pill-h) * 2.4);
+  gap: calc(var(--intro-pill-h) * 2.4);
+  padding-right: calc(var(--intro-pill-h) * 2.4);
 }
 
-@keyframes s3-pills-flow {
+@keyframes intro-pills-flow {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-50%, 0, 0); }
 }
 
 /* 单条文字条：外部轮廓（扁椭圆），内部文字用原图，只缩不放 */
-.s3-pill {
+.intro-pill {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: var(--s3-pill-lw) solid var(--s3-pill-line);
-  border-radius: var(--s3-pill-radius);
-  padding: calc(var(--s3-pill-h) * 0.42) calc(var(--s3-pill-h) * 1.5);
+  border: var(--intro-pill-lw) solid var(--intro-pill-line);
+  border-radius: var(--intro-pill-radius);
+  padding: calc(var(--intro-pill-h) * 0.42) calc(var(--intro-pill-h) * 1.5);
 }
 
-.s3-pill img {
+.intro-pill img {
   display: block;
-  height: var(--s3-pill-h);
+  height: var(--intro-pill-h);
   width: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .s3-pills__track { animation: none; }
+  .intro-pills__track { animation: none; }
 }
 
 /* iGEM Check: [x] 100vh scroll-snap screens [x] 45/55 alternating layout [x] Float keyframes reused [x] Mobile responsive [x] Reduced motion supported [x] Per-section background placeholders */

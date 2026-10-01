@@ -72,17 +72,31 @@ rule set and pre-commit checklist.
 `static/js/core/utils.js`. The local `static/image/` folder has been removed — `static/`
 now contains JS/CSS only (verified: 0 remaining local image references).
 
-**Page loading animation (page-loader):** every page shows a full-screen cream/warm-brown
-loader whose pseudo-animation is a 6-frame sprite flip-book (`steps(6)`). The overlay is
-released only after the page's declared first-screen illustrations settle
-(`window.PageLoader.register(...)` — e.g. the Team Leader's large portrait on Members).
-Files: arm `js/components/page-loader-arm.js` (synchronous, in `<head>`),
-controller `js/components/page-loader.js`, styles `css/components/page-loader.css`.
-The loader sprite lives on the CDN at `image/loader/loader-sprite[@2x].webp` (source of
-truth: root workspace `static/image/loader/`) — **upload these with the other images**;
-until then the loader falls back to a pure-CSS breathing-dots animation, so nothing breaks.
-The homepage GIF intro now starts only after `pageloader:done`, and its watchdog is
-loader-aware (fixes the occasional "GIF gets killed" race).
+**Page loading animation (page-loader) — 2026-09-29 起整体暂缓，不随本轮上线。**
+原因：美工未出雪碧图素材。原来每页都会显示一个米黄/暖棕全屏遮罩，伪动画是 6 帧雪碧图
+翻页（`steps(6)`），遮罩只在页面声明过的首屏关键插画就绪后才放行
+（`window.PageLoader.register(...)`，例如 Members 页的队长大图）。
+现在**配套四件全部撤出**（缺一件就出错）：
+
+| # | 位置 | 内容 |
+|---|---|---|
+| 1 | `<head>` 样式 | `<link … css/components/page-loader.css>` |
+| 2 | `<head>` 同步脚本（**非 defer**） | 给 `<html>` 打 `.page-loader-armed` 的 IIFE（原 `page-loader-arm.js`） |
+| 3 | `<head>` defer 脚本 | `<script … js/components/page-loader.js>` |
+| 4 | `<body>` 标记 | `<div class="page-loader" id="page-loader">…</div>` |
+
+**为什么必须同进退**：唯一让遮罩不显形的规则是 `page-loader.css` 第 22 行的
+`.page-loader { display: none }`；只留标记不撤 CSS，遮罩会变成**显形破块**盖住每一页。
+
+- 归档：`static/css/components/page-loader.css`、`static/js/components/page-loader.js`
+  → `对话归档/2026-09/2026-09-29-flask-orphans/`（见文末归档清单）
+- 雪碧图仍在 CDN 缺位（`image/loader/loader-sprite[@2x].webp`，实测 403），撤出后
+  已不再请求它，`loader-sprite@2x.webp` 的 404 从验收失败清单里消失。
+- 顺带效果：全站不再有 `page-loader-armed` / `pageloader:done` 交接，首页 GIF arm 的
+  看门狗立即起算（对首访更友好）。
+- **接回顺序**：① CSS 链接 → ② 同步 arm（必须非 defer、先于 `<body>` 渲染）→ ③ defer
+  控制器 → ④ `<body>` 标记；然后把两个文件加回推送清单的 CSS / JS 组，并把
+  `2026-09-29-test-public-build.js` 的脚本数断言从 7 改回 8。
 
 ## Team page: member categories and order (parity with root site)
 
@@ -116,7 +130,7 @@ root static site (root is authoritative — see root `README.md` **§5.15**):
   tokens, which must never reach the frozen build.
 - Re-runnable structural check (validates field order, group hit, framing fields and that every
   `images` first candidate exists on disk, in both projects):
-  `node 对话归档/temporary-tools/2026-09-15-check-members-format.js`.
+  `node 对话归档/temporary-tools/2026-09/2026-09-15-check-members-format.js`.
 
 ## Members page: responsive layout + full-screen intro cover (2026-09-16)
 
@@ -138,7 +152,7 @@ Mirrors the root site (root is authoritative — see root `README.md` **§5.16**
 - Failure modes: without JS the cover never arms (`.members-intro { display: none }`); if the
   controller fails to load, the arm script's 8 s watchdog force-finishes so the page can never be
   blocked. Set `ONCE_PER_SESSION = true` in the arm script to show the cover only once per session.
-- Temporary/dev verification needs a **no-cache** server (`对话归档/temporary-tools/2026-09-16-dev-server-nostore.py`);
+- Temporary/dev verification needs a **no-cache** server (`对话归档/temporary-tools/2026-09/2026-09-16-dev-server-nostore.py`);
   `python -m http.server` sends no `Cache-Control`, and Chromium's heuristic freshness once made a
   stale `members.css` look like a broken change.
 
@@ -158,6 +172,14 @@ for the full rationale. The two workspaces are kept in sync on these points:
   executive-summary animation (yeast float / typewriter / reveal / smooth scroll) respects it.
 - **Lean components** — `components/sidebar-progress.js` and `pages/attributions.js` dropped
   their test/debug code and init `console.log`.
+- **Page-scoped scripts（2026-09-29 起）** — `wiki/layout.html` 只留全站必需脚本，页面专属脚本一律
+  写在该页的 `{% block scripts %}`：`home.html` = `executive-summary-animation.js`(defer) +
+  `intro-gif-arm.js`(非 defer)、`team.html` = `members-intro-arm.js`、design/hardware/... =
+  `sidebar-progress.js`。
+  **`executive-summary-animation.js` 是首页硬依赖，不是可选**：`index.css` 里 `.reveal { opacity: 0 }`，
+  而全仓库只有它会加 `.reveal--visible`。漏加载 = 首页 **49 个 `.reveal` 元素（含 H1 大标题）全部隐形**
+  （2026-09-29 实测踩到过：`revealHidden 49/49`、`titleOpacity: "0"`）。修好后实测首屏 3 个立即浮现，
+  滚动到底 49/49 全可见。
 - **HP map clustering** — `components/hp-map.js` groups experts by province into a single
   `.hz-cluster` pin (fewer DOM pins than one-pin-per-expert), with a hover popover listing
   that province's experts; the detail still opens in the existing `#hzModal`. Data source
@@ -165,14 +187,75 @@ for the full rationale. The two workspaces are kept in sync on these points:
   `provinceId` / `provinceName` fields. The 7 interviewed experts (full `why`/`what`/`how`
   notes) live in that file; expert photos reference the iGEM Uploads CDN.
 
-- **Homepage GIF intro** — `components/index-intro-gif.js` + `css/components/index-intro-gif.css`,
-  with a tiny vendored `intro-gif-arm.js` (non-defer, from `layout.html`) arming `<html>` before
-  first paint so the nav is hidden during playback without a flash. Triggers only on external /
-  direct homepage visits (not in-site navigation) and respects `prefers-reduced-motion`; a 6s
-  watchdog force-recovers the nav. GIF sources point at the iGEM Uploads CDN, and the controller
-  skips gracefully on a missing frame, so the nav never stays locked.
+- **Homepage GIF intro（素材未上传，控制器暂未接通）** — `components/index-intro-gif.js` +
+  `css/components/index-intro-gif.css`，配一个极小的 `intro-gif-arm.js`（非 defer；2026-09-29 起
+  由 `home.html` 页面级加载，**不再放 `layout.html`**），在首帧前给 `<html>` 打 `intro-gif-armed`，
+  播放期隐藏导航且无闪烁。只在站外 / 直接访问首页时触发，尊重 `prefers-reduced-motion`，
+  6s 看门狗兜底恢复导航。
+  **当前状态**：CDN 上 `image/Animation/index/gif/boot animation.GIF` 尚未上传（实测 403，
+  与 `loader-sprite@2x.webp` 同一状态），所以控制器先不接 —— 接上只会让首访多等 9.2s 空白遮罩
+  （末帧 `onSkip` 会交回总时长兜底）。素材上传后，把 `index-intro-gif.js` 加进 `home.html` 的
+  `{% block scripts %}`（defer）即可，其余无需改动。
 
 Note: the search index generator is pure Python (stdlib `html.parser`), so it runs in the
 Python-only GitLab CI image — `.gitlab-ci.yml` invokes `python tools/search_index_generator.py`
 right after `flask freeze`. It writes both `static/js/core/search-index.json` (committed
 source) and `public/static/js/core/search-index.json` (deployed artifact).
+
+### 已归档的无用文件（2026-09-29）
+
+flask 工程**没有 git 历史**，所以清理一律「移到归档」而非删除，随时可取回：
+
+```
+对话归档/2026-09/2026-09-29-flask-orphans/            （共 8 个文件）
+  static/css/design.css                          10,192 B ← 全站 0 引用；contribution.css 注释明确写"不加载 design.css"
+  static/css/engineering.css                          0 B ← 空文件，0 引用
+  static/css/social-groups.css                       44 B ← 占位，0 引用
+  static/css/components/scroll-progress-bar.css     441 B ← 自身写着"滚动阅读进度条样式已禁用"
+  static/css/components/page-loader.css           5,396 B ← 加载遮罩整体暂缓（见上文该节）
+  static/js/core/scroll-progress-bar.js           6,733 B ← 页面里从无 #scroll-progress-bar 元素，纯空转
+  static/js/components/page-loader.js             7,123 B ← 加载遮罩整体暂缓（见上文该节）
+  static/js/components/page-loader-arm.js         1,000 B ← 曾内嵌进 layout.html，随遮罩一起撤出
+```
+
+判定口径：扫全部模板的 `url_for('static', filename=...)` + `{% block styles %}`/`scripts` +
+JS 里的 `fetch(...)` + 全站字面量，再确认没有 `@import`（全站 0 处）。**注意别被注释里的文件名骗到**
+（比如 layout 里那句"原 page-loader-arm.js，现内嵌"不是加载引用）。
+
+清理后全站只剩一个"故意未接"的文件：`static/js/components/index-intro-gif.js`（见上面
+Homepage GIF intro 条目，卡在 CDN 素材未上传）。
+
+---
+
+## Flask 工程操作红线（每次改动前必读）
+
+> 本文件不推送，仅本地协作用。每次修改 `igem2026-flask/` 内任何文件前，先读完本节。
+
+### 1. URL 与冻结产物：无扩展名是硬规定
+- 路由统一 `@app.route("/<page>")`（外加 `/` 与显式 `/design`）。Frozen-Flask 写出的产物是 `public/<page>`（**无 .html 扩展名**），由 GitLab Pages 当 `text/html` 提供。
+- **绝不要**把链接或路由改成 `/<page>.html`，否则评委按官方标准链接 `2026.igem.wiki/szpu-china/<page>` 访问会 404，相关项可能不予评审。
+- 本地预览**必须**用 `flask serve`（或 `python -c "from app import freezer; freezer.run()"`），它会把无扩展名文件正确识别为 html。**不要**用 `python -m http.server` 打开 `public/`——浏览器会把无扩展名文件当 `octet-stream` 直接下载，那不是 bug，是本地服务器 MIME 识别问题。
+
+### 2. Python 文件只有一个：app.py
+- 仓库里只应有一个 Python 入口 `app.py`，**不要**新增 `site_nav.py` 之类的本地模块。导航（6 栏目 + 17 子项）已硬编码进 `wiki/menu.html` 与 `wiki/footer.html`，与官方 2026 模板、BNUZH 2025、Manipal 2022 写法一致。
+- `app.py` 不 import 任何本地文件；改完路由/生成器直接 `flask freeze` 即可，漏传也不会崩。
+
+### 3. design 页位置
+- 源文件：`wiki/pages/design.html`（**平铺**，与官方模板一致；2026-09-29 起不再有子目录）；对外 URL **保持 `/design`**。评委标准链接能直接点开，零风险。
+
+### 4. 推送时禁止改动/删除的文件
+- 官方模板自带、本地没有或不该覆盖的文件不要删：`README.md`、`.gitlab-ci.yml`、`dependencies.txt`、`.gitignore`、`LICENSE`、`CLAUDE.md`、`.claude/RESPONSIBLE_AI_USE.md`、`static/bootstrap.min.css`、`static/bootstrap.bundle.min.js`、`static/style.css`、`wiki/pages/inclusivity.html`（官方模板自带，本地无此页）。
+- `dependencies.txt` 用官方 11 行版（含全部传递依赖），**不要**用本地 2 行版覆盖。
+- `app.py` 是覆盖，不是删。
+
+### 5. 推送前验收（本地）
+- 同步校验：`python 对话归档/temporary-tools/2026-09-29-verify-checklist-sync.py` → 期望 `27/27 identical`。
+- 构建验收：`python -m flask freeze` 后跑 `playwright-cli -s=igem run-code --filename "对话归档/temporary-tools/2026-09-29-test-public-build.js"` → 期望 21/21、`fails: []`。
+- 推送清单：`对话归档/plans/design-upload-checklist.md`。
+
+### 6. 注释与对外文案红线
+- 推送到官方仓库的文件（模板/JS/CSS）里**不要**出现内部引用：本地归档路径（`对话归档/...`）、内部脚本名（`temporary-tools/...`）、内部日期（`2026-09-xx`）、已删除模块名（`site_nav`）、以及 `文件:行号` 形式的引用注释。功能说明性中文注释（如"默认折叠"）保留即可。
+- 图片一律走 iGEM Uploads CDN（`https://static.igem.wiki/2026/szpu-china/image/...`），`static/` 只允许 JS/CSS。模板用 `{{ media("image/...") }}`，JS 读 `window.MEDIA_BASE`。
+
+### 7. 搜索索引
+- 改完页面后重建：`python tools/search_index_generator.py`（在 `flask freeze` 之后跑；CI 里 `.gitlab-ci.yml` 已串接）。产物 `static/js/core/search-index.json` 需提交。

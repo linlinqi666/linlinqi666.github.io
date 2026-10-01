@@ -1,36 +1,129 @@
-{# wiki/menu.html — 复刻根目录棕色 iconfont 导航（iGEM 合规：资源全部本地化）#}
+{% from "icons.html" import icon with context %}
+{# wiki/menu.html — 复刻主站棕色 iconfont 导航（iGEM 合规：资源全部本地化）#}
 {# 桌面导航：<nav> + .nav-items(#nav-items)；移动端：#hamburger-menu + #mobile-menu-overlay/#mobile-menu#}
-{# 数据来自 context_processor 注入的 site_nav，结构与根目录 site.js 一致（使用 dropdown）。#}
+{# 导航直接硬编码在下面（官方 iGEM 模板与 BNUZH 2025、Manipal 2022 同为这种写法：
+   仓库里只保留 app.py 一个 Python 文件，导航不依赖任何 Python 数据模块）。#}
 {# 与 static/js/core/mobile-menu.js 及 nav-scroll-behavior.js 兼容。#}
 
 {% macro navList() %}
-  {% for item in site_nav %}
-    {% if item.dropdown %}
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle">
-          <span class="iconfont {{ item.icon }}"></span>
-          <span>{{ item.label }}</span>
+    <li>
+      <a href="index.html"{% if active_page == 'home' %}class="active" aria-current="page"{% endif %}>
+        {{ icon('home') }}
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        {{ icon('xiangmu') }}
+        <span>Project</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="description"{% if active_page == 'description' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('jianjie') }}
+          <span>Description</span>
         </a>
-        <div class="dropdown-content">
-          {% for sub in item.dropdown %}
-            <a href="{{ sub.href }}"
-               {% if active_page == sub.page %}class="active" aria-current="page"{% endif %}>
-              <span class="iconfont {{ sub.icon }}"></span>
-              <span>{{ sub.label }}</span>
-            </a>
-          {% endfor %}
-        </div>
-      </li>
-    {% else %}
-      <li>
-        <a href="{{ item.href }}"
-           {% if active_page == (item.page or 'home') %}class="active" aria-current="page"{% endif %}>
-          <span class="iconfont {{ item.icon }}"></span>
-          <span>{{ item.label }}</span>
+        <a href="design"{% if active_page == 'design' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('sheji') }}
+          <span>Design</span>
         </a>
-      </li>
-    {% endif %}
-  {% endfor %}
+        <a href="engineering"{% if active_page == 'engineering' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('shezhichilun') }}
+          <span>Engineering</span>
+        </a>
+        <a href="contribution"{% if active_page == 'contribution' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('gongxian') }}
+          <span>Contribution</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        {{ icon('tuandui') }}
+        <span>Team</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="team"{% if active_page == 'team' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('tuanduichengyuan') }}
+          <span>Team</span>
+        </a>
+        <a href="attributions"{% if active_page == 'attributions' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('guishu') }}
+          <span>Attributions</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        {{ icon('cplus') }}
+        <span>Dry Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="model"{% if active_page == 'model' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('wumoxing') }}
+          <span>Model</span>
+        </a>
+        <a href="hardware"{% if active_page == 'hardware' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('yingjian') }}
+          <span>Hardware</span>
+        </a>
+        <a href="software"{% if active_page == 'software' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('ruanjian-') }}
+          <span>Software</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        {{ icon('shiyan-L') }}
+        <span>Wet Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="experiments"{% if active_page == 'experiments' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('shiyanjilu') }}
+          <span>Experiments</span>
+        </a>
+        <a href="protocol"{% if active_page == 'protocol' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('neirong') }}
+          <span>Protocol</span>
+        </a>
+        <a href="results"{% if active_page == 'results' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('shiyanjieguo') }}
+          <span>Results</span>
+        </a>
+        <a href="parts"{% if active_page == 'parts' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('jiyin') }}
+          <span>Parts</span>
+        </a>
+        <a href="safety-and-security"{% if active_page == 'safety-and-security' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('anquan') }}
+          <span>Safety and Security</span>
+        </a>
+        <a href="notebook"{% if active_page == 'notebook' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('rizhi') }}
+          <span>Notebook</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        {{ icon('shehuishijian') }}
+        <span>Human Practices</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="human-practices"{% if active_page == 'human-practices' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('shehuishijian') }}
+          <span>Human Practices</span>
+        </a>
+        <a href="education"{% if active_page == 'education' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('jiaoyu1') }}
+          <span>Education</span>
+        </a>
+        <a href="sustainability"{% if active_page == 'sustainability' %}class="active" aria-current="page"{% endif %}>
+          {{ icon('cooperation') }}
+          <span>Sustainability</span>
+        </a>
+      </div>
+    </li>
 {% endmacro %}
 
 <!-- 移动端全屏菜单 -->

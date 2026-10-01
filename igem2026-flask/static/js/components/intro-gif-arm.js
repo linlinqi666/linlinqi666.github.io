@@ -1,3 +1,4 @@
+
 /**
  * intro-gif-arm.js
  * 首页 GIF 开场动画的「预绘制 arm」脚本（与根站 src/_includes/head-extra/index.njk 同款）。

@@ -1,15 +1,15 @@
 {
   "meta": {
-    "title": "纳米抗体–甲流 HA 对接筛选数据",
+    "title": "Nanobody–Influenza A HA Docking Screening Data",
     "sourceOfTruth": "static/expriments/drylab/model/model(1).docx",
     "corpus": "static/expriments/drylab/model/md/10-一手分析.md",
     "date": "2026-09-27",
-    "note": "本文件是 Model 页正文表格与交互演示的唯一数据源。数值逐条抄自建模文档 §5.3 / §5.4 / §6，未经二次换算。",
+    "note": "This file is the single data source for the Model page's body tables and interactive demo. Values are transcribed entry by entry from modeling document §5.3 / §5.4 / §6, without secondary conversion.",
     "kind": "computational-prediction",
-    "kindNote": "全部为分子对接与模拟的计算预测；建模文档 §9 明确写明「无实验验证」。页面不得表述为已验证结论。",
+    "kindNote": "All are computational predictions from molecular docking and simulation; modeling document §9 explicitly states 'no experimental validation.' The page must not present them as verified conclusions.",
     "structureBase": "static/data/dry-lab/model/",
     "dataAttrBase": "data-base-path",
-    "antigenRoleNote": "特异性指数由目标亚型 H1N1 与对照亚型 H3N2、H5N1 的打分差值构成，对照亚型用于量化特异性，不是检测对象。"
+    "antigenRoleNote": "The specificity index is built from the score difference between the target subtype H1N1 and the control subtypes H3N2 and H5N1; the control subtypes are used to quantify specificity, not as detection targets."
   },
   "funnel": {
     "candidatesScreened": 17,
@@ -20,21 +20,21 @@
   },
   "scoring": {
     "cluspro": {
-      "label": "ClusPro 刚性对接",
+      "label": "ClusPro rigid docking",
       "formula": "E = 0.40Erep − 0.40Eatt + 600Eelec + 1.00EDARS",
-      "unit": "kcal/mol（文档未标注单位，仅给数值）",
-      "note": "每个「候选 × 抗原」组合保留 Top 10 构象。"
+      "unit": "kcal/mol (the document does not state the unit; only values are given)",
+      "note": "The Top 10 conformations are retained for each 'candidate × antigen' combination."
     },
     "specificityIndex": {
-      "label": "特异性指数",
+      "label": "Specificity index",
       "formula": "( E_H1N1 − E_H3N2 + E_H1N1 − E_H5N1 ) / 2",
-      "note": "越负表示对 H1N1 的特异性越好。"
+      "note": "A more negative value indicates better specificity for H1N1."
     },
     "haddock": {
-      "label": "HADDOCK 2.5 半柔性精修",
-      "flow": "刚性对接 it0 → 半柔性精修 it1 → 水精修 itw",
-      "metrics": "HADDOCK score / 聚类大小 / BSA (Å²)",
-      "note": "HADDOCK score 越负表示界面质量越好。"
+      "label": "HADDOCK 2.5 semi-flexible refinement",
+      "flow": "Rigid docking it0 → semi-flexible refinement it1 → water refinement itw",
+      "metrics": "HADDOCK score / cluster size / BSA (Å²)",
+      "note": "A more negative HADDOCK score indicates better interface quality."
     }
   },
   "antigens": [
@@ -75,9 +75,9 @@
         396,
         399
       ],
-      "structureNote": "该条目是 HA 与一个单域抗体的共结晶复合物；文件已按建模文档 §5.1 的口径裁剪为「仅 HA 链」。共结晶的结合体不是本项目筛出的 R1aB6。",
+      "structureNote": "This entry is a co-crystal complex of HA with a single-domain antibody; per modeling document §5.1, the file has been trimmed to 'HA chains only.' The co-crystallized binder is not R1aB6 selected by this project.",
       "role": "target",
-      "roleLabel": "目标亚型"
+      "roleLabel": "Target subtype"
     },
     {
       "id": "H3N2",
@@ -116,9 +116,9 @@
         396,
         399
       ],
-      "structureNote": "同 9VH4，已裁剪为仅 HA 链；共结晶结合体不是本项目的 R1aB6。",
+      "structureNote": "Same as 9VH4, trimmed to HA chains only; the co-crystallized binder is not R1aB6 of this project.",
       "role": "control",
-      "roleLabel": "对照亚型"
+      "roleLabel": "Control subtype"
     },
     {
       "id": "H5N1",
@@ -128,7 +128,7 @@
       "resolution": "3.06 Å",
       "source": "RCSB",
       "structure": "structures/9MQ2.pdb",
-      "chainMap": "A = HA1（该条目未沉积 HA2）",
+      "chainMap": "A = HA1 (this entry deposited no HA2)",
       "activeResiduesHA1": [
         25,
         45,
@@ -141,9 +141,9 @@
         307
       ],
       "activeResiduesHA2": [],
-      "structureNote": "该条目只沉积了 HA1 链（残基 13–321），因此文档列出的 332 与全部 HA2 活性残基在该结构里不存在，页面标注 H5 时相应收敛。",
+      "structureNote": "This entry deposited only the HA1 chain (residues 13–321), so residue 332 and all HA2 active residues listed in the document are absent from this structure; the page accordingly converges when labeling H5.",
       "role": "control",
-      "roleLabel": "对照亚型"
+      "roleLabel": "Control subtype"
     }
   ],
   "candidates": [
@@ -155,7 +155,7 @@
       "verdict": {
         "outcome": "lead",
         "rank": 1,
-        "zh": "H1N1 特异性最优（未处理抗原指数 −93.25），最低 HADDOCK score（−93.2），MD 稳定，交叉反应风险中等，MM-GBSA 结合自由能 −3.74 kcal/mol。文档据此将其选为识别元件。",
+        "zh": "Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA binding free energy −3.74 kcal/mol. The document therefore selects it as the recognition element.",
         "en": "Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔG = −3.74 kcal/mol."
       },
       "cluspro": {
@@ -177,7 +177,7 @@
         "HIV1": -960.8,
         "RSVF": -883.6,
         "mean": -866.2,
-        "risk": "中等",
+        "risk": "Moderate",
         "riskLevel": 3
       },
       "haddock": {
@@ -186,7 +186,8 @@
         "bsa": 1890.1
       },
       "structure": {
-        "complex": null
+        "complex": null,
+        "nanobody": "structures/nanobodies/R1aB6.pdb"
       }
     },
     {
@@ -197,7 +198,7 @@
       "verdict": {
         "outcome": "lead",
         "rank": 2,
-        "zh": "HADDOCK score 第二（−89.4），但 ClusPro 特异性指数为正（+23.75），交叉反应风险最低却对 H1N1 特异性差。",
+        "zh": "Second-best HADDOCK score (−89.4), but the ClusPro specificity index is positive (+23.75); it has the lowest cross-reactivity risk yet poor H1N1 specificity.",
         "en": "Second-best HADDOCK score (−89.4) but positive ClusPro specificity index (+23.75): lowest cross-reactivity risk yet poor H1N1 specificity."
       },
       "cluspro": {
@@ -219,7 +220,7 @@
         "HIV1": -814.0,
         "RSVF": -713.6,
         "mean": -756.5,
-        "risk": "最低",
+        "risk": "Lowest",
         "riskLevel": 1
       },
       "haddock": {
@@ -228,7 +229,8 @@
         "bsa": 2764.4
       },
       "structure": {
-        "complex": null
+        "complex": null,
+        "nanobody": "structures/nanobodies/R2aF9.pdb"
       }
     },
     {
@@ -239,7 +241,7 @@
       "verdict": {
         "outcome": "lead",
         "rank": 3,
-        "zh": "HADDOCK score 第三（−84.6），但 ClusPro 特异性指数较弱（−40.75），交叉反应风险最高。",
+        "zh": "Third-best HADDOCK score (−84.6), but the ClusPro specificity index is weaker (−40.75) and the cross-reactivity risk is the highest.",
         "en": "Third by HADDOCK score (−84.6); weaker ClusPro specificity index (−40.75) and the highest cross-reactivity risk."
       },
       "cluspro": {
@@ -261,7 +263,7 @@
         "HIV1": -939.8,
         "RSVF": -948.5,
         "mean": -931.2,
-        "risk": "最高",
+        "risk": "Highest",
         "riskLevel": 5
       },
       "haddock": {
@@ -270,7 +272,8 @@
         "bsa": 2634.4
       },
       "structure": {
-        "complex": null
+        "complex": null,
+        "nanobody": "structures/nanobodies/R1aA5.pdb"
       }
     },
     {
@@ -281,7 +284,7 @@
       "verdict": {
         "outcome": "rejected",
         "rank": 4,
-        "zh": "ClusPro 特异性指数中等（−57.35），HADDOCK score 第四（−71.1），交叉反应风险较高。",
+        "zh": "Mid-range ClusPro specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk.",
         "en": "Rejected: mid-range specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk."
       },
       "cluspro": {
@@ -303,7 +306,7 @@
         "HIV1": -936.6,
         "RSVF": -894.7,
         "mean": -890.6,
-        "risk": "较高",
+        "risk": "Higher",
         "riskLevel": 4
       },
       "haddock": {
@@ -312,7 +315,8 @@
         "bsa": 2538.9
       },
       "structure": {
-        "complex": null
+        "complex": null,
+        "nanobody": "structures/nanobodies/R2bE8.pdb"
       }
     },
     {
@@ -323,7 +327,7 @@
       "verdict": {
         "outcome": "rejected",
         "rank": 5,
-        "zh": "ClusPro 特异性指数第二（−72.55），但 HADDOCK score 最低（−68.8），界面结合质量差。",
+        "zh": "Second-best ClusPro specificity index (−72.55), but the worst HADDOCK score (−68.8), indicating poor interface quality.",
         "en": "Rejected: second-best specificity index (−72.55) but worst HADDOCK score (−68.8), indicating poor interface quality."
       },
       "cluspro": {
@@ -345,7 +349,7 @@
         "HIV1": -937.6,
         "RSVF": -876.9,
         "mean": -879.5,
-        "risk": "中等",
+        "risk": "Moderate",
         "riskLevel": 3
       },
       "haddock": {
@@ -354,13 +358,14 @@
         "bsa": 2548.0
       },
       "structure": {
-        "complex": null
+        "complex": null,
+        "nanobody": "structures/nanobodies/R2bD9.pdb"
       }
     }
   ],
   "interface": {
     "pair": "R1aB6 vs H1N1",
-    "method": "PyMOL 界面分析（残基） + SPICE 相互作用分析（作用类型计数）",
+    "method": "PyMOL interface analysis (residues) + SPICE interaction analysis (interaction-type counts)",
     "haSide": {
       "count": 30,
       "ranges": [
@@ -369,7 +374,7 @@
         "303–332",
         "358–396"
       ],
-      "note": "文档原文记为「HA 侧：30 个残基（27–32, 44–53, 303–332, 358–396）」。"
+      "note": "The original document records 'HA side: 30 residues (27–32, 44–53, 303–332, 358–396).'"
     },
     "nanobodySide": {
       "count": 24,
@@ -398,45 +403,45 @@
       {
         "nanobody": "ARGB:31",
         "ha": "ASNA:27",
-        "type": "氢键",
+        "type": "Hydrogen bond",
         "distance": 2.086
       },
       {
         "nanobody": "ARGB:31",
         "ha": "SERA:29",
-        "type": "氢键",
+        "type": "Hydrogen bond",
         "distance": 2.18
       },
       {
         "nanobody": "ARGB:31",
         "ha": "THRA:44",
-        "type": "氢键",
+        "type": "Hydrogen bond",
         "distance": 3.097
       },
       {
         "nanobody": "ARGB:31",
         "ha": "GLNA:51",
-        "type": "氢键",
+        "type": "Hydrogen bond",
         "distance": 2.086
       },
       {
         "nanobody": "ASPB:55",
         "ha": "THRA:30",
-        "type": "氢键",
+        "type": "Hydrogen bond",
         "distance": 2.725
       },
       {
         "nanobody": "THRB:54",
         "ha": "ASPA:31",
-        "type": "盐桥",
+        "type": "Salt bridge",
         "distance": 3.48
       }
     ],
-    "hotspotNote": "ARGB:31 参与 4 组氢键，是文档提出的热点残基，并被写为后续 R31A 突变体的研究靶点。",
+    "hotspotNote": "ARGB:31 participates in 4 hydrogen bonds; it is the hotspot residue proposed by the document and is written as a target for the subsequent R31A mutant study.",
     "structureGap": {
       "resolved": false,
-      "zh": "本项目的 R1aB6–H1N1 对接复合物结构未公开（团队未提供 HADDOCK 输出文件）。下方三维视图展示的是抗原来源结构 9VH4，并按文档列出的界面活性残基高亮；它不是本项目的对接结果。",
-      "en": "The project's own R1aB6–H1N1 docked complex is not published yet. The 3D view below shows the antigen source structure 9VH4 with the documented interface residues highlighted; it is not our docking result."
+      "zh": "The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex.",
+      "en": "The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex."
     }
   },
   "md": {
@@ -444,26 +449,26 @@
     "forcefield": "Amber99sbildn",
     "waterModel": "TIP3P",
     "seed": "gen_seed = 1",
-    "reportedDuration": "10 ns（文档正文口径，见注意事项）",
+    "reportedDuration": "10 ns (per the document body; see caveats)",
     "items": [
       {
         "metric": "RMSD",
-        "value": "0.45 nm（文档记为稳定）"
+        "value": "0.45 nm (document records as stable)"
       },
       {
-        "metric": "RMSF（界面）",
+        "metric": "RMSF (interface)",
         "value": "< 0.17 nm"
       },
       {
         "metric": "Rg",
-        "value": "3.87 nm（稳定）"
+        "value": "3.87 nm (stable)"
       },
       {
-        "metric": "氢键",
+        "metric": "Hydrogen bonds",
         "value": "462.1 ± 9.6"
       }
     ],
-    "caveat": "源文档图 5 的 RMSD 横轴只画到约 8 ns，且曲线峰值约 0.70 nm，与正文「10 ns / 0.45 nm 稳定」的表述不一致；页面正文按文档口径呈现，差异记在页面源码注释里（编号 MQ-6）。"
+    "caveat": "In source document Figure 5, the RMSD horizontal axis only reaches about 8 ns and the curve peak is about 0.70 nm, inconsistent with the body text '10 ns / 0.45 nm stable'; the page body follows the document's stated values, and the discrepancy is recorded in the page source comments (numbered MQ-6)."
   },
   "mmgbsa": {
     "engine": "gmx_MMPBSA 1.5.0.3",
@@ -490,112 +495,112 @@
         "value": -3.74
       }
     ],
-    "note": "文档 §9 自述：MM-GBSA 仅基于 10 帧，统计误差较大。"
+    "note": "Document §9 states: MM-GBSA is based on only 10 frames, with large statistical error."
   },
   "pipeline": [
     {
       "stage": 1,
-      "question": "哪个抗体结合 H1N1 最好？",
-      "method": "ClusPro 刚性对接（未处理抗原）",
-      "output": "特异性指数排名"
+      "question": "Which antibody binds H1N1 best?",
+      "method": "ClusPro rigid docking (untreated antigen)",
+      "output": "Specificity-index ranking"
     },
     {
       "stage": 2,
-      "question": "处理后抗原是否影响结合？",
-      "method": "ClusPro 刚性对接（复合物处理后抗原）",
-      "output": "交叉验证结合模式"
+      "question": "Does the processed antigen affect binding?",
+      "method": "ClusPro rigid docking (post-complex-processing antigen)",
+      "output": "Cross-validate the binding mode"
     },
     {
       "stage": 3,
-      "question": "是否与无关病毒交叉反应？",
-      "method": "ClusPro 刚性对接（SARS / HIV1 / RSVF）",
-      "output": "交叉反应风险"
+      "question": "Does it cross-react with unrelated viruses?",
+      "method": "ClusPro rigid docking (SARS / HIV1 / RSVF)",
+      "output": "Cross-reactivity risk"
     },
     {
       "stage": 4,
-      "question": "结合模式是否稳定？",
-      "method": "HADDOCK 2.5 半柔性精修",
+      "question": "Is the binding mode stable?",
+      "method": "HADDOCK 2.5 semi-flexible refinement",
       "output": "HADDOCK score、BSA"
     },
     {
       "stage": 5,
-      "question": "哪些残基驱动结合？",
+      "question": "Which residues drive binding?",
       "method": "PyMOL + SPICE",
-      "output": "界面残基、相互作用类型"
+      "output": "Interface residues, interaction types"
     },
     {
       "stage": 6,
-      "question": "复合物在水中是否稳定？",
+      "question": "Is the complex stable in water?",
       "method": "GROMACS MD + MM-GBSA",
       "output": "RMSD、RMSF、Rg、ΔG_bind"
     },
     {
       "stage": 7,
-      "question": "实验上要验证什么？",
-      "method": "综合分析",
-      "output": "热点残基（ARGB:31）"
+      "question": "What should be validated experimentally?",
+      "method": "Integrated analysis",
+      "output": "Hotspot residue (ARGB:31)"
     }
   ],
   "limitations": [
-    "ClusPro 中受体按刚性处理，可能遗漏诱导契合效应。",
-    "对接使用隐式溶剂，忽略显式水桥。",
-    "HADDOCK 中界面半柔性，允许侧链重排但主链固定。",
-    "10 ns 的 MD 可能无法捕捉慢构象变化。",
-    "MM-GBSA 仅基于 10 帧，统计误差较大。",
-    "全文无实验验证（文档 §9 自述）。"
+  "In ClusPro the receptor is treated as rigid, which may miss induced-fit effects.",
+  "Docking uses implicit solvent and ignores explicit water bridges.",
+  "In HADDOCK the interface is semi-flexible, allowing side-chain rearrangement while the backbone stays fixed.",
+  "10 ns of MD may fail to capture slow conformational changes.",
+  "MM-GBSA is based on only 10 frames, with large statistical error.",
+  "The entire text has no experimental validation (document §9 states this)."
   ],
   "reproducibility": [
     {
-      "item": "软件版本",
+      "item": "Software version",
       "value": "ClusPro、HADDOCK 2.5、GROMACS 2026.3、PyMOL、SPICE、gmx_MMPBSA 1.5.0.3"
     },
     {
-      "item": "力场",
+      "item": "Force field",
       "value": "Amber99sbildn"
     },
     {
-      "item": "水模型",
+      "item": "Water model",
       "value": "TIP3P"
     },
     {
-      "item": "随机种子",
+      "item": "Random seed",
       "value": "gen_seed = 1"
     },
     {
-      "item": "参数文件",
-      "value": "文档记「已上传 GitHub（mdp_files/）」，仓库链接在文档中仍为待补"
+      "item": "Parameter files",
+      "value": "The document says 'uploaded to GitHub (mdp_files/),' but the repository link is still to be filled in the document."
     }
   ],
   "designDecisions": [
     {
-      "prediction": "R1aB6 具有最高 H1N1 特异性",
-      "decision": "选为识别元件"
+      "prediction": "R1aB6 has the highest H1N1 specificity",
+      "decision": "Selected as the recognition element"
     },
     {
-      "prediction": "ARGB:31 是热点残基",
-      "decision": "提出 R31A 突变体为后续研究靶点"
+      "prediction": "ARGB:31 is a hotspot residue",
+      "decision": "Proposed the R31A mutant as a target for subsequent studies"
     },
     {
-      "prediction": "R2bD9 与 R2bE8 交叉反应风险较高",
-      "decision": "降低优先级"
+      "prediction": "R2bD9 and R2bE8 have higher cross-reactivity risk",
+      "decision": "Lowered priority"
     }
   ],
   "openItems": [
     {
       "id": "MQ-1",
-      "zh": "候选命名有两套写法（R1aXA5/R2bXD9 与 R1aA5/R2bD9）。页面统一用不带 X 的写法，另一套待实验组核销。"
+      "zh": "Candidate naming has two conventions (R1aXA5/R2bXD9 vs R1aA5/R2bD9). The page uniformly uses the X-less form; the other is pending lab verification."
     },
     {
       "id": "MQ-5",
-      "zh": "代码仓库、参数文件、输入输出结构的 GitHub 链接在文档中均为待补；页面按实际状态表述。"
+      "zh": "In the document, the GitHub links for the code repository, parameter files, and input/output structures are all 'to be filled'; the page states the actual status."
     },
     {
       "id": "MQ-6",
-      "zh": "MD 时长与 RMSD 口径：正文 10 ns / 0.45 nm，源图轨迹约 8 ns、峰值约 0.70 nm。"
+      "zh": "MD duration and RMSD: body text 10 ns / 0.45 nm; source-figure trajectory about 8 ns, peak about 0.70 nm."
     },
     {
       "id": "MQ-7",
-      "zh": "源文档两张 17 抗体图表（处理后抗原、交叉反应）的候选编号对照表与筛选图不一致，故不引用该两图，相关结果只用表格呈现。"
+      "zh": "The source document's two 17-antibody charts (post-processed antigen, cross-reactivity) have candidate-number cross-reference tables inconsistent with the screening figure, so those two charts are not cited; the related results are presented only in tables."
     }
   ]
 }

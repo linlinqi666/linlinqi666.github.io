@@ -96,7 +96,7 @@ js:
           <h2>{{ pair(card.title.en, card.title.zh) }}</h2>
           <div class="content-body">
             {% if card.summary %}
-            <p class="executive-summary">{{ pair(card.summary.en, card.summary.zh) }}</p>
+            <p class="executive-summary">{{ pair(card.summary.en, card.summary.zh) | safe }}</p>
             {% endif %}
 
             {% for block in card.blocks %}

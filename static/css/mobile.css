@@ -1,4 +1,4 @@
-/* ===== 通用移动端响应式样式 ===== */
+﻿/* ===== 通用移动端响应式样式 ===== */
 /* iGEM Layout Strategy: Shared mobile responsive styles for all pages. Optimized for compatibility, UX, and accessibility. */
 
 @media (max-width: 1024px) {
@@ -1108,6 +1108,40 @@ img.loaded {
     display: block;
     background-color: var(--mobile-bg-fallback);
     border-radius: var(--mobile-radius-md);
+  }
+
+  /* 首页透明拼装插画（hero/板块舞台/漂浮酵母）：不吃全局 img 的米色底与圆角，
+     否则透明 webp 背后垫出色块（REQ-20260928-002 移动端适配）。
+     同时取消 blanket 的 max-width:100%，让板块舞台内插画按各自 width% 定位
+     （如 hero 的 width:140% 不会被 blanket 压回 100%）。 */
+  .home-page .echo-stage img,
+  .home-page .art-stage img,
+  .home-page .yeast-float img {
+    background-color: transparent;
+    border-radius: 0;
+    max-width: none;
+  }
+  /* 例外：intro 内容条图片必须保留显式高度（--intro-pill-h），否则被 blanket 的
+     height:auto 与 .presentation-section img 撑成原图巨字。放最后加载层，
+     对所有页面统一生效（REQ-20260928-002） */
+  .home-page .art-stage--project-intro .intro-pill img {
+    height: var(--intro-pill-h);
+    max-width: none;
+  }
+
+  /* statistics 揭示动画：小英文标题与点击提示在窄屏用更小字号、左上对齐
+     （放最后加载层，覆盖本块 blanket 的 p/div 字号；REQ-20261001-001） */
+  .home-page .art-stage--statistics .statistics-caption {
+    left: 5%;
+    top: 6.5%;
+    max-width: 82%;
+    font-size: clamp(12px, 3.3vw, 15px);
+    letter-spacing: 0.03em;
+  }
+
+  .home-page .art-stage--statistics .statistics-hint__label {
+    padding: 0.3em 0.85em;
+    font-size: clamp(12px, 3.4vw, 15px);
   }
 
   /* 首页 presentation 模块：强制内容不溢出视口 */

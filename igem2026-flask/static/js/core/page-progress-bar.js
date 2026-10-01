@@ -1,3 +1,4 @@
+
 /**
  * iGEM SZPU-2026 - Page Progress Bar
  *

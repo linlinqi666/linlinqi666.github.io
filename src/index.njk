@@ -1,4 +1,4 @@
----
+﻿---
 permalink: "index.html"
 title: "iGEM SZPU-2026 - 首页"
 lang: "zh-CN"
@@ -11,6 +11,7 @@ js:
   - static/js/components/executive-summary-animation.js
   - static/js/components/index-intro-gif.js
   - static/js/pages/home-nav.js
+  - static/js/pages/statistics-reveal.js
 ---
 
 {% extends "layouts/base.njk" %}
@@ -28,7 +29,8 @@ js:
           aria-hidden="true">→</span></button>
     </div>
 
-<!-- 模块 1: Hero 标题页（板块 1：ECHO 品牌构图，由 webp 组件拼装） -->
+<!-- 首页动画屏顺序（2026-10-01 调整）：1 首页(hero) → 2 人类实践(human-practices) → 3 结果(statistics) → 4 安全(safety) → 5 背景(public-health) → 6 设计(project-intro) → 7 构建与测试(dbtl-cycle) -->
+    <!-- 模块 1: Hero 标题页（板块 1：ECHO 品牌构图，由 webp 组件拼装） -->
     <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
       <h1 class="sr-only">ECHO Yeast — 工程化酿酒酵母 H1N1 流感病毒生物传感器</h1>
       <div class="echo-stage" aria-label="ECHO = Engineered Cellular Host, Observation of viral signals">
@@ -49,135 +51,146 @@ js:
       </div>
     </section>
 
-    <!-- 模块 2: 背景 -->
-    <section id="public-health" class="presentation-section yeast-screen" data-title="背景">
-      <h2 class="sr-only">Can We Build a Living Sensor That Directly Responds to Viral Signals?</h2>
-      <!-- 板块 2「Can We Build a Living Sensor」 ｜ 对照成品图：对话归档/2026-09-22-homepage-assembly/mockups/50314a3b2c87cfe13cd2dfd90a295494.2e5af09548.jpg
-           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--s2 段 -->
-      <div class="art-stage art-stage--s2">
-        <img class="art art--s2-title" src="static/image/Animation/index/webp/s2-title.webp" alt="Can We Build a Living Sensor That Directly Responds to Viral Signals?">
-        <img class="art art--s2-petri" src="static/image/Animation/index/webp/s2-petri-dish.webp" alt="" aria-hidden="true">
-        <img class="art art--s2-virus" src="static/image/Animation/index/webp/s2-virus-cluster.webp" alt="" aria-hidden="true">
-        <img class="art art--s2-mascot" src="static/image/Animation/index/webp/s2-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
+    <!-- 模块 2: 人类实践（human-practices） -->
+    <section id="human-practices" class="presentation-section yeast-screen" data-title="人类实践">
+      <h2 class="sr-only">Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026</h2>
+      <!-- human-practices「FluNet 图表」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/96673fa9ecf228f6acfe63f4ef7af4a2.65a2a71e09.jpg
+           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--human-practices 段 -->
+      <div class="art-stage art-stage--human-practices">
+        <!-- <img class="art art--human-practices-wave" src="static/image/Animation/index/webp/shared-wave-1.webp" alt="" aria-hidden="true"> -->
+        <img class="art art--human-practices-title" src="static/image/Animation/index/webp/s7-chart-title.webp" alt="Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026">
+        <img class="art art--human-practices-chart" src="static/image/Animation/index/webp/s7-chart.webp" alt="流感亚型检测量折线图">
+        <img class="art art--human-practices-mascot" src="static/image/Animation/index/webp/s7-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
+        <img class="art art--human-practices-axis" src="static/image/Animation/index/webp/s7-axis-label.webp" alt="Week start date">
+        <img class="art art--human-practices-legend-subtypes" src="static/image/Animation/index/webp/s7-legend-subtypes.webp" alt="Influenza subtypes">
+        <img class="art art--human-practices-legend-h1n1" src="static/image/Animation/index/webp/s7-legend-h1n1.webp" alt="A(H1N1)pdm09">
+        <img class="art art--human-practices-legend-pos" src="static/image/Animation/index/webp/s7-legend-positive.webp" alt="Influenza percent positive">
       </div>
     </section>
 
-    <!-- 模块 3: 设计 -->
+    <!-- 模块 3: 结果（statistics） -->
+    <section id="statistics" class="presentation-section yeast-screen" data-title="结果">
+      <h2 class="sr-only">Detection methods: qPCR / ELISA / CGIS</h2>
+      <!-- statistics「qPCR / ELISA / CGIS」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/2c38d1be8698c07ee4679dbe7058ae5f.733d81e9d9.jpg
+           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--statistics 段 -->
+      <div class="art-stage art-stage--statistics">
+        <!-- 英文小标题：进入该屏时由 statistics-reveal.js 触发「右先左后」逐词下落；
+             无 JS 时静态可见（脚本只加类，不做默认隐藏） -->
+        <p class="statistics-caption" lang="en">Contemporary popular methods for detecting H1N1 influenza</p>
+        <!-- <img class="art art--statistics-cloud" src="static/image/Animation/index/webp/statistics-cloud.webp" alt="" aria-hidden="true"> -->
+        <img class="art art--statistics-hill" src="static/image/Animation/index/webp/s5-hill.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-qpcr" src="static/image/Animation/index/webp/s5-circle-qpcr.webp" alt="qPCR">
+        <img class="art art--statistics-elisa" src="static/image/Animation/index/webp/s5-circle-elisa.webp" alt="ELISA">
+        <img class="art art--statistics-cgis" id="statistics-cgis" src="static/image/Animation/index/webp/s5-circle-cgis.webp" alt="CGIS">
+        <img class="art art--statistics-arc" src="static/image/Animation/index/webp/s5-dashed-arc.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-bulb" src="static/image/Animation/index/webp/s5-bulb.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-mascot" src="static/image/Animation/index/webp/s5-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
+        <img class="art art--statistics-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
+        <!-- CGIS 点击提示（箭头 + Click here）：由 statistics-reveal.js 定位到 CGIS 圆正上方，
+             点击展开后移除；无 JS / 未进入该屏时不显示 -->
+        <div class="statistics-hint" aria-hidden="true">
+          <div class="statistics-hint__inner">
+            <span class="statistics-hint__label">Click here</span>
+            <svg class="statistics-hint__arrow" viewBox="0 0 24 46" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path d="M12 3 C 12 14, 12 22, 12 33" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 7.5"></path>
+              <path d="M4.5 29 L12 41.5 L19.5 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 模块 4: 安全（safety） -->
+    <section id="safety" class="presentation-section yeast-screen" data-title="安全">
+      <h2 class="sr-only">Influenza A Virus Biosensor Based on Engineered Yeast</h2>
+      <!-- safety「Influenza A Virus Biosensor」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/b6dd40228602e3596ff162aa41b47b4c.c2d33725d0.jpg
+           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--safety 段 -->
+      <div class="art-stage art-stage--safety">
+        <img class="art art--safety-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
+        <!-- <img class="art art--safety-curve" src="static/image/Animation/index/webp/shared-blue-curve.webp" alt="" aria-hidden="true"> -->
+        <img class="art art--safety-mascot" src="static/image/Animation/index/webp/s6-mascot-flying.webp" alt="EchoYeast 披风飞行">
+        <img class="art art--safety-title" src="static/image/Animation/index/webp/s6-title.webp" alt="Influenza A Virus Biosensor Based on Engineered Yeast">
+        <img class="art art--safety-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
+      </div>
+    </section>
+
+    <!-- 模块 5: 背景（public-health） -->
+    <section id="public-health" class="presentation-section yeast-screen" data-title="背景">
+      <h2 class="sr-only">Can We Build a Living Sensor That Directly Responds to Viral Signals?</h2>
+      <!-- public-health「Can We Build a Living Sensor」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/50314a3b2c87cfe13cd2dfd90a295494.2e5af09548.jpg
+           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--public-health 段 -->
+      <div class="art-stage art-stage--public-health">
+        <img class="art art--public-health-title" src="static/image/Animation/index/webp/s2-title.webp" alt="Can We Build a Living Sensor That Directly Responds to Viral Signals?">
+        <img class="art art--public-health-petri" src="static/image/Animation/index/webp/s2-petri-dish.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-virus" src="static/image/Animation/index/webp/s2-virus-cluster.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-mascot" src="static/image/Animation/index/webp/s2-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
+      </div>
+    </section>
+
+    <!-- 模块 6: 设计（project-intro） -->
     <section id="project-intro" class="presentation-section yeast-screen" data-title="设计">
       <h2 class="sr-only">WHY EHCO Yeast?</h2>
-      <!-- 板块 3「WHY EHCO Yeast」 ｜ 对照成品图：对话归档/2026-09-22-homepage-assembly/mockups/588dd796bfeb7b0a1c24a53b4213b4f6.01c3a629f8.jpg
-           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--s3 段 -->
-      <div class="art-stage art-stage--s3">
-        <img class="art art--s3-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
-        <img class="art art--s3-title" src="static/image/Animation/index/webp/s3-title.webp" alt="WHY EHCO Yeast?">
+      <!-- project-intro「WHY EHCO Yeast」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/588dd796bfeb7b0a1c24a53b4213b4f6.01c3a629f8.jpg
+           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--project-intro 段 -->
+      <div class="art-stage art-stage--project-intro">
+        <img class="art art--project-intro-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
+        <img class="art art--project-intro-title" src="static/image/Animation/index/webp/s3-title.webp" alt="WHY EHCO Yeast?">
         <!-- 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播
-             位置/大小/速度 → static/css/index.css 搜「板块 3 文字条」
-             每排的 .s3-pills__group 出现两次（第二份 aria-hidden）用于无缝循环，删掉会跳帧 -->
-        <div class="s3-pills">
-          <div class="s3-pills__row">
-            <div class="s3-pills__track">
-              <div class="s3-pills__group">
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-low-cost.webp" alt="Low-cost cultivation"></span>
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-native-signal.webp" alt="Native eukaryotic signal transduction network"></span>
+             位置/大小/速度 → static/css/index.css 搜「project-intro 文字条」
+             每排的 .intro-pills__group 出现两次（第二份 aria-hidden）用于无缝循环，删掉会跳帧 -->
+        <div class="intro-pills">
+          <div class="intro-pills__row">
+            <div class="intro-pills__track">
+              <div class="intro-pills__group">
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-low-cost.webp" alt="Low-cost cultivation"></span>
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-native-signal.webp" alt="Native eukaryotic signal transduction network"></span>
               </div>
-              <div class="s3-pills__group" aria-hidden="true">
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-low-cost.webp" alt=""></span>
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-native-signal.webp" alt=""></span>
-              </div>
-            </div>
-          </div>
-          <div class="s3-pills__row">
-            <div class="s3-pills__track">
-              <div class="s3-pills__group">
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-biosafety.webp" alt="High biosafety level"></span>
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-env-tolerance.webp" alt="Strong environmental tolerance"></span>
-              </div>
-              <div class="s3-pills__group" aria-hidden="true">
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-biosafety.webp" alt=""></span>
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-env-tolerance.webp" alt=""></span>
+              <div class="intro-pills__group" aria-hidden="true">
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-low-cost.webp" alt=""></span>
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-native-signal.webp" alt=""></span>
               </div>
             </div>
           </div>
-          <div class="s3-pills__row">
-            <div class="s3-pills__track">
-              <div class="s3-pills__group">
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-toolbox.webp" alt="Well-established genetic engineering toolbox"></span>
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-combining.webp" alt="Combining eukaryotic expression and environmental adaptability"></span>
+          <div class="intro-pills__row">
+            <div class="intro-pills__track">
+              <div class="intro-pills__group">
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-biosafety.webp" alt="High biosafety level"></span>
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-env-tolerance.webp" alt="Strong environmental tolerance"></span>
               </div>
-              <div class="s3-pills__group" aria-hidden="true">
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-toolbox.webp" alt=""></span>
-                <span class="s3-pill"><img src="static/image/Animation/index/webp/s3-pill-combining.webp" alt=""></span>
+              <div class="intro-pills__group" aria-hidden="true">
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-biosafety.webp" alt=""></span>
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-env-tolerance.webp" alt=""></span>
+              </div>
+            </div>
+          </div>
+          <div class="intro-pills__row">
+            <div class="intro-pills__track">
+              <div class="intro-pills__group">
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-toolbox.webp" alt="Well-established genetic engineering toolbox"></span>
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-combining.webp" alt="Combining eukaryotic expression and environmental adaptability"></span>
+              </div>
+              <div class="intro-pills__group" aria-hidden="true">
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-toolbox.webp" alt=""></span>
+                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-combining.webp" alt=""></span>
               </div>
             </div>
           </div>
         </div>
-        <img class="art art--s3-mascot" src="static/image/Animation/index/webp/s3-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
-        <img class="art art--s3-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
+        <img class="art art--project-intro-mascot" src="static/image/Animation/index/webp/s3-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
+        <img class="art art--project-intro-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
       </div>
     </section>
 
-    <!-- 模块 4: 湿实验 / DBTL -->
+    <!-- 模块 7: 构建与测试（dbtl-cycle） -->
     <section id="dbtl-cycle" class="presentation-section yeast-screen" data-title="构建与测试">
       <h2 class="sr-only">Research content: Workflow and principle</h2>
-      <!-- 板块 4「Research content: Workflow and principle」 ｜ 对照成品图：对话归档/2026-09-22-homepage-assembly/mockups/32d8bc036fff9e0d276ad6d75e11d6b9.cf62b5ed87.jpg
-           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--s4 段 -->
-      <div class="art-stage art-stage--s4">
-        <img class="art art--s4-wave" src="static/image/Animation/index/webp/shared-wave-3.webp" alt="" aria-hidden="true">
-        <img class="art art--s4-title" src="static/image/Animation/index/webp/s4-title.webp" alt="Research content: Workflow and principle">
-        <img class="art art--s4-diagram" src="static/image/Animation/index/webp/s4-workflow-diagram.webp" alt="工作流程与原理示意图">
-        <img class="art art--s4-mascot" src="static/image/Animation/index/webp/s4-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
-      </div>
-    </section>
-
-    <!-- 已移除空的「核心发现吸顶导引条」section：徽标块删除后它只剩空容器，
-         仍是 100vh + sticky，会在滚动时以空白奶油底盖住整个视口（2026-09-22 实测）。 -->
-
-    <!-- 模块 5: 结果 -->
-    <section id="statistics" class="presentation-section yeast-screen" data-title="结果">
-      <h2 class="sr-only">Detection methods: qPCR / ELISA / CGIS</h2>
-      <!-- 板块 5「qPCR / ELISA / CGIS」 ｜ 对照成品图：对话归档/2026-09-22-homepage-assembly/mockups/2c38d1be8698c07ee4679dbe7058ae5f.733d81e9d9.jpg
-           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--s5 段 -->
-      <div class="art-stage art-stage--s5">
-        <!-- <img class="art art--s5-cloud" src="static/image/Animation/index/webp/s5-cloud.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--s5-hill" src="static/image/Animation/index/webp/s5-hill.webp" alt="" aria-hidden="true">
-        <img class="art art--s5-qpcr" src="static/image/Animation/index/webp/s5-circle-qpcr.webp" alt="qPCR">
-        <img class="art art--s5-elisa" src="static/image/Animation/index/webp/s5-circle-elisa.webp" alt="ELISA">
-        <img class="art art--s5-cgis" src="static/image/Animation/index/webp/s5-circle-cgis.webp" alt="CGIS">
-        <img class="art art--s5-arc" src="static/image/Animation/index/webp/s5-dashed-arc.webp" alt="" aria-hidden="true">
-        <img class="art art--s5-bulb" src="static/image/Animation/index/webp/s5-bulb.webp" alt="" aria-hidden="true">
-        <img class="art art--s5-mascot" src="static/image/Animation/index/webp/s5-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
-        <img class="art art--s5-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
-      </div>
-    </section>
-
-    <!-- 模块 6: 安全 -->
-    <section id="safety" class="presentation-section yeast-screen" data-title="安全">
-      <h2 class="sr-only">Influenza A Virus Biosensor Based on Engineered Yeast</h2>
-      <!-- 板块 6「Influenza A Virus Biosensor」 ｜ 对照成品图：对话归档/2026-09-22-homepage-assembly/mockups/b6dd40228602e3596ff162aa41b47b4c.c2d33725d0.jpg
-           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--s6 段 -->
-      <div class="art-stage art-stage--s6">
-        <img class="art art--s6-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
-        <!-- <img class="art art--s6-curve" src="static/image/Animation/index/webp/shared-blue-curve.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--s6-mascot" src="static/image/Animation/index/webp/s6-mascot-flying.webp" alt="EchoYeast 披风飞行">
-        <img class="art art--s6-title" src="static/image/Animation/index/webp/s6-title.webp" alt="Influenza A Virus Biosensor Based on Engineered Yeast">
-        <img class="art art--s6-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
-      </div>
-    </section>
-
-    <!-- 模块 7: 人类实践 -->
-    <section id="human-practices" class="presentation-section yeast-screen" data-title="人类实践">
-      <h2 class="sr-only">Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026</h2>
-      <!-- 板块 7「FluNet 图表」 ｜ 对照成品图：对话归档/2026-09-22-homepage-assembly/mockups/96673fa9ecf228f6acfe63f4ef7af4a2.65a2a71e09.jpg
-           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--s7 段 -->
-      <div class="art-stage art-stage--s7">
-        <!-- <img class="art art--s7-wave" src="static/image/Animation/index/webp/shared-wave-1.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--s7-title" src="static/image/Animation/index/webp/s7-chart-title.webp" alt="Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026">
-        <img class="art art--s7-chart" src="static/image/Animation/index/webp/s7-chart.webp" alt="流感亚型检测量折线图">
-        <img class="art art--s7-mascot" src="static/image/Animation/index/webp/s7-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
-        <img class="art art--s7-axis" src="static/image/Animation/index/webp/s7-axis-label.webp" alt="Week start date">
-        <img class="art art--s7-legend-subtypes" src="static/image/Animation/index/webp/s7-legend-subtypes.webp" alt="Influenza subtypes">
-        <img class="art art--s7-legend-h1n1" src="static/image/Animation/index/webp/s7-legend-h1n1.webp" alt="A(H1N1)pdm09">
-        <img class="art art--s7-legend-pos" src="static/image/Animation/index/webp/s7-legend-positive.webp" alt="Influenza percent positive">
+      <!-- dbtl-cycle「Research content: Workflow and principle」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/32d8bc036fff9e0d276ad6d75e11d6b9.cf62b5ed87.jpg
+           微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--dbtl-cycle 段 -->
+      <div class="art-stage art-stage--dbtl-cycle">
+        <img class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared-wave-3.webp" alt="" aria-hidden="true">
+        <img class="art art--dbtl-cycle-title" src="static/image/Animation/index/webp/s4-title.webp" alt="Research content: Workflow and principle">
+        <img class="art art--dbtl-cycle-diagram" src="static/image/Animation/index/webp/s4-workflow-diagram.webp" alt="工作流程与原理示意图">
+        <img class="art art--dbtl-cycle-mascot" src="static/image/Animation/index/webp/s4-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
       </div>
     </section>
 

@@ -1,3 +1,4 @@
+
 /**
  * index-intro-gif.js
  * 首页 GIF 开场动画控制器

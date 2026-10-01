@@ -105,7 +105,7 @@ module.exports = {
       title: { zh: '1.1 Δfar1 底盘菌株（BY4741 背景）', en: '1.1 Δfar1 chassis strain (BY4741 background)' },
       summary: {
         zh: 'FAR1 被 CRISPR/Cas9 敲除的酿酒酵母底盘，经测序确认；不含 SST2 敲除。',
-        en: 'A Saccharomyces cerevisiae chassis with FAR1 knocked out by CRISPR/Cas9 and confirmed by sequencing. It does not carry an SST2 knockout.'
+        en: 'A <i>Saccharomyces cerevisiae</i> chassis with FAR1 knocked out by CRISPR/Cas9 and confirmed by sequencing. It does not carry an SST2 knockout.'
       },
       blocks: [
         {

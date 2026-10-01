@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "macros.html" import media %}
 {% block title %}Model{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/model.css') }}">
@@ -6,12 +7,11 @@
 {% endblock %}
 {% block page_content %}
 
-    
 <div class="description-container">
 
-      <!-- 左侧导航栏 -->
+      <!-- Left navigation bar -->
       <aside class="description-sidebar">
-        <!-- 酵母细胞装饰 -->
+        <!-- Yeast cell decoration -->
         <div class="yeast-decoration">
           <div class="yeast-cell yeast-cell-1"></div>
           <div class="yeast-cell yeast-cell-2"></div>
@@ -30,12 +30,17 @@
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#overview" class="nav-main-link">Overview</a>
+                <a href="#model-overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#model-game" class="nav-main-link">Interactive Demo</a>
               </div>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#assumptions" class="nav-main-link">模型假设</a>
+                <a href="#model-assumptions" class="nav-main-link">Model Assumptions</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -43,18 +48,13 @@
                 </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#biological-assumptions">生物学假设</a></li>
-                <li class="level3"><a href="#mathematical-assumptions">数学假设</a></li>
+                <li class="level3"><a href="#model-biological-assumptions">Biological Assumptions</a></li>
+                <li class="level3"><a href="#model-mathematical-assumptions">Computational &amp; Mathematical Assumptions</a></li>
               </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#data-parameters" class="nav-main-link">数据与参数</a>
-              </div>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#results" class="nav-main-link">模型结果</a>
+                <a href="#model-data-parameters" class="nav-main-link">Data &amp; Parameters</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -62,19 +62,42 @@
                 </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#dose-response">剂量-反应曲线</a></li>
-                <li class="level3"><a href="#kinetics">动力学模拟</a></li>
+                <li class="level3"><a href="#model-data-targets">Target Proteins &amp; Antigen Processing</a></li>
+                <li class="level3"><a href="#model-data-nanobodies">Nanobodies &amp; Structure Prediction</a></li>
+                <li class="level3"><a href="#model-data-scoring">Scoring Functions &amp; Specificity Index</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#model-results" class="nav-main-link">Model Results</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#model-screening">Screening &amp; Ranking</a></li>
+                <li class="level3"><a href="#model-haddock">HADDOCK Semi-flexible Refinement</a></li>
+                <li class="level3"><a href="#model-interface">Binding Interface &amp; Hotspot Residues</a></li>
+                <li class="level3"><a href="#model-kinetics">Dynamics &amp; Binding Free Energy</a></li>
+                <li class="level3"><a href="#model-ranking">Conclusions &amp; Design Decisions</a></li>
               </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#validation" class="nav-main-link">模型验证</a>
+                <a href="#model-validation" class="nav-main-link">Validation &amp; Discussion</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#model-planned" class="nav-main-link">Planned Work</a>
               </div>
             </li>
           </ul>
         </div>
 
-        <!-- 发酵进度容器 -->
+        <!-- Fermentation progress container -->
         <div class="progress-section">
           <div class="progress-flask">
             <div class="flask-body">
@@ -93,105 +116,693 @@
               <span class="progress-percentage" id="progress-percentage">0%</span>
             </div>
           </div>
-          <div class="progress-title">发酵进度</div>
+          <div class="progress-title">Fermentation Progress</div>
         </div>
       </aside>
 
-      <!-- 右侧内容区域 -->
+      <!-- Right content area -->
       <div class="description-content">
         <div id="model-award" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>本页面向 iGEM Best Model 奖项要求，展示用于理解、预测和指导 PAGER-Yeast 生物传感器设计的数学模型与计算机模拟工作。</p>
-          </div>
           <h2>Best Model Award</h2>
-          <p>机制模型、机器学习或其他计算方法可以帮助项目设计、预测系统行为或解释实验结果。本页面需以任何人都能理解的方式解释模型的假设、数据、参数和结果。</p>
-          <p>[待补充：说明本队模型工作的核心目标，以及它如何与湿实验结果相互印证。]</p>
+          <p>We have 17 nanobody sequences, none of which has an experimental structure. We first use molecular docking to rank them, then decide which few are worth taking into experiments.</p>
+          <p>ClusPro rigid docking ranks the {{ model_docking.funnel.candidatesScreened }} candidates by their scores against three influenza A HA antigens (H1N1, H3N2, H5N1), and a specificity index quantifies which candidate is more biased toward H1N1. HADDOCK 2.5 semi-flexible refinement provides the HADDOCK score, cluster size, and buried surface area (BSA); PyMOL and SPICE give the interface residues and interaction types. GROMACS molecular dynamics and MM-GBSA check whether the complex is stable in water and what its binding free energy is. Docking results of the candidates against unrelated viral antigens (SARS, HIV1, RSVF) are used to rank cross-reactivity on a relative scale. This converges on a single lead candidate, R1aB6, and flags ARGB:31 as a target for subsequent mutagenesis studies.</p>
+          <p>These values come from molecular docking and simulation and are computational predictions; Section 9 of the modeling document states that there is "no experimental validation." Detection sensitivity, specificity, limit of detection, quantitative range, and clinical usability have not been measured. The 3D view shows antigen-source structures, not the project's docking complex.</p>
         </div>
 
-        <div id="overview" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>概述建模动机、模型类型（如 ODE、 agent-based、统计模型）及其在 DBTL 循环中的位置。</p>
+        <div id="model-overview" class="content-card">
+          <div class="content-text-frame">
+            <h2>Overview</h2>
+
+            <p>EchoYeast requires a nanobody that recognizes H1N1 HA while keeping cross-reactivity with other subtypes and unrelated viruses as low as possible, yet none of the 17 candidate sequences has an experimental structure. Cloning, expressing, and measuring binding for each candidate would be costly and time-consuming. Molecular docking first provides a ranking and binding modes, so that follow-up experiments can focus on a few candidates.</p>
+
+            <p>The core question is which nanobody can bind H1N1 HA with the highest affinity and specificity. The workflow must produce four outputs: candidate ranking, specificity quantification, an atomic-level binding mode, and an assessment of complex stability under physiological conditions.</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <svg viewBox="0 0 1400 330" role="img" aria-label="Figure 1. Modeling workflow overview: 17 nanobodies and 3 HA antigens are screened by ClusPro rigid docking to 5 candidates, then refined by HADDOCK 2.5 semi-flexible refinement to obtain the best complex, followed by two parallel tracks of interface analysis (PyMOL + SPICE) and molecular dynamics (GROMACS + MM-GBSA), converging on hotspot residues and model-guided design" style="max-width:1000px; width:100%; height:auto; border:1px solid #D4A574; border-radius:12px; background:#FFF8E7; font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;">
+                <title>Modeling workflow overview</title>
+                <desc>Seventeen nanobody candidates and three HA antigens are screened by ClusPro rigid docking; the top 5 candidates are refined against H1N1 HA by HADDOCK 2.5 semi-flexible refinement to obtain the best complex; interface analysis (PyMOL + SPICE) and molecular dynamics (GROMACS, MM-GBSA binding free energy) run in parallel and converge on hotspot residue ARGB:31 for model-guided design.</desc>
+                <defs>
+                  <marker id="modelFlowArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="#8B5A2B"></path>
+                  </marker>
+                </defs>
+                <rect x="0" y="0" width="1400" height="330" rx="16" fill="#FFF8E7" stroke="#D4A574" stroke-width="2"></rect>
+                <g fill="none" stroke="#8B5A2B" stroke-width="1.6" marker-end="url(#modelFlowArrow)">
+                  <path d="M156,136 L176,136"></path>
+                  <path d="M312,136 L332,136"></path>
+                  <path d="M482,136 L502,136"></path>
+                  <path d="M658,136 L678,136"></path>
+                  <path d="M788,126 L820,66"></path>
+                  <path d="M788,146 L820,236"></path>
+                  <path d="M1010,62 L1145,62 L1145,104"></path>
+                  <path d="M1010,240 L1040,240"></path>
+                  <path d="M1115,208 L1115,168"></path>
+                  <path d="M1220,136 L1250,136"></path>
+                </g>
+                <rect x="16" y="100" width="140" height="72" rx="10" fill="#FFF8E7" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="86" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">17 nanobodies</text>
+                <text x="86" y="150" text-anchor="middle" font-size="11.5" fill="#333333">+ 3 HA antigens</text>
+                <rect x="176" y="100" width="136" height="72" rx="10" fill="#FFFFFF" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="244" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Rigid docking</text>
+                <text x="244" y="150" text-anchor="middle" font-size="11.5" fill="#666666">ClusPro</text>
+                <rect x="332" y="100" width="150" height="72" rx="10" fill="#FFFFFF" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="407" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Top 5 candidates</text>
+                <text x="407" y="150" text-anchor="middle" font-size="11.5" fill="#666666">+ H1N1 HA</text>
+                <rect x="502" y="100" width="156" height="72" rx="10" fill="#FFFFFF" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="580" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Semi-flexible refinement</text>
+                <text x="580" y="150" text-anchor="middle" font-size="11.5" fill="#666666">HADDOCK 2.5</text>
+                <rect x="678" y="100" width="110" height="72" rx="10" fill="#FFFFFF" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="733" y="140" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Best complex</text>
+                <rect x="820" y="30" width="190" height="64" rx="10" fill="#FCE7CB" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="915" y="58" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Interface analysis</text>
+                <text x="915" y="78" text-anchor="middle" font-size="11.5" fill="#666666">PyMOL + SPICE</text>
+                <rect x="820" y="208" width="190" height="64" rx="10" fill="#FCE7CB" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="915" y="236" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Molecular dynamics</text>
+                <text x="915" y="256" text-anchor="middle" font-size="11.5" fill="#666666">GROMACS</text>
+                <rect x="1040" y="208" width="150" height="64" rx="10" fill="#FCE7CB" stroke="#D4A574" stroke-width="1.5"></rect>
+                <text x="1115" y="236" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">MM-GBSA</text>
+                <text x="1115" y="256" text-anchor="middle" font-size="11.5" fill="#666666">ΔG bind</text>
+                <rect x="1070" y="104" width="150" height="64" rx="10" fill="#FFFFFF" stroke="#8B5A2B" stroke-width="2"></rect>
+                <text x="1145" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5D3A1A">Hotspot residues</text>
+                <text x="1145" y="150" text-anchor="middle" font-size="11.5" fill="#666666">ARGB:31</text>
+                <rect x="1250" y="104" width="130" height="64" rx="10" fill="#5D3A1A" stroke="#5D3A1A" stroke-width="1.5"></rect>
+                <text x="1315" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF">Model-guided</text>
+                <text x="1315" y="150" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF">design</text>
+              </svg>
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 1. Modeling workflow overview: 17 candidates screened by rigid docking, 5 candidates refined by semi-flexible refinement, then converged via the two branches of interface analysis and molecular dynamics to hotspot residues and design decisions (schematic, not experimental results)</figcaption>
+            </figure>
+
+            <p>The workflow proceeds as "question → hypothesis → method → output → validation → design decision," where the output of each step is the input of the next.</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <svg viewBox="0 0 1200 800" role="img" aria-label="Figure 2. Modeling logic chain: question, hypothesis, six methods, output, validation, and design decision (schematic, not experimental results)" style="max-width:920px; width:100%; height:auto; border:1px solid #ddd; border-radius:12px; background:#FFF8E7; font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;">
+                <title>Modeling logic chain</title>
+                <desc>Starting from the question of which nanobody specifically binds H1N1 HA, six methods (ClusPro rigid docking on unprocessed and processed antigen and on off-target viruses, HADDOCK 2.5 semi-flexible refinement, PyMOL + SPICE interface analysis, GROMACS + MM-GBSA dynamics) produce the specificity index and related outputs, which are validated and lead to design decisions (select R1aB6, propose ARG-B:31 as a hotspot residue).</desc>
+                <defs>
+                  <marker id="modelChainArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="#8B5A2B"></path>
+                  </marker>
+                </defs>
+                <rect x="0" y="0" width="1200" height="800" rx="18" fill="#FFF8E7" stroke="#D4A574" stroke-width="2"></rect>
+                <g fill="none" stroke="#8B5A2B" stroke-width="1.6" marker-end="url(#modelChainArrow)">
+                  <path d="M600,70 L600,96"></path>
+                  <path d="M600,216 L600,250"></path>
+                  <path d="M600,296 L600,312"></path>
+                  <path d="M145,312 L1055,312"></path>
+                  <path d="M145,312 L145,336"></path>
+                  <path d="M327,312 L327,336"></path>
+                  <path d="M509,312 L509,336"></path>
+                  <path d="M691,312 L691,336"></path>
+                  <path d="M873,312 L873,336"></path>
+                  <path d="M1055,312 L1055,336"></path>
+                  <path d="M145,432 L145,456"></path>
+                  <path d="M327,432 L327,456"></path>
+                  <path d="M509,432 L509,456"></path>
+                  <path d="M691,432 L691,456"></path>
+                  <path d="M873,432 L873,456"></path>
+                  <path d="M1055,432 L1055,456"></path>
+                  <path d="M145,456 L1055,456"></path>
+                  <path d="M600,456 L600,486"></path>
+                  <path d="M600,538 L600,566"></path>
+                  <path d="M600,670 L600,690"></path>
+                </g>
+                <rect x="375" y="16" width="450" height="54" rx="10" fill="#8B5A2B" stroke="#5D3A1A" stroke-width="1.5"></rect>
+                <text x="600" y="48" text-anchor="middle" fill="#ffffff" font-size="13.5" font-weight="700">Question: Which nanobody can specifically bind H1N1 HA?</text>
+                <rect x="330" y="96" width="540" height="120" rx="10" fill="#ffffff" stroke="#cdb892" stroke-width="1.5"></rect>
+                <text x="348" y="122" fill="#5D3A1A" font-size="14" font-weight="700">Hypothesis</text>
+                <text x="348" y="150" fill="#333333" font-size="13">• Rigid docking screens candidates</text>
+                <text x="348" y="176" fill="#333333" font-size="13">• Semi-flexible refinement optimizes binding</text>
+                <text x="348" y="200" fill="#333333" font-size="13">• MD validates stability</text>
+                <rect x="510" y="250" width="180" height="46" rx="10" fill="#FCE7CB" stroke="#8B5A2B" stroke-width="1.5"></rect>
+                <text x="600" y="278" text-anchor="middle" fill="#5D3A1A" font-size="14" font-weight="700">Method</text>
+                <g fill="#ffffff" stroke="#D4A574" stroke-width="1.5">
+                  <rect x="60" y="336" width="170" height="96" rx="10"></rect>
+                  <rect x="242" y="336" width="170" height="96" rx="10"></rect>
+                  <rect x="424" y="336" width="170" height="96" rx="10"></rect>
+                  <rect x="606" y="336" width="170" height="96" rx="10"></rect>
+                  <rect x="788" y="336" width="170" height="96" rx="10"></rect>
+                  <rect x="970" y="336" width="170" height="96" rx="10"></rect>
+                </g>
+                <g text-anchor="middle" fill="#333333" font-size="11">
+                  <text x="145" y="378">ClusPro rigid docking</text>
+                  <text x="145" y="398">(unprocessed antigen)</text>
+                  <text x="327" y="378">ClusPro rigid docking</text>
+                  <text x="327" y="398">(processed antigen)</text>
+                  <text x="509" y="378">ClusPro rigid docking</text>
+                  <text x="509" y="398">(SARS / HIV / RSVF)</text>
+                  <text x="691" y="378">HADDOCK 2.5</text>
+                  <text x="691" y="398">semi-flexible refinement</text>
+                  <text x="873" y="378">PyMOL + SPICE</text>
+                  <text x="873" y="398">interface analysis</text>
+                  <text x="1055" y="378">GROMACS + MM-GBSA</text>
+                  <text x="1055" y="398">MD &amp; binding free energy</text>
+                </g>
+                <rect x="500" y="486" width="200" height="52" rx="10" fill="#FCE7CB" stroke="#8B5A2B" stroke-width="1.5"></rect>
+                <text x="600" y="514" text-anchor="middle" fill="#5D3A1A" font-size="13" font-weight="700">Output: specificity index</text>
+                <rect x="300" y="566" width="600" height="104" rx="10" fill="#ffffff" stroke="#cdb892" stroke-width="1.5"></rect>
+                <text x="318" y="592" fill="#5D3A1A" font-size="14" font-weight="700">Validation</text>
+                <text x="318" y="620" fill="#333333" font-size="13">• Multi-method cross-validation</text>
+                <text x="318" y="644" fill="#333333" font-size="13">• MD stability</text>
+                <text x="318" y="668" fill="#333333" font-size="13">• Positive-control re-docking</text>
+                <rect x="330" y="690" width="540" height="80" rx="10" fill="#ffffff" stroke="#cdb892" stroke-width="1.5"></rect>
+                <text x="348" y="716" fill="#5D3A1A" font-size="14" font-weight="700">Design decision</text>
+                <text x="348" y="742" fill="#333333" font-size="13">• Select R1aB6</text>
+                <text x="348" y="762" fill="#333333" font-size="13">• Propose ARGB:31 as hotspot residue</text>
+              </svg>
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 2. Modeling logic chain: the correspondence between methods and outputs (schematic, not experimental results)</figcaption>
+            </figure>
+
+            <p>The questions, methods, and outputs of the seven stages:</p>
+
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Stage</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Question Addressed</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Method</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Output</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stage in model_docking.display.pipeline %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.stage }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.question }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.method }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.output }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p>Whether the lead candidate R1aB6 can recognize HA on the yeast surface and whether the reporting pathway is activated must be answered by subsequent PAGER receptor expression and induction experiments, with readout by flow cytometry measuring yEGFP fluorescence and X-Gal staining. These experiments have not yet been performed.</p>
           </div>
-          <h2>Overview</h2>
-          <ul>
-            <li><strong>建模目的：</strong>预测 PAGER 受体在 HA 抗原存在下的激活效率、信号放大倍数及检测下限。</li>
-            <li><strong>模型类型：</strong>[待补充：常微分方程组 / 随机模拟 / 机器学习 / 组合模型]</li>
-            <li><strong>与湿实验的对应：</strong>模型预测将通过流式细胞术 yEGFP 荧光强度与 X-Gal 显色结果进行验证。</li>
-          </ul>
-          <p>[待补充：建议上传模型流程图或 DBTL 循环图，尺寸 1200×600px，.webp 格式并压缩至 150KB 以下。]</p>
         </div>
 
-        <div id="assumptions" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>明确列出模型简化假设及其适用范围，确保评审能够理解模型的边界条件。</p>
+        <div id="model-game" class="content-card" data-base-path="">
+          <h2>Interactive Demo: Nanobody × Influenza A HA Docking Cards</h2>
+          <p>Drag a card to the center, or click a card to select it. After choosing one antibody and one antigen, the result panel shows the docking result for that combination, and the ranking panel shows the {{ model_docking.funnel.candidatesRefined }} candidates ranked by specificity index. The demo covers only the {{ model_docking.funnel.candidatesRefined }} candidates with numerical values in the document.</p>
+
+          <div class="model-game">
+            <div class="model-game__toolbar">
+              <p class="model-game__toolbar-hint">How to select: click a card, or drag it into the center slot; click a selected card again to deselect.</p>
+              <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+            </div>
+
+            <div class="model-game__board">
+              <section class="model-game__column">
+                <h3 id="model-game-antibodies-title" class="model-game__column-title" data-no-fold>Nanobodies ({{ model_docking.funnel.candidatesRefined }} candidates)</h3>
+                <div class="model-game__cards" id="model-game-antibodies"></div>
+              </section>
+
+              <div class="model-game__center">
+                <div class="model-game__slots">
+                  <button type="button" class="model-game__slot" id="model-game-slot-antibody">Drag in or click a nanobody card on the left</button>
+                  <span class="model-game__slot-times" aria-hidden="true">×</span>
+                  <button type="button" class="model-game__slot" id="model-game-slot-antigen">Drag in or click an antigen card on the right</button>
+                </div>
+
+                <div class="model-game__viewer-block">
+                  <div class="model-game__viewer-head">
+                    <p class="model-game__viewer-title">3D Structure &amp; Ranking</p>
+                    <div class="model-game__viewer-actions">
+                      <button type="button" id="model-game-view-nanobody" class="model-game__button model-game__button--ghost" disabled>View Nanobody</button>
+                      <button type="button" id="model-game-view-receptor" class="model-game__button model-game__button--ghost" disabled>View Antigen</button>
+                      <button type="button" id="model-game-load3d" class="model-game__button">Load 3D Structure</button>
+                      <button type="button" id="model-game-style" class="model-game__button model-game__button--ghost">Display Mode: Cartoon</button>
+                      <button type="button" id="model-game-viewer-toggle" class="model-game__button model-game__button--ghost" aria-expanded="false" aria-controls="model-game-viewer">Show Numbers</button>
+                    </div>
+                  </div>
+                  <div class="model-game__flip">
+                    <div class="model-game__flip-inner">
+                      <div class="model-game__flip-face model-game__flip-face--3d">
+                        <div class="model-game__viewer" id="model-game-viewer">
+                          <div class="model-game__viewer-empty">
+                            <svg class="model-game__viewer-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                              <circle cx="24" cy="24" r="7"></circle>
+                              <circle cx="10" cy="12" r="3.5"></circle>
+                              <circle cx="38" cy="12" r="3.5"></circle>
+                              <circle cx="10" cy="36" r="3.5"></circle>
+                              <circle cx="38" cy="36" r="3.5"></circle>
+                              <line x1="17" y1="20" x2="12.6" y2="14.6"></line>
+                              <line x1="31" y1="20" x2="35.4" y2="14.6"></line>
+                              <line x1="17" y1="28" x2="12.6" y2="33.4"></line>
+                              <line x1="31" y1="28" x2="35.4" y2="33.4"></line>
+                            </svg>
+                            <p>Click "Load 3D Structure" to fetch and display the selected structure. The 3D library is downloaded only at that step.</p>
+                          </div>
+                        </div>
+                        <p class="model-game__viewer-note" id="model-game-viewer-note"></p>
+                        <p class="model-game__viewer-message" id="model-game-viewer-message" hidden></p>
+                      </div>
+                      <div class="model-game__flip-face model-game__flip-face--numbers">
+                        <div class="model-game__panel model-game__panel--ranking" id="model-game-ranking"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="model-game__panel" id="model-game-result"></div>
+              </div>
+
+              <section class="model-game__column">
+                <h3 id="model-game-antigens-title" class="model-game__column-title" data-no-fold>Influenza A HA Antigens ({{ model_docking.funnel.fluAntigens }} types)</h3>
+                <div class="model-game__cards" id="model-game-antigens"></div>
+              </section>
+            </div>
+
+            <p class="model-game__fallback" id="model-game-fallback" hidden></p>
+            <p class="model-game__status" id="model-game-status" role="status" aria-live="polite"></p>
+            <p class="model-game__caption">Data are from Sections 5.3 and 5.4 of the modeling document and are computational predictions. The "target subtype / control subtype" labels on the cards follow the document's convention: the specificity index is built from the score difference between H1N1 and H3N2/H5N1; the control subtypes are used to quantify specificity, not as detection targets.</p>
           </div>
-          <h2>模型假设</h2>
-          <div id="biological-assumptions">
-            <h3>生物学假设</h3>
+        </div>
+
+        <div id="model-assumptions" class="content-card">
+          <div class="content-text-frame">
+            <h2>Model Assumptions</h2>
+
+            <h3 id="model-biological-assumptions">Biological Assumptions</h3>
+            <p>On the antigen side, we use HA structures deposited in RCSB to represent the native conformation, and we use two states as controls: the directly downloaded "untreated antigen," and the "post-complex-processing antigen" extracted from an antibody–antigen complex to represent the bound-state conformation. The recognition element has no such convenience: none of the 17 candidate nanobodies has an experimental structure in the PDB, they are about 114–123 residues long, and they carry no His-tag or linker, so a structure-prediction model must substitute for a crystal structure.</p>
+            <p>The binding interface is treated regionally: the active residues on HA (HA1 25, 45–49, 305–307, 332; HA2 361–364, 381, 382, 384, 385, 388, 391, 392, 395, 396, 399) and the CDR residues of the nanobody are taken as the range participating in binding. Cross-reactivity is ranked relatively using the average docking score of candidates against unrelated viral antigens (SARS, HIV1, RSVF); it does not constitute a quantitative metric.</p>
+
+            <h3 id="model-mathematical-assumptions">Computational &amp; Mathematical Assumptions</h3>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Assumption</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Rationale</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Potential Bias</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">Receptor treated as rigid in ClusPro</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Rapidly screens out many candidates</td>
+                  <td style="{{ model_docking.tableStyle.td }}">May miss induced-fit effects</td>
+                </tr>
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">Interface treated as semi-flexible in HADDOCK</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Allows side-chain rearrangement</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Backbone remains fixed</td>
+                </tr>
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">Implicit solvent used in docking</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Standard practice for protein–protein docking</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Ignores explicit water bridges</td>
+                </tr>
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">Amber99sbildn force field used</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Well-validated for protein systems</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Inherent approximations of the force field</td>
+                </tr>
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">10 ns MD suffices to check stability</td>
+                  <td style="{{ model_docking.tableStyle.td }}">Standard preliminary-validation timescale</td>
+                  <td style="{{ model_docking.tableStyle.td }}">May miss slow conformational changes</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p>Therefore the conclusions apply only to relative comparison among candidates: they provide ranking and interface description, and do not involve absolute binding affinity or detection performance.</p>
+          </div>
+        </div>
+
+        <div id="model-data-parameters" class="content-card">
+          <div class="content-text-frame">
+            <h2>Data &amp; Parameters</h2>
+
+            <h3 id="model-data-targets">Target Proteins &amp; Antigen Processing</h3>
+            <p>The three influenza A HA antigens are all taken from structures deposited in RCSB; the documented processing is: remove antibody chains, remove glycosylation and water molecules, split HA1 and HA2 into independent chains, and unify chain IDs (HA as A/B, nanobody as C).</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Antigen</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Strain</th>
+                  <th style="{{ model_docking.tableStyle.th }}">PDB ID</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Source</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Resolution</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Retained Chains</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for antigen in model_docking.display.antigens %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.name }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.strain }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.pdbId }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.source }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.resolution }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.chainMap }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>The 3D view uses these three structures, trimmed per the documented convention to "HA chains only": antibody chains, glycosylation, and heteroatoms are removed, and coordinates are unchanged. Each entry is further noted below.</p>
             <ul>
-              <li>酵母细胞均匀悬浮，不考虑细胞间异质性（或计划通过单细胞模型引入）。</li>
-              <li>HA 抗原与 anti-HA 纳米抗体结合符合质量作用定律。</li>
-              <li>MT1 抑制肽与 hM1Dq 受体的结合/解离处于快速平衡。</li>
-              <li>DCZ 激动剂浓度在诱导期间保持恒定。</li>
+              {% for antigen in model_docking.display.antigens %}
+              <li><strong>{{ antigen.pdbId }}（{{ antigen.name }}）：</strong>{{ antigen.structureNote }}</li>
+              {% endfor %}
+            </ul>
+
+            <h3 id="model-data-nanobodies">Nanobodies &amp; Structure Prediction</h3>
+            <p>The candidates are 17 brand-new nanobody sequences with no experimental structure in the PDB, about 114–123 residues long, and carrying no His-tag or linker; structure prediction uses a locally deployed AlphaFold2, taking high-confidence models with pLDDT above 90, and assigns the ligand chain ID as C. The predicted structures of the {{ model_docking.funnel.candidatesRefined }} candidates that entered refinement are self-hosted and shown in the "View Nanobody" button of the interactive demo above (single chain, produced by a structure-prediction model, not an experimental structure).</p>
+            <p>Scoring and refinement provide citable values only for {{ model_docking.funnel.candidatesRefined }} of these candidates (R1aB6, R2aF9, R1aA5, R2bE8, R2bD9); both the results section below and the interactive demo are limited to these {{ model_docking.funnel.candidatesRefined }}. The remaining {{ model_docking.funnel.candidatesScreened }} did not enter the refinement stage and have no citable values.</p>
+
+            <h3 id="model-data-scoring">Scoring Functions &amp; Specificity Index</h3>
+            <ul>
+              <li><strong>ClusPro score:</strong>{{ model_docking.scoring.cluspro.formula }}; the Top 10 conformations are retained for each "candidate × antigen" combination.</li>
+              <li><strong>Specificity index:</strong>{{ model_docking.scoring.specificityIndex.formula }}。{{ model_docking.scoring.specificityIndex.note }}</li>
+              <li><strong>HADDOCK 2.5:</strong>{{ model_docking.scoring.haddock.flow }}, outputting {{ model_docking.scoring.haddock.metrics }}. {{ model_docking.scoring.haddock.note }}</li>
+              <li><strong>Dynamics &amp; free energy:</strong>GROMACS molecular dynamics + MM-GBSA; force field {{ model_docking.md.forcefield }}, water model {{ model_docking.md.waterModel }}, random seed {{ model_docking.md.seed }}.</li>
+              <li><strong>Positive control:</strong> re-docking of the experimentally resolved 9VH4 complex serves as the control for the docking pipeline.</li>
             </ul>
           </div>
-          <div id="mathematical-assumptions">
-            <h3>数学假设</h3>
+        </div>
+
+        <div id="model-results" class="content-card">
+          <div class="content-text-frame">
+            <h2>Model Results</h2>
+
+            <h3 id="model-screening">Screening &amp; Ranking</h3>
+            <p>Under the untreated antigen, the docking scores and average specificity advantage of the 17 candidates against the three influenza A HA antigens are as follows (the red flag marks the candidate with the best specificity). A more negative specificity index indicates that the candidate is more biased toward H1N1 relative to other subtypes.</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="{{ media('lab/drylab/model/model-cluspro-screen.webp') }}" alt="Figure 3. Left: ClusPro scores of the 17 candidates against H1N1, H3N2, H5N1 (weighted score; more negative means stronger binding); Right: average specificity advantage of each candidate against H1N1, with the red flag marking the most specific one" loading="lazy" width="1400" height="693" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 3. ClusPro scores and average specificity advantage of the 17 candidates: left, scores against the three influenza A HA antigens; right, specificity advantage (more negative = more specific, red flag marks the best candidate) (computational prediction results)</figcaption>
+            </figure>
+
+            <p>The {{ model_docking.funnel.candidatesRefined }} refined candidates' scores and specificity indices under the untreated antigen:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
+                  <th style="{{ model_docking.tableStyle.th }}">H1N1</th>
+                  <th style="{{ model_docking.tableStyle.th }}">H3N2</th>
+                  <th style="{{ model_docking.tableStyle.th }}">H5N1</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Specificity Index</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Conclusion</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in model_docking.tables.untreated %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H1N1 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H3N2 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H5N1 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.index }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.outcome }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>The ranking is R1aB6 &gt; R2bD9 &gt; R2bE8 &gt; R1aA5 &gt; R2aF9 (from most negative to least negative specificity index).</p>
+
+            <p>The same {{ model_docking.funnel.candidatesRefined }} candidates' results against the "post-complex-processing antigen":</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
+                  <th style="{{ model_docking.tableStyle.th }}">H1N1</th>
+                  <th style="{{ model_docking.tableStyle.th }}">H3N2</th>
+                  <th style="{{ model_docking.tableStyle.th }}">H5N1</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Specificity Index</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in model_docking.tables.treated %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H1N1 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H3N2 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H5N1 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.index }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>After switching to the processed antigen, all candidates' specificity indices become positive or near zero, indicating that antigen conformational processing markedly changes the specificity ranking. The document therefore takes the untreated-antigen results as the primary basis, on the grounds that the untreated antigen is closer to the native conformation.</p>
+
+            <p>Cross-reactivity risk is expressed as the average binding energy of candidates against unrelated viral antigens (SARS, HIV1, RSVF); a more negative value indicates stronger binding and higher cross-reactivity risk:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
+                  <th style="{{ model_docking.tableStyle.th }}">SARS</th>
+                  <th style="{{ model_docking.tableStyle.th }}">HIV1</th>
+                  <th style="{{ model_docking.tableStyle.th }}">RSVF</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Mean Binding Energy</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Cross-reactivity Risk</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in model_docking.tables.cross %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.SARS }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.HIV1 }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.RSVF }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.mean }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.risk }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <!-- MQ-7: the source document has two additional 17-antibody charts (processed antigen, cross-reactivity) placed after 5.3.2 / 5.3.3,
+                 whose candidate-number cross-reference tables contradict the numbering in the screening figure, so they cannot be mapped row-by-row to this section's tables; this page therefore does not cite those two charts,
+                 and the related results are presented only in tables. See md/10-一手分析.md §5.1, §6. -->
+
+            <h3 id="model-haddock">HADDOCK Semi-flexible Refinement</h3>
+            <p>Results after semi-flexible refinement of the {{ model_docking.funnel.candidatesRefined }} refined candidates against H1N1 HA:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
+                  <th style="{{ model_docking.tableStyle.th }}">HADDOCK score</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Cluster Size</th>
+                  <th style="{{ model_docking.tableStyle.th }}">BSA (Å²)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in model_docking.tables.haddock %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.score }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.clusterSize }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ row.bsa }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>The ranking is R1aB6 &gt; R2aF9 &gt; R1aA5 &gt; R2bE8 &gt; R2bD9. Plotting the two metrics together shows they do not always move in the same direction:</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="{{ media('lab/drylab/model/model-specificity-vs-haddock.webp') }}" alt="Figure 4. Combined view: horizontal axis is the ClusPro specificity index (more negative is better), vertical axis is the HADDOCK score (more negative is better); R1aB6 falls in the optimal lower-left region, while R2aF9 falls in the right region with poor specificity" loading="lazy" width="1269" height="952" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 4. Combined view of the two metrics: horizontal axis is the ClusPro specificity index, vertical axis is the HADDOCK score, both better when more negative; R1aB6 sits at the optimal position in both directions (computational prediction results)</figcaption>
+            </figure>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="{{ media('lab/drylab/model/model-haddock-bars.webp') }}" alt="Figure 5. Bar chart of HADDOCK scores for the 5 candidates, with score, BSA, and cluster size N annotated on the bars" loading="lazy" width="1269" height="793" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 5. HADDOCK score, buried surface area (BSA), and cluster size (N) for the {{ model_docking.funnel.candidatesRefined }} candidates (computational prediction results)</figcaption>
+            </figure>
+
+            <h3 id="model-interface">Binding Interface &amp; Hotspot Residues</h3>
+            <p>Interface analysis targets the best combination, R1aB6 with H1N1 HA. PyMOL gives 30 interface residues on the HA side ({{ model_docking.interface.haSide.ranges | join(', ') }}) and 24 residues on the nanobody side (CDR1 27–37, CDR2 44–65, CDR3 101–104). SPICE gives the following counts of interaction types:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Interaction Type</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in model_docking.display.interactions %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.label }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p>The residues with the shortest distances and repeated occurrences are promoted to hotspots:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Nanobody Residue</th>
+                  <th style="{{ model_docking.tableStyle.th }}">HA Residue</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Interaction</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Distance (Å)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in model_docking.display.hotspots %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.nanobody }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.ha }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.type }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.distance }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>{{ model_docking.interface.hotspotNote }}</p>
+            <!-- The source document has a note here for "Figure 4. Binding interface and interaction network. 3Dmol interaction," but the document does not embed that figure.
+                 This page substitutes it with "antigen structure + interface-residue highlighting (interactive demo card) + the table above"; this project's docking-complex structure is not yet public,
+                 and no substitute structure from outside this project is shown or used. -->
+
+            <h3 id="model-kinetics">Dynamics &amp; Binding Free Energy</h3>
+            <p>The R1aB6–H1N1 HA complex was placed in a water box for molecular dynamics ({{ model_docking.md.reportedDuration }}, GROMACS, {{ model_docking.md.forcefield }} force field, {{ model_docking.md.waterModel }} water model) to observe whether it is stable:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Metric</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in model_docking.display.md %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.metric }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="{{ media('lab/drylab/model/model-md-stability.webp') }}" alt="Figure 6. Left: RMSD of the R1aB6–H1N1 complex over time; Right: per-residue RMSF" loading="lazy" width="1400" height="467" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 6. RMSD (left) and per-residue RMSF (right) of the R1aB6–H1N1 complex (computational prediction results)</figcaption>
+            </figure>
+            <!-- MQ-6: the document body states 10 ns and RMSD 0.45 nm (stable), but the figure's horizontal axis only reaches about 8 ns and the curve peak is about 0.70 nm,
+                 so the two descriptions are inconsistent and await lab verification; this page's body follows the document's stated values and does not rewrite numbers based on the figure. -->
+
+            <p>The binding free energy was estimated by MM-GBSA ({{ model_docking.mmgbsa.engine }}, in kcal/mol):</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Energy Term</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Value (kcal/mol)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in model_docking.display.mmgbsa %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.term }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>{{ model_docking.mmgbsa.note }}</p>
+
+            <h3 id="model-ranking">Conclusions &amp; Design Decisions</h3>
+            <p><strong>Selected candidates ({{ model_docking.display.leads | length }}):</strong></p>
             <ul>
-              <li>采用确定性 ODE 描述信号通路的平均行为。</li>
-              <li>忽略细胞生长对报告基因表达的稀释效应（或作为参数纳入）。</li>
-              <li>参数估计基于文献值与湿实验拟合。</li>
+              {% for item in model_docking.display.leads %}
+              <li><strong>{{ item.id }}：</strong>{{ item.zh }}</li>
+              {% endfor %}
             </ul>
+            <p><strong>Rejected candidates ({{ model_docking.display.rejected | length }}):</strong></p>
+            <ul>
+              {% for item in model_docking.display.rejected %}
+              <li><strong>{{ item.id }}：</strong>{{ item.zh }}</li>
+              {% endfor %}
+            </ul>
+
+            <p>These results correspond to concrete design actions:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Model Prediction</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Design Decision</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in model_docking.designDecisions %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.prediction }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.decision }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p>What remains is experimental validation and model revision. The computational prediction and candidate selection steps are complete; the remaining two steps depend on subsequent wet-lab experiments.</p>
           </div>
-          <p>[待补充：为每条假设标注依据来源（文献 DOI 或实验数据）。]</p>
         </div>
 
-        <div id="data-parameters" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>列出模型所需的输入数据、参数表及其单位，确保可复现性。</p>
+        <div id="model-validation" class="content-card">
+          <div class="content-text-frame">
+            <h2>Validation &amp; Discussion</h2>
+
+            <p>Both the ClusPro untreated-antigen ranking and the HADDOCK refinement rank R1aB6 as the best; PyMOL and SPICE each give the same set of interface residues; molecular dynamics checks complex stability in water; MM-GBSA gives the binding free energy; and the cross-reactivity assessment gives the relative position of off-target risk. The document also re-docked the experimentally resolved 9VH4 complex as a control for the whole pipeline.</p>
+
+            {% set totalEnergy = model_docking.display.mmgbsa | last %}
+            <ul>
+              <li>ClusPro (untreated antigen) and HADDOCK both rank R1aB6 as the top candidate.</li>
+              <li>PyMOL and SPICE corroborate the same set of interface residues.</li>
+              <li>Molecular dynamics shows the complex remains stable over the simulation time; the MM-GBSA binding free energy is {{ totalEnergy.value }} kcal/mol, consistent in sign with stable binding.</li>
+              <li>The cross-reactivity assessment places R1aB6 at a moderate risk level, not in the highest tier.</li>
+            </ul>
+
+            <p>Two inconsistencies:</p>
+            <ul>
+              <li>R2aF9 ranks second by HADDOCK score but has a positive ClusPro specificity index. Relying on only one metric would reverse the conclusion.</li>
+              <li>R1aA5 has a larger interface area (BSA) than R1aB6 yet a lower HADDOCK score. Interface quality matters more than area size.</li>
+            </ul>
+
+            <p>This round of modeling accomplished four things: it narrowed {{ model_docking.funnel.candidatesScreened }} candidates down to {{ model_docking.funnel.leads }} lead molecules, provided an atomic-level binding mode, proposed testable hotspot residues, and reduced off-target risk through cross-reactivity assessment.</p>
+
+            <p><strong>Limitations.</strong></p>
+            <ul>
+              {% for item in model_docking.limitations %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+
+            <p><strong>Reproducibility.</strong> Parameters are recorded as follows:</p>
+            <table style="{{ model_docking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ model_docking.tableStyle.headRow }}">
+                  <th style="{{ model_docking.tableStyle.th }}">Item</th>
+                  <th style="{{ model_docking.tableStyle.th }}">Content</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in model_docking.reproducibility %}
+                <tr style="{{ model_docking.tableStyle.row }}">
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.item }}</td>
+                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p><strong>Code and data availability.</strong> Software versions, force field, water model, and random seed are listed in the previous section; the molecular dynamics parameter files (mdp_files) are, per the document, uploaded to the code repository, but the repository address and public links to the input/output structure files have not yet been provided.</p>
+            <!-- MQ-5: the GitHub links in document §9/§10/§11 are all "to be filled"; add the links here after verification.
+                 The Best Model self-assessment three questions (whether the model helped understanding/prediction/design, whether it used experimental or related data, whether it provides an example for others)
+                 are an internal self-assessment and, per the site convention, are not included in the body; the original text is at the end of md/正文逐字对照/. -->
           </div>
-          <h2>数据与参数</h2>
-          <ul>
-            <li><strong>输入数据：</strong>[待补充：HA 抗原浓度范围、DCZ 浓度、酵母接种密度、培养时间等]</li>
-            <li><strong>关键参数：</strong>[待补充：结合速率常数 k<sub>on</sub>/k<sub>off</sub>、受体表达量、G 蛋白激活速率、报告基因表达速率、降解速率等]</li>
-            <li><strong>参数来源：</strong>[待补充：文献值 / 拟合得到 / 待实验测定]</li>
-          </ul>
-          <p>[待补充：建议以表格形式呈现参数名、符号、数值、单位、来源与不确定性。]</p>
-          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+        </div>
+      
+        <div id="model-planned" class="content-card">
+          <h2>Planned Work: Pathway ODE Model</h2>
+          <p>Beyond the docking and simulation screening described above, a second modeling track is planned for the receptor-to-reporter pathway: a deterministic ordinary-differential-equation description of antigen recognition, release of the MT1 block, hM1Dq activation, Gpa1-mediated MAPK signalling, and FUS1-driven yEGFP and lacZ output, with DCZ as the agonist input.</p>
+          <p>This track has not been performed yet: no parameters have been fitted and no simulated output has been produced. The parameter set is intended to combine literature values with the team's own measurements where those become available. The planned outputs are a dose-response relation against antigen concentration and a time-course simulation, both to be compared with the wet-lab readouts (flow-cytometry yEGFP fluorescence and X-Gal lacZ staining) once those are obtained. No sensitivity, limit-of-detection, quantitative-range, or clinical claim is made for this track on this page.</p>
+          <p>This subsection records intent only. It is not a result and must not be cited as one.</p>
         </div>
 
-        <div id="results" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>展示模型输出结果，重点呈现对项目设计有指导意义的预测。</p>
-          </div>
-          <h2>模型结果</h2>
-          <div id="dose-response">
-            <h3>剂量-反应曲线</h3>
-            <p>[待补充：模拟不同 HA 抗原浓度下的 yEGFP 荧光输出曲线；需标注坐标轴单位、误差定义（SD/SEM）、样本量 n、对照组。]</p>
-          </div>
-          <div id="kinetics">
-            <h3>动力学模拟</h3>
-            <p>[待补充：模拟抗原结合、MT1 位移、hM1Dq 激活、报告基因表达随时间变化的过程；建议用动态线图或阶段注释框呈现。]</p>
-          </div>
-          <p>[待补充：所有图表需包含误差棒定义、样本量、对照组说明，并优先使用原生 JS 交互式图表。]</p>
-        </div>
-
-        <div id="validation" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>说明模型预测与实验结果或已有文献的对比，评估模型可靠性。</p>
-          </div>
-          <h2>模型验证</h2>
-          <ul>
-            <li><strong>实验对照：</strong>[待补充：野生型 BY4741、空载体对照、阳性对照的预测与实测对比]</li>
-            <li><strong>敏感性分析：</strong>[待补充：识别对输出影响最大的关键参数]</li>
-            <li><strong>模型局限：</strong>[待补充：当前未考虑的生物学细节及未来改进方向]</li>
-          </ul>
-          <p>[待补充：建议采用“预测 vs 实测”镜像卡片布局，高亮重合区域。]</p>
-          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
-        </div>
-      </div>
+</div>
     </div>
 {% endblock %}
+
 {% block scripts %}
+<script>
+// Interactive demo payload: the same source as the body tables
+// (static/data/dry-lab/model/model-docking.json, injected by app.py).
+// static/js/pages/model-game.js is deferred, so this global is ready in time.
+window.MODEL_DOCKING_DATA = {{ model_docking.client | tojson }};
+</script>
 <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/pages/model-game.js') }}" defer></script>
 {% endblock %}

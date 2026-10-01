@@ -1,6 +1,15 @@
 /* ===== 通用移动端响应式样式 ===== */
 /* iGEM Layout Strategy: Shared mobile responsive styles for all pages. Optimized for compatibility, UX, and accessibility. */
 
+@media (max-width: 1024px) {
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+}
+
 /* ================================================== */
 /* 统一移动端动画系统 - Mobile Animation System v2.0 */
 /* iGEM Design: 符合移动端平台特性的统一动效规范 */
@@ -664,14 +673,11 @@ img[data-srcset] {
   background: var(--mobile-bg-fallback);
   min-height: 6.25rem;
   opacity: 0.7;
-  filter: blur(0.3125rem);
-  transition: opacity var(--anim-duration-medium) var(--anim-easing-decelerate),
-    filter var(--anim-duration-medium) var(--anim-easing-decelerate);
+  transition: opacity var(--anim-duration-medium) var(--anim-easing-decelerate);
 }
 
 img.loaded {
   opacity: 1;
-  filter: blur(0);
 }
 
 /* ================================================== */
@@ -741,8 +747,7 @@ img.loaded {
   .nav-search__toggle {
     width: 2.75rem;
     height: 2.75rem;
-    background: rgba(139, 90, 43, 0.06);
-    border-color: rgba(139, 90, 43, 0.2);
+    background: rgba(255, 248, 231, 0.12);
   }
 
   .nav-search__panel {
@@ -831,16 +836,14 @@ img.loaded {
     background-color: white;
   }
 
-  /* 移动端全屏菜单遮罩层 - 使用新动画系统 */
+  /* 移动端遮罩层 - 纯色半透明 scrim，去掉毛玻璃模糊以提升移动端流畅度 */
   .mobile-menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--mobile-menu-bg);
-    backdrop-filter: blur(1.25rem);
-    -webkit-backdrop-filter: blur(1.25rem);
+    background: rgba(17, 24, 39, 0.55);
     z-index: 99998;
     transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
       visibility var(--anim-duration-medium) var(--anim-easing-standard);
@@ -859,15 +862,17 @@ img.loaded {
     pointer-events: auto;
   }
 
-  /* 移动端菜单内容 - 使用新动画系统 */
+  /* 移动端菜单内容 - 底部抽屉（Bottom Sheet）：从底部 translateY 滑入，仅动 transform/opacity */
   .mobile-menu-overlay .mobile-menu {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
-    width: min(90vw, 25rem);
-    max-height: min(85vh, 85svh);
-    padding: var(--mobile-spacing-xl) var(--mobile-spacing-xl) var(--mobile-spacing-xl);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    width: 100%;
+    max-height: min(88vh, 88svh);
+    padding: var(--mobile-spacing-xl) var(--mobile-spacing-lg)
+      calc(var(--mobile-spacing-xl) + env(safe-area-inset-bottom));
     padding-left: max(2rem, env(safe-area-inset-left));
     padding-right: max(2rem, env(safe-area-inset-right));
     transition: transform var(--anim-duration-medium) var(--anim-easing-decelerate),
@@ -879,13 +884,15 @@ img.loaded {
     display: block;
     box-sizing: border-box;
     background: #FFFDF8;
-    border-radius: 1rem;
-    border: 0.1875rem solid #D4A574;
-    box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.25);
+    border-radius: 1.25rem 1.25rem 0 0;
+    border: 0.1875rem solid #38BDF8;
+    border-bottom: none;
+    box-shadow: 0 -0.5rem 2rem rgba(0, 0, 0, 0.25);
+    will-change: transform;
   }
 
   .mobile-menu-overlay.active .mobile-menu {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateY(0);
     opacity: 1;
   }
 
@@ -917,12 +924,12 @@ img.loaded {
     position: relative;
     overflow: hidden;
     gap: var(--mobile-spacing-sm);
-    background: rgba(139, 90, 43, 0.12);
+    background: rgba(56, 189, 248, 0.12);
   }
 
   .mobile-menu ul li a:hover,
   .mobile-menu ul li a:active {
-    background: #5D3A1A;
+    background: #0C4A6E;
     color: #FFFDF8;
     transform: scale(0.96);
   }
@@ -939,8 +946,6 @@ img.loaded {
     border-radius: var(--mobile-radius-md);
     margin: var(--mobile-spacing-sm) 0;
     padding: var(--mobile-spacing-xs) 0;
-    backdrop-filter: blur(0.3125rem);
-    -webkit-backdrop-filter: blur(0.3125rem);
     background: var(--mobile-dropdown-bg);
     max-height: 0;
     overflow: hidden;
@@ -1031,7 +1036,7 @@ img.loaded {
     padding-top: max(0.5rem, env(safe-area-inset-top));
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-left: max(1rem, env(safe-area-inset-left));
-    background: url(https://static.igem.wiki/2026/szpu-china/image/wikiStructure/nav_bc.webp) no-repeat left center;
+    background: var(--color-echo-bg);
     background-size: cover;
     will-change: transform;
     box-shadow: var(--mobile-shadow-lg);
@@ -1103,6 +1108,25 @@ img.loaded {
     display: block;
     background-color: var(--mobile-bg-fallback);
     border-radius: var(--mobile-radius-md);
+  }
+
+  /* 首页透明拼装插画（hero/板块舞台/漂浮酵母）：不吃全局 img 的米色底与圆角，
+     否则透明 webp 背后垫出色块（REQ-20260928-002 移动端适配）。
+     同时取消 blanket 的 max-width:100%，让板块舞台内插画按各自 width% 定位
+     （如 hero 的 width:140% 不会被 blanket 压回 100%）。 */
+  .home-page .echo-stage img,
+  .home-page .art-stage img,
+  .home-page .yeast-float img {
+    background-color: transparent;
+    border-radius: 0;
+    max-width: none;
+  }
+  /* 例外：s3 内容条图片必须保留显式高度（--s3-pill-h），否则被 blanket 的
+     height:auto 与 .presentation-section img 撑成原图巨字。放最后加载层，
+     对所有页面统一生效（REQ-20260928-002） */
+  .home-page .art-stage--s3 .s3-pill img {
+    height: var(--s3-pill-h);
+    max-width: none;
   }
 
   /* 首页 presentation 模块：强制内容不溢出视口 */
@@ -1282,11 +1306,10 @@ img.loaded {
     height: 0.125rem;
   }
 
-  /* 超小屏幕下的菜单优化 */
+  /* 超小屏幕下的底部抽屉优化：保持全宽，略微降低最大高度并预留底部安全区 */
   .mobile-menu-overlay .mobile-menu {
-    width: min(95vw, 23.75rem);
-    max-height: min(88vh, 88svh);
-    padding: var(--mobile-spacing-lg) var(--mobile-spacing-lg) var(--mobile-spacing-lg);
+    max-height: min(82vh, 82svh);
+    padding-bottom: calc(var(--mobile-spacing-lg) + env(safe-area-inset-bottom));
   }
 
   /* 菜单间距调整 */

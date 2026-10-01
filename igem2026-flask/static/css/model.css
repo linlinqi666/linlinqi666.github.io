@@ -1,1 +1,780 @@
-/* 干实验组模型页面样式 */
+/* Dry-lab model page styles
+ *
+ * Scope: serves only the "Interactive Demo" block of the dry-lab/model page (nanobody × influenza A HA docking cards).
+ * Convention: new class names always use the model- namespace and do not modify site-wide generic classes, easing later migration to the official submission project;
+ *       colors, radii, shadows, and durations all reuse the design tokens from navigation.css; no separate visual language.
+ */
+
+/* ============ Body figures ============ */
+
+/* Figures exported from the modeling document mostly have dark backgrounds; rounded corners and a border make them blend more cleanly with the cream page */
+.content-card figure img {
+  border-radius: var(--radius-sm);
+}
+
+/* ============ Demo area frame ============ */
+
+.model-game {
+  margin: 1.5rem 0 0;
+}
+
+.model-game__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.model-game__toolbar-hint {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__board {
+  display: grid;
+  grid-template-columns: minmax(11rem, 13rem) minmax(0, 1fr) minmax(11rem, 13rem);
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+.model-game__column-title {
+  margin: 0 0 var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--border-color);
+  font-size: var(--font-size-md);
+  color: var(--color-primary-dark);
+}
+
+.model-game__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* 栅格项的自动最小宽度会被卡牌横向滚动条的内容顶宽（窄屏实测 487px），
+   导致整列超出卡片后被页面 overflow-x:hidden 裁掉；显式允许收缩。 */
+.model-game__column,
+.model-game__center {
+  min-width: 0;
+}
+
+/* ============ Cards ============ */
+
+.model-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--color-primary-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  box-shadow: var(--desc-shadow-xs, 0 1px 4px rgba(139, 90, 43, 0.04));
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: grab;
+  transition: transform var(--duration-fast) var(--ease-smooth),
+    box-shadow var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.model-card:hover,
+.model-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--desc-shadow-sm, 0 2px 8px rgba(139, 90, 43, 0.05));
+}
+
+.model-card:focus-visible {
+  outline: 2px solid var(--color-echo-blue);
+  outline-offset: 2px;
+}
+
+.model-card.is-selected {
+  border-color: var(--color-green-accent);
+  background: #f3fbf4;
+  box-shadow: inset 0 0 0 1px var(--color-green-accent);
+}
+
+.model-card.is-dragging {
+  opacity: 0.5;
+}
+
+.model-card__name {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.model-card__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-lighter);
+}
+
+.model-card__badge,
+.model-game__badge {
+  align-self: flex-start;
+  justify-self: start;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+  /* 文字量决定胶囊宽度：不允许被定宽网格列压出背景框 */
+  white-space: nowrap;
+}
+
+.model-card__badge--lead,
+.model-game__badge--lead {
+  border-color: #a5d6a7;
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.model-card__badge--rejected,
+.model-game__badge--rejected {
+  border-color: #f0c9a8;
+  background: #fdf1e7;
+  color: #8a4b2a;
+}
+
+/* "Target subtype / control subtype" tags on antigen cards: make the screening logic visible on the card faces */
+.model-card__tag {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  line-height: 1.6;
+  border: 1px solid var(--border-color);
+  background: var(--color-primary-lighter, rgba(245, 230, 211, 0.9));
+  color: var(--color-primary-dark);
+}
+
+.model-card__tag--target {
+  border-color: #a5d6a7;
+  background: #eef8ef;
+  color: #1b5e20;
+}
+
+/* ============ Center column: slots / result / ranking / 3D ============ */
+
+.model-game__slots {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.model-game__slot {
+  flex: 1;
+  min-height: 3rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px dashed var(--color-primary-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card-hover);
+  color: var(--color-text-light);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-smooth),
+    background var(--duration-fast) var(--ease-smooth);
+}
+
+.model-game__slot.is-filled {
+  border-style: solid;
+  border-color: var(--color-primary);
+  background: var(--bg-card);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
+.model-game__slot.is-over {
+  border-color: var(--color-green-accent);
+  background: #f3fbf4;
+}
+
+.model-game__slot-times {
+  color: var(--color-text-lighter);
+}
+
+.model-game__panel {
+  min-height: 9rem;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--desc-shadow-xs, 0 1px 4px rgba(139, 90, 43, 0.04));
+}
+
+.model-game__result-title {
+  margin: 0 0 var(--spacing-md);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-dark);
+  animation: model-game-fade var(--duration-normal) var(--ease-smooth) both;
+}
+
+@keyframes model-game-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Main metric block: enlarged specificity index + gauge centered at 0 */
+.model-game__hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.model-game__hero-label {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__hero-value {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-green-accent);
+}
+
+.model-game__hero-value.is-positive {
+  color: #b4651c;
+}
+
+.model-game__hero-note {
+  flex: 1 1 12rem;
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+}
+
+.model-game__gauge {
+  position: relative;
+  height: 0.6rem;
+  margin: var(--spacing-xs) 0 0.15rem;
+  border-radius: var(--radius-pill, 999px);
+  background: linear-gradient(90deg, #e8f5e9 0%, #f7f2e6 50%, #fdf1e7 100%);
+  overflow: hidden;
+}
+
+.model-game__gauge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--color-primary-light);
+}
+
+.model-game__gauge-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--color-green-accent);
+  transition: width var(--duration-normal) var(--ease-smooth);
+}
+
+.model-game__gauge-bar.is-positive {
+  background: #c97b2e;
+}
+
+.model-game__gauge-scale {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 var(--spacing-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-lighter);
+}
+
+.model-game__verdict {
+  margin: 0 0 var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-left: 3px solid var(--color-primary-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.model-game__verdict--lead {
+  border-left-color: var(--color-green-accent);
+  background: #f5fbf6;
+}
+
+.model-game__verdict--rejected {
+  border-left-color: #c97b2e;
+  background: #fdf7f0;
+}
+
+.model-game__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.model-game__table th,
+.model-game__table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--border-color-light);
+  text-align: left;
+  vertical-align: top;
+}
+
+.model-game__table th {
+  width: 62%;
+  font-weight: 400;
+  color: var(--color-text-light);
+}
+
+.model-game__table td {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.model-game__table td.is-muted {
+  font-weight: 400;
+  color: var(--color-text-lighter);
+}
+
+.model-game__hint,
+.model-game__caption {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__detail {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px dashed var(--border-color);
+}
+
+.model-game__detail-title {
+  margin: 0 0 var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.model-game__residues {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+}
+
+/* ============ Ranking bar ============ */
+
+.model-game__ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.model-game__ranking-item {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 4.2rem auto;
+  gap: var(--spacing-sm);
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.model-game__ranking-item.is-active .model-game__ranking-name {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.model-game__ranking-track {
+  display: block;
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--color-primary-lighter, rgba(245, 230, 211, 0.9));
+}
+
+.model-game__ranking-bar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--color-primary);
+  transition: width var(--duration-normal) var(--ease-smooth);
+}
+
+.model-game__ranking-bar.is-positive {
+  background: #c97b2e;
+}
+
+.model-game__ranking-value {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--color-text);
+}
+
+/* 排名面板已移入中部翻转卡背面（.model-game__flip-face--numbers），窄栏双行布局不再使用 */
+
+/* ============ 3D panel ============ */
+
+.model-game__viewer-block {
+  margin: 0 0 var(--spacing-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--desc-shadow-sm, 0 2px 8px rgba(139, 90, 43, 0.05));
+}
+
+/* ============ 翻转卡：正面 3D 结构 / 背面特异性指数排名 ============ */
+
+.model-game__flip {
+  perspective: 1400px;
+}
+
+.model-game__flip-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-smooth);
+}
+
+.model-game__flip-face {
+  grid-area: 1 / 1;
+  min-width: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 背面（排名面）常驻转 180°：容器翻转后转正 */
+.model-game__flip-face--numbers {
+  transform: rotateY(180deg);
+}
+
+.model-game__viewer-block.is-flipped .model-game__flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* WebGL 合成层可能无视 backface-visibility：翻转动画结束后由 JS 给离场面补 visibility:hidden 兜底 */
+.model-game__flip-face.is-parked {
+  visibility: hidden;
+}
+
+.model-game__flip-face .model-game__panel--ranking {
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+/* 热点残基列表默认折叠，避免把结果面板撑得过长；展开时高度变化要通知侧栏重算 */
+.model-game__detail > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.model-game__detail > summary::-webkit-details-marker {
+  display: none;
+}
+
+.model-game__detail > summary::before {
+  content: "▸ ";
+}
+
+.model-game__detail[open] > summary::before {
+  content: "▾ ";
+}
+
+.model-game__viewer-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.model-game__viewer-title {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.model-game__viewer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.model-game__button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-smooth),
+    color var(--duration-fast) var(--ease-smooth);
+}
+
+.model-game__button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.model-game__button--ghost {
+  background: transparent;
+  color: var(--color-primary-dark);
+}
+
+.model-game__button--ghost:hover:not(:disabled) {
+  background: var(--color-primary-lighter, rgba(245, 230, 211, 0.9));
+}
+
+.model-game__button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Active state of the view-toggle buttons: make clear which kind of structure the 3D panel currently shows */
+.model-game__button.is-active {
+  background: var(--color-green-accent);
+  border-color: var(--color-green-accent);
+  color: var(--color-white);
+}
+
+.model-game__button.is-active:hover:not(:disabled) {
+  background: var(--color-green-dark, #2f7d4f);
+}
+
+.model-game__viewer-note,
+.model-game__viewer-message,
+.model-game__status,
+.model-game__fallback {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__viewer {
+  position: relative;
+  min-height: 12rem;
+  border: 2px dashed var(--color-primary-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card-hover);
+}
+
+.model-game__viewer.is-ready {
+  /* 高度压到 18rem：作为钉住面板时需给下方结果留出可视空间 */
+  height: 18rem;
+  border-style: solid;
+  border-color: var(--border-color);
+  background: var(--bg-card);
+}
+
+.model-game__viewer-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  min-height: 12rem;
+  padding: var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__viewer-empty p {
+  max-width: 24rem;
+  margin: 0;
+}
+
+.model-game__viewer-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-primary-light);
+}
+
+.model-game__viewer-message {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid #f0c9a8;
+  border-radius: var(--radius-sm);
+  background: #fdf1e7;
+  color: #8a4b2a;
+}
+
+.model-game__fallback {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid #f0c9a8;
+  border-radius: var(--radius-sm);
+  background: #fdf1e7;
+  color: #8a4b2a;
+}
+
+/* Reserve a small height for the status region to prevent page jumps when it updates */
+.model-game__status {
+  min-height: 1.2rem;
+}
+
+/* ============ Responsive ============ */
+
+@media (max-width: 1100px) {
+  .model-game__board {
+    grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr) minmax(9rem, 11rem);
+  }
+
+  .model-game__ranking-item {
+    grid-template-columns: 4rem minmax(0, 1fr) 3.8rem auto;
+  }
+
+  .model-game__viewer.is-ready {
+    height: 15rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* This page has many body-table columns (6 in the antigen table, 6 in the scoring table); compressing to 100% width on narrow screens hurts readability:
+     instead let the table scroll horizontally with content-width columns, keeping page-level horizontal overflow at zero. */
+  .content-card table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .model-game__board {
+    grid-template-columns: 1fr;
+  }
+
+  /* 单栏窄屏：钉住的偏移贴到顶，画布再压缩，避免占掉半屏 */
+  .model-game__viewer-block {
+    padding: var(--spacing-sm);
+  }
+
+  .model-game__viewer {
+    min-height: 9rem;
+  }
+
+  .model-game__viewer.is-ready {
+    height: 13rem;
+  }
+
+  .model-game__viewer-empty {
+    min-height: 9rem;
+    padding: var(--spacing-md);
+  }
+
+  .model-game__cards {
+    flex-direction: row;
+    gap: var(--spacing-sm);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-xs);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .model-card {
+    flex: 0 0 60%;
+    max-width: 14rem;
+  }
+
+  .model-game__slots {
+    flex-wrap: wrap;
+  }
+
+  .model-game__slot {
+    flex: 1 1 100%;
+    min-height: 3.25rem;
+  }
+
+  .model-game__slot-times {
+    display: none;
+  }
+
+  .model-game__panel {
+    padding: var(--spacing-md);
+  }
+
+  .model-game__table th {
+    width: auto;
+  }
+
+  .model-game__table th,
+  .model-game__table td {
+    display: block;
+    width: 100%;
+    border-bottom: none;
+  }
+
+  .model-game__table tr {
+    display: block;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border-color-light);
+  }
+
+  .model-game__ranking-item {
+    grid-template-columns: 3.6rem minmax(0, 1fr) 3.4rem;
+  }
+
+  .model-game__ranking-item .model-game__badge {
+    grid-column: 1 / -1;
+  }
+
+  .model-game__viewer,
+  .model-game__viewer.is-ready {
+    height: 16rem;
+    min-height: 16rem;
+  }
+
+  .model-game__button {
+    flex: 1 1 auto;
+    min-height: 2.75rem;
+  }
+}
+
+/* ============ Reduced motion ============ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .model-card,
+  .model-game__slot,
+  .model-game__button,
+  .model-game__ranking-bar {
+    transition: none;
+  }
+
+  .model-game__flip-inner {
+    transition: none;
+  }
+
+  .model-game__result-title {
+    animation: none;
+  }
+
+  .model-card:hover,
+  .model-card:focus-visible {
+    transform: none;
+  }
+}

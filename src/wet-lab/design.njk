@@ -10,13 +10,9 @@ js:
   - static/js/components/sidebar-progress.js
 ---
 
-{# 页面结构依据：static/expriments/The extreme/exepriment/experiments/00-Experiments页面撰写方针.md 与 11-Experiments页面撰写模板.md；
-   本页由原实验页（wet-lab/experiments）拆分而来（需求 REQ-20260926-002），承接「实验设计」层内容：
-   背景与目标 → 实验总体设计 → 各模块实验设计（设计目标 / 技术路线 / 判定与对照设计）→ 设计迭代与失败 → 结果与讨论。
-   材料、配方、分步参数与对照设置见 wet-lab/protocol.html；实测数值与讨论见 wet-lab/result.html。
-   内部核验项（KQ- / SQ- / RC- / GC- / RS-）以 HTML 注释留在对应位置，不渲染。
-   与结果页口径的核对：底盘 SST2 记录存在两轮（主源记 S1–S10 全部有条带、未敲除；result 源记 S1–S15 中 6 个无条带并经测序确认），
-   关系待实验组核销（RS-1）。本页正文不写该两轮细节，只写判据设计（PCR 初筛 + 测序确认），与结果页「两基因均获测序确认敲除株」保持一致。 #}
+{# 本页正文由用户提供的 Design(1).doc（二进制 .doc 经 aspose 转换提取）逐字同步，覆盖原实验设计层内容。
+   项目专属科学表述以原始材料复核为准（secondary-source / needs-primary-source-review）。
+   小节折叠：h3 带 design- 前缀 id，由全站 section-fold.js 自动收纳；侧边栏高亮前缀 design- 已在 sidebar-progress.js 登记。 #}
 
 {% extends "layouts/base.njk" %}
 
@@ -36,70 +32,53 @@ js:
 
         <div class="description-nav-wrapper">
           <ul class="description-nav">
-            <li class="level1">
+            <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#design-overview" class="nav-main-link">项目背景与检测目标</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-framework" class="nav-main-link">实验总体设计</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-chassis" class="nav-main-link">底盘酵母改造</a>
+                <a href="#design-background" class="nav-main-link">Background</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#design-chassis-goal">设计目标</a></li>
-                <li class="level3"><a href="#design-chassis-route">技术路线</a></li>
-                <li class="level3"><a href="#design-chassis-controls">判定与对照设计</a></li>
+                <li class="level3">
+                  <a href="#design-why-iav">Why Detect IAV</a>
+                </li>
+                <li class="level3">
+                  <a href="#design-challenges">Airborne Monitoring Challenges</a>
+                </li>
               </ul>
             </li>
-            <li class="level1">
+            <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#design-pager" class="nav-main-link">PAGER 受体构建与验证</a>
+                <a href="#design-solution" class="nav-main-link">Solution</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#design-pager-goal">设计目标</a></li>
-                <li class="level3"><a href="#design-pager-route">技术路线</a></li>
-                <li class="level3"><a href="#design-pager-controls">判定与对照设计</a></li>
+                <li class="level3">
+                  <a href="#design-overall">Overall Design</a>
+                </li>
+                <li class="level3">
+                  <a href="#design-module1">Module 1: Chassis</a>
+                </li>
+                <li class="level3">
+                  <a href="#design-module2">Module 2: G-Protein</a>
+                </li>
+                <li class="level3">
+                  <a href="#design-module3">Module 3: PAGER Receptor</a>
+                </li>
+                <li class="level3">
+                  <a href="#design-module4">Module 4: Reporter</a>
+                </li>
+                <li class="level3">
+                  <a href="#design-safety">Safety &amp; Design</a>
+                </li>
               </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-gpa1" class="nav-main-link">GPA1 人源化改造</a>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#design-gpa1-goal">设计目标</a></li>
-                <li class="level3"><a href="#design-gpa1-route">技术路线</a></li>
-                <li class="level3"><a href="#design-gpa1-controls">判定与对照设计</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-reporter" class="nav-main-link">报告体系构建</a>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#design-reporter-goal">设计目标</a></li>
-                <li class="level3"><a href="#design-reporter-route">技术路线</a></li>
-                <li class="level3"><a href="#design-reporter-controls">判定与对照设计</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-iteration" class="nav-main-link">设计迭代与失败</a>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#design-iteration-1">路线一被测序判否</a></li>
-                <li class="level3"><a href="#design-iteration-2">WB 分子量不符</a></li>
-                <li class="level3"><a href="#design-iteration-3">免疫荧光阴性</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-discussion" class="nav-main-link">结果与讨论</a>
-              </div>
             </li>
           </ul>
         </div>
@@ -123,217 +102,247 @@ js:
               <span class="progress-percentage" id="progress-percentage">0%</span>
             </div>
           </div>
-          <div class="progress-title">发酵进度</div>
+          <div class="progress-title">Progress</div>
         </div>
       </aside>
 
       <!-- Right Content Area -->
       <div class="description-content">
+        <div id="design-background" class="content-card">
+          <h2>Background</h2>
 
-        <!-- ============ 1. 项目背景与检测目标 ============ -->
-        <div id="design-overview" class="content-card">
-          <h2>项目背景与检测目标</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              本项目用酿酒酵母 BY4741 做底盘，搭建一条「甲型流感病毒 HA 抗原识别 → 下游报告输出」的生物传感主链。本页记录这条主链的实验设计：每一步为什么做、模块之间怎么依赖、哪些方案中途换过。
-            </p>
-            <p class="content-intro">
-              这条主链要落地，必须先把酵母底盘清理干净、把识别受体表达出来、把人和酵母之间的信号接口接通、再把报告读出建好。这四个动作分别对应四个实验模块：底盘酵母改造、PAGER 受体构建与验证、GPA1 人源化改造、报告体系构建。
-            </p>
-            <p class="content-intro">
-              四个模块按「设计、执行、结果」分工到三页：本页写设计层的内容，即每个实验要回答什么问题、方法选择依据是什么、对照与判定怎么设计、哪些方案中途换过；材料清单与分步参数在 <a href="protocol.html">Protocol 页</a>；实测数值与讨论在 <a href="result.html">Results 页</a>。本页不写传感性能，灵敏度、特异性与检出限都没有测过，也不写对 HA 的识别结论。
-            </p>
-          </div>
+          <h3 id="design-why-iav">Why detect influenza A virus?</h3>
+          <p>Influenza A virus (IAV) poses persistent global public-health threats. According to WHO estimates,
+            seasonal influenza causes approximately 1 billion infections, 3-5 million cases of severe illness, and
+            290,000-650,000 respiratory deaths worldwide each year, especially among children, the elderly and
+            immunocompromised populations. Influenza A virus is highly variable: its surface hemagglutinin (HA)
+            protein continuously escapes existing population immunity through antigenic drift and antigenic shift<sup>1</sup>.</p>
+
+          <figure class="design-figure">
+            <img loading="lazy" decoding="async"
+                 src="../static/image/wait/design/design_01.png"
+                 alt="Figure 1. Transmission routes of influenza A virus and typical high-risk indoor scenarios for airborne IAV exposure">
+            <figcaption>Figure 1. Transmission routes of influenza A virus and typical high-risk indoor scenarios for airborne IAV exposure</figcaption>
+          </figure>
+
+          <p>Traditional influenza surveillance mainly relies on &ldquo;patient-centered sampling&rdquo;: swabs from
+            symptomatic patients are collected for laboratory testing. This workflow only reflects infections after
+            people develop clinical symptoms. Once patients show fever or cough, viruses may already spread widely in
+            shared indoor spaces. Early warning before large-scale transmission is hard to achieve by human-centered
+            monitoring alone<sup>2</sup>.</p>
+          <p>Accumulated evidence confirms that aerosol transmission is a critical route for IAV spread in crowded
+            indoor environments, such as schools, hospitals, nursing homes, subway stations and dormitories<sup>3</sup>.
+            Virus-carrying fine aerosol particles can stay suspended in air for hours, infecting people via inhalation
+            even without close contact with patients<sup>4</sup>.</p>
+          <p>Air-borne pathogen monitoring brings unique public-health value:</p>
+          <ol>
+            <li><strong>Pre-symptom early warning:</strong> Detect viral hazards in indoor air before mass symptomatic
+              cases emerge, enabling proactive ventilation, disinfection and crowd-flow management, rather than only
+              responding after infections happen.</li>
+            <li><strong>Identify transmission hot-spots:</strong> Distinguish high-risk locations inside buildings
+              (classrooms, wards, waiting halls) and guide targeted prevention measures.</li>
+            <li><strong>Complement existing surveillance system:</strong> Current national influenza networks focus on
+              clinical patients. Air monitoring adds environmental dimension data to support epidemic trend assessment
+              for public-health decision-making.</li>
+            <li><strong>Protect high-density congregate settings:</strong> Schools and nursing homes suffer heavy
+              influenza-related absences and severe-case burdens. Real-time air risk evaluation helps reduce
+              cluster-outbreak risks for vulnerable groups.</li>
+          </ol>
+
+          <h3 id="design-challenges">Challenges in Airborne Influenza A Virus Monitoring</h3>
+          <p>Detecting IAV in air faces intrinsic physical difficulty: viral particles are highly diluted in ambient
+            air, with extremely low actual concentration. Today's mainstream paradigm for airborne-virus detection is
+            exemplified by bio-aerosol sampling combined with quantitative reverse-transcription PCR (qRT-PCR), the
+            gold-standard laboratory method. This workflow is divided into two discrete steps: bio-aerosol samples are
+            first collected on-site and then transported back to a central laboratory for qRT-PCR analysis. No mature,
+            low-cost on-site POCT solution exists for air-borne IAV surveillance<sup>5</sup>.</p>
+
+          <h3 id="design-refs-bg">References</h3>
+          <ol class="ref-list">
+            <li>Global Influenza Strategy for 2019-2030. https://www.who.int/news-room/detail/11-03-2019-who-launches-new-global-influenza-strategy</li>
+            <li>Coleman KK, Sigler WV. Airborne Influenza A Virus Exposure in an Elementary School. Sci Rep. 2020 Feb 5;10(1):1859. doi: 10.1038/s41598-020-58588-1.</li>
+            <li>Pan M, Lednicky JA, Wu CY. Collection, particle sizing and detection of airborne viruses. J Appl Microbiol. 2019 Dec;127(6):1596-1611. doi: 10.1111/jam.14278.</li>
+            <li>Li B, Lin B, Wang Y, Shi Y, Zeng W, Zhao Y, Gu Y, Liu C, Gao H, Cheng H, Zheng X, Xiang G, Wang G, Liu P. Multi-scenario surveillance of respiratory viruses in aerosols with sub-single-copy spatial resolution. Nat Commun. 2024 Oct 10;15(1):8770. doi: 10.1038/s41467-024-53059-x.</li>
+            <li>Pan M, Bonny TS, Loeb J, Jiang X, Lednicky JA, Eiguren-Fernandez A, Hering S, Fan ZH, Wu CY. Collection of Viable Aerosolized Influenza Virus and Other Respiratory Viruses in a Student Health Care Center through Water-Based Condensation Growth. mSphere. 2017 Oct 11;2(5):e00251-17. doi: 10.1128/mSphere.00251-17.</li>
+          </ol>
         </div>
 
-        <!-- ============ 2. 实验总体设计 ============ -->
-        <div id="design-framework" class="content-card">
-          <h2>实验总体设计</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              四个模块按「底盘 → 受体 → 接口 → 报告」的顺序依赖，技术栈彼此独立，唯一的公共项是底盘菌株 BY4741。
-            </p>
-            <p class="content-intro">
-              底盘是后续三步的共同宿主；受体装进底盘后才有蛋白可测；接口改造在受体之后动 GPA1；报告体系评估 FUS1 启动子在被诱导时的输出。四个模块的技术栈几乎正交：底盘用 pML104 与同源臂修复模板，受体用 pGADT7，接口用 pRS426 与多片段融合 PCR，报告用 pESC-HIS。模块划分与项目 Design 页一致。
-            </p>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="border-bottom:2px solid #333;">
-                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">模块（本页顺序）</th>
-                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">主要载体与元件</th>
-                  <th style="border:1px solid #ccc; padding:8px; text-align:left;">关键读出</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom:1px solid #ddd;">
-                  <td style="border:1px solid #ccc; padding:8px;">底盘酵母改造</td>
-                  <td style="border:1px solid #ccc; padding:8px;">pML104（sgRNA 递送）、同源臂融合修复模板</td>
-                  <td style="border:1px solid #ccc; padding:8px;">菌落 PCR 初筛、Sanger 测序确认；α-factor 梯度生长曲线</td>
-                </tr>
-                <tr style="border-bottom:1px solid #ddd;">
-                  <td style="border:1px solid #ccc; padding:8px;">PAGER 受体构建与验证</td>
-                  <td style="border:1px solid #ccc; padding:8px;">pGADT7、PAGER 融合受体</td>
-                  <td style="border:1px solid #ccc; padding:8px;">质粒浓度与双酶切、菌落 PCR、SDS-PAGE 与 WB、免疫荧光、DCZ 读板</td>
-                </tr>
-                <tr style="border-bottom:1px solid #ddd;">
-                  <td style="border:1px solid #ccc; padding:8px;">GPA1 人源化改造</td>
-                  <td style="border:1px solid #ccc; padding:8px;">pRS426、多片段融合 PCR 线性供体片段</td>
-                  <td style="border:1px solid #ccc; padding:8px;">两轮菌落 PCR 与测序；形态、生长、荧光三层表型</td>
-                </tr>
-                <tr style="border-bottom:1px solid #ddd;">
-                  <td style="border:1px solid #ccc; padding:8px;">报告体系构建</td>
-                  <td style="border:1px solid #ccc; padding:8px;">pESC-HIS、FUS1 启动子突变库、MEL1 与 yEGFP</td>
-                  <td style="border:1px solid #ccc; padding:8px;">X-α-gal 蓝白斑显色、荧光酶标读数、OD₆₀₀ 生长曲线</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="content-intro">
-              <strong>跨模块前提：</strong>α-factor 是底盘、报告、接口三个模块共用的诱导输入，但三套浓度体系并不统一。底盘功能验证用 0 / 1 / 10 μM 三档，报告体系与 GPA1 表型验证用八档梯度。任何跨模块数值比较都必须注明各自的体系，不能直接横向比大小。
-            </p>
-          </div>
+        <div id="design-solution" class="content-card">
+          <h2>Solution</h2>
+
+          <h3 id="design-overall">Overall Design</h3>
+          <p>To address this Challenge, our team designed an engineered yeast whole-cell biosensor that aims to achieve
+            low-cost, high-sensitivity, field-deployable detection of airborne influenza A virus. Our system adopts the
+            PAGER (Protein-fragment Assisted GPCR Expression Reporter) programmable antigen-gated receptor strategy,
+            adapted from a published synthetic GPCR framework<sup>1</sup>. In the presence of the hemagglutinin (HA)
+            antigen from influenza A virus, the receptor is de-repressed, thereby triggering the downstream yeast MAPK
+            mating pathway and activating reporter gene expression to produce a fluorescent readout.</p>
+
+          <figure class="design-figure">
+            <img loading="lazy" decoding="async"
+                 src="../static/image/wait/design/design_02.png"
+                 alt="Figure 2. Modular Design of the Engineered Yeast Biosensor">
+            <figcaption>Figure 2. Modular Design of the Engineered Yeast Biosensor. The chassis is rewired for GPCR-MAPK coupling; the PAGER receptor enables HA-gated de-repression; the FUS1-driven cassette provides reporter output.</figcaption>
+          </figure>
+
+          <p>Our project follows a modular design strategy:</p>
+          <ol>
+            <li><strong>Chassis Cell Engineering.</strong> FAR1, and SST2 are knocked out to remove endogenous
+              interference, prevent cell cycle arrest, and enhance signal sensitivity<sup>2,3</sup>.</li>
+            <li><strong>Humanized Gpa1-G&alpha;q chimeric G protein.</strong> The yeast Gpa1 C-terminus is replaced
+              with the human G&alpha;q C-terminus to couple hM1Dq to the yeast MAPK pathway<sup>4</sup>.</li>
+            <li><strong>PAGER antigen-gated fusion receptor protein design for HA recognition.</strong> hM1Dq is a
+              human M1 DREADD receptor that can be activated by DCZ<sup>1</sup>. Anti-IAV HA nanobody (VHH)
+              specifically binds H1N1 or H3N2 HA<sup>5</sup>. MT1 muscarinic toxin acts as an auto-inhibitory peptide
+              that occupies the orthosteric site of the hM1Dq receptor. Antigen binding relieves this inhibition via
+              steric hindrance<sup>1</sup>.</li>
+            <li><strong>FUS1-driven reporter output module.</strong> The yeast FUS1 promoter drives yEGFP or MEL1
+              expression, producing green fluorescence or blue color as the output signal<sup>6</sup>.</li>
+          </ol>
+          <p>Once these four modules are assembled and validated, the sensor will be further interfaced with an air
+            sampler (e.g., a cyclone sampler or impactor) to collect airborne particles into a liquid medium. The
+            collected liquid is then applied to the yeast sensor, enabling airborne influenza A virus detection.</p>
+
+          <h3 id="design-module1">Module 1: Chassis Cell Engineering — Knockout of FAR1 and SST2</h3>
+          <h4>Design Purpose</h4>
+          <p>Wild-type <i>Saccharomyces cerevisiae</i> BY4741 possesses a native mating pheromone response MAPK
+            pathway. Two endogenous factors interfere with our synthetic human-origin GPCR (hM1Dq) signal transmission:</p>
+          <p><strong>Cell-cycle arrest:</strong> pheromone stimulation triggers Far1-mediated G1 arrest, preventing
+            continuous proliferation and long-term real-time monitoring<sup>2</sup>.</p>
+          <p><strong>Negative regulation:</strong> Sst2 acts as a negative regulator of G-protein signaling, dampening
+            the signal amplitude of the GPCR&ndash;MAPK cascade<sup>3</sup>.</p>
+          <p>To re-wire the native pathway for our synthetic sensor, we perform targeted gene editing to remove growth
+            arrest and enhance signal sensitivity, creating a chassis better suited for downstream human GPCR coupling.</p>
+          <h4>Gene Knockout Design</h4>
+          <p>We use the CRISPR-Cas9 system to introduce frameshift mutations in two target genes, FAR1 and SST2, in
+            BY4741. sgRNAs targeting the coding sequences of these genes are cloned into the pML104 vector, which
+            carries both the Cas9 expression cassette and the sgRNA expression cassette. After transformation, Cas9 is
+            guided by the sgRNAs to cleave the target loci, and the resulting double-strand breaks are repaired by
+            non-homologous end joining (NHEJ), frequently generating frameshift mutations that disrupt gene function.
+            Correctly edited clones will be verified by colony PCR and Sanger sequencing.</p>
+
+          <figure class="design-figure">
+            <img loading="lazy" decoding="async"
+                 src="../static/image/wait/design/design_03.jpeg"
+                 alt="Figure 3. Signal Transduction Mechanism and Chassis Optimization of the Engineered Yeast Biosensor">
+            <figcaption>Figure 3. Signal Transduction Mechanism and Chassis Optimization of the Engineered Yeast Biosensor</figcaption>
+          </figure>
+
+          <h3 id="design-module2">Module 2: Humanized G-Protein Engineering — Gpa1-G&alpha;q Chimera</h3>
+          <h4>Design Purpose</h4>
+          <p>Native yeast Gpa1 (the G&alpha; subunit) cannot recognize the human-derived hM1Dq GPCR. To couple hM1Dq to
+            the yeast intracellular MAPK pathway, we need to engineer the G&alpha; subunit so that it can be recognized
+            and activated by hM1Dq. Literature indicates that the C-terminal 5 amino acids of the G&alpha; protein
+            determine GPCR&ndash;G&alpha; recognition specificity. Replacing the C-terminus of yeast Gpa1 with the
+            corresponding human G&alpha;q sequence is sufficient to change its receptor coupling specificity while
+            preserving its ability to activate the yeast downstream pathway<sup>4</sup>.</p>
+          <h4>Gpa1&ndash;G&alpha;q chimeric protein design</h4>
+          <p>Native yeast Gpa1 (G&alpha; subunit) cannot recognize human-derived hM1Dq GPCR. Literature indicates that
+            C-terminal 5 amino acids of G&alpha; protein determine GPCR&ndash;G&alpha; recognition specificity<sup>4</sup>.</p>
+          <ul>
+            <li>Wild-type yeast Gpa1 C-terminal 5 aa: &ldquo;KIGII&rdquo;</li>
+            <li>Replace with human G&alpha;q C-terminal 5 aa: &ldquo;EYNLV&rdquo;</li>
+          </ul>
+          <p>The chimeric Gpa1-G&alpha;q retains the yeast Gpa1 backbone, which is capable of activating the yeast
+            G&beta;&gamma; (Ste4/Ste18) and downstream Ste5/Ste7/Fus3 MAPK cascade, but its C-terminus is now
+            compatible with human hM1Dq.</p>
+          <p>To humanize the C-terminus of yeast Gpa1, a donor cassette containing the upstream homology arm
+            (Homology-U), the URA3 selectable marker, and the downstream homology arm (Homology-D) was designed, with
+            the humanized 5-amino-acid sequence EYNLV followed by a stop codon placed between the two homology arms.
+            This cassette was introduced into <i>S. cerevisiae</i> by transformation, where homologous recombination
+            directed its integration into the native GPA1 locus on Chromosome VIII (region 116,000&ndash;111,500 bp;
+            NCBI RefSeq: GCF_000146045.2), replacing the original C-terminal motif KIGII. Correctly edited clones were
+            selected on SD-Ura medium and verified by colony PCR and Sanger sequencing, yielding the Gpa1-G&alpha;q
+            chimera for functional coupling with hM1Dq.</p>
+
+          <figure class="design-figure">
+            <img loading="lazy" decoding="async"
+                 src="../static/image/wait/design/design_04.png"
+                 alt="Figure 4. Schematic of GPA1 Locus Modification and Humanized Sequence Integration via Homologous Recombination">
+            <figcaption>Figure 4. Schematic of GPA1 Locus Modification and Humanized Sequence Integration via Homologous Recombination</figcaption>
+          </figure>
+
+          <h3 id="design-module3">Module 3: PAGER Antigen&#8209;Gated Fusion Receptor Protein Design</h3>
+          <h4>Design Purpose</h4>
+          <p>We adopt PAGER synthetic GPCR &ldquo;antigen-gated de-inhibition&rdquo; logic. In absence of target HA
+            antigen, receptor stays self-inhibited with very low background signal. When influenza A HA antigen appears,
+            antigen-nanobody binding relieves self-inhibition, enabling downstream signal activation upon DCZ
+            small-molecule agonist stimulation<sup>1</sup>.</p>
+          <p>Our full-length fusion protein domain arrangement (N-terminal to C-terminal): MT1 auto-inhibitory
+            peptide &ndash; anti-HA nanobody &ndash; TEV protease cleavage site &ndash; ALFA tag &ndash; hM1Dq receptor.</p>
+          <h4>Each domain function:</h4>
+          <ol>
+            <li><strong>MT1 auto-inhibitory toxin peptide:</strong> Constitutive suppressor domain for hM1Dq. Without
+              HA antigen, MT1 binds hM1Dq and locks receptor in inactive state to minimize background leakage
+              signal<sup>1</sup>.</li>
+            <li><strong>anti-HA nanobody:</strong> Recognition element, high-specific affinity binding to hemagglutinin
+              HA of influenza A virus. When HA binds nanobody, steric hindrance displaces MT1 peptide away from hM1Dq,
+              releasing receptor inhibition<sup>5</sup>.</li>
+            <li><strong>TEV protease cleavage site:</strong> Built-in positive-control switch. TEV protease cleavage
+              can artificially remove MT1 inhibition, to validate whether downstream signaling cascade works normally.</li>
+            <li><strong>hM1Dq human-derived GPCR:</strong> Core receptor. After de-repression, small-molecule agonist
+              DCZ can activate hM1Dq, which transduces intracellular signals through our Gpa1-G&alpha;q chimera to
+              trigger the yeast MAPK pathway<sup>1</sup>.</li>
+          </ol>
+
+          <figure class="design-figure">
+            <img loading="lazy" decoding="async"
+                 src="../static/image/wait/design/design_05.png"
+                 alt="Figure 5. Schematic Representation of the Structural Composition and Signal Transduction of the Engineered PAGER Receptor">
+            <figcaption>Figure 5. Schematic Representation of the Structural Composition and Signal Transduction of the Engineered PAGER Receptor</figcaption>
+          </figure>
+
+          <h3 id="design-module4">Module 4: Reporter Output Module: FUS1 Promoter Reporter System</h3>
+          <p>After the MAPK signaling cascade is activated, a readable output signal is required for biosensor readout.
+            We selected the native yeast FUS1 promoter, which is natively triggered by the yeast mating-pheromone MAPK
+            cascade. Once the upstream receptor is activated, FUS1 initiates transcription of the downstream reporter
+            gene<sup>6</sup>.</p>
+          <p>We built two independent single-reporter plasmids for parallel testing. One produces fluorescent output
+            (yEGFP), the other produces colorimetric output (MEL1 /&alpha;-galactosidase with X-&alpha;-Gal
+            substrate). By comparing signal intensity, background noise, dynamic range and experimental operability
+            between the two systems, we aim to identify the more suitable readout strategy for our yeast biosensor<sup>7</sup>.</p>
+          <p><strong>Plasmid backbone:</strong> pESC-HIS. Two constructed reporter plasmids:</p>
+          <p>pESC-HIS-FUS1-yEGFP: Fluorescent output, quantitative measurement via fluorescence detector.</p>
+          <p>pESC-HIS-FUS1-MEL1: Colorimetric output, chromogenic reaction with X-&alpha;-Gal substrate.</p>
+          <p><strong>Experimental goal:</strong> Evaluate and select the optimal read-out modality for our biosensor
+            from fluorescence or colorimetric output.</p>
+
+          <figure class="design-figure">
+            <img loading="lazy" decoding="async"
+                 src="../static/image/wait/design/design_06.png"
+                 alt="Figure 6. Two readout reporter circuits driven by FUS1 promoter in yeast">
+            <figcaption>Figure 6. Two readout reporter circuits driven by FUS1 promoter in yeast</figcaption>
+          </figure>
+
+          <h3 id="design-safety">Safety &amp; Design Considerations</h3>
+          <ol>
+            <li><strong>Chassis biosafety:</strong> We use non-pathogenic laboratory-standard <i>Saccharomyces
+              cerevisiae</i> BY4741, a widely used biosafety-level-1 microbial chassis with no pathogenic risk. We adopt
+              auxotrophic selection markers on our expression plasmids; engineered yeast strains can only survive on
+              culture media supplemented with corresponding deficient amino acids. This imposes a biological
+              containment barrier: the engineered yeast cannot stably proliferate in natural environments lacking the
+              required nutrients, minimizing the risk of uncontrolled environmental escape.</li>
+            <li><strong>Recognition element:</strong> anti-HA nanobody and hM1Dq receptor are heterologous protein
+              expression; no virulence-related genes are introduced. No replication-competent viral sequences are used
+              in our constructs.</li>
+            <li><strong>Control logic:</strong> Self-inhibition design greatly reduces constitutive leakage activation,
+              lowering false-positive risk of sensor and improving the signal-to-noise ratio of our biosensor.</li>
+            <li><strong>Modularity design:</strong> Our whole system is modularized. Only replacing the nanobody domain
+              can change detection target, supporting future adaptation to other respiratory pathogens such as RSV or
+              coronavirus.</li>
+          </ol>
+
+          <h3 id="design-refs-sol">References</h3>
+          <ol class="ref-list">
+            <li>Kalogriopoulos NA, Tei R, Yan Y, Klein PM, Ravalin M, Cai B, Soltesz I, Li Y, Ting AY. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature. 2025 Jan;637(8044):230-239. doi: 10.1038/s41586-024-08282-3. Epub 2024 Dec 4. Erratum in: Nature. 2025 Feb;638(8050):E2. doi: 10.1038/s41586-025-08607-w.</li>
+            <li>Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor Far1. Curr Biol. 2014 Jun 16;24(12):1390-1396. doi: 10.1016/j.cub.2014.05.002.</li>
+            <li>Chasse SA, Flanary P, Parnell SC, Hao N, Cha JY, Siderovski DP, Dohlman HG. Genome-scale analysis reveals Sst2 as the principal regulator of mating pheromone signaling in the yeast <i>Saccharomyces cerevisiae</i>. Eukaryot Cell. 2006 Feb;5(2):330-46. doi: 10.1128/EC.5.2.330-346.2006.</li>
+            <li>Komatsuzaki K, Murayama Y, Giambarella U, Ogata E, Seino S, Nishimoto I. A novel system that reports the G-proteins linked to a given receptor: a study of type 3 somatostatin receptor. FEBS Lett. 1997;406(1-2):165-70. doi: 10.1016/s0014-5793(97)00266-4.</li>
+            <li>Gaiotto T, Hufton SE. Cross-Neutralising Nanobodies Bind to a Conserved Pocket in the Hemagglutinin Stem Region Identified Using Yeast Display and Deep Mutational Scanning. PLoS One. 2016 Oct 14;11(10):e0164296. doi: 10.1371/journal.pone.0164296.</li>
+            <li>Bagnat M, Chang A, Simons K. Plasma membrane proton ATPase Pma1p requires raft association for surface delivery in yeast. Mol Biol Cell. 2001 Dec;12(12):4129-38. doi: 10.1091/mbc.12.12.4129.</li>
+            <li>Liljeström PL. The nucleotide sequence of the yeast MEL1 gene. Nucleic Acids Res. 1985 Oct 25;13(20):7257-68. doi: 10.1093/nar/13.20.7257</li>
+          </ol>
         </div>
-
-        <!-- ============ 3.1 底盘酵母改造 ============ -->
-        <div id="design-chassis" class="content-card">
-          <h2>底盘酵母改造</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              用 pML104 递送 CRISPR/Cas9 与 sgRNA，配同源臂融合修复模板，敲除 SST2 与 FAR1 两个内源基因：SST2 敲除以放大下游信号，FAR1 敲除以维持实时监测时细胞持续生长。
-            </p>
-
-            <h3 id="design-chassis-goal">设计目标</h3>
-            <p class="content-intro">
-              敲除两个内源基因：SST2（G 蛋白负调控因子，敲除以放大下游信号）与 FAR1（交配信号诱导的细胞周期阻滞因子，敲除以维持实时监测时细胞持续生长）。这一步对接主链的最前端，为下游受体和接口提供一个干扰更少、能持续分裂的底盘。本模块只解决底盘本身，不碰下游通路输出幅度。
-            </p>
-
-            <h3 id="design-chassis-route">技术路线</h3>
-            <p class="content-intro">
-              用 pML104 载体递送 CRISPR/Cas9 与 sgRNA，配同源臂融合修复模板完成敲除。sgRNA 部分通过反向 PCR 构建到载体上；修复模板由两段同源臂经两轮融合 PCR 拼接，敲除位点设计 4 bp 缺失造成移码，使跨越位点的引物在敲除后无法配对。敲除采用两轮流程：先做 FAR1，再用 5-FOA 反筛去除携带 URA3 标记的 sgRNA 质粒，在无质粒的 FAR1 敲除株基础上做第二基因的敲除。
-            </p>
-
-            <h3 id="design-chassis-controls">判定与对照设计</h3>
-            <p class="content-intro">
-              敲除是否成功采用两级判定：菌落 PCR 初筛，测序确认。菌落 PCR 的判据是「无扩增条带」，即引物在敲除位点找不到可结合的模板；单凭这一条不能排除 PCR 本身失败，因此候选克隆一律送测序，最终结论以测序为准。功能验证设 BY4741 与敲除株两组，各设 0 / 1 / 10 μM α-factor 三档，每组 3 个生物学重复，误差棒为 SEM，30 ℃、200 rpm 下从 0 h 起每小时测一次 OD₆₀₀，连续 6 h。
-            </p>
-          </div>
-        </div>
-
-        <!-- ============ 3.2 PAGER 受体构建与验证 ============ -->
-        <div id="design-pager" class="content-card">
-          <h2>PAGER 受体构建与验证</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              把 PAGER 融合受体装进酵母并验证其构建与表达。本模块只验证受体本身的构建与表达，不验证对 HA 的识别性能。
-            </p>
-
-            <h3 id="design-pager-goal">设计目标</h3>
-            <p class="content-intro">
-              把 PAGER 融合受体克隆进 pGADT7 载体，转化大肠杆菌与酵母，验证蛋白表达，并用 DCZ 做功能读出。这一步对接主链的「识别」环节，把抗原识别元件装到酵母里。注意：本模块只验证受体本身的构建与表达，不验证对 HA 的识别性能。
-            </p>
-
-            <h3 id="design-pager-route">技术路线</h3>
-            <p class="content-intro">
-              受体基因合成后先在大肠杆菌里扩增：Top10 转化、扩培、质粒小提、双酶切（NdeI 与 BamHI-HF）与琼脂糖电泳验证；验证通过的质粒转化酵母，再做蛋白层检测与功能读出。蛋白层用 SDS-PAGE 与 Western blot，配合免疫荧光观察定位；功能读出用 DCZ 梯度诱导、酶标仪按时间读板。三段证据的目标不同：酶切与菌落 PCR 验证构建是否正确，WB 验证蛋白是否表达，DCZ 读板验证受体能否被小分子配体激活。
-            </p>
-
-            <h3 id="design-pager-controls">判定与对照设计</h3>
-            <p class="content-intro">
-              构建验证以双酶切条带与理论值比对、菌落 PCR 条带尺寸为判据。蛋白层以分子量为判据，免疫荧光设 BY4741 阴性对照。DCZ 功能验证设 25 / 50 / 100 / 250 / 500 / 1000 nM 六档，配空白与阴性对照，30 ℃ 孵育 2–6 h 每小时读数。重复数按日期记录为流水，未系统给 n。
-            </p>
-          </div>
-        </div>
-
-        <!-- ============ 3.3 GPA1 人源化改造 ============ -->
-        <div id="design-gpa1" class="content-card">
-          <h2>GPA1 人源化改造</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              把 GPA1 基因 C 端 5 个氨基酸替换为人源序列（KIGII → EYNLV），并在其后引入终止密码子，使人的 DREADD 受体 hM1Dq 能驱动酵母 MAPK 通路。
-            </p>
-
-            <h3 id="design-gpa1-goal">设计目标</h3>
-            <p class="content-intro">
-              把 GPA1 基因 C 端 5 个氨基酸替换为人源序列（KIGII → EYNLV），并在其后引入终止密码子，使人的 DREADD 受体 hM1Dq 能驱动酵母 MAPK 通路。这一步是人和酵母信号之间的接口。改造本身会改变酵母对 α-factor 的响应，因此要单独测改造后形态、生长、下游表达三层响应有没有变化。
-            </p>
-
-            <h3 id="design-gpa1-route">技术路线</h3>
-            <p class="content-intro">
-              供体片段的制备先后尝试了两条路线：路线一用 pRS426 二次线性化载体与一步克隆组装，把目的片段接到载体上；路线二改用多片段融合 PCR，把 URA3 表达盒与上下游同源臂三段共融成完整线性供体片段，直接转化酵母做同源重组。两条路线的取舍记录在「设计迭代与失败」一节。
-            </p>
-
-            <h3 id="design-gpa1-controls">判定与对照设计</h3>
-            <p class="content-intro">
-              同源重组是否成功用两轮菌落 PCR 初筛，随机挑克隆送测序确认。表型验证分三层：0 / 1 / 10 μM α-factor 下的形态观察；3 株 × 3 浓度 × 3 重复 × 11 时间点的生长曲线；八档 α-factor 梯度的荧光读数。这三层针对的是同一个设计问题：替换 C 端之后，细胞对 α-factor 的响应有没有变。浓度体系与底盘模块不同，并列呈现须各自注明。
-            </p>
-          </div>
-        </div>
-
-        <!-- ============ 3.4 报告体系构建 ============ -->
-        <div id="design-reporter" class="content-card">
-          <h2>报告体系构建</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              建立一条「α-factor → FUS1 启动子 → 报告基因」的诱导读出体系，作为下游信号有无的判读手段。
-            </p>
-
-            <h3 id="design-reporter-goal">设计目标</h3>
-            <p class="content-intro">
-              建立一条「α-factor → FUS1 启动子 → 报告基因」的诱导读出体系，作为下游信号有无的判读手段。本模块对 PAGER 受体链路没有直接描写，对外唯一接口是 α-factor 这一层。它只回答「给了 α-factor，报告基因出不出、出多少」。
-            </p>
-
-            <h3 id="design-reporter-route">技术路线</h3>
-            <p class="content-intro">
-              本模块六份方案按用途分三型。A 型（方案 01）建库筛选：对 FUS1 启动子的 PRE1 / PRE2 位点做突变建库，与线性化的 pESC-HIS 载体同源重组共转化，两轮筛选后测序鉴定启动子序列。B 型（方案 02、03）做基因型验证，用两套菌落 PCR 体系确认转化子。C 型（方案 04、05、06）做诱导表征：分别用 MEL1 + X-α-gal 显色、yEGFP 荧光与 OD₆₀₀ 生长曲线三套读出并行。三套读出各自回答不同问题：显色看信号有没有，荧光看信号有多强，生长曲线看诱导剂本身有没有毒性。其中显色读出（方案 04）已执行但未得到可用结果，短期无法优化，本模块现有结果仅来自荧光与生长曲线两条读出，不以显色判读。
-            </p>
-
-            <h3 id="design-reporter-controls">判定与对照设计</h3>
-            <p class="content-intro">
-              建库筛选分两轮：先负选挑无色克隆，再在高浓度 α-factor 下挑诱导变蓝的克隆，FUS1 启动子测序鉴定。诱导表征设 0 μM 阴性组与纯培养基空白组；重复方面，方案 04 给 3 次生物学重复，方案 05、06 各给 3 次生物学重复加 3 次技术重复；方案 01、02、03 未给重复数。荧光读数在黑色 96 孔板上以 Synergy HTX 酶标仪按终点模式逐时点读数，实际执行参数为滤光片组 1：激发 485/20 nm、发射 528/20 nm，顶部光学、增益 35、检测高度 1 mm，每 1 h 读一次、连续 16 h，并以荧光值除以 OD₆₀₀ 归一化；方案文本原标称 488 nm 激发 / 507 nm 发射并注明「可根据仪器参数微调」，页面按实际仪器参数引用。OD₆₀₀ 未按逐小时采样，实际于诱导后 0 h、0 h 33 min、1 h 43 min、2 h 49 min、5 h 31 min、9 h 55 min（约 0、0.55、1.72、2.82、5.52、9.92 h）共 6 个时点测定。<!-- RC-1：方案写 24 → 0 μM 八档，与常规 nM 量级相差 10³–10⁴ 倍，核实前页面不使用该数值 --><!-- RC-4：方案 01 缺退火温度 / 循环数 / 凝胶浓度等参数 --><!-- RC-9 / RC-10：对照定义与重复数分布不均，引用前核对 -->
-            </p>
-          </div>
-        </div>
-
-        <!-- ============ 4. 设计迭代与失败 ============ -->
-        <div id="design-iteration" class="content-card">
-          <h2>设计迭代与失败</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              三个卡点按「现象 → 判断 → 改动 → 结果」写。一处直接改变了后续方案（接口模块换路线），两处改了检测与成像条件。
-            </p>
-
-            <h3 id="design-iteration-1">路线一（GPA1 供体）被测序判否</h3>
-            <p class="content-intro">
-              现象：pRS426 二次线性化路线体外组装顺利，但一步克隆产物转 TOP10 试了六种浓度均无目标菌落；线性供体片段送测发现 500 bp 之后大量碱基错配。判断：以质粒 PCR 扩增制备长供体片段的策略可行性较差。改动：放弃路线一，未做酵母转化，改用多片段融合 PCR。结果：路线二拼成完整供体片段并转化酵母，得到 12 号、17 号两株测序一致的工程菌。
-            </p>
-
-            <h3 id="design-iteration-2">WB 分子量不符</h3>
-            <p class="content-intro">
-              现象：7 月 16 日与 7 月 18 日的 SDS-PAGE 与 WB，预期 60 多 kD，条带出现在 40 kD 附近。判断：先排查上样与转膜条件，后续调整了样品处理与检测条件。改动与结果：8 月 30 日至 31 日在 60 kD 附近有条带，但杂带较多，仍需优化。
-            </p>
-
-            <h3 id="design-iteration-3">免疫荧光阴性</h3>
-            <p class="content-intro">
-              现象：7 月 29 日免疫荧光记录，1、2 号为第一次构建的菌，3、4 号为第二次构建，7、8 号为 BY4741 阴性对照，均无明显荧光。判断：信号不足或抗体、破壁条件未优化，未继续深挖。本条按记录照实写为阴性结果。
-            </p>
-          </div>
-        </div>
-
-        <!-- ============ 5. 结果与讨论 ============ -->
-        <div id="design-discussion" class="content-card">
-          <h2>结果与讨论</h2>
-          <div class="content-text-frame">
-            <p class="executive-summary">
-              四个模块各自成立，端到端的链路还没有一次完整实测。
-            </p>
-            <p class="content-intro">
-              底盘模块给出经测序确认的敲除株，并观察到敲除改变了菌株对 α-factor 的响应；受体模块的克隆链走通，蛋白层在 60 kD 附近测到条带但杂带较多，功能验证的读板数据以图片形式保存。接口改造得到 12 号、17 号两株测序一致的工程菌，但改造之后细胞对 α-factor 的响应在形态、生长、通路三层都减弱——这是改造本身的后果，需要在页面上讲清，因为项目最终要靠人源受体驱动通路，而不是靠 α-factor。报告体系完成构建，并拿到随 α-factor 浓度变化的荧光响应。
-            </p>
-            <p class="content-intro">
-              把四段并起来看，从识别到输出的完整链路还没有一次端到端实测：识别元件的表达与功能读出仍待完成，底盘与接口两段有明确的单点结果，报告体系拿到了剂量响应。失败记录多数来自这些未完成处，写清卡在哪一步，供后续队伍判断该从哪一段接手。各模块的完整数值、图表与讨论见 <a href="result.html">Results 页</a>。
-            </p>
-          </div>
-        </div>
-
       </div>
     </div>
 {% endblock %}
@@ -342,6 +351,7 @@ js:
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
+    // 页面加载进度条
     new PageProgressBar().startAutoProgress();
 
   });

@@ -626,9 +626,12 @@ body.home-page {
   overflow-x: hidden;
 }
 
-/* 页脚特殊处理 - 确保可以完整显示 */
+/* 页脚特殊处理 - 确保可以完整显示。
+   背景渐变不在此声明：由 navigation.css 的 .section-footer 统一提供
+   （linear-gradient(135deg, rgba(76,157,211,.96), rgba(58,120,166,.96))）。
+   此处原先写的 var(--bg-footer-gradient) 在全站没有任何定义，会导致
+   background 在计算值阶段失效、页脚变透明，白字压页面米黄底而不可读。 */
 .section-footer {
-  background: var(--bg-footer-gradient);
   position: relative;
   overflow: visible;
   height: auto;

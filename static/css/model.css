@@ -1,18 +1,18 @@
-/* 干实验组模型页面样式
+/* Dry-lab model page styles
  *
- * 范围：只服务 dry-lab/model 页的「交互演示」区块（纳米抗体 × 甲流 HA 对接卡牌）。
- * 约定：新增类名一律 model- 前缀命名空间，不改全站通用类，便于后续迁移到官方提交工程；
- *       颜色、圆角、阴影、时长全部复用 navigation.css 的设计令牌，不另立视觉语言。
+ * Scope: serves only the "Interactive Demo" block of the dry-lab/model page (nanobody × influenza A HA docking cards).
+ * Convention: new class names always use the model- namespace and do not modify site-wide generic classes, easing later migration to the official submission project;
+ *       colors, radii, shadows, and durations all reuse the design tokens from navigation.css; no separate visual language.
  */
 
-/* ============ 正文配图 ============ */
+/* ============ Body figures ============ */
 
-/* 建模文档导出的图多为深色底，加圆角与描边后与米黄页面衔接得更整齐 */
+/* Figures exported from the modeling document mostly have dark backgrounds; rounded corners and a border make them blend more cleanly with the cream page */
 .content-card figure img {
   border-radius: var(--radius-sm);
 }
 
-/* ============ 演示区外框 ============ */
+/* ============ Demo area frame ============ */
 
 .model-game {
   margin: 1.5rem 0 0;
@@ -54,7 +54,14 @@
   gap: var(--spacing-sm);
 }
 
-/* ============ 卡牌 ============ */
+/* 栅格项的自动最小宽度会被卡牌横向滚动条的内容顶宽（窄屏实测 487px），
+   导致整列超出卡片后被页面 overflow-x:hidden 裁掉；显式允许收缩。 */
+.model-game__column,
+.model-game__center {
+  min-width: 0;
+}
+
+/* ============ Cards ============ */
 
 .model-card {
   position: relative;
@@ -112,11 +119,14 @@
 .model-card__badge,
 .model-game__badge {
   align-self: flex-start;
+  justify-self: start;
   padding: 0.1rem 0.45rem;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-size: var(--font-size-xs);
   line-height: 1.5;
+  /* 文字量决定胶囊宽度：不允许被定宽网格列压出背景框 */
+  white-space: nowrap;
 }
 
 .model-card__badge--lead,
@@ -133,7 +143,7 @@
   color: #8a4b2a;
 }
 
-/* 抗原卡上的「目标亚型 / 对照亚型」标签：让筛选逻辑在卡面上可见 */
+/* "Target subtype / control subtype" tags on antigen cards: make the screening logic visible on the card faces */
 .model-card__tag {
   align-self: flex-start;
   margin-top: 0.15rem;
@@ -152,7 +162,7 @@
   color: #1b5e20;
 }
 
-/* ============ 中栏：槽位 / 结果 / 排名 / 三维 ============ */
+/* ============ Center column: slots / result / ranking / 3D ============ */
 
 .model-game__slots {
   display: flex;
@@ -223,7 +233,7 @@
   }
 }
 
-/* 主指标区：特异性指数放大 + 以 0 为中点的刻度条 */
+/* Main metric block: enlarged specificity index + gauge centered at 0 */
 .model-game__hero {
   display: flex;
   flex-wrap: wrap;
@@ -376,7 +386,7 @@
   color: var(--color-text-light);
 }
 
-/* ============ 排名条 ============ */
+/* ============ Ranking bar ============ */
 
 .model-game__ranking-list {
   display: flex;
@@ -389,7 +399,7 @@
 
 .model-game__ranking-item {
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr) 4.2rem 3rem;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 4.2rem auto;
   gap: var(--spacing-sm);
   align-items: center;
   font-size: var(--font-size-sm);
@@ -426,10 +436,73 @@
   color: var(--color-text);
 }
 
-/* ============ 三维面板 ============ */
+/* 排名面板已移入中部翻转卡背面（.model-game__flip-face--numbers），窄栏双行布局不再使用 */
+
+/* ============ 3D panel ============ */
 
 .model-game__viewer-block {
-  margin-top: var(--spacing-lg);
+  margin: 0 0 var(--spacing-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--desc-shadow-sm, 0 2px 8px rgba(139, 90, 43, 0.05));
+}
+
+/* ============ 翻转卡：正面 3D 结构 / 背面特异性指数排名 ============ */
+
+.model-game__flip {
+  perspective: 1400px;
+}
+
+.model-game__flip-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-smooth);
+}
+
+.model-game__flip-face {
+  grid-area: 1 / 1;
+  min-width: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 背面（排名面）常驻转 180°：容器翻转后转正 */
+.model-game__flip-face--numbers {
+  transform: rotateY(180deg);
+}
+
+.model-game__viewer-block.is-flipped .model-game__flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* WebGL 合成层可能无视 backface-visibility：翻转动画结束后由 JS 给离场面补 visibility:hidden 兜底 */
+.model-game__flip-face.is-parked {
+  visibility: hidden;
+}
+
+.model-game__flip-face .model-game__panel--ranking {
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+/* 热点残基列表默认折叠，避免把结果面板撑得过长；展开时高度变化要通知侧栏重算 */
+.model-game__detail > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.model-game__detail > summary::-webkit-details-marker {
+  display: none;
+}
+
+.model-game__detail > summary::before {
+  content: "▸ ";
+}
+
+.model-game__detail[open] > summary::before {
+  content: "▾ ";
 }
 
 .model-game__viewer-head {
@@ -485,6 +558,17 @@
   cursor: progress;
 }
 
+/* Active state of the view-toggle buttons: make clear which kind of structure the 3D panel currently shows */
+.model-game__button.is-active {
+  background: var(--color-green-accent);
+  border-color: var(--color-green-accent);
+  color: var(--color-white);
+}
+
+.model-game__button.is-active:hover:not(:disabled) {
+  background: var(--color-green-dark, #2f7d4f);
+}
+
 .model-game__viewer-note,
 .model-game__viewer-message,
 .model-game__status,
@@ -496,14 +580,15 @@
 
 .model-game__viewer {
   position: relative;
-  min-height: 20rem;
+  min-height: 12rem;
   border: 2px dashed var(--color-primary-light);
   border-radius: var(--radius-md);
   background: var(--bg-card-hover);
 }
 
 .model-game__viewer.is-ready {
-  height: 30rem;
+  /* 高度压到 18rem：作为钉住面板时需给下方结果留出可视空间 */
+  height: 18rem;
   border-style: solid;
   border-color: var(--border-color);
   background: var(--bg-card);
@@ -515,8 +600,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  min-height: 20rem;
-  padding: var(--spacing-xl);
+  min-height: 12rem;
+  padding: var(--spacing-md);
   text-align: center;
   font-size: var(--font-size-sm);
   color: var(--color-text-light);
@@ -549,12 +634,12 @@
   color: #8a4b2a;
 }
 
-/* 状态播报区留一寸高度，避免播报时页面跳动 */
+/* Reserve a small height for the status region to prevent page jumps when it updates */
 .model-game__status {
   min-height: 1.2rem;
 }
 
-/* ============ 响应式 ============ */
+/* ============ Responsive ============ */
 
 @media (max-width: 1100px) {
   .model-game__board {
@@ -562,14 +647,18 @@
   }
 
   .model-game__ranking-item {
-    grid-template-columns: 4rem minmax(0, 1fr) 3.8rem 2.8rem;
+    grid-template-columns: 4rem minmax(0, 1fr) 3.8rem auto;
+  }
+
+  .model-game__viewer.is-ready {
+    height: 15rem;
   }
 }
 
 @media (max-width: 768px) {
 
-  /* 本页正文表格列多（抗原表 6 列、打分表 6 列），窄屏下若按 100% 宽压缩会难以阅读：
-     改为表格自身横向滚动，列宽取内容宽度，页面级仍无横向溢出。 */
+  /* This page has many body-table columns (6 in the antigen table, 6 in the scoring table); compressing to 100% width on narrow screens hurts readability:
+     instead let the table scroll horizontally with content-width columns, keeping page-level horizontal overflow at zero. */
   .content-card table {
     display: block;
     overflow-x: auto;
@@ -578,6 +667,24 @@
 
   .model-game__board {
     grid-template-columns: 1fr;
+  }
+
+  /* 单栏窄屏：钉住的偏移贴到顶，画布再压缩，避免占掉半屏 */
+  .model-game__viewer-block {
+    padding: var(--spacing-sm);
+  }
+
+  .model-game__viewer {
+    min-height: 9rem;
+  }
+
+  .model-game__viewer.is-ready {
+    height: 13rem;
+  }
+
+  .model-game__viewer-empty {
+    min-height: 9rem;
+    padding: var(--spacing-md);
   }
 
   .model-game__cards {
@@ -647,7 +754,7 @@
   }
 }
 
-/* ============ 动效降级 ============ */
+/* ============ Reduced motion ============ */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -655,6 +762,10 @@
   .model-game__slot,
   .model-game__button,
   .model-game__ranking-bar {
+    transition: none;
+  }
+
+  .model-game__flip-inner {
     transition: none;
   }
 

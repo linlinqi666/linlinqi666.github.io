@@ -1,3 +1,4 @@
+{% from "icons.html" import icon with context %}
 {% extends "layout.html" %}
 {% from "macros.html" import img_placeholder %}
 
@@ -6,6 +7,11 @@
 
 {% block hero %}{% endblock %}
 {% block main_class %}long-page{% endblock %}
+
+{% block styles %}
+<!-- 首页 GIF 开场样式：仅首页需要，故不下沉到全站 layout（.intro-gif 默认 display:none 靠这里） -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/index-intro-gif.css') }}">
+{% endblock %}
 
 {% block page_content %}
 <!-- 首页 GIF 开场动画（默认不显示、不下载；由 index-intro-gif.js 激活。
@@ -234,17 +240,17 @@
     <h2 class="section-summary__title reveal">团队亮点</h2>
     <div class="summary-grid">
       <article class="summary-card reveal">
-        <span class="iconfont icon-tuandui"></span>
+        {{ icon('tuandui') }}
         <h3>跨学科协作</h3>
         <p>合成生物学、计算机建模、硬件设计与社会调查成员协同推进，形成从元件到社会的完整闭环。</p>
       </article>
       <article class="summary-card reveal">
-        <span class="iconfont icon-shezhichilun"></span>
+        {{ icon('shezhichilun') }}
         <h3>DBTL 工程思维</h3>
         <p>每个设计决策均对应可测试假设与迭代计划，确保项目可追溯、可复现、可改进。</p>
       </article>
       <article class="summary-card reveal">
-        <span class="iconfont icon-shehuishijian"></span>
+        {{ icon('shehuishijian') }}
         <h3>社会反馈驱动</h3>
         <p>专家与公众反馈持续塑造项目目标与产品形态，使技术方案贴近真实使用场景。</p>
       </article>
@@ -258,38 +264,56 @@
     <h2 class="section-summary__title reveal">探索我们的 Wiki</h2>
     <div class="portal-grid" role="navigation" aria-label="子页面导航">
       <a href="{{ url_for('pages', page='description') }}" class="portal-card reveal">
-        <span class="iconfont icon-jianjie"></span>
+        {{ icon('jianjie') }}
         <span>Description</span>
       </a>
       <a href="{{ url_for('pages', page='design') }}" class="portal-card reveal">
-        <span class="iconfont icon-sheji"></span>
+        {{ icon('sheji') }}
         <span>Design</span>
       </a>
       <a href="{{ url_for('pages', page='engineering') }}" class="portal-card reveal">
-        <span class="iconfont icon-shezhichilun"></span>
+        {{ icon('shezhichilun') }}
         <span>Engineering</span>
       </a>
       <a href="{{ url_for('pages', page='results') }}" class="portal-card reveal">
-        <span class="iconfont icon-shiyanjieguo"></span>
+        {{ icon('shiyanjieguo') }}
         <span>Results</span>
       </a>
       <a href="{{ url_for('pages', page='safety-and-security') }}" class="portal-card reveal">
-        <span class="iconfont icon-anquan"></span>
+        {{ icon('anquan') }}
         <span>Safety</span>
       </a>
       <a href="{{ url_for('pages', page='human-practices') }}" class="portal-card reveal">
-        <span class="iconfont icon-shehuishijian"></span>
+        {{ icon('shehuishijian') }}
         <span>Human Practices</span>
       </a>
       <a href="{{ url_for('pages', page='model') }}" class="portal-card reveal">
-        <span class="iconfont icon-wumoxing"></span>
+        {{ icon('wumoxing') }}
         <span>Dry Lab</span>
       </a>
-      <a href="{{ url_for('pages', page='members') }}" class="portal-card reveal">
-        <span class="iconfont icon-tuandui"></span>
+      <a href="{{ url_for('pages', page='team') }}" class="portal-card reveal">
+        {{ icon('tuandui') }}
         <span>Team</span>
       </a>
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<!-- 首页专属脚本：只服务本页，故不下沉到全站 layout。
+
+     ① executive-summary-animation.js（defer）—— 必需，不是可选：
+        index.css 里 .reveal { opacity: 0 }，而全仓库只有本脚本会加 .reveal--visible。
+        漏加载它 = 首页 49 个 .reveal 元素（含 H1 大标题）全部隐形。
+        本脚本另供：打字机、8 屏插画浮动、Start Journey 平滑滚动。
+
+     ② intro-gif-arm.js（同步，非 defer）—— 先于 <body> 渲染给 <html> 打
+        intro-gif-armed，6s 看门狗兜底恢复导航。
+        全站加载遮罩（page-loader）本轮整体暂缓，已无 page-loader-armed 交接，
+        看门狗立即起算（对首访更友好）。
+        其控制器 index-intro-gif.js 目前未接入：CDN 上 boot animation.GIF 尚未上传
+        （403），接上只会让首访多等 9.2s 空白遮罩，等素材上传后再一起接。 -->
+<script src="{{ url_for('static', filename='js/components/intro-gif-arm.js') }}"></script>
+<script src="{{ url_for('static', filename='js/components/executive-summary-animation.js') }}" defer></script>
 {% endblock %}

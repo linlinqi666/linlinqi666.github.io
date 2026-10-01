@@ -136,8 +136,8 @@
         roles: ['Adviser'],
         directions: ['Scientific Guidance'],
         bio: 'Adhere to the Scientific Outlook on Development',
-        photoPosition: 'center top',
-        photoSize: '80% auto'
+        photoPosition: '100% 25%',
+        photoSize: '68% auto'
       },
       {
         id: 'zjh',
@@ -145,23 +145,26 @@
         roles: ['Adviser'],
         directions: ['Scientific Guidance'],
         bio: 'Keep Pushing',
-        photoPosition: 'center top',
-        photoSize: '80% auto'
+        photoPosition: '100% 15%',
+        photoSize: '84% auto'
       },
       // 2026-09-15 新增 PI 两位与 WIKI 两位；2026-09-16 补入 bio（directions 待团队补标签）。
-      // zlj / tyj 无 _kt 卡通头像，显式指定头像=本人照片，避免探测必然 404 的 _kt 路径；
-      // lrx / crq 已补 _kt 卡通头像，走默认候选链（webp/<id>_kt.webp 优先），无需覆盖。
+      // 2026-09-30 修正：zlj / tyj 的 _kt 卡通头像已就位，移除旧的显式头像覆盖；原覆盖里的
+      // `../../image/...` 是相对 JS 文件的写法，在 /team/members.html 下会解析成 /image/... 而 404，
+      // 是两位 PI 头像裂图的根因。现统一走默认候选链（头像 webp/<id>_kt.webp 优先，缺则回退本人照片）；
+      // zlj 的大图仍用米黄背景版，但改为页面基准相对路径 `../static/...`。
       {
         id: 'zlj',
         name: 'Lijun Zhang',
         roles: ['Primary PI', 'PI'],
         directions: [],
         bio: 'iGEM is far more than a competition, it is a transformative journey on which students explore the boundless possibilities of synthetic biology.',
-        photoPosition: 'center top',
-        photoSize: '30% auto',
+        photoPosition: '55% 0%',
+        photoSize: '36% auto',
         images: {
-          photo: { candidates: ['../../image/any-icon/character/webp/zlj-cream.webp', '../../image/any-icon/character/webp/zlj.webp'] },
-          avatar: { candidates: ['../../image/any-icon/character/webp/zlj.webp'] }
+          // 2026-09-30：大图改用原始照片（源图片/zlj.png 转制 webp/zlj.webp，1760×2447），
+          // 而非之前的米黄背景版 zlj-cream.webp。
+          photo: { candidates: ['../static/image/any-icon/character/webp/zlj.webp', '../static/image/any-icon/character/webp/zlj-cream.webp'] }
         }
       },
       {
@@ -170,9 +173,8 @@
         roles: ['Secondary PI', 'PI'],
         directions: [],
         bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
-        photoPosition: '72% top',
-        photoSize: '72% auto',
-        images: { avatar: { candidates: ['../../image/any-icon/character/webp/tyj.webp'] } }
+        photoPosition: '100% 10%',
+        photoSize: '78% auto'
       },
       {
         id: 'lrx',
@@ -625,6 +627,66 @@
   const BackgroundController = (function () {
     let activeSlide = 'a';
     let generation = 0;
+    let lastImg = null;
+    let lastSize = null;
+    let lastPosition = null;
+    let lastDomRefs = null;
+
+    /* 把 "N% auto" 解析为照片相对滑层宽度的百分比 N；cover / 未识别 → null（视为满铺） */
+    function parsePhotoSize(str) {
+      if (!str) return null;
+      const m = /^\s*([\d.]+)%\s+auto\s*$/.exec(str);
+      if (m) return parseFloat(m[1]);
+      if (/cover/i.test(str)) return null;
+      return null;
+    }
+
+    /* 把 "X% Y%" / "center top" 等解析为 [X, Y] 百分比（关键字按浏览器规则映射） */
+    function parsePhotoPosition(str) {
+      const parts = (str || '').trim().split(/\s+/);
+      const map = { center: 50, top: 0, bottom: 100, left: 0, right: 100 };
+      const x = parts[0], y = parts[1] || 'center';
+      const xv = map[x] !== undefined ? map[x] : parseFloat(x);
+      const yv = map[y] !== undefined ? map[y] : parseFloat(y);
+      return [isNaN(xv) ? 50 : xv, isNaN(yv) ? 50 : yv];
+    }
+
+    /* 按照片实际渲染框写入 CSS 变量（.bg-mask 据此做米黄晕影羽化）。
+       纯 O(1) 计算 + 一次 CSS 变量写入，不触发强制同步布局，不参与动画。
+       缺省（无图 / 滑层尺寸为 0）时退回满铺，不绘制晕影。 */
+    function setPhotoBox(img, size, position, domRefs) {
+      const layer = domRefs && domRefs.bgLayer;
+      if (!layer || !img || !img.naturalWidth) return;
+      const rect = layer.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+      if (!W || !H) return;
+
+      const N = parsePhotoSize(size);
+      let leftPct, rightPct, topPct, bottomPct, fadeX, fadeY;
+      if (N === null) {
+        leftPct = 0; rightPct = 100; topPct = 0; bottomPct = 100; fadeX = 0; fadeY = 0;
+      } else {
+        const Xr = parsePhotoPosition(position);
+        const w = W * N / 100;
+        const h = w * img.naturalHeight / img.naturalWidth;
+        const left = (W - w) * (Xr[0] / 100);
+        const top = (H - h) * (Xr[1] / 100);
+        leftPct = left / W * 100;
+        rightPct = (left + w) / W * 100;
+        topPct = top / H * 100;
+        bottomPct = (top + h) / H * 100;
+        const fadePx = Math.min(96, Math.max(24, w * 0.15));
+        fadeX = fadePx / W * 100;
+        fadeY = fadePx / H * 100;
+      }
+      const st = layer.style;
+      st.setProperty('--photo-left', leftPct + '%');
+      st.setProperty('--photo-right', rightPct + '%');
+      st.setProperty('--photo-top', topPct + '%');
+      st.setProperty('--photo-bottom', bottomPct + '%');
+      st.setProperty('--photo-fade-x', fadeX + '%');
+      st.setProperty('--photo-fade-y', fadeY + '%');
+    }
 
     /**
      * Preload and display the next background image.
@@ -645,7 +707,7 @@
       const bgSize = size || ImageResolver.DEFAULT_PHOTO_SIZE;
       const currentGeneration = ++generation;
 
-      function applyLoaded(path) {
+      function applyLoaded(path, img) {
         if (currentGeneration !== generation) return;
         const safePath = path
           ? encodeURI(path)
@@ -659,6 +721,13 @@
         next.classList.add('is-active');
         current.classList.remove('is-active');
         activeSlide = activeSlide === 'a' ? 'b' : 'a';
+        if (img) {
+          lastImg = img;
+          lastSize = bgSize;
+          lastPosition = bgPosition;
+          lastDomRefs = domRefs;
+          setPhotoBox(img, bgSize, bgPosition, domRefs);
+        }
       }
 
       function tryCandidate(index) {
@@ -668,12 +737,17 @@
           return;
         }
         const img = new Image();
-        img.onload = () => applyLoaded(candidates[index]);
+        img.onload = () => applyLoaded(candidates[index], img);
         img.onerror = () => tryCandidate(index + 1);
         img.src = candidates[index];
       }
 
       tryCandidate(0);
+    }
+
+    /* 视口变化时重新计算渲染框（照片百分比随滑层尺寸变化），仅 O(1) 计算 */
+    function refreshPhotoBox() {
+      if (lastImg) setPhotoBox(lastImg, lastSize, lastPosition, lastDomRefs);
     }
 
     /**
@@ -690,7 +764,7 @@
       updateBackgroundWithCandidates(candidates, position, size, domRefs);
     }
 
-    return { updateBackground, updateBackgroundWithCandidates };
+    return { updateBackground, updateBackgroundWithCandidates, refreshPhotoBox };
   })();
 
   /**
@@ -829,7 +903,6 @@
     let selectedId = null;
     let isRailCollapsed = false;
     let cachedScrollbarWidth = null;
-    let lastRailRect = null;
     let railResizeObserver = null;
     let railFillerRafId = null;
     let resizeRafId = null;
@@ -867,38 +940,14 @@
 
     function invalidateScrollbarWidth() {
       cachedScrollbarWidth = null;
-      lastRailRect = null;
     }
 
+    /* 仅把实测滚动条宽度写入 CSS 变量；.rail-edge-filler 的纵向几何已由纯 CSS
+       (top:0;bottom:0) 接管，不再需要 JS 回写 top/height，避免展开动画中同步滞后
+       造成的右缘短暂脱离视口。 */
     function updateRailEdgeFiller() {
-      const filler = domRefs.filler;
-      const rail = domRefs.rail;
-      if (!filler || !rail) return;
-
-      if (!rail.classList.contains('is-visible')) {
-        if (filler.style.top !== '' || filler.style.height !== '') {
-          filler.style.top = '';
-          filler.style.height = '';
-          lastRailRect = null;
-        }
-        return;
-      }
-
       const scrollbarWidth = measureScrollbarWidth();
       document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-
-      const railRect = rail.getBoundingClientRect();
-      if (lastRailRect &&
-        Math.round(lastRailRect.top) === Math.round(railRect.top) &&
-        Math.round(lastRailRect.height) === Math.round(railRect.height)) {
-        return;
-      }
-      lastRailRect = railRect;
-
-      const top = `${Math.round(railRect.top)}px`;
-      const height = `${Math.round(railRect.height)}px`;
-      if (filler.style.top !== top) filler.style.top = top;
-      if (filler.style.height !== height) filler.style.height = height;
     }
 
     function scheduleRailEdgeFillerUpdate() {
@@ -1173,6 +1222,7 @@
           lastWidth = width;
           resyncStripGroupsHeight();
           scheduleRailEdgeFillerUpdate();
+          BackgroundController.refreshPhotoBox();
         });
       }
 
@@ -1243,7 +1293,6 @@
       selectedId = null;
       isRailCollapsed = false;
       cachedScrollbarWidth = null;
-      lastRailRect = null;
       lastWidth = window.innerWidth;
     }
 

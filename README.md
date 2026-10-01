@@ -4,6 +4,15 @@
 >
 > 审查方式：基于全仓库静态文件分析，并使用 Playwright（Chromium）对 `index.html`、`project/description.html` 等页面进行实际渲染，提取了计算后的真实样式值（字体、背景、侧边栏尺寸、字号等）进行交叉验证。
 
+> ### 最要紧的四条（文件很长、轻重不一，这四条每次动手前都要确认）
+>
+> 本文件各节轻重不同，以下四条是**违反即造成污染或返工**的硬规矩，其余章节按需查阅：
+>
+> 1. **对话产物当次归位，不等堆积。** 任何对话/工具产生的文件，生成那一刻就移入 `对话归档/`，并按月份容器与主题分层；**不要等用户来提醒才整理**。移动后同步全仓引用路径。详见 **第十一节 11.5**。
+> 2. **根目录 `*.html` 是构建产物，改源不改产物。** 改页面必须改 `src/**/*.njk` 后跑 `npm run build:all`；直接编辑根目录 HTML 不算修复。详见 **第二节 / 第十节**。
+> 3. **图片引用前先核对文件存在。** 历史上多次因文件名写错导致全站破图。详见 **第六节**。
+> 4. **提交前 `git status` 复查。** 只暂存本次文件，禁止 `git add .`；不提交构建产物、`node_modules`、密钥与 `对话归档/`。详见 **第十七节**。
+
 ## 〇、当前项目关系与状态（2026-08-09）
 本仓库内存在两个 wiki 工程，分工如下：
 - **igem2026-flask（生产提交工程）**：基于官方 `wiki-frozen-flask` 模板的 Frozen-Flask 站点，为 2026 赛季正式提交版本。静态资源仅含 CSS/JS（图片走 `static.igem.wiki`），通过 `.gitlab-ci.yml` 源码构建发布，符合 iGEM 官方三条硬性规则。合规细节见 `对话归档/research-reports/gitlab/IGEM2026_WIKI_COMPLIANCE.md`。
@@ -390,7 +399,7 @@ node static/js/core/search-index-generator.js
 
 ### 5.14 Design / Protocol / Results / Contribution 四页结构（2026-09-22 重建，2026-09-26 拆分）
 
-四页按 `static/expriments/The extreme/` 下三套页面资料包（`exepriment/experiments/`、`result/`、`contribution/` 的 `output/15-*内容大纲.md`）重建，内容来源为 `static/expriments/` 四个模块的一手分析。原 `wet-lab/experiments.html` 于 2026-09-26 按用户指令拆分为 `wet-lab/design.html`（实验设计）与 `wet-lab/protocol.html`（实验方案）两页：原页删除，导航（`nav.njk` 移动 + 桌面两处）、页脚（`footer.njk`）、首页页脚与 `src/_data/contribution.js` 引用同步改到新页，搜索索引 `PAGES` 同步（需求 `REQ-20260926-002`）；他队样本分析与拆分方案见 `对话归档/2026-09-26-experiments-split/`。
+四页按 `static/expriments/The extreme/` 下三套页面资料包（`exepriment/experiments/`、`result/`、`contribution/` 的 `output/15-*内容大纲.md`）重建，内容来源为 `static/expriments/` 四个模块的一手分析。原 `wet-lab/experiments.html` 于 2026-09-26 按用户指令拆分为 `wet-lab/design.html`（实验设计）与 `wet-lab/protocol.html`（实验方案）两页：原页删除，导航（`nav.njk` 移动 + 桌面两处）、页脚（`footer.njk`）、首页页脚与 `src/_data/contribution.js` 引用同步改到新页，搜索索引 `PAGES` 同步（需求 `REQ-20260926-002`）；他队样本分析与拆分方案见 `对话归档/2026-09/2026-09-26-experiments-split/`。
 
 **Design 页**（`src/wet-lab/design.njk`）五节，承接设计层内容：
 
@@ -402,7 +411,7 @@ node static/js/core/search-index-generator.js
 | 设计迭代与失败 | `#design-iteration` | 卡点按「现象 → 判断 → 改动 → 结果」 |
 | 结果与讨论 | `#design-discussion` | 四段合看的结论与未完成处；完整数值指向 Results 页 |
 
-**Protocol 页**（`src/wet-lab/protocol.njk`，2026-09-27 起改为按实验组原始方案文档生成）：四个模块（`#protocol-chassis` / `#protocol-pager` / `#protocol-gpa1` / `#protocol-reporter`），页内不放导语、使用说明或页间分工说明，直接进入文档内容。每个模块只收录「目的 / 实验材料 / 实验步骤」三类章节，文字照实验组逐字稿录入、不做二次改写；报告体系模块按六份原始实验方案分列。原文档的「实验结果」「数据整理 / 结果判定 / 实验预期结果」章不收录（实测结果归 Results 页）。页面配图 8 张（设计类图谱，PNG 原件复制到 `static/image/protocol/<模块>/docx-media/`）；生成脚本与逐行文本覆盖校验、图片哈希校验记录见 `对话归档/2026-09-27-protocol-from-source/`。2026-09-27 用户确认删除 6 段与 3.3.1 逐字重复的纯化步骤（生成脚本 `SKIP_RANGES` 清单，行号 + 首尾文本校验，源文档未改、可回滚）。两页共用 `experiments.css`。
+**Protocol 页**（`src/wet-lab/protocol.njk`，2026-09-27 起改为按实验组原始方案文档生成）：四个模块（`#protocol-chassis` / `#protocol-pager` / `#protocol-gpa1` / `#protocol-reporter`），页内不放导语、使用说明或页间分工说明，直接进入文档内容。每个模块只收录「目的 / 实验材料 / 实验步骤」三类章节，文字照实验组逐字稿录入、不做二次改写；报告体系模块按六份原始实验方案分列。原文档的「实验结果」「数据整理 / 结果判定 / 实验预期结果」章不收录（实测结果归 Results 页）。页面配图 8 张（设计类图谱，PNG 原件复制到 `static/image/protocol/<模块>/docx-media/`）；生成脚本与逐行文本覆盖校验、图片哈希校验记录见 `对话归档/2026-09/2026-09-27-protocol-from-source/`。2026-09-27 用户确认删除 6 段与 3.3.1 逐字重复的纯化步骤（生成脚本 `SKIP_RANGES` 清单，行号 + 首尾文本校验，源文档未改、可回滚）。两页共用 `experiments.css`。
 
 - 分流规则：材料 / 配方 / 步骤 / 对照与结果判定归 Protocol（直接收录实验组源文档）；设计目的与方案演进的分析归 Design；实测结果归 Results——三页不互相复制数据。新增模块须在 Design 页与 Protocol 页同时补齐对应内容。
 - 侧边栏 TOC 与页内 id 同步更新（Design 页两级：节 + 模块；Protocol 页四个模块一级项）；改锚点须同步 TOC。`sidebar-progress.js` 的 `sectionIdPrefixes` 已加入 `design-` / `protocol-` 前缀，TOC 可下钻到模块级。
@@ -440,11 +449,13 @@ node static/js/core/search-index-generator.js
 
 **已按本规范改造**（wet-lab，2026-09-27）：`result`（22 小节）/ `safety`（7）/ `protocol`（15）/ `design`（15）。
 
-**protocol 页特别说明（2026-09-27 第三轮）**：`src/wet-lab/protocol.njk` 由生成脚本 `对话归档/2026-09-27-protocol-from-source/temporary-tools/build_protocol_njk.py` 从实验组源文档逐字生成，**锚点与两级导航已写进生成脚本**——正文 h3 为 `protocol-<模块>-purpose|materials|steps`（报告体系 6 份方案为 `protocol-reporter-plan-1..6`），侧边栏四个模块各挂对应 `level3`。维护该页须改脚本并重跑：`python build_protocol_njk.py` → 将 `generated/protocol.njk` 复制到 `src/wet-lab/protocol.njk` → `npx @11ty/eleventy` → 跑 §5.14.1 两套验证。**直接编辑 `src/wet-lab/protocol.njk` 会在下次重跑脚本时被覆盖。**
+**protocol 页特别说明（2026-09-27 第三轮）**：`src/wet-lab/protocol.njk` 由生成脚本 `对话归档/2026-09/2026-09-27-protocol-from-source/temporary-tools/build_protocol_njk.py` 从实验组源文档逐字生成，**锚点与两级导航已写进生成脚本**——正文 h3 为 `protocol-<模块>-purpose|materials|steps`（报告体系 6 份方案为 `protocol-reporter-plan-1..6`），侧边栏四个模块各挂对应 `level3`。维护该页须改脚本并重跑：`python build_protocol_njk.py` → 将 `generated/protocol.njk` 复制到 `src/wet-lab/protocol.njk` → `npx @11ty/eleventy` → 跑 §5.14.1 两套验证。**直接编辑 `src/wet-lab/protocol.njk` 会在下次重跑脚本时被覆盖。**
 
 **已回退（2026-09-27，用户确认改造范围仅湿实验）**：dry-lab `software` / `hardware`、project `description` / `design` / `engineering` / `contribution`、human-practices `education` 共 7 页的锚点与折叠改造已用 git 精确还原（`src/` 下对应 `.njk` 回到改造前状态），为它们新增的 `sectionIdPrefixes` 前缀（`software-` / `hardware-` / `project-` / `engineering-` / `build-` / `test-` / `learn-` / `education-` / `description-` / `biological-` / `modular-` / `innovation-` / `references` 等）已一并撤除。这 7 页恢复原状：侧边栏 `level3` 指向页面中不存在的 id（点击无反应）、滚动高亮不生效。如未来要重启这些页的改造，按本节三步 + §5.14.1 两套验证执行。
 
-**dry-lab `model` 页重新纳入（2026-09-27 重写，`REQ-20260927-001`）**：Model 页正文按干实验建模文档整体重写，同时按本规范重建锚点与两级导航——10 个小节（`model-biological-assumptions` / `model-mathematical-assumptions` / `model-data-targets` / `model-data-nanobodies` / `model-data-scoring` / `model-screening` / `model-haddock` / `model-interface` / `model-kinetics` / `model-ranking`），`sectionIdPrefixes` 已补回 `model-`，两套验证脚本的页面清单已加入 `dry-lab/model.html`（e2e target 由 `model-dose-response` 改为 `model-screening`）。页面结构与数据源见 `static/expriments/drylab/model/plan.md`（含交互演示数据源 `static/data/dry-lab/model/model-docking.json` 与按需加载的自托管三维库 `static/js/3dmol/`）。
+**dry-lab `model` 页重新纳入（2026-09-27 重写，`REQ-20260927-001`）**：Model 页正文按干实验建模文档整体重写，同时按本规范重建锚点与两级导航，共 10 个小节（id 前缀 `model-`，已登记到 `sectionIdPrefixes`）；两套验证脚本的页面清单已加入 `dry-lab/model.html`（e2e target 由 `model-dose-response` 改为 `model-screening`）。
+
+> 该页的素材、运行资源、打分数据与待核项**不在这里展开**，统一见 **`static/expriments/drylab/model/00-文件归属.md`**（该文件同时取代了同目录 `plan.md`）。
 
 **例外与边界（2026-09-27 确认）**：
 
@@ -495,14 +506,14 @@ node static/js/core/search-index-generator.js
 | `photoSize` | 背景大图缩放（CSS `background-size`） | 回退默认 `cover` |
 | `images`（可选） | 覆盖 `photo` / `avatar` 的候选路径 | 走下面的默认候选链 |
 
-**照片微调（`photoPosition` / `photoSize`）速查表**（2026-09-15 现状，直接改 `members.js` 对应数值即可，无需动 CSS）：
+**照片微调（`photoPosition` / `photoSize`）速查表**（2026-09-30 现状，直接改 `members.js` 对应数值即可，无需动 CSS）：
 
 | 成员 | id | 分组 | photoPosition | photoSize |
 |---|---|---|---|---|
-| Lijun Zhang | `zlj` | PI | `center top` | `80% auto` |
-| Yongjun Tang | `tyj` | PI | `center top` | `80% auto` |
-| Lizhen Zhu | `zlz` | Adviser | `center top` | `80% auto` |
-| Jianhua Zhou | `zjh` | Adviser | `center top` | `80% auto` |
+| Lijun Zhang | `zlj` | PI | `70% 0%` | `36% auto` |
+| Yongjun Tang | `tyj` | PI | `100% 10%` | `78% auto` |
+| Lizhen Zhu | `zlz` | Adviser | `100% 25%` | `68% auto` |
+| Jianhua Zhou | `zjh` | Adviser | `100% 15%` | `84% auto` |
 | Jie Xia | `xj` | Wet Lab | `center 30%` | `100% auto` |
 | Yifan Gao | `gyf` | Wet Lab | `center 10%` | `60% auto` |
 | Chengxi Luo | `lcx` | Wet Lab | `70% 10%` | `70% auto` |
@@ -511,8 +522,8 @@ node static/js/core/search-index-generator.js
 | Yuelin Zheng | `zyl` | Wet Lab | `55% 10%` | `80% auto` |
 | Rui Luo | `lr` | Dry Lab | `60% 30%` | `60% auto` |
 | Qi Xu | `xq` | WIKI | `45% 30%` | `60% auto` |
-| Ruoxi Li | `lrx` | WIKI | `center 20%` | `60% auto` |
-| Rouqing Chen | `crq` | WIKI | `center 20%` | `60% auto` |
+| Ruoxi Li | `lrx` | WIKI | `60% 20%` | `60% auto` |
+| Rouqing Chen | `crq` | WIKI | `center 34%` | `70% auto` |
 | Yuquan Luo | `lyq` | HP | `60% 30%` | `60% auto` |
 | Siqi Peng | `psq` | Art | `60% 30%` | `90% auto` |
 
@@ -522,7 +533,14 @@ node static/js/core/search-index-generator.js
 **图片候选链（`ImageResolver`）：**
 - 背景大图：`webp/<id>.webp` → `源图片/<id>.jpg` → `源图片/<id>.png`。
 - 条带头像：`webp/<id>_kt.webp` → `源图片/<id>_kt.jpg` → `源图片/<id>_kt.png` → `webp/<id>.webp` → `源图片/<id>.jpg` → `源图片/<id>.png`（后三项是「没有卡通头像」的兜底，避免 `onerror` 链耗尽出现破图）。
-- **没有 `_kt` 卡通头像的成员**（当前为 `zlj` / `tyj`）必须显式写 `images: { avatar: { candidates: [...] } }`，把本人照片放在首位：否则浏览器会先探测不存在的 `_kt` 路径，产生必然 404 的请求（已实测：不写会新增 12 条 404 控制台报错）。写成一行即可，与其余字段保持同一视觉格式；**补上 `_kt` 素材后应把该字段删掉**，回到默认候选链（否则会继续用本人照片当头像，`lrx` / `crq` 于 2026-09-16 已按此处理）。
+- **没有 `_kt` 卡通头像的成员**必须显式写 `images: { avatar: { candidates: [...] } }`，把本人照片放在首位：否则浏览器会先探测不存在的 `_kt` 路径，产生必然 404 的请求（已实测：不写会新增 12 条 404 控制台报错）。写成一行即可，与其余字段保持同一视觉格式；**补上 `_kt` 素材后应把该字段删掉**，回到默认候选链（否则会继续用本人照片当头像，`lrx` / `crq` 于 2026-09-16、`zlj` / `tyj` 于 2026-09-30 已按此处理）。
+- **路径基准是页面，不是 JS 文件（2026-09-30 修坑）**：`images` 里的候选路径由浏览器按**当前页 URL**解析，成员页是 `/team/members.html`（一级目录），因此必须写 `../static/image/...`。写成 `../../image/...` 会被解析成 `/image/...` 而 404——`zlj` / `tyj` 的头像与大图曾因此整组裂图，且 `onerror` 兜底链同样指向错误路径，连回退都没有。默认候选链（`IMAGE_PATH_TEMPLATES`）本身就是 `../static/...`，**能走默认链就不要写覆盖**。
+- **取景调参方法（2026-09-30）**：改完不要只凭肉眼，按「检测 → 求解 → 实测复核」三步走，脚本都在 `对话归档/temporary-tools/2026-09/`：
+  1. `2026-09-30-face-detect-members.py`（YuNet）输出每张照片的人脸中心相对坐标与宽高比；
+  2. `2026-09-30-members-photo-solve.py` 按桌面（1440×800）与移动端（334×219）两套容器尺寸网格搜索，求一组两端都能把人脸放进可视区的 `(size, px, py)`；
+  3. `2026-09-30-members-photo-measure.js` 起真实浏览器截图并回读 `background-position/size`，再用第 1 步的脚本对截图做人脸检测复核（截图前必须先点掉全屏引导封面 `.members-intro`，否则每张截图都一样）。
+  桌面理想落点：人脸中心 x≈0.60–0.62（避开左侧正文蒙版、又不压到右侧信息条）、y≈0.40–0.44；移动端卡片只有 219px 高且底部 62% 起淡出，人脸 y 需落在 0.35–0.40 才看得见。
+- **照片晕影与取景参数的关系（2026-10-01）**：背景照片四周的米黄羽化由 `members.js` 的 `setPhotoBox()` 按**实际渲染框**算出并写入 CSS 变量（`--photo-left/right/top/bottom`、`--photo-fade-x/y`，挂在 `.members-bg-layer` 上），`members.css` 的 `.bg-mask` 四条渐变据此绘制。**不要让"照片边缘好不好看"成为改 `photoSize` / `photoPosition` 的理由**——取景参数只决定人脸构图，羽化跟随渲染框自动适配（窄幅照片的左右硬边同样会被羽化）。变量缺省时退化为"照片满铺、不羽化"，无 JS 或图片信息缺失时页面与旧版一致，不会出现整块不透明色。
 
 **约定：**
 - 成员的归属分类取自 `roles` 数组里**在 `ROLE_ORDER` 中排名最靠前**的一项（`getPrimaryRole`）；`roles` 中其余非分类项会作为标签显示在详情面板与右侧信息条，`ROLE_ORDER` 内的分类项则被 `CLASSIFICATION_ROLES` 过滤掉，不重复显示为标签。因此「Primary PI / Secondary PI」这类展示标签与分类角色 `PI` 必须同时写进 `roles`（如 `['Primary PI', 'PI']`）。
@@ -532,11 +550,11 @@ node static/js/core/search-index-generator.js
 - **当前填写状态（2026-09-16）**：`zlj` / `tyj` / `lrx` / `crq` 的 `bio` 已填入本人句子（文案由团队成员提供，仅把中文全角逗号规范为英文逗号，其余未改）；四人的 `directions` 仍留空，待团队给出方向标签。`lrx` / `crq` 的源照片于同日替换为 3:4 竖构图，`lrx.webp` 1440×1920 / 263.1 KB、`crq.webp` 1440×1920 / 244.8 KB，取景仍为 `center 20%` / `60% auto`，如需更完整身位可下调到 `50% auto`。同日两人补入 `_kt` 卡通头像：`lrx_kt.webp` 1280×1280 / 62.3 KB、`crq_kt.webp` 1280×1280 / 44.8 KB（源 `lrx_kt.jpg` 108 KB、`crq_kt.jpg` 86.5 KB），条带头像改走默认候选链。
 - `static/js/pages/members.js` 的性能预算已由 42 KB 上调至 46 KB（`tools/check-performance-budget.js`）：该文件同时承载成员数据与渲染逻辑，名册从 13 人增至 16 人并新增取景字段后，42 KB 只剩 71 字节余量，补文案即会触发构建失败；逻辑部分未增长。
 - 生产提交工程 `igem2026-flask` 的同名文件为镜像（根站为权威源），仅图片前缀改为 `https://static.igem.wiki/2026/szpu-china/image/...`，改动须同步两侧；新增 WebP 需由团队上传至 iGEM Uploads CDN 后才在正式站点生效。
-- 结构自检脚本（可重跑）：`node 对话归档/temporary-tools/2026-09-15-check-members-format.js` —— 校验两工程字段顺序、分类命中、取景字段存在、`images` 首个候选文件真实存在，并打印上表。
+- 结构自检脚本（可重跑）：`node 对话归档/temporary-tools/2026-09/2026-09-15-check-members-format.js` —— 校验两工程字段顺序、分类命中、取景字段存在、`images` 首个候选文件真实存在，并打印上表。
 
 ### 5.16 成员页响应式布局与全屏引导封面（2026-09-16）
 
-成员页此前的问题（多断点实测，见 `对话归档/logs/2026-09-16-members-responsive-before*.txt`）：
+成员页此前的问题（多断点实测，见 `对话归档/logs/2026-09/2026-09-16-members-responsive-before*.txt`）：
 
 | 问题 | 表现 | 根因 |
 |---|---|---|
@@ -558,8 +576,16 @@ node static/js/core/search-index-generator.js
 
 - **默认选中首位成员**（所有断点）：桌面展示其背景与信息条，堆叠展示 hero 与详情卡；堆叠布局下选中后自动收起列表，并在详情卡移出视口时平滑带入。
 - **展开高度实测**：`setStripGroupsExpanded()` 把 `scrollHeight` 写进 `--strip-groups-max`，CSS 仅保留 `2400px` 兜底；组内折叠后由事件委托触发 `resyncStripGroupsHeight()` 重测，视口切换时清理。
-- **无缓存验证环境**：`python -m http.server` 不发 `Cache-Control`，Chromium 会按启发式新鲜度直接复用缓存（本项目实测出现过 `members.css` 一小时未重新校验，导致"改了没生效"的假象）。验证请用 `对话归档/temporary-tools/2026-09-16-dev-server-nostore.py`（强制 no-store），并注意重启浏览器会话以清掉旧缓存条目。
+- **无缓存验证环境**：`python -m http.server` 不发 `Cache-Control`，Chromium 会按启发式新鲜度直接复用缓存（本项目实测出现过 `members.css` 一小时未重新校验，导致"改了没生效"的假象）。验证请用 `对话归档/temporary-tools/2026-09/2026-09-16-dev-server-nostore.py`（强制 no-store），并注意重启浏览器会话以清掉旧缓存条目。
 - **预算条目**：`members.js` 46 → 48 KB（新增响应式逻辑），并新增 `members.css` 26 KB、`components/members-intro.js` 6 KB、`components/members-intro.css` 7 KB 三条守护（见 `tools/check-performance-budget.js`）。
+- **右侧简介条带排版规范（2026-10-01）**：`.rail-scroll` **不带卡片背景框**（用户 2026-10-01 明确反馈去掉背景/边框/阴影——原半透明卡片 + 阴影在视觉上"越过内容左缘"，且让右侧照片硬边看起来更突兀）。文字直接落在 `.bio-rail-inner` 的右侧不透明渐变上，字号/字色统一走全站令牌：姓名 22px/700/`--primary-blue`，角色 14px/600/`--color-text-light`，方向标签 13px/600/`--tag-fill-blue` 底，简介 15px/`--color-text`、行高 1.8，并以 `border-top: 1px solid rgba(43,108,176,.16)` 与标签区分层。`.bio-rail-inner` 两侧等宽内边距 `clamp(20px, 4vw, 36px)`，姓名/标签/简介共享同一测量宽度，长短简介都不破版。实测（16 位成员，1600×900）简介文字左端最深到 x=1286，该处 rail 渐变不透明度约 0.59，文字区背景亮度中位数 ≈241，深色正文对比充足。
+- **展开动画右缘贴合不变量（2026-10-01，禁止回退）**：
+  1. `.bio-rail.is-visible .bio-rail-inner` 的缓动**不得使用 y 分量 > 1 的过冲曲线**——原 `cubic-bezier(0.34, 1.56, 0.64, 1)` 会把 `translateX(100%) → translateX(0)` 推过终点，面板右缘因此短暂离开视口右缘；现用不过冲的 `cubic-bezier(0.22, 1, 0.36, 1)`。
+  2. `.rail-edge-filler` 纵向几何为纯 CSS `top:0; bottom:0`（`position: fixed; right:0`，宽度取 `--scrollbar-width`），展开态 `transition: none`，**不再由 JS 逐帧回写 `top`/`height`**（时点依赖的同步滞后正是右缘空当的来源之一）。
+  3. JS 侧只保留 `measureScrollbarWidth()` 写 `--scrollbar-width`。
+  4. 验收方式：展开全过程逐帧断言 `railInner.getBoundingClientRect().right >= window.innerWidth - 0.5`（含起手与过冲瞬间）。
+- **照片边缘羽化的方向陷阱（2026-10-01）**：`.bg-mask` 的四条羽化层中，**右缘与下缘的渐变必须落在照片渲染框之"内"**（`transparent` → 在照片右/下缘处变为 `opaque`），因为渲染框外本来就是米黄底色，渐变写在外侧等于完全无效；左缘/上缘相反（框内由 `opaque` 渐隐到 `transparent`）。曾因右缘写成"框外渐显"导致只有左侧有羽化、右侧全是硬边，排查脚本见 `对话归档/temporary-tools/2026-10/`。
+- **预算门禁的实际位置（2026-10-01 核查）**：`tools/check-performance-budget.js` 在根站与 `igem2026-flask/tools/` 中**均不存在**，且 `package.json` 的 `build:all` 只含 `eleventy && search-index-generator`，**构建不会执行预算校验**（§10.1 的第 4 条与 §14.5 的引用均为过期描述，与 §17.3.1 的说明冲突）。可用的脚本位于 `对话归档/temporary-tools/check-performance-budget.js`，需手动运行。本次改动结果：根站 `members.css` 25.3 KB（上限 26 KB）、`members.js` 47.5 KB（上限 48 KB），均在预算内；脚本中的 `members.js` 上限已从过期的 46 KB 对齐为 README §5.16 记录的 48 KB。**不要把未运行的预算检查写成"通过"。**
 
 **全屏引导封面（`#members-intro`）** —— 用户要求"进入成员页先看整队照片，点击再进入"：
 
@@ -576,7 +602,7 @@ node static/js/core/search-index-generator.js
 
 ### 5.17 首页分屏组件拼装与「手动微调区」（2026-09-22）
 
-首页 10 个 `.yeast-screen` 板块里的插画与装饰，由 `static/image/Animation/index/webp/` 的**设计切片**在 `static/css/index.css` 的 `.art-stage--sN` 舞台上拼装而成。成品对照图（7 张，1080×608）、实测数据与全部脚本归档在 `对话归档/2026-09-22-homepage-assembly/`。
+首页 10 个 `.yeast-screen` 板块里的插画与装饰，由 `static/image/Animation/index/webp/` 的**设计切片**在 `static/css/index.css` 的 `.art-stage--sN` 舞台上拼装而成。成品对照图（7 张，1080×608）、实测数据与全部脚本归档在 `对话归档/2026-09/2026-09-22-homepage-assembly/`。
 
 #### 装配工作流（顺序不可颠倒）
 
@@ -590,25 +616,25 @@ node static/js/core/search-index-generator.js
 `python -m http.server` 不发送 `Cache-Control`，Chromium 会按启发式新鲜度直接复用缓存（本项目实测出现过 `members.css` 一小时未重新校验）。改完样式看不到变化时，第一嫌疑是缓存而不是选择器。
 
 ```powershell
-python "对话归档/temporary-tools/2026-09-16-dev-server-nostore.py" 8124
+python "对话归档/temporary-tools/2026-09/2026-09-16-dev-server-nostore.py" 8124
 # → http://127.0.0.1:8124/
 ```
 
-#### 板块 3 文字条（2026-09-22 定稿）
+#### project-intro 文字条（内容条，2026-09-22 定稿；2026-10-01 类名词义化 s3→project-intro）
 
-6 条文字条按 **3 排 × 每排 2 条**摆在成品图红框内，带椭圆描边、左右边缘渐隐与无缝流动。参数集中在 `static/css/index.css` 末尾「板块 3 文字条」段（`--s3-*` 变量），**定位只有这一处**（旧的逐条 `.art--s3-pN` 绝对定位已移除）。
+6 条文字条按 **3 排 × 每排 2 条**摆在成品图红框内，带椭圆描边、左右边缘渐隐与无缝流动。参数集中在 `static/css/index.css` 末尾「project-intro 文字条」段（`--intro-*` 变量），**定位只有这一处**（旧的逐条 `.art--project-intro-pN` 绝对定位已移除）。首页屏序已于 2026-10-01 重排为 1→7→5→6→2→3→4，类名已随语义化脱离位置编号（见 REQ-20260928-002 §16/§17）。
 
 | 参数 | 定稿值 | 作用 |
 |---|---|---|
-| `.s3-pills` inset | `left 1% / top 16.5% / width 98% / height 64%` | 红框范围 |
-| `--s3-pill-h` | `clamp(15px, 3.3vh, 34px)` | 文字条统一高度（图片按比例缩放） |
-| `--s3-pill-line` | `#4c9dd3` | 描边色，与文字同色 |
-| `--s3-pill-lw` | `2px` | 描边粗细 |
-| `--s3-pill-radius` | `999px` | 扁椭圆；写 `50%` 是数学椭圆，但两端会切到文字 |
-| `--s3-fade` | `12%` | 边缘淡化起点，到边缘正好 100% 透明 |
-| `--s3-flow-dur` | `28s` | 流动周期，改 `0s` 即静止 |
+| `.intro-pills` inset | `left 1% / top 16.5% / width 98% / height 64%` | 红框范围 |
+| `--intro-pill-h` | `clamp(15px, 3.3vh, 34px)` | 文字条统一高度（图片按比例缩放） |
+| `--intro-pill-line` | `#4c9dd3` | 描边色，与文字同色 |
+| `--intro-pill-lw` | `2px` | 描边粗细 |
+| `--intro-pill-radius` | `999px` | 扁椭圆；写 `50%` 是数学椭圆，但两端会切到文字 |
+| `--intro-fade` | `12%` | 边缘淡化起点，到边缘正好 100% 透明 |
+| `--intro-flow-dur` | `28s` | 流动周期，改 `0s` 即静止 |
 
-结构约定：每排 `.s3-pills__track` 内含**两段完全相同**的 `.s3-pills__group`（第二段 `aria-hidden`），位移 50% 恰好等于一整段宽度；删掉第二段会跳帧。
+结构约定：每排 `.intro-pills__track` 内含**两段完全相同**的 `.intro-pills__group`（第二段 `aria-hidden`），位移 50% 恰好等于一整段宽度；删掉第二段会跳帧。
 
 #### 组件切片的坐标系偏差（板块 4–7 与原图偏差大的根因）
 
@@ -622,9 +648,9 @@ python "对话归档/temporary-tools/2026-09-16-dev-server-nostore.py" 8124
 
 > 动板块 4–7 之前先解决第 1 条。坐标系没定标就调百分比，等于在上一次错误的基准上再调一次。
 
-#### 板块 7 定稿（2026-09-24）
+#### human-practices 定稿（FluNet 图表，2026-09-24；2026-10-01 类名词义化 s7→human-practices）
 
-定位只有 `static/css/index.css` 搜「板块 7：FluNet 图表」这一处。
+定位只有 `static/css/index.css` 搜「human-practices：FluNet 图表」这一处。
 
 | 元件 | 定稿值 | 说明 |
 |---|---|---|
@@ -830,6 +856,46 @@ node tools/check-performance-budget.js          # 性能预算（见 14.5；memb
 在第 8 节约束规则基础上追加：
 
 > **第 13 条（最高优先级）：** 对话/工具产生的任何额外文件，**必须在生成当次立即**移入 `对话归档/` 对应子目录，并确保 `.gitignore` 已覆盖；绝不允许将其留在仓库根目录或业务目录。提交前请务必 `git status` 复查根目录与业务目录，确认无 stray 文件混入。
+
+### 11.5 对话归档内部自整理（会话目录按月归组；生成当次就归位，不要攒着）
+
+> ### ⚠ 最要紧的三条（本节其余可以后看，这三条每次会话都要做）
+>
+> 1. **带日期的会话目录一律放进月份容器**：`对话归档/2026-09/<2026-09-DD-主题>/`。根目录只保留分类目录与月份容器，不再出现一长排 `2026-09-xx-…`。
+> 2. **生成当次就归位，不要攒到堆不下再处理。** 这一条的优先级高于「先把活干完」——新增会话目录、截图、脚本的那一刻就按本条放好。**不要等用户来提醒才整理。**
+> 3. **移动完必须同步引用。** 全仓搜 `对话归档/<日期>`、`temporary-tools/<日期>`，把注释与文档里的旧路径一并改掉；否则下次按注释找文件会扑空。改完再搜一次确认 0 残留。
+
+**目录分层（会话级 vs 分类级）**
+
+```
+对话归档/
+├─ 2026-09/                      会话级归档：一个月一个容器
+│   ├─ 2026-09-15-team-members-refactor/
+│   └─ 2026-09-27-engineering-page-analysis/
+├─ screenshots/                  分类级：长期
+│   ├─ 2026-08/  2026-09/         带日期前缀的截图，按年月归组
+│   └─ homepage/  contribution/   无日期的，按主题归组
+├─ temporary-tools/              只放脚本
+│   ├─ 2026-09/                   带日期的一次性脚本
+│   └─ check-*.js …               长期复用的工具，留在根
+└─ logs/  misc/  plans/  research/ …（同为分类级，规则同上）
+```
+
+**四条规则**
+
+1. **会话级目录**（目录名以 `YYYY-MM-DD-` 开头）移入 `YYYY-MM/`。根目录因此只剩十来个分类目录加月份容器，新增月份会自动开新容器。
+2. **分类目录内**的带日期文件，归入该目录下的 `YYYY-MM/` 子目录；无日期的文件按主题归组（`homepage/`、`contribution/`）或留在根。
+3. **`temporary-tools/` 只放脚本。** 素材包（如整站抓取的图集）、`.log`、`.txt`、`.docx`、`.html` 一律移出：素材 → `misc/`，日志 → `logs/`。混放会让一个目录从几十个文件膨胀到几千个。
+4. **分类目录内文件数超过 100 且仍在增长**时，再按用途细分（检查类 / 改写类 / 提取类），并同步更新所有引用；未到规模不要为分类而分类。
+
+**移动后的收尾（必做）**
+
+- 路径替换范式：`对话归档/2026-09-14-x` → `对话归档/2026-09/2026-09-14-x`；`temporary-tools/2026-09-14-x` → `temporary-tools/2026-09/2026-09-14-x`。
+- 同步脚本：`对话归档/2026-09/2026-09-28-archive-reorg/temporary-tools/fix_archive_refs.py`（传仓库根路径即可，只改文本类文件、跳过 `node_modules` 与二进制目录）。
+- **源码里的这类路径多是注释，不是运行时加载路径**（对照成品图位置、方案出处、生成脚本位置），所以移动不会破图；但注释指向失效会误导后续维护，必须改。
+- 改完跑一次全仓搜索 `(对话归档|temporary-tools|screenshots|logs)/20\d\d-\d\d-\d\d-`，结果应为 0。
+
+> 本轮整理（2026-09-28）：18 个带日期目录归入 `2026-09/`；`screenshots/` 218 个文件按 2026-08 / 2026-09 / homepage / contribution / misc 分组；`temporary-tools/` 3947 个文件降到 102（3822 文件的 `kollektiva-members` 图集移入 `misc/`，日志与文本文档移入 `logs/`，带日期脚本归入 `2026-09/`）；`logs/` 内 48 个带日期文件按年月归组。全仓 91 个文件的路径引用已同步。
 
 ---
 

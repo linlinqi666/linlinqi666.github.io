@@ -1,3 +1,4 @@
+
 /**
  * executive-summary-animation.js
  * 首页 Executive Summary 滚动驱动动画 + 酵母屏动效 + 交互增强

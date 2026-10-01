@@ -75,9 +75,19 @@ body>header {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  /* 照片渲染框边缘（相对本层，百分比）。由 members.js 在成员切换时按实际渲染框写入；
+     .bg-mask 的四条羽化渐变据此工作。缺省值退化为"照片满铺、不羽化"。 */
+  --photo-left: 0%;
+  --photo-right: 100%;
+  --photo-top: 0%;
+  --photo-bottom: 100%;
+  --photo-fade-x: 0%;
+  --photo-fade-y: 0%;
 }
 
-/* 中间人物大背景图的双缓冲滑动容器，由 JS 切换 .is-active 实现淡入淡出。 */
+/* 中间人物大背景图的双缓冲滑动容器，由 JS 切换 .is-active 实现淡入淡出。
+   刻意不加 mask-image：照片边缘融合改由 .bg-mask 的米黄羽化层完成（见下），
+   双缓冲淡入层因此不需要遮罩合成，属净性能收益。 */
 .bg-slide {
   position: absolute;
   inset: 0;
@@ -87,29 +97,48 @@ body>header {
   opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 0;
-  /* iGEM Visual Strategy: Apply a radial edge mask so the full-bleed member
-     photo dissolves smoothly into the page background instead of ending in a
-     hard edge. The fade width is relative to the element's shorter side and
-     stays outside the central subject area. */
-  -webkit-mask-image: radial-gradient(ellipse at center,
-      black calc(100% - (var(--photo-edge-fade) * 2)),
-      transparent 100%);
-  mask-image: radial-gradient(ellipse at center,
-      black calc(100% - (var(--photo-edge-fade) * 2)),
-      transparent 100%);
 }
 
 .bg-slide.is-active {
   opacity: 1;
 }
 
-/* 中间人物大背景图的遮罩层，避免背景图干扰左侧条带与右侧详情文字。 */
+/* 中间人物大背景图的遮罩层，避免背景图干扰左侧条带与右侧详情文字。
+   顶部四条"照片边缘羽化"渐变由 JS 写入的 --photo-* 变量驱动，作用于照片**内侧**：
+   左/上缘在照片内由米黄渐隐到透明，右/下缘在照片内由透明渐显到米黄，
+   使照片四周硬边都被米黄包住、自然融入页面背景（不使用任何模糊）。
+   注意：右/下缘的渐变必须落在照片渲染框**之内**——照片外侧本来就是米黄底，
+   写在外侧等于没有效果。 */
 .bg-mask {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
+    /* 左缘：渲染框左缘之内侧由不透明米黄渐隐到透明 */
+    linear-gradient(to right,
+      rgba(247, 241, 228, 1) 0%,
+      rgba(247, 241, 228, 1) var(--photo-left, 0%),
+      rgba(247, 241, 228, 0) calc(var(--photo-left, 0%) + var(--photo-fade-x, 0%)),
+      rgba(247, 241, 228, 0) 100%),
+    /* 右缘：渲染框右缘之内侧由透明渐显到不透明米黄 */
+    linear-gradient(to right,
+      rgba(247, 241, 228, 0) 0%,
+      rgba(247, 241, 228, 0) calc(var(--photo-right, 100%) - var(--photo-fade-x, 0%)),
+      rgba(247, 241, 228, 1) var(--photo-right, 100%),
+      rgba(247, 241, 228, 1) 100%),
+    /* 上缘：渲染框上缘之内侧由不透明米黄渐隐到透明 */
+    linear-gradient(to bottom,
+      rgba(247, 241, 228, 1) 0%,
+      rgba(247, 241, 228, 1) var(--photo-top, 0%),
+      rgba(247, 241, 228, 0) calc(var(--photo-top, 0%) + var(--photo-fade-y, 0%)),
+      rgba(247, 241, 228, 0) 100%),
+    /* 下缘：渲染框下缘之内侧由透明渐显到不透明米黄 */
+    linear-gradient(to bottom,
+      rgba(247, 241, 228, 0) 0%,
+      rgba(247, 241, 228, 0) calc(var(--photo-bottom, 100%) - var(--photo-fade-y, 0%)),
+      rgba(247, 241, 228, 1) var(--photo-bottom, 100%),
+      rgba(247, 241, 228, 1) 100%),
     /* Left-to-right fade keeps the ribbon navigation readable. */
     linear-gradient(to right,
       rgba(247, 241, 228, 1) 0%,
@@ -560,8 +589,8 @@ body>header {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  color: #1F2937;
-  font-size: 13px;
+  color: var(--color-text, #333);
+  font-size: 15px;
   text-align: right;
   pointer-events: none;
   overflow: hidden;
@@ -570,7 +599,8 @@ body>header {
 .bio-rail-inner {
   width: 100%;
   height: 100%;
-  padding: 32px 28px 32px clamp(56px, 8vw, 110px);
+  /* 去掉原本不对称的大左内边距，改为两侧等宽，使内容共享同一测量宽度 */
+  padding: 32px clamp(20px, 4vw, 36px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -594,7 +624,9 @@ body>header {
 
 .bio-rail.is-visible .bio-rail-inner {
   transform: translateX(0);
-  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* 禁止过冲：cubic-bezier y 分量 >1 会让 translateX 短暂越过终点，使右缘离开视口右缘。
+     这里改不过冲曲线，根除负向位移，整段动画右缘始终贴合视口。 */
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .bio-rail.is-dragging .bio-rail-inner {
@@ -607,7 +639,8 @@ body>header {
 
 /* Scrollable wrapper keeps short content vertically centered while allowing
    long bios to start at the top and scroll naturally. Content is right-aligned
-   so it stays inside the opaque region of the rail gradient. */
+   so it stays inside the opaque region of the rail gradient. 背景已去掉，
+   仅保留内边距与文字层级，避免卡片框视觉上越过内容左缘。 */
 .rail-scroll {
   width: 100%;
   margin-top: auto;
@@ -615,6 +648,15 @@ body>header {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  box-sizing: border-box;
+  padding: clamp(20px, 4vw, 30px);
+  /* 去掉卡片背景框：用户反馈不要背景框，文字直接落在 rail 自身的渐变上，
+     避免左侧阴影/背景视觉上越过内容左缘。 */
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  min-height: 0;
 }
 
 /* Toggle tab that reappears when the rail is dragged/closed. */
@@ -652,9 +694,13 @@ body>header {
 }
 
 /* Edge filler: covers the narrow scrollbar/track gap between the rail and the
-   viewport right edge so the expanded panel appears truly flush. */
+   viewport right edge so the expanded panel appears truly flush. 纵向几何改为纯
+   CSS（top:0;bottom:0，充满视口高度），不再依赖 JS 逐帧回写 top/height，避免同步滞后
+   导致展开过程中右缘短暂脱离视口。 */
 .rail-edge-filler {
   position: fixed;
+  top: 0;
+  bottom: 0;
   right: 0;
   width: var(--scrollbar-width, 0px);
   pointer-events: none;
@@ -667,6 +713,7 @@ body>header {
       transparent 100%);
   opacity: 0;
   visibility: hidden;
+  /* 收起时保留淡出；展开时由 .is-visible 规则取消过渡，使补齐从第 0 帧即生效 */
   transition: opacity 0.25s ease, visibility 0.25s ease;
   z-index: -1;
 }
@@ -674,6 +721,8 @@ body>header {
 .bio-rail.is-visible .rail-edge-filler {
   opacity: 1;
   visibility: visible;
+  /* 展开态取消过渡：补齐条带从第 0 帧就贴住视口右缘，不再有淡入延迟造成的空当 */
+  transition: none;
 }
 
 .bio-rail.is-visible .rail-toggle {
@@ -683,17 +732,18 @@ body>header {
 }
 
 .rail-name {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--primary-blue);
   margin: 0 0 8px;
-  line-height: 1.2;
+  line-height: 1.25;
   text-align: right;
 }
 
 .rail-role {
-  font-size: 13px;
-  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-light, #666);
   margin: 0 0 14px;
   text-align: right;
 }
@@ -709,19 +759,22 @@ body>header {
 
 .rail-tag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 999px;
   background: var(--tag-fill-blue);
   color: var(--primary-blue);
 }
 
+/* 标签组与简介之间以细分隔线拉开层级 */
 .rail-bio {
-  font-size: 13px;
-  line-height: 1.7;
-  color: #1F2937;
-  margin: 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--color-text, #333);
+  margin: 16px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(43, 108, 176, 0.16);
   text-align: right;
 }
 
@@ -771,7 +824,7 @@ body>header {
   }
 
   .bg-slide {
-    /* hero 用底部渐隐替代桌面端的径向淡化，避免圆角与径向 mask 相互削弱 */
+    /* hero 用底部渐隐替代桌面端的照片框羽化；圆角由 .members-bg-layer 裁切 */
     -webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
   }

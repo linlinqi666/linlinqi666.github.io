@@ -2346,6 +2346,48 @@ html {
   line-height: 1.7;
 }
 
+/* ===== 设计图（figures，design / wet-lab design 等页共用） ===== */
+.design-figure {
+  margin: var(--desc-spacing-2xl) 0;
+  text-align: center;
+}
+
+.design-figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--desc-radius-md);
+  box-shadow: var(--desc-shadow-card);
+}
+
+.design-figure figcaption {
+  margin-top: var(--desc-spacing-sm);
+  font-size: var(--desc-font-size-sm);
+  color: var(--desc-color-primary-light);
+  line-height: 1.6;
+}
+
+/* ===== 内容卡片内子小节标题（Design Purpose / Gene Knockout Design 等） ===== */
+.content-card h4 {
+  color: var(--desc-color-primary-dark);
+  font-size: var(--desc-font-size-xl);
+  margin: var(--desc-spacing-xl) 0 var(--desc-spacing-sm);
+  font-weight: 600;
+}
+
+/* ===== 参考文献列表 ===== */
+.content-card ol.ref-list {
+  padding-left: 1.6rem;
+  list-style: decimal;
+}
+
+.content-card ol.ref-list > li {
+  font-size: var(--desc-font-size-sm-md);
+  line-height: 1.7;
+  margin-bottom: var(--desc-spacing-sm);
+  text-indent: 0;
+  word-break: break-word;
+}
+
 /* ===== 概念高亮 ===== */
 .concept-highlight {
   background: rgba(52, 168, 83, 0.05);
@@ -4168,6 +4210,8 @@ footer {
 
   .footer-scroller {
     width: 100%;
+    max-width: 100%; /* 重置桌面 flex 布局的 max-width:60%，否则窄屏卡片被卡在 60% 宽、logo 两边被裁（REQ-20260928-002） */
+    flex: 0 0 auto;
     padding: var(--spacing-xl);
   }
 

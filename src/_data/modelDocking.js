@@ -1,14 +1,14 @@
-// Model 页数据桥接（dry lab）
-// 唯一数据源是 static/data/dry-lab/model/model-docking.json —— 页面正文表格与
-// static/js/pages/model-game.js 的交互演示读的是同一份数据，避免两处数字漂移。
-// 之所以用「JSON 文件 + 本桥接」而不是直接把对象写在这里：
-//   1) 客户端（浏览器）也需要这份数据，JSON 可由模板内联进页面（Nunjucks: | dump）；
-//   2) 后续迁移到官方提交工程（Flask）时，同一份 JSON 可直接复用，模板用 Jinja2 的 | tojson。
-// 数值口径与出处见 static/expriments/drylab/model/md/10-一手分析.md。
+// Model page data bridge (dry lab)
+// The single data source is static/data/dry-lab/model/model-docking.json — the page body tables and
+// the interactive demo in static/js/pages/model-game.js read the same file, avoiding numeric drift between the two.
+// We use a "JSON file + this bridge" instead of writing the object directly here because:
+//   1) the client (browser) also needs this data, and the JSON can be inlined into the page (Nunjucks: | dump);
+//   2) when migrating to the official submission project (Flask), the same JSON can be reused with Jinja2's | tojson.
+// Numeric conventions and provenance: see static/expriments/drylab/model/md/10-一手分析.md.
 //
-// 排序口径：特异性指数、交叉反应平均结合能、HADDOCK score 都是「越负越好」，故升序。
-// 显示口径：docx 原文用 U+2212 减号（−）与固定小数位，故本桥接统一预格式化，
-//           模板只渲染字符串，避免两处各写一次格式化规则。
+// Sorting: the specificity index, mean cross-reactivity binding energy, and HADDOCK score are all "more negative is better," hence ascending order.
+// Display: the docx source uses the U+2212 minus sign (−) and fixed decimal places, so this bridge pre-formats uniformly,
+//           and templates render only strings, avoiding duplicate formatting rules in two places.
 
 const path = require('path');
 const fs = require('fs');
@@ -16,9 +16,9 @@ const fs = require('fs');
 const dataPath = path.join(__dirname, '..', '..', 'static', 'data', 'dry-lab', 'model', 'model-docking.json');
 const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-const OUTCOME_ZH = { lead: '入选', rejected: '淘汰' };
+const OUTCOME_LABEL = { lead: 'Selected', rejected: 'Rejected' };
 
-// 与 docx 一致的显示格式：负数用 U+2212，小数位按原表保留
+// Display format matching the docx: negative numbers use U+2212, decimals kept as in the original table
 function num(value, digits) {
   if (typeof value !== 'number') {
     return '—';
@@ -36,7 +36,7 @@ data.tables = {
       H3N2: num(c.cluspro.untreated.H3N2, 1),
       H5N1: num(c.cluspro.untreated.H5N1, 1),
       index: num(c.cluspro.untreated.specificityIndex, 2),
-      outcome: OUTCOME_ZH[c.verdict.outcome] || c.verdict.outcome
+      outcome: OUTCOME_LABEL[c.verdict.outcome] || c.verdict.outcome
     })),
   treated: data.candidates
     .slice()
@@ -70,21 +70,21 @@ data.tables = {
     }))
 };
 
-// 表头与单元格共用同一套内联样式（沿用 design 页既有表格写法）
+// Table headers and cells share the same inline styles (following the existing table style on the design page)
 data.tableStyle = {
-  table: 'width:100%; border-collapse:collapse; margin:1rem 0;',
-  headRow: 'border-bottom:2px solid #333;',
-  th: 'border:1px solid #ccc; padding:8px; text-align:left;',
-  row: 'border-bottom:1px solid #ddd;',
-  td: 'border:1px solid #ccc; padding:8px;'
+  table: 'width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;',
+  headRow: 'border-bottom:2px solid #8B5A2B; background:#FCE7CB;',
+  th: 'border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;',
+  row: 'border-bottom:1px solid #D4A574;',
+  td: 'border:1px solid #D4A574; padding:8px; color:#333333;'
 };
 
 data.display = {
   interactions: [
-    { label: '总接触点', value: String(data.interface.interactions.contacts) },
-    { label: '氢键', value: String(data.interface.interactions.hbonds) },
-    { label: '盐桥', value: String(data.interface.interactions.saltBridges) },
-    { label: '疏水作用', value: String(data.interface.interactions.hydrophobic) }
+    { label: 'Total contacts', value: String(data.interface.interactions.contacts) },
+    { label: 'Hydrogen bonds', value: String(data.interface.interactions.hbonds) },
+    { label: 'Salt bridges', value: String(data.interface.interactions.saltBridges) },
+    { label: 'Hydrophobic interactions', value: String(data.interface.interactions.hydrophobic) }
   ],
   hotspots: data.interface.hotspots.map((h) => ({
     nanobody: h.nanobody,
@@ -114,7 +114,7 @@ data.display = {
   }))
 };
 
-// 客户端内联用的精简载荷：只带交互演示需要的字段（原始数值，由前端自行格式化）
+// Slim payload for client-side inlining: only the fields the interactive demo needs (raw values, formatted by the front end)
 data.client = {
   funnel: data.funnel,
   scoring: data.scoring,
