@@ -931,15 +931,57 @@ body.home-page {
   align-items: stretch;
 }
 
-/* 滚动图片区域 */
-.footer-scroller {
+/* 伙伴栏(2026-10-04 重设计):原「白色大卡 + logo 走马灯」改为可扩展芯片栏,
+   新增伙伴只需在 footer.html 里复制一个 .partner-chip,自动换行排布;
+   与右侧 Contact 圆形图标共用同一套半透明白风格,蓝底上不再留大块空卡。 */
+.footer-partners {
   flex: 0 0 60%;
   max-width: 60%;
-  position: relative;
-  background: #ffffff;
-  border-radius: var(--radius-md);
-  padding: var(--spacing-5xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.partners-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.partners-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.partner-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-3xl);
+  background: rgba(255, 255, 255, 0.12);
   border: 1px solid var(--bg-footer-border);
+  border-radius: var(--radius-lg);
+  transition: background var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-normal) var(--ease-smooth),
+    border-color var(--duration-normal) var(--ease-smooth);
+}
+
+.partner-chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-0.125rem);
+}
+
+.partner-chip img {
+  height: 3rem;
+  width: auto;
+  max-width: 9.5rem;
+  object-fit: contain;
 }
 
 /* Contact Us 区域 */
@@ -1440,9 +1482,10 @@ body.home-page {
     gap: var(--spacing-xl);
   }
 
-  .footer-scroller {
+  .footer-partners {
     width: 100%;
-    padding: var(--spacing-xl);
+    max-width: 100%;
+    flex: 0 0 auto;
   }
 
   .footer-contact {
@@ -1525,9 +1568,8 @@ body.home-page {
     gap: var(--spacing-lg);
   }
 
-  .footer-scroller {
+  .footer-partners {
     width: 100%;
-    padding: var(--spacing-lg);
   }
 
   .footer-contact {
@@ -1541,14 +1583,13 @@ body.home-page {
     gap: var(--spacing-lg);
   }
 
-  .footer-scroller::before,
-  .footer-scroller::after {
-    width: 60px;
+  .partner-chip {
+    padding: var(--spacing-sm) var(--spacing-xl);
   }
 
-  .scroll-image {
-    height: 60px;
-    max-width: 200px;
+  .partner-chip img {
+    height: 2.5rem;
+    max-width: 7.5rem;
   }
 
   /* 导航列 - 移动端改为2列布局，避免5列挤在一起 */
@@ -1940,6 +1981,77 @@ html.home-scroll-snap {
 .summary-inner {
   width: 80%;
   max-width: 1200px;
+}
+
+/* ---------- final-cta：4 吉祥物门户（2026-10-04 替换原 8 张文字门户卡） ----------
+   与根站同一套实现：四只等宽平铺整行，hover 时整只做 180° 转身（只动 transform）。 */
+#final-cta .summary-inner {
+  width: 94%;
+}
+
+.mascot-portal-row {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(8px, 1.2vw, 20px);
+  width: 100%;
+  margin-top: clamp(18px, 3vh, 40px);
+}
+
+.mascot-portal {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 0.9vh, 12px);
+  padding: clamp(8px, 1.2vw, 18px) clamp(4px, 0.6vw, 10px);
+  text-decoration: none;
+  border-radius: var(--radius-lg, 12px);
+  transition: background-color var(--duration-normal, 0.3s) ease, box-shadow var(--duration-normal, 0.3s) ease;
+}
+
+.mascot-portal__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  transform: rotateY(0deg);
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mascot-portal__label {
+  font-size: clamp(12px, 1.05vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-echo-blue, #4c9dd3);
+  white-space: nowrap;
+}
+
+.mascot-portal:hover,
+.mascot-portal:focus-visible {
+  background-color: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 28px rgba(76, 157, 211, 0.16);
+}
+
+.mascot-portal:hover .mascot-portal__img,
+.mascot-portal:focus-visible .mascot-portal__img {
+  transform: rotateY(180deg) translateY(-4px);
+}
+
+.mascot-portal:focus-visible {
+  outline: 2px solid var(--color-echo-blue, #4c9dd3);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-portal__img { transition: none; }
+
+  .mascot-portal:hover .mascot-portal__img,
+  .mascot-portal:focus-visible .mascot-portal__img { transform: none; }
 }
 
 .section-summary__title {

@@ -1,14 +1,18 @@
-
 /**
  * search.js
- * 全站页面搜索模块。
+ * 全站页面搜索模块（FlexSearch 关键词智能检索）。
  *
  * 功能：
  * - 在导航栏最右侧提供搜索按钮，悬停/点击展开搜索面板
  * - 加载 static/js/core/search-index.json 构建的索引
+ * - 使用 FlexSearch（Document 模式）做 BM25 评分 + 字段权重（title 优先）
+ *   + 前缀/模糊匹配；中文按字、英文按词并支持前缀
  * - 支持文字内容与图片（文件名/alt）检索
  * - 结果展示匹配上下文与所属页面，点击跳转至对应页面
  * - 暂不支持跳转到页面内具体锚点
+ *
+ * 依赖：static/js/vendor/flexsearch.bundle.min.js（须在本文件之前加载，
+ *       提供全局 FlexSearch；未加载时自动降级为朴素 includes 匹配）。
  *
  * 公共 API：window.iGEMSearch { open, close, isOpen }
  */
@@ -20,12 +24,49 @@
   const MAX_QUERY_LENGTH = 80;
 
   let basePath = '.';
+  const FlexSearchNS = (typeof window !== 'undefined' && window.FlexSearch) ? window.FlexSearch : null;
 
   const state = {
     index: [],
+    searchIndex: null, // FlexSearch.Document 实例
     isOpen: false,
     initialized: false
   };
+
+  /**
+   * 自定义编码：英文/数字按整词（配合 tokenize:'forward' 支持前缀），
+   * 中文逐字（中文无空格，逐字索引可保证子串命中）。返回小写 token 数组。
+   */
+  function encodeTokens(str) {
+    const s = String(str || '').toLowerCase();
+    const tokens = [];
+    const latin = s.match(/[a-z0-9]+/g);
+    if (latin) tokens.push.apply(tokens, latin);
+    for (const ch of s) {
+      const code = ch.codePointAt(0);
+      if (code >= 0x4e00 && code <= 0x9fff) tokens.push(ch);
+    }
+    return tokens;
+  }
+
+  function buildSearchIndex(records) {
+    if (!FlexSearchNS || !FlexSearchNS.Document) return null;
+    const index = new FlexSearchNS.Document({
+      tokenize: 'forward',
+      cache: true,
+      document: {
+        id: 'id',
+        index: [
+          { field: 'title', tokenize: 'forward' },
+          { field: 'content', tokenize: 'forward' }
+        ],
+        store: ['pageUrl', 'pageTitle', 'content', 'type', 'src']
+      },
+      encode: encodeTokens
+    });
+    for (let i = 0; i < records.length; i++) index.add(records[i]);
+    return index;
+  }
 
   /**
    * 从 data-base-path 读取当前页面相对站点根目录的路径前缀。
@@ -45,9 +86,6 @@
     return basePath + '/' + rootRelativeUrl;
   }
 
-  /**
-   * 异步加载搜索索引 JSON。
-   */
   function getScriptUrl() {
     const scripts = document.querySelectorAll('script[src*="static/js/core/search.js"]');
     if (scripts.length) {
@@ -82,11 +120,13 @@
       })
       .then(index => {
         state.index = Array.isArray(index) ? index : [];
+        state.searchIndex = buildSearchIndex(state.index);
         return state.index;
       })
       .catch(error => {
         console.warn('[Search] 加载索引失败：', url, error);
         state.index = [];
+        state.searchIndex = null;
         return state.index;
       });
 
@@ -116,24 +156,37 @@
 
   /**
    * 执行本地搜索，返回按页面分组的结果。
+   * 优先走 FlexSearch；若索引未构建（vendor 未加载）则降级为朴素 includes 匹配。
    */
   function performSearch(query) {
-    const q = query.trim().slice(0, MAX_QUERY_LENGTH).toLowerCase();
-    if (!q || !state.index.length) return [];
+    const raw = query.trim().slice(0, MAX_QUERY_LENGTH);
+    if (!raw || !state.index.length) return [];
 
     const pageMap = new Map();
 
-    state.index.forEach(record => {
-      const content = (record.content || '').toLowerCase();
-      const title = (record.pageTitle || '').toLowerCase();
-      if (!content.includes(q) && !title.includes(q)) return;
-
-      if (!pageMap.has(record.pageUrl)) {
-        pageMap.set(record.pageUrl, []);
-      }
-      const items = pageMap.get(record.pageUrl);
-      if (items.length < 3) items.push(record);
-    });
+    if (state.searchIndex) {
+      const results = state.searchIndex.search(raw, { limit: 60, enrich: true });
+      results.forEach(group => {
+        (group.result || []).forEach(item => {
+          const doc = item.doc;
+          if (!doc) return;
+          if (!pageMap.has(doc.pageUrl)) pageMap.set(doc.pageUrl, []);
+          const items = pageMap.get(doc.pageUrl);
+          if (items.length < 3) items.push(doc);
+        });
+      });
+    } else {
+      // 降级：朴素子串匹配
+      const q = raw.toLowerCase();
+      state.index.forEach(record => {
+        const content = (record.content || '').toLowerCase();
+        const title = (record.pageTitle || '').toLowerCase();
+        if (!content.includes(q) && !title.includes(q)) return;
+        if (!pageMap.has(record.pageUrl)) pageMap.set(record.pageUrl, []);
+        const items = pageMap.get(record.pageUrl);
+        if (items.length < 3) items.push(record);
+      });
+    }
 
     const groups = [];
     pageMap.forEach((items, pageUrl) => {
@@ -236,9 +289,7 @@
   }
 
   /**
-   * 悬停展开 / 延迟收起。
-   * 仅在搜索按钮上悬停时展开，鼠标离开搜索区域后延迟 350ms 收起；
-   * 如果输入框或其内部任意元素聚焦，则不自动收起。
+   * 已打开搜索面板的悬停保持与延迟收起。
    */
   function bindHoverKeepOpen(container, toggle, input) {
     const HOVER_LEAVE_DELAY = 350;
@@ -246,20 +297,11 @@
 
     function clearLeaveTimer() {
       if (leaveTimer) {
-        clearTimeout(leaveTimer);
+        clearLeaveTimer();
         leaveTimer = null;
       }
     }
 
-    // 仅按钮悬停触发自动展开，避免大区域误触；悬停展开时不自动聚焦输入框
-    toggle.addEventListener('mouseenter', () => {
-      clearLeaveTimer();
-      if (!state.isOpen) {
-        openSearch(false);
-      }
-    });
-
-    // 在搜索区域内悬停时保持打开
     container.addEventListener('mouseenter', () => {
       clearLeaveTimer();
     });

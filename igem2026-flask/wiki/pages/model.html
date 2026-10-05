@@ -305,8 +305,18 @@
 
           <div class="model-game">
             <div class="model-game__toolbar">
-              <p class="model-game__toolbar-hint">How to select: click a card, or drag it into the center slot; click a selected card again to deselect.</p>
-              <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+              <p class="model-game__toolbar-hint">How to select: pick a docking mode, then click a card or drag it into the center slot; click a selected card again to deselect. With a pair selected, one of that combination's docking results is drawn at random.</p>
+
+              <div class="model-game__modes" role="group" aria-label="Docking mode">
+                <button type="button" id="model-game-mode-rigid" class="model-game__button model-game__button--mode is-active" aria-pressed="true">Rigid (ClusPro)</button>
+                <button type="button" id="model-game-mode-flex" class="model-game__button model-game__button--mode" aria-pressed="false">Semi-flexible (HADDOCK)</button>
+              </div>
+
+              <div class="model-game__toolbar-actions">
+                <button type="button" id="model-game-draw" class="model-game__button">Draw a Result</button>
+                <button type="button" id="model-game-random-pair" class="model-game__button model-game__button--ghost">Random Pair</button>
+                <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+              </div>
             </div>
 
             <div class="model-game__board">

@@ -123,7 +123,9 @@ data.client = {
   interface: data.interface,
   md: data.md,
   mmgbsa: data.mmgbsa,
-  structureBase: data.meta.structureBase
+  structureBase: data.meta.structureBase,
+  // docking modes + per-combination results + card art (see build-model-game-data.py)
+  game: data.game || null
 };
 
 module.exports = data;

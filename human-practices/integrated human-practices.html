@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <link rel="icon" type="image/png" href="../static/image/any-icon/SZPU(notext).png">
+  <link rel="icon" type="image/png" href="../static/image/any-icon/teamlogo.png">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Human Practices - iGEM SZPU-2026</title>
@@ -16,6 +16,7 @@
 
 <link rel="stylesheet" href="../static/css/mobile.css">
 <link rel="stylesheet" href="../static/css/components/page-loader.css">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css">
 <link rel="stylesheet" href="../static/css/components/section-fold.css">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
@@ -30,17 +31,29 @@
   .hp-flat-track { display: flex; flex-wrap: nowrap; transition: transform .42s ease; }
   .hp-flat-track.is-moving { will-change: transform; }
   .hp-flat-track > * { min-width: 0; }
-  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, outline-color .28s ease; }
+  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, transform .28s cubic-bezier(.22,1,.36,1), outline-color .28s ease; animation: hpCardIn .55s cubic-bezier(.22,1,.36,1) both; }
+  .hp-flat-card:nth-child(1) { animation-delay: .05s; }
+  .hp-flat-card:nth-child(2) { animation-delay: .13s; }
+  .hp-flat-card:nth-child(3) { animation-delay: .21s; }
+  .hp-flat-card:nth-child(4) { animation-delay: .29s; }
   .hp-flat-card + .hp-flat-card { border-left: 1rem solid transparent; background-clip: padding-box; }
   .hp-flat-card:nth-child(n + 5) { display: none; }
   .hp-flat-card.is-active { opacity: 1; }
   .hp-flat-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .42s ease; }
-  .hp-flat-card:hover img, .hp-flat-card:focus-visible img { transform: scale(1.025); }
-  .hp-flat-card span { position: absolute; left: .75rem; bottom: .65rem; font-size: clamp(.82rem, 1.3vw, 1.05rem); font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.45); }
-  .hp-flat-button { width: 2.5rem; height: 2.5rem; padding: 0; border: 1px solid rgba(20,62,58,.65); border-radius: 50%; background: transparent; color: #143e3a; font: 1.25rem/1 serif; cursor: pointer; }
-  .hp-flat-button:hover, .hp-flat-button:focus-visible { background: #143e3a; color: #fff; }
-  .hp-flat-intro { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: baseline; gap: 1rem; padding: 1rem 0 0; border-top: 1px solid rgba(20,62,58,.28); color: #143e3a; }
-  .hp-flat-intro-date, .hp-flat-intro-count { font-size: .78rem; letter-spacing: .1em; white-space: nowrap; }
+  .hp-flat-card:hover, .hp-flat-card:focus-visible { transform: translateY(-4px); opacity: .92; }
+  .hp-flat-card.is-active:hover, .hp-flat-card.is-active:focus-visible { opacity: 1; }
+  .hp-flat-card:hover img, .hp-flat-card:focus-visible img { transform: scale(1.06); }
+  .hp-flat-card span { position: absolute; left: .75rem; bottom: .65rem; font-size: clamp(.82rem, 1.3vw, 1.05rem); font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.45); transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .28s ease; opacity: .92; }
+  .hp-flat-card:hover span, .hp-flat-card:focus-visible span { transform: translateY(-2px); opacity: 1; }
+  @keyframes hpCardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: .72; transform: none; } }
+  @keyframes hpIntroIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .hp-flat-intro.is-switching .hp-flat-intro-date,
+  .hp-flat-intro.is-switching .hp-flat-intro-title,
+  .hp-flat-intro.is-switching .hp-flat-intro-count { animation: hpIntroIn .32s ease both; }
+  .hp-flat-button { width: 2.5rem; height: 2.5rem; padding: 0; border: 1px solid rgba(139,115,85,.55); border-radius: 50%; background: transparent; color: #6f5b44; font: 1.25rem/1 serif; cursor: pointer; transition: background-color .2s ease, color .2s ease, transform .2s ease; }
+  .hp-flat-button:hover, .hp-flat-button:focus-visible { background: #8b7355; color: #fff8e7; transform: scale(1.08); }
+  .hp-flat-intro { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: baseline; gap: 1rem; padding: 1rem 0 0; border-top: 1px solid rgba(139,115,85,.28); color: #5c4d3c; }
+  .hp-flat-intro-date, .hp-flat-intro-count { font-size: .78rem; letter-spacing: .1em; white-space: nowrap; color: #8b7355; }
   .hp-flat-intro-title { margin: 0; font-size: clamp(.95rem,1.35vw,1.1rem); line-height: 1.65; }
   .hp-flat-detail-panel { margin-top: 0; }
   .hp-flat-detail-panel > .detail-viewport { overflow: hidden; transition: height .42s cubic-bezier(.22, 1, .36, 1); }
@@ -49,6 +62,12 @@
   .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
   .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide[aria-hidden="false"] { visibility: visible; }
   @media (prefers-reduced-motion: reduce) { .hp-flat-detail-panel > .detail-viewport, .hp-flat-detail-panel > .detail-viewport > .detail-track { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-flat-card, .hp-flat-card img, .hp-flat-card span, .hp-flat-button,
+    .hp-flat-intro.is-switching .hp-flat-intro-date,
+    .hp-flat-intro.is-switching .hp-flat-intro-title,
+    .hp-flat-intro.is-switching .hp-flat-intro-count { animation: none !important; transition: none !important; }
+  }
   @media (max-width: 700px) {
     .description-container { width: min(92vw, 1440px); }
     .hp-flat-carousel { gap: .45rem; }
@@ -80,11 +99,11 @@
     font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     color: #4a3f33;
     max-width: 1100px; margin: 0 auto;
-    /* 暖棕色画框，与项目主题色保持一致 */
-    background: radial-gradient(1200px 600px at 50% -10%, #f3eadd 0%, #e0d2c1 60%, #c9b99a 100%);
-    padding: 24px 18px 36px;
-    border-radius: 20px;
-    box-shadow: 0 24px 70px rgba(74,59,42,.22);
+    /* 去掉外层大白框：外层只作轻量承载，视觉重心交给地图容器；标题直接落在页面奶油底上 */
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
     /* 隔离层叠与布局，避免影响宿主页面 */
     isolation: isolate;
   }
@@ -124,7 +143,7 @@
   .hz-detail-card__table th, .hz-detail-card__table td { padding: .6rem .8rem; border-bottom: 1px solid rgba(139,115,85,.18); text-align: left; vertical-align: top; line-height: 1.55; }
   .hz-detail-card__table th { background: rgba(139,115,85,.14); color: #5c4d3c; font-weight: 700; }
   .hz-detail-card__table tr:last-child td { border-bottom: none; }
-  .hz-map .hz-cluster.is-active { transform: translate(-50%, -50%) scale(1.1); z-index: 30; filter: drop-shadow(0 0 8px rgba(74,59,42,.45)); }
+  .hz-map .hz-cluster.is-active { transform: translate(-50%, -100%) scale(1.14); z-index: 30; filter: drop-shadow(0 6px 9px rgba(74,59,42,.42)); }
   .hz-detail-card:focus { outline: 3px solid rgba(139,115,85,.45); outline-offset: 3px; }
   @media (max-width: 680px) { .hz-details-intro, .hz-detail-card { padding: 1.15rem; } .hz-detail-card { grid-template-columns: 1fr; } .hz-detail-card__photo { max-width: 260px; } }
   @media (prefers-reduced-motion: reduce) { .hz-detail-track { transition: none; } }
@@ -144,12 +163,17 @@
   .hz-map .hz-container {
     position: relative; width: 100%;
     aspect-ratio: 774.044 / 569.651;        /* 中国地图 natural ratio */
-    background: linear-gradient(180deg, var(--hz-map-bg-1) 0%, var(--hz-map-bg-2) 100%);
-    border: 1px solid rgba(139,115,85,.25);
-    border-radius: 18px;
+    border-radius: 22px;
     /* 用 padding 给边缘 pin 留出安全区，避免被圆角背景裁切 */
     padding: 18px; box-sizing: border-box;
-    box-shadow: 0 20px 60px rgba(74,59,42,.18);
+    /* 去掉生硬大白框：细腻主题渐变 + 内高光 + 柔和投影，呈现“悬浮地图”质感 */
+    background:
+      radial-gradient(130% 120% at 50% -18%, #f7f0e3 0%, #ece0cd 58%, #dccdb2 100%);
+    border: 1px solid rgba(139,115,85,.30);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.55) inset,
+      0 22px 55px -20px rgba(74,59,42,.32);
+    overflow: hidden;
     /* 覆盖 static CSS 中的 contain，避免创建额外 stacking context 导致图钉被地图层覆盖 */
     contain: none !important;
   }
@@ -260,30 +284,60 @@
     }
   }
 
-  /* 省份集合点：形状调试阶段——先不放任何内容，仅展示小尺寸图钉形状以便调整大小 */
+  /* 省份集合点：地图图钉造型（上圆头 + 下尖尾），针尖对准坐标；头内放专家照片或默认人像剪影 */
   .hz-map .hz-cluster {
-    position: absolute; width: 18px; min-height: 18px; padding: 0;
-    transform: translate(-50%, -50%); z-index: 25; cursor: pointer;
+    --pin-head: 32px;
+    --pin-tail: 14px;
+    position: absolute; width: var(--pin-head);
+    height: calc(var(--pin-head) + var(--pin-tail) - 2px);
+    padding: 0;
+    transform: translate(-50%, -100%); transform-origin: 50% 100%;
+    z-index: 25; cursor: pointer;
     appearance: none; border: none;
-    border-radius: 50%; background: var(--cluster-color, #b94a48); color: transparent;
-    box-shadow: 0 3px 8px rgba(74,59,42,.35), 0 0 0 1px rgba(74,59,42,.18);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s ease;
+    background: transparent; color: transparent;
+    filter: drop-shadow(0 3px 4px rgba(74,59,42,.35));
+    transition: transform .18s cubic-bezier(.4,0,.2,1), filter .18s ease;
     contain: none !important;
-    overflow: hidden;
+    overflow: visible;
   }
-  .hz-map .hz-cluster--single {
-    border-color: #ffffff;
-    box-shadow: 0 3px 8px rgba(74,59,42,.35), 0 0 0 1px rgba(74,59,42,.18);
+  /* 针尾：等腰三角，随分类色 */
+  .hz-map .hz-cluster::before {
+    content: ""; position: absolute; left: 50%; top: calc(var(--pin-head) - 7px);
+    width: calc(var(--pin-head) * .46); height: calc(var(--pin-tail) + 8px);
+    transform: translateX(-50%);
+    background: var(--cluster-color, #8B7355);
+    clip-path: polygon(50% 100%, 4% 0, 96% 0);
   }
+  /* 针头：圆形头像位 */
+  .hz-map .hz-cluster__head {
+    position: absolute; top: 0; left: 0;
+    width: var(--pin-head); height: var(--pin-head);
+    border-radius: 50%; box-sizing: border-box;
+    background: #f3ead8; border: 2px solid var(--cluster-color, #8B7355);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .hz-map .hz-cluster__head--count {
+    background: var(--cluster-color, #8B7355); border-color: #fff8e7;
+    color: #fff; font-size: 13px; font-weight: 700; line-height: 1;
+  }
+  /* 多专家针头的人数角标 */
+  .hz-map .hz-cluster__badge {
+    position: absolute; right: -3px; top: calc(var(--pin-head) - 8px);
+    min-width: 15px; height: 15px; padding: 0 3px; box-sizing: border-box;
+    border-radius: 50%; border: 1.5px solid #fff8e7;
+    background: var(--cluster-color, #8B7355); color: #fff;
+    font-size: 10px; font-weight: 700; line-height: 12px; text-align: center;
+  }
+  .hz-map .hz-cluster__photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .hz-map .hz-cluster__silhouette { width: 74%; height: 74%; fill: #a89177; }
+  .hz-map .hz-cluster__count,
+  .hz-map .hz-cluster__name { display: none; }
   .hz-map .hz-cluster:hover,
   .hz-map .hz-cluster:focus-visible,
   .hz-map .hz-cluster.is-active {
-    transform: translate(-50%, -50%) scale(1.25); z-index: 30; outline: none;
-    box-shadow: 0 6px 14px rgba(74,59,42,.45), 0 0 0 1px rgba(74,59,42,.18);
+    transform: translate(-50%, -100%) scale(1.14); z-index: 30; outline: none;
+    filter: drop-shadow(0 6px 9px rgba(74,59,42,.42));
   }
-  .hz-map .hz-cluster__count,
-  .hz-map .hz-cluster__name { display: none; }
   .hz-map .hz-cluster-popover {
     position: absolute; left: 0; top: 0; z-index: 40; width: min(280px, calc(100% - 24px));
     padding: 14px; border: 1px solid rgba(139,115,85,.36); border-radius: 14px;
@@ -293,7 +347,9 @@
   .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; }
   .hz-cluster-popover__header span { color:#8b7355; font-size:12px; }
   .hz-cluster-popover ul { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; list-style:none; max-height:240px; overflow:auto; }
-  .hz-cluster-expert { width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
+  /* 全局内容卡列表用 li::before 画圆点，会渗进浮层列表，这里显式清除 */
+  .hz-cluster-popover ul li::before { content:none; display:none; }
+  .hz-cluster-expert { display:flex; align-items:center; gap:9px; width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
   .hz-cluster-expert[data-category="science"]:hover,
   .hz-cluster-expert[data-category="science"]:focus-visible { border-color:#4A90E2; background:#eaf2fb; outline:none; }
   .hz-cluster-expert[data-category="policy"]:hover,
@@ -305,9 +361,19 @@
   .hz-cluster-expert__name, .hz-cluster-expert__meta { display:block; }
   .hz-cluster-expert__name { font-weight:700; font-size:13px; }
   .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size:11px; line-height:1.4; }
+  /* 展开列表里的小头像：有照片用照片，无照片用人像剪影 */
+  .hz-cluster-expert__body { min-width:0; }
+  .hz-cluster-expert__avatar {
+    flex:0 0 auto; width:32px; height:32px; border-radius:50%; box-sizing:border-box;
+    border:1px solid rgba(139,115,85,.35); background:#f3ead8; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hz-cluster-expert__avatar img { display:block; width:100%; height:100%; object-fit:cover; }
+  .hz-cluster-expert__avatar .hz-cluster__silhouette { width: 74%; height: 74%; fill:#a89177; }
   @media (max-width: 640px) {
     .hz-map .hz-cluster-popover { position: relative; left:auto; top:auto; width:100%; margin-top:10px; }
-    .hz-map .hz-cluster { width:14px; min-height:14px; }
+    .hz-map .hz-cluster { --pin-head: 24px; --pin-tail: 10px; }
+    .hz-map .hz-cluster__head--count { font-size: 11px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hz-map .hz-cluster { transition:none; }
@@ -319,12 +385,61 @@
   }
   .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
 
+  /* ===== 浮层与图钉动画 ===== */
+  @keyframes hzPopoverIn {
+    from { opacity: 0; transform: translateY(10px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes hzItemIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes hzPinFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes hzPinPulse {
+    0%   { opacity: .55; transform: scale(.85); }
+    100% { opacity: 0;   transform: scale(1.9); }
+  }
+
+  /* 移入展开专家列表：浮层淡入上移 + 轻微放大 */
+  .hz-cluster-popover {
+    animation: hzPopoverIn .24s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  /* 浮层内专家项依次错落出现，强化“展开列表”的动效感 */
+  .hz-cluster-popover ul li { animation: hzItemIn .26s ease both; }
+  .hz-cluster-popover ul li:nth-child(1) { animation-delay: .05s; }
+  .hz-cluster-popover ul li:nth-child(2) { animation-delay: .10s; }
+  .hz-cluster-popover ul li:nth-child(3) { animation-delay: .15s; }
+  .hz-cluster-popover ul li:nth-child(4) { animation-delay: .20s; }
+  .hz-cluster-popover ul li:nth-child(5) { animation-delay: .25s; }
+  .hz-cluster-popover ul li:nth-child(6) { animation-delay: .30s; }
+  .hz-cluster-popover ul li:nth-child(7) { animation-delay: .35s; }
+  .hz-cluster-popover ul li:nth-child(8) { animation-delay: .40s; }
+
+  /* 图钉渲染时依次淡入，形成“落点”节奏 */
+  .hz-map .hz-cluster { animation: hzPinFade .5s ease both; }
+
+  /* 激活图钉的脉冲圈（贴合针头圆形），提示当前选中 */
+  .hz-map .hz-cluster::after {
+    content: ""; position: absolute; top: 0; left: 0;
+    width: var(--pin-head); height: var(--pin-head);
+    border-radius: 50%;
+    border: 2px solid var(--cluster-color, #8B7355);
+    opacity: 0; pointer-events: none;
+  }
+  .hz-map .hz-cluster.is-active::after { animation: hzPinPulse 1.6s ease-out infinite; }
+
   /* 尊重用户的减弱动效偏好 */
   @media (prefers-reduced-motion: reduce) {
     .hz-map .hz-layer,
     .hz-map .hz-cluster,
     .hz-map .hz-container,
-    .hz-map #chinaProvinces path { 
+    .hz-map #chinaProvinces path,
+    .hz-cluster-popover,
+    .hz-cluster-popover ul li,
+    .hz-map .hz-cluster::after { 
       transition: none !important; 
       animation: none !important; 
       will-change: auto !important;
@@ -343,8 +458,12 @@
       <div class="page-loader__inner">
         <div class="page-loader__stage">
           <span class="page-loader__halo" aria-hidden="true"></span>
-          <div class="page-loader__frames" aria-hidden="true"></div>
-          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="page-loader__frames" aria-hidden="true">
+            <!-- 2026-10-04：原 6 帧雪碧图换成 2 帧插画（loader-frame-1/2.jpg，硬切逐帧）
+                 2026-10-05：删去原「两帧图加载失败时兜底的呼吸三点」——两帧循环即默认 -->
+            <span class="page-loader__frame page-loader__frame--1"></span>
+            <span class="page-loader__frame page-loader__frame--2"></span>
+          </div>
         </div>
         <p class="page-loader__text" aria-hidden="true">Loading</p>
       </div>
@@ -385,7 +504,6 @@
         <div class="dropdown-content">
           <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
           <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
-          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -403,8 +521,8 @@
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
-          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+
+          <a href="../human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
         </div>
       </li>
     </ul>
@@ -441,7 +559,6 @@
         <div class="dropdown-content">
           <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
           <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
-          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -459,8 +576,8 @@
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
-          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+
+          <a href="../human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
         </div>
       </li>
     </ul>
@@ -1111,16 +1228,19 @@
   <div class="component-container">
     <div class="footer-wrapper">
       <div class="footer-top">
-        <div class="footer-scroller">
-          <div class="image-scroller">
-            <div class="scroller-track">
-              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
-              </a>
-              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
-              </a>
-            </div>
+        
+        <div class="footer-partners">
+          <span class="partners-label">Supported by</span>
+          <div class="partners-list">
+            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
+            </a>
+            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
+            </a>
+            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
+            </a>
           </div>
         </div>
         <div class="footer-contact">
@@ -1181,15 +1301,14 @@
               <ul>
                 <li><a href="../dry-lab/model.html">Model</a></li>
                 <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-                <li><a href="../dry-lab/software.html">Software</a></li>
               </ul>
             </div>
             <div class="footer-column">
               <h4>Human Practices</h4>
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
-                <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
+
+                <li><a href="../human-practices/inclusivity.html">Inclusivity</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -1222,16 +1341,48 @@
 </section>
 
 
+  <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
+  <!-- 全站「返回顶部」悬浮按钮（2026-10-04）
+     两张图叠合（透明底 webp，存于同级 transparent/）：
+       外圈 back-to-top-ring（自带环绕文字，持续顺时针旋转）
+       内芯 back-to-top-core（静止）
+     hover：外圈与内芯作为整体一起上下浮动。
+     由 base.njk 引入 → 每个页面都有一份；行为见 static/js/components/back-to-top.js。 -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
+  <span class="back-to-top__ring" aria-hidden="true">
+    <!-- 2026-10-05：外圈换用美工新图 back-to-top-ring.png（原带环绕文字 webp 已删） -->
+    <img class="back-to-top__ring-img" src="../static/image/Animation/top/transparent/back-to-top-ring.png"
+      alt="" width="320" height="320" decoding="async">
+  </span>
+  <span class="back-to-top__core" aria-hidden="true">
+    <img class="back-to-top__core-img" src="../static/image/Animation/top/transparent/back-to-top-core.webp"
+      alt="" width="320" height="320" decoding="async">
+  </span>
+</button>
+
+
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
   <script src="../static/js/components/page-loader.js" defer></script>
+  <script src="../static/js/components/back-to-top.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
   <script src="../static/js/core/search.js" defer></script>
   <script src="../static/js/components/section-fold.js" defer></script>
+  <script src="../static/js/components/mascot-portal.js" defer></script>
   <script src="../static/js/components/hp-reveal-box.js" defer></script><script src="../static/js/components/hp-flat-carousel.js" defer></script>
   
+
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
 </body>
 </html>

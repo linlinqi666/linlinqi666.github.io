@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ lang | default('zh-CN') }}"{% if htmlClass %} class="{{ htmlClass }}"{% endif %}>
 <head>
-  <link rel="icon" type="image/png" href="{{ basePath | default('') }}static/image/any-icon/SZPU(notext).png">
+  <link rel="icon" type="image/png" href="{{ basePath | default('') }}static/image/any-icon/teamlogo.png">
   {% include "partials/head.njk" %}
 </head>
 <body class="{{ bodyClass | default('') }}">
@@ -13,16 +13,33 @@
   </main>
   {% if footer !== false %}{% include "partials/footer.njk" %}{% endif %}
 
+  <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
+  {% include "partials/back-to-top.njk" %}
+
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="{{ basePath | default('') }}static/js/core/utils.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/components/page-loader.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/back-to-top.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/mobile-menu.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/page-progress-bar.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/vendor/flexsearch.bundle.min.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/core/search.js" defer></script>
   <script src="{{ basePath | default('') }}static/js/components/section-fold.js" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/mascot-portal.js" defer></script>
   {% for s in (js or []) %}<script src="{{ basePath | default('') }}{{ s }}" defer></script>{% endfor %}
   {% block scripts %}{% endblock %}
+
+  {# 页面加载进度条启动：全站只需一次，故内嵌在布局末尾（与 Flask 站 wiki/layout.html 同款写法）。
+     原先每个页面各自内嵌一份同样的样板，属重复代码，已统一收敛到此处并加存在性守卫——
+     page-progress-bar.js 未加载或加载失败时静默跳过，不会抛 ReferenceError。 #}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
 </body>
 </html>

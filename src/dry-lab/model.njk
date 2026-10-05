@@ -318,8 +318,18 @@ js:
 
           <div class="model-game">
             <div class="model-game__toolbar">
-              <p class="model-game__toolbar-hint">How to select: click a card, or drag it into the center slot; click a selected card again to deselect.</p>
-              <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+              <p class="model-game__toolbar-hint">How to select: pick a docking mode, then click a card or drag it into the center slot; click a selected card again to deselect. With a pair selected, one of that combination's docking results is drawn at random.</p>
+
+              <div class="model-game__modes" role="group" aria-label="Docking mode">
+                <button type="button" id="model-game-mode-rigid" class="model-game__button model-game__button--mode is-active" aria-pressed="true">Rigid (ClusPro)</button>
+                <button type="button" id="model-game-mode-flex" class="model-game__button model-game__button--mode" aria-pressed="false">Semi-flexible (HADDOCK)</button>
+              </div>
+
+              <div class="model-game__toolbar-actions">
+                <button type="button" id="model-game-draw" class="model-game__button">Draw a Result</button>
+                <button type="button" id="model-game-random-pair" class="model-game__button model-game__button--ghost">Random Pair</button>
+                <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+              </div>
             </div>
 
             <div class="model-game__board">
@@ -806,66 +816,5 @@ js:
 // Data payload for the interactive demo: same source as the body tables (static/data/dry-lab/model/model-docking.json).
 // The page script static/js/pages/model-game.js is loaded with defer, so this variable is ready when it executes.
 window.MODEL_DOCKING_DATA = {{ modelDocking.client | dump | safe }};
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    // Mobile hamburger menu toggle
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const mobileOverlay = document.getElementById('mobile-menu-overlay');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (hamburgerMenu && mobileOverlay && mobileMenu) {
-      hamburgerMenu.addEventListener('click', function (e) {
-        e.stopPropagation();
-        this.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-
-        if (mobileOverlay.classList.contains('active')) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
-      });
-
-      // Close on overlay click
-      mobileOverlay.addEventListener('click', function (e) {
-        if (e.target === mobileOverlay) {
-          hamburgerMenu.classList.remove('active');
-          mobileOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-
-      // Mobile dropdown menu toggle
-      const dropdownToggles = mobileMenu.querySelectorAll('.dropdown-toggle');
-      dropdownToggles.forEach(function (toggle) {
-        toggle.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const parent = this.parentElement;
-          parent.classList.toggle('dropdown-open');
-        });
-      });
-
-      // Close menu after clicking a nav link
-      const navLinks = mobileMenu.querySelectorAll('a:not(.dropdown-toggle)');
-      navLinks.forEach(function (link) {
-        link.addEventListener('click', function () {
-          hamburgerMenu.classList.remove('active');
-          mobileOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
-    }
-
-  });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    new PageProgressBar().startAutoProgress();
-
-  });
 </script>
 {% endblock %}

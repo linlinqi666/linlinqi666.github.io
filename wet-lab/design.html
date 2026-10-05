@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="../static/image/any-icon/SZPU(notext).png">
+  <link rel="icon" type="image/png" href="../static/image/any-icon/teamlogo.png">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Design - iGEM SZPU-2026</title>
@@ -16,6 +16,7 @@
 
 <link rel="stylesheet" href="../static/css/mobile.css">
 <link rel="stylesheet" href="../static/css/components/page-loader.css">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css">
 <link rel="stylesheet" href="../static/css/components/section-fold.css">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
@@ -31,8 +32,12 @@
       <div class="page-loader__inner">
         <div class="page-loader__stage">
           <span class="page-loader__halo" aria-hidden="true"></span>
-          <div class="page-loader__frames" aria-hidden="true"></div>
-          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="page-loader__frames" aria-hidden="true">
+            <!-- 2026-10-04：原 6 帧雪碧图换成 2 帧插画（loader-frame-1/2.jpg，硬切逐帧）
+                 2026-10-05：删去原「两帧图加载失败时兜底的呼吸三点」——两帧循环即默认 -->
+            <span class="page-loader__frame page-loader__frame--1"></span>
+            <span class="page-loader__frame page-loader__frame--2"></span>
+          </div>
         </div>
         <p class="page-loader__text" aria-hidden="true">Loading</p>
       </div>
@@ -73,7 +78,6 @@
         <div class="dropdown-content">
           <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
           <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
-          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -91,8 +95,8 @@
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
-          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+
+          <a href="../human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
         </div>
       </li>
     </ul>
@@ -129,7 +133,6 @@
         <div class="dropdown-content">
           <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
           <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
-          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -147,8 +150,8 @@
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
-          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+
+          <a href="../human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
         </div>
       </li>
     </ul>
@@ -488,12 +491,19 @@
 
           <h3 id="design-safety">Safety &amp; Design Considerations</h3>
           <ol>
-            <li><strong>Chassis biosafety:</strong> We use non-pathogenic laboratory-standard <i>Saccharomyces
-              cerevisiae</i> BY4741, a widely used biosafety-level-1 microbial chassis with no pathogenic risk. We adopt
-              auxotrophic selection markers on our expression plasmids; engineered yeast strains can only survive on
-              culture media supplemented with corresponding deficient amino acids. This imposes a biological
-              containment barrier: the engineered yeast cannot stably proliferate in natural environments lacking the
-              required nutrients, minimizing the risk of uncontrolled environmental escape.</li>
+            <li><strong>Chassis biosafety:</strong> In this study, the non-pathogenic laboratory standard strain
+              <i>Saccharomyces cerevisiae</i> BY4741 was selected as the chassis cell. This strain belongs to
+              Biosafety Level 1 (BSL-1) microorganisms and poses no pathogenic risk. In terms of biosafety design, we
+              exploit its auxotrophic properties to construct a biological containment barrier, thereby reducing the
+              risk of uncontrolled dissemination of the engineered strain in natural environments. BY4741 is naturally
+              auxotrophic for histidine (His), leucine (Leu), methionine (Met), and uracil (Ura). The PAGER system, the
+              reporter system, and the plasmids for Gpa1 humanization and gene knockout constructed in this study carry
+              LEU, HIS, and URA selection markers, respectively, which complement the corresponding auxotrophies. To
+              ensure biosafety, we further designed a marker-removal strategy: the URA marker will be removed by
+              5-fluoroorotic acid (5-FOA) counter-selection, so that the engineered strain will ultimately maintain a
+              double auxotrophy for uracil and methionine. This double-auxotrophy mechanism is designed to render the
+              strain unable to proliferate effectively outside the specific supplemented medium, thereby effectively
+              reducing the risk of environmental release.</li>
             <li><strong>Recognition element:</strong> anti-HA nanobody and hM1Dq receptor are heterologous protein
               expression; no virulence-related genes are introduced. No replication-competent viral sequences are used
               in our constructs.</li>
@@ -524,16 +534,19 @@
   <div class="component-container">
     <div class="footer-wrapper">
       <div class="footer-top">
-        <div class="footer-scroller">
-          <div class="image-scroller">
-            <div class="scroller-track">
-              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
-              </a>
-              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
-              </a>
-            </div>
+        
+        <div class="footer-partners">
+          <span class="partners-label">Supported by</span>
+          <div class="partners-list">
+            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
+            </a>
+            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
+            </a>
+            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
+            </a>
           </div>
         </div>
         <div class="footer-contact">
@@ -594,15 +607,14 @@
               <ul>
                 <li><a href="../dry-lab/model.html">Model</a></li>
                 <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-                <li><a href="../dry-lab/software.html">Software</a></li>
               </ul>
             </div>
             <div class="footer-column">
               <h4>Human Practices</h4>
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
-                <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
+
+                <li><a href="../human-practices/inclusivity.html">Inclusivity</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -635,25 +647,48 @@
 </section>
 
 
+  <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
+  <!-- 全站「返回顶部」悬浮按钮（2026-10-04）
+     两张图叠合（透明底 webp，存于同级 transparent/）：
+       外圈 back-to-top-ring（自带环绕文字，持续顺时针旋转）
+       内芯 back-to-top-core（静止）
+     hover：外圈与内芯作为整体一起上下浮动。
+     由 base.njk 引入 → 每个页面都有一份；行为见 static/js/components/back-to-top.js。 -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
+  <span class="back-to-top__ring" aria-hidden="true">
+    <!-- 2026-10-05：外圈换用美工新图 back-to-top-ring.png（原带环绕文字 webp 已删） -->
+    <img class="back-to-top__ring-img" src="../static/image/Animation/top/transparent/back-to-top-ring.png"
+      alt="" width="320" height="320" decoding="async">
+  </span>
+  <span class="back-to-top__core" aria-hidden="true">
+    <img class="back-to-top__core-img" src="../static/image/Animation/top/transparent/back-to-top-core.webp"
+      alt="" width="320" height="320" decoding="async">
+  </span>
+</button>
+
+
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
   <script src="../static/js/components/page-loader.js" defer></script>
+  <script src="../static/js/components/back-to-top.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
   <script src="../static/js/core/search.js" defer></script>
   <script src="../static/js/components/section-fold.js" defer></script>
+  <script src="../static/js/components/mascot-portal.js" defer></script>
   <script src="../static/js/components/sidebar-progress.js" defer></script>
   
-<script>
-document.addEventListener('DOMContentLoaded', function () {
 
-    // 页面加载进度条
-    new PageProgressBar().startAutoProgress();
-
-  });
-</script>
-
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
 </body>
 </html>

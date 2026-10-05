@@ -316,12 +316,19 @@ js:
 
           <h3 id="design-safety">Safety &amp; Design Considerations</h3>
           <ol>
-            <li><strong>Chassis biosafety:</strong> We use non-pathogenic laboratory-standard <i>Saccharomyces
-              cerevisiae</i> BY4741, a widely used biosafety-level-1 microbial chassis with no pathogenic risk. We adopt
-              auxotrophic selection markers on our expression plasmids; engineered yeast strains can only survive on
-              culture media supplemented with corresponding deficient amino acids. This imposes a biological
-              containment barrier: the engineered yeast cannot stably proliferate in natural environments lacking the
-              required nutrients, minimizing the risk of uncontrolled environmental escape.</li>
+            <li><strong>Chassis biosafety:</strong> In this study, the non-pathogenic laboratory standard strain
+              <i>Saccharomyces cerevisiae</i> BY4741 was selected as the chassis cell. This strain belongs to
+              Biosafety Level 1 (BSL-1) microorganisms and poses no pathogenic risk. In terms of biosafety design, we
+              exploit its auxotrophic properties to construct a biological containment barrier, thereby reducing the
+              risk of uncontrolled dissemination of the engineered strain in natural environments. BY4741 is naturally
+              auxotrophic for histidine (His), leucine (Leu), methionine (Met), and uracil (Ura). The PAGER system, the
+              reporter system, and the plasmids for Gpa1 humanization and gene knockout constructed in this study carry
+              LEU, HIS, and URA selection markers, respectively, which complement the corresponding auxotrophies. To
+              ensure biosafety, we further designed a marker-removal strategy: the URA marker will be removed by
+              5-fluoroorotic acid (5-FOA) counter-selection, so that the engineered strain will ultimately maintain a
+              double auxotrophy for uracil and methionine. This double-auxotrophy mechanism is designed to render the
+              strain unable to proliferate effectively outside the specific supplemented medium, thereby effectively
+              reducing the risk of environmental release.</li>
             <li><strong>Recognition element:</strong> anti-HA nanobody and hM1Dq receptor are heterologous protein
               expression; no virulence-related genes are introduced. No replication-competent viral sequences are used
               in our constructs.</li>
@@ -347,13 +354,3 @@ js:
     </div>
 {% endblock %}
 
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    // 页面加载进度条
-    new PageProgressBar().startAutoProgress();
-
-  });
-</script>
-{% endblock %}

@@ -11,7 +11,10 @@ js:
   - static/js/components/executive-summary-animation.js
   - static/js/components/index-intro-gif.js
   - static/js/pages/home-nav.js
+  - static/js/pages/home-idle-motion.js
   - static/js/pages/statistics-reveal.js
+  - static/js/pages/dbtl-pump.js
+  - static/js/pages/influenza-burden.js
 ---
 
 {% extends "layouts/base.njk" %}
@@ -29,25 +32,88 @@ js:
           aria-hidden="true">→</span></button>
     </div>
 
-<!-- 首页动画屏顺序（2026-10-01 调整）：1 首页(hero) → 2 人类实践(human-practices) → 3 结果(statistics) → 4 安全(safety) → 5 背景(public-health) → 6 设计(project-intro) → 7 构建与测试(dbtl-cycle) -->
+<!-- 首页动画屏顺序（2026-10-03 调整）：1 首页(hero) → 2 甲流负担(influenza-burden) → 3 人类实践(human-practices) → 4 结果(statistics) → 5 安全(safety) → 6 背景(public-health) → 7 设计(project-intro) → 8 构建与测试(dbtl-cycle) -->
     <!-- 模块 1: Hero 标题页（板块 1：ECHO 品牌构图，由 webp 组件拼装） -->
     <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
       <h1 class="sr-only">ECHO Yeast — 工程化酿酒酵母 H1N1 流感病毒生物传感器</h1>
       <div class="echo-stage" aria-label="ECHO = Engineered Cellular Host, Observation of viral signals">
         <img class="echo-art echo-art--logo"
-          src="static/image/Animation/index/webp/s1-echo-logo.webp" alt="ECHO">
+          src="static/image/Animation/index/webp/hero-echo-logo.webp" alt="ECHO">
         <img class="echo-art echo-art--dash-a" alt="" aria-hidden="true"
           src="static/image/Animation/index/webp/shared-yellow-dash-a.webp">
         <img class="echo-art echo-art--dash-b" alt="" aria-hidden="true"
           src="static/image/Animation/index/webp/shared-yellow-dash-b.webp">
-        <p class="echo-stage__tagline">
-          <span>ECHO = <b>E</b>ngineered <b>C</b>ellular <b>H</b>ost</span>
-          <span><b>O</b>bservation of viral signals</span>
-        </p>
+        <img class="echo-art echo-art--tagline" alt="ECHO = Engineered Cellular Host, Observation of viral signals"
+          src="static/image/Animation/index/webp/shared-blue-curve.webp">
         <img class="echo-art echo-art--mascot" alt="EchoYeast 酵母吉祥物"
-          src="static/image/Animation/index/webp/s1-mascot.webp">
+          src="static/image/Animation/index/webp/hero-mascot.webp">
         <img class="echo-art echo-art--wave" alt="" aria-hidden="true"
           src="static/image/Animation/index/webp/shared-wave-1.webp">
+      </div>
+    </section>
+
+    <!-- 模块 1.5: 甲流负担（influenza-burden）—— 数据沉浸屏（2026-10-03 v2 重做）
+         主体是「实时感染计数器」：按 WHO 口径（每年约 10 亿例季节性流感 × 甲型占比 66%），
+         折合每年约 6.6 亿、每秒约 21 人感染甲流；页面打开起数字持续跳动，读者停留的每一秒
+         都在涨——这是本屏"持续抓住视觉"的核心；辅以 12 席位网格（1 格亮蓝 = 每 12 人 1 人）、
+         2023–2025 三年占总人口比例（表格式右栏）与来源注脚。
+         ★ 降级铁律：标记里默认写的是「每年 660,000,000 人感染」，无障碍/无 JS 读到的是这版
+           静态事实；实时计数器由 influenza-burden.js 接管后才换成「since you opened this page」
+           并持续跳动（同时把跳动数字标记 aria-hidden，旁边提供静态的无障碍句子）。
+         prefers-reduced-motion / 无 JS / 无 WAAPI → 不接管，保持静态年值。 -->
+    <section id="influenza-burden" class="presentation-section yeast-screen" data-title="甲流负担">
+      <h2 class="sr-only">About 1 in 12 people worldwide is infected by influenza A every year</h2>
+      <div class="art-stage art-stage--influenza-burden">
+        <!-- 自绘背景层（无素材、纯 CSS/SVG）：淡淡的数据网格 + 计数器区域柔光 +
+             一枚 12 刻度的虚线环（呼应「每 12 人 1 人」）。极缓慢的漂移/呼吸只动
+             transform，prefers-reduced-motion 下停止；整层在内容之下且不接收点击。 -->
+        <div class="burden-backdrop" aria-hidden="true">
+          <span class="burden-backdrop__grid"></span>
+          <span class="burden-backdrop__glow"></span>
+          <svg class="burden-backdrop__ring" viewBox="0 0 100 100" fill="none" focusable="false">
+            <circle cx="50" cy="50" r="44" stroke="rgba(76,157,211,0.55)" stroke-width="0.8"
+              stroke-dasharray="1.2 5.5" stroke-linecap="round"></circle>
+            <circle cx="50" cy="50" r="34" stroke="rgba(76,157,211,0.3)" stroke-width="0.55"
+              stroke-dasharray="1.2 8" stroke-linecap="round"></circle>
+            {% for i in range(0, 12) %}<circle cx="50" cy="6.5" r="2.1" transform="rotate({{ i * 30 }} 50 50)"
+              fill="{{ 'rgba(76,157,211,0.7)' if i == 0 else 'rgba(76,157,211,0.38)' }}"></circle>{% endfor %}
+          </svg>
+        </div>
+
+        <p class="burden-eyebrow">Influenza A · every year</p>
+
+        <p class="burden-lead">
+          <span class="burden-lead__num">1 in 12</span>
+          <span class="burden-lead__copy">people worldwide are infected by influenza A every year</span>
+        </p>
+
+        <!-- 12 席位：每格代表人口里的 1 人，1 格亮蓝 -->
+        <ul class="burden-grid" aria-hidden="true">
+          {% for i in range(0, 12) %}<li class="burden-grid__dot{{ ' is-lit' if i == 0 else '' }}"></li>{% endfor %}
+        </ul>
+
+        <!-- 实时感染计数器（无 JS 时读的是「每年 660,000,000 人」这一静态事实） -->
+        <div class="burden-counter">
+          <p class="burden-counter__label" data-burden-label>Every year</p>
+          <p class="burden-counter__value" data-burden-value>660,000,000</p>
+          <p class="burden-counter__unit" data-burden-unit>people catch influenza A</p>
+          <div class="burden-counter__track" aria-hidden="true">
+            <span class="burden-counter__tick"></span>
+          </div>
+          <p class="burden-counter__rate">≈ 21 every second</p>
+        </div>
+        <p class="sr-only">Approximately 21 people are infected with influenza A every second — about
+          660 million each year, based on WHO estimates.</p>
+
+        <p class="burden-years-caption">Share of the world population</p>
+        <ul class="burden-years">
+          {% for y in [{ y: '2023', v: '8.19%' }, { y: '2024', v: '8.11%' }, { y: '2025', v: '8.03%' }] %}<li class="burden-year"><span class="burden-year__label">{{ y.y }}</span><span class="burden-year__val">{{ y.v }}</span></li>{% endfor %}
+        </ul>
+
+        <p class="burden-note">Estimate: WHO ~1 billion seasonal influenza cases each year × influenza A share of
+          positives (66%, WHO South-East Asia Region, 2025) ÷ UN world population for that year; that is also
+          ≈ 21 new infections every second. Sources: WHO Influenza (seasonal) fact sheet, 28 Feb 2025;
+          WHO Seasonal influenza – Global situation, 10 Dec 2025; UN World Population Prospects via World Bank.</p>
       </div>
     </section>
 
@@ -58,13 +124,14 @@ js:
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--human-practices 段 -->
       <div class="art-stage art-stage--human-practices">
         <!-- <img class="art art--human-practices-wave" src="static/image/Animation/index/webp/shared-wave-1.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--human-practices-title" src="static/image/Animation/index/webp/s7-chart-title.webp" alt="Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026">
-        <img class="art art--human-practices-chart" src="static/image/Animation/index/webp/s7-chart.webp" alt="流感亚型检测量折线图">
-        <img class="art art--human-practices-mascot" src="static/image/Animation/index/webp/s7-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
-        <img class="art art--human-practices-axis" src="static/image/Animation/index/webp/s7-axis-label.webp" alt="Week start date">
-        <img class="art art--human-practices-legend-subtypes" src="static/image/Animation/index/webp/s7-legend-subtypes.webp" alt="Influenza subtypes">
-        <img class="art art--human-practices-legend-h1n1" src="static/image/Animation/index/webp/s7-legend-h1n1.webp" alt="A(H1N1)pdm09">
-        <img class="art art--human-practices-legend-pos" src="static/image/Animation/index/webp/s7-legend-positive.webp" alt="Influenza percent positive">
+        <!-- 2026-10-05：标题/轴标签/图例原为纯文字图 → 改真文本（样式见 index.css「art 文字化」段） -->
+        <p class="art art--human-practices-title art-title-text art-title-text--hp" lang="en">Virus detections by subtype reported to FluNet,<br>21 October 2022 to 21 August 2026</p>
+        <img class="art art--human-practices-chart" src="static/image/Animation/index/webp/human-practices-chart.webp" alt="流感亚型检测量折线图">
+        <img class="art art--human-practices-mascot" src="static/image/Animation/index/webp/human-practices-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
+        <p class="art art--human-practices-axis art-title-text" lang="en">Week start date</p>
+        <p class="art art--human-practices-legend-subtypes art-legend" lang="en">Influenza subtypes</p>
+        <p class="art art--human-practices-legend-h1n1 art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#acdaf2" aria-hidden="true"></span>A(H1N1)pdm09</p>
+        <p class="art art--human-practices-legend-pos art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#f0a609" aria-hidden="true"></span>Influenza percent positive</p>
       </div>
     </section>
 
@@ -78,13 +145,13 @@ js:
              无 JS 时静态可见（脚本只加类，不做默认隐藏） -->
         <p class="statistics-caption" lang="en">Contemporary popular methods for detecting H1N1 influenza</p>
         <!-- <img class="art art--statistics-cloud" src="static/image/Animation/index/webp/statistics-cloud.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--statistics-hill" src="static/image/Animation/index/webp/s5-hill.webp" alt="" aria-hidden="true">
-        <img class="art art--statistics-qpcr" src="static/image/Animation/index/webp/s5-circle-qpcr.webp" alt="qPCR">
-        <img class="art art--statistics-elisa" src="static/image/Animation/index/webp/s5-circle-elisa.webp" alt="ELISA">
-        <img class="art art--statistics-cgis" id="statistics-cgis" src="static/image/Animation/index/webp/s5-circle-cgis.webp" alt="CGIS">
-        <img class="art art--statistics-arc" src="static/image/Animation/index/webp/s5-dashed-arc.webp" alt="" aria-hidden="true">
-        <img class="art art--statistics-bulb" src="static/image/Animation/index/webp/s5-bulb.webp" alt="" aria-hidden="true">
-        <img class="art art--statistics-mascot" src="static/image/Animation/index/webp/s5-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
+        <img class="art art--statistics-hill" src="static/image/Animation/index/webp/statistics-hill.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-qpcr" src="static/image/Animation/index/webp/statistics-circle-qpcr.webp" alt="qPCR">
+        <img class="art art--statistics-elisa" src="static/image/Animation/index/webp/statistics-circle-elisa.webp" alt="ELISA">
+        <img class="art art--statistics-cgis" id="statistics-cgis" src="static/image/Animation/index/webp/statistics-circle-cgis.webp" alt="CGIS">
+        <img class="art art--statistics-arc" src="static/image/Animation/index/webp/statistics-dashed-arc.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-bulb" src="static/image/Animation/index/webp/statistics-bulb.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-mascot" src="static/image/Animation/index/webp/statistics-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
         <img class="art art--statistics-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
         <!-- CGIS 点击提示（箭头 + Click here）：由 statistics-reveal.js 定位到 CGIS 圆正上方，
              点击展开后移除；无 JS / 未进入该屏时不显示 -->
@@ -97,6 +164,29 @@ js:
             </svg>
           </div>
         </div>
+        <!-- 三方法信息条（2026-10-05）：三圆揭示完成后，移入任一圆 → 从圆右侧「擦除」展开
+             蓝底白字条（优势/劣势），移出收回；揭示完成前不可见（由 statistics-reveal.js
+             加 js-methods-armed 收起 + is-open 展开）。
+             无 JS / prefers-reduced-motion：三条静态可见（默认 CSS 不做隐藏，降级红线）。
+             文案出处：首页逻辑.docx Part 1（qPCR/ELISA 精准但依赖设备实验室人员、
+             CGIS 现场快检）；经 CDC「Overview of Influenza Testing Methods / RIDT Guidance」
+             与 MDPI 2025 综述外部确证——docx 中「CGIS 假阳性高」按 CDC 口径修正为
+             「灵敏度有限（易假阴性）、结果不确定性高」（详见交付文档）。 -->
+        <div class="method-info method-info--qpcr">
+          <p class="method-info__title">qPCR <small>Nucleic acid test</small></p>
+          <p class="method-info__pro">＋ Highest sensitivity &amp; accuracy, quantitative — the reference standard</p>
+          <p class="method-info__con">－ Needs lab equipment &amp; trained staff, ~1–2 h</p>
+        </div>
+        <div class="method-info method-info--elisa">
+          <p class="method-info__title">ELISA <small>Antigen / protein test</small></p>
+          <p class="method-info__pro">＋ High throughput &amp; lower cost, good for batch screening</p>
+          <p class="method-info__con">－ Less sensitive than qPCR, needs a reader &amp; more time</p>
+        </div>
+        <div class="method-info method-info--cgis">
+          <p class="method-info__title">CGIS <small>Colloidal gold strip</small></p>
+          <p class="method-info__pro">＋ On-site result in 10–15 min, portable, no instruments</p>
+          <p class="method-info__con">－ Limited sensitivity &amp; result uncertainty, needs confirmatory testing</p>
+        </div>
       </div>
     </section>
 
@@ -108,8 +198,9 @@ js:
       <div class="art-stage art-stage--safety">
         <img class="art art--safety-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
         <!-- <img class="art art--safety-curve" src="static/image/Animation/index/webp/shared-blue-curve.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--safety-mascot" src="static/image/Animation/index/webp/s6-mascot-flying.webp" alt="EchoYeast 披风飞行">
-        <img class="art art--safety-title" src="static/image/Animation/index/webp/s6-title.webp" alt="Influenza A Virus Biosensor Based on Engineered Yeast">
+        <img class="art art--safety-mascot" src="static/image/Animation/index/webp/safety-mascot-flying.webp" alt="EchoYeast 披风飞行">
+        <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
+        <p class="art art--safety-title art-title-text" lang="en">Influenza A Virus<br>Biosensor Based on<br>Engineered Yeast</p>
         <img class="art art--safety-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
       </div>
     </section>
@@ -120,10 +211,11 @@ js:
       <!-- public-health「Can We Build a Living Sensor」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/50314a3b2c87cfe13cd2dfd90a295494.2e5af09548.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--public-health 段 -->
       <div class="art-stage art-stage--public-health">
-        <img class="art art--public-health-title" src="static/image/Animation/index/webp/s2-title.webp" alt="Can We Build a Living Sensor That Directly Responds to Viral Signals?">
-        <img class="art art--public-health-petri" src="static/image/Animation/index/webp/s2-petri-dish.webp" alt="" aria-hidden="true">
-        <img class="art art--public-health-virus" src="static/image/Animation/index/webp/s2-virus-cluster.webp" alt="" aria-hidden="true">
-        <img class="art art--public-health-mascot" src="static/image/Animation/index/webp/s2-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
+        <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
+        <p class="art art--public-health-title art-title-text" lang="en">Can We Build a Living Sensor<br>That Directly Responds to Viral Signals?</p>
+        <img class="art art--public-health-petri" src="static/image/Animation/index/webp/public-health-petri-dish.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-virus" src="static/image/Animation/index/webp/public-health-virus-cluster.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-mascot" src="static/image/Animation/index/webp/public-health-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
       </div>
     </section>
 
@@ -134,7 +226,8 @@ js:
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--project-intro 段 -->
       <div class="art-stage art-stage--project-intro">
         <img class="art art--project-intro-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
-        <img class="art art--project-intro-title" src="static/image/Animation/index/webp/s3-title.webp" alt="WHY EHCO Yeast?">
+        <!-- 2026-10-05：标题原为纯文字图 → 真文本（EHCO 为原设计稿拼写，按原样保留） -->
+        <p class="art art--project-intro-title art-title-text" lang="en">WHY EHCO Yeast?</p>
         <!-- 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播
              位置/大小/速度 → static/css/index.css 搜「project-intro 文字条」
              每排的 .intro-pills__group 出现两次（第二份 aria-hidden）用于无缝循环，删掉会跳帧 -->
@@ -142,41 +235,41 @@ js:
           <div class="intro-pills__row">
             <div class="intro-pills__track">
               <div class="intro-pills__group">
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-low-cost.webp" alt="Low-cost cultivation"></span>
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-native-signal.webp" alt="Native eukaryotic signal transduction network"></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Low-cost cultivation</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Native eukaryotic signal transduction network</span></span>
               </div>
               <div class="intro-pills__group" aria-hidden="true">
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-low-cost.webp" alt=""></span>
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-native-signal.webp" alt=""></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Low-cost cultivation</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Native eukaryotic signal transduction network</span></span>
               </div>
             </div>
           </div>
           <div class="intro-pills__row">
             <div class="intro-pills__track">
               <div class="intro-pills__group">
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-biosafety.webp" alt="High biosafety level"></span>
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-env-tolerance.webp" alt="Strong environmental tolerance"></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">High biosafety level</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Strong environmental tolerance</span></span>
               </div>
               <div class="intro-pills__group" aria-hidden="true">
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-biosafety.webp" alt=""></span>
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-env-tolerance.webp" alt=""></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">High biosafety level</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Strong environmental tolerance</span></span>
               </div>
             </div>
           </div>
           <div class="intro-pills__row">
             <div class="intro-pills__track">
               <div class="intro-pills__group">
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-toolbox.webp" alt="Well-established genetic engineering toolbox"></span>
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-combining.webp" alt="Combining eukaryotic expression and environmental adaptability"></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Well-established genetic engineering toolbox</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Combining eukaryotic expression and environmental adaptability</span></span>
               </div>
               <div class="intro-pills__group" aria-hidden="true">
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-toolbox.webp" alt=""></span>
-                <span class="intro-pill"><img src="static/image/Animation/index/webp/s3-pill-combining.webp" alt=""></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Well-established genetic engineering toolbox</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Combining eukaryotic expression and environmental adaptability</span></span>
               </div>
             </div>
           </div>
         </div>
-        <img class="art art--project-intro-mascot" src="static/image/Animation/index/webp/s3-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
+        <img class="art art--project-intro-mascot" src="static/image/Animation/index/webp/project-intro-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
         <img class="art art--project-intro-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
       </div>
     </section>
@@ -188,9 +281,13 @@ js:
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--dbtl-cycle 段 -->
       <div class="art-stage art-stage--dbtl-cycle">
         <img class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared-wave-3.webp" alt="" aria-hidden="true">
-        <img class="art art--dbtl-cycle-title" src="static/image/Animation/index/webp/s4-title.webp" alt="Research content: Workflow and principle">
-        <img class="art art--dbtl-cycle-diagram" src="static/image/Animation/index/webp/s4-workflow-diagram.webp" alt="工作流程与原理示意图">
-        <img class="art art--dbtl-cycle-mascot" src="static/image/Animation/index/webp/s4-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
+        <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
+        <p class="art art--dbtl-cycle-title art-title-text" lang="en">Research content:<br>Workflow and principle</p>
+        <!-- 原理示意图：首次滑入本屏时由 dbtl-pump.js 触发「想法泵出」入场——
+             以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大；
+             无 JS / prefers-reduced-motion 时静态直出（脚本只加类，不做默认隐藏） -->
+        <img class="art art--dbtl-cycle-diagram" src="static/image/Animation/index/webp/dbtl-cycle-workflow-diagram.webp" alt="工作流程与原理示意图">
+        <img class="art art--dbtl-cycle-mascot" src="static/image/Animation/index/webp/dbtl-cycle-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
       </div>
     </section>
 
@@ -216,95 +313,62 @@ js:
       <!-- iGEM Check: [x] Future directions only [x] No unsupported claims [x] Placeholder for expansion data -->
     </section>
 
-    <!-- 模块 9: 团队亮点（文字摘要卡片） -->
-    <section id="team-highlight" class="presentation-section yeast-screen" data-title="团队介绍">
-      <div class="yeast-screen__inner">
-        <div class="yeast-screen__content">
-        <h2 class="section-summary__title reveal">团队亮点</h2>
-        <div class="summary-grid">
-          <article class="summary-card reveal">
-            <span class="iconfont icon-tuandui"></span>
-            <h3>跨学科协作</h3>
-            <p>合成生物学、计算机建模、硬件设计与社会调查成员协同推进，形成从元件到社会的完整闭环。</p>
-          </article>
-          <article class="summary-card reveal">
-            <span class="iconfont icon-shezhichilun"></span>
-            <h3>DBTL 工程思维</h3>
-            <p>每个设计决策均对应可测试假设与迭代计划，确保项目可追溯、可复现、可改进。</p>
-          </article>
-          <article class="summary-card reveal">
-            <span class="iconfont icon-shehuishijian"></span>
-            <h3>社会反馈驱动</h3>
-            <p>专家与公众反馈持续塑造项目目标与产品形态，使技术方案贴近真实使用场景。</p>
-          </article>
-        </div>
-      </div>
-      </div>
-      <!-- iGEM Check: [x] Team strengths summarized [x] No fabricated member details [x] Links to subpages below -->
-    </section>
+    <!-- 模块 9: 团队亮点屏已删除（2026-10-05 用户要求）；团队信息见 Members 子页 -->
 
-    <!-- 模块 10: 8-Portal 导航 -->
+    <!-- 模块 10: 4-Portal 导航（2026-10-04：8 个文字门户卡 → 4 个吉祥物入口，铺满整行）
+         顺序固定为 design → result → model → HP，与吉祥物造型一一对应；
+         hover 时整只吉祥物做 180° 转身（纯 transform，不动布局）。 -->
     <section id="final-cta" class="presentation-section yeast-screen" data-title="探索更多">
       <div class="yeast-screen__inner">
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">探索我们的 Wiki</h2>
-        <div class="portal-grid" role="navigation" aria-label="子页面导航">
-          <a href="project/description.html" class="portal-card reveal">
-            <span class="iconfont icon-jianjie"></span>
-            <span>Description</span>
-          </a>
-          <a href="project/design.html" class="portal-card reveal">
-            <span class="iconfont icon-sheji"></span>
-            <span>Design</span>
-          </a>
-          <a href="project/engineering.html" class="portal-card reveal">
-            <span class="iconfont icon-shezhichilun"></span>
-            <span>Engineering</span>
-          </a>
-          <a href="wet-lab/result.html" class="portal-card reveal">
-            <span class="iconfont icon-shiyanjieguo"></span>
-            <span>Results</span>
-          </a>
-          <a href="wet-lab/safety.html" class="portal-card reveal">
-            <span class="iconfont icon-anquan"></span>
-            <span>Safety</span>
-          </a>
-          <a href="human-practices/integrated human-practices.html" class="portal-card reveal">
-            <span class="iconfont icon-shehuishijian"></span>
-            <span>Human Practices</span>
-          </a>
-          <a href="dry-lab/model.html" class="portal-card reveal">
-            <span class="iconfont icon-wumoxing"></span>
-            <span>Dry Lab</span>
-          </a>
-          <a href="team/members.html" class="portal-card reveal">
-            <span class="iconfont icon-tuandui"></span>
-            <span>Team</span>
-          </a>
+          <div class="mascot-portal-row" role="navigation" aria-label="子页面导航">
+            <a href="project/design.html" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-design.webp"
+                alt="Design 板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Design</span>
+            </a>
+            <a href="wet-lab/result.html" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-result.webp"
+                alt="Results 板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Results</span>
+            </a>
+            <a href="dry-lab/model.html" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-model.webp"
+                alt="Dry Lab 建模板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Model</span>
+            </a>
+            <a href="human-practices/integrated human-practices.html" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-hp.webp"
+                alt="Human Practices 板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Human Practices</span>
+            </a>
+          </div>
         </div>
       </div>
-      </div>
-      <!-- iGEM Check: [x] 8 portals to subpages [x] Accessible nav markup [x] No external broken links -->
+      <!-- iGEM Check: [x] 4 portals to subpages (Design/Results/Dry Lab/Human Practices；
+           其余子页面仍可从顶部导航与各页内链到达) [x] Accessible nav markup [x] No external broken links -->
     </section>
 
     <section id="footer" class="section-footer">
       <div class="component-container">
         <div class="footer-wrapper">
-          <!-- 顶部内容：图片滚动 + Contact Us -->
+          <!-- 顶部内容：赞助/支持方（2026-10-04c：换 iGEM + 食品药品学院 + SZPU 三张横排，与 Contact Us 5:5） + Contact Us -->
           <div class="footer-top">
-            <!-- 滚动图片展示区域 -->
-            <div class="footer-scroller">
-              <div class="image-scroller">
-                <div class="scroller-track">
-                  <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                    <img loading="lazy" decoding="async" src="static/image/any-icon/SZPU(notext).webp" alt="SZPU"
-                      class="scroll-image">
-                  </a>
-                  <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                    <img loading="lazy" decoding="async" src="static/image/any-icon/shiyao(notext).webp" alt="shiyao"
-                      class="scroll-image">
-                  </a>
-                </div>
+            <!-- 伙伴栏：结构与 partials/footer.njk 一致，样式见 navigation/navigation.css「伙伴栏」段 -->
+            <div class="footer-partners">
+              <span class="partners-label">Supported by</span>
+              <div class="partners-list">
+                <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+                  <img loading="lazy" decoding="async" src="static/image/any-icon/igem.png" alt="iGEM">
+                </a>
+                <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+                  <img loading="lazy" decoding="async" src="static/image/any-icon/shiyao.png"
+                    alt="School of Food and Drug, SZPU">
+                </a>
+                <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+                  <img loading="lazy" decoding="async" src="static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
+                </a>
               </div>
             </div>
             <!-- Contact Us 区域 -->
@@ -372,15 +436,14 @@ js:
                   <ul>
                     <li><a href="dry-lab/model.html">Model</a></li>
                     <li><a href="dry-lab/hardware.html">Hardware</a></li>
-                    <li><a href="dry-lab/software.html">Software</a></li>
                   </ul>
                 </div>
                 <div class="footer-column">
                   <h4>Human Practices</h4>
                   <ul>
                     <li><a href="human-practices/integrated human-practices.html">Integrated HP</a></li>
-                    <li><a href="human-practices/education.html">Education</a></li>
-                    <li><a href="human-practices/sustainability.html">Sustainability</a></li>
+
+                    <li><a href="human-practices/inclusivity.html">Inclusivity</a></li>
                   </ul>
                 </div>
                 <div class="footer-column">
@@ -417,13 +480,3 @@ js:
     </section>
 {% endblock %}
 
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    // 页面加载进度条
-    new PageProgressBar().startAutoProgress();
-  
-  });
-</script>
-{% endblock %}

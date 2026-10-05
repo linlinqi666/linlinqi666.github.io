@@ -5,8 +5,12 @@
       <div class="page-loader__inner">
         <div class="page-loader__stage">
           <span class="page-loader__halo" aria-hidden="true"></span>
-          <div class="page-loader__frames" aria-hidden="true"></div>
-          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="page-loader__frames" aria-hidden="true">
+            <!-- 2026-10-04：原 6 帧雪碧图换成 2 帧插画（loader-frame-1/2.jpg，硬切逐帧）
+                 2026-10-05：删去原「两帧图加载失败时兜底的呼吸三点」——两帧循环即默认 -->
+            <span class="page-loader__frame page-loader__frame--1"></span>
+            <span class="page-loader__frame page-loader__frame--2"></span>
+          </div>
         </div>
         <p class="page-loader__text" aria-hidden="true">Loading</p>
       </div>

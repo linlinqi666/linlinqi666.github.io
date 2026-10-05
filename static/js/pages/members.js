@@ -134,7 +134,7 @@
         id: 'zlz',
         name: 'Lizhen Zhu',
         roles: ['Adviser'],
-        directions: ['Scientific Guidance'],
+        directions: ['Scientific Guidance', 'Adviser'],
         bio: 'Adhere to the Scientific Outlook on Development',
         photoPosition: '100% 25%',
         photoSize: '68% auto'
@@ -143,7 +143,7 @@
         id: 'zjh',
         name: 'Jianhua Zhou',
         roles: ['Adviser'],
-        directions: ['Scientific Guidance'],
+        directions: ['Scientific Guidance', 'Adviser'],
         bio: 'Keep Pushing',
         photoPosition: '100% 15%',
         photoSize: '84% auto'
@@ -154,9 +154,18 @@
       // 是两位 PI 头像裂图的根因。现统一走默认候选链（头像 webp/<id>_kt.webp 优先，缺则回退本人照片）；
       // zlj 的大图仍用米黄背景版，但改为页面基准相对路径 `../static/...`。
       {
+        id: 'tyj',
+        name: 'Yongjun Tang',
+        roles: ['Primary PI', 'PI'],
+        directions: [],
+        bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
+        photoPosition: '100% 10%',
+        photoSize: '78% auto'
+      },
+      {
         id: 'zlj',
         name: 'Lijun Zhang',
-        roles: ['Primary PI', 'PI'],
+        roles: ['Secondary PI', 'PI'],
         directions: [],
         bio: 'iGEM is far more than a competition, it is a transformative journey on which students explore the boundless possibilities of synthetic biology.',
         photoPosition: '55% 0%',
@@ -166,15 +175,6 @@
           // 而非之前的米黄背景版 zlj-cream.webp。
           photo: { candidates: ['../static/image/any-icon/character/webp/zlj.webp', '../static/image/any-icon/character/webp/zlj-cream.webp'] }
         }
-      },
-      {
-        id: 'tyj',
-        name: 'Yongjun Tang',
-        roles: ['Secondary PI', 'PI'],
-        directions: [],
-        bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
-        photoPosition: '100% 10%',
-        photoSize: '78% auto'
       },
       {
         id: 'lrx',
@@ -988,7 +988,7 @@
     }
 
     /** 堆叠布局：用实测高度驱动展开动画（CSS 只留兜底上限），详情见 README §5.16 */
-    function setStripGroupsExpanded(expanded) {
+    function setStripGroupsExpanded(expanded, instant) {
       const strip = domRefs.membersStrip;
       const groups = domRefs.stripGroups;
       if (!strip || !groups) return;
@@ -997,6 +997,14 @@
         /* 折叠态下子元素仍有布局，scrollHeight 即自然高度 */
         groups.style.setProperty('--strip-groups-max', `${groups.scrollHeight}px`);
         strip.classList.add('is-expanded');
+      } else if (instant) {
+        /* 选中成员后立刻收起列表：关闭过渡让布局同步落定，否则紧跟的
+           bringDetailIntoView 会按收起前的旧位置滚动，终点越过详情卡落到页脚。 */
+        const prevTransition = groups.style.transition;
+        groups.style.transition = 'none';
+        strip.classList.remove('is-expanded');
+        void groups.offsetHeight; /* 强制同步重排，max-height 立即归零 */
+        groups.style.transition = prevTransition;
       } else {
         strip.classList.remove('is-expanded');
       }
@@ -1027,19 +1035,28 @@
       }
     }
 
-    /** 堆叠布局下详情卡若完全移出视口则带入，避免"点了没反应"的错觉 */
+    /** 堆叠布局下详情卡若完全移出视口则带入，避免"点了没反应"的错觉。
+       注意：选中成员时会同步折叠列表，且浏览器会对被点击条带做"焦点滚动"，
+       二者都发生在同步阶段。这里用双 rAF 等布局稳定后，再按"收起后"的真实
+       位置确定性滚动，避免平滑 scrollIntoView 与焦点滚动竞争、导致终点越过
+       详情卡落到页脚（此前移动端点击末尾成员会滚到底部导航栏）。 */
     function bringDetailIntoView() {
       const card = domRefs.detailCard;
       if (!card || card.hidden) return;
-      const rect = card.getBoundingClientRect();
-      const viewportH = window.innerHeight || 0;
-      if (rect.top >= 0 && rect.top < viewportH) return;
-      const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-      try {
-        card.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-      } catch (e) {
-        card.scrollIntoView();
-      }
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          const rect = card.getBoundingClientRect();
+          const viewportH = window.innerHeight || 0;
+          if (rect.top >= 0 && rect.top < viewportH) return;
+          const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+          const top = Math.max(0, window.scrollY + rect.top - 12);
+          try {
+            window.scrollTo({ top: top, behavior: reduced ? 'auto' : 'smooth' });
+          } catch (e) {
+            window.scrollTo(0, top);
+          }
+        });
+      });
     }
 
     /**
@@ -1112,7 +1129,7 @@
       );
 
       if (stacked) {
-        setStripGroupsExpanded(false);
+        setStripGroupsExpanded(false, true);
         bringDetailIntoView();
       }
     }

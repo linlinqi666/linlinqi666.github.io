@@ -17,5 +17,18 @@
       root.classList.add('page-loader-done');
       setTimeout(function () { root.classList.remove('page-loader-done'); }, 420);
     }, MAX_WAIT);
+
+    /* 2026-10-04：head 阶段同步预取两帧加载图 —— 原先等 DOMContentLoaded 才预载，
+       弱网下遮罩全程只剩 Loading 文字；现借助 currentScript 反推站点根路径，
+       预载的 Image 挂到 window.__pageLoaderFrames 供 page-loader.js 复用。 */
+    var script = document.currentScript;
+    if (script && script.src) {
+      var base = script.src.replace(/static\/js\/components\/page-loader-arm\.js.*$/, '');
+      window.__pageLoaderFrames = [1, 2].map(function (n) {
+        var img = new Image();
+        img.src = base + 'static/image/any-icon/loader/transparent/loader-frame-' + n + '.png';
+        return img;
+      });
+    }
   } catch (e) { /* 忽略：无论如何都不能阻塞页面 */ }
 })();

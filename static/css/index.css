@@ -1305,6 +1305,10 @@ html.home-scroll-snap #footer.section-footer {
   --section-bg-img: var(--color-echo-bg);
 }
 
+#influenza-burden {
+  --section-bg-img: var(--color-echo-bg);
+}
+
 #hero {
   --section-bg-img: var(--color-echo-bg);
 }
@@ -1340,6 +1344,7 @@ html.home-scroll-snap #footer.section-footer {
 #statistics,
 #safety,
 #human-practices,
+#influenza-burden,
 #future-vision,
 #team-highlight,
 #final-cta {
@@ -1442,6 +1447,88 @@ html.home-scroll-snap #footer.section-footer {
   }
 }
 
+/* ---------- final-cta：4 吉祥物门户（2026-10-04 替换原 8 张文字门户卡） ----------
+   四只吉祥物等宽平铺整行（各 25%），hover 时整只做平面 2D 整圈旋转（rotate 360°）
+   + 轻微上浮，落点仍是原朝向。
+   说明：原用 rotateY(360deg) 的 3D 翻转 —— 平面透明图在 90°~270° 会露空/露镜像，
+        透出页面奶白底色即"闪白"，已弃用；平面 2D 旋转全程可见、无闪白。
+   旋转作用在 .mascot-portal__img 上（独立合成层），不动布局属性。 */
+.mascot-portal-row {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(8px, 1.2vw, 20px);
+  width: 100%;
+  margin-top: clamp(18px, 3vh, 40px);
+}
+
+/* 吉祥物要「一起占满 100%」，必须突破 .yeast-screen__content 的 760px 文本栏宽 */
+#final-cta .yeast-screen__content {
+  max-width: min(1200px, 94vw);
+}
+
+.mascot-portal {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 0.9vh, 12px);
+  padding: clamp(8px, 1.2vw, 18px) clamp(4px, 0.6vw, 10px);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: background-color var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.mascot-portal__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  /* 基础态不加 transition：旋转交给 keyframes，类移除时直接回到 rotate(0)/translateY(0)，
+     避免「移出瞬间反向回退」那一下（2026-10-04 要修的闪停问题）。 */
+}
+
+.mascot-portal__label {
+  font-size: clamp(12px, 1.05vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-echo-blue);
+  white-space: nowrap;
+}
+
+.mascot-portal:hover,
+.mascot-portal:focus-visible {
+  /* 纯透明：不铺白色卡片底（用户 2026-10-04 反馈），仅留投影做轻微悬浮提示 */
+  background-color: transparent;
+  box-shadow: 0 10px 28px rgba(76, 157, 211, 0.16);
+}
+
+/* 2026-10-04：「触发即播完」—— 鼠标移出 / 失焦都不再回退或停住。
+   平面整圈旋转改为 keyframes，由 JS 加 .is-spinning 触发；
+   mouseleave / blur 一律不撤类，动画跑满全程后在 animationend 才清除
+   （见 static/js/components/mascot-portal.js），与 :hover 彻底解耦。 */
+@keyframes mascot-portal-spin {
+  from { transform: rotate(0deg) translateY(0); }
+  to   { transform: rotate(360deg) translateY(-4px); }
+}
+.mascot-portal__img.is-spinning {
+  animation: mascot-portal-spin 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.mascot-portal:focus-visible {
+  outline: 2px solid var(--color-echo-blue);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 减弱动效：直接关掉触发式整圈旋转（类仍可加，但无动画） */
+  .mascot-portal__img.is-spinning { animation: none; }
+}
+
 /* ================================================== */
 /* 首页 Hero：ECHO 品牌构图（板块 1，webp 组件拼装） */
 /* 设计画布 1080×607，组件按百分比定位，aspect-ratio 等比缩放 */
@@ -1528,26 +1615,13 @@ html.home-scroll-snap #footer.section-footer {
   animation-delay: 0.3s;
 }
 
-.echo-stage__tagline {
-  position: absolute;
+/* 标语（2026-10-05）：原为真文本 → 换回艺术构图图 shared-blue-curve.webp
+   （用户指定：蓝斜构图原图更贴近设计稿）。位置沿用原文本块实测坐标。 */
+.echo-art--tagline {
   left: 7%;
   top: 50%;
   width: 46%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15em;
-  color: var(--color-echo-blue, #4c9dd3);
-  font-weight: 700;
-  font-style: italic;
-  font-size: clamp(0.85rem, 1.6vw, 1.5rem);
-  line-height: 1.15;
-  z-index: 3;
-  opacity: 0;
-  animation: echoIn 0.9s 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.echo-stage__tagline b {
-  color: #2f6fb8;
+  animation-delay: 0.45s;
 }
 
 @keyframes echoIn {
@@ -1560,7 +1634,7 @@ html.home-scroll-snap #footer.section-footer {
 @media (prefers-reduced-motion: reduce) {
 
   .echo-art,
-  .echo-stage__tagline {
+  .echo-art--tagline {
     animation: none;
     opacity: 1;
     transform: none;
@@ -1600,7 +1674,7 @@ html.home-scroll-snap #footer.section-footer {
     max-width: 66%;
   }
 
-  .echo-stage__tagline {
+  .echo-art--tagline {
     left: 8%;
     top: 36%;
     width: 78%;
@@ -1633,6 +1707,59 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 /* ================================================== */
+/* art 文字化（2026-10-05）：纯文字图 → 真文本
+   原 s2/s3/s4/s6/s7 标题、轴标签、图例、s3 药丸都是普通圆体蓝字
+   （取色 #4d9fd8；图例色块 #acdaf2 / #f0a609），改为真文本后
+   可选中、可翻译、无障碍更优；字号按原图宽占比换算，行为与
+   图片版一致：定位/宽度仍走下方「手动微调区」同名规则。 */
+/* ================================================== */
+.art-title-text,
+.art-legend,
+.intro-pill__text {
+  margin: 0;
+  font-family: 'Arial Rounded MT Bold', 'Baloo 2', 'Comic Sans MS', 'Segoe UI',
+    'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-weight: 700;
+  color: #4d9fd8;
+}
+
+.art-title-text {
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  white-space: nowrap;   /* 行内手动 <br> 断行，与原图逐行一致 */
+}
+
+.art-title-text--hp {
+  text-align: center;    /* FluNet 图表标题原图两行居中 */
+}
+
+.art-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  white-space: nowrap;
+}
+
+.art-legend__swatch {
+  flex: 0 0 auto;
+  width: 1.15em;
+  height: 0.78em;
+  border-radius: 0.08em;
+  background: var(--swatch, #4d9fd8);
+}
+
+/* 各屏字号（换算自原图）：标题按「行宽 = 原图宽」、图例按去色块后文本宽 */
+.art-stage--public-health .art--public-health-title { font-size: clamp(13px, 2.45vw, 52px); }
+.art-stage--project-intro .art--project-intro-title { font-size: clamp(18px, 6vw, 126px); }
+.art-stage--dbtl-cycle .art--dbtl-cycle-title       { font-size: clamp(12px, 3.6vw, 76px); }
+.art-stage--safety .art--safety-title               { font-size: clamp(13px, 4.1vw, 86px); }
+.art-stage--human-practices .art--human-practices-title            { font-size: clamp(10px, 2.5vw, 52px); }
+.art-stage--human-practices .art--human-practices-axis             { font-size: clamp(9px, 2.5vw, 52px); }
+.art-stage--human-practices .art--human-practices-legend-subtypes  { font-size: clamp(8px, 1.6vw, 33px); }
+.art-stage--human-practices .art--human-practices-legend-h1n1      { font-size: clamp(8px, 2.05vw, 43px); }
+.art-stage--human-practices .art--human-practices-legend-pos       { font-size: clamp(8px, 0.78vw, 17px); }
+
+/* ================================================== */
 /* 组件层级 z-index —— 只放层级，定位一律写在下方「手动微调区」 */
 /* 约定：0=背景(波浪/云/山)  1=被上层压住的装饰  2=默认  3=文字类 */
 /* ================================================== */
@@ -1659,6 +1786,7 @@ html.home-scroll-snap #footer.section-footer {
 /* 主题底色：首页各 section 统一用主题米白。
    注意必须用 background-color：把颜色写进 background-image 会让整条声明失效。 */
 #hero,
+#influenza-burden,
 #public-health,
 #project-intro,
 #dbtl-cycle,
@@ -1720,7 +1848,7 @@ html.home-scroll-snap #footer.section-footer {
    不再逐个绝对定位，统一由 .intro-pills 盒子控制 → 见文件末尾「project-intro 文字条」段。 */
 /* 显微镜+书的吉祥物：切片比例 1.44:1，成品图该区域约 1.78:1。
    按高对齐→右侧短一截；按宽对齐→顶部超出。现在"按高对齐"，想改按宽就把 height 换成 width。 */
-.art-stage--project-intro .art--project-intro-mascot { left: 46.7%; top: 45.8%; height: 55.2%; width: auto; }
+.art-stage--project-intro .art--project-intro-mascot { left: 46.7%; top: 45.8%; height: 55.2%; width: auto; z-index: 4; }
 .art-stage--project-intro .art--project-intro-sparkle { left: 42.7%; top: 62.8%; width: 5.4%; }  /* 黄色星芒 */
 
 /* ---------- dbtl-cycle：Research content（流程图） ---------- */
@@ -1740,6 +1868,330 @@ html.home-scroll-snap #footer.section-footer {
 }
 .art-stage--dbtl-cycle .art--dbtl-cycle-mascot { left: 1%; bottom: 0; width: 30%; }        /* 笔记本吉祥物（贴底锚定） */
 
+/* ---------- dbtl-cycle：原理示意图「想法泵出」入场（REQ-20261002-001） ---------- */
+/* 首次滑入本屏：示意图以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大。
+   隐藏态只由 JS 加 js-pump-armed 类——无 JS / prefers-reduced-motion 直接呈现完整静态布局。
+   动画期间示意图升到 z-index 4：DOM 里吉祥物在其后（默认盖住它），
+   不抬层的话小图会藏在头部后面而不是“从头部泵出”。收尾时随类一起还原。 */
+.js-pump-armed .art--dbtl-cycle-diagram {
+  opacity: 0;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+/* ---------- influenza-burden：甲流负担（数据沉浸屏，REQ-20261003-001） ---------- */
+/* v2（2026-10-03 重做）：主体由「12 点阵」换成「实时感染计数器」——按 WHO 口径
+   ≈21 人/秒感染甲流，页面打开起数字持续跳动；12 席位网格与三年占比表作为辅证。
+   本屏无 webp 拼装（吉祥物已移除，改由数据本身撑画面）；数值集中在本段。
+   全屏文字统一走主体色系（--color-echo-blue 的压暗版，保证奶油底上的对比度）。 */
+.art-stage--influenza-burden {
+  --burden-ink: #2f6f96;        /* 正文/说明：主体蓝压暗 */
+  --burden-ink-soft: #4f86a8;   /* 次要标签、注脚：比正文浅，仍属主体色 */
+}
+
+/* 自绘背景层：数据网格 + 柔光 + 12 刻度虚线环（纯装饰，不抢主体内容） */
+.art-stage--influenza-burden .burden-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.burden-backdrop__grid {
+  position: absolute;
+  inset: -8%;
+  opacity: 0.5;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(76, 157, 211, 0.08) 0 1px, rgba(76, 157, 211, 0) 1px 46px),
+    repeating-linear-gradient(90deg, rgba(76, 157, 211, 0.08) 0 1px, rgba(76, 157, 211, 0) 1px 46px);
+  animation: burdenGridDrift 48s linear infinite alternate;
+}
+
+.burden-backdrop__glow {
+  position: absolute;
+  left: -8%;
+  top: 22%;
+  width: 66%;
+  height: 66%;
+  background: radial-gradient(closest-side, rgba(76, 157, 211, 0.17), rgba(76, 157, 211, 0) 72%);
+  animation: burdenGlowBreathe 9s ease-in-out infinite alternate;
+}
+
+.burden-backdrop__ring {
+  position: absolute;
+  right: -5%;
+  bottom: -12%;
+  width: clamp(240px, 30vw, 440px);
+  height: auto;
+  opacity: 0.8;
+}
+
+@keyframes burdenGridDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(16px, -12px, 0); }
+}
+
+@keyframes burdenGlowBreathe {
+  from { transform: scale(1); }
+  to { transform: scale(1.055); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burden-backdrop__grid,
+  .burden-backdrop__glow {
+    animation: none;
+  }
+}
+
+.art-stage--influenza-burden .burden-eyebrow {
+  position: absolute;
+  left: 6%;
+  top: 6.5%;
+  z-index: 3;
+  margin: 0;
+  font-size: clamp(10px, 0.92vw, 15px);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--burden-ink-soft);
+}
+
+.art-stage--influenza-burden .burden-lead {
+  position: absolute;
+  left: 6%;
+  top: 10%;
+  width: 52%;
+  z-index: 3;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-echo-blue);
+}
+
+.burden-lead__num {
+  display: block;
+  font-size: clamp(38px, 6.4vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.burden-lead__copy {
+  display: block;
+  margin-top: 0.3em;
+  font-size: clamp(14px, 1.55vw, 26px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  color: var(--burden-ink);
+}
+
+/* 拆词后的单词（脚本拆分；无 JS 时整句静态可见） */
+.burden-lead__word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.burden-lead--armed .burden-lead__word {
+  opacity: 0;
+}
+
+/* 12 席位：每格代表人口里的一个人，1 格亮蓝 = 每 12 人里 1 人 */
+.art-stage--influenza-burden .burden-grid {
+  position: absolute;
+  left: 6%;
+  top: 36%;
+  z-index: 3;
+  display: flex;
+  gap: clamp(6px, 0.75vw, 14px);
+  max-width: 52%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.burden-grid__dot {
+  width: clamp(16px, 1.9vw, 32px);
+  height: clamp(16px, 1.9vw, 32px);
+  border-radius: 7px;
+  border: 2px solid rgba(76, 157, 211, 0.4);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.burden-grid__dot.is-lit {
+  background: var(--color-echo-blue);
+  border-color: var(--color-echo-blue);
+  box-shadow: 0 0 0 6px rgba(76, 157, 211, 0.14);
+}
+
+/* 实时感染计数器：本屏主角，字号顶满可接受宽度 */
+.art-stage--influenza-burden .burden-counter {
+  position: absolute;
+  left: 6%;
+  top: 45%;
+  width: 58%;
+  z-index: 3;
+}
+
+.burden-counter__label {
+  margin: 0;
+  font-size: clamp(11px, 1vw, 16px);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--burden-ink-soft);
+}
+
+.burden-counter__value {
+  margin: 0.05em 0 0;
+  font-size: clamp(64px, 13vw, 190px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-echo-blue);
+  white-space: nowrap;
+}
+
+/* 实时模式下的「心跳」：与秒节拍同周期（1s），幅度极小只添生命感不改可读性 */
+.burden-counter--live .burden-counter__value {
+  transform-origin: left center;
+  animation: burdenHeartbeat 1s ease-in-out infinite;
+}
+
+@keyframes burdenHeartbeat {
+  0%, 26%, 100% { transform: scale(1); }
+  12% { transform: scale(1.014); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burden-counter--live .burden-counter__value {
+    animation: none;
+  }
+}
+
+.burden-counter__unit {
+  margin: 0.18em 0 0;
+  font-size: clamp(13px, 1.35vw, 22px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--burden-ink);
+}
+
+/* 秒节拍：光点每秒扫一趟 = 约 21 人（由 JS 以量测到的轨道宽度驱动 WAAPI） */
+.burden-counter__track {
+  position: relative;
+  margin-top: 1.1em;
+  width: 64%;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(76, 157, 211, 0.22);
+  opacity: 0; /* 仅实时模式（JS 加 .burden-counter--live）出现 */
+}
+
+.burden-counter--live .burden-counter__track {
+  opacity: 1;
+}
+
+.burden-counter__tick {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--color-echo-blue);
+  will-change: transform;
+}
+
+.burden-counter__rate {
+  margin: 0.5em 0 0;
+  font-size: clamp(11px, 1vw, 15px);
+  letter-spacing: 0.06em;
+  color: var(--burden-ink-soft);
+}
+
+/* 三年占比：右栏表格式数据墙 */
+.art-stage--influenza-burden .burden-years-caption {
+  position: absolute;
+  right: 6%;
+  top: 10%;
+  width: 26%;
+  z-index: 3;
+  margin: 0;
+  font-size: clamp(10px, 0.9vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--burden-ink-soft);
+}
+
+.art-stage--influenza-burden .burden-years {
+  position: absolute;
+  right: 6%;
+  top: 14%;
+  width: 26%;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(76, 157, 211, 0.28);
+}
+
+.burden-year {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: clamp(9px, 1.5vh, 22px) 0;
+  border-bottom: 1px solid rgba(76, 157, 211, 0.28);
+}
+
+.burden-year__label {
+  font-size: clamp(12px, 1.05vw, 17px);
+  letter-spacing: 0.1em;
+  color: var(--burden-ink-soft);
+}
+
+.burden-year__val {
+  font-size: clamp(26px, 3.3vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-echo-blue);
+}
+
+/* 估算口径与来源注脚 */
+.art-stage--influenza-burden .burden-note {
+  position: absolute;
+  left: 6%;
+  bottom: 5%;
+  width: 54%;
+  z-index: 3;
+  margin: 0;
+  font-size: clamp(10px, 0.8vw, 13px);
+  line-height: 1.6;
+  color: var(--burden-ink-soft);
+}
+
+/* 隐藏态：脚本接管后、播放前才隐藏（无 JS 时全程静态可见） */
+/* 席位格与年份行按「单个」隐藏（容器保持可见），才能做逐个错峰。 */
+.js-burden-armed .burden-eyebrow,
+.js-burden-armed .burden-lead__num,
+.js-burden-armed .burden-counter__label,
+.js-burden-armed .burden-counter__value,
+.js-burden-armed .burden-counter__unit,
+.js-burden-armed .burden-counter__rate,
+.js-burden-armed .burden-years-caption,
+.js-burden-armed .burden-note,
+.js-burden-armed .burden-grid__dot,
+.js-burden-armed .burden-year {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
 /* ---------- statistics：检测方法 qPCR / ELISA / CGIS ---------- */
 /* statistics-cloud 是未裁剪的整幅画布（2720x1600），必须按整幅映射，不能按"云本身"给小宽度 */
 /* statistics-cloud 是「上浅蓝 / 下白」的整幅切片，不是整幅画框内容：不能铺满 100%×100%，
@@ -1758,6 +2210,84 @@ html.home-scroll-snap #footer.section-footer {
 .art-stage--statistics .art--statistics-bulb { left: 76.9%; top: 23%; width: 15.7%; }      /* 灯泡（右上） */
 .art-stage--statistics .art--statistics-mascot { left: 42.1%; top: 21.4%; width: 38.9%; }  /* 托腮吉祥物（改 top 锚定，避免被下缘截断） */
 .art-stage--statistics .art--statistics-sparkle { left: 4.8%; top: 68.4%; width: 3%; }     /* 黄色星芒 */
+
+/* ---------- statistics：三方法信息条（2026-10-05 REQ） ----------
+   三圆揭示完成后（statistics-reveal.js finish() 才绑定交互），移入圆圈 →
+   蓝底白字条从圆右侧「擦除」展开（clip-path inset 过渡，只动 clip-path/opacity/
+   visibility，均为可合成或零成本属性），移出收回。
+   降级红线：默认（无 JS / reduced-motion）三条静态可见——收起态只由
+   .js-methods-armed 控制；条本身 pointer-events:none，悬停热区是圆圈图。 */
+.method-info {
+  position: absolute;
+  z-index: 6;
+  width: 26%;
+  margin: 0;
+  padding: clamp(8px, 0.85vw, 16px) clamp(10px, 1vw, 18px);
+  border-radius: clamp(10px, 1vw, 18px);
+  background: rgba(76, 157, 211, 0.97);
+  color: #fff;
+  text-align: left;
+  box-shadow: 0 12px 28px rgba(47, 111, 150, 0.38);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.method-info__title {
+  margin: 0 0 0.3em;
+  font-size: clamp(12px, 1.05vw, 18px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.method-info__title small {
+  font-size: 0.66em;
+  font-weight: 600;
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+}
+
+.method-info__pro,
+.method-info__con {
+  margin: 0.18em 0 0;
+  font-size: clamp(9px, 0.8vw, 13.5px);
+  line-height: 1.4;
+}
+
+.method-info__pro { font-weight: 600; }
+
+/* 桌面定位（换算自圆圈定位：条贴圆右侧、垂直对齐圆心） */
+.art-stage--statistics .method-info--qpcr  { left: 19%;   top: 23%;   }
+.art-stage--statistics .method-info--elisa { left: 37.5%; top: 41%;   }
+.art-stage--statistics .method-info--cgis  { left: 23.5%; top: 63.5%; }
+
+/* JS 接管后：默认收起（揭示完成前不可见），is-open 擦除展开 */
+.art-stage--statistics.js-methods-armed .method-info {
+  opacity: 0;
+  visibility: hidden;
+  clip-path: inset(0 100% 0 0 round 16px);
+  transition: clip-path 0.38s var(--ease-smooth), opacity 0.26s ease,
+    visibility 0s linear 0.38s;
+}
+
+.art-stage--statistics.js-methods-armed .method-info.is-open {
+  opacity: 1;
+  visibility: visible;
+  /* 负 inset 把 box-shadow 一并露出（收起态正 inset 只裁内容盒） */
+  clip-path: inset(-40% -40% -40% -40% round 16px);
+  transition: clip-path 0.38s var(--ease-smooth), opacity 0.2s ease,
+    visibility 0s;
+}
+
+/* 揭示完成后的圆圈成为悬停热区（.art 默认 pointer-events:none，这里放开） */
+.art-stage--statistics.js-methods-armed .method-hotspot {
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-smooth);
+}
+
+.art-stage--statistics.js-methods-armed .method-hotspot:hover {
+  transform: translateY(-3px);
+}
 
 /* ---------- statistics：检测方法「揭示动画」交互层（REQ-20261001-001） ---------- */
 /* 1) 英文小标题：贴在动画区块顶部左侧（不居中）。无 JS 时静态可见；进入该屏时
@@ -1930,12 +2460,15 @@ html.home-scroll-snap #footer.section-footer {
 
   /* project-intro：标题上 / 吉祥物右中(放大) / 云贴底满宽 / 星芒 */
   .art-stage--project-intro .art--project-intro-title   { left: 20%; top: 6%;  width: 58%; }
-  .art-stage--project-intro .art--project-intro-mascot  { left: 30%; top: 22%; width: 70%; height: auto; }
+  .art-stage--project-intro .art--project-intro-mascot  { left: 30%; top: 22%; width: 70%; height: auto; z-index: 4; }
   .art-stage--project-intro .art--project-intro-cloud   { left: 0;   top: auto; bottom: 0; width: 100%; }
   .art-stage--project-intro .art--project-intro-sparkle { left: 28%; top: 18%; width: 7%; }
   /* 内容条盒子的竖屏位置与高度变量（图片高度保护已下沉到 mobile.css 全局响应式层，
      避免 blanket 的 img{height:auto} 后加载覆盖 —— REQ-20260928-002） */
-  .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(14px, 4vw, 22px); }
+  /* 移动端条带收小一号 + 边缘渐隐加宽：375px 视口下 14-22px 的条带相对过宽，
+     文字被视口硬切；吉祥物 z-index:4 压在条带(z-index:3)之上后，条带穿过吉祥物
+     呈"景深"效果而不是"遮挡"效果（用户 2026-10-03 实机反馈）。 */
+  .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(11px, 3vw, 16px); --intro-fade: 16%; }
 
   /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → 流程图近满宽居中 → 波浪+笔记本吉祥物贴底 */
   .art-stage--dbtl-cycle .art--dbtl-cycle-title   { left: 4%;  top: 4%;  width: 58%; }
@@ -1952,6 +2485,11 @@ html.home-scroll-snap #footer.section-footer {
   .art-stage--statistics .art--statistics-arc     { left: 24%; top: 52%; width: 12%; }
   .art-stage--statistics .art--statistics-bulb    { left: 74%; top: 18%; width: 22%; }
   .art-stage--statistics .art--statistics-sparkle { left: 4%;  top: 70%; width: 5%; }
+
+  /* 三方法信息条（移动端）：贴各自圆右侧，宽度放大补偿小屏字号 */
+  .art-stage--statistics .method-info--qpcr  { left: 27%; top: 19%; width: 42%; }
+  .art-stage--statistics .method-info--elisa { left: 42%; top: 39%; width: 46%; }
+  .art-stage--statistics .method-info--cgis  { left: 28%; top: 61%; width: 42%; }
 
   /* safety：吉祥物左(放大) / 标题右上 / 云满宽贴底(作为底部色块填充) / 曲线+星芒 */
   .art-stage--safety .art--safety-mascot  { left: 1%;  top: 6%;  width: 56%; }
@@ -2003,18 +2541,26 @@ html.home-scroll-snap #footer.section-footer {
   --intro-pill-radius: 999px;
   --intro-fade: 12%;
   --intro-flow-dur: 28s;
-  /* 左右边缘渐隐：越靠近边缘越透明，边缘处 100% 消失 */
+}
+
+.intro-pills__row {
+  flex: 0 0 auto;
+  overflow: hidden;
+  /* 左右边缘渐隐：越靠近边缘越透明，边缘处 100% 消失（--intro-fade 由外盒继承）。
+     【遮罩必须挂在“排”上而不是外盒，且排要提升合成层】—— 2026-10-02 实测：
+     ① 遮罩挂外盒时，整页滚动（root scroller）会让这块 1254×461 的遮罩区域每帧
+        重栅格化，产生 60ms+ 主线程卡顿；去掉遮罩卡顿即消失（67ms→14ms）；
+     ② 外盒自身不带合成层时，内部做 transform 动画的子层可能逃逸遮罩，
+        表现为条带在右缘“直接出现”而不是淡入（用户实机截图）。
+     把遮罩下沉到每排并 translateZ(0) 提升合成层后：滚动只是平移已栅格化图层，
+     实测滚动最大帧耗时 67ms → 13ms、零丢帧，且双侧渐隐恢复正常。 */
   -webkit-mask-image: linear-gradient(to right, #0000 0%, #000 var(--intro-fade), #000 calc(100% - var(--intro-fade)), #0000 100%);
   mask-image: linear-gradient(to right, #0000 0%, #000 var(--intro-fade), #000 calc(100% - var(--intro-fade)), #0000 100%);
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-}
-
-.intro-pills__row {
-  flex: 0 0 auto;
-  overflow: hidden;
+  transform: translateZ(0);
 }
 
 /* 流动：每排由两段完全相同的 .intro-pills__group 首尾相接，
@@ -2037,7 +2583,8 @@ html.home-scroll-snap #footer.section-footer {
   to   { transform: translate3d(-50%, 0, 0); }
 }
 
-/* 单条文字条：外部轮廓（扁椭圆），内部文字用原图，只缩不放 */
+/* 单条文字条：外部轮廓（扁椭圆），内部文字 2026-10-05 起为真文本
+   （原图文字墨高 ≈ 0.85×条高 → 字号取 0.92×h，行盒 1.06×h 与原条高基本一致） */
 .intro-pill {
   flex: 0 0 auto;
   display: inline-flex;
@@ -2048,10 +2595,11 @@ html.home-scroll-snap #footer.section-footer {
   padding: calc(var(--intro-pill-h) * 0.42) calc(var(--intro-pill-h) * 1.5);
 }
 
-.intro-pill img {
+.intro-pill__text {
   display: block;
-  height: var(--intro-pill-h);
-  width: auto;
+  font-size: calc(var(--intro-pill-h) * 0.92);
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2059,3 +2607,15 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 /* iGEM Check: [x] 100vh scroll-snap screens [x] 45/55 alternating layout [x] Float keyframes reused [x] Mobile responsive [x] Reduced motion supported [x] Per-section background placeholders */
+
+/* ---------- 首页离屏动画停表（2026-10-05 性能优化） ----------
+   scroll-snap 满屏分屏下，相邻屏虽然看不到，其 infinite 合成动画（hero 浮动、
+   burden 背景漂移/呼吸、药丸轮播、秒节拍等）仍在合成器里持续跑，多屏叠加
+   放大 GPU/合成开销（用户实测第二屏计数与药丸轮播屏滚动卡顿）。
+   home-idle-motion.js 给完全离屏的 section 打 data-offscreen，这里统一停表；
+   回到视口（含边界相切→开始进入）立即恢复，动画从暂停点继续，不跳帧。
+   仅作用于 CSS animation；WAAPI（秒节拍光点）由 influenza-burden.js 自行暂停。 */
+.presentation-section[data-offscreen],
+.presentation-section[data-offscreen] * {
+  animation-play-state: paused !important;
+}

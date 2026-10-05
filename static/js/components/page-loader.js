@@ -54,19 +54,8 @@
     }
   }
 
-  /* ---- 雪碧图探测：就绪则显示图片伪动画，否则保留纯 CSS 兜底 ---- */
-  function probeSprite() {
-    var frames = document.querySelector('.page-loader__frames');
-    if (!frames || !overlay) return;
-    var bg = '';
-    try { bg = getComputedStyle(frames).backgroundImage || ''; } catch (e) { bg = ''; }
-    var m = bg.match(/url\(["']?([^"')]+)["']?\)/);
-    if (!m) return;
-    var probe = new Image();
-    probe.onload = function () { overlay.classList.add('page-loader--sprite-ready'); };
-    probe.onerror = function () { warn('loader sprite unavailable, CSS fallback in use'); };
-    probe.src = m[1];
-  }
+  /* ---- 2026-10-05：原 probeFrames（探测两帧就绪后隐藏兜底三点）随
+     fallback 三点一并移除——两帧循环即默认，帧图仍由 arm.js 预取。 ---- */
 
   /* ---- 声明式关键资源：<img data-critical> / [data-critical-bg] ---- */
   function collectFromDom() {
@@ -205,7 +194,6 @@
 
   function init() {
     overlay = document.getElementById('page-loader');
-    probeSprite();
     var groups = collectFromDom();
     for (var i = 0; i < groups.length; i++) loadGroup(groups[i]);
     evaluate();

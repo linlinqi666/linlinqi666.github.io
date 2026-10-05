@@ -19,6 +19,11 @@
 | REQ-20260928-001 | 首页交互体验打磨（吸附偏移 / 导航 Hover 呼出 / GIF 开场 / 酵母浮动） | 体验优化 | 根站（flask 待同步） | 已完成 | `REQ-20260928-001.md` | — | 2026-09-28 |
 | REQ-20260928-002 | 首页移动端适配（C 先行：CSS 缩放备选 / A 待定：美工专属素材） | 体验优化 | 根站（flask 待同步） | 进行中 | `REQ-20260928-002.md` | — | 2026-09-28 |
 | REQ-20261001-001 | 首页 statistics（检测方法）屏「CGIS 揭示」交互动画 | 功能（交互动画） | 根站（flask 待同步） | 已完成 | `REQ-20261001-001.md` | — | 2026-10-01 |
+| REQ-20261002-001 | 首页 dbtl-cycle 屏原理示意图「想法泵出」入场动画 | 功能（入场动画） | 根站（flask 待同步） | 已完成 | `REQ-20261002-001.md` | — | 2026-10-02 |
+| REQ-20261003-001 | 首页新增「甲流负担」屏（1 in 12 剧场 + WHO 数据文案） | 功能（新增分屏） | 根站（flask 待同步） | 已完成 | `REQ-20261003-001.md` | — | 2026-10-03 |
+| REQ-20261004-001 | 加载动画 6 帧→2 帧 + 探索屏四吉祥物门户 + 全站返回顶部组件 | 功能（素材替换 / 区块改版 / 新组件） | 根站 + flask（已同步，6 张图待传 CDN） | 已完成 | `REQ-20261004-001.md` | — | 2026-10-04 |
+| REQ-20261003-002 | Model 页对接卡牌：刚性/半柔性双模式 + 随机抽 6 选 1 排名 + 真实复合物 + 卡面图标 + 修 Reload | 功能（交互改造） | 跨工程（已双站同步） | 已完成 | `REQ-20261003-002.md` | — | 2026-10-03 |
+| REQ-20261005-001 | 首页 statistics 三方法信息条二段动画 + 首页离屏动画停表 | 功能（交互动画）+ 性能优化 | 根站（flask 待同步） | 已完成 | \REQ-20261005-001.md\ | — | 2026-10-05 |
 | （示例）REQ-20260823-001 | 示例需求 | 功能 | 根站 | 待确认 | `REQ-20260823-001.md` | — | 2026-08-23 |
 
 ## 记录规范
@@ -33,3 +38,6 @@
 | ID | 现象 | 影响 | 工程 | 根因 | 修复 | 验证 | 状态 |
 |---|---|---|---|---|---|---|---|
 | BUG-20260823-001 | 人类实践轮播点击后页面跳动、第四篇定位偏移且前文残留 | 点击轮播图会触发视口滚动，详情轨道按百分比定位并在响应式/内容高度变化时出现错位；地图图钉和轮播详情缺少完整切换链路 | 根站 | 点击处理调用 `scrollIntoView`；详情轨道未按当前视口实际宽度重新定位，非当前幻灯片未明确视觉隐藏；图钉未绑定专家详情轨道 | 轮播改为稳定 `data-hp-article` 注册表和 `translate3d` 整篇切换；移除纵向滚动；非当前文章设置 `aria-hidden`/`inert`；图钉按 `data-hz-expert` 切换专家详情并同步动态高度 | `npm run build:all`、`node --check static/js/components/hp-flat-carousel.js` 通过；HTTP 页面已生成并核对标识与点击逻辑；浏览器自动化工具不可用，需人工点击复核 | 已完成 |
+| BUG-20261005-001 | 首页滚回 project-intro 屏后药丸轮播停止（动画停在 paused） | 轮播优点屏回到视口不再滚动，视觉上「卡死」 | 根站 | 2026-10-05 离屏停表（home-idle-motion.js）初版用 `threshold:0 + ratio===0` 判定：Chrome 在相邻屏「边界相切」（ratio 恰为 0 且 isIntersecting 仍 true）进出该状态都可能不产生 IO 回调，快速滚到相邻屏时 data-offscreen 残留，滚回视口收不到恢复回调 | 改为 rootMargin 12% 缓冲带 + 布尔 isIntersecting 判定（相切态视为可见；离/进缓冲带是真翻转，IO 可靠触发）；另加滚动节流兜底 sweep：已打标 section 矩形与视口相交即立即摘除 | playwright 实测：相邻屏往返不打标、滚回 running 且 currentTime 增长；真离屏打标→滚回即恢复；兜底 sweep 误标场景实测生效；十屏回归 0 错误 0 断链 | 已完成 |
+| BUG-20261005-002 | 根站 protocol 页内嵌 PDF 无法显示，浏览器报「协议不支持」 | `wet-lab/protocol.html` 的 PDF 阅读区空白，只显示 fallback 文案；CDN 上的 PDF 本身正常（HTTP 200, application/pdf, 249,525 字节） | 根站 | `src/_includes/partials/pdf-embed.njk` 无条件把 front matter 的 `basePath`（protocol.njk 为 `../`）拼到 `pdfUrl` 前。2026-09-30 该页 `pdfUrl` 改用绝对地址 `https://static.igem.wiki/...`，拼出的 `data="../https://static.igem.wiki/..."` 被浏览器按未知协议解析，故报协议不支持（flask 站写的是纯绝对 URL，未受影响） | partial 改为按地址类型分支：绝对 URL（`http(s)://` 或 `//`）原样使用，仅站内相对路径才拼 `basePath`；绝对性判断用新增 `isRemoteUrl` filter（JS 正则），不用 Nunjucks 内置 `slice`——其底层 `Array.prototype.slice` 作用于字符串返回字符数组，与字符串比较恒为 false（此坑已踩过一次） | `npm run build:all` 通过且复跑幂等；产物 `wet-lab/protocol.html` 的 `data` 已是纯绝对 URL；`curl` 探测 CDN 200 / `application/pdf`；未做浏览器端渲染截图 | 已完成 |
+

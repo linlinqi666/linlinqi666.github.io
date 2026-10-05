@@ -3906,15 +3906,57 @@ footer {
   align-items: stretch;
 }
 
-/* 滚动图片区域 */
-.footer-scroller {
+/* 伙伴栏（2026-10-04 重设计）：原「白色大卡 + logo 走马灯」改为可扩展芯片栏，
+   新增伙伴只需在 footer 模板里复制一个 .partner-chip，自动换行排布；
+   与右侧 Contact 圆形图标共用同一套半透明白风格，蓝底上不再留大块空卡。 */
+.footer-partners {
   flex: 0 0 60%;
   max-width: 60%;
-  position: relative;
-  background: #ffffff;
-  border-radius: var(--radius-md);
-  padding: var(--spacing-5xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.partners-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.partners-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.partner-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-3xl);
+  background: rgba(255, 255, 255, 0.12);
   border: 1px solid var(--bg-footer-border);
+  border-radius: var(--radius-lg);
+  transition: background var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-normal) var(--ease-smooth),
+    border-color var(--duration-normal) var(--ease-smooth);
+}
+
+.partner-chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-0.125rem);
+}
+
+.partner-chip img {
+  height: 3rem;
+  width: auto;
+  max-width: 9.5rem;
+  object-fit: contain;
 }
 
 /* Contact Us 区域 */
@@ -4035,71 +4077,6 @@ footer {
   transform: translateX(-50%) translateY(-8px);
 }
 
-.footer-scroller::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 120px;
-  background: linear-gradient(to right, #ffffff, transparent);
-  z-index: 2;
-  pointer-events: none;
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
-  opacity: 0;
-}
-
-.footer-scroller::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 120px;
-  background: linear-gradient(to left, #ffffff, transparent);
-  z-index: 2;
-  pointer-events: none;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  opacity: 0;
-}
-
-.image-scroller {
-  display: flex;
-  overflow: hidden;
-  width: 100%;
-  min-width: 0;
-  position: relative;
-  z-index: 1;
-  justify-content: center;
-}
-
-.scroller-track {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-4xl);
-  flex-shrink: 1;
-  width: max-content;
-  max-width: 100%;
-  min-width: min(600px, 100%);
-  min-height: 120px;
-}
-
-.scroll-image {
-  width: auto;
-  height: 90px;
-  max-width: 360px;
-  object-fit: contain;
-  flex-shrink: 0;
-  transition: all var(--duration-normal) var(--ease-default);
-  opacity: 0.95;
-}
-
-.scroll-image:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
 /* 导航链接区域 */
 .footer-navigation {
   width: 100%;
@@ -4208,11 +4185,10 @@ footer {
     gap: var(--spacing-xl);
   }
 
-  .footer-scroller {
+  .footer-partners {
     width: 100%;
-    max-width: 100%; /* 重置桌面 flex 布局的 max-width:60%，否则窄屏卡片被卡在 60% 宽、logo 两边被裁（REQ-20260928-002） */
+    max-width: 100%; /* 重置桌面 flex 布局的 max-width:60% */
     flex: 0 0 auto;
-    padding: var(--spacing-xl);
   }
 
   .footer-contact {
@@ -4224,14 +4200,9 @@ footer {
     gap: var(--spacing-xl);
   }
 
-  .footer-scroller::before,
-  .footer-scroller::after {
-    width: 80px;
-  }
-
-  .scroll-image {
-    height: 70px;
-    max-width: 260px;
+  .partner-chip img {
+    height: 2.75rem;
+    max-width: 8.5rem;
   }
 
   .footer-content-box {
@@ -4270,9 +4241,8 @@ footer {
     gap: var(--spacing-lg);
   }
 
-  .footer-scroller {
+  .footer-partners {
     width: 100%;
-    padding: var(--spacing-lg);
   }
 
   .footer-contact {
@@ -4286,14 +4256,13 @@ footer {
     gap: var(--spacing-lg);
   }
 
-  .footer-scroller::before,
-  .footer-scroller::after {
-    width: 60px;
+  .partner-chip {
+    padding: var(--spacing-sm) var(--spacing-xl);
   }
 
-  .scroll-image {
-    height: 60px;
-    max-width: 200px;
+  .partner-chip img {
+    height: 2.5rem;
+    max-width: 7.5rem;
   }
 
   /* 导航列 - 移动端改为2列布局，避免5列挤在一起 */

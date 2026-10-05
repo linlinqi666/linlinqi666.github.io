@@ -6,16 +6,20 @@
   <div class="component-container">
     <div class="footer-wrapper">
       <div class="footer-top">
-        <div class="footer-scroller">
-          <div class="image-scroller">
-            <div class="scroller-track">
-              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="{{ basePath | default('') }}static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
-              </a>
-              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="{{ basePath | default('') }}static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
-              </a>
-            </div>
+        {# 伙伴栏（2026-10-04c）：三张赞助/支持方 logo 横向排列，与右侧 Contact Us 5:5 分栏；
+           新增伙伴只需复制一个 .partner-chip（样式见 navigation/navigation.css「伙伴栏」段） #}
+        <div class="footer-partners">
+          <span class="partners-label">Supported by</span>
+          <div class="partners-list">
+            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="{{ basePath | default('') }}static/image/any-icon/igem.png" alt="iGEM">
+            </a>
+            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="{{ basePath | default('') }}static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
+            </a>
+            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="{{ basePath | default('') }}static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
+            </a>
           </div>
         </div>
         <div class="footer-contact">
@@ -76,15 +80,14 @@
               <ul>
                 <li><a href="{{ basePath | default('') }}dry-lab/model.html">Model</a></li>
                 <li><a href="{{ basePath | default('') }}dry-lab/hardware.html">Hardware</a></li>
-                <li><a href="{{ basePath | default('') }}dry-lab/software.html">Software</a></li>
               </ul>
             </div>
             <div class="footer-column">
               <h4>Human Practices</h4>
               <ul>
                 <li><a href="{{ basePath | default('') }}human-practices/integrated human-practices.html">Integrated HP</a></li>
-                <li><a href="{{ basePath | default('') }}human-practices/education.html">Education</a></li>
-                <li><a href="{{ basePath | default('') }}human-practices/sustainability.html">Sustainability</a></li>
+
+                <li><a href="{{ basePath | default('') }}human-practices/inclusivity.html">Inclusivity</a></li>
               </ul>
             </div>
             <div class="footer-column">

@@ -1,0 +1,109 @@
+/* ==========================================================================
+   back-to-top.css — 全站「返回顶部」悬浮按钮
+   结构（两层图叠合，见 partials/back-to-top.njk）：
+     .back-to-top          固定定位按钮（右下角），hover 时整体上下浮动
+       .back-to-top__ring  外圈图（自带环绕文字）→ 无限顺时针旋转
+       .back-to-top__core  内芯图 → 静止
+   约束：只动 transform / opacity；hover 与常驻动画都是 GPU 合成层；
+        prefers-reduced-motion 下停止旋转与浮动（保留可点击）。
+   ========================================================================== */
+
+.back-to-top {
+  --btt-size: 126px;         /* 按钮直径（2026-10-04d：1.5×=126px，距边距不变） */
+  --btt-ring-duration: 14s;  /* 外圈一圈 */
+  --btt-float-duration: 1.1s;/* hover 上下浮动 */
+
+  position: fixed;
+  right: clamp(14px, 2.2vw, 30px);
+  bottom: calc(clamp(14px, 2.2vw, 30px) + env(safe-area-inset-bottom, 0px));
+  z-index: 9998;             /* 高于页面内容，低于导航(9999)与加载遮罩(100003) */
+  width: var(--btt-size);
+  height: var(--btt-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.28s ease, visibility 0s linear 0.28s, transform 0.28s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 滚过一屏后出现（由 JS 打 .back-to-top--visible） */
+.back-to-top--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.28s ease, visibility 0s, transform 0.28s ease;
+}
+
+.back-to-top__ring,
+.back-to-top__core {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.back-to-top__ring-img,
+.back-to-top__core-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 外圈：环绕文字无限顺时针旋转 */
+.back-to-top__ring {
+  animation: back-to-top-spin var(--btt-ring-duration) linear infinite;
+  will-change: transform;
+}
+
+.back-to-top__core {
+  transform: scale(0.62);   /* 内芯缩在中心，外圈文字留出可读空间 */
+}
+
+@keyframes back-to-top-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* hover / 键盘聚焦：外圈与内芯作为整体一起上下浮动 */
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  animation: back-to-top-float var(--btt-float-duration) ease-in-out infinite;
+}
+
+/* 按下瞬间暂停浮动：既是点击精度（移动中的目标难点中）也避免抖动 */
+.back-to-top:active {
+  animation-play-state: paused;
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--color-echo-blue, #4c9dd3);
+  outline-offset: 4px;
+}
+
+@keyframes back-to-top-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+/* 移动端略小（同步 1.5×） */
+@media (max-width: 768px) {
+  .back-to-top { --btt-size: 99px; }
+}
+
+/* 减弱动效：停止旋转与浮动，保留点击功能 */
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top,
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    animation: none;
+  }
+
+  /* 外圈旋转挂在子元素上，必须单独停（父级 animation:none 管不到它） */
+  .back-to-top__ring {
+    animation: none;
+  }
+}

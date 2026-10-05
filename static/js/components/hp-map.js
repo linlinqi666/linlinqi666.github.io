@@ -36,7 +36,7 @@
       region: "Shenzhen, Guangdong",
       category: "industry",
       coord: { top: 79.5, left: 69.0 },
-      photo: "../../image/any-icon/HP/expert_img/wangwenjie.jpg",
+      photo: "../static/image/any-icon/HP/expert_img/wangwenjie.jpg",
       org: "深圳市妇幼保健院 · 南方科技大学医学院",
       role: "检验科主任 · 教学督导",
       desc: "长期从事新型生物学诊断标志物、肿瘤与自噬等方向研究；担任多个医学检验相关专业委员会职务，在临床检验与体外诊断领域具有丰富经验。",
@@ -52,7 +52,7 @@
       region: "Guangzhou, Guangdong",
       category: "science",
       coord: { top: 73.0, left: 63.5 },
-      photo: "../../image/any-icon/HP/expert_img/fukai.jpg",
+      photo: "../static/image/any-icon/HP/expert_img/fukai.jpg",
       org: "中山大学",
       role: "临床医学博士",
       desc: "研究方向涉及肺部疾病、呼吸道感染与临床诊断，就本项目的技术可行性与临床应用场景提出了系统性建议。",
@@ -144,6 +144,16 @@
 
   function getInitial(name) {
     return name.replace(/^(Dr\.|Prof\.)\s*/, "").charAt(0).toUpperCase();
+  }
+
+  // 默认人像剪影：替代不方便出镜的专家头像（针头与浮层小头像共用）
+  const SILHOUETTE_SVG = '<svg class="hz-cluster__silhouette" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="4.1"></circle><path d="M3.6 20.6c0-4.5 3.9-6.7 8.4-6.7s8.4 2.2 8.4 6.7z"></path></svg>';
+
+  function faceHTML(expert) {
+    if (expert && expert.photo) {
+      return '<img class="hz-cluster__photo" src="' + expert.photo + '" alt="" loading="lazy" decoding="async">';
+    }
+    return SILHOUETTE_SVG;
   }
 
   // 专家详情卡与地图是同一篇文章中的相邻区块，不能限制在 #hzMap 内查询。
@@ -274,7 +284,7 @@
       expertButton.type = "button";
       expertButton.className = "hz-cluster-expert";
       expertButton.dataset.category = expert.category;
-      expertButton.innerHTML = '<span class="hz-cluster-expert__name">' + expert.name + '</span><span class="hz-cluster-expert__meta">' + categoryNames[expert.category] + ' · ' + expert.region + '</span>';
+      expertButton.innerHTML = '<span class="hz-cluster-expert__avatar">' + faceHTML(expert) + '</span><span class="hz-cluster-expert__body"><span class="hz-cluster-expert__name">' + expert.name + '</span><span class="hz-cluster-expert__meta">' + categoryNames[expert.category] + ' · ' + expert.region + '</span></span>';
       expertButton.addEventListener("click", () => {
         closeCluster(false);
         selectExpert(expert, button);
@@ -290,8 +300,10 @@
     const buttonTop = (parseFloat(button.style.top) / 100) * mapHeight;
     popover.style.width = Math.min(popoverWidth, mapWidth - 24) + "px";
     const popoverHeight = popover.offsetHeight;
+    // 图钉以针尖对准坐标（translate(-50%,-100%)）；避让需覆盖「图钉全高 + hover 放大(1.14)」
+    const pinClearance = 60;
     popover.style.left = Math.max(12, Math.min(mapWidth - popover.offsetWidth - 12, buttonLeft - popover.offsetWidth / 2)) + "px";
-    popover.style.top = buttonTop > popoverHeight + 20 ? buttonTop - popoverHeight - 20 + "px" : Math.min(mapHeight - popoverHeight - 12, buttonTop + 38) + "px";
+    popover.style.top = buttonTop > popoverHeight + pinClearance ? buttonTop - popoverHeight - pinClearance + "px" : Math.min(mapHeight - popoverHeight - 12, buttonTop + 10) + "px";
     popover.addEventListener("mouseenter", cancelCloseCluster);
     popover.addEventListener("mouseleave", scheduleCloseCluster);
     button.addEventListener("mouseenter", cancelCloseCluster);
@@ -323,9 +335,14 @@
     button.classList.remove("hz-cluster--mixed");
     if (onlyExpert) button.classList.add("hz-cluster--single");
     if (onlyExpert) {
-      button.innerHTML = '<span class="hz-cluster__count">1</span><span class="hz-cluster__name">' + onlyExpert.name + '</span>';
+      // 单专家：针头内放该专家照片（或默认人像剪影）
+      button.innerHTML = '<span class="hz-cluster__head">' + faceHTML(onlyExpert) + '</span>';
     } else {
-      button.innerHTML = '<span class="hz-cluster__count">' + cluster.experts.length + '</span><span class="hz-cluster__name">' + cluster.name.replace("省", "") + '</span>';
+      // 多专家同省：优先用首位有照片的专家头像，缺照片时回退人数
+      const withPhoto = cluster.experts.find(expert => expert.photo);
+      button.innerHTML = withPhoto
+        ? '<span class="hz-cluster__head">' + faceHTML(withPhoto) + '</span><span class="hz-cluster__badge">' + cluster.experts.length + '</span>'
+        : '<span class="hz-cluster__head hz-cluster__head--count">' + cluster.experts.length + '</span>';
     }
     button.addEventListener("mouseenter", () => openCluster(cluster, button, "hover"));
     button.addEventListener("mouseleave", scheduleCloseCluster);
@@ -344,7 +361,10 @@
     cancelCloseCluster();
     closeCluster(false);
     chinaPins.innerHTML = "";
-    getVisibleClusters().forEach(cluster => createCluster(cluster, chinaPins));
+    getVisibleClusters().forEach((cluster, idx) => {
+      const button = createCluster(cluster, chinaPins);
+      if (button) button.style.animationDelay = (idx * 70) + "ms";
+    });
     root.dispatchEvent(new CustomEvent("hz:pins-rendered", { bubbles: true }));
   }
 

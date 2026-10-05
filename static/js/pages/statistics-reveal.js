@@ -31,6 +31,7 @@
   var ARMED = 'js-reveal-armed';
   var IN_VIEW = 'in-view';
   var REVEALED = 'revealed';
+  var METHODS_ARMED = 'js-methods-armed';
   var HIDDEN_OPACITY = 0;
 
   /** 时间轴（ms） */
@@ -128,6 +129,99 @@
       img.addEventListener('error', disarm);
     });
 
+    // ==================================================
+    // 三方法信息条（2026-10-05 REQ）：
+    //   - setup 即加 js-methods-armed（条收起：揭示完成前不可见，用户硬性要求）；
+    //   - finish()（三圆展开完毕）才绑定 hover/focus/click —— 展开未完成时
+    //     即使移入圆圈也不会有蓝条；
+    //   - 移出/失焦收回；触屏用点按开/关；
+    //   - 无 JS / reduced-motion：脚本开头已 return，条保持静态可见（降级红线）。
+    // ==================================================
+    var revealedDone = false;
+    var hotspots = [];
+    var METHOD_DEFS = [
+      { circle: qpcr,  barClass: 'method-info--qpcr',  name: 'qPCR' },
+      { circle: elisa, barClass: 'method-info--elisa', name: 'ELISA' },
+      { circle: cgis,  barClass: 'method-info--cgis',  name: 'CGIS' }
+    ];
+
+    function collectHotspots() {
+      METHOD_DEFS.forEach(function (def) {
+        if (!def.circle) return;
+        var bar = stage.querySelector('.' + def.barClass);
+        if (!bar) return;
+        var pair = {
+          circle: def.circle,
+          bar: bar,
+          name: def.name,
+          openedAt: 0,     // 条被打开的时刻（tap 序列里 click 的开/关判断用）
+          open: null,
+          close: null
+        };
+        pair.open = function () {
+          if (!revealedDone) return;   // 展开动画未完成前不允许出现蓝条
+          closeAllBars(bar);
+          bar.classList.add('is-open');
+          // 记录打开时刻：触屏 tap 会先派发 mouseenter（打开）再派发 click，
+          // click 里的开/关判断需要知道「是不是刚被同一次交互打开的」
+          pair.openedAt = Date.now();
+        };
+        pair.close = function () {
+          bar.classList.remove('is-open');
+        };
+        hotspots.push(pair);
+      });
+    }
+
+    function closeAllBars(except) {
+      hotspots.forEach(function (p) {
+        if (p.bar !== except) p.bar.classList.remove('is-open');
+      });
+    }
+
+    function armMethodBars() {
+      stage.classList.add(METHODS_ARMED);
+    }
+
+    /** 展开动画全部结束后（finish 内调用）才允许悬停/点按触发蓝条 */
+    function bindMethodBars() {
+      revealedDone = true;
+      hotspots.forEach(function (p) {
+        p.circle.setAttribute('tabindex', '0');
+        p.circle.setAttribute('role', 'button');
+        p.circle.setAttribute('aria-label', p.name + '：查看该检测方式的优势与劣势');
+        p.circle.classList.add('method-hotspot');
+        p.circle.addEventListener('mouseenter', p.open);
+        p.circle.addEventListener('mouseleave', p.close);
+        p.circle.addEventListener('focus', p.open);
+        p.circle.addEventListener('blur', p.close);
+        // 触屏没有 hover：点按开/关。tap 序列 = mouseenter(开) → click：
+        // 若条刚被同一次交互打开（<600ms），click 不再关闭，视为「点开」；
+        // 已打开一段时间后再点才是「关闭」。
+        p.circle.addEventListener('click', function () {
+          if (p.bar.classList.contains('is-open')
+            && p.openedAt && Date.now() - p.openedAt < 600) {
+            return;
+          }
+          if (p.bar.classList.contains('is-open')) { p.close(); } else { p.open(); }
+        });
+      });
+    }
+
+    function disarmMethodBars() {
+      stage.classList.remove(METHODS_ARMED);
+      hotspots.forEach(function (p) {
+        p.circle.classList.remove('method-hotspot');
+        p.circle.removeAttribute('tabindex');
+        p.circle.removeAttribute('role');
+        p.circle.removeAttribute('aria-label');
+        p.bar.classList.remove('is-open');
+      });
+    }
+
+    collectHotspots();
+    armMethodBars();
+
     var captionWords = splitCaption(caption);
 
     function onCgisKeydown(event) {
@@ -145,6 +239,7 @@
 
     function disarm() {
       stage.classList.remove(ARMED);
+      disarmMethodBars();
       if (cgis) {
         cgis.removeAttribute('role');
         cgis.removeAttribute('tabindex');
@@ -407,6 +502,7 @@
     function finish() {
       stage.classList.remove(ARMED);
       stage.classList.add(REVEALED + '-done');
+      bindMethodBars();      // 三圆到位：解锁信息条悬停（REQ 2026-10-05）
       elisa.style.transform = '';
       qpcr.style.transform = '';
       runningAnims.forEach(function (a) {

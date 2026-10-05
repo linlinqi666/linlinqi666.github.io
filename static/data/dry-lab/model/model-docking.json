@@ -542,12 +542,12 @@
     }
   ],
   "limitations": [
-  "In ClusPro the receptor is treated as rigid, which may miss induced-fit effects.",
-  "Docking uses implicit solvent and ignores explicit water bridges.",
-  "In HADDOCK the interface is semi-flexible, allowing side-chain rearrangement while the backbone stays fixed.",
-  "10 ns of MD may fail to capture slow conformational changes.",
-  "MM-GBSA is based on only 10 frames, with large statistical error.",
-  "The entire text has no experimental validation (document §9 states this)."
+    "In ClusPro the receptor is treated as rigid, which may miss induced-fit effects.",
+    "Docking uses implicit solvent and ignores explicit water bridges.",
+    "In HADDOCK the interface is semi-flexible, allowing side-chain rearrangement while the backbone stays fixed.",
+    "10 ns of MD may fail to capture slow conformational changes.",
+    "MM-GBSA is based on only 10 frames, with large statistical error.",
+    "The entire text has no experimental validation (document §9 states this)."
   ],
   "reproducibility": [
     {
@@ -602,5 +602,475 @@
       "id": "MQ-7",
       "zh": "The source document's two 17-antibody charts (post-processed antigen, cross-reactivity) have candidate-number cross-reference tables inconsistent with the screening figure, so those two charts are not cited; the related results are presented only in tables."
     }
-  ]
+  ],
+  "game": {
+    "modes": [
+      {
+        "id": "rigid",
+        "label": "Rigid docking (ClusPro)",
+        "shortLabel": "Rigid",
+        "antigens": [
+          "H1N1",
+          "H3N2",
+          "H5N1"
+        ],
+        "rankBy": "modelIndex",
+        "structure": "antigen + predicted nanobody (two separate components)",
+        "note": "ClusPro rigid docking; the exported files contain the HA chains only (no nanobody chain) and carry no per-model energy, so the rank shown is the ClusPro export index within the best cluster (model.000.00 = best of that cluster). The 3D view therefore shows the antigen and the predicted nanobody as two separate components, not a docking pose."
+      },
+      {
+        "id": "flexible",
+        "label": "Semi-flexible refinement (HADDOCK 2.5)",
+        "shortLabel": "Semi-flexible",
+        "antigens": [
+          "H1N1"
+        ],
+        "rankBy": "haddockScore",
+        "structure": "real complex (HA + nanobody, both chains present)",
+        "note": "HADDOCK 2.5 semi-flexible refinement against H1N1 HA only. Each file holds the true complex (chain A = HA, chain B = nanobody), so the 3D view is the docking result itself. Rank is by HADDOCK score (more negative is better) among the six published clusters; HADDOCK cluster numbers are ordered by population, not by score."
+      }
+    ],
+    "combos": {
+      "rigid": {
+        "R1aB6": {
+          "H1N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -877.1,
+            "topLowest": -933.9,
+            "clusters": 26
+          },
+          "H3N2": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -701.0,
+            "topLowest": -845.3,
+            "clusters": 30
+          },
+          "H5N1": {
+            "results": 1,
+            "topCluster": 0,
+            "topCenter": -753.0,
+            "topLowest": -817.9,
+            "clusters": 30
+          }
+        },
+        "R2aF9": {
+          "H1N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -671.8,
+            "topLowest": -792.4,
+            "clusters": 30
+          },
+          "H3N2": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -704.2,
+            "topLowest": -764.4,
+            "clusters": 30
+          },
+          "H5N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -596.2,
+            "topLowest": -867.9,
+            "clusters": 27
+          }
+        },
+        "R1aA5": {
+          "H1N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -798.9,
+            "topLowest": -955.2,
+            "clusters": 19
+          },
+          "H3N2": {
+            "results": 5,
+            "topCluster": 0,
+            "topCenter": -796.3,
+            "topLowest": -796.3,
+            "clusters": 30
+          },
+          "H5N1": {
+            "results": 5,
+            "topCluster": 0,
+            "topCenter": -895.6,
+            "topLowest": -923.9,
+            "clusters": 25
+          }
+        },
+        "R2bE8": {
+          "H1N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -864.8,
+            "topLowest": -921.7,
+            "clusters": 28
+          },
+          "H3N2": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -693.6,
+            "topLowest": -815.7,
+            "clusters": 27
+          },
+          "H5N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -696.4,
+            "topLowest": -813.1,
+            "clusters": 25
+          }
+        },
+        "R2bD9": {
+          "H1N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -667.7,
+            "topLowest": -756.3,
+            "clusters": 30
+          },
+          "H3N2": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -817.9,
+            "topLowest": -817.9,
+            "clusters": 30
+          },
+          "H5N1": {
+            "results": 6,
+            "topCluster": 0,
+            "topCenter": -692.7,
+            "topLowest": -881.0,
+            "clusters": 25
+          }
+        }
+      },
+      "flexible": {
+        "R1aB6": {
+          "H1N1": {
+            "results": 6,
+            "results2": [
+              {
+                "cluster": 1,
+                "score": -77.863,
+                "sd": 2.075,
+                "bsa": 1945.93,
+                "nstruc": 33,
+                "rank": 4,
+                "file": "structures/complexes/R1aB6_H1N1_cluster1.pdb.gz"
+              },
+              {
+                "cluster": 2,
+                "score": -87.703,
+                "sd": 6.258,
+                "bsa": 2094.36,
+                "nstruc": 18,
+                "rank": 2,
+                "file": "structures/complexes/R1aB6_H1N1_cluster2.pdb.gz"
+              },
+              {
+                "cluster": 3,
+                "score": -75.231,
+                "sd": 9.684,
+                "bsa": 1711.692,
+                "nstruc": 18,
+                "rank": 5,
+                "file": "structures/complexes/R1aB6_H1N1_cluster3.pdb.gz"
+              },
+              {
+                "cluster": 4,
+                "score": -78.4,
+                "sd": 7.347,
+                "bsa": 1937.097,
+                "nstruc": 16,
+                "rank": 3,
+                "file": "structures/complexes/R1aB6_H1N1_cluster4.pdb.gz"
+              },
+              {
+                "cluster": 5,
+                "score": -93.232,
+                "sd": 2.65,
+                "bsa": 1890.057,
+                "nstruc": 16,
+                "rank": 1,
+                "file": "structures/complexes/R1aB6_H1N1_cluster5.pdb.gz"
+              },
+              {
+                "cluster": 6,
+                "score": -73.795,
+                "sd": 11.775,
+                "bsa": 1542.528,
+                "nstruc": 10,
+                "rank": 6,
+                "file": "structures/complexes/R1aB6_H1N1_cluster6.pdb.gz"
+              }
+            ]
+          }
+        },
+        "R2aF9": {
+          "H1N1": {
+            "results": 6,
+            "results2": [
+              {
+                "cluster": 1,
+                "score": -89.406,
+                "sd": 1.501,
+                "bsa": 2764.39,
+                "nstruc": 61,
+                "rank": 1,
+                "file": "structures/complexes/R2aF9_H1N1_cluster1.pdb.gz"
+              },
+              {
+                "cluster": 2,
+                "score": -41.201,
+                "sd": 4.089,
+                "bsa": 2240.492,
+                "nstruc": 14,
+                "rank": 5,
+                "file": "structures/complexes/R2aF9_H1N1_cluster2.pdb.gz"
+              },
+              {
+                "cluster": 3,
+                "score": -57.755,
+                "sd": 6.942,
+                "bsa": 2318.93,
+                "nstruc": 12,
+                "rank": 2,
+                "file": "structures/complexes/R2aF9_H1N1_cluster3.pdb.gz"
+              },
+              {
+                "cluster": 4,
+                "score": -46.395,
+                "sd": 7.22,
+                "bsa": 2428.185,
+                "nstruc": 11,
+                "rank": 4,
+                "file": "structures/complexes/R2aF9_H1N1_cluster4.pdb.gz"
+              },
+              {
+                "cluster": 5,
+                "score": -51.33,
+                "sd": 6.338,
+                "bsa": 2094.418,
+                "nstruc": 8,
+                "rank": 3,
+                "file": "structures/complexes/R2aF9_H1N1_cluster5.pdb.gz"
+              },
+              {
+                "cluster": 6,
+                "score": -22.121,
+                "sd": 3.126,
+                "bsa": 1923.308,
+                "nstruc": 7,
+                "rank": 6,
+                "file": "structures/complexes/R2aF9_H1N1_cluster6.pdb.gz"
+              }
+            ]
+          }
+        },
+        "R1aA5": {
+          "H1N1": {
+            "results": 6,
+            "results2": [
+              {
+                "cluster": 1,
+                "score": -64.988,
+                "sd": 2.443,
+                "bsa": 2592.755,
+                "nstruc": 33,
+                "rank": 3,
+                "file": "structures/complexes/R1aA5_H1N1_cluster1.pdb.gz"
+              },
+              {
+                "cluster": 2,
+                "score": -84.622,
+                "sd": 5.225,
+                "bsa": 2630.398,
+                "nstruc": 26,
+                "rank": 1,
+                "file": "structures/complexes/R1aA5_H1N1_cluster2.pdb.gz"
+              },
+              {
+                "cluster": 3,
+                "score": -52.114,
+                "sd": 2.977,
+                "bsa": 2275.695,
+                "nstruc": 25,
+                "rank": 6,
+                "file": "structures/complexes/R1aA5_H1N1_cluster3.pdb.gz"
+              },
+              {
+                "cluster": 4,
+                "score": -52.728,
+                "sd": 11.217,
+                "bsa": 2124.295,
+                "nstruc": 9,
+                "rank": 5,
+                "file": "structures/complexes/R1aA5_H1N1_cluster4.pdb.gz"
+              },
+              {
+                "cluster": 5,
+                "score": -64.929,
+                "sd": 13.849,
+                "bsa": 2374.033,
+                "nstruc": 8,
+                "rank": 4,
+                "file": "structures/complexes/R1aA5_H1N1_cluster5.pdb.gz"
+              },
+              {
+                "cluster": 6,
+                "score": -83.219,
+                "sd": 3.227,
+                "bsa": 2613.962,
+                "nstruc": 8,
+                "rank": 2,
+                "file": "structures/complexes/R1aA5_H1N1_cluster6.pdb.gz"
+              }
+            ]
+          }
+        },
+        "R2bE8": {
+          "H1N1": {
+            "results": 6,
+            "results2": [
+              {
+                "cluster": 1,
+                "score": -42.171,
+                "sd": 0.967,
+                "bsa": 2329.573,
+                "nstruc": 19,
+                "rank": 5,
+                "file": "structures/complexes/R2bE8_H1N1_cluster1.pdb.gz"
+              },
+              {
+                "cluster": 2,
+                "score": -71.129,
+                "sd": 4.908,
+                "bsa": 2619.912,
+                "nstruc": 16,
+                "rank": 1,
+                "file": "structures/complexes/R2bE8_H1N1_cluster2.pdb.gz"
+              },
+              {
+                "cluster": 3,
+                "score": -61.225,
+                "sd": 8.856,
+                "bsa": 2323.52,
+                "nstruc": 11,
+                "rank": 2,
+                "file": "structures/complexes/R2bE8_H1N1_cluster3.pdb.gz"
+              },
+              {
+                "cluster": 4,
+                "score": -37.508,
+                "sd": 4.558,
+                "bsa": 2185.715,
+                "nstruc": 9,
+                "rank": 6,
+                "file": "structures/complexes/R2bE8_H1N1_cluster4.pdb.gz"
+              },
+              {
+                "cluster": 5,
+                "score": -49.023,
+                "sd": 4.716,
+                "bsa": 2608.177,
+                "nstruc": 8,
+                "rank": 3,
+                "file": "structures/complexes/R2bE8_H1N1_cluster5.pdb.gz"
+              },
+              {
+                "cluster": 6,
+                "score": -47.178,
+                "sd": 3.392,
+                "bsa": 2062.34,
+                "nstruc": 8,
+                "rank": 4,
+                "file": "structures/complexes/R2bE8_H1N1_cluster6.pdb.gz"
+              }
+            ]
+          }
+        },
+        "R2bD9": {
+          "H1N1": {
+            "results": 6,
+            "results2": [
+              {
+                "cluster": 1,
+                "score": -53.696,
+                "sd": 3.099,
+                "bsa": 2487.297,
+                "nstruc": 45,
+                "rank": 3,
+                "file": "structures/complexes/R2bD9_H1N1_cluster1.pdb.gz"
+              },
+              {
+                "cluster": 2,
+                "score": -51.652,
+                "sd": 8.06,
+                "bsa": 2211.382,
+                "nstruc": 24,
+                "rank": 4,
+                "file": "structures/complexes/R2bD9_H1N1_cluster2.pdb.gz"
+              },
+              {
+                "cluster": 3,
+                "score": -43.417,
+                "sd": 4.188,
+                "bsa": 2147.572,
+                "nstruc": 9,
+                "rank": 6,
+                "file": "structures/complexes/R2bD9_H1N1_cluster3.pdb.gz"
+              },
+              {
+                "cluster": 4,
+                "score": -54.109,
+                "sd": 6.314,
+                "bsa": 2538.442,
+                "nstruc": 8,
+                "rank": 2,
+                "file": "structures/complexes/R2bD9_H1N1_cluster4.pdb.gz"
+              },
+              {
+                "cluster": 5,
+                "score": -50.162,
+                "sd": 9.602,
+                "bsa": 2374.267,
+                "nstruc": 8,
+                "rank": 5,
+                "file": "structures/complexes/R2bD9_H1N1_cluster5.pdb.gz"
+              },
+              {
+                "cluster": 6,
+                "score": -55.156,
+                "sd": 21.05,
+                "bsa": 2417.77,
+                "nstruc": 7,
+                "rank": 1,
+                "file": "structures/complexes/R2bD9_H1N1_cluster6.pdb.gz"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "structureBase": "static/data/dry-lab/model/",
+    "icons": {
+      "base": "https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/icons/",
+      "antigens": {
+        "H1N1": "antigen-h1n1.webp",
+        "H3N2": "antigen-h3n2.webp",
+        "H5N1": "antigen-h5n1.webp"
+      },
+      "candidates": {
+        "R1aB6": "nanobody-r1ab6.webp",
+        "R2aF9": "nanobody-r2af9.webp",
+        "R1aA5": "nanobody-r1aa5.webp",
+        "R2bE8": "nanobody-r2be8.webp",
+        "R2bD9": "nanobody-r2bd9.webp"
+      }
+    }
+  }
 }

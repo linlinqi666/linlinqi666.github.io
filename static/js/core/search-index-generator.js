@@ -22,15 +22,13 @@ const PAGES = [
   'team/attributions.html',
   'dry-lab/model.html',
   'dry-lab/hardware.html',
-  'dry-lab/software.html',
   'wet-lab/design.html',
   'wet-lab/protocol.html',
   'wet-lab/result.html',
   'wet-lab/parts.html',
   'wet-lab/safety.html',
   'human-practices/integrated human-practices.html',
-  'human-practices/education.html',
-  'human-practices/sustainability.html'
+  'human-practices/inclusivity.html'
 ];
 
 const TEXT_CHUNK_SIZE = 320;
@@ -120,6 +118,7 @@ function buildIndex() {
     const mainText = cleanText(clone.textContent || '');
     chunkText(mainText).forEach(chunk => {
       records.push({
+        id: records.length,
         type: 'text',
         pageUrl: pagePath,
         pageTitle: pageTitle,
@@ -136,6 +135,7 @@ function buildIndex() {
       const src = normalizeToRootRelative(rawSrc, pagePath);
       const filename = path.basename(src);
       records.push({
+        id: records.length,
         type: 'image',
         pageUrl: pagePath,
         pageTitle: pageTitle,

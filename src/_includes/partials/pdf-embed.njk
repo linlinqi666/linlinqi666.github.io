@@ -1,11 +1,16 @@
 {# 内嵌 PDF 通用组件：protocol 等单文档页面复用。
    通过 front matter 传入 pdfUrl / pdfLabel / pdfFallback。
    浏览器原生渲染 PDF；文件未就位时显示 fallback 占位文案。
+   pdfUrl 支持两种形式（2026-10-05 修复）：
+     - 站内相对路径（old/doc.pdf）：按 basePath 前缀解析；
+     - 绝对 URL（https://static.igem.wiki/... 或 //cdn/...）：原样使用，
+       不再拼接 basePath——否则会生成 ../https://... 这类非法地址，浏览器报「协议不支持」。
    data URL 追加 #toolbar=0&navpanes=0：隐藏浏览器内置 PDF 阅读器工具条
    （含 Chrome 的「绘制/Draw」按钮，其语言跟随浏览器设置，页面无法切换）。 #}
+{% set pdfHref = pdfUrl if (pdfUrl | isRemoteUrl) else (basePath | default('')) + pdfUrl %}
 <div class="pdf-embed">
   <object class="pdf-embed__object" type="application/pdf"
-          data="{{ basePath | default('') }}{{ pdfUrl }}#toolbar=0&navpanes=0"
+          data="{{ pdfHref }}#toolbar=0&navpanes=0"
           aria-label="{{ pdfLabel | default('PDF document') }}">
     <p class="pdf-embed__fallback">{{ pdfFallback | default('该文档尚未上传，敬请期待。 / The document is not available yet.') }}</p>
   </object>

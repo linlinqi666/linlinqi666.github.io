@@ -832,8 +832,15 @@ img.loaded {
     transform: rotate(-45deg);
   }
 
+  /* 菜单打开时汉堡变「关闭钮」：暖棕圆钮 + 米白叉线，
+     原来是透明底 + 白线，浮在深色遮罩上观感发蓝发灰 */
+  .hamburger-menu.active {
+    background: rgba(139, 90, 43, 0.85);
+    border-color: rgba(255, 248, 231, 0.65);
+  }
+
   .hamburger-menu.active span {
-    background-color: white;
+    background-color: #FFF8E7;
   }
 
   /* 移动端遮罩层 - 纯色半透明 scrim，去掉毛玻璃模糊以提升移动端流畅度 */
@@ -843,7 +850,8 @@ img.loaded {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(17, 24, 39, 0.55);
+    /* 遮罩用暖棕 scrim（原来偏蓝黑 rgba(17,24,39,.55)），让抽屉浮在主题暖色上 */
+    background: rgba(61, 42, 26, 0.45);
     z-index: 99998;
     transition: opacity var(--anim-duration-medium) var(--anim-easing-standard),
       visibility var(--anim-duration-medium) var(--anim-easing-standard);
@@ -883,12 +891,26 @@ img.loaded {
     -webkit-overflow-scrolling: touch;
     display: block;
     box-sizing: border-box;
-    background: #FFFDF8;
-    border-radius: 1.25rem 1.25rem 0 0;
-    border: 0.1875rem solid #38BDF8;
+    /* 抽屉本体：与全站一致的米黄底 + 细暖棕描边（原来是白底 + 3px 天蓝粗边 #38BDF8） */
+    background: #FFF8E7;
+    border-radius: 1.5rem 1.5rem 0 0;
+    border: 1px solid rgba(139, 90, 43, 0.18);
     border-bottom: none;
-    box-shadow: 0 -0.5rem 2rem rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -0.5rem 2rem rgba(93, 58, 26, 0.28);
     will-change: transform;
+  }
+
+  /* 顶部抓握条：暗示「底部抽屉可下滑关闭」，纯 CSS 不加 DOM */
+  .mobile-menu-overlay .mobile-menu::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.75rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: rgba(139, 90, 43, 0.25);
   }
 
   .mobile-menu-overlay.active .mobile-menu {
@@ -900,45 +922,71 @@ img.loaded {
     list-style: none;
     padding: 0;
     margin: 0;
-    text-align: center;
+    text-align: left;
   }
 
   .mobile-menu ul li {
-    margin: var(--mobile-spacing-sm) 0;
+    margin: 0;
     border: none;
     display: block;
+    border-bottom: 1px solid rgba(139, 90, 43, 0.12);
   }
 
+  .mobile-menu ul li:last-child {
+    border-bottom: none;
+  }
+
+  /* 主项：行式导航（左图标 + 文案 + 右侧箭头），按压时用暖棕高亮——
+     原来是淡蓝圆角块（rgba(56,189,248,.12)）+ 深蓝按压色（#0C4A6E），与主题脱节 */
   .mobile-menu ul li a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
-    font-size: 1.25rem;
+    justify-content: flex-start;
+    padding: calc(var(--mobile-spacing-md) + 0.125rem) var(--mobile-spacing-sm);
+    font-size: 1.2rem;
     font-weight: 600;
-    color: #4A3525;
+    color: #5D3A1A;
     text-decoration: none;
     transition: background var(--anim-duration-fast) var(--anim-easing-standard),
-      transform var(--anim-duration-fast) var(--anim-easing-standard);
-    border-radius: var(--mobile-radius-xl);
+      color var(--anim-duration-fast) var(--anim-easing-standard);
+    border-radius: var(--mobile-radius-lg);
     position: relative;
     overflow: hidden;
-    gap: var(--mobile-spacing-sm);
-    background: rgba(56, 189, 248, 0.12);
+    gap: var(--mobile-spacing-md);
+    background: transparent;
   }
 
   .mobile-menu ul li a:hover,
   .mobile-menu ul li a:active {
-    background: #0C4A6E;
-    color: #FFFDF8;
-    transform: scale(0.96);
+    background: rgba(139, 90, 43, 0.08);
+    color: #5D3A1A;
+    transform: none;
+  }
+
+  /* 当前页：暖棕浅底 + 左侧竖条，与桌面导航的 active 语义一致 */
+  .mobile-menu ul li a.active,
+  .mobile-menu ul li a[aria-current="page"] {
+    background: rgba(139, 90, 43, 0.1);
+  }
+
+  .mobile-menu ul li a.active::before,
+  .mobile-menu ul li a[aria-current="page"]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 0.2rem;
+    border-radius: 999px;
+    background: #8B5A2B;
   }
 
   .mobile-menu ul li a .iconfont {
-    margin-right: var(--mobile-spacing-sm);
+    margin-right: 0;
     font-size: 1.4rem;
     min-width: 2rem;
     text-align: center;
+    color: #8B5A2B;
   }
 
   /* 下拉菜单优化 - 使用新动画系统 */
@@ -963,16 +1011,39 @@ img.loaded {
     transform: translateY(0);
   }
 
+  /* 子项：缩进 + 前置小圆点，弱于主项一档 */
   .mobile-menu .dropdown-content a {
-    padding: var(--mobile-spacing-sm) var(--mobile-spacing-lg);
-    font-size: 1.05rem;
+    position: relative;
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-sm) var(--mobile-spacing-sm) 3.25rem;
+    font-size: 1rem;
     font-weight: 500;
-    color: #6B5B45;
+    color: #8B5A2B;
+    border-radius: var(--mobile-radius-md);
+  }
+
+  .mobile-menu .dropdown-content a::before {
+    content: '';
+    position: absolute;
+    left: 2.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background: rgba(139, 90, 43, 0.45);
+  }
+
+  .mobile-menu .dropdown-content a:hover,
+  .mobile-menu .dropdown-content a:active {
+    background: rgba(139, 90, 43, 0.08);
+    color: #5D3A1A;
   }
 
   .mobile-menu .dropdown-toggle::after {
     content: '▾';
-    margin-left: var(--mobile-spacing-xs);
+    margin-left: auto;
+    padding-left: var(--mobile-spacing-sm);
+    color: rgba(139, 90, 43, 0.6);
     transition: transform var(--anim-duration-fast) var(--anim-easing-standard);
     opacity: 0.8;
     display: inline-block;
@@ -1224,7 +1295,7 @@ img.loaded {
     max-width: 10rem;
   }
 
-  .scroll-image {
+  .partner-chip img {
     max-height: 2.75rem;
     max-width: 11.25rem;
   }
@@ -1841,6 +1912,27 @@ img.loaded {
 
   80% {
     transform: translateX(0.25rem);
+  }
+}
+
+/* ================================================== */
+/* final-cta 吉祥物门户：窄屏 2×2 排布（4 列会把每只压到 ~90px 不可读）。
+   放在最后加载层，沿用根站同一实现（REQ-20261004-001）。 */
+/* ================================================== */
+@media (max-width: 768px) {
+  #final-cta .summary-inner {
+    width: 94vw;
+  }
+
+  .mascot-portal-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .mascot-portal__label {
+    font-size: 12px;
+    letter-spacing: 0.04em;
   }
 }
 

@@ -594,6 +594,150 @@
   background: var(--bg-card);
 }
 
+/* 3D 画布容器：高度跟随 .model-game__viewer（is-ready 时为 18rem），
+   否则新建的 pane 会塌成 0 高，画布看不见 */
+.model-game__viewer-pane {
+  width: 100%;
+  height: 100%;
+}
+
+/* 刚性模式：抗原与预测纳米抗体并排展示（两个独立组分，不是对接 pose） */
+.model-game__viewer-split {
+  display: flex;
+  gap: var(--spacing-sm);
+  width: 100%;
+  height: 100%;
+}
+
+.model-game__viewer-part {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+
+.model-game__viewer-caption {
+  margin: 0 0 0.25rem;
+  font-size: var(--font-size-xs);
+  line-height: 1.3;
+  color: var(--color-text-light);
+  text-align: center;
+}
+
+.model-game__viewer-part .model-game__viewer-pane {
+  flex: 1 1 auto;
+  min-height: 8rem;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+}
+
+/* ------------------------------------------------- 模式切换与抽签结果面板 */
+
+.model-game__modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.model-game__toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-left: auto;
+}
+
+.model-game__button--mode {
+  border-color: var(--border-color);
+  color: var(--color-text);
+  background: var(--bg-card);
+}
+
+.model-game__button--mode.is-active {
+  border-color: var(--color-primary);
+  color: #fff;
+  background: var(--color-primary);
+}
+
+/* 卡面图标：名字前的小图；未上传时 JS 会把它隐藏，避免出现破图 */
+.model-card__icon {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.model-card.is-unavailable {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.model-game__draw {
+  padding: var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+}
+
+.model-game__draw-head {
+  margin: 0 0 0.25rem;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.model-game__draw-pick {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.model-game__draw-metrics {
+  margin: 0.25rem 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__draw-list {
+  margin: var(--spacing-sm) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.model-game__draw-item {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.15rem 0.35rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__draw-item.is-drawn {
+  background: #fdf1e7;
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
+.model-game__draw-score {
+  font-variant-numeric: tabular-nums;
+}
+
+.model-game__draw-note {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+  color: var(--color-text-light);
+}
+
 .model-game__viewer-empty {
   display: flex;
   flex-direction: column;

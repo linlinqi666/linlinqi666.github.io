@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="../static/image/any-icon/SZPU(notext).png">
+  <link rel="icon" type="image/png" href="../static/image/any-icon/teamlogo.png">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Model - iGEM SZPU-2026</title>
@@ -16,6 +16,7 @@
 
 <link rel="stylesheet" href="../static/css/mobile.css">
 <link rel="stylesheet" href="../static/css/components/page-loader.css">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css">
 <link rel="stylesheet" href="../static/css/components/section-fold.css">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
@@ -31,8 +32,12 @@
       <div class="page-loader__inner">
         <div class="page-loader__stage">
           <span class="page-loader__halo" aria-hidden="true"></span>
-          <div class="page-loader__frames" aria-hidden="true"></div>
-          <div class="page-loader__fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="page-loader__frames" aria-hidden="true">
+            <!-- 2026-10-04：原 6 帧雪碧图换成 2 帧插画（loader-frame-1/2.jpg，硬切逐帧）
+                 2026-10-05：删去原「两帧图加载失败时兜底的呼吸三点」——两帧循环即默认 -->
+            <span class="page-loader__frame page-loader__frame--1"></span>
+            <span class="page-loader__frame page-loader__frame--2"></span>
+          </div>
         </div>
         <p class="page-loader__text" aria-hidden="true">Loading</p>
       </div>
@@ -73,7 +78,6 @@
         <div class="dropdown-content">
           <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
           <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
-          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -91,8 +95,8 @@
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
-          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+
+          <a href="../human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
         </div>
       </li>
     </ul>
@@ -129,7 +133,6 @@
         <div class="dropdown-content">
           <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
           <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
-          <a href="../dry-lab/software.html"><span class="iconfont icon-ruanjian-"></span><span>Software</span></a>
         </div>
       </li>
       <li class="dropdown">
@@ -147,8 +150,8 @@
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
         <div class="dropdown-content">
           <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
-          <a href="../human-practices/education.html"><span class="iconfont icon-jiaoyu1"></span><span>Education</span></a>
-          <a href="../human-practices/sustainability.html"><span class="iconfont icon-cooperation"></span><span>Sustainability</span></a>
+
+          <a href="../human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
         </div>
       </li>
     </ul>
@@ -524,8 +527,18 @@
 
           <div class="model-game">
             <div class="model-game__toolbar">
-              <p class="model-game__toolbar-hint">How to select: click a card, or drag it into the center slot; click a selected card again to deselect.</p>
-              <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+              <p class="model-game__toolbar-hint">How to select: pick a docking mode, then click a card or drag it into the center slot; click a selected card again to deselect. With a pair selected, one of that combination's docking results is drawn at random.</p>
+
+              <div class="model-game__modes" role="group" aria-label="Docking mode">
+                <button type="button" id="model-game-mode-rigid" class="model-game__button model-game__button--mode is-active" aria-pressed="true">Rigid (ClusPro)</button>
+                <button type="button" id="model-game-mode-flex" class="model-game__button model-game__button--mode" aria-pressed="false">Semi-flexible (HADDOCK)</button>
+              </div>
+
+              <div class="model-game__toolbar-actions">
+                <button type="button" id="model-game-draw" class="model-game__button">Draw a Result</button>
+                <button type="button" id="model-game-random-pair" class="model-game__button model-game__button--ghost">Random Pair</button>
+                <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
+              </div>
             </div>
 
             <div class="model-game__board">
@@ -1297,16 +1310,19 @@
   <div class="component-container">
     <div class="footer-wrapper">
       <div class="footer-top">
-        <div class="footer-scroller">
-          <div class="image-scroller">
-            <div class="scroller-track">
-              <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU(notext).webp" alt="SZPU" class="scroll-image">
-              </a>
-              <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer">
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao(notext).webp" alt="shiyao" class="scroll-image">
-              </a>
-            </div>
+        
+        <div class="footer-partners">
+          <span class="partners-label">Supported by</span>
+          <div class="partners-list">
+            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
+            </a>
+            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
+            </a>
+            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
+            </a>
           </div>
         </div>
         <div class="footer-contact">
@@ -1367,15 +1383,14 @@
               <ul>
                 <li><a href="../dry-lab/model.html">Model</a></li>
                 <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-                <li><a href="../dry-lab/software.html">Software</a></li>
               </ul>
             </div>
             <div class="footer-column">
               <h4>Human Practices</h4>
               <ul>
                 <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
-                <li><a href="../human-practices/education.html">Education</a></li>
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
+
+                <li><a href="../human-practices/inclusivity.html">Inclusivity</a></li>
               </ul>
             </div>
             <div class="footer-column">
@@ -1408,83 +1423,54 @@
 </section>
 
 
+  <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
+  <!-- 全站「返回顶部」悬浮按钮（2026-10-04）
+     两张图叠合（透明底 webp，存于同级 transparent/）：
+       外圈 back-to-top-ring（自带环绕文字，持续顺时针旋转）
+       内芯 back-to-top-core（静止）
+     hover：外圈与内芯作为整体一起上下浮动。
+     由 base.njk 引入 → 每个页面都有一份；行为见 static/js/components/back-to-top.js。 -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
+  <span class="back-to-top__ring" aria-hidden="true">
+    <!-- 2026-10-05：外圈换用美工新图 back-to-top-ring.png（原带环绕文字 webp 已删） -->
+    <img class="back-to-top__ring-img" src="../static/image/Animation/top/transparent/back-to-top-ring.png"
+      alt="" width="320" height="320" decoding="async">
+  </span>
+  <span class="back-to-top__core" aria-hidden="true">
+    <img class="back-to-top__core-img" src="../static/image/Animation/top/transparent/back-to-top-core.webp"
+      alt="" width="320" height="320" decoding="async">
+  </span>
+</button>
+
+
   <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
   <script src="../static/js/core/utils.js" defer></script>
   <script src="../static/js/components/page-loader.js" defer></script>
+  <script src="../static/js/components/back-to-top.js" defer></script>
   <script src="../static/js/core/mobile-menu.js" defer></script>
   <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
   <script src="../static/js/core/page-progress-bar.js" defer></script>
   <script src="../static/js/core/scroll-progress-bar.js" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
   <script src="../static/js/core/search.js" defer></script>
   <script src="../static/js/components/section-fold.js" defer></script>
+  <script src="../static/js/components/mascot-portal.js" defer></script>
   <script src="../static/js/components/sidebar-progress.js" defer></script><script src="../static/js/pages/model-game.js" defer></script>
   
 <script>
 // Data payload for the interactive demo: same source as the body tables (static/data/dry-lab/model/model-docking.json).
 // The page script static/js/pages/model-game.js is loaded with defer, so this variable is ready when it executes.
-window.MODEL_DOCKING_DATA = {"funnel":{"candidatesScreened":17,"candidatesRefined":5,"leads":1,"fluAntigens":3,"unrelatedAntigens":3},"scoring":{"cluspro":{"label":"ClusPro rigid docking","formula":"E = 0.40Erep − 0.40Eatt + 600Eelec + 1.00EDARS","unit":"kcal/mol (the document does not state the unit; only values are given)","note":"The Top 10 conformations are retained for each 'candidate × antigen' combination."},"specificityIndex":{"label":"Specificity index","formula":"( E_H1N1 − E_H3N2 + E_H1N1 − E_H5N1 ) / 2","note":"A more negative value indicates better specificity for H1N1."},"haddock":{"label":"HADDOCK 2.5 semi-flexible refinement","flow":"Rigid docking it0 → semi-flexible refinement it1 → water refinement itw","metrics":"HADDOCK score / cluster size / BSA (Å²)","note":"A more negative HADDOCK score indicates better interface quality."}},"antigens":[{"id":"H1N1","name":"H1N1 HA","strain":"A/Puerto Rico/8/1934","pdbId":"9VH4","resolution":"2.80 Å","source":"RCSB","structure":"structures/9VH4.pdb","chainMap":"A = HA1, B = HA2","activeResiduesHA1":[25,45,46,47,48,49,305,306,307,332],"activeResiduesHA2":[361,362,363,364,381,382,384,385,388,391,392,395,396,399],"structureNote":"This entry is a co-crystal complex of HA with a single-domain antibody; per modeling document §5.1, the file has been trimmed to 'HA chains only.' The co-crystallized binder is not R1aB6 selected by this project.","role":"target","roleLabel":"Target subtype"},{"id":"H3N2","name":"H3N2 HA","strain":"A/Puerto Rico/8/1934-New York/55/2004","pdbId":"9VH5","resolution":"2.70 Å","source":"RCSB","structure":"structures/9VH5.pdb","chainMap":"A = HA1, B = HA2","activeResiduesHA1":[25,45,46,47,48,49,305,306,307,332],"activeResiduesHA2":[361,362,363,364,381,382,384,385,388,391,392,395,396,399],"structureNote":"Same as 9VH4, trimmed to HA chains only; the co-crystallized binder is not R1aB6 of this project.","role":"control","roleLabel":"Control subtype"},{"id":"H5N1","name":"H5N1 HA","strain":"A/Jiangsu/NJ210/2023","pdbId":"9MQ2","resolution":"3.06 Å","source":"RCSB","structure":"structures/9MQ2.pdb","chainMap":"A = HA1 (this entry deposited no HA2)","activeResiduesHA1":[25,45,46,47,48,49,305,306,307],"activeResiduesHA2":[],"structureNote":"This entry deposited only the HA1 chain (residues 13–321), so residue 332 and all HA2 active residues listed in the document are absent from this structure; the page accordingly converges when labeling H5.","role":"control","roleLabel":"Control subtype"}],"candidates":[{"id":"R1aB6","aliases":["R1aB6"],"verdict":{"outcome":"lead","rank":1,"zh":"Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA binding free energy −3.74 kcal/mol. The document therefore selects it as the recognition element.","en":"Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔG = −3.74 kcal/mol."},"cluspro":{"untreated":{"H1N1":-933.9,"H3N2":-863.4,"H5N1":-817.9,"specificityIndex":-93.25},"treated":{"H1N1":-867.2,"H3N2":-912,"H5N1":-922.2,"specificityIndex":49.9}},"crossReactivity":{"SARS":-754.3,"HIV1":-960.8,"RSVF":-883.6,"mean":-866.2,"risk":"Moderate","riskLevel":3},"haddock":{"score":-93.2,"clusterSize":16,"bsa":1890.1},"structure":{"complex":null,"nanobody":"structures/nanobodies/R1aB6.pdb"}},{"id":"R2aF9","aliases":["R2aF9"],"verdict":{"outcome":"lead","rank":2,"zh":"Second-best HADDOCK score (−89.4), but the ClusPro specificity index is positive (+23.75); it has the lowest cross-reactivity risk yet poor H1N1 specificity.","en":"Second-best HADDOCK score (−89.4) but positive ClusPro specificity index (+23.75): lowest cross-reactivity risk yet poor H1N1 specificity."},"cluspro":{"untreated":{"H1N1":-792.4,"H3N2":-764.4,"H5N1":-867.9,"specificityIndex":23.75},"treated":{"H1N1":-830.6,"H3N2":-785.3,"H5N1":-875.6,"specificityIndex":-0.15}},"crossReactivity":{"SARS":-742,"HIV1":-814,"RSVF":-713.6,"mean":-756.5,"risk":"Lowest","riskLevel":1},"haddock":{"score":-89.4,"clusterSize":61,"bsa":2764.4},"structure":{"complex":null,"nanobody":"structures/nanobodies/R2aF9.pdb"}},{"id":"R1aA5","aliases":["R1aXA5"],"verdict":{"outcome":"lead","rank":3,"zh":"Third-best HADDOCK score (−84.6), but the ClusPro specificity index is weaker (−40.75) and the cross-reactivity risk is the highest.","en":"Third by HADDOCK score (−84.6); weaker ClusPro specificity index (−40.75) and the highest cross-reactivity risk."},"cluspro":{"untreated":{"H1N1":-1022.7,"H3N2":-950.5,"H5N1":-1013.4,"specificityIndex":-40.75},"treated":{"H1N1":-874.6,"H3N2":-953.1,"H5N1":-1050.4,"specificityIndex":127.1}},"crossReactivity":{"SARS":-905.4,"HIV1":-939.8,"RSVF":-948.5,"mean":-931.2,"risk":"Highest","riskLevel":5},"haddock":{"score":-84.6,"clusterSize":26,"bsa":2634.4},"structure":{"complex":null,"nanobody":"structures/nanobodies/R1aA5.pdb"}},{"id":"R2bE8","aliases":["R2bE8"],"verdict":{"outcome":"rejected","rank":4,"zh":"Mid-range ClusPro specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk.","en":"Rejected: mid-range specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk."},"cluspro":{"untreated":{"H1N1":-921.7,"H3N2":-915.6,"H5N1":-813.1,"specificityIndex":-57.35},"treated":{"H1N1":-928.1,"H3N2":-897.2,"H5N1":-951.3,"specificityIndex":-3.85}},"crossReactivity":{"SARS":-840.5,"HIV1":-936.6,"RSVF":-894.7,"mean":-890.6,"risk":"Higher","riskLevel":4},"haddock":{"score":-71.1,"clusterSize":16,"bsa":2538.9},"structure":{"complex":null,"nanobody":"structures/nanobodies/R2bE8.pdb"}},{"id":"R2bD9","aliases":["R2bXD9"],"verdict":{"outcome":"rejected","rank":5,"zh":"Second-best ClusPro specificity index (−72.55), but the worst HADDOCK score (−68.8), indicating poor interface quality.","en":"Rejected: second-best specificity index (−72.55) but worst HADDOCK score (−68.8), indicating poor interface quality."},"cluspro":{"untreated":{"H1N1":-997,"H3N2":-845,"H5N1":-1003.9,"specificityIndex":-72.55},"treated":{"H1N1":-842.5,"H3N2":-796,"H5N1":-930.3,"specificityIndex":20.6}},"crossReactivity":{"SARS":-824.1,"HIV1":-937.6,"RSVF":-876.9,"mean":-879.5,"risk":"Moderate","riskLevel":3},"haddock":{"score":-68.8,"clusterSize":5,"bsa":2548},"structure":{"complex":null,"nanobody":"structures/nanobodies/R2bD9.pdb"}}],"interface":{"pair":"R1aB6 vs H1N1","method":"PyMOL interface analysis (residues) + SPICE interaction analysis (interaction-type counts)","haSide":{"count":30,"ranges":["27–32","44–53","303–332","358–396"],"note":"The original document records 'HA side: 30 residues (27–32, 44–53, 303–332, 358–396).'"},"nanobodySide":{"count":24,"cdr":[{"name":"CDR1","range":"27–37"},{"name":"CDR2","range":"44–65"},{"name":"CDR3","range":"101–104"}]},"interactions":{"contacts":61,"hbonds":19,"saltBridges":3,"hydrophobic":39},"hotspots":[{"nanobody":"ARGB:31","ha":"ASNA:27","type":"Hydrogen bond","distance":2.086},{"nanobody":"ARGB:31","ha":"SERA:29","type":"Hydrogen bond","distance":2.18},{"nanobody":"ARGB:31","ha":"THRA:44","type":"Hydrogen bond","distance":3.097},{"nanobody":"ARGB:31","ha":"GLNA:51","type":"Hydrogen bond","distance":2.086},{"nanobody":"ASPB:55","ha":"THRA:30","type":"Hydrogen bond","distance":2.725},{"nanobody":"THRB:54","ha":"ASPA:31","type":"Salt bridge","distance":3.48}],"hotspotNote":"ARGB:31 participates in 4 hydrogen bonds; it is the hotspot residue proposed by the document and is written as a target for the subsequent R31A mutant study.","structureGap":{"resolved":false,"zh":"The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex.","en":"The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex."}},"md":{"engine":"GROMACS","forcefield":"Amber99sbildn","waterModel":"TIP3P","seed":"gen_seed = 1","reportedDuration":"10 ns (per the document body; see caveats)","items":[{"metric":"RMSD","value":"0.45 nm (document records as stable)"},{"metric":"RMSF (interface)","value":"< 0.17 nm"},{"metric":"Rg","value":"3.87 nm (stable)"},{"metric":"Hydrogen bonds","value":"462.1 ± 9.6"}],"caveat":"In source document Figure 5, the RMSD horizontal axis only reaches about 8 ns and the curve peak is about 0.70 nm, inconsistent with the body text '10 ns / 0.45 nm stable'; the page body follows the document's stated values, and the discrepancy is recorded in the page source comments (numbered MQ-6)."},"mmgbsa":{"engine":"gmx_MMPBSA 1.5.0.3","unit":"kcal/mol","items":[{"term":"ΔVDWAALS","value":-59.41},{"term":"ΔEEL","value":5.22},{"term":"ΔEGB","value":57.69},{"term":"ΔESURF","value":-7.23},{"term":"ΔTOTAL","value":-3.74}],"note":"Document §9 states: MM-GBSA is based on only 10 frames, with large statistical error."},"structureBase":"static/data/dry-lab/model/"};
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    // Mobile hamburger menu toggle
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const mobileOverlay = document.getElementById('mobile-menu-overlay');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (hamburgerMenu && mobileOverlay && mobileMenu) {
-      hamburgerMenu.addEventListener('click', function (e) {
-        e.stopPropagation();
-        this.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-
-        if (mobileOverlay.classList.contains('active')) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
-      });
-
-      // Close on overlay click
-      mobileOverlay.addEventListener('click', function (e) {
-        if (e.target === mobileOverlay) {
-          hamburgerMenu.classList.remove('active');
-          mobileOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-
-      // Mobile dropdown menu toggle
-      const dropdownToggles = mobileMenu.querySelectorAll('.dropdown-toggle');
-      dropdownToggles.forEach(function (toggle) {
-        toggle.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const parent = this.parentElement;
-          parent.classList.toggle('dropdown-open');
-        });
-      });
-
-      // Close menu after clicking a nav link
-      const navLinks = mobileMenu.querySelectorAll('a:not(.dropdown-toggle)');
-      navLinks.forEach(function (link) {
-        link.addEventListener('click', function () {
-          hamburgerMenu.classList.remove('active');
-          mobileOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
-    }
-
-  });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    new PageProgressBar().startAutoProgress();
-
-  });
+window.MODEL_DOCKING_DATA = {"funnel":{"candidatesScreened":17,"candidatesRefined":5,"leads":1,"fluAntigens":3,"unrelatedAntigens":3},"scoring":{"cluspro":{"label":"ClusPro rigid docking","formula":"E = 0.40Erep − 0.40Eatt + 600Eelec + 1.00EDARS","unit":"kcal/mol (the document does not state the unit; only values are given)","note":"The Top 10 conformations are retained for each 'candidate × antigen' combination."},"specificityIndex":{"label":"Specificity index","formula":"( E_H1N1 − E_H3N2 + E_H1N1 − E_H5N1 ) / 2","note":"A more negative value indicates better specificity for H1N1."},"haddock":{"label":"HADDOCK 2.5 semi-flexible refinement","flow":"Rigid docking it0 → semi-flexible refinement it1 → water refinement itw","metrics":"HADDOCK score / cluster size / BSA (Å²)","note":"A more negative HADDOCK score indicates better interface quality."}},"antigens":[{"id":"H1N1","name":"H1N1 HA","strain":"A/Puerto Rico/8/1934","pdbId":"9VH4","resolution":"2.80 Å","source":"RCSB","structure":"structures/9VH4.pdb","chainMap":"A = HA1, B = HA2","activeResiduesHA1":[25,45,46,47,48,49,305,306,307,332],"activeResiduesHA2":[361,362,363,364,381,382,384,385,388,391,392,395,396,399],"structureNote":"This entry is a co-crystal complex of HA with a single-domain antibody; per modeling document §5.1, the file has been trimmed to 'HA chains only.' The co-crystallized binder is not R1aB6 selected by this project.","role":"target","roleLabel":"Target subtype"},{"id":"H3N2","name":"H3N2 HA","strain":"A/Puerto Rico/8/1934-New York/55/2004","pdbId":"9VH5","resolution":"2.70 Å","source":"RCSB","structure":"structures/9VH5.pdb","chainMap":"A = HA1, B = HA2","activeResiduesHA1":[25,45,46,47,48,49,305,306,307,332],"activeResiduesHA2":[361,362,363,364,381,382,384,385,388,391,392,395,396,399],"structureNote":"Same as 9VH4, trimmed to HA chains only; the co-crystallized binder is not R1aB6 of this project.","role":"control","roleLabel":"Control subtype"},{"id":"H5N1","name":"H5N1 HA","strain":"A/Jiangsu/NJ210/2023","pdbId":"9MQ2","resolution":"3.06 Å","source":"RCSB","structure":"structures/9MQ2.pdb","chainMap":"A = HA1 (this entry deposited no HA2)","activeResiduesHA1":[25,45,46,47,48,49,305,306,307],"activeResiduesHA2":[],"structureNote":"This entry deposited only the HA1 chain (residues 13–321), so residue 332 and all HA2 active residues listed in the document are absent from this structure; the page accordingly converges when labeling H5.","role":"control","roleLabel":"Control subtype"}],"candidates":[{"id":"R1aB6","aliases":["R1aB6"],"verdict":{"outcome":"lead","rank":1,"zh":"Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA binding free energy −3.74 kcal/mol. The document therefore selects it as the recognition element.","en":"Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔG = −3.74 kcal/mol."},"cluspro":{"untreated":{"H1N1":-933.9,"H3N2":-863.4,"H5N1":-817.9,"specificityIndex":-93.25},"treated":{"H1N1":-867.2,"H3N2":-912,"H5N1":-922.2,"specificityIndex":49.9}},"crossReactivity":{"SARS":-754.3,"HIV1":-960.8,"RSVF":-883.6,"mean":-866.2,"risk":"Moderate","riskLevel":3},"haddock":{"score":-93.2,"clusterSize":16,"bsa":1890.1},"structure":{"complex":null,"nanobody":"structures/nanobodies/R1aB6.pdb"}},{"id":"R2aF9","aliases":["R2aF9"],"verdict":{"outcome":"lead","rank":2,"zh":"Second-best HADDOCK score (−89.4), but the ClusPro specificity index is positive (+23.75); it has the lowest cross-reactivity risk yet poor H1N1 specificity.","en":"Second-best HADDOCK score (−89.4) but positive ClusPro specificity index (+23.75): lowest cross-reactivity risk yet poor H1N1 specificity."},"cluspro":{"untreated":{"H1N1":-792.4,"H3N2":-764.4,"H5N1":-867.9,"specificityIndex":23.75},"treated":{"H1N1":-830.6,"H3N2":-785.3,"H5N1":-875.6,"specificityIndex":-0.15}},"crossReactivity":{"SARS":-742,"HIV1":-814,"RSVF":-713.6,"mean":-756.5,"risk":"Lowest","riskLevel":1},"haddock":{"score":-89.4,"clusterSize":61,"bsa":2764.4},"structure":{"complex":null,"nanobody":"structures/nanobodies/R2aF9.pdb"}},{"id":"R1aA5","aliases":["R1aXA5"],"verdict":{"outcome":"lead","rank":3,"zh":"Third-best HADDOCK score (−84.6), but the ClusPro specificity index is weaker (−40.75) and the cross-reactivity risk is the highest.","en":"Third by HADDOCK score (−84.6); weaker ClusPro specificity index (−40.75) and the highest cross-reactivity risk."},"cluspro":{"untreated":{"H1N1":-1022.7,"H3N2":-950.5,"H5N1":-1013.4,"specificityIndex":-40.75},"treated":{"H1N1":-874.6,"H3N2":-953.1,"H5N1":-1050.4,"specificityIndex":127.1}},"crossReactivity":{"SARS":-905.4,"HIV1":-939.8,"RSVF":-948.5,"mean":-931.2,"risk":"Highest","riskLevel":5},"haddock":{"score":-84.6,"clusterSize":26,"bsa":2634.4},"structure":{"complex":null,"nanobody":"structures/nanobodies/R1aA5.pdb"}},{"id":"R2bE8","aliases":["R2bE8"],"verdict":{"outcome":"rejected","rank":4,"zh":"Mid-range ClusPro specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk.","en":"Rejected: mid-range specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk."},"cluspro":{"untreated":{"H1N1":-921.7,"H3N2":-915.6,"H5N1":-813.1,"specificityIndex":-57.35},"treated":{"H1N1":-928.1,"H3N2":-897.2,"H5N1":-951.3,"specificityIndex":-3.85}},"crossReactivity":{"SARS":-840.5,"HIV1":-936.6,"RSVF":-894.7,"mean":-890.6,"risk":"Higher","riskLevel":4},"haddock":{"score":-71.1,"clusterSize":16,"bsa":2538.9},"structure":{"complex":null,"nanobody":"structures/nanobodies/R2bE8.pdb"}},{"id":"R2bD9","aliases":["R2bXD9"],"verdict":{"outcome":"rejected","rank":5,"zh":"Second-best ClusPro specificity index (−72.55), but the worst HADDOCK score (−68.8), indicating poor interface quality.","en":"Rejected: second-best specificity index (−72.55) but worst HADDOCK score (−68.8), indicating poor interface quality."},"cluspro":{"untreated":{"H1N1":-997,"H3N2":-845,"H5N1":-1003.9,"specificityIndex":-72.55},"treated":{"H1N1":-842.5,"H3N2":-796,"H5N1":-930.3,"specificityIndex":20.6}},"crossReactivity":{"SARS":-824.1,"HIV1":-937.6,"RSVF":-876.9,"mean":-879.5,"risk":"Moderate","riskLevel":3},"haddock":{"score":-68.8,"clusterSize":5,"bsa":2548},"structure":{"complex":null,"nanobody":"structures/nanobodies/R2bD9.pdb"}}],"interface":{"pair":"R1aB6 vs H1N1","method":"PyMOL interface analysis (residues) + SPICE interaction analysis (interaction-type counts)","haSide":{"count":30,"ranges":["27–32","44–53","303–332","358–396"],"note":"The original document records 'HA side: 30 residues (27–32, 44–53, 303–332, 358–396).'"},"nanobodySide":{"count":24,"cdr":[{"name":"CDR1","range":"27–37"},{"name":"CDR2","range":"44–65"},{"name":"CDR3","range":"101–104"}]},"interactions":{"contacts":61,"hbonds":19,"saltBridges":3,"hydrophobic":39},"hotspots":[{"nanobody":"ARGB:31","ha":"ASNA:27","type":"Hydrogen bond","distance":2.086},{"nanobody":"ARGB:31","ha":"SERA:29","type":"Hydrogen bond","distance":2.18},{"nanobody":"ARGB:31","ha":"THRA:44","type":"Hydrogen bond","distance":3.097},{"nanobody":"ARGB:31","ha":"GLNA:51","type":"Hydrogen bond","distance":2.086},{"nanobody":"ASPB:55","ha":"THRA:30","type":"Hydrogen bond","distance":2.725},{"nanobody":"THRB:54","ha":"ASPA:31","type":"Salt bridge","distance":3.48}],"hotspotNote":"ARGB:31 participates in 4 hydrogen bonds; it is the hotspot residue proposed by the document and is written as a target for the subsequent R31A mutant study.","structureGap":{"resolved":false,"zh":"The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex.","en":"The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex."}},"md":{"engine":"GROMACS","forcefield":"Amber99sbildn","waterModel":"TIP3P","seed":"gen_seed = 1","reportedDuration":"10 ns (per the document body; see caveats)","items":[{"metric":"RMSD","value":"0.45 nm (document records as stable)"},{"metric":"RMSF (interface)","value":"< 0.17 nm"},{"metric":"Rg","value":"3.87 nm (stable)"},{"metric":"Hydrogen bonds","value":"462.1 ± 9.6"}],"caveat":"In source document Figure 5, the RMSD horizontal axis only reaches about 8 ns and the curve peak is about 0.70 nm, inconsistent with the body text '10 ns / 0.45 nm stable'; the page body follows the document's stated values, and the discrepancy is recorded in the page source comments (numbered MQ-6)."},"mmgbsa":{"engine":"gmx_MMPBSA 1.5.0.3","unit":"kcal/mol","items":[{"term":"ΔVDWAALS","value":-59.41},{"term":"ΔEEL","value":5.22},{"term":"ΔEGB","value":57.69},{"term":"ΔESURF","value":-7.23},{"term":"ΔTOTAL","value":-3.74}],"note":"Document §9 states: MM-GBSA is based on only 10 frames, with large statistical error."},"structureBase":"static/data/dry-lab/model/","game":{"modes":[{"id":"rigid","label":"Rigid docking (ClusPro)","shortLabel":"Rigid","antigens":["H1N1","H3N2","H5N1"],"rankBy":"modelIndex","structure":"antigen + predicted nanobody (two separate components)","note":"ClusPro rigid docking; the exported files contain the HA chains only (no nanobody chain) and carry no per-model energy, so the rank shown is the ClusPro export index within the best cluster (model.000.00 = best of that cluster). The 3D view therefore shows the antigen and the predicted nanobody as two separate components, not a docking pose."},{"id":"flexible","label":"Semi-flexible refinement (HADDOCK 2.5)","shortLabel":"Semi-flexible","antigens":["H1N1"],"rankBy":"haddockScore","structure":"real complex (HA + nanobody, both chains present)","note":"HADDOCK 2.5 semi-flexible refinement against H1N1 HA only. Each file holds the true complex (chain A = HA, chain B = nanobody), so the 3D view is the docking result itself. Rank is by HADDOCK score (more negative is better) among the six published clusters; HADDOCK cluster numbers are ordered by population, not by score."}],"combos":{"rigid":{"R1aB6":{"H1N1":{"results":6,"topCluster":0,"topCenter":-877.1,"topLowest":-933.9,"clusters":26},"H3N2":{"results":6,"topCluster":0,"topCenter":-701,"topLowest":-845.3,"clusters":30},"H5N1":{"results":1,"topCluster":0,"topCenter":-753,"topLowest":-817.9,"clusters":30}},"R2aF9":{"H1N1":{"results":6,"topCluster":0,"topCenter":-671.8,"topLowest":-792.4,"clusters":30},"H3N2":{"results":6,"topCluster":0,"topCenter":-704.2,"topLowest":-764.4,"clusters":30},"H5N1":{"results":6,"topCluster":0,"topCenter":-596.2,"topLowest":-867.9,"clusters":27}},"R1aA5":{"H1N1":{"results":6,"topCluster":0,"topCenter":-798.9,"topLowest":-955.2,"clusters":19},"H3N2":{"results":5,"topCluster":0,"topCenter":-796.3,"topLowest":-796.3,"clusters":30},"H5N1":{"results":5,"topCluster":0,"topCenter":-895.6,"topLowest":-923.9,"clusters":25}},"R2bE8":{"H1N1":{"results":6,"topCluster":0,"topCenter":-864.8,"topLowest":-921.7,"clusters":28},"H3N2":{"results":6,"topCluster":0,"topCenter":-693.6,"topLowest":-815.7,"clusters":27},"H5N1":{"results":6,"topCluster":0,"topCenter":-696.4,"topLowest":-813.1,"clusters":25}},"R2bD9":{"H1N1":{"results":6,"topCluster":0,"topCenter":-667.7,"topLowest":-756.3,"clusters":30},"H3N2":{"results":6,"topCluster":0,"topCenter":-817.9,"topLowest":-817.9,"clusters":30},"H5N1":{"results":6,"topCluster":0,"topCenter":-692.7,"topLowest":-881,"clusters":25}}},"flexible":{"R1aB6":{"H1N1":{"results":6,"results2":[{"cluster":1,"score":-77.863,"sd":2.075,"bsa":1945.93,"nstruc":33,"rank":4,"file":"structures/complexes/R1aB6_H1N1_cluster1.pdb.gz"},{"cluster":2,"score":-87.703,"sd":6.258,"bsa":2094.36,"nstruc":18,"rank":2,"file":"structures/complexes/R1aB6_H1N1_cluster2.pdb.gz"},{"cluster":3,"score":-75.231,"sd":9.684,"bsa":1711.692,"nstruc":18,"rank":5,"file":"structures/complexes/R1aB6_H1N1_cluster3.pdb.gz"},{"cluster":4,"score":-78.4,"sd":7.347,"bsa":1937.097,"nstruc":16,"rank":3,"file":"structures/complexes/R1aB6_H1N1_cluster4.pdb.gz"},{"cluster":5,"score":-93.232,"sd":2.65,"bsa":1890.057,"nstruc":16,"rank":1,"file":"structures/complexes/R1aB6_H1N1_cluster5.pdb.gz"},{"cluster":6,"score":-73.795,"sd":11.775,"bsa":1542.528,"nstruc":10,"rank":6,"file":"structures/complexes/R1aB6_H1N1_cluster6.pdb.gz"}]}},"R2aF9":{"H1N1":{"results":6,"results2":[{"cluster":1,"score":-89.406,"sd":1.501,"bsa":2764.39,"nstruc":61,"rank":1,"file":"structures/complexes/R2aF9_H1N1_cluster1.pdb.gz"},{"cluster":2,"score":-41.201,"sd":4.089,"bsa":2240.492,"nstruc":14,"rank":5,"file":"structures/complexes/R2aF9_H1N1_cluster2.pdb.gz"},{"cluster":3,"score":-57.755,"sd":6.942,"bsa":2318.93,"nstruc":12,"rank":2,"file":"structures/complexes/R2aF9_H1N1_cluster3.pdb.gz"},{"cluster":4,"score":-46.395,"sd":7.22,"bsa":2428.185,"nstruc":11,"rank":4,"file":"structures/complexes/R2aF9_H1N1_cluster4.pdb.gz"},{"cluster":5,"score":-51.33,"sd":6.338,"bsa":2094.418,"nstruc":8,"rank":3,"file":"structures/complexes/R2aF9_H1N1_cluster5.pdb.gz"},{"cluster":6,"score":-22.121,"sd":3.126,"bsa":1923.308,"nstruc":7,"rank":6,"file":"structures/complexes/R2aF9_H1N1_cluster6.pdb.gz"}]}},"R1aA5":{"H1N1":{"results":6,"results2":[{"cluster":1,"score":-64.988,"sd":2.443,"bsa":2592.755,"nstruc":33,"rank":3,"file":"structures/complexes/R1aA5_H1N1_cluster1.pdb.gz"},{"cluster":2,"score":-84.622,"sd":5.225,"bsa":2630.398,"nstruc":26,"rank":1,"file":"structures/complexes/R1aA5_H1N1_cluster2.pdb.gz"},{"cluster":3,"score":-52.114,"sd":2.977,"bsa":2275.695,"nstruc":25,"rank":6,"file":"structures/complexes/R1aA5_H1N1_cluster3.pdb.gz"},{"cluster":4,"score":-52.728,"sd":11.217,"bsa":2124.295,"nstruc":9,"rank":5,"file":"structures/complexes/R1aA5_H1N1_cluster4.pdb.gz"},{"cluster":5,"score":-64.929,"sd":13.849,"bsa":2374.033,"nstruc":8,"rank":4,"file":"structures/complexes/R1aA5_H1N1_cluster5.pdb.gz"},{"cluster":6,"score":-83.219,"sd":3.227,"bsa":2613.962,"nstruc":8,"rank":2,"file":"structures/complexes/R1aA5_H1N1_cluster6.pdb.gz"}]}},"R2bE8":{"H1N1":{"results":6,"results2":[{"cluster":1,"score":-42.171,"sd":0.967,"bsa":2329.573,"nstruc":19,"rank":5,"file":"structures/complexes/R2bE8_H1N1_cluster1.pdb.gz"},{"cluster":2,"score":-71.129,"sd":4.908,"bsa":2619.912,"nstruc":16,"rank":1,"file":"structures/complexes/R2bE8_H1N1_cluster2.pdb.gz"},{"cluster":3,"score":-61.225,"sd":8.856,"bsa":2323.52,"nstruc":11,"rank":2,"file":"structures/complexes/R2bE8_H1N1_cluster3.pdb.gz"},{"cluster":4,"score":-37.508,"sd":4.558,"bsa":2185.715,"nstruc":9,"rank":6,"file":"structures/complexes/R2bE8_H1N1_cluster4.pdb.gz"},{"cluster":5,"score":-49.023,"sd":4.716,"bsa":2608.177,"nstruc":8,"rank":3,"file":"structures/complexes/R2bE8_H1N1_cluster5.pdb.gz"},{"cluster":6,"score":-47.178,"sd":3.392,"bsa":2062.34,"nstruc":8,"rank":4,"file":"structures/complexes/R2bE8_H1N1_cluster6.pdb.gz"}]}},"R2bD9":{"H1N1":{"results":6,"results2":[{"cluster":1,"score":-53.696,"sd":3.099,"bsa":2487.297,"nstruc":45,"rank":3,"file":"structures/complexes/R2bD9_H1N1_cluster1.pdb.gz"},{"cluster":2,"score":-51.652,"sd":8.06,"bsa":2211.382,"nstruc":24,"rank":4,"file":"structures/complexes/R2bD9_H1N1_cluster2.pdb.gz"},{"cluster":3,"score":-43.417,"sd":4.188,"bsa":2147.572,"nstruc":9,"rank":6,"file":"structures/complexes/R2bD9_H1N1_cluster3.pdb.gz"},{"cluster":4,"score":-54.109,"sd":6.314,"bsa":2538.442,"nstruc":8,"rank":2,"file":"structures/complexes/R2bD9_H1N1_cluster4.pdb.gz"},{"cluster":5,"score":-50.162,"sd":9.602,"bsa":2374.267,"nstruc":8,"rank":5,"file":"structures/complexes/R2bD9_H1N1_cluster5.pdb.gz"},{"cluster":6,"score":-55.156,"sd":21.05,"bsa":2417.77,"nstruc":7,"rank":1,"file":"structures/complexes/R2bD9_H1N1_cluster6.pdb.gz"}]}}}},"structureBase":"static/data/dry-lab/model/","icons":{"base":"https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/icons/","antigens":{"H1N1":"antigen-h1n1.webp","H3N2":"antigen-h3n2.webp","H5N1":"antigen-h5n1.webp"},"candidates":{"R1aB6":"nanobody-r1ab6.webp","R2aF9":"nanobody-r2af9.webp","R1aA5":"nanobody-r1aa5.webp","R2bE8":"nanobody-r2be8.webp","R2bD9":"nanobody-r2bd9.webp"}}}};
 </script>
 
+
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
 </body>
 </html>

@@ -347,11 +347,12 @@ node static/js/core/search-index-generator.js
 
 ### 5.12 首页分屏结构（index.njk + index.css）
 
-首页 `index.njk` 为**全屏滚动叙事页**，由 10 个 `presentation-section`（`.yeast-screen`）分屏组成，每屏 `min-height:100vh` 且 flex 垂直水平居中：
+首页 `index.njk` 为**全屏滚动叙事页**，由 11 个 `presentation-section`（`.yeast-screen`）分屏组成，每屏 `min-height:100vh` 且 flex 垂直水平居中（**屏序已于 2026-10-01/03 重排**，见下方表格实际顺序）：
 
 | 屏 ID | 内容 | 背景（`--section-bg-img`） |
 |---|---|---|
 | `#hero` | 标题 + 副标题 + Start Journey | `画板+1.webp` |
+| `#influenza-burden` | 甲流负担（数据沉浸屏：实时感染计数器 ≈21 人/秒持续跳动 + 12 席位网格 + 三年占比表 + 来源注脚；数据与算法见 `Requirements/REQ-20261003-001.md`） | `--color-echo-bg` |
 | `#public-health` | 背景/痛点 | `画板+2.webp` |
 | `#project-intro` | 项目简介 | `画板+3.webp` |
 | `#dbtl-cycle` | 设计-构建-测试-学习 | `画板+4.webp` |
@@ -917,14 +918,24 @@ node tools/check-performance-budget.js          # 性能预算（见 14.5；memb
 
 ### 16.1 机制总览（两站同源）
 
-每个页面在加载期间显示统一的加载遮罩，遮罩内是 6 帧雪碧图构成的逐帧伪动画；仅当该页「首屏可见的基础插画」全部就绪后遮罩才收起，其余资源继续懒加载。
+每个页面在加载期间显示统一的加载遮罩，遮罩内是 **2 帧插画**（`loader-frame-1.jpg` / `loader-frame-2.jpg`）硬切构成的逐帧伪动画（2026-10-04 由原 6 帧雪碧图替换）；仅当该页「首屏可见的基础插画」全部就绪后遮罩才收起，其余资源继续懒加载。
 
 | 组件 | 根站 | flask | 作用 |
 |---|---|---|---|
-| arm（同步，置于 head） | `static/js/components/page-loader-arm.js` | 同 | 首屏即给 `<html>` 打 `page-loader-armed`（显示遮罩 + 锁滚动 + 隐藏原生内容），8s 看门狗兜底 |
-| 控制器（defer） | `static/js/components/page-loader.js` | 同 | 收集关键图 → 预加载 → 判定收尾 → 派发 `pageloader:done` |
-| 样式 | `static/css/components/page-loader.css`（本地雪碧图） | 同（雪碧图走 CDN） | 米黄/暖棕遮罩 + `steps(6)` 伪动画 + 纯 CSS 兜底 |
-| 插画 | `static/image/loader/loader-sprite[@2x].webp` | `image/loader/...`（iGEM CDN） | 6 帧雪碧图（240px/帧，@2x 480px）+ 独立帧 |
+| arm（同步，置于 head） | `static/js/components/page-loader-arm.js` | **暂缓**（组件整体未上线） | 首屏即给 `<html>` 打 `page-loader-armed`（显示遮罩 + 锁滚动 + 隐藏原生内容），8s 看门狗兜底 |
+| 控制器（defer） | `static/js/components/page-loader.js` | **暂缓** | 收集关键图 → 预加载 → 判定收尾 → 派发 `pageloader:done`；帧图探测改为「两帧都就绪才切图片动画」 |
+| 样式 | `static/css/components/page-loader.css`（本地帧图） | **暂缓** | 米黄/暖棕遮罩 + 2 帧硬切伪动画 + 纯 CSS 兜底 |
+| 插画 | `static/image/any-icon/loader/loader-frame-{1,2}.jpg`（各 1280²，约 88KB） | 无需上传（组件暂缓） | 原 6 帧雪碧图 `loader-sprite[@2x].webp` 与 6 张逐帧导出已删除 |
+
+### 16.1.1 全站「返回顶部」悬浮按钮（2026-10-04）
+
+`src/_includes/partials/back-to-top.njk` + `static/css/components/back-to-top.css` + `static/js/components/back-to-top.js`；根站由 `base.njk` 引入（每个页面一份），flask 由 `wiki/layout.html` 引入。
+
+- 结构：外圈图（自带环绕文字）套住内芯图，两张图绝对定位叠合；外圈 `back-to-top-spin` 无限顺时针旋转，hover 时按钮整体 `back-to-top-float` 上下浮动。
+- 行为：`scrollY > 240px` 加 `.back-to-top--visible`（passive 滚动 + rAF 节流）；点击平滑回顶（reduced-motion 直接跳），并把焦点还给 `<main>`。
+- 可达性：`<button aria-label="返回顶部">`；隐藏时 `visibility: hidden`（移出可聚焦序列）；`:active` 暂停浮动以保证点击精度。
+- 图片：根站本地 `static/image/Animation/top/back-to-top-{ring,core}.jpg`（320²，各约 12KB）；flask 走 CDN `common/back-to-top-{ring,core}.jpg`。
+- ⚠️ 根站 partial 内的图片路径必须带 `basePath`（子页在子目录，否则 404）。
 
 **对外接口**：`window.PageLoader.register(urls)`（登记首屏关键图，支持候选回退 `[[c1,c2]]`）、`.done(cb)`、`.isDone()`。
 
@@ -952,8 +963,8 @@ node tools/check-performance-budget.js          # 性能预算（见 14.5；memb
 
 - **flask（生产站）**：`static/` 只允许 JS/CSS；**所有图片必须走 iGEM 自有 CDN** `https://static.igem.wiki/2026/szpu-china/image/...`，**禁止任何第三方 CDN**。取址入口：模板用 `wiki/macros.html` 的 `media(rel)` / `igem_img(name,alt,cls)`；JS 用 `window.MEDIA_BASE`（由 `static/js/core/utils.js` 暴露）。本轮已删除 flask 本地 `static/image/`，46 条本地引用全部改为 CDN。
 - **根站（历史参考站）**：按用户确认保留本地 `static/image/`，仅共享同一套加载器逻辑（雪碧图用本地路径）。
-- **根站插画入库边界（2026-09-16）**：`static/image/loader/` 中**只有 CSS 实际加载的 `loader-sprite@2x.webp` 入库**；`loader-frame-1~6.webp`（逐帧导出）与 `loader-sprite.webp`（1x 副本）为同源冗余、全仓库 0 引用，已在 `.gitignore` 排除，本地物理保留供开发预览。
-- **待上传清单**：flask 的加载器插画需上传到 CDN 的 `image/loader/`（`loader-sprite.webp`、`loader-sprite@2x.webp`；源文件在根站 `static/image/loader/`）。未上传前遮罩自动使用纯 CSS 兜底动画，不会破版。
+- **根站插画入库边界（2026-10-04 更新）**：加载器插画改为两张独立帧图 `static/image/any-icon/loader/loader-frame-{1,2}.jpg`（原 6 帧雪碧图与逐帧导出已删除，不再有「多帧冗余副本」问题）；`.gitignore` 里针对旧 `static/image/loader/` 的排除项可保留（已无匹配文件）。
+- **待上传清单（2026-10-04）**：见 `Requirements/REQ-20261004-001.md` §4——本轮新增 6 张需上传 CDN（首页 4 张吉祥物 + 全站返回顶部 2 张）；加载器插画**不再需要上传**（flask 侧组件暂缓）。未上传前吉祥物与返回顶部图标会退化为空白/缺图，页面结构不破版。
 
 ### 16.6 回归验证
 

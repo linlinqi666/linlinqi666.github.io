@@ -1,6 +1,6 @@
 /* ==========================================================================
    page-loader.css — 全站页级加载遮罩（根站）
-   米黄/暖棕设计系统；6 帧雪碧图逐帧伪动画 + 纯 CSS 兜底
+   米黄/暖棕设计系统；2 帧插画硬切伪动画 + 纯 CSS 兜底
    说明：遮罩默认 display:none，仅当 <head> 内同步脚本 page-loader-arm.js
         给 <html> 打上 .page-loader-armed 后才启用 —— JS 禁用 / 脚本 404
         时页面完全不受影响（不会永久遮挡）。
@@ -13,7 +13,7 @@
   --pl-dark: #5D3A1A;    /* 深棕 */
   --pl-soft: #D4A574;    /* 浅棕 */
   --pl-frame: 240px;     /* 单帧显示尺寸 */
-  --pl-duration: 1.2s;   /* 一轮 6 帧时长 */
+  --pl-duration: 1.2s;   /* 一轮 2 帧时长（每帧 0.6s） */
   --pl-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -78,44 +78,39 @@ html.page-loader-done .page-loader {
   animation: page-loader-halo 2.4s var(--pl-ease) infinite;
 }
 
-/* 6 帧雪碧图逐帧伪动画 */
+/* 2 帧逐帧伪动画（2026-10-04：原 6 帧雪碧图 → loader-frame-1/2）
+   2026-10-04c：换用用户提供的透明底 PNG（同目录 transparent/loader-frame-1/2.png）；
+   帧容器默认可见 —— 原先等 frames-ready 才显示，弱网下整段加载期只剩 Loading
+   文字（无动画），现改为图未到时留空、到一帧显一帧；兜底三点仅在两帧全部失败时保留。 */
 .page-loader__frames {
+  position: relative;
   width: var(--pl-frame);
   height: var(--pl-frame);
-  background-image: url("../../image/any-icon/loader/loader-sprite@2x.webp");
-  background-size: calc(var(--pl-frame) * 6) var(--pl-frame);
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  opacity: 0;
-  transition: opacity 0.24s var(--pl-ease);
-  animation: page-loader-frames var(--pl-duration) steps(6) infinite;
+  opacity: 1;
 }
 
-.page-loader--sprite-ready .page-loader__frames { opacity: 1; }
-
-/* 纯 CSS 兜底：雪碧图未就绪（预览期无图 / 加载失败）时显示的呼吸三点 */
-.page-loader__fallback {
+.page-loader__frame {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: opacity 0.24s var(--pl-ease);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0;
+  will-change: opacity;
 }
 
-.page-loader--sprite-ready .page-loader__fallback { opacity: 0; }
-
-.page-loader__fallback i {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--pl-soft);
-  animation: page-loader-dot 1.05s ease-in-out infinite;
+.page-loader__frame--1 {
+  background-image: url("../../image/any-icon/loader/transparent/loader-frame-1.png");
+  animation: page-loader-frame-1 var(--pl-duration) linear infinite;
 }
 
-.page-loader__fallback i:nth-child(2) { animation-delay: 0.16s; }
-.page-loader__fallback i:nth-child(3) { animation-delay: 0.32s; }
+.page-loader__frame--2 {
+  background-image: url("../../image/any-icon/loader/transparent/loader-frame-2.png");
+  animation: page-loader-frame-2 var(--pl-duration) linear infinite;
+}
+
+/* 2026-10-05：原「两帧图加载失败时兜底的呼吸三点」整段移除——
+   两帧循环即默认显示，不再需要 fallback（用户要求）。 */
 
 .page-loader__text {
   margin: 0;
@@ -127,19 +122,19 @@ html.page-loader-done .page-loader {
   animation: page-loader-fade 1.6s var(--pl-ease) infinite alternate;
 }
 
-@keyframes page-loader-frames {
-  from { background-position: 0 0; }
-  to   { background-position: calc(var(--pl-frame) * -6) 0; }
+@keyframes page-loader-frame-1 {
+  0%, 49.99% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes page-loader-frame-2 {
+  0%, 49.99% { opacity: 0; }
+  50%, 100% { opacity: 1; }
 }
 
 @keyframes page-loader-halo {
   0%, 100% { transform: scale(0.94); opacity: 0.72; }
   50%      { transform: scale(1.06); opacity: 1; }
-}
-
-@keyframes page-loader-dot {
-  0%, 100% { transform: translateY(0);    opacity: 0.45; }
-  50%      { transform: translateY(-7px); opacity: 1; }
 }
 
 @keyframes page-loader-fade {
@@ -155,9 +150,11 @@ html.page-loader-done .page-loader {
 
 /* 无障碍：尊重减弱动效偏好（定格首帧，去掉一切循环动画与过渡） */
 @media (prefers-reduced-motion: reduce) {
-  .page-loader__frames { animation: none; }
+  /* 减弱动效：定格第 1 帧（不再硬切），其余循环动画一并停止 */
+  .page-loader__frame { animation: none; }
+  .page-loader__frame--1 { opacity: 1; }
+  .page-loader__frame--2 { opacity: 0; }
   .page-loader__halo,
-  .page-loader__fallback i,
   .page-loader__text { animation: none; }
   .page-loader,
   html.page-loader-done .page-loader { transition: none; }

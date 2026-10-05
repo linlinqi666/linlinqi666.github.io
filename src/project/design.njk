@@ -118,7 +118,7 @@ js:
 
             <figure class="design-figure">
               <img loading="lazy" decoding="async"
-                   src="../static/image/result/wait/design_01.png"
+                   src="../static/image/wait/design_01.png"
                    alt="Figure 1. Transmission routes of influenza A virus and typical high-risk indoor scenarios for airborne IAV exposure">
               <figcaption>Figure 1. Transmission routes of influenza A virus and typical high-risk indoor scenarios for airborne IAV exposure</figcaption>
             </figure>
@@ -184,7 +184,7 @@ js:
 
             <figure class="design-figure">
               <img loading="lazy" decoding="async"
-                   src="../static/image/result/wait/design_02.png"
+                   src="../static/image/wait/design_02.png"
                    alt="Figure 2. Modular Design of the Engineered Yeast Biosensor">
               <figcaption>Figure 2. Modular Design of the Engineered Yeast Biosensor. The chassis is rewired for GPCR-MAPK coupling; the PAGER receptor enables HA-gated de-repression; the FUS1-driven cassette provides reporter output.</figcaption>
             </figure>
@@ -229,7 +229,7 @@ js:
 
             <figure class="design-figure">
               <img loading="lazy" decoding="async"
-                   src="../static/image/result/wait/design_03.jpeg"
+                   src="../static/image/wait/design_03.jpeg"
                    alt="Figure 3. Signal Transduction Mechanism and Chassis Optimization of the Engineered Yeast Biosensor">
               <figcaption>Figure 3. Signal Transduction Mechanism and Chassis Optimization of the Engineered Yeast Biosensor</figcaption>
             </figure>
@@ -265,7 +265,7 @@ js:
 
             <figure class="design-figure">
               <img loading="lazy" decoding="async"
-                   src="../static/image/result/wait/design_04.png"
+                   src="../static/image/wait/design_04.png"
                    alt="Figure 4. Schematic of GPA1 Locus Modification and Humanized Sequence Integration via Homologous Recombination">
               <figcaption>Figure 4. Schematic of GPA1 Locus Modification and Humanized Sequence Integration via Homologous Recombination</figcaption>
             </figure>
@@ -297,7 +297,7 @@ js:
 
             <figure class="design-figure">
               <img loading="lazy" decoding="async"
-                   src="../static/image/result/wait/design_05.png"
+                   src="../static/image/wait/design_05.png"
                    alt="Figure 5. Schematic Representation of the Structural Composition and Signal Transduction of the Engineered PAGER Receptor">
               <figcaption>Figure 5. Schematic Representation of the Structural Composition and Signal Transduction of the Engineered PAGER Receptor</figcaption>
             </figure>
@@ -321,7 +321,7 @@ js:
 
             <figure class="design-figure">
               <img loading="lazy" decoding="async"
-                   src="../static/image/result/wait/design_06.png"
+                   src="../static/image/wait/design_06.png"
                    alt="Figure 6. Two readout reporter circuits driven by FUS1 promoter in yeast">
               <figcaption>Figure 6. Two readout reporter circuits driven by FUS1 promoter in yeast</figcaption>
             </figure>
@@ -330,12 +330,19 @@ js:
           <div id="design-safety">
             <h3>Safety &amp; Design Considerations</h3>
             <ol>
-              <li><strong>Chassis biosafety:</strong> We use non-pathogenic laboratory-standard <i>Saccharomyces
-                cerevisiae</i> BY4741, a widely used biosafety-level-1 microbial chassis with no pathogenic risk. We adopt
-                auxotrophic selection markers on our expression plasmids; engineered yeast strains can only survive on
-                culture media supplemented with corresponding deficient amino acids. This imposes a biological
-                containment barrier: the engineered yeast cannot stably proliferate in natural environments lacking the
-                required nutrients, minimizing the risk of uncontrolled environmental escape.</li>
+              <li><strong>Chassis biosafety:</strong> In this study, the non-pathogenic laboratory standard strain
+                <i>Saccharomyces cerevisiae</i> BY4741 was selected as the chassis cell. This strain belongs to
+                Biosafety Level 1 (BSL-1) microorganisms and poses no pathogenic risk. In terms of biosafety design, we
+                exploit its auxotrophic properties to construct a biological containment barrier, thereby reducing the
+                risk of uncontrolled dissemination of the engineered strain in natural environments. BY4741 is naturally
+                auxotrophic for histidine (His), leucine (Leu), methionine (Met), and uracil (Ura). The PAGER system, the
+                reporter system, and the plasmids for Gpa1 humanization and gene knockout constructed in this study carry
+                LEU, HIS, and URA selection markers, respectively, which complement the corresponding auxotrophies. To
+                ensure biosafety, we further designed a marker-removal strategy: the URA marker will be removed by
+                5-fluoroorotic acid (5-FOA) counter-selection, so that the engineered strain will ultimately maintain a
+                double auxotrophy for uracil and methionine. This double-auxotrophy mechanism is designed to render the
+                strain unable to proliferate effectively outside the specific supplemented medium, thereby effectively
+                reducing the risk of environmental release.</li>
               <li><strong>Recognition element:</strong> anti-HA nanobody and hM1Dq receptor are heterologous protein
                 expression; no virulence-related genes are introduced. No replication-competent viral sequences are used
                 in our constructs.</li>
@@ -364,13 +371,3 @@ js:
     </div>
 {% endblock %}
 
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    // 页面加载进度条
-    new PageProgressBar().startAutoProgress();
-  
-  });
-</script>
-{% endblock %}
