@@ -1,0 +1,63 @@
+---
+permalink: "human-practices/sustainability.html"
+title: "Sustainability - iGEM SZPU-2026"
+lang: "en"
+basePath: "../"
+---
+
+{% extends "layouts/base.njk" %}
+
+{% block main %}
+{# 2026-10-06i：由 inclusivity.njk 改名而来（原页仅有空壳小标题，Inclusivity Award 本队不申报，
+   依迁移技能 R3c 处理）。内容只写已在仓库内可查证的设计意图，不含未验证的性能数字。 #}
+<section id="human-practices-sustainability">
+  <h1>Sustainability</h1>
+
+  <p class="page-lead">
+    PAGER-Yeast is an engineered-yeast sensor for influenza A. For this project, sustainability means keeping the
+    system usable where influenza is most often missed — clinics without laboratory infrastructure, schools, border
+    checkpoints and homes — and keeping the parts reusable by other teams. Three design decisions follow from that:
+    a low-cost portable readout, a recognition module that can be re-targeted without new hardware, and an open,
+    standardised parts set.
+  </p>
+
+  <h2>Designed for low-resource settings</h2>
+  <p>
+    The reporter is read as fluorescence intensity, which a portable fluorimeter can measure; the workflow does not
+    require a qPCR thermocycler or an ELISA plate reader. The intended deployment settings are primary-care clinic
+    screening, school morning checks, border quarantine ports and at-home self-testing — places where a result has to
+    arrive quickly and at low cost. A semi-quantitative relationship between fluorescence intensity and viral load
+    is being established through DCZ concentration-gradient and induction-time optimisation, so that a reader
+    without calibration curves can still return an interpretable result.
+  </p>
+
+  <h2>A recognition module that is swapped, not rebuilt</h2>
+  <p>
+    The membrane anchor — the α-factor secretion signal and the linker scaffold — stays fixed, and only the VHH
+    sequence is replaced to target a new antigen. Re-targeting the sensor to H5, H7, SARS-CoV-2 or RSV therefore
+    reuses the same chassis, the same reporter and the same reader: extending the analyte range costs a VHH
+    sequence, not a new instrument. The downstream GPCR signal rewiring and the dual-mode reporter are likewise kept
+    universal across targets.
+  </p>
+
+  <h2>Open parts and reproducible protocols</h2>
+  <p>
+    The signalling and reporter components are being submitted as iGEM Registry-compatible parts, together with the
+    protocols and plasmid maps needed to reproduce each construct. Standardised, registry-indexed parts let other
+    teams reuse the module instead of re-optimising it, and keep the work auditable.
+  </p>
+
+  <h2>Limits of this assessment</h2>
+  <p>
+    This page states design intent and the reuse strategy; it is not a life-cycle assessment. The material footprint
+    of the reader, the disposal route of the used test components and the energy demand of long-term field
+    deployment have not been measured yet, and no environmental benefit is claimed on their behalf.
+  </p>
+
+  <!-- ⚠ 核验：目标场景清单（基层诊所初筛 / 校园晨检 / 出入境检疫 / 家庭自测）与「α-factor 锚定 +
+       linker 框架、仅换 VHH」「DCZ 浓度梯度与诱导时间优化」「iGEM Registry 兼容提交」三处表述，
+       均取自本站首页 Future Vision 屏与 wet-lab/design 的硬件设想，尚未与团队实验结果交叉核对。 -->
+  <!-- iGEM Check: [x] Design intent only, no unsupported performance claims [x] No placeholder text
+       [x] Reuse strategy stated [x] Limits stated explicitly [x] No fabricated figures -->
+</section>
+{% endblock %}

@@ -8,14 +8,30 @@
   .hp-flat-track { display: flex; flex-wrap: nowrap; transition: transform .42s ease; }
   .hp-flat-track.is-moving { will-change: transform; }
   .hp-flat-track > * { min-width: 0; }
-  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, transform .28s cubic-bezier(.22,1,.36,1), outline-color .28s ease; animation: hpCardIn .55s cubic-bezier(.22,1,.36,1) both; }
+  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, transform .28s cubic-bezier(.22,1,.36,1), outline-color .28s ease; animation: hpCardIn .55s cubic-bezier(.22,1,.36,1) backwards; }
   .hp-flat-card:nth-child(1) { animation-delay: .05s; }
   .hp-flat-card:nth-child(2) { animation-delay: .13s; }
   .hp-flat-card:nth-child(3) { animation-delay: .21s; }
   .hp-flat-card:nth-child(4) { animation-delay: .29s; }
+  .hp-flat-card:nth-child(5) { animation-delay: .37s; }
+  .hp-flat-card:nth-child(6) { animation-delay: .45s; }
+  .hp-flat-card:nth-child(7) { animation-delay: .53s; }
+  .hp-flat-card:nth-child(8) { animation-delay: .61s; }
+  /* 无配图的文章：纯文字卡片，保证条目不被隐藏 */
+  .hp-flat-card--text { background: linear-gradient(150deg, #efe4cf 0%, #dfd0b6 100%); }
+  .hp-flat-card--text span { left: .9rem; right: .9rem; bottom: auto; top: 50%; transform: translateY(-50%); color: #5c4d3c; text-shadow: none; font-size: clamp(.8rem, 1.15vw, 1rem); line-height: 1.35; }
   .hp-flat-card + .hp-flat-card { border-left: 1rem solid transparent; background-clip: padding-box; }
-  .hp-flat-card:nth-child(n + 5) { display: none; }
-  .hp-flat-card.is-active { opacity: 1; }
+  .hp-flat-card.is-active { opacity: 1; box-shadow: 0 12px 26px -14px rgba(74,59,42,.5); }
+  .hp-flat-card::after { content: ""; position: absolute; inset: 0; border: 2px solid rgba(166,124,82,.9); opacity: 0; pointer-events: none; }
+  /* 到位特效：切换到某板块时，对应卡片金环闪现 + 轻微回弹，提示“已滚动到该位置” */
+  .hp-flat-card.is-arriving { animation: hpCardArrive .62s cubic-bezier(.22,1,.36,1); }
+  .hp-flat-card.is-arriving::after { animation: hpCardRing .62s ease-out; }
+  @keyframes hpCardArrive {
+    0% { transform: scale(.96); box-shadow: 0 0 0 0 rgba(166,124,82,.5); }
+    55% { transform: scale(1.03); }
+    100% { transform: none; box-shadow: 0 0 0 12px rgba(166,124,82,0); }
+  }
+  @keyframes hpCardRing { 0% { opacity: .95; } 100% { opacity: 0; } }
   .hp-flat-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .42s ease; }
   .hp-flat-card:hover, .hp-flat-card:focus-visible { transform: translateY(-4px); opacity: .92; }
   .hp-flat-card.is-active:hover, .hp-flat-card.is-active:focus-visible { opacity: 1; }
@@ -41,6 +57,7 @@
   @media (prefers-reduced-motion: reduce) { .hp-flat-detail-panel > .detail-viewport, .hp-flat-detail-panel > .detail-viewport > .detail-track { transition: none; } }
   @media (prefers-reduced-motion: reduce) {
     .hp-flat-card, .hp-flat-card img, .hp-flat-card span, .hp-flat-button,
+    .hp-flat-card.is-arriving, .hp-flat-card.is-arriving::after,
     .hp-flat-intro.is-switching .hp-flat-intro-date,
     .hp-flat-intro.is-switching .hp-flat-intro-title,
     .hp-flat-intro.is-switching .hp-flat-intro-count { animation: none !important; transition: none !important; }

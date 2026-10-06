@@ -1576,11 +1576,15 @@ html.home-scroll-snap #footer.section-footer {
   animation-delay: var(--echo-in-delay), calc(var(--echo-in-delay) + 0.9s);
 }
 
-/* 以下 x/y/w 为模板匹配在成品图里实测所得（measure-fit.js），勿凭目测改 */
+/* 以下 x/y/w 为模板匹配在成品图里实测所得（measure-fit.js），勿凭目测改
+   2026-10-06h：hero-echo-logo.png 原为 1600×1600 画布、ECHO 字只占 y541–1043，
+   盒子不等于字区（字落在盒内 34%–59% 处），标语上移后会与字重叠。已按 alpha
+   紧裁为 1510×526（原件备份 backups/webp-original/hero-echo-logo.1600square.png），
+   坐标换算自设计稿 1080×607：字区 x100–580 / y115–280 → left 8.8% / top 19% / width 44.9%。 */
 .echo-art--logo {
-  left: 10.4%;
-  top: 20.4%;
-  width: 41.5%;
+  left: 8.8%;
+  top: 19%;
+  width: 44.9%;
   animation-delay: 0.05s;
 }
 
@@ -1606,21 +1610,28 @@ html.home-scroll-snap #footer.section-footer {
   animation-delay: 0.15s;
 }
 
+/* 2026-10-06：第一屏波浪换美工新图（1080×635 整幅双层波浪，非旧细条），
+   改为满宽贴底的背景层；移动端规则（bottom:0 width:100%）与之一致 */
 .echo-art--wave {
   left: 0;
-  top: 81.3%;
-  width: 80%;
+  top: auto;
+  bottom: 0;
+  width: 100%;
   height: auto;
   z-index: 0;
   animation-delay: 0.3s;
 }
 
-/* 标语（2026-10-05）：原为真文本 → 换回艺术构图图 shared-blue-curve.webp
-   （用户指定：蓝斜构图原图更贴近设计稿）。位置沿用原文本块实测坐标。 */
+/* 标语（2026-10-05）：原为真文本 → 换回艺术构图图 shared-blue-curve.png
+   （用户指定：蓝斜构图原图更贴近设计稿）。
+   2026-10-06h：原图是 1600×1600 大画布、标语字只占 y719–986 一条带，按 top:50%
+   摆放时字带整体落到屏底被裁（用户报"字体掉下去了"）。已按 alpha 紧裁为 1475×291
+   （原件备份 backups/webp-original/shared-blue-curve.1600square.png），盒子即字区，
+   坐标换算自设计稿 1080×607：字区 x95–560 / y300–385 → left 8.8% / top 49% / width 43%。 */
 .echo-art--tagline {
-  left: 7%;
-  top: 50%;
-  width: 46%;
+  left: 8.8%;
+  top: 49%;
+  width: 43%;
   animation-delay: 0.45s;
 }
 
@@ -1676,8 +1687,8 @@ html.home-scroll-snap #footer.section-footer {
 
   .echo-art--tagline {
     left: 8%;
-    top: 36%;
-    width: 78%;
+    top: 42%;
+    width: 86%;
   }
 
   .echo-art--wave {
@@ -1755,9 +1766,11 @@ html.home-scroll-snap #footer.section-footer {
 .art-stage--safety .art--safety-title               { font-size: clamp(13px, 4.1vw, 86px); }
 .art-stage--human-practices .art--human-practices-title            { font-size: clamp(10px, 2.5vw, 52px); }
 .art-stage--human-practices .art--human-practices-axis             { font-size: clamp(9px, 2.5vw, 52px); }
-.art-stage--human-practices .art--human-practices-legend-subtypes  { font-size: clamp(8px, 1.6vw, 33px); }
-.art-stage--human-practices .art--human-practices-legend-h1n1      { font-size: clamp(8px, 2.05vw, 43px); }
-.art-stage--human-practices .art--human-practices-legend-pos       { font-size: clamp(8px, 0.78vw, 17px); }
+/* 2026-10-06d：三段图例字号统一（原 33/43/17px 视觉大小不一，用户要求一致），
+   实测以 1.6vw 为基准；宽度由文本长度自然决定，高度（视觉大小）一致 */
+.art-stage--human-practices .art--human-practices-legend-subtypes,
+.art-stage--human-practices .art--human-practices-legend-h1n1,
+.art-stage--human-practices .art--human-practices-legend-pos       { font-size: clamp(9px, 1.6vw, 33px); }
 
 /* ================================================== */
 /* 组件层级 z-index —— 只放层级，定位一律写在下方「手动微调区」 */
@@ -1927,6 +1940,24 @@ html.home-scroll-snap #footer.section-footer {
   opacity: 0.8;
 }
 
+/* 2026-10-06：甲流病毒 —— 坐在右下角环区内、贴住画面角落，不遮挡正文与计数器。
+   只动 transform（合成层友好），离屏由 home-idle-motion 停表统一暂停。 */
+.burden-backdrop__virus {
+  position: absolute;
+  right: 1.5%;
+  bottom: 1%;
+  width: clamp(150px, 19vw, 290px);
+  height: auto;
+  opacity: 0.96;
+  transform: translateZ(0);
+  animation: burdenVirusFloat 7.5s ease-in-out infinite alternate;
+}
+
+@keyframes burdenVirusFloat {
+  from { transform: translate3d(0, 0, 0) rotate(-1.5deg); }
+  to   { transform: translate3d(0, -14px, 0) rotate(1.5deg); }
+}
+
 @keyframes burdenGridDrift {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(16px, -12px, 0); }
@@ -1939,7 +1970,8 @@ html.home-scroll-snap #footer.section-footer {
 
 @media (prefers-reduced-motion: reduce) {
   .burden-backdrop__grid,
-  .burden-backdrop__glow {
+  .burden-backdrop__glow,
+  .burden-backdrop__virus {
     animation: none;
   }
 }
@@ -2207,6 +2239,13 @@ html.home-scroll-snap #footer.section-footer {
 /* 虚线弧：连接三个圆（原图里 qPCR→ELISA→CGIS 之间）。改前 left 0/top 0/width 7% 被挤在
    左上角外，实际不可见。切片 494x361，一弧一用；若原图需要两段弧，要再加一个 img 节点。 */
 .art-stage--statistics .art--statistics-arc { left: 22%; top: 53%; width: 8%; }
+/* 2026-10-06f：ELISA→qPCR 连线。2026-10-06i 改为复用第一条弧的切图，只关于水平线翻转
+   （scaleY(-1)）——与 CGIS–ELISA 弧上下对称，构成 S 形链。
+   注意：不能用 rotate(180deg)：那会把走向也反过来（对角镜像），弧会从左下走向右上，
+   接不到 qPCR（左上）→ ELISA（右下）。盒位按两圆 facing 边缘量取（1440×810 实测
+   qPCR 圆心 (170,186) r≈86、ELISA 圆心 (413,332) r≈103，两圆 facing 点中点 (284,255)），
+   弧两端落在盒角上、藏进圆内（z-index 1 < 圆 2），读作"相连"。 */
+.art-stage--statistics .art--statistics-link { left: 14.2%; top: 24%; width: 9%; z-index: 1; transform: scaleY(-1); }
 .art-stage--statistics .art--statistics-bulb { left: 76.9%; top: 23%; width: 15.7%; }      /* 灯泡（右上） */
 .art-stage--statistics .art--statistics-mascot { left: 42.1%; top: 21.4%; width: 38.9%; }  /* 托腮吉祥物（改 top 锚定，避免被下缘截断） */
 .art-stage--statistics .art--statistics-sparkle { left: 4.8%; top: 68.4%; width: 3%; }     /* 黄色星芒 */
@@ -2332,6 +2371,12 @@ html.home-scroll-snap #footer.section-footer {
 .js-reveal-armed .art--statistics-arc {
   /* 虚线弧先整体裁掉，点击后由脚本以 clip-path 从 CGIS 一侧扇形擦出 */
   clip-path: polygon(0% 100%, 0% 100%, 0% 100%);
+}
+
+.js-reveal-armed .art--statistics-link {
+  /* 2026-10-06i：连线（scaleY(-1) 上下翻转）先裁掉，点击后从 ELISA 一侧擦出：
+     视觉右下角 = 局部右上角（scaleY 只翻转纵轴，横向不变） */
+  clip-path: polygon(100% 0%, 100% 0%, 100% 0%);
 }
 
 /* 3) 隐藏未点击期间 CGIS 可点（.art 基类默认 pointer-events: none） */
@@ -2537,6 +2582,7 @@ html.home-scroll-snap #footer.section-footer {
   /* ↑ 上面 5 行 = 红框范围 ｜ 下面 5 行 = 可调参数 */
   --intro-pill-h: clamp(15px, 3.3vh, 34px);
   --intro-pill-line: #4c9dd3;
+  --intro-pill-bg: #ffffff;
   --intro-pill-lw: 2px;
   --intro-pill-radius: 999px;
   --intro-fade: 12%;
@@ -2592,6 +2638,8 @@ html.home-scroll-snap #footer.section-footer {
   justify-content: center;
   border: var(--intro-pill-lw) solid var(--intro-pill-line);
   border-radius: var(--intro-pill-radius);
+  /* 2026-10-06：药丸内部改白色填充（原为透明，透出米黄底），蓝描边+白底更清晰 */
+  background: var(--intro-pill-bg);
   padding: calc(var(--intro-pill-h) * 0.42) calc(var(--intro-pill-h) * 1.5);
 }
 
@@ -2618,4 +2666,40 @@ html.home-scroll-snap #footer.section-footer {
 .presentation-section[data-offscreen],
 .presentation-section[data-offscreen] * {
   animation-play-state: paused !important;
+}
+
+/* ---------- future-vision 标题字图（2026-10-06e，21/22.png 紧裁） ----------
+   中文原标题「未来愿景：从 H1N1 到广谱平台」由美工出英文图：Future Vision 泡泡 + 胶囊副题。
+   正文段落/列表仍为真文本（真实 iGEM 内容，不做图片化）。SR 文本见 index.njk h2.sr-only。 */
+.fv-title-img {
+  display: block;
+  margin: 0 auto 6px;
+  width: min(39%, 370px);
+  height: auto;
+}
+
+.fv-sub-img {
+  display: block;
+  margin: 0 auto 18px;
+  width: min(88%, 860px);
+  height: auto;
+}
+
+/* 2026-10-06f：本屏内容加宽到约 60% 页宽，段落/列表间距拉开；
+   纵向间距按 100vh 屏内不溢出收敛（1440x810 实测内容高 ≈920px → 收到 ≈780px）
+   2026-10-06h：正文改主题色——与 influenza-burden 屏同口径的主体蓝压暗版
+   （#2f6f96 / 次要 #4f86a8），不用 --color-echo-blue 纯色：米黄底上长段正文
+   对比度不足（≈2.6:1），压暗后 ≈4.9:1 可读。
+   标题图宽度收到 39%（2.0 宽高比下 ≈185px 高），使整屏内容 ≈714px 居中不顶满。 */
+#future-vision .yeast-screen__content { max-width: min(60vw, 1180px); color: #2f6f96; }
+#future-vision .yeast-screen__content > p { margin-block: 0.8em; line-height: 1.8; }
+#future-vision .yeast-screen__list { margin-block: 1em; }
+#future-vision .yeast-screen__list li { margin-bottom: 0.5em; line-height: 1.7; }
+#future-vision .yeast-screen__list strong { color: #1f6ea6; }
+#future-vision .yeast-screen__placeholder { color: #4f86a8; }
+
+@media (max-width: 768px) {
+  .fv-title-img { width: min(62%, 300px); }
+  .fv-sub-img   { width: 94%; }
+  #future-vision .yeast-screen__content { max-width: 100%; }
 }

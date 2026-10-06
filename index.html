@@ -63,11 +63,25 @@
         // 看门狗：组件脚本始终未启动时强制结束开场（恢复导航与滚动）。
         // 页面加载遮罩（page-loader）先播、GIF 后播：遮罩期间不计时，
         // 等 pageloader:done 或硬上限后再开始 6s 计时，避免把 GIF 卡没。
+        // 2026-10-06 弱网修复：组件已启动但 GIF 仍在下载时（组件挂出
+        // window.__introGifWaiting），看门狗不再强判 finished——组件自身有
+        // 20s 单帧下载超时兜底（超时会自行 finish），此处再加 30s 二级
+        // 硬兜底，绝不让导航被永久锁住。原实现 6s 一到就把还在等 GIF
+        // 的开场层直接判死，弱网下 GIF 必被「挤掉」。
         var watchdogStarted = false;
         function startWatchdogOnce() {
           if (watchdogStarted) return;
           watchdogStarted = true;
           setTimeout(function () {
+            if (window.__introGifWaiting) {
+              // 组件在等 GIF：交给组件自己的超时收尾，另设二级硬兜底
+              setTimeout(function () {
+                if (!root.classList.contains('intro-gif-running')) {
+                  root.classList.add('intro-gif-finished');
+                }
+              }, 30000);
+              return;
+            }
             if (!root.classList.contains('intro-gif-running')) {
               root.classList.add('intro-gif-finished');
             }
@@ -202,7 +216,7 @@
         <div class="dropdown-content">
           <a href="human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
 
-          <a href="human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
+          <a href="human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -257,7 +271,7 @@
         <div class="dropdown-content">
           <a href="human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
 
-          <a href="human-practices/inclusivity.html"><span class="iconfont icon-cooperation"></span><span>Inclusivity</span></a>
+          <a href="human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -316,17 +330,17 @@
       <h1 class="sr-only">ECHO Yeast — 工程化酿酒酵母 H1N1 流感病毒生物传感器</h1>
       <div class="echo-stage" aria-label="ECHO = Engineered Cellular Host, Observation of viral signals">
         <img class="echo-art echo-art--logo"
-          src="static/image/Animation/index/webp/hero-echo-logo.webp" alt="ECHO">
+          src="static/image/Animation/index/webp/first-section/hero-echo-logo.png" alt="ECHO">
         <img class="echo-art echo-art--dash-a" alt="" aria-hidden="true"
-          src="static/image/Animation/index/webp/shared-yellow-dash-a.webp">
+          src="static/image/Animation/index/webp/shared/shared-yellow-dash-a.webp">
         <img class="echo-art echo-art--dash-b" alt="" aria-hidden="true"
-          src="static/image/Animation/index/webp/shared-yellow-dash-b.webp">
+          src="static/image/Animation/index/webp/shared/shared-yellow-dash-b.webp">
         <img class="echo-art echo-art--tagline" alt="ECHO = Engineered Cellular Host, Observation of viral signals"
-          src="static/image/Animation/index/webp/shared-blue-curve.webp">
+          src="static/image/Animation/index/webp/shared/shared-blue-curve.png">
         <img class="echo-art echo-art--mascot" alt="EchoYeast 酵母吉祥物"
-          src="static/image/Animation/index/webp/hero-mascot.webp">
+          src="static/image/Animation/index/webp/first-section/hero-mascot.webp">
         <img class="echo-art echo-art--wave" alt="" aria-hidden="true"
-          src="static/image/Animation/index/webp/shared-wave-1.webp">
+          src="static/image/Animation/index/webp/shared/shared-wave-1.png">
       </div>
     </section>
 
@@ -367,6 +381,11 @@
               fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(330 50 50)"
               fill="rgba(76,157,211,0.38)"></circle>
           </svg>
+          <!-- 2026-10-06：甲流病毒坐在右下角虚线环的角落里（美工 virus.png 透明图）。
+               只做极缓慢的上下浮动（transform-only），离屏随 section 停表。 -->
+          <img class="burden-backdrop__virus"
+            src="static/image/Animation/index/webp/second-section/virus.png" alt="" aria-hidden="true"
+            width="1600" height="1600" decoding="async">
         </div>
 
         <p class="burden-eyebrow">Influenza A · every year</p>
@@ -412,11 +431,17 @@
       <!-- human-practices「FluNet 图表」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/96673fa9ecf228f6acfe63f4ef7af4a2.65a2a71e09.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--human-practices 段 -->
       <div class="art-stage art-stage--human-practices">
-        <!-- <img class="art art--human-practices-wave" src="static/image/Animation/index/webp/shared-wave-1.webp" alt="" aria-hidden="true"> -->
-        <!-- 2026-10-05：标题/轴标签/图例原为纯文字图 → 改真文本（样式见 index.css「art 文字化」段） -->
-        <p class="art art--human-practices-title art-title-text art-title-text--hp" lang="en">Virus detections by subtype reported to FluNet,<br>21 October 2022 to 21 August 2026</p>
-        <img class="art art--human-practices-chart" src="static/image/Animation/index/webp/human-practices-chart.webp" alt="流感亚型检测量折线图">
-        <img class="art art--human-practices-mascot" src="static/image/Animation/index/webp/human-practices-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
+        <!-- <img class="art art--human-practices-wave" src="static/image/Animation/index/webp/shared/shared-wave-1.png" alt="" aria-hidden="true"> -->
+        <!-- 2026-10-06e：标题改用美工字图（8.png 紧裁）；轴标签/图例仍为真文本 -->
+        <img class="art art--human-practices-title" src="static/image/Animation/index/webp/third-section/human-practices-chart-title.png"
+          alt="Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026">
+        <!-- 2026-10-06d：5 张字体插图 img 全部移除——4 张内容配错（见下注），chart-title 虽内容正确
+             但与 HTML 标题同位重复（方形图内文字落图中央成重影）。全部由真文本渲染替代。 -->
+        <img class="art art--human-practices-chart" src="static/image/Animation/index/webp/third-section/human-practices-chart.png" alt="流感亚型检测量折线图">
+        <img class="art art--human-practices-mascot" src="static/image/Animation/index/webp/third-section/human-practices-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
+        <!-- 2026-10-06d：删去 4 张内容配错的字体插图 png（axis-label 实为 WHY EHCO Yeast?、
+             legend-subtypes/h1n1 均为 Can We Build a Living Sensor…、legend-positive 为另一句标题）；
+             图例与横轴标题保留下方 HTML 文本（同款圆体、更清晰）。chart-title.png 内容正确保留。 -->
         <p class="art art--human-practices-axis art-title-text" lang="en">Week start date</p>
         <p class="art art--human-practices-legend-subtypes art-legend" lang="en">Influenza subtypes</p>
         <p class="art art--human-practices-legend-h1n1 art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#acdaf2" aria-hidden="true"></span>A(H1N1)pdm09</p>
@@ -433,15 +458,23 @@
         <!-- 英文小标题：进入该屏时由 statistics-reveal.js 触发「右先左后」逐词下落；
              无 JS 时静态可见（脚本只加类，不做默认隐藏） -->
         <p class="statistics-caption" lang="en">Contemporary popular methods for detecting H1N1 influenza</p>
-        <!-- <img class="art art--statistics-cloud" src="static/image/Animation/index/webp/statistics-cloud.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--statistics-hill" src="static/image/Animation/index/webp/statistics-hill.webp" alt="" aria-hidden="true">
-        <img class="art art--statistics-qpcr" src="static/image/Animation/index/webp/statistics-circle-qpcr.webp" alt="qPCR">
-        <img class="art art--statistics-elisa" src="static/image/Animation/index/webp/statistics-circle-elisa.webp" alt="ELISA">
-        <img class="art art--statistics-cgis" id="statistics-cgis" src="static/image/Animation/index/webp/statistics-circle-cgis.webp" alt="CGIS">
-        <img class="art art--statistics-arc" src="static/image/Animation/index/webp/statistics-dashed-arc.webp" alt="" aria-hidden="true">
-        <img class="art art--statistics-bulb" src="static/image/Animation/index/webp/statistics-bulb.webp" alt="" aria-hidden="true">
-        <img class="art art--statistics-mascot" src="static/image/Animation/index/webp/statistics-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
-        <img class="art art--statistics-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
+        <!-- <img class="art art--statistics-cloud" src="static/image/Animation/index/webp/fourth-section/statistics-cloud.webp" alt="" aria-hidden="true"> -->
+        <img class="art art--statistics-hill" src="static/image/Animation/index/webp/fourth-section/statistics-hill.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-qpcr" src="static/image/Animation/index/webp/fourth-section/statistics-circle-qpcr.webp" alt="qPCR">
+        <img class="art art--statistics-elisa" src="static/image/Animation/index/webp/fourth-section/statistics-circle-elisa.webp" alt="ELISA">
+        <img class="art art--statistics-cgis" id="statistics-cgis" src="static/image/Animation/index/webp/fourth-section/statistics-circle-cgis.webp" alt="CGIS">
+        <img class="art art--statistics-arc" src="static/image/Animation/index/webp/fourth-section/statistics-dashed-arc.webp" alt="" aria-hidden="true">
+        <!-- 2026-10-06f：ELISA→qPCR 第二段连线。
+             2026-10-06i：原为自绘 SVG，弧向与第一条不对称 → 改为复用同一切图
+             statistics-dashed-arc.webp 并 rotate(180deg)，即第一条弧绕中心翻转 180°，
+             与 CGIS–ELISA 弧构成 S 形链；z-index 1 压在两圆之下，端头被圆挡住
+             读作"相连"。揭示顺序：CGIS 弧画出 → ELISA 落位 → 本线擦出 → qPCR 落位
+             （statistics-reveal.js）。降级红线：无 JS / reduced-motion 静态可见。 -->
+        <img class="art art--statistics-link" src="static/image/Animation/index/webp/fourth-section/statistics-dashed-arc.webp"
+          alt="" aria-hidden="true" decoding="async">
+        <img class="art art--statistics-bulb" src="static/image/Animation/index/webp/fourth-section/statistics-bulb.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-mascot" src="static/image/Animation/index/webp/fourth-section/statistics-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
+        <img class="art art--statistics-sparkle" src="static/image/Animation/index/webp/shared/shared-sparkle.webp" alt="" aria-hidden="true">
         <!-- CGIS 点击提示（箭头 + Click here）：由 statistics-reveal.js 定位到 CGIS 圆正上方，
              点击展开后移除；无 JS / 未进入该屏时不显示 -->
         <div class="statistics-hint" aria-hidden="true">
@@ -485,12 +518,13 @@
       <!-- safety「Influenza A Virus Biosensor」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/b6dd40228602e3596ff162aa41b47b4c.c2d33725d0.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--safety 段 -->
       <div class="art-stage art-stage--safety">
-        <img class="art art--safety-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
-        <!-- <img class="art art--safety-curve" src="static/image/Animation/index/webp/shared-blue-curve.webp" alt="" aria-hidden="true"> -->
-        <img class="art art--safety-mascot" src="static/image/Animation/index/webp/safety-mascot-flying.webp" alt="EchoYeast 披风飞行">
-        <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
-        <p class="art art--safety-title art-title-text" lang="en">Influenza A Virus<br>Biosensor Based on<br>Engineered Yeast</p>
-        <img class="art art--safety-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
+        <img class="art art--safety-cloud" src="static/image/Animation/index/webp/shared/shared-cloud-1.webp" alt="" aria-hidden="true">
+        <!-- <img class="art art--safety-curve" src="static/image/Animation/index/webp/shared/shared-blue-curve.png" alt="" aria-hidden="true"> -->
+        <img class="art art--safety-mascot" src="static/image/Animation/index/webp/fifth-section/safety-mascot-flying.webp" alt="EchoYeast 披风飞行">
+        <!-- 2026-10-06e：标题改用美工字图（20.png 紧裁）；SR 文本见 section 内 h2.sr-only -->
+        <img class="art art--safety-title" src="static/image/Animation/index/webp/fifth-section/safety-title.png"
+          alt="Influenza A Virus Biosensor Based on Engineered Yeast">
+        <img class="art art--safety-sparkle" src="static/image/Animation/index/webp/shared/shared-sparkle.webp" alt="" aria-hidden="true">
       </div>
     </section>
 
@@ -500,11 +534,12 @@
       <!-- public-health「Can We Build a Living Sensor」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/50314a3b2c87cfe13cd2dfd90a295494.2e5af09548.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--public-health 段 -->
       <div class="art-stage art-stage--public-health">
-        <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
-        <p class="art art--public-health-title art-title-text" lang="en">Can We Build a Living Sensor<br>That Directly Responds to Viral Signals?</p>
-        <img class="art art--public-health-petri" src="static/image/Animation/index/webp/public-health-petri-dish.webp" alt="" aria-hidden="true">
-        <img class="art art--public-health-virus" src="static/image/Animation/index/webp/public-health-virus-cluster.webp" alt="" aria-hidden="true">
-        <img class="art art--public-health-mascot" src="static/image/Animation/index/webp/public-health-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
+        <!-- 2026-10-06e：标题改用美工字图（12.png 紧裁）；SR 文本见 section 内 h2.sr-only -->
+        <img class="art art--public-health-title" src="static/image/Animation/index/webp/sixth-section/public-health-title.png"
+          alt="Can We Build a Living Sensor That Directly Responds to Viral Signals?">
+        <img class="art art--public-health-petri" src="static/image/Animation/index/webp/sixth-section/public-health-petri-dish.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-virus" src="static/image/Animation/index/webp/sixth-section/public-health-virus-cluster.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-mascot" src="static/image/Animation/index/webp/sixth-section/public-health-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
       </div>
     </section>
 
@@ -514,9 +549,11 @@
       <!-- project-intro「WHY EHCO Yeast」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/588dd796bfeb7b0a1c24a53b4213b4f6.01c3a629f8.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--project-intro 段 -->
       <div class="art-stage art-stage--project-intro">
-        <img class="art art--project-intro-cloud" src="static/image/Animation/index/webp/shared-cloud-1.webp" alt="" aria-hidden="true">
-        <!-- 2026-10-05：标题原为纯文字图 → 真文本（EHCO 为原设计稿拼写，按原样保留） -->
-        <p class="art art--project-intro-title art-title-text" lang="en">WHY EHCO Yeast?</p>
+        <img class="art art--project-intro-cloud" src="static/image/Animation/index/webp/shared/shared-cloud-1.webp" alt="" aria-hidden="true">
+        <!-- 2026-10-06e：标题改用美工字图（14.png 紧裁；EHCO 为原设计稿拼写，按原样保留）；
+             SR 文本见 section 内 h2.sr-only -->
+        <img class="art art--project-intro-title" src="static/image/Animation/index/webp/seventh-section/project-intro-title.png"
+          alt="WHY EHCO Yeast?">
         <!-- 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播
              位置/大小/速度 → static/css/index.css 搜「project-intro 文字条」
              每排的 .intro-pills__group 出现两次（第二份 aria-hidden）用于无缝循环，删掉会跳帧 -->
@@ -558,8 +595,8 @@
             </div>
           </div>
         </div>
-        <img class="art art--project-intro-mascot" src="static/image/Animation/index/webp/project-intro-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
-        <img class="art art--project-intro-sparkle" src="static/image/Animation/index/webp/shared-sparkle.webp" alt="" aria-hidden="true">
+        <img class="art art--project-intro-mascot" src="static/image/Animation/index/webp/seventh-section/project-intro-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
+        <img class="art art--project-intro-sparkle" src="static/image/Animation/index/webp/shared/shared-sparkle.webp" alt="" aria-hidden="true">
       </div>
     </section>
 
@@ -569,14 +606,14 @@
       <!-- dbtl-cycle「Research content: Workflow and principle」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/32d8bc036fff9e0d276ad6d75e11d6b9.cf62b5ed87.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--dbtl-cycle 段 -->
       <div class="art-stage art-stage--dbtl-cycle">
-        <img class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared-wave-3.webp" alt="" aria-hidden="true">
+        <img class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared/shared-wave-3.webp" alt="" aria-hidden="true">
         <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
         <p class="art art--dbtl-cycle-title art-title-text" lang="en">Research content:<br>Workflow and principle</p>
         <!-- 原理示意图：首次滑入本屏时由 dbtl-pump.js 触发「想法泵出」入场——
              以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大；
              无 JS / prefers-reduced-motion 时静态直出（脚本只加类，不做默认隐藏） -->
-        <img class="art art--dbtl-cycle-diagram" src="static/image/Animation/index/webp/dbtl-cycle-workflow-diagram.webp" alt="工作流程与原理示意图">
-        <img class="art art--dbtl-cycle-mascot" src="static/image/Animation/index/webp/dbtl-cycle-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
+        <img class="art art--dbtl-cycle-diagram" src="static/image/Animation/index/webp/eighth-section/dbtl-cycle-workflow-diagram.webp" alt="工作流程与原理示意图">
+        <img class="art art--dbtl-cycle-mascot" src="static/image/Animation/index/webp/eighth-section/dbtl-cycle-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
       </div>
     </section>
 
@@ -584,19 +621,37 @@
     <section id="future-vision" class="presentation-section yeast-screen yeast-screen--reverse" data-title="未来愿景">
       <div class="yeast-screen__inner yeast-screen--reverse">
         <div class="yeast-screen__content">
-          <h2 class="yeast-screen__title reveal">未来愿景：从 H1N1 到广谱平台</h2>
+          <!-- 2026-10-06e：标题两行改用美工字图（21/22.png 紧裁，中文原标题译为英文由美工出图）；
+               2026-10-06f：正文段落/列表由中文译为英文（保持未来时态，不写成已完成结果）；
+               本屏内容加宽至约 60% 页宽、间距拉开（static/css/index.css 搜 fv- 与 #future-vision） -->
+          <h2 class="sr-only">Future Vision: From H1N1 to the Broad Spectrum Platform</h2>
+          <img class="fv-title-img reveal" src="static/image/Animation/index/webp/ninth-section/future-vision-title.png"
+            alt="Future Vision" width="1056" height="529" decoding="async">
+          <img class="fv-sub-img reveal" src="static/image/Animation/index/webp/ninth-section/future-vision-subtitle.png"
+            alt="From H1N1 to the Broad Spectrum Platform" width="1219" height="88" decoding="async">
           <p class="reveal">
-            完成 H1N1 概念验证后，PAGER-Yeast 平台的核心价值在于其模块化与可替换性：膜表面的纳米抗体识别单元可针对不同抗原快速迭代，而下游的 GPCR
-            信号重布线与双模式报告系统保持通用。结合低成本便携式荧光读数设备，该体系有望从实验室原型走向基层可用的现场检测工具。
+            Once the H1N1 proof of concept is complete, the core value of the PAGER-Yeast platform lies in its
+            modularity and replaceability: the membrane nanobody recognition unit can be rapidly iterated against
+            new antigens, while the downstream GPCR signal-rewiring and the dual-mode reporter system stay
+            universal. Combined with a low-cost portable fluorescence reader, the system could move from a
+            laboratory prototype to a field-ready testing tool for primary-care settings.
           </p>
           <ul class="yeast-screen__list reveal">
-            <li><strong>模块化识别单元：</strong>保留 α-factor 分泌锚定与 linker 框架，仅替换 VHH 序列即可覆盖 H5、H7 等流感亚型，乃至 SARS-CoV-2、RSV
-              等呼吸道病原体；</li>
-            <li><strong>信号优化：</strong>通过 DCZ 浓度梯度与诱导时间优化，建立荧光强度与病毒载量的对应关系，实现半定量检测，匹配便携式荧光读数仪；</li>
-            <li><strong>多场景应用：</strong>面向基层诊所初筛、校园晨检、出入境检疫口岸与家庭自测等需要快速、低成本结果的场景；</li>
-            <li><strong>开源与标准化：</strong>以 iGEM Registry 兼容形式提交启动子、报告基因、信号模块等标准化生物元件，并整理可复现的实验方案与质粒地图。</li>
+            <li><strong>Modular recognition unit:</strong> keeping the α-factor secretion anchor and linker
+              scaffold, swapping only the VHH sequence would extend coverage to H5, H7 and other influenza
+              subtypes — and potentially to respiratory pathogens such as SARS-CoV-2 and RSV;</li>
+            <li><strong>Signal optimization:</strong> by tuning the DCZ concentration gradient and induction
+              time, we plan to correlate fluorescence intensity with viral load for semi-quantitative detection
+              that matches portable fluorimeters;</li>
+            <li><strong>Multi-scenario use:</strong> aimed at settings that need fast, low-cost results —
+              primary-care clinic screening, school morning checks, border quarantine ports and at-home
+              self-testing;</li>
+            <li><strong>Open source &amp; standardization:</strong> submitting standardized biological parts
+              (promoters, reporter genes, signaling modules) in an iGEM Registry-compatible form, together with
+              reproducible protocols and plasmid maps.</li>
           </ul>
-          <p class="yeast-screen__placeholder reveal">[待补充：目标拓展亚型列表、硬件原型参数、产品化时间表与监管路径初步评估]</p>
+          <p class="yeast-screen__placeholder reveal">[To be added: target subtype list, hardware prototype
+            specifications, product timeline and a preliminary regulatory pathway assessment]</p>
         </div>
       </div>
       <!-- iGEM Check: [x] Future directions only [x] No unsupported claims [x] Placeholder for expansion data -->
@@ -607,29 +662,29 @@
     <!-- 模块 10: 4-Portal 导航（2026-10-04：8 个文字门户卡 → 4 个吉祥物入口，铺满整行）
          顺序固定为 design → result → model → HP，与吉祥物造型一一对应；
          hover 时整只吉祥物做 180° 转身（纯 transform，不动布局）。 -->
-    <section id="final-cta" class="presentation-section yeast-screen" data-title="探索更多">
+    <section id="final-cta" class="presentation-section yeast-screen" data-title="Explore">
       <div class="yeast-screen__inner">
         <div class="yeast-screen__content">
-          <h2 class="yeast-screen__title reveal">探索我们的 Wiki</h2>
-          <div class="mascot-portal-row" role="navigation" aria-label="子页面导航">
+          <h2 class="yeast-screen__title reveal">Explore Our Wiki</h2>
+          <div class="mascot-portal-row" role="navigation" aria-label="Sub-page navigation">
             <a href="project/design.html" class="mascot-portal reveal">
-              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-design.webp"
-                alt="Design 板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/tenth-section/explore/transparent/explore-design.webp"
+                alt="Design section mascot" width="1280" height="1280" loading="lazy" decoding="async">
               <span class="mascot-portal__label">Design</span>
             </a>
             <a href="wet-lab/result.html" class="mascot-portal reveal">
-              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-result.webp"
-                alt="Results 板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/tenth-section/explore/transparent/explore-result.webp"
+                alt="Results section mascot" width="1280" height="1280" loading="lazy" decoding="async">
               <span class="mascot-portal__label">Results</span>
             </a>
             <a href="dry-lab/model.html" class="mascot-portal reveal">
-              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-model.webp"
-                alt="Dry Lab 建模板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/tenth-section/explore/transparent/explore-model.webp"
+                alt="Dry Lab modelling section mascot" width="1280" height="1280" loading="lazy" decoding="async">
               <span class="mascot-portal__label">Model</span>
             </a>
             <a href="human-practices/integrated human-practices.html" class="mascot-portal reveal">
-              <img class="mascot-portal__img" src="static/image/Animation/index/webp/explore/transparent/explore-hp.webp"
-                alt="Human Practices 板块吉祥物" width="1280" height="1280" loading="lazy" decoding="async">
+              <img class="mascot-portal__img" src="static/image/Animation/index/webp/tenth-section/explore/transparent/explore-hp.webp"
+                alt="Human Practices section mascot" width="1280" height="1280" loading="lazy" decoding="async">
               <span class="mascot-portal__label">Human Practices</span>
             </a>
           </div>
@@ -732,7 +787,7 @@
                   <ul>
                     <li><a href="human-practices/integrated human-practices.html">Integrated HP</a></li>
 
-                    <li><a href="human-practices/inclusivity.html">Inclusivity</a></li>
+                    <li><a href="human-practices/sustainability.html">Sustainability</a></li>
                   </ul>
                 </div>
                 <div class="footer-column">

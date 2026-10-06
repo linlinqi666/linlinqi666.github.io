@@ -40,11 +40,25 @@
         // 看门狗：组件脚本始终未启动时强制结束开场（恢复导航与滚动）。
         // 页面加载遮罩（page-loader）先播、GIF 后播：遮罩期间不计时，
         // 等 pageloader:done 或硬上限后再开始 6s 计时，避免把 GIF 卡没。
+        // 2026-10-06 弱网修复：组件已启动但 GIF 仍在下载时（组件挂出
+        // window.__introGifWaiting），看门狗不再强判 finished——组件自身有
+        // 20s 单帧下载超时兜底（超时会自行 finish），此处再加 30s 二级
+        // 硬兜底，绝不让导航被永久锁住。原实现 6s 一到就把还在等 GIF
+        // 的开场层直接判死，弱网下 GIF 必被「挤掉」。
         var watchdogStarted = false;
         function startWatchdogOnce() {
           if (watchdogStarted) return;
           watchdogStarted = true;
           setTimeout(function () {
+            if (window.__introGifWaiting) {
+              // 组件在等 GIF：交给组件自己的超时收尾，另设二级硬兜底
+              setTimeout(function () {
+                if (!root.classList.contains('intro-gif-running')) {
+                  root.classList.add('intro-gif-finished');
+                }
+              }, 30000);
+              return;
+            }
             if (!root.classList.contains('intro-gif-running')) {
               root.classList.add('intro-gif-finished');
             }

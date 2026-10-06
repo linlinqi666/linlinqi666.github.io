@@ -106,6 +106,15 @@
       activate(frame);
       // 当前帧已开播，再预取下一帧，避免与本帧争抢带宽
       preload(frames[index + 1]);
+      // 2026-10-06 弱网修复：总时长兜底改为「首帧真正开播后」才起算。
+      // 原实现 start() 即启动 masterFinishTimer，弱网下 GIF 尚未下载完，
+      // 9.2s 一到就会把还没播的 GIF 直接掐掉（用户实测「GIF 被挤掉」）。
+      if (!masterFinishTimer) {
+        var total = frames.reduce(function (sum, f) {
+          return sum + f.duration;
+        }, 0);
+        masterFinishTimer = setTimeout(finish, total);
+      }
       stepTimer = setTimeout(function () {
         play(index + 1);
       }, Math.max(0, frame.duration - SWITCH_LEAD));
@@ -116,9 +125,12 @@
       settled = true;
       clearTimeout(loadTimer);
       release();
-      // 末帧加载/解码失败：不再提前结束整段动画，交由总时长兜底，
-      // 继续展示上一帧直到收尾，避免“播一半就消失”。
-      if (index + 1 >= frames.length) return;
+      // 2026-10-06：唯一帧（首帧）加载失败时直接收尾进页面，绝不永久锁屏；
+      // 多帧场景的末帧失败仍交由总时长兜底继续展示上一帧。
+      if (index + 1 >= frames.length) {
+        if (!masterFinishTimer) finish();
+        return;
+      }
       play(index + 1);
     }
 
@@ -132,6 +144,9 @@
   function finish() {
     if (finished) return;
     finished = true;
+
+    // 2026-10-06：收尾时撤下等待标志，head 看门狗按正常路径处理
+    window.__introGifWaiting = false;
 
     clearTimeout(stepTimer);
     clearTimeout(loadTimer);
@@ -177,6 +192,9 @@
   function start() {
     if (finished) return;
 
+    // 2026-10-06：已进入播放流程，撤下「组件在等 GIF」标志（head 看门狗据此放行）
+    window.__introGifWaiting = false;
+
     root.classList.add(RUNNING);
 
     var skip = document.getElementById('intro-gif-skip');
@@ -187,13 +205,7 @@
       if (event.key === 'Escape' || event.key === 'Esc') finish();
     });
 
-    // 总时长兜底：保证整段动画至少展示 各帧时长之和，
-    // 即使末帧加载/解码失败也不会在中途提前收尾。
-    var total = frames.reduce(function (sum, frame) {
-      return sum + frame.duration;
-    }, 0);
-    masterFinishTimer = setTimeout(finish, total);
-
+    // 总时长兜底已移至 onReady（首帧真正开播后起算），见 play() 内 2026-10-06 注释。
     play(0);
   }
 
@@ -208,6 +220,16 @@
 
     collectFrames();
     if (!frames.length) return;
+
+    // 2026-10-06 弱网修复：挂出「组件在等 GIF」标志——head 看门狗看到它
+    // 就不再按 6s 强判 finished（原实现弱网下 GIF 还没下完就被挤掉）。
+    // 撤除时机：start() / finish()。组件自身仍有 20s 单帧超时兜底。
+    window.__introGifWaiting = true;
+
+    // 2026-10-06 弱网修复：首帧 GIF 立即预取，与 page-loader 的关键图下载并行。
+    // 原实现要等 loader 收尾后才在 play(0) 里发起 GIF 请求，弱网下 GIF
+    // 下载被整体后移，入场动画必然被压缩甚至跳过。
+    preload(frames[0]);
 
     whenLoaderReady(start);
   }

@@ -3,9 +3,13 @@
 
   var articleDefinitions = [
     { id: 'section-overview', time: '', title: '项目概述', img: '../static/image/any-icon/home.webp', summary: '了解项目背景、目标，以及团队如何把人类实践反馈转化为工程设计。' },
-    { id: 'section-carousel', time: '26/07/31', title: '清华参赛交流', img: '../static/image/any-icon/HP/tsinghua/1.jpg', summary: '与其他 iGEM 团队交流项目思路、实验经验和后续合作方向。' },
-    { id: 'section-southchina', time: '26/08/01', title: '华南交流会', img: '../static/image/any-icon/HP/southchina/SZU.jpg', summary: '围绕真实应用需求，收集来自高校与产业伙伴的反馈。' },
-    { id: 'section-education', time: '26/08/03', title: '中学生科普', img: '../static/image/any-icon/HP/school1.jpg', summary: '把合成生物学知识带进校园，让更多学生理解生物传感器的价值。' }
+    { id: 'section-framework', time: '26/07/31', title: '行动研究框架', summary: '以行动研究螺旋循环组织人类实践，把专家反馈转化为可追溯的工程决策。' },
+    { id: 'section-stakeholder', time: '26/07/31', title: '利益相关者', summary: '梳理七类关键利益相关者，从多视角校准项目需求与风险边界。' },
+    { id: 'section-interviewees', time: '26/07/31', title: '访谈对象清单', summary: '列出全部访谈专家与群体，点击地图图钉查看详细记录。' },
+    { id: 'section-southchina', time: '26/08/01', title: '华南交流会', img: '../static/image/any-icon/HP/southchina/hp-southchina--exchange-group-photo.jpg', summary: '与华南多支 iGEM 队伍面对面交流，收集来自高校与评审的反馈。' },
+    { id: 'section-apic', time: '26/08/02', title: 'APiC 交流会', summary: '第一届亚太 iGEM 交流会，在南科大与港大两阶段打磨项目。' },
+    { id: 'section-education', time: '26/08/03', title: '中职学校科普', img: '../static/image/any-icon/HP/hp--outreach-students.jpg', summary: '把合成生物学带进校园，让更多学生理解生物传感器的价值。' },
+    { id: 'section-freshman', time: '26/08/03', title: '新生科普分享', summary: '面向 2026 级新生科普合成生物学与甲流空气检测项目。' }
   ];
 
   function wrapIndex(value, length) {
@@ -61,10 +65,6 @@
         img: slide.getAttribute('data-hp-image') || articleDefinition.img || (image ? image.currentSrc || image.src : ''),
         summary: slide.getAttribute('data-hp-summary') || articleDefinition.summary || (heading ? heading.textContent.trim() : '')
       };
-      if (!article.img) {
-        console.warn('[HP carousel] 文章“' + id + '”未提供轮播图片，已跳过。请设置 data-hp-image。');
-        return;
-      }
       articles.push(article);
     });
     articleDefinitions.forEach(function (article) {
@@ -87,6 +87,31 @@
       syncDetailHeight();
     }
 
+    // 卡片条跟随滚动：让当前激活卡片始终可见（第 5 张起从右侧滑入视野）
+    function syncStripPosition() {
+      var cards = track.querySelectorAll('.hp-flat-card');
+      var card = cards[index];
+      var viewport = track.parentElement;
+      if (!card || !viewport) return;
+      var trackRect = track.getBoundingClientRect();
+      var cardRect = card.getBoundingClientRect();
+      var view = viewport.clientWidth;
+      var maxScroll = Math.max(0, track.scrollWidth - view);
+      // 目标：激活卡片右缘对齐视口右缘（新卡“从右边滚出来”），并夹在可滚动范围内
+      var target = Math.min(Math.max(0, cardRect.left - trackRect.left + cardRect.width - view), maxScroll);
+      track.style.transform = 'translate3d(' + (-target) + 'px, 0, 0)';
+    }
+
+    // 到位特效：激活卡片闪环 + 回弹一次，提示“已切换到该板块”
+    function pulseActiveCard() {
+      var cards = track.querySelectorAll('.hp-flat-card');
+      var card = cards[index];
+      if (!card) return;
+      card.classList.remove('is-arriving');
+      void card.offsetWidth; // 强制重排，让到位动画可重复触发
+      card.classList.add('is-arriving');
+    }
+
     function update() {
       var article = articles[index];
       intro.querySelector('.hp-flat-intro-date').textContent = article.time || 'OVERVIEW';
@@ -95,6 +120,7 @@
       track.querySelectorAll('.hp-flat-card').forEach(function (card, cardIndex) {
         var active = cardIndex === index;
         card.classList.toggle('is-active', active);
+        card.classList.remove('is-arriving');
         card.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
       detailSlides.forEach(function (slide, slideIndex) {
@@ -103,6 +129,7 @@
         slide.inert = !active;
       });
       syncDetailPosition();
+      syncStripPosition();
     }
 
     function replayIntro() {
@@ -117,6 +144,7 @@
       detailTrack.classList.add('is-moving');
       update();
       replayIntro();
+      pulseActiveCard();
       window.dispatchEvent(new CustomEvent('hp:article-change', { detail: { index: index, id: articles[index].id } }));
       window.setTimeout(function () {
         track.classList.remove('is-moving');
@@ -129,9 +157,14 @@
       card.type = 'button';
       card.className = 'hp-flat-card';
       card.setAttribute('aria-label', '查看' + article.title);
-      card.innerHTML = '<img loading="lazy" decoding="async" alt=""><span></span>';
-      card.querySelector('img').src = article.img;
-      card.querySelector('img').alt = article.title;
+      if (article.img) {
+        card.innerHTML = '<img loading="lazy" decoding="async" alt=""><span></span>';
+        card.querySelector('img').src = article.img;
+        card.querySelector('img').alt = article.title;
+      } else {
+        card.classList.add('hp-flat-card--text');
+        card.innerHTML = '<span></span>';
+      }
       card.querySelector('span').textContent = article.title;
       card.addEventListener('click', function () {
         goTo(articleIndex);
@@ -146,9 +179,9 @@
       if (event.key === 'ArrowLeft') goTo(index - 1);
       if (event.key === 'ArrowRight') goTo(index + 1);
     });
-    window.addEventListener('resize', syncDetailPosition);
+    window.addEventListener('resize', function () { syncDetailPosition(); syncStripPosition(); });
     if (resizeObserver) detailSlides.forEach(function (slide) { resizeObserver.observe(slide); });
-    window.addEventListener('hp:content-resize', syncDetailPosition);
+    window.addEventListener('hp:content-resize', function () { syncDetailPosition(); syncStripPosition(); });
     window.HPFlatCarousel = { goTo: goTo, syncHeight: syncDetailPosition };
     update();
   }

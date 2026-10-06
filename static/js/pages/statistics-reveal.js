@@ -8,8 +8,9 @@
  *   - ELISA、qPCR 两个圆与虚线弧隐藏（缩放并叠到 CGIS 圆身后，不会露边）；
  *   - 屏顶英文小标题逐词「右先左后」下落；
  *   - CGIS 圆上方出现「Click here」箭头提示；
- *   - 点击（或键盘触发）CGIS 后：虚线弧先画出 → ELISA → qPCR，依次沿以 CGIS 为
- *     圆心的轨道展开到设计位置（最终态 = index.css 现有布局，不做任何改写）。
+ *   - 点击（或键盘触发）CGIS 后：CGIS→ELISA 虚线弧先画出 → ELISA 沿以 CGIS 为
+ *     圆心的轨道展开落位 → ELISA→qPCR 连线（2026-10-06f 新增，内联 SVG）擦出 →
+ *     qPCR 落位（最终态 = index.css 现有布局，不做任何改写）。
  *   - 每次页面加载只播一次：展开后滑走再滑回不重播，刷新才重置。
  *
  * @降级红线
@@ -38,7 +39,9 @@
   var T = {
     arcDraw: 460,      // 虚线弧画出
     elisaDelay: 280,   // ELISA 出发
-    qpcrDelay: 560,    // qPCR 出发
+    linkDelay: 1180,   // ELISA→qPCR 连线擦出（等 ELISA 落位，280+950≈1230 前后衔接）
+    linkDraw: 400,     // 连线擦出时长
+    qpcrDelay: 1420,   // qPCR 出发（连线画完再出发）
     fly: 950,          // 单个圆飞行时长
     hintDelay: 780,    // 提示出现（等标题落定）
     wordStagger: 62,   // 标题逐词间隔（右 → 左）
@@ -95,6 +98,7 @@
     var elisa = stage.querySelector('.art--statistics-elisa');
     var qpcr = stage.querySelector('.art--statistics-qpcr');
     var arc = stage.querySelector('.art--statistics-arc');
+    var link = stage.querySelector('.art--statistics-link');   // 2026-10-06f：ELISA→qPCR 连线
     var hint = stage.querySelector('.statistics-hint');
     var caption = stage.querySelector('.statistics-caption');
 
@@ -438,6 +442,7 @@
       hideHint();
       drawArc();
       flyCircle(elisa, geo.elisa, T.elisaDelay);
+      drawLink();
       flyCircle(qpcr, geo.qpcr, T.qpcrDelay);
       finishTimer = window.setTimeout(finish, T.qpcrDelay + T.fly + 90);
     }
@@ -470,6 +475,22 @@
         { clipPath: 'polygon(0% 100%, 0% -140%, 240% 100%)', offset: 1 }
       ], {
         duration: T.arcDraw,
+        easing: 'cubic-bezier(0.3, 0.9, 0.4, 1)',
+        fill: 'forwards'
+      });
+      runningAnims.push(anim);
+    }
+
+    // 2026-10-06i：ELISA→qPCR 连线（切图 scaleY(-1) 上下翻转）——clip-path 走元素局部坐标：
+    // scaleY(-1) 只翻纵轴，视觉右下角 = 局部右上角（100% 0%），从那里扫向覆盖整幅的三角形
+    function drawLink() {
+      if (!link) return;
+      var anim = link.animate([
+        { clipPath: 'polygon(100% 0%, 100% 0%, 100% 0%)', offset: 0 },
+        { clipPath: 'polygon(100% 0%, -140% 0%, 100% 240%)', offset: 1 }
+      ], {
+        duration: T.linkDraw,
+        delay: T.linkDelay,
         easing: 'cubic-bezier(0.3, 0.9, 0.4, 1)',
         fill: 'forwards'
       });

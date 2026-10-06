@@ -605,6 +605,16 @@ node static/js/core/search-index-generator.js
 
 首页 10 个 `.yeast-screen` 板块里的插画与装饰，由 `static/image/Animation/index/webp/` 的**设计切片**在 `static/css/index.css` 的 `.art-stage--sN` 舞台上拼装而成。成品对照图（7 张，1080×608）、实测数据与全部脚本归档在 `对话归档/2026-09/2026-09-22-homepage-assembly/`。
 
+**素材目录已按屏分组（2026-10-06f）**：`webp/` 顶层不再放图，素材按滚动顺序入 `first-section/`（hero）→ `second-section/`（甲流负担）→ `third-section/`（human-practices 图表屏）→ `fourth-section/`（statistics）→ `fifth-section/`（safety）→ `sixth-section/`（public-health）→ `seventh-section/`（project-intro）→ `eighth-section/`（dbtl-cycle）→ `ninth-section/`（future-vision）→ `tenth-section/`（final-cta，含原 `explore/` 子树）；跨屏复用切片统一在 `shared/`。新增素材请放入对应屏文件夹，引用路径 `static/image/Animation/index/webp/<屏文件夹>/<文件名>`。
+
+**本轮同屏改动（2026-10-06f）**：① `#future-vision` 内容栏加宽至约 60% 页宽、纵向间距按 810px 视口收敛不溢出，正文段落/列表/占位句全部由中文译为英文（保持未来时态）；② statistics 屏新增 ELISA→qPCR 连线（内联 SVG，`.art--statistics-link`），揭示顺序改为「CGIS 弧画出 → ELISA 落位 → 连线擦出 → qPCR 落位」（`statistics-reveal.js` 时间轴 linkDelay/linkDraw/qpcrDelay=1420），降级红线不变（无 JS/reduced-motion 静态可见）。
+
+**hero 标语归位与主题色（2026-10-06h）**：`hero-echo-logo.png` 与 `shared-blue-curve.png` 原都是 1600×1600 大画布，字只占中间一条带（logo 字区 y541–1043、标语字区 y719–986），按整幅定位会算错位置——标语因此整体落到屏底被裁（用户报"字体掉下去了"）。两张图已按 alpha 紧裁（1510×526 / 1475×291，原件备份 `对话归档/2026-09/2026-09-22-homepage-assembly/backups/webp-original/*.1600square.png`），CSS 坐标换算自设计稿 1080×607：logo `left 8.8% / top 19% / width 44.9%`、标语 `left 8.8% / top 49% / width 43%`。**教训：设计切片务必紧裁后再定位，否则盒子≠内容区，位置全错。** `#future-vision` 正文改主题色（正文 `#2f6f96`、列表小标题 `#1f6ea6`、占位句 `#4f86a8`，与 `influenza-burden` 屏同口径；不用 `--color-echo-blue` 纯色，因米黄底上长段正文对比度仅 ≈2.6:1）。排查脚本 `对话归档/temporary-tools/audit-uncropped.py` 可复检全目录"未紧裁画布"隐患，当前仅剩 `shared-wave-alt-c/d.png` 两个未被引用的备用图。
+
+**2026-10-06i 三项**：① statistics 第二条连线改为复用第一条弧的切图 `statistics-dashed-arc.webp` 并**只关于水平线翻转 `scaleY(-1)`**（不要用 `rotate(180deg)`，那会把走向也反过来、接不上 qPCR→ELISA；顺序仍为 CGIS 弧 → ELISA → 连线 → qPCR）；② 首页末屏「探索我们的 Wiki」改为 `Explore Our Wiki`（含 `data-title`/aria/alt）；③ **`human-practices/inclusivity` 改为 `human-practices/sustainability`**——本队不申报 Inclusivity Award（迁移技能 R3c），新页只写可查证的设计意图并显式声明"非生命周期评估"；根站 `src/human-practices/sustainability.njk` 与 flask `wiki/pages/sustainability.html` 同源，导航/页脚/搜索索引清单同步改指。菜单图标新增自绘内联 SVG 叶片 `shengtai`（flask `wiki/icons.html`），根站导航用等价内联路径 + `.nav-glyph`。
+
+**flask 站镜像现状与上传清单**：flask 首页仍是上一代版本（无 webp 拼装、FV/末屏曾为中文 + `img_placeholder`），本轮只同步了纯文案部分；把 10 屏视觉体系迁过去必须**先**把 46 张 webp 上传 CDN（R7），否则只会得到"合规但全 403 空图"的页面。完整清单（官方仓库差集 NEW 67 / BOTH 需覆盖 5 / REMOTE-ONLY 11、CDN 31 张待处理、favicon 与 iconfont 处理、阻塞与待决策）见 `对话归档/2026-10-06i-sustainability-and-upload-manifest/verification/2026-10-06i-upload-manifest.md`；技能脚本原始输出同目录 `check-*.txt`。
+
 #### 装配工作流（顺序不可颠倒）
 
 1. **先核对骨架**：改动落在 `index.html`（产物）与 `static/css/index.css`。调样式前先确认 `index.html` 里对应节点的类名与层级是否符合预期。
