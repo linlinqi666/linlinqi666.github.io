@@ -1861,13 +1861,16 @@ html.home-scroll-snap #footer.section-footer {
    不再逐个绝对定位，统一由 .intro-pills 盒子控制 → 见文件末尾「project-intro 文字条」段。 */
 /* 显微镜+书的吉祥物：切片比例 1.44:1，成品图该区域约 1.78:1。
    按高对齐→右侧短一截；按宽对齐→顶部超出。现在"按高对齐"，想改按宽就把 height 换成 width。 */
-.art-stage--project-intro .art--project-intro-mascot { left: 46.7%; top: 45.8%; height: 55.2%; width: auto; z-index: 4; }
+/* 2026-10-07b：按用户要求再放大 1.3×（59%→77%）并向屏幕中部靠拢（left 46.7%→30%，
+   top 43.5%→20.5%，底缘落在 97.5% 附近，右缘 92% 不出画） */
+.art-stage--project-intro .art--project-intro-mascot { left: 30%; top: 20.5%; height: 77%; width: auto; z-index: 4; }
 .art-stage--project-intro .art--project-intro-sparkle { left: 42.7%; top: 62.8%; width: 5.4%; }  /* 黄色星芒 */
 
 /* ---------- dbtl-cycle：Research content（流程图） ---------- */
-/* 满宽横条类：画布即板块画框，按画布高分数定位（方案 B） */
-/* shared-wave-3：画布 2720x602，内容在画布 y 61.12%~98.87%（实测）→ 不能用满框 */
-.art-stage--dbtl-cycle .art--dbtl-cycle-wave { left: 0; top: 61.12%; width: 100%; height: 37.75%; }
+/* 2026-10-07：波浪条改用美术「细」版 shared-wave-5.webp（1080×95，宽高比 11.4:1），
+   素材已按 alpha 紧裁 → 元素满宽贴底、高度走原比例即可；不再用「画布高分数定位」。
+   同时退出浮动动画列表：贴底横条上下浮动会在底缘露出米黄底缝。 */
+.art-stage--dbtl-cycle .art--dbtl-cycle-wave { left: 0; bottom: 0; width: 100%; height: auto; animation: none; }
 .art-stage--dbtl-cycle .art--dbtl-cycle-title { left: 3.7%; top: 7.9%; width: 37.4%; }     /* 标题文字（左上） */
 /* 流程图：原图里它坐在白色圆角卡片上；切片是 RGB 无 alpha 的白底直角矩形，
    所以圆角与描边必须由 CSS 补，否则会是一块方角白块（见 README §5.17 根因 5） */
@@ -2245,7 +2248,9 @@ html.home-scroll-snap #footer.section-footer {
    接不到 qPCR（左上）→ ELISA（右下）。盒位按两圆 facing 边缘量取（1440×810 实测
    qPCR 圆心 (170,186) r≈86、ELISA 圆心 (413,332) r≈103，两圆 facing 点中点 (284,255)），
    弧两端落在盒角上、藏进圆内（z-index 1 < 圆 2），读作"相连"。 */
-.art-stage--statistics .art--statistics-link { left: 14.2%; top: 24%; width: 9%; z-index: 1; transform: scaleY(-1); }
+/* 2026-10-07c：按用户 DevTools 实调固化——rotate(245deg) + 加大盒位，弧形与连接点
+   以用户调好的效果为准（qPCR→ELISA 连线自然搭在两圆 facing 边缘）。 */
+.art-stage--statistics .art--statistics-link { left: 17.2%; top: 19%; width: 10%; z-index: 1; transform: rotate(245deg); }
 .art-stage--statistics .art--statistics-bulb { left: 76.9%; top: 23%; width: 15.7%; }      /* 灯泡（右上） */
 .art-stage--statistics .art--statistics-mascot { left: 42.1%; top: 21.4%; width: 38.9%; }  /* 托腮吉祥物（改 top 锚定，避免被下缘截断） */
 .art-stage--statistics .art--statistics-sparkle { left: 4.8%; top: 68.4%; width: 3%; }     /* 黄色星芒 */
@@ -2374,9 +2379,9 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 .js-reveal-armed .art--statistics-link {
-  /* 2026-10-06i：连线（scaleY(-1) 上下翻转）先裁掉，点击后从 ELISA 一侧擦出：
-     视觉右下角 = 局部右上角（scaleY 只翻转纵轴，横向不变） */
-  clip-path: polygon(100% 0%, 100% 0%, 100% 0%);
+  /* 2026-10-07c：连线（rotate 245°）先裁掉，点击后从 ELISA 一侧擦出：
+     局部左下角经 245° 旋转落在视觉右下（ELISA 侧） */
+  clip-path: polygon(0% 100%, 0% 100%, 0% 100%);
 }
 
 /* 3) 隐藏未点击期间 CGIS 可点（.art 基类默认 pointer-events: none） */
@@ -2451,11 +2456,23 @@ html.home-scroll-snap #footer.section-footer {
    （改前 left 8%/bottom 8%/width 30%，偏小偏下——与你把 public-health/project-intro 吉祥物放大上移的做法一致） */
 /* shared-cloud-1 已键掉不透明白底（纯白 255,255,255 → 透明），蓝波在素材 y 38%~78%。
    按此标定：放大到 260% 宽并把左上负偏，蓝波即落在板块 y 0%~46%，铺满上半部。 */
-.art-stage--safety .art--safety-cloud { left: 0%; top: 62%; width: 100%; }
+/* 2026-10-07b：贴底修正——蓝波直边在画布 y84.2%，画布底部还有 7.06% 透明区，
+   原 top:62% 让直边悬在屏内、底下漏出米黄条。改 bottom 锚定 -7.06% 使直边正好压在
+   视口底边（16:9 各分辨率比值恒定）；同时退出浮动动画（上浮会重新露出底缝）。 */
+.art-stage--safety .art--safety-cloud { left: 0; bottom: -7.06%; width: 100%; animation: none; }
 .art-stage--safety .art--safety-curve { left: 17.8%; top: 58.9%; width: 12.4%; }   /* 蓝色曲线 */
 .art-stage--safety .art--safety-mascot { left: 5.5%; top: 3%; width: 36.9%; }    /* 披风吉祥物 */
 .art-stage--safety .art--safety-title { left: 56.1%; top: 30.4%; width: 40.2%; }   /* 标题文字（右侧） */
 .art-stage--safety .art--safety-sparkle { left: 39.9%; top: 62.5%; width: 6.7%; }  /* 黄色星芒 */
+/* 2026-10-07b：上波改用离线「翻转+纵压 72%」的 fifth-section/safety-sky.webp
+   （直边在素材顶边，top:0 即贴屏幕顶，不再需要 transform）；按用户要求整体左移并
+   略缩：left -3% / width 106% 保证左右都出画， crest 移出左缘、不留缝。 */
+/* 2026-10-07c：按用户 DevTools 实调固化 top:-50px——素材直边上方还有 11.4% 透明带
+   （0.0232×视口宽 ≈33px@1440），-50px 再多压 17px 保证完全贴顶。注意是绝对值：
+   更小视口下会多裁一点波带（移动端断点改用比例值 -2.32vw）。 */
+.art-stage--safety .art--safety-sky { left: -3%; top: -50px; width: 106%; height: auto; z-index: 0; }
+.art-stage--safety .art--safety-star-a { left: 11%; top: 11%; width: 5.2%; }
+.art-stage--safety .art--safety-star-b { left: 88%; top: 15%; width: 4.6%; }
 
 /* ---------- human-practices：FluNet 图表 ---------- */
 /* 满宽横条：画布即画框，贴底锚定（切片宽高比自带正确高度） */
@@ -2513,12 +2530,12 @@ html.home-scroll-snap #footer.section-footer {
   /* 移动端条带收小一号 + 边缘渐隐加宽：375px 视口下 14-22px 的条带相对过宽，
      文字被视口硬切；吉祥物 z-index:4 压在条带(z-index:3)之上后，条带穿过吉祥物
      呈"景深"效果而不是"遮挡"效果（用户 2026-10-03 实机反馈）。 */
-  .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(11px, 3vw, 16px); --intro-fade: 16%; }
+  .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(12px, 3.4vw, 18px); --intro-fade: 16%; }
 
   /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → 流程图近满宽居中 → 波浪+笔记本吉祥物贴底 */
   .art-stage--dbtl-cycle .art--dbtl-cycle-title   { left: 4%;  top: 4%;  width: 58%; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-diagram { left: 6%;  top: 18%; width: 88%; }
-  .art-stage--dbtl-cycle .art--dbtl-cycle-wave    { left: 0;   top: 55%; width: 100%; height: 45%; }
+  .art-stage--dbtl-cycle .art--dbtl-cycle-wave    { left: 0;   bottom: 0;  width: 100%; height: auto; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-mascot  { left: 0;   top: auto; bottom: 0; width: 42%; }
 
   /* statistics：云满宽上(放大) / 吉祥物右中(放大) / 三圆纵列放大(左) / 灯泡右上(放大) / 山贴底 */
@@ -2542,6 +2559,9 @@ html.home-scroll-snap #footer.section-footer {
   .art-stage--safety .art--safety-cloud   { left: 0;   top: auto; bottom: 0; width: 100%; height: 55%; }
   .art-stage--safety .art--safety-curve   { left: 16%; top: 40%; width: 14%; }
   .art-stage--safety .art--safety-sparkle { left: 38%; top: 52%; width: 8%; }
+  .art-stage--safety .art--safety-sky     { left: -3%; top: -2.32vw; width: 106%; height: auto; }
+  .art-stage--safety .art--safety-star-a { left: 9%;  top: 9%;  width: 8%; }
+  .art-stage--safety .art--safety-star-b { left: 86%; top: 13%; width: 7%; }
 
   /* human-practices：竖屏紧凑纵排 —— 标题 → 图表满宽 → 横轴标题+三图例紧跟图表下方 → 吉祥物右中 → 波浪贴底 */
   .art-stage--human-practices .art--human-practices-title   { left: 8%;  top: 4%;  width: 84%; }
@@ -2571,19 +2591,22 @@ html.home-scroll-snap #footer.section-footer {
 .intro-pills {
   position: absolute;
   left: 1%;
-  top: 16.5%;
+  top: 18%;
   width: 98%;
-  height: 64%;
+  height: 58%;
   z-index: 3;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   pointer-events: none;
   /* ↑ 上面 5 行 = 红框范围 ｜ 下面 5 行 = 可调参数 */
-  --intro-pill-h: clamp(15px, 3.3vh, 34px);
+  /* 2026-10-07（Q4-A）：条带放大 ≈21%（3.3vh→4.0vh、上限 34→40px），外盒 64%→58% 高、
+     top 16.5%→18% —— 条带变大的同时把行间距收窄，整体仍居中不贴边。
+     2026-10-07：按用户要求去掉椭圆条带的蓝色描边（--intro-pill-lw: 0），保留白底。 */
+  --intro-pill-h: clamp(17px, 4vh, 40px);
   --intro-pill-line: #4c9dd3;
   --intro-pill-bg: #ffffff;
-  --intro-pill-lw: 2px;
+  --intro-pill-lw: 0px;
   --intro-pill-radius: 999px;
   --intro-fade: 12%;
   --intro-flow-dur: 28s;

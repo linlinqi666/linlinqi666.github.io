@@ -13,7 +13,7 @@ js:
 
 {# 本页（2026-09-30 回退后微调）：恢复为整份 protocol.pdf 内嵌，无侧栏、无页首装饰大字；
    页首加介绍卡说明本页用途，PDF 由 content-card 容器包裹（样式在 pdf-embed.css 的
-   .protocol-page 作用域内）。data URL 的 #toolbar=0 在 partial 中统一追加。
+   .protocol-page 作用域内）。2026-10-07 起不再追加 #toolbar=0，恢复阅读器基础功能。
    拆分版（6 板块 / 22 大目录）已弃用；整份 PDF 已托管于 static.igem.wiki。
    改动需与 Flask 站 wiki/pages/protocol.html 同步。 #}
 {% extends "layouts/base.njk" %}
@@ -37,7 +37,7 @@ js:
   <section class="content-card" aria-label="Protocol document">
     {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/protocol/protocol.pdf" %}
     {% set pdfLabel = "Protocol (PDF, 32 pages)" %}
-    {% set pdfFallback = "该协议 PDF 暂不可用。 / This protocol PDF is not available yet." %}
+    {% set pdfFallback = "This protocol PDF is not available yet." %}
     {% include "partials/pdf-embed.njk" %}
   </section>
 </main>

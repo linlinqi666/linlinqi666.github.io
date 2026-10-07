@@ -70,8 +70,9 @@
 {% block page_content %}
 {# 本页（2026-09-30 回退后微调）：恢复为整份 protocol.pdf 内嵌，无侧栏、无页首装饰大字；
    页首加介绍卡说明本页用途，PDF 由 content-card 容器包裹。
-   data URL 追加 #toolbar=0&navpanes=0：隐藏浏览器内置 PDF 阅读器工具条
-   （含 Chrome 的「绘制/Draw」按钮——其语言跟随浏览器设置，页面无法切换，故整体隐藏）。
+   2026-10-07 按用户要求：不再追加 #toolbar=0&navpanes=0，恢复浏览器 PDF 阅读器
+   基础功能（缩放/下载/打印）。阅读器 UI 语言跟随浏览器设置（浏览器界面，
+   页面无法控制）；页面正文保持全英文。
    拆分版（6 板块 / 22 大目录）已弃用；整份 PDF 已托管于 static.igem.wiki。
    改动需与根站 src/wet-lab/protocol.njk 同步。 #}
 <main class="pdf-page protocol-page">
@@ -87,9 +88,9 @@
   <section class="content-card" aria-label="Protocol document">
     <div class="pdf-embed">
       <object class="pdf-embed__object" type="application/pdf"
-              data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/protocol/protocol.pdf#toolbar=0&navpanes=0"
+              data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/protocol/protocol.pdf"
               aria-label="Protocol">
-        <p class="pdf-embed__fallback">该协议 PDF 暂不可用。 / This protocol PDF is not available yet.</p>
+        <p class="pdf-embed__fallback">This protocol PDF is not available yet.</p>
       </object>
     </div>
   </section>

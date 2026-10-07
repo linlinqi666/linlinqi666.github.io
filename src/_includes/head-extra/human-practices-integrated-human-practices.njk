@@ -92,7 +92,7 @@
     --hz-province-hover: #b8a883;
     font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     color: #4a3f33;
-    max-width: 1100px; margin: 0 auto;
+    max-width: 560px; margin: 0 auto;
     /* 去掉外层大白框：外层只作轻量承载，视觉重心交给地图容器；标题直接落在页面奶油底上 */
     background: transparent;
     padding: 0;
@@ -156,7 +156,7 @@
 
   .hz-map .hz-container {
     position: relative; width: 100%;
-    aspect-ratio: 774.044 / 569.651;        /* 中国地图 natural ratio */
+    aspect-ratio: 314 / 360;        /* 中国地图 natural ratio */
     border-radius: 22px;
     /* 用 padding 给边缘 pin 留出安全区，避免被圆角背景裁切 */
     padding: 18px; box-sizing: border-box;
@@ -378,6 +378,61 @@
     margin-top: 16px; font-size: 13px; color: #7d6d5a;
   }
   .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
+
+  /* ===== 地图与专家索引并排（等高）；全部专家收进一个大收纳条 ===== */
+  .hz-map-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.5rem; align-items: stretch; max-width: 900px; margin: 0 auto; }
+  .hz-map-layout .hz-map { max-width: none; width: 100%; margin: 0; }
+  .hz-expert-index { display: flex; flex-direction: column; gap: .25rem; min-height: 0; overflow: auto; padding: .8rem .7rem; border: 1px solid rgba(139,115,85,.2); border-radius: 14px; background: rgba(255,250,240,.85); box-shadow: 0 0.25rem 1rem rgba(139,90,43,.08); }
+  .hz-expert-index__item { background: rgba(255,255,255,.65); border: 1px solid rgba(139,115,85,.16); }
+  .hz-expert-index__item:hover, .hz-expert-index__item:focus-visible { background: #fff8e7; transform: translateX(2px); border-color: rgba(139,115,85,.4); }
+  .hz-expert-index__group { display: flex; align-items: center; gap: .4rem; margin: .55rem 0 .2rem; font-size: .78rem; font-weight: 700; color: #5c4d3c; }
+  .hz-expert-index__group:first-child { margin-top: 0; }
+  .hz-expert-index__item { display: flex; align-items: center; gap: .55rem; padding: .3rem .45rem; border-radius: 9px; color: #5c4d3c; text-decoration: none; transition: background-color .15s ease, transform .15s ease, border-color .15s ease; }
+  .hz-expert-index__item:hover, .hz-expert-index__item:focus-visible { background: rgba(139,115,85,.14); outline: none; }
+  .hz-expert-index__avatar { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; overflow: hidden; background: #f3ead8; border: 1px solid rgba(139,115,85,.35); display: flex; align-items: center; justify-content: center; }
+  .hz-expert-index__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hz-expert-index__avatar .hz-cluster__silhouette { width: 74%; height: 74%; fill: #a89177; }
+  .hz-expert-index__name { font-size: .85rem; line-height: 1.3; }
+  .hz-expert-fold-all { margin-top: 1.5rem; }
+  /* 展开动画：内容淡入下滑，收起无动画（原生 details 无高度过渡，用内容入场补偿） */
+  .hz-expert-fold-all[open] > .section-fold__body { animation: hpFoldReveal .38s cubic-bezier(.22,1,.36,1); }
+  .hz-expert-fold-all[open] > summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  @keyframes hpFoldReveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  .hz-expert-fold-all > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; padding: .85rem 1.1rem; border: 1px solid rgba(139,115,85,.28); border-radius: 12px; background: rgba(139,115,85,.1); }
+  .hz-expert-fold-all > summary::-webkit-details-marker { display: none; }
+  .hz-expert-fold-all__title { font-weight: 700; color: #5c4d3c; font-size: 1.02rem; }
+  .hz-expert-fold-all__hint { font-size: .8rem; color: #8b7355; }
+  .hz-expert-stack { display: grid; gap: 1.1rem; min-width: 0; margin-top: 1.1rem; }
+  .hz-expert-stack .hz-detail-slide { width: 100%; }
+  /* 锚点定位预留固定导航高度，避免专家标题被顶栏遮住 */
+  .hz-expert-stack h3[id^="expert-"] { scroll-margin-top: 5.5rem; }
+  @media (max-width: 860px) {
+    .hz-map-layout { grid-template-columns: 1fr; }
+    .hz-expert-index { flex-direction: row; flex-wrap: wrap; }
+    .hz-expert-index__group { width: 100%; }
+  }
+  /* 图片预留位：后续补图时直接替换为 <img> */
+  .hp-photo-slot { display: grid; place-items: center; min-height: 170px; margin: 1rem 0; border: 1px dashed rgba(139,115,85,.45); border-radius: 12px; background: rgba(139,115,85,.08); color: #8b7355; font-size: .85rem; letter-spacing: .04em; }
+
+  /* ===== 专家详情：会议照片画廊 =====
+     与头像的竖版 2:3 框区分开——会议照片多为 16:9 或超宽截图，一律按原始比例自适应，不裁切。 */
+  .hz-detail-card__gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin-top: 1.15rem; align-items: start; max-width: 960px; }
+  .hz-detail-card__gallery figure { margin: 0; }
+  .hz-detail-card__gallery img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
+  .hz-detail-card__gallery figcaption { margin-top: .3rem; font-size: .76rem; letter-spacing: .02em; color: #8b7355; }
+  /* 单图：限宽不限高，避免超宽截图被拉成整卡宽 */
+  .hz-detail-card__gallery--single { grid-template-columns: minmax(0, 1fr); }
+  .hz-detail-card__gallery--single figure { max-width: 780px; }
+  @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
+
+  /* ===== 活动照片墙：按原图比例流式排布 =====
+     覆盖 .hp-photo-grid 的固定 240px 行高 + object-fit:cover，避免 16:9 与竖构图照片被裁切；
+     图注由「悬停浮层」改为图片下方常显，配合不等高排布更好读。 */
+  .hp-photo-grid--flow { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; overflow: visible; }
+  .hp-photo-grid--flow .hp-photo-item { overflow: visible; }
+  .hp-photo-grid--flow .hp-photo-item img { height: auto; object-fit: contain; }
+  .hp-photo-grid--flow .hp-photo-item figcaption { position: static; opacity: 1; transform: none; background: none; color: #7d6d5a; padding: .45rem .1rem 0; font-size: .8rem; }
+  .hp-photo-grid--dense { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
   /* ===== 浮层与图钉动画 ===== */
   @keyframes hzPopoverIn {

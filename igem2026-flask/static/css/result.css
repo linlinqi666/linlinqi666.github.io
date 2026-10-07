@@ -1,1 +1,71 @@
-/* 湿实验组实验结果页面样式 */
+/* 湿实验组实验结果页面样式（flask 站）
+   作用域：.results-page（results.html 的 .description-container 上带此类） */
+
+/* ==========================================================
+   摘要条：覆盖 index.css 的首页 300vh 规则
+   ----------------------------------------------------------
+   index.css 为首页滚动动画区定义了 .executive-summary{height:300vh;padding-top:100vh}。
+   contribution.css 只在 .contribution-page 作用域下还原，本页没有该类，故在此按
+   内容页口径重写一遍（选择器多一层 .results-page，顺序无关且不会外溢）。
+   ========================================================== */
+.results-page .executive-summary {
+  position: static;
+  height: auto;
+  min-height: 0;
+  width: auto;
+  padding: 0.85rem 1.1rem;
+  margin: 0 0 1.25rem;
+  border-left: 3px solid var(--desc-color-primary, #8B5A2B);
+  border-radius: 0 0.375rem 0.375rem 0;
+  background: linear-gradient(90deg, rgba(139, 90, 43, 0.07) 0%, rgba(139, 90, 43, 0.02) 100%);
+  display: block;
+}
+
+.results-page .executive-summary::before {
+  content: none;
+}
+
+/* ==========================================================
+   文档插图：一图一注，统一宽度
+   ----------------------------------------------------------
+   图序、图片与图注严格对应源报告 Result(1).doc，每图独立一块。
+   统一 width:100% 使各图在正文列内等宽，避免"一张大一张小"。
+   ========================================================== */
+.results-page .result-fig {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.results-page .result-fig__img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  /* mobile.css 的全局 img{content-visibility:auto} 未配 contain-intrinsic-size：
+     离屏图片会被当成 0 高，滚动到时页面高度跳变。本页图多且大，按真实尺寸参与布局。 */
+  content-visibility: visible;
+}
+
+.results-page .result-fig__cap {
+  margin-top: 0.6rem;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+/* 图片占位块：图注先到位、真图后补（Fig. 6 / Fig. 13） */
+.results-page .result-fig__placeholder {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: 12rem;
+  margin: 0 auto;
+  border: 1px dashed #D4A574;
+  border-radius: 4px;
+  object-fit: cover;
+  content-visibility: visible;
+}

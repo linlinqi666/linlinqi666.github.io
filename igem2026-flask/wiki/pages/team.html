@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
-{% block title %}Team{% endblock %}
+{% from "macros.html" import media %}
+{% set active_page = "team" %}
+{% block title %}Members{% endblock %}
 {% block head_extra %}
 <!-- 全屏引导封面 arm：必须同步（非 defer）执行，先于 <body> 渲染，
      否则会先闪出成员页再被封面盖住。逻辑与根站 head-extra/team-members.njk 一致 -->
@@ -21,12 +23,11 @@
 <div class="members-intro" id="members-intro" role="dialog" aria-modal="true" aria-label="Team introduction">
   <div class="members-intro__media" aria-hidden="true">
     <span class="members-intro__backdrop"></span>
-    <!-- 封面图直写队伍实际 CDN 路径：media() 宏产出的是 2026/szpu-china 前缀，
-         该前缀在 static.igem.wiki 上一律 403（iGEM 用 403 表示对象不存在）。
-         实测 34/34 可达，记录见 对话归档/temporary-tools/2026-09/2026-09-30-probe-team-cdn.py -->
+    <!-- 封面图走 media() 宏（macros.html 已指向 teams/6373/wiki 新基址）；
+         实测可达，记录见 对话归档/temporary-tools/2026-09/2026-09-30-probe-team-cdn.py -->
     <img class="members-intro__photo" id="members-intro-photo" data-critical loading="eager" fetchpriority="high"
       decoding="async" alt="SZPU-China 2026 team photo"
-      src="https://static.igem.wiki/teams/6373/wiki/team/00-team-cover.webp">
+      src="{{ media('team/00-team-cover.png') }}">
     <span class="members-intro__shade"></span>
   </div>
   <div class="members-intro__panel">

@@ -1,0 +1,23 @@
+/* 图片到达动画
+ * 配套 static/js/components/media-reveal.js（全站加载）。2026-10-07 建立。
+ *
+ * 规定写法（写对了就自动获得「加载前预留空间 + 到达淡入」，两站通用）：
+ *   <img src="…" alt="…" width="1200" height="800" loading="lazy" decoding="async">
+ * - width / height 写图片真实像素：浏览器据此在**加载前**就按比例预留位置，页面不会跳；
+ * - loading="lazy" 交给浏览器按需加载，decoding="async" 避免解码阻塞主线程；
+ * - 到达淡入由本组件的 JS 负责，HTML 侧不需要写任何 class。
+ *
+ * 降级红线（不得回退）：
+ * - 默认状态不隐藏任何图片：无 JS、reduced-motion、脚本 404 时图片照常直接显示；
+ * - 隐藏类 .media-reveal--pending 只由 JS 在读不到「已解码」状态时添加；
+ * - 图片加载失败（error）也照常显示，不会因为等不到 load 而永久隐身。
+ */
+.media-reveal {
+  transition: opacity var(--duration-normal, 0.3s) var(--ease-smooth, ease);
+}
+
+/* 隐藏必须是瞬时的：否则从 opacity 1 淡到 0 会先闪一下要淡入的图 */
+.media-reveal--pending {
+  opacity: 0;
+  transition: none;
+}

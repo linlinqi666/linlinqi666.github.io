@@ -1,4 +1,49 @@
-/* 湿实验组实验结果页面样式（占位文件，请勿删除：HTML 仍引用本文件） */
+/* 湿实验组实验结果页面样式 */
 
 /* 2026-09-27：正文收纳条样式与锚点 scroll-margin 已迁移到全站组件
-   static/css/components/section-fold.css（所有页面共用），本文件保留占位。 */
+   static/css/components/section-fold.css（所有页面共用）。 */
+
+/* ==========================================================
+   文档插图：一图一注，统一宽度
+   ----------------------------------------------------------
+   图序、图片与图注严格对应源报告 Result(1).doc，每图独立一块。
+   统一 width:100% 使各图在正文列内等宽，避免"一张大一张小"。
+   ========================================================== */
+.result-fig {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.result-fig__img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  /* mobile.css 的全局 img{content-visibility:auto} 未配 contain-intrinsic-size：
+     离屏图片会被当成 0 高，滚动到时页面高度跳变。本页图多且大，按真实尺寸参与布局。 */
+  content-visibility: visible;
+}
+
+.result-fig__cap {
+  margin-top: 0.6rem;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+/* 图片占位块：图注先到位、真图后补（Fig. 6 / Fig. 13） */
+.result-fig__placeholder {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: 12rem;
+  margin: 0 auto;
+  border: 1px dashed #D4A574;
+  border-radius: 4px;
+  object-fit: cover;
+  content-visibility: visible;
+}

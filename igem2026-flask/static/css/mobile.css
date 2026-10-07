@@ -633,10 +633,12 @@ a:active,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 减少布局偏移 */
-img {
-  content-visibility: auto;
-}
+/* 减少布局偏移
+   2026-10-07：撤掉原来的 img{content-visibility:auto}。该写法给每张图片加了尺寸遏制，
+   而 contain-intrinsic-size 缺失时，视口外的图片会被按 0×0 计算，滚动到附近再突然撑开
+   ——图片密集页（wet-lab/result 等）实测整页高度可差数千像素，反而把布局偏移放大。
+   图片的加载时机交给 loading="lazy"，尺寸预留交给 <img> 自带的 width/height 属性
+   （浏览器据此在加载前按比例留位，见 static/css/components/media-reveal.css 的说明）。 */
 
 /* 优化渲染性能 */
 .section-bg-img,

@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="static/css/components/page-loader.css">
 <link rel="stylesheet" href="static/css/components/back-to-top.css">
 <link rel="stylesheet" href="static/css/components/section-fold.css">
+<link rel="stylesheet" href="static/css/components/media-reveal.css">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
 <script src="static/js/components/page-loader-arm.js"></script>
@@ -518,6 +519,11 @@
       <!-- safety「Influenza A Virus Biosensor」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/b6dd40228602e3596ff162aa41b47b4c.c2d33725d0.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--safety 段 -->
       <div class="art-stage art-stage--safety">
+        <!-- 2026-10-07：按设计稿补齐「上部波浪 + 3 颗星」。上波 = 现有底部云波
+             shared-cloud-1.webp 垂直翻转（scaleY(-1)），同源同宽必对称；星星复用
+             shared-sparkle.webp，左上/右上各一颗（第三颗是原有的那颗）。 -->
+        <img class="art art--safety-sky" src="static/image/Animation/index/webp/fifth-section/safety-sky.webp"
+          alt="" aria-hidden="true" decoding="async">
         <img class="art art--safety-cloud" src="static/image/Animation/index/webp/shared/shared-cloud-1.webp" alt="" aria-hidden="true">
         <!-- <img class="art art--safety-curve" src="static/image/Animation/index/webp/shared/shared-blue-curve.png" alt="" aria-hidden="true"> -->
         <img class="art art--safety-mascot" src="static/image/Animation/index/webp/fifth-section/safety-mascot-flying.webp" alt="EchoYeast 披风飞行">
@@ -525,6 +531,10 @@
         <img class="art art--safety-title" src="static/image/Animation/index/webp/fifth-section/safety-title.png"
           alt="Influenza A Virus Biosensor Based on Engineered Yeast">
         <img class="art art--safety-sparkle" src="static/image/Animation/index/webp/shared/shared-sparkle.webp" alt="" aria-hidden="true">
+        <img class="art art--safety-sparkle art--safety-star-a" src="static/image/Animation/index/webp/shared/shared-sparkle.webp"
+          alt="" aria-hidden="true" decoding="async">
+        <img class="art art--safety-sparkle art--safety-star-b" src="static/image/Animation/index/webp/shared/shared-sparkle.webp"
+          alt="" aria-hidden="true" decoding="async">
       </div>
     </section>
 
@@ -606,7 +616,9 @@
       <!-- dbtl-cycle「Research content: Workflow and principle」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/32d8bc036fff9e0d276ad6d75e11d6b9.cf62b5ed87.jpg
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--dbtl-cycle 段 -->
       <div class="art-stage art-stage--dbtl-cycle">
-        <img class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared/shared-wave-3.webp" alt="" aria-hidden="true">
+        <!-- 2026-10-07：波浪条换成美术给的「细」版 shared-wave-5.webp（1080×95，宽高比 11.4:1；
+             原 shared-wave-3.webp 为 7.4:1，明显更厚）。素材已抠掉编辑残留白斑并按 alpha 紧裁。 -->
+        <img class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared/shared-wave-5.webp" alt="" aria-hidden="true" decoding="async">
         <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
         <p class="art art--dbtl-cycle-title art-title-text" lang="en">Research content:<br>Workflow and principle</p>
         <!-- 原理示意图：首次滑入本屏时由 dbtl-pump.js 触发「想法泵出」入场——
@@ -857,6 +869,7 @@
   <script src="static/js/vendor/flexsearch.bundle.min.js" defer></script>
   <script src="static/js/core/search.js" defer></script>
   <script src="static/js/components/section-fold.js" defer></script>
+  <script src="static/js/components/media-reveal.js" defer></script>
   <script src="static/js/components/mascot-portal.js" defer></script>
   <script src="static/js/components/executive-summary-animation.js" defer></script><script src="static/js/components/index-intro-gif.js" defer></script><script src="static/js/pages/home-nav.js" defer></script><script src="static/js/pages/home-idle-motion.js" defer></script><script src="static/js/pages/statistics-reveal.js" defer></script><script src="static/js/pages/dbtl-pump.js" defer></script><script src="static/js/pages/influenza-burden.js" defer></script>
   

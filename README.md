@@ -425,7 +425,7 @@ node static/js/core/search-index-generator.js
 「侧边栏级联导航 + 正文收纳条」的页面存在一组**强耦合**前端组件，任一改动后必须联合验证，禁止「改 A 测 A 过、B 又瘫」式的分开测试：
 
 - 各内容页 `.njk`：小节标题锚点 `<页面前缀>-<语义>` + 侧边栏 `level2/level3` 导航；
-- `static/js/components/section-fold.js`（`base.njk` 全站加载）：把 `.content-card` 内带 id 的 h3 包成 `<details class="section-fold">` 默认折叠（点击展开、锚点命中自动展开）；
+- `static/js/components/section-fold.js`（`base.njk` 全站加载）：把 `.content-card` 内带 id 的 h3 包成 `<details class="section-fold">` 默认折叠（点击展开、锚点命中自动展开；2026-10-07 起展开/收起带「高度 + 内容淡入」动画，写法不变，参数与约定见 §5.14.3）；
 - `static/js/components/sidebar-progress.js`：滚动高亮（视口中线判定）+ 自动展开当前模块，依赖 `sectionIdPrefixes` 含对应页面前缀；
 - `static/css/components/section-fold.css`（`head.njk` 全站加载）：收纳条样式 + 锚点 `scroll-margin-top`；
 - `static/css/navigation/navigation.css`：侧边栏 `level2` 折叠态（默认折叠、点击 level1 展开）。
@@ -444,7 +444,7 @@ node static/js/core/search-index-generator.js
 
 1. **小节标题必须有 id**：`<h3 id="<页面前缀>-<语义>">`，前缀取页面名（`results-` / `protocol-` / `design-` / `safety-` …），且该前缀必须登记在 `sidebar-progress.js` 的 `sectionIdPrefixes`，否则滚动高亮失效；
 2. **侧边栏两级**：`li.level1`（模块，指向卡片 div 的 id）下挂 `ul.level2 > li.level3`（小节，指向 h3 的 id），默认折叠、点击 level1 展开；
-3. **收纳条自动生效**：脚本运行时把每个 `.content-card` 内带 id 的 h3 及其后内容（至下一个 h2/h3）包成 `<details>`；数据渲染、正文无 h3 的页面可改用**整卡折叠**——给卡片 div 加 `data-fold-card`，脚本把 `.content-body` 收起、卡片标题 h2 留在收纳条上，锚点仍保留在卡片 div 上供侧边栏链接使用（该形态组件已具备，当前暂无页面启用）。两种情况页面都无需再写任何 JS；
+3. **收纳条自动生效**：脚本运行时把每个 `.content-card` 内带 id 的 h3 及其后内容（至下一个 h2/h3）包成 `<details>`（2026-10-07 起自带展开/收起动画，写法不变，见 §5.14.3）；数据渲染、正文无 h3 的页面可改用**整卡折叠**——给卡片 div 加 `data-fold-card`，脚本把 `.content-body` 收起、卡片标题 h2 留在收纳条上，锚点仍保留在卡片 div 上供侧边栏链接使用（该形态组件已具备，当前暂无页面启用）。两种情况页面都无需再写任何 JS；
 4. **卡片级 id 与 h3 id 都保留**：滚动高亮按视口中线判定，落在卡片区间高亮 level1，落在小节区间高亮 level3；
 5. 整页关闭折叠用 `<body data-section-fold="off">`；排除个别标题用 `<h3 data-no-fold>`。
 
@@ -478,6 +478,40 @@ node static/js/core/search-index-generator.js
 - 设计 / 计划不写成结果：未完成的写「计划验证 / 尚未」，数据不足写清卡在哪一步。
 
 > 注意：`.gitignore` 的 `*.md` 规则会连带忽略 `static/expriments/` 下的方案文档与页面模板；如需入库，须追加 `!static/expriments/**/*.md` 例外（同 11.2 的既有做法）。
+
+### 5.14.3 收纳条展开动画 + 图片到达动画（2026-10-07）
+
+两个全站组件，**零配置接入**：HTML 写对就自动生效，页面不需要写任何 JS/CSS；根站与 flask 镜像同源。
+
+| 组件 | 文件（根站 ↔ flask 镜像） | 全站加载位置 |
+|---|---|---|
+| 收纳条（含展开/收起动画） | `static/js/components/section-fold.js` + `static/css/components/section-fold.css` | 根站 `base.njk` / `head.njk`、flask `wiki/layout.html` |
+| 图片到达动画 | `static/js/components/media-reveal.js` + `static/css/components/media-reveal.css` | 同上 |
+
+#### A. 收纳条：怎么写就有动画
+
+1. **写法与 §5.14.2 完全一致，无需任何改动**——正文小节标题写成 `<h3 id="<页面前缀>-<语义>">` 且位于 `.content-card` 内（或给容器加 `data-section-fold-root`）即可。新增页面/新模块不需要做任何事。
+2. 点击标题的行为：高度平滑展开 **0.3s**（`--duration-normal` + `--ease-smooth`）+ 内容整体淡入；再点一次对称收起，**动画播完才真正把 `details.open` 置为 false**；侧边栏 level3 锚点 / URL hash 命中时自动展开，并在动画结束后校正滚动落点。
+3. **动画参数唯一入口**：`static/css/components/section-fold.css` 里 `.section-fold` 的变量块——`--fold-dur-open` / `--fold-dur-close` / `--fold-ease`（默认取全站令牌，符合 §4.6）。
+4. **关闭开关**：整页 `<body data-section-fold-anim="off">`；单个收纳条 `data-fold-anim="off"`。
+5. **降级红线（不得回退）**：无 JS → 不生成收纳条、正文全展开（渐进增强）；`prefers-reduced-motion: reduce` → 瞬开瞬收、不写任何内联样式；动画期间只在 `.section-fold__body` 上临时挂 `overflow:hidden`，播完立即撤除，内部 sticky/绝对定位不受影响；快速连点、收起途中反悔都从**当前可见高度**接着走。
+6. 与 `SidebarProgress` 的强耦合不变（§5.14.1）：动画起手与收尾各调用一次 `recalculate()`。
+7. ⚠️ `.section-fold__body` 的 padding 是 HP 页手写收纳条（`.hz-expert-fold-all` + `hpFoldReveal`）的既有依赖，**不能删也不能搬**；组件自己生成的收纳条把内边距放在内层 `.section-fold__inner`，使动画层高度能真正归零（padding 会抵住 `height:0`）。
+
+#### B. 图片：怎么写就有「不跳动 + 到达淡入」
+
+```html
+<img src="…" alt="…" width="1200" height="800" loading="lazy" decoding="async">
+```
+
+- `width` / `height` 写**图片真实像素**：浏览器据此在加载前按比例预留位置，页面不再因图片到达而跳动；
+- `loading="lazy"` / `decoding="async"` 交给浏览器，不要自行加 class；
+- 到达淡入由 `media-reveal.js` 自动接管：**只处理 `<main>` 内**、尚未解码完成的图片先瞬时 `opacity: 0`，解码完成后淡入（0.3s）；已缓存/已解码的图片**不参与**（避免闪一下）；加载失败（error）也照常显示，不会永久隐身；
+- 退出方式：`data-no-reveal`（加在 `img` 或任意祖先上）；`prefers-reduced-motion: reduce` 时整个组件不生效；
+- 同批撤掉了 `mobile.css` 里无差别的 `img { content-visibility: auto }`：它未配 `contain-intrinsic-size`，会把视口外的图片按 0×0 计算，滚动到附近再突然撑开，反而放大布局偏移（图片密集页实测整页高度差数千像素）；
+- 现状：flask `wiki/pages/results.html` 的 17 张配图已按此写法（宽高取自 CDN 实测像素）；其余页面按需补齐——**新写图片请直接照此格式**。
+
+**本轮验证（可复跑）**：`对话归档/temporary-tools/2026-10/2026-10-07_verify_animations.py`（逐帧采样 + 双重降级 + 图片预留共 31 项，全绿；报告 `…/verify-production/anim-verify.txt`）；§5.14.1 的两套耦合回归（结构层 jsdom + 真实 Chrome 几何层）均通过，报告 `…/verify-production/coupling-tests.txt`。
 
 ### 5.15 Team 成员页分类与顺序（2026-09-15 重组）
 
@@ -608,6 +642,8 @@ node static/js/core/search-index-generator.js
 **素材目录已按屏分组（2026-10-06f）**：`webp/` 顶层不再放图，素材按滚动顺序入 `first-section/`（hero）→ `second-section/`（甲流负担）→ `third-section/`（human-practices 图表屏）→ `fourth-section/`（statistics）→ `fifth-section/`（safety）→ `sixth-section/`（public-health）→ `seventh-section/`（project-intro）→ `eighth-section/`（dbtl-cycle）→ `ninth-section/`（future-vision）→ `tenth-section/`（final-cta，含原 `explore/` 子树）；跨屏复用切片统一在 `shared/`。新增素材请放入对应屏文件夹，引用路径 `static/image/Animation/index/webp/<屏文件夹>/<文件名>`。
 
 **本轮同屏改动（2026-10-06f）**：① `#future-vision` 内容栏加宽至约 60% 页宽、纵向间距按 810px 视口收敛不溢出，正文段落/列表/占位句全部由中文译为英文（保持未来时态）；② statistics 屏新增 ELISA→qPCR 连线（内联 SVG，`.art--statistics-link`），揭示顺序改为「CGIS 弧画出 → ELISA 落位 → 连线擦出 → qPCR 落位」（`statistics-reveal.js` 时间轴 linkDelay/linkDraw/qpcrDelay=1420），降级红线不变（无 JS/reduced-motion 静态可见）。
+
+**2026-10-07 三屏微调**（Q1–Q5 由用户拍板）：① 新素材 `shared/shared-wave-5.webp`（用户提供的透明细波，抠掉 63 万低 alpha 噪点 + 167 处白斑后按 alpha 紧裁为 1080×95），设计原理屏 `art--dbtl-cycle-wave` 换新素材并改为**满宽贴底、高度走原比例**、退出浮动动画（贴底横条浮动会露底缝）；② 安全屏新增 `.art--safety-sky`＝底部云波 `shared-cloud-1.webp` 垂直翻转（`scaleY(-1)`）满宽贴顶，同源同宽必对称；③ 安全屏星星补齐 3 颗（复用 `shared-sparkle.webp`，新增 `-star-a` 左上 / `-star-b` 右上），移动端断点同步；④ 轮播屏药丸 `clamp(15px,3.3vh,34px)→clamp(17px,4vh,40px)`、外盒 `top 16.5%/h 64%→top 18%/h 58%` 收紧行距、吉祥物 `height 55.2%→59%`，并**去掉椭圆条带蓝色描边**（`--intro-pill-lw: 0`）。验收：1440×810 三屏 + 与设计稿并排对照（`对话归档/2026-10-07-visual-tuning/verification/compare-*.png`）+ 390×844 回归（无横向溢出）。**同日返工（b 轮）**：① 安全屏两波贴边——精测云波直边在画布 y84.2%，底部云波改 `bottom:-7.06%` 并退出浮动动画，上波改用离线翻转+纵压 72% 的新素材 `fifth-section/safety-sky.webp`（直边在素材顶边）并 `left:-3%/width:106%` 左移缩幅；② 轮播屏吉祥物再放大 1.3×（`height 77% / left 30% / top 20.5%`）；③ statistics 吉祥物按用户提供的 `34.png` 覆盖替换（同比例 1345×1387，CSS 零改动，旧图备份 `*.overcropped.webp`）。**同日动画顺滑化（c 轮）**：statistics 揭示动画取消二段式（先画线→等落位→再画线→再飞），改**一段式连贯揭示**——两段虚线一笔向上画（`linkDelay 1180→260`，紧接弧线尾端）、两圆随线起飞（`elisaDelay 280→180`、`qpcrDelay 1420→640`、`fly 950→900`，各环节互相重叠不空等），顺序仍为 CGIS→ELISA→qPCR，总时长 ≈2.4s→≈1.6s；位置/几何参数不动（保留用户 DevTools 实调值）。时序帧验收：`对话归档/screenshots/2026-10/2026-10-07-stat-t*.png`。
 
 **hero 标语归位与主题色（2026-10-06h）**：`hero-echo-logo.png` 与 `shared-blue-curve.png` 原都是 1600×1600 大画布，字只占中间一条带（logo 字区 y541–1043、标语字区 y719–986），按整幅定位会算错位置——标语因此整体落到屏底被裁（用户报"字体掉下去了"）。两张图已按 alpha 紧裁（1510×526 / 1475×291，原件备份 `对话归档/2026-09/2026-09-22-homepage-assembly/backups/webp-original/*.1600square.png`），CSS 坐标换算自设计稿 1080×607：logo `left 8.8% / top 19% / width 44.9%`、标语 `left 8.8% / top 49% / width 43%`。**教训：设计切片务必紧裁后再定位，否则盒子≠内容区，位置全错。** `#future-vision` 正文改主题色（正文 `#2f6f96`、列表小标题 `#1f6ea6`、占位句 `#4f86a8`，与 `influenza-burden` 屏同口径；不用 `--color-echo-blue` 纯色，因米黄底上长段正文对比度仅 ≈2.6:1）。排查脚本 `对话归档/temporary-tools/audit-uncropped.py` 可复检全目录"未紧裁画布"隐患，当前仅剩 `shared-wave-alt-c/d.png` 两个未被引用的备用图。
 

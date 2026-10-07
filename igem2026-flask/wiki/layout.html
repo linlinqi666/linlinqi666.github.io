@@ -36,8 +36,10 @@
   <!-- 全站「返回顶部」悬浮按钮（2026-10-04）：外圈图自带环绕文字持续旋转，hover 整体上下浮动 -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/components/back-to-top.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
-  <!-- 内容页小节收纳条样式（section-fold.js 的配套样式） -->
+  <!-- 内容页小节收纳条样式（section-fold.js 的配套样式，含展开/收起动画） -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/components/section-fold.css') }}">
+  <!-- 图片到达动画样式（media-reveal.js 的配套样式）；空间预留靠 img 的 width/height 属性 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/media-reveal.css') }}">
   {% block styles %}{% endblock %}
 
   <!-- 全站加载遮罩（page-loader）本轮整体暂缓：雪碧图美术素材未就绪，故不随本页上线。
@@ -64,6 +66,7 @@
   <script src="{{ url_for('static', filename='js/vendor/flexsearch.bundle.min.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/core/search.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/section-fold.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/media-reveal.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/back-to-top.js') }}" defer></script>
   {% block scripts %}{% endblock %}
 </head>
@@ -89,13 +92,14 @@
        Requirements/REQ-20261004-001.md §4。 -->
   <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
     <span class="back-to-top__ring" aria-hidden="true">
+      <!-- 2026-10-07：改用已上传到 CDN 的新素材（外圈 avif / 内芯 webp，两者扩展名不同，勿统一） -->
       <img class="back-to-top__ring-img"
-        src="https://static.igem.wiki/teams/6373/wiki/common/back-to-top-ring.jpg" alt="" width="320" height="320"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-ring.avif" alt="" width="320" height="320"
         decoding="async">
     </span>
     <span class="back-to-top__core" aria-hidden="true">
       <img class="back-to-top__core-img"
-        src="https://static.igem.wiki/teams/6373/wiki/common/back-to-top-core.jpg" alt="" width="320" height="320"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-core.webp" alt="" width="320" height="320"
         decoding="async">
     </span>
   </button>

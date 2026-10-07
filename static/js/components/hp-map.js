@@ -23,13 +23,13 @@
     public: "#F5A623"
   };
   const provinceCoordinates = {
-    "CN-44": { top: 87.7, left: 65.0 }, // 广东（几何质心）
-    "CN-33": { top: 73.3, left: 76.0 }, // 浙江（几何质心）
-    "CN-43": { top: 77.2, left: 62.3 }, // 湖南（几何质心）
-    "CN-35": { top: 80.8, left: 72.5 }, // 福建（几何质心）
-    "CN-21": { top: 40.3, left: 80.1 }, // 辽宁（几何质心）
-    "CN-32": { top: 63.5, left: 74.9 }, // 江苏（几何质心）
-    "CN-11": { top: 43.6, left: 70.0 }  // 北京（几何质心）
+    "CN-44": { top: 83.2, left: 13.7 }, // 广东（几何质心）
+    "CN-33": { top: 60.4, left: 40.9 }, // 浙江（几何质心）
+    "CN-43": { top: 66.6, left: 7.1 }, // 湖南（几何质心）
+    "CN-35": { top: 72.3, left: 32.2 }, // 福建（几何质心）
+    "CN-21": { top: 8.2, left: 51.0 }, // 辽宁（几何质心）
+    "CN-32": { top: 44.9, left: 38.1 }, // 江苏（几何质心）
+    "CN-11": { top: 13.4, left: 26.1 }  // 北京（几何质心）
   };
   const chinaExperts = [
     {
@@ -39,8 +39,8 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "industry",
-      coord: { top: 92.5, left: 70.5 },
-      photo: "../static/image/any-icon/HP/expert_img/wangwenjie.jpg",
+      coord: { top: 90.8, left: 27.3 },
+      photo: "../static/image/any-icon/HP/expert_img/wangwenjie.png",
       org: "深圳某二甲医院",
       role: "医技科主任",
       desc: "长期从事临床检验与体外诊断相关工作，从一线医疗场景出发，就甲流检测痛点、治疗策略与预防需求提供反馈。",
@@ -55,7 +55,7 @@
       provinceName: "广东省",
       region: "Guangzhou, Guangdong",
       category: "industry",
-      coord: { top: 89.5, left: 68.3 },
+      coord: { top: 86.1, left: 21.9 },
       photo: "../static/image/any-icon/HP/expert_img/fukai.jpg",
       org: "中山大学",
       role: "临床医学博士",
@@ -71,8 +71,8 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "industry",
-      coord: { top: 92.7, left: 70.7 },
-      photo: "",
+      coord: { top: 91.1, left: 27.8 },
+      photo: "../static/image/any-icon/HP/expert_img/dengmanqing.png",
       org: "深圳某三甲医院药学部",
       role: "副主任药师",
       desc: "从儿科临床与用药安全角度，就产品定位、易感人群适配、目标受众、生物安全与临床转化提出反馈。",
@@ -87,7 +87,7 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "industry",
-      coord: { top: 92.3, left: 70.3 },
+      coord: { top: 90.5, left: 26.8 },
       photo: "",
       org: "深圳某生物科技公司",
       role: "经理",
@@ -103,7 +103,7 @@
       provinceName: "湖南省",
       region: "Changsha, Hunan",
       category: "science",
-      coord: { top: 76.5, left: 64.5 },
+      coord: { top: 65.5, left: 12.5 },
       photo: "",
       org: "合成生物学专家 · 多年 iGEM 指导经验",
       role: "iGEM 中期指导",
@@ -119,8 +119,8 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "policy",
-      coord: { top: 92.6, left: 70.6 },
-      photo: "",
+      coord: { top: 91.0, left: 27.5 },
+      photo: "../static/image/any-icon/HP/expert_img/fangshisong.png",
       org: "深圳市疾控中心病原所",
       role: "副所长",
       desc: "从公共卫生监测与疾控视角，就选题严谨性、检测靶基因选择、空气采样瓶颈、注册路径与科研验证方法提供判断标准。",
@@ -135,8 +135,8 @@
       provinceName: "福建省",
       region: "Xiamen, Fujian",
       category: "science",
-      coord: { top: 85.3, left: 75.8 },
-      photo: "",
+      coord: { top: 79.4, left: 40.4 },
+      photo: "../static/image/any-icon/HP/expert_img/luozhouqing.jpg",
       org: "厦门大学",
       role: "生命科学学院教授",
       desc: "在酵母工程改造、膜蛋白检测与受体路线方面经验丰富，就实验操作、受体改造、报告系统、细胞壁通透性与信号放大提供咨询。",
@@ -151,7 +151,7 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "policy",
-      coord: { top: 92.4, left: 70.4 },
+      coord: { top: 90.7, left: 27.0 },
       photo: "",
       org: "深圳市卫生健康委员会审批处",
       role: "四级调研员",
@@ -167,8 +167,8 @@
       provinceName: "辽宁省",
       region: "Dalian, Liaoning",
       category: "science",
-      coord: { top: 46.8, left: 81.6 },
-      photo: "",
+      coord: { top: 18.5, left: 54.7 },
+      photo: "../static/image/any-icon/HP/expert_img/wuhui.jpg",
       org: "大连理工大学",
       role: "教授",
       desc: "在信号识别、传导、响应各模块与 iGEM 策略方面给予指导，就实验优化、通路打通与元件提交提出具体建议。",
@@ -183,8 +183,8 @@
       provinceName: "江苏省",
       region: "Nanjing, Jiangsu",
       category: "science",
-      coord: { top: 66.0, left: 71.3 },
-      photo: "",
+      coord: { top: 48.9, left: 29.3 },
+      photo: "../static/image/any-icon/HP/expert_img/jiahonghua.png",
       org: "南京工业大学",
       role: "生命与制药工程学院研究员",
       desc: "从合成生物学工程化视角审视项目设计、效果指标与验证方法，就文献对比、膜蛋白验证、报告系统、底盘选择与 iGEM 策略提供反馈。",
@@ -199,7 +199,7 @@
       provinceName: "北京市",
       region: "Beijing",
       category: "science",
-      coord: { top: 43.5, left: 70.1 },
+      coord: { top: 13.3, left: 26.3 },
       photo: "",
       org: "中国科学院数学与系统科学研究院",
       role: "博士",
@@ -210,12 +210,13 @@
     },
     {
       slug: "sz-vocational",
+      onMap: false,
       name: "深圳市第一职业技术学校",
       provinceId: "CN-44",
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "public",
-      coord: { top: 92.8, left: 70.8 },
+      coord: { top: 91.3, left: 28.0 },
       photo: "",
       org: "深圳市第一职业技术学校（坪山校区）",
       role: "科普宣讲合作学校",
@@ -226,12 +227,13 @@
     },
     {
       slug: "freshman",
+      onMap: false,
       name: "2026 新生宣传",
       provinceId: "CN-44",
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "public",
-      coord: { top: 92.2, left: 70.2 },
+      coord: { top: 90.3, left: 26.6 },
       photo: "",
       org: "本校 2026 级药学和制药工程技术本科新生",
       role: "新生科普分享会",
@@ -247,7 +249,7 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "science",
-      coord: { top: 92.5, left: 70.5 },
+      coord: { top: 90.8, left: 27.3 },
       photo: "",
       org: "纳米抗体分子对接与建模方向",
       role: "指导教师",
@@ -263,7 +265,7 @@
       provinceName: "广东省",
       region: "Shenzhen, Guangdong",
       category: "science",
-      coord: { top: 92.1, left: 70.1 },
+      coord: { top: 90.2, left: 26.3 },
       photo: "",
       org: "合成生物学与计算指导",
       role: "项目指导教师 / 顾问",
@@ -274,12 +276,13 @@
     },
     {
       slug: "yeast-online",
+      onMap: false,
       name: "酵母线上交流会",
       provinceId: "CN-44",
       provinceName: "广东省",
       region: "Online · 多校联合",
       category: "science",
-      coord: { top: 92.9, left: 70.9 },
+      coord: { top: 91.4, left: 28.3 },
       photo: "",
       org: "多所高校共同组织",
       role: "酵母专题线上交流会",
@@ -295,7 +298,7 @@
       provinceName: "浙江省",
       region: "Hangzhou, Zhejiang",
       category: "industry",
-      coord: { top: 70.0, left: 75.8 },
+      coord: { top: 55.2, left: 40.4 },
       photo: "",
       org: "杭州三甲医院",
       role: "重症监护室一线护理人员",
@@ -323,15 +326,13 @@
   // 专家详情卡与地图是同一篇文章中的相邻区块，不能限制在 #hzMap 内查询。
   const articleSlide = root.closest(".detail-slide");
   const detailCard = articleSlide && articleSlide.querySelector(".hz-details-card.hz-details");
-  const detailPanel = detailCard && detailCard.querySelector("#hzDetailPanel");
-  const detailViewport = detailCard && detailCard.querySelector("#hzDetailViewport");
-  const detailTrack = detailCard && detailCard.querySelector("#hzDetailTrack");
-  const detailsIntro = detailCard && detailCard.querySelector("#hzDetailsIntro");
-  if (!detailCard || !detailPanel || !detailViewport || !detailTrack || !detailsIntro) {
+  const expertStack = detailCard && detailCard.querySelector(".hz-expert-stack");
+  const expertIndex = articleSlide && articleSlide.querySelector("#hzExpertIndex");
+  if (!detailCard || !expertStack) {
     console.warn("[HP map] 未找到专家详情容器，地图图钉交互未初始化。");
     return;
   }
-  const detailSlides = Array.from(detailTrack.querySelectorAll(":scope > .hz-detail-slide"));
+  const detailSlides = Array.from(expertStack.querySelectorAll(".hz-detail-slide"));
   const detailSlidesByExpert = new Map();
   detailSlides.forEach(slide => {
     const slug = slide.dataset.hzExpert;
@@ -341,6 +342,81 @@
     }
     detailSlidesByExpert.set(slug, slide);
   });
+
+  /** 展开某位专家的收纳条并滚动定位（锚点 expert-<slug>）。 */
+  function navigateToExpert(slug) {
+    const anchor = document.getElementById("expert-" + slug);
+    if (!anchor) {
+      console.warn("[HP map] 未找到专家“" + slug + "”的锚点，无法定位。");
+      return;
+    }
+    const fold = anchor.closest ? anchor.closest("details.section-fold") : null;
+    if (fold && !fold.open) {
+      fold.open = true;
+      window.requestAnimationFrame(function () { scrollToExpert(anchor); });
+    } else {
+      scrollToExpert(anchor);
+    }
+    if (window.location.hash !== "#expert-" + slug) {
+      window.history.replaceState(null, "", "#expert-" + slug);
+    }
+  }
+
+  function scrollToExpert(anchor) {
+    if (typeof anchor.scrollIntoView === "function") {
+      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    const sp = window.SidebarProgress;
+    if (sp && typeof sp.recalculate === "function") sp.recalculate();
+  }
+
+  /** 左侧专家索引：按类别分色分组，只显示头像 + 姓名，点击导航到对应专家。 */
+  function renderExpertIndex() {
+    if (!expertIndex) return;
+    expertIndex.innerHTML = "";
+    const categoryOrder = ["science", "industry", "policy", "public"];
+    const groups = new Map();
+    chinaExperts.forEach(expert => {
+      if (expert.onMap === false) return;
+      if (!groups.has(expert.category)) groups.set(expert.category, []);
+      groups.get(expert.category).push(expert);
+    });
+    categoryOrder.forEach(cat => {
+      const members = groups.get(cat);
+      if (!members || !members.length) return;
+      const head = document.createElement("div");
+      head.className = "hz-expert-index__group";
+      head.innerHTML = '<span class="hz-legend-dot ' + cat + '"></span><span>' + (categoryNames[cat] || cat) + '</span>';
+      expertIndex.appendChild(head);
+      members.forEach(expert => {
+        const link = document.createElement("a");
+        link.className = "hz-expert-index__item";
+        link.href = "#expert-" + expert.slug;
+        link.setAttribute("aria-label", "查看" + expert.name + "的访谈记录");
+        link.innerHTML = '<span class="hz-expert-index__avatar">' + faceHTML(expert) +
+          '</span><span class="hz-expert-index__name">' + expert.name + '</span>';
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          navigateToExpert(expert.slug);
+        });
+        expertIndex.appendChild(link);
+      });
+    });
+  }
+  renderExpertIndex();
+
+  /** 专家索引与地图容器严格等高（地图高度随宽度按比例变化，用 JS 同步）。 */
+  function syncIndexHeight() {
+    if (!expertIndex) return;
+    const mapBox = document.getElementById("hzMapContainer");
+    if (mapBox) expertIndex.style.maxHeight = mapBox.offsetHeight + "px";
+  }
+  syncIndexHeight();
+  window.addEventListener("resize", syncIndexHeight);
+  if (typeof ResizeObserver === "function") {
+    const mapBox = document.getElementById("hzMapContainer");
+    if (mapBox) new ResizeObserver(() => { syncIndexHeight(); }).observe(mapBox);
+  }
 
   function syncOuterArticleHeight() {
     window.dispatchEvent(new CustomEvent("hp:content-resize"));
@@ -378,31 +454,15 @@
   }
 
   function selectExpert(expert, pin) {
-    const slide = detailSlidesByExpert.get(expert.slug);
-    if (!slide) {
-      console.warn("[HP map] 未找到专家“" + expert.slug + "”的详情，无法切换。");
-      return;
-    }
-    const slideIndex = detailSlides.indexOf(slide);
-    detailPanel.hidden = false;
-    detailsIntro.hidden = true;
-    detailTrack.style.transform = "translate3d(" + (-slideIndex * detailViewport.clientWidth) + "px, 0, 0)";
-    detailViewport.style.height = slide.offsetHeight + "px";
-    detailSlides.forEach((item, index) => {
-      const active = index === slideIndex;
-      item.setAttribute("aria-hidden", active ? "false" : "true");
-      item.inert = !active;
-    });
     root.querySelectorAll(".hz-cluster").forEach(item => item.classList.toggle("is-active", item === pin));
-    detailPanel.setAttribute("aria-label", expert.name + "的访谈记录");
-    syncOuterArticleHeight();
+    navigateToExpert(expert.slug);
   }
 
   function getVisibleClusters() {
-    const active = new Set(Array.from(root.querySelectorAll('#hzFilter input[type="checkbox"]:checked')).map(cb => cb.value));
     const clusters = new Map();
     chinaExperts.forEach(expert => {
-      if (!expert.provinceId || !active.has(expert.category)) return;
+      if (expert.onMap === false) return;
+      if (!expert.provinceId) return;
       if (!expert.slug || !detailSlidesByExpert.has(expert.slug)) {
         console.warn("[HP map] 专家 “" + (expert.name || expert.slug) + "” 缺少可映射的详情卡，已跳过渲染。");
         return;
@@ -534,29 +594,15 @@
 
   if (typeof ResizeObserver === "function") {
     new ResizeObserver(() => {
-      const activeSlide = detailSlides.find(slide => slide.getAttribute("aria-hidden") === "false");
-      if (activeSlide && !detailPanel.hidden) {
-        detailViewport.style.height = activeSlide.offsetHeight + "px";
-        syncOuterArticleHeight();
-      }
-    }).observe(detailTrack);
+      syncOuterArticleHeight();
+    }).observe(expertStack);
   }
 
-  root.querySelector("#hzFilter").addEventListener("change", renderPins);
   document.addEventListener("click", event => {
     if (activeCluster && !activeCluster.popover.contains(event.target) && !activeCluster.button.contains(event.target)) closeCluster(false);
   });
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeCluster(true);
-  });
-
-  const filterEl = root.querySelector("#hzFilter");
-  const filterToggle = root.querySelector("#hzFilterToggle");
-  filterToggle.addEventListener("click", () => {
-    const isCollapsed = filterEl.classList.toggle("collapsed");
-    filterToggle.setAttribute("aria-expanded", String(!isCollapsed));
-    filterToggle.textContent = isCollapsed ? "+" : "−";
-    filterToggle.setAttribute("aria-label", isCollapsed ? "展开筛选面板" : "收起筛选面板");
   });
 
   renderPins();

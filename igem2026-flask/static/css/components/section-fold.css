@@ -1,8 +1,24 @@
 /* 通用正文小节收纳条
  * 配套 static/js/components/section-fold.js（全站加载）。
+ * 2026-09-27 建立；2026-10-07 增加展开/收起动画。
+ *
  * 运行时把 .content-card 内带 id 的 h3 及其后续内容包成 <details class="section-fold">，默认折叠。
- * 任何页面只要给正文小节 h3 加 id（<页面前缀>-<语义>），即自动获得收纳条效果。
+ * 任何页面只要给正文小节 h3 加 id（<页面前缀>-<语义>），即自动获得收纳条 + 展开动画，无需写 JS/CSS。
+ *
+ * ⚠️ .section-fold__body 的 padding 是 human-practices/integrated human-practices 页
+ *    手写收纳条（.hz-expert-fold-all + hpFoldReveal）的既有依赖，不能删、不能搬。
+ *    组件自己生成的收纳条因此改用内层 .section-fold__inner 承载内边距，
+ *    让 .section-fold__body 的高度可以真正收到 0（padding 会抵住 height:0，收不干净）。
  */
+
+/* ===== 展开/收起动画参数（唯一入口）=====
+ * 时长与缓动一律走全站令牌（README §4.6），只在这里改即可全站生效；
+ * JS 通过 getComputedStyle 读取，读不到时用 0.3s / --ease-smooth 兜底。 */
+.section-fold {
+  --fold-dur-open: var(--duration-normal, 0.3s);
+  --fold-dur-close: var(--duration-normal, 0.3s);
+  --fold-ease: var(--ease-smooth, cubic-bezier(0.16, 1, 0.3, 1));
+}
 
 /* 锚点跳转双保险：目标标题留出固定顶栏空间，避免被导航栏遮挡导致「点不准」 */
 .content-card h2,
@@ -27,7 +43,7 @@
   display: inline-block;
   margin-right: 0.45rem;
   color: inherit;
-  transition: transform 0.2s ease;
+  transition: transform var(--duration-fast, 0.2s) var(--ease-smooth, ease);
 }
 .section-fold[open] > summary::before {
   transform: rotate(90deg);
@@ -38,6 +54,25 @@
 .section-fold > summary:hover {
   opacity: 0.88;
 }
+
+/* 手写收纳条（.hz-expert-fold-all 等非组件生成的 details）沿用的内边距——保持原值 */
 .section-fold__body {
   padding: 0.5rem 0 0.25rem;
+}
+
+/* 动画作用层：只在展开/收起过程中由 JS 写 height + overflow，静态时不设任何高度。
+   padding 移到内层，收起时高度才能真正归零（选择器多一层 .section-fold，优先于上面那条）。 */
+.section-fold > .section-fold__body {
+  padding: 0;
+  overflow: visible;
+}
+.section-fold__inner {
+  padding: 0.5rem 0 0.25rem;
+}
+
+/* 减少动态：不做动画，交回原生 details 行为 */
+@media (prefers-reduced-motion: reduce) {
+  .section-fold > summary::before {
+    transition: none;
+  }
 }

@@ -8,9 +8,10 @@
  *   - ELISA、qPCR 两个圆与虚线弧隐藏（缩放并叠到 CGIS 圆身后，不会露边）；
  *   - 屏顶英文小标题逐词「右先左后」下落；
  *   - CGIS 圆上方出现「Click here」箭头提示；
- *   - 点击（或键盘触发）CGIS 后：CGIS→ELISA 虚线弧先画出 → ELISA 沿以 CGIS 为
- *     圆心的轨道展开落位 → ELISA→qPCR 连线（2026-10-06f 新增，内联 SVG）擦出 →
- *     qPCR 落位（最终态 = index.css 现有布局，不做任何改写）。
+ *   - 点击（或键盘触发）CGIS 后：一段式连贯揭示——CGIS→ELISA 虚线弧擦出、
+ *     ELISA 随即沿轨道展开落位；ELISA→qPCR 连线（2026-10-06f 新增）紧接弧线
+ *     尾端继续向上擦出、qPCR 随即落位（2026-10-07d：两段线一笔画出、两圆随线
+ *     起飞，各环节重叠不空等；最终态 = index.css 现有布局，不做任何改写）。
  *   - 每次页面加载只播一次：展开后滑走再滑回不重播，刷新才重置。
  *
  * @降级红线
@@ -35,14 +36,16 @@
   var METHODS_ARMED = 'js-methods-armed';
   var HIDDEN_OPACITY = 0;
 
-  /** 时间轴（ms） */
+  /** 时间轴（ms）——2026-10-07d：一段式连贯揭示。两段线一笔向上画、两圆随线起飞，
+   *  各环节互相重叠、不空等：弧线擦出 → ELISA 即刻出发；连线紧接弧线尾端继续
+   *  向上画 → qPCR 在连线到达前出发。顺序仍为 CGIS → ELISA → qPCR。 */
   var T = {
-    arcDraw: 460,      // 虚线弧画出
-    elisaDelay: 280,   // ELISA 出发
-    linkDelay: 1180,   // ELISA→qPCR 连线擦出（等 ELISA 落位，280+950≈1230 前后衔接）
-    linkDraw: 400,     // 连线擦出时长
-    qpcrDelay: 1420,   // qPCR 出发（连线画完再出发）
-    fly: 950,          // 单个圆飞行时长
+    arcDraw: 560,      // CGIS→ELISA 虚线弧擦出
+    elisaDelay: 180,   // ELISA 出发（弧线刚到 ELISA 一侧即启程，不空等）
+    linkDelay: 260,    // ELISA→qPCR 连线紧接弧线尾端继续擦出（首尾相接一笔向上）
+    linkDraw: 560,     // 连线擦出时长（与弧线一致，节奏统一）
+    qpcrDelay: 640,    // qPCR 出发（连线仍在画，衔接不断档）
+    fly: 900,          // 单个圆飞行时长
     hintDelay: 780,    // 提示出现（等标题落定）
     wordStagger: 62,   // 标题逐词间隔（右 → 左）
     wordDrop: 620,     // 单个词下落时长
@@ -481,13 +484,13 @@
       runningAnims.push(anim);
     }
 
-    // 2026-10-06i：ELISA→qPCR 连线（切图 scaleY(-1) 上下翻转）——clip-path 走元素局部坐标：
-    // scaleY(-1) 只翻纵轴，视觉右下角 = 局部右上角（100% 0%），从那里扫向覆盖整幅的三角形
+    // 2026-10-07c：ELISA→qPCR 连线（切图 rotate 245°）——clip-path 走元素局部坐标：
+    // 局部左下角经 245° 旋转落在视觉右下（ELISA 侧），从那里扫向覆盖整幅的三角形
     function drawLink() {
       if (!link) return;
       var anim = link.animate([
-        { clipPath: 'polygon(100% 0%, 100% 0%, 100% 0%)', offset: 0 },
-        { clipPath: 'polygon(100% 0%, -140% 0%, 100% 240%)', offset: 1 }
+        { clipPath: 'polygon(0% 100%, 0% 100%, 0% 100%)', offset: 0 },
+        { clipPath: 'polygon(0% 100%, 0% -140%, 300% 100%)', offset: 1 }
       ], {
         duration: T.linkDraw,
         delay: T.linkDelay,

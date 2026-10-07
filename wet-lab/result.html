@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="../static/css/components/page-loader.css">
 <link rel="stylesheet" href="../static/css/components/back-to-top.css">
 <link rel="stylesheet" href="../static/css/components/section-fold.css">
+<link rel="stylesheet" href="../static/css/components/media-reveal.css">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
 <script src="../static/js/components/page-loader-arm.js"></script>
@@ -209,62 +210,53 @@
           <ul class="description-nav">
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#results-overview" class="nav-main-link">Results 概览</a>
+                <a href="#results-overview" class="nav-main-link">Results Overview</a>
               </div>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#results-chassis" class="nav-main-link">一、底盘改造</a>
+                <a href="#results-chassis" class="nav-main-link">Chassis</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-signal" class="nav-main-link">PAGER Receptor</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-gpa1" class="nav-main-link">G-Protein</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-reporter" class="nav-main-link">Reporter</a>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#results-chassis-1">pML104-sgRNA 质粒构建</a></li>
-                <li class="level3"><a href="#results-chassis-2">修复模板扩增</a></li>
-                <li class="level3"><a href="#results-chassis-3">分子验证</a></li>
-                <li class="level3"><a href="#results-chassis-4">表型/功能验证</a></li>
+                <li class="level3"><a href="#results-reporter-1">Vector construction &amp; transformation</a></li>
+                <li class="level3"><a href="#results-reporter-2">Sequencing verification</a></li>
+                <li class="level3"><a href="#results-reporter-3">α-factor gradient imaging</a></li>
+                <li class="level3"><a href="#results-reporter-4">Reporter: growth curves</a></li>
+                <li class="level3"><a href="#results-reporter-5">Time-course fluorescence</a></li>
+                <li class="level3"><a href="#results-reporter-6">Reporter: early signal-to-noise</a></li>
+                <li class="level3"><a href="#results-chassis-1">sgRNA vector construction</a></li>
+                <li class="level3"><a href="#results-chassis-2">Repair templates</a></li>
+                <li class="level3"><a href="#results-chassis-3">Transformation &amp; colony PCR</a></li>
+                <li class="level3"><a href="#results-chassis-4">Sanger sequencing</a></li>
+                <li class="level3"><a href="#results-chassis-5">Knockout: growth curves</a></li>
+                <li class="level3"><a href="#results-chassis-6">Knockout: fluorescence</a></li>
+                <li class="level3"><a href="#results-chassis-7">Knockout: early signal-to-noise</a></li>
+                <li class="level3"><a href="#results-gpa1-1">Homologous template</a></li>
+                <li class="level3"><a href="#results-gpa1-2">Transformation &amp; validation</a></li>
+                <li class="level3"><a href="#results-gpa1-3">Sequence confirmation</a></li>
+                <li class="level3"><a href="#results-gpa1-4">Morphology</a></li>
+                <li class="level3"><a href="#results-gpa1-5">Growth of humanized strains</a></li>
+                <li class="level3"><a href="#results-gpa1-6">Fluorescence response</a></li>
               </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#results-pager" class="nav-main-link">二、受体构建</a>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#results-pager-1">概述</a></li>
-                <li class="level3"><a href="#results-pager-2">大肠杆菌转化与质粒提取验证</a></li>
-                <li class="level3"><a href="#results-pager-3">酵母转化与酵母质粒提取</a></li>
-                <li class="level3"><a href="#results-pager-4">酵母第二次转化结果与菌落PCR</a></li>
-                <li class="level3"><a href="#results-pager-5">蛋白表达检测</a></li>
-                <li class="level3"><a href="#results-pager-6">第二次构建</a></li>
-                <li class="level3"><a href="#results-pager-7">第三次构建</a></li>
-                <li class="level3"><a href="#results-pager-8">小结</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#results-gpa1" class="nav-main-link">三、接口改造</a>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#results-gpa1-1">概述</a></li>
-                <li class="level3"><a href="#results-gpa1-2">两条路线：线性供体片段</a></li>
-                <li class="level3"><a href="#results-gpa1-3">改造菌株的确证</a></li>
-                <li class="level3"><a href="#results-gpa1-4">响应与表达</a></li>
-                <li class="level3"><a href="#results-gpa1-5">小结</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#results-reporter" class="nav-main-link">四、报告体系</a>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#results-reporter-1">目的片段与载体制备</a></li>
-                <li class="level3"><a href="#results-reporter-2">Gibson 克隆与转化筛选</a></li>
-                <li class="level3"><a href="#results-reporter-3">阳性重组子分子鉴定</a></li>
-                <li class="level3"><a href="#results-reporter-4">α-因子梯度诱导分析</a></li>
-                <li class="level3"><a href="#results-reporter-5">总结</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#results-discussion" class="nav-main-link">五、综合讨论</a>
+                <a href="#results-discussion" class="nav-main-link">Discussion</a>
               </div>
             </li>
 
@@ -299,631 +291,233 @@
 
         <!-- ============ 概览 ============ -->
         <div id="results-overview" class="content-card">
-          <h2>Results 概览</h2>
+          <h2>Results Overview</h2>
           <div class="content-text-frame">
             <p class="executive-summary">
-              这一页回答「我们实际测到了什么」。四节结果按安装顺序排列：底盘改造、受体构建、接口改造、报告体系；每节先给数据，再写这些数据能支持到哪一步。
+              This page reports the experimental results of the yeast influenza-A biosensor project. It is organized by the four project modules, in the order of the yeast signalling pathway: chassis engineering, the signal recognition module, Gpa1 humanization, and reporter system construction.
             </p>
             <p class="content-intro">
-              四个模块的技术栈彼此独立：底盘用 pML104 与同源臂修复模板，受体用 pGADT7 与 PAGER 融合受体，接口用 pRS426 与多片段融合 PCR，报告体系用 pESC-HIS 与 FUS1 启动子。唯一的公共项是底盘菌株 BY4741，以及作为诱导输入的 α-factor——但三套浓度体系并存，跨模块数值不能直接比大小。
-            </p>
-            <p class="content-intro">
-              <strong>边界说明：</strong>本页不写检测灵敏度、特异性、检出限与临床可用性，这些测量没有做过；不把方案预期写成实测结果。本页图片均来自实验记录中的图表与成像，导出格式的图片只作可视化呈现，不作为原始数据。
+              The results reported below belong to the reporter system construction module; figures and captions follow the consolidated experimental results report.
             </p>
           </div>
         </div>
 
-        <!-- ============ 一、底盘改造 ============ -->
-                <div id="results-chassis" class="content-card">
-          <div class="content-text-frame">
-<h2>底盘酵母改造</h2>
-<h3 id="results-chassis-1">一 pML104-sgRNA质粒构建</h3>
-<p>1.1 方案一：在载体上设计约25 bp引物，通过反向PCR线性化载体；同时在目的片段两端各引入20 bp与线性化载体匹配的同源序列，后续经一步克隆连接完成质粒构建。</p>
-<h5>1.1.1反向PCR扩增线性化</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img001.png" alt="图1 方案一 反向PCR扩增线性化载体电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图1 方案一 反向PCR扩增线性化载体电泳图</figcaption>
-</figure>
-<p>注：泳道2是退火温度为53℃时的PCR产物；泳道3是退火温度为55℃时的PCR产物；</p>
-<p>如图所示，退火温度为53℃与55℃时扩增效果基本一致，均可见清晰的目标条带（约11209 bp）。然而，所有PCR产物（包括阴性对照）均出现明显弥散现象。结合后续更换水、模板及PCR Mix等试剂后该现象仍存在，可初步排除试剂污染因素，推测该弥散条带可能与引物设计有关。针对此问题，后续可通过扩大PCR反应体系，并结合切胶回收以去除弥散干扰，从而获得纯度较高的目标产物。</p>
-<p>表1 方案一线性化载体直接纯化回收的浓度及纯度</p>
-<h5>1.1.2一步克隆及转化大肠杆菌</h5>
-<p>（1）一步克隆产物验证——PCR验证</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img002.png" alt="图2 一步克隆连接PCR验证电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图2 一步克隆连接PCR验证电泳图</figcaption>
-</figure>
-<p>注：泳道2：一步克隆后PCR验证产物；泳道3：阴性；最终扩增的条带是400bp左右</p>
-<p>如图所示，一步克隆连接产物经PCR验证后，在约250–500 bp之间（接近250 bp）出现一条清晰的主条带，阴性对照无对应明亮条带。该结果提示连接产物中可能存在目标片段，但条带位置偏低，其是否为预期的连接方式尚不能确定，需结合后续大肠杆菌转化实验，通过菌落PCR及测序进一步判断质粒是否成功环化及连接是否正确。</p>
-<p>（2）一步克隆验证——大肠杆菌转化</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img003.png" alt="图3 方案一 一步克隆连接-大肠杆菌转化实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img004.png" alt="图3 方案一 一步克隆连接-大肠杆菌转化实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img005.png" alt="图3 方案一 一步克隆连接-大肠杆菌转化实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图3 方案一 一步克隆连接-大肠杆菌转化实验</figcaption>
-</figure>
-<p>注：1号是阴性对照；2号是阳性对照（加入提取的pML104环化质粒）；3号是一步克隆连接产物</p>
-<p>如图所示，阴性对照平板上无菌落生长，阳性对照平板上可见少量零星菌落（推测可能与加入质粒量过多、对感受态细胞产生一定抑制有关），表明感受态细胞活性正常，转化体系有效。而一步克隆连接产物转化后平板上无菌落生长，提示该连接产物未能成功环化或未形成可稳定复制的重组质粒，即一步克隆连接反应可能未成功。</p>
-<p>由于方案一中线性化载体扩增不稳定，条带常偏离目标位置，且载体与目的片段间仅20 bp同源臂，一步克隆转化大肠杆菌始终未获成功，推测连接效率较低。因此后续改用方案二：直接在载体上引入目的片段，延长同源臂，连接环化时无需额外添加目的片段，线性化载体可自行环化，操作更为简便。</p>
-<p>1.2 方案二：直接通过引物将目的片段（约33 bp）引入载体，两引物间含约20 bp重叠同源序列，经反向PCR扩增即获得携带目的片段的线性化载体，无需额外添加目的片段，直接一步克隆连接即可完成构建。</p>
-<h5>1.2.1反向PCR扩增线性化（携带33bp目的片段）</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img006.png" alt="图4 方案二 pML104-sgRNA-FAR1线性化载体电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图4 方案二 pML104-sgRNA-FAR1线性化载体电泳图</figcaption>
-</figure>
-<p>注：理论上扩增条带总长是11279bp</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img007.png" alt="图5 方案二 pML104-sgRNA-SST2线性化载体电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图5 方案二 pML104-sgRNA-SST2线性化载体电泳图</figcaption>
-</figure>
-<p>注：理论上扩增条带总长是11279bp</p>
-<p>从图中可见清晰且明亮的目标条带，且条带位置与预期一致，说明线性化载体扩增成功。但与此同时，泳道中还存在非特异性扩增条带，可能会对后续实验造成干扰，因此后续需通过切胶回收对目标条带进行纯化。</p>
-<p>表2 方案二线性化载体切胶回收的纯度与浓度</p>
-<h5>1.2.2一步克隆及转化大肠杆菌</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img008.png" alt="图6 方案二 一步克隆连接-大肠杆菌转化实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img009.png" alt="图6 方案二 一步克隆连接-大肠杆菌转化实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img010.png" alt="图6 方案二 一步克隆连接-大肠杆菌转化实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图6 方案二 一步克隆连接-大肠杆菌转化实验</figcaption>
-</figure>
-<p>注：1号是阳性对照（转入≤50ng的pML104环状质粒）；2号是一步克隆连接产物（图中平板标注“STE2”为笔误，实际应为FAR1）；3号是阴性对照</p>
-<p>阴性对照平板上无菌落生长，一步克隆连接产物转化后同样未长出菌落，而空质粒（阳性对照）平板上菌落生长密集，表明感受态细胞活性正常、转化体系有效。由此推测，一步克隆连接产物未能成功环化或未形成可稳定复制的重组质粒，即该连接反应未成功。</p>
-<p>针对上述现象，考虑到一步克隆连接始终未能成功，遂尝试不再依赖体外连接，而是直接利用酿酒酵母自身的同源重组能力完成质粒环化。由于线性化载体本身已携带33 bp目的片段，故不再进行大肠杆菌转化，而是直接将线性化载体转入酿酒酵母中，若其能在酵母体内自行环化，则该pML104-sgRNA重组质粒即可在酿酒酵母体内定向切割目标靶点。</p>
-<h5>1.2.3酵母转化</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img011.png" alt="图7 方案二 pML104-sgRNA-FAR1线性化载体转化酵母后的平板" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img012.png" alt="图7 方案二 pML104-sgRNA-FAR1线性化载体转化酵母后的平板" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图7 方案二 pML104-sgRNA-FAR1线性化载体转化酵母后的平板</figcaption>
-</figure>
-<p>注：1号是pML104-sgRNA-FAR1线性化载体；2号是阴性对照</p>
-<p>pML104-sgRNA-FAR1线性化载体直接转入酿酒酵母后，平板上长出大量菌落；阴性对照平板上无菌落生长。该结果初步表明，线性化载体可能在酿酒酵母体内利用自身同源重组能力完成环化，并成功转化入酵母细胞。</p>
-<p>为获得FAR1与SST2双基因敲除菌株，在第一轮FAR1敲除完成后，利用5-FOA反筛去除携带URA3标记的sgRNA质粒，获得无质粒的FAR1敲除株；随后在此基础上转入针对SST2的CRISPR质粒，进行第二轮敲除。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img013.png" alt="图8 FAR1敲除株5-FOA反筛实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img014.png" alt="图8 FAR1敲除株5-FOA反筛实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img015.png" alt="图8 FAR1敲除株5-FOA反筛实验" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图8 FAR1敲除株5-FOA反筛实验</figcaption>
-</figure>
-<p>注：1号阴性对照；2号稀释至10-1的菌液浓度，3号稀释至10-2的菌液浓度</p>
-<p>5-FOA反筛平板上长出大量菌落，其中10⁻¹稀释度下菌落过于密集，难以挑取单菌落，故从10⁻²稀释度平板上挑取10个单菌落，分别点种至SD-His平板与SD-His-Ura平板进行验证。若质粒已成功丢失，则菌株应仅能在SD-His平板上生长，而在SD-His-Ura平板上无法生长。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img016.png" alt="图9 5-FOA反筛后挑取单菌落在SD-His与SD-His-Ura平板上的点种" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图9 5-FOA反筛后挑取单菌落在SD-His与SD-His-Ura平板上的点种验证结果</figcaption>
-</figure>
-<p>图中上排为SD-His平板，下排为SD-His-Ura平板。5-FOA反筛后挑取的单菌落点种结果显示，菌落均能在SD-His平板上正常生长，而在SD-His-Ura平板上不生长，表明质粒已成功丢失，5-FOA反筛成功。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img017.png" alt="图10 方案二 pML104-sgRNA-SST2线性化载体转化酵母后的平板" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img018.png" alt="图10 方案二 pML104-sgRNA-SST2线性化载体转化酵母后的平板" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图10 方案二 pML104-sgRNA-SST2线性化载体转化酵母后的平板</figcaption>
-</figure>
-<p>注：1号是涂布了20ul菌液；2号是涂布了80ul菌液</p>
-<p>从图中可见，1号与2号平板均长出密集菌落，但1号平板（涂布20 μL菌液）中菌落分布相对分散，便于挑取单菌落，故从该平板中挑取15个单菌落进行后续验证实验。</p>
-<h3 id="results-chassis-2">二 修复模板扩增</h3>
-<p>2.1 方案一：以酿酒酵母基因组为模板，使用约50–60 bp的上游引物（较原序列缺失4个碱基，造成移码突变），下游引物不改序列、仅与上游Tm匹配，PCR扩增获得FAR1约611 bp、SST2约1303 bp的修复模板。</p>
-<h5>2.1.1 PCR扩增</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img019.png" alt="图11 方案一 修复模板PCR扩增电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图11 方案一 修复模板PCR扩增电泳图</figcaption>
-</figure>
-<p>注：泳道2是扩增针对FAR1基因的修复模板，泳道4是扩增针对SST2基因的修复模板</p>
-<p>FAR1修复模板（611 bp）扩增后可见清晰条带，且位置正确；而SST2修复模板（1303 bp）未扩增出条带。由于SST2修复模板片段较长，初步推测可能是PCR延伸时间不足所致。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img020.png" alt="图12方案一 SST2修复模板扩增图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图12方案一 SST2修复模板扩增图</figcaption>
-</figure>
-<p>注：优化程序后进行SST2修复模板扩增，目标条带1303bp</p>
-<p>从图中可以看出，条带位置正常且清晰。</p>
-<p>2.2 方案二：与方案一思路基本一致，但在缺失4个碱基的基础上，另将NGG中的1个G突变为T或A，以避免向导序列二次识别并反复切割。同时将FAR1与SST2的修复模板均扩增至约1000 bp，左右各含约500 bp同源序列，以提高修复模板的结合效率。</p>
-<h5>2.2.1PCR扩增上臂及下臂</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img021.png" alt="图13 FAR1与SST2修复模板上、下臂的PCR扩增" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图13 FAR1与SST2修复模板上、下臂的PCR扩增</figcaption>
-</figure>
-<p>注：泳道2-3是FAR1上臂（658bp）；泳道4-5是SST2上臂（491bp）；泳道6-7是FAR1下臂（528bp）；泳道8-9是SST2下臂（549bp）</p>
-<p>由于后续融合PCR对上下臂的纯度要求较高，因此采用切胶回收对目的片段进行纯化。</p>
-<p>表3 FAR1和SST2的上、下臂PCR产物切胶回收的浓度及纯度</p>
-<h5>2.2.2融合PCR</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img022.png" alt="图14 FAR1与SST2修复模板融合PCR扩增电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图14 FAR1与SST2修复模板融合PCR扩增电泳图</figcaption>
-</figure>
-<p>注：泳道2-4是FAR1修复模板（1146bp）；泳道5-7是SST2修复模板（993bp）</p>
-<p>从电泳图可以看出，FAR1与SST2的修复模板扩增产物均呈现清晰、单一的目标条带，条带位置与预期大小一致，且无明显非特异性扩增或引物二聚体等杂带。整体扩增效果良好，表明修复模板已成功扩增，可直接进行后续的回收纯化。</p>
-<h5>2.2.3回收浓度及纯度</h5>
-<p>表4 直接纯化回收FAR1及SST2修复模板的浓度和纯度</p>
-<h3 id="results-chassis-3">三 分子验证</h3>
-<h4>3.1 FAR1敲除株的PCR鉴定</h4>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img023.png" alt="图15 FAR1敲除菌株PCR扩增验证电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图15 FAR1敲除菌株PCR扩增验证电泳图</figcaption>
-</figure>
-<p>注：泳道2-11分别是敲除FAR1菌株F1-F10的PCR扩增条带，泳道12是BY4741（野生型）用作阳性对照</p>
-<p>验证方法：敲除验证采用跨越敲除位点的上游引物：若基因组未发生敲除，引物可正常结合并扩增出条带；若4个碱基被成功敲除，引物因无法配对而无法扩增，以此区分野生型与敲除株。</p>
-<p>从图中可以看出，除F10和F7出现微弱条带外，阳性对照BY4741正常扩增出目标条带，其余菌株均未扩增出条带，提示这些菌株可能已成功实现基因敲除。该结果也表明，此验证方法能够以较高概率筛选到成功敲除的菌株。不过，真正判断是否敲除还需要测序进一步确认。</p>
-<h4>3.2 SST2敲除株的PCR鉴定</h4>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img024.png" alt="图16 SST2敲除菌株PCR扩增验证电泳图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图16 SST2敲除菌株PCR扩增验证电泳图</figcaption>
-</figure>
-<p>注：泳道2-16分别是敲除SST2菌株S1-S15的PCR扩增条带，泳道17是BY4741（野生型）用作阳性对照</p>
-<p>验证方法与FAR1一致。</p>
-<p>从图中可以看出，阳性对照BY4741正常扩增出目标条带；S2、S4、S5、S6、S7、S15未扩增出目标条带，提示这些菌株可能已成功实现基因敲除；其余菌株（S1、S3、S8、S9、S10、S11、S12、S13、S14）均扩增出条带，说明其未成功敲除。该结果表明，基于跨越敲除位点引物的PCR验证方法可有效区分野生型与敲除株，并从中筛选出候选敲除菌株。</p>
-<h4>3.3 FAR1敲除株的测序验证</h4>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img025.png" alt="img025.png" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img026.png" alt="图17 FAR1敲除菌株测序峰图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图17 FAR1敲除菌株测序峰图</figcaption>
-</figure>
-<p>测序结果证实，目标位点已成功发生4个碱基缺失：原序列GCGTCACGATCTCCACT，敲除后变为GCGTCACGATCTC，测序峰图与预期序列完全一致，进一步确认该菌株为成功敲除株。</p>
-<h4>3.4 SST2敲除株的测序验证</h4>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img027.png" alt="图18 SST2敲除菌株测序峰图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图18 SST2敲除菌株测序峰图</figcaption>
-</figure>
-<p>测序结果证实，SST2目标位点成功发生4个碱基缺失：原序列为GCCACGAGTTCTGTC，敲除后变为GCCACGAGTTC，测序峰图与预期序列一致，进一步确认该菌株为SST2成功敲除株。其测定方法与结果判读均与FAR1相同。</p>
-<h3 id="results-chassis-4">四 表型/功能验证</h3>
-<h4>4.1 FAR1敲除株的表型/功能验证</h4>
-<h5>4.1.1 生长曲线测定</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img028.png" alt="图19 FAR1敲除株与BY4741在不同浓度下的生长曲线" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图19 FAR1敲除株与BY4741在不同浓度下的生长曲线</figcaption>
-</figure>
-<p>注：横坐标为培养时间（h），纵坐标为OD600。实验设置0μm、1μm、10μm三个a-factor浓度，每个浓度设3个平行样。BY4741为野生型对照，ΔFAR1为FAR1敲除株。</p>
-<p>生长曲线结果显示，FAR1敲除株在0 μm、1 μm和10 μm a-factor浓度下的生长趋势基本一致，说明FAR1敲除后菌株生长不再受a-factor浓度影响；而野生型BY4741在10 μm a-factor条件下生长明显受抑制，与敲除株形成对比。该结果表明，FAR1可能是a-factor影响酵母生长的关键靶点，敲除FAR1可解除a-factor对生长的抑制作用。</p>
-<h5>4.1.2 荧光强度测定</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img029.png" alt="图20 FAR1敲除菌与野生型在不同浓度下的荧光强度变化曲线" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图20 FAR1敲除菌与野生型在不同浓度下的荧光强度变化曲线</figcaption>
-</figure>
-<p>注：横坐标为培养时间（h），纵坐标为荧光强度。实验设置0 μm、1 μm、10 μm三个a-factor浓度，每组设3个平行样。yE-GFP为对照菌株，ΔFAR1为FAR1敲除株。</p>
-<p>荧光强度曲线结果显示，FAR1敲除株在0μm a-factor条件下荧光强度较低，且随a-factor浓度升高而明显增强，10μm时达到最高；对照组yE-GFP同样表现出随a-factor浓度升高而增强的趋势，但整体荧光强度低于FAR1敲除株。该结果表明，FAR1敲除后菌株荧光表达仍受a-factor浓度调控，且在10μm a-factor条件下荧光强度最高。</p>
-<h4>4.2 SST2敲除株的功能验证</h4>
-<h5>4.2.1 荧光强度测定</h5>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/底盘酵母改造/docx-media/img030.png" alt="图21 FAR1、SST2敲除菌株与野生型在不同浓度下的荧光强度变化曲线" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图21 FAR1、SST2敲除菌株与野生型在不同浓度下的荧光强度变化曲线</figcaption>
-</figure>
-<p>注：横坐标为培养时间（h），纵坐标为荧光强度。实验设置0μm、1μm、10μm三个a-factor浓度。yE-GFP为对照菌株，ΔSST2、ΔFAR1为SST2与FAR1双敲除株。</p>
-<p>从图中可以得到两个信息：</p>
-<p>1、低浓度灵敏度显著增强：在1μm及10μm a-factor条件下，双敲除株荧光强度高于对照，尤其是中间浓度1μm，双敲除菌株的荧光值远远高于对照，表明敲除降低了响应阈值，低浓度即可触发强信号。</p>
-<p>2、高浓度响应增强且持续时间延长</p>
-<p>最大浓度下，对照组约18 h达峰后下降，而双敲除株持续上升至22 h仍未达峰，且最大值已远超对照峰值，提示响应幅度放大且负反馈机制受损。</p>
-<p>总体结论</p>
-<p>FAR1与SST2双敲除增强了酵母对a-factor的荧光响应，表现为低浓度更敏感、高浓度更持久，提示敲除破坏了信号通路的负反馈调控，具备作为低浓度信号放大生物传感器元件的潜力。</p>
-          </div>
+        <!-- ============ §2 底盘（通路第 1 段） ============ -->
+
+        <div id="results-chassis" class="content-card">
+          <h2>Chassis Cell Engineering — Knockout of FAR1 and SST2</h2>
         </div>
 
-        <div id="results-pager" class="content-card">
-          <div class="content-text-frame">
-<h2>PAGER门控系统的构建</h2>
-<p>材料来源：个人实验记录</p>
-<p>日期：2026年4月-9月</p>
-<h3 id="results-pager-1">1  概述</h3>
-<p>本模块围绕PAGER质粒开展大肠杆菌转化、质粒提取与验证，并进一步完成酵母转化、酵母质粒提取、菌落PCR与蛋白表达检测。实验目的在于获得可用于后续功能验证的PAGER酵母工程菌株，并通过酶切、PCR与免疫检测确认质粒与表达情况。</p>
-<p>本模块先交代大肠杆菌与酵母转化的结果，再给出质粒提取、菌落PCR与蛋白表达的数据。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img001.png" alt="图 1 质粒构建示意图。" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 1 质粒构建示意图。</figcaption>
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img002.png" alt="图 2  PAGER门控系统原理示意图。当HA蛋白与纳米抗体结合时，DCZ小分子" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 2  PAGER门控系统原理示意图。当HA蛋白与纳米抗体结合时，DCZ小分子能够与hM1Dq受体结合，引起下游反应（如荧光等）。</figcaption>
-</figure>
-<h3 id="results-pager-2">2  大肠杆菌转化与质粒提取验证</h3>
-<h4>2.1  大肠杆菌转化</h4>
-<p>将PAGER质粒转化到Top10中，涂布于LB(Amp)平板，37℃倒置培养23 h。平板上可见散在单菌落，转化结果正常，可用于后续挑菌与质粒提取。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img003.jpeg" alt="图3 4.23 37°C涂布含PAGER质粒的大肠杆菌倒置培养23h后的结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图3 4.23 37°C涂布含PAGER质粒的大肠杆菌倒置培养23h后的结果</figcaption>
-</figure>
-<h4>2.2 质粒提取与浓度纯度</h4>
-<p>提取质粒，共获得4个样品，浓度与纯度如下表。4个样品A260/A280均在1.89-1.93之间，纯度尚可，浓度满足后续酶切与转化需求。</p>
-<p>表1 4.24提取质粒的浓度与纯度</p>
-<h4>2.3 双酶切验证</h4>
-<p>用BamHI和NdeI对提取质粒进行双酶切，酶切结果条带与预期的7939 bp和2063 bp相符合，说明质粒构建正确。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img004.jpeg" alt="图4 4.24 BamHI和NdeI双酶切的结果 条带符合预期" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图4 4.24 BamHI和NdeI双酶切的结果 条带符合预期</figcaption>
-</figure>
-<h3 id="results-pager-3">3 酵母转化与酵母质粒提取</h3>
-<h4>3.1 酵母转化</h4>
-<p>4.29进行酵母转化，阴性和空白对照均未长出菌落，1号和3号染菌，其余两个平板生长良好。整体来看，转化组有阳性菌落出现，但部分平板存在污染，后续挑菌需避开染菌平板。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img005.jpeg" alt="图5 4.29 酵母转化阴性和空白都没有长 1号和3号染菌 其他两个挺好的" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图5 4.29 酵母转化阴性和空白都没有长 1号和3号染菌 其他两个挺好的</figcaption>
-</figure>
-<h4>3.2 酵母质粒提取</h4>
-<h4>4.30进行酵母质粒提取第一次实验，共获得两组样品，浓度与纯度如下。</h4>
-<p>表2 4.30 酵母质粒提取第一次实验</p>
-<p>表3 5.3 酵母质粒提取第二次实验</p>
-<p>5.3进行酵母质粒提取第二次实验，并做双酶切。电泳结果显示2、4、3号泳道均没有目的条带，阴性对照无条带，双酶切验证失败。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img006.jpeg" alt="图6 5.3 酵母质粒提取第二次实验双酶切" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图6 5.3 酵母质粒提取第二次实验双酶切</figcaption>
-</figure>
-<h4>5.9进行第三次提取含PAGER质粒酵母的质粒，浓度与纯度如下。</h4>
-<p>表4 5.9 第三次提取含PAGER质粒酵母的质粒</p>
-<p>5.11进行第四次提取含PAGER质粒酵母的质粒，浓度与纯度如下，酵母质粒提取结果均不理想，决定再次转化看看。</p>
-<p>表5 5.11 第四次提取含PAGER质粒酵母的质粒</p>
-<h3 id="results-pager-4">4 酵母第二次转化结果与菌落PCR</h3>
-<h4>4.1 酵母转化结果</h4>
-<p>5.22 PAGER酵母转化结果显示，1-4号均转化成功；空白在转化时加入的是无菌水，阴性涂布的是BY4741，未长出菌落，结果理想。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img007.jpeg" alt="img007.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img008.jpeg" alt="img008.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img009.jpeg" alt="img009.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img010.jpeg" alt="img010.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img011.jpeg" alt="图7 5.22 PAGER酵母转化结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/信号识别模块/docx-media/img012.jpeg" alt="图7 5.22 PAGER酵母转化结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图7 5.22 PAGER酵母转化结果</figcaption>
-</figure>
-<h4>4.2 酵母菌落PCR</h4>
-<p>6.9进行酵母菌落PCR，从左到右依次为：3号菌液70℃、80℃、90℃破膜，4-1号菌液70℃、80℃、marker、90℃破膜，4-2号菌液、70℃、80℃、90℃破膜，4月24号大肠杆菌质粒1号，此次采用50 μL体系。电泳结果显示样品1-4在目标区域附近有条带，阴性1、阴性2无明显条带，说明菌落PCR可以初步鉴定阳性克隆，但破膜温度与模板质量对结果有影响。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img013.png" alt="图8 6.9 酵母菌落PCR结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图8 6.9 酵母菌落PCR结果</figcaption>
-</figure>
-<h3 id="results-pager-5">5 蛋白表达检测</h3>
-<p>7.16进行SDS-PAGE，预期条带应为60多kD，实际结果出现在40 kD附近。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img014.png" alt="图9 7.16 SDS-PAGE结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图9 7.16 SDS-PAGE结果</figcaption>
-</figure>
-<p>7.18进行WB，预期条带应为60多kD，实际结果同样出现在40 kD附近。两次结果一致，说明目标蛋白可能存在截短表达或降解，也可能与载体构建、标签位置或抗体识别有关，需进一步排查。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img015.png" alt="图10 7.18 WB 结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图10 7.18 WB 结果</figcaption>
-</figure>
-<h3 id="results-pager-6">6 第二次构建</h3>
-<h4>6.1 目的片段扩增</h4>
-<p>7.21使用新引物从新构建，删除目的片段与启动子之间的多余序列，进行第二次PCR与电泳验证，在10 kb条带附近出现条带，验证成功。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img016.png" alt="图11 7.21 新引物第二次PCR与电泳结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图11 7.21 新引物第二次PCR与电泳结果</figcaption>
-</figure>
-<h4>7.21进行胶回收与酵母转化，浓度偏低，但还是接着转入酵母中。</h4>
-<p>表6 7.21 胶回收结果</p>
-<h4>6.2 酵母转化</h4>
-<p>7.23转化平板结果显示，SD-Leu平板上长出单菌落，对照BY4741平板无明显菌落，转化组生长良好。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img017.jpeg" alt="图12 7.23 转化平板结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/信号识别模块/docx-media/img018.jpeg" alt="图12 7.23 转化平板结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图12 7.23 转化平板结果</figcaption>
-</figure>
-<p>7.24进行第一次菌落PCR，2号为正确条带（689 bp），初步判定2号菌为阳性克隆。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img019.png" alt="图13 7.24 第一次菌落PCR结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图13 7.24 第一次菌落PCR结果</figcaption>
-</figure>
-<h4>6.3 免疫荧光功能验证</h4>
-<p>7.29进行免疫检测，1号、2号为第一次构建的菌，3号、4号为第二次构建的菌，7号、8号为BY4741阴性对照，无明显荧光。结果说明第一次与第二次构建的菌株均未检测到明显目标信号，需结合测序与表达条件进一步确认。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img020.jpeg" alt="img020.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img021.jpeg" alt="img021.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<p>1号                                   2号</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img022.jpeg" alt="img022.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img023.jpeg" alt="img023.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<p>3号                                 4号</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img024.jpeg" alt="img024.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img025.jpeg" alt="img025.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<p>5号                                6号</p>
-<p>图14 7.29 免疫检测结果</p>
-<h3 id="results-pager-7">7 第三次构建</h3>
-<p>由于第二次构建没有成功表达出蛋白，故作第三次构建，修改了Linker的序列。</p>
-<h4>7.1 目的片段扩增与一步克隆</h4>
-<p>8.14进行载体线性化PCR与胶回收，目的片段（762bp）线性化样品浓度为167.2 ng/μL，A260/280为1.86。电泳结果显示500和800 bp之间有目的条带，胶回收结果可用。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img026.png" alt="图15 目的片段PCR扩增电泳验证结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图15 目的片段PCR扩增电泳验证结果</figcaption>
-</figure>
-<p>表7 8.14 目的片段胶回收结果</p>
-<p>8.19进行载体线性化PCR与胶回收，载体线性化样品（8844bp）浓度为106.3 ng/μL，A260/280为1.89。电泳结果显示10000 bp附近有目的条带，胶回收结果可用。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img027.png" alt="图16 8.19 载体线性化PCR电泳验证结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图16 8.19 载体线性化PCR电泳验证结果</figcaption>
-</figure>
-<p>表8 8.19 载体片段胶回收结果</p>
-<p>8.23进行一步克隆与验证，目标条带为472 bp，一步克隆成功。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img028.png" alt="图17 8.23 一步克隆PCR电泳验证结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图17 8.23 一步克隆PCR电泳验证结果</figcaption>
-</figure>
-<h4>7.2 大肠杆菌转化与验证</h4>
-<p>8.25进行一步克隆转化菌落PCR验证，目标条带为472 bp，一步克隆成功。菌落PCR结果显示多数样品在目标位置有条带，说明转化子中目的片段已成功导入大肠杆菌。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img029.png" alt="图18 8.25 一步克隆转化菌落PCR验证" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/信号识别模块/docx-media/img030.png" alt="图18 8.25 一步克隆转化菌落PCR验证" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图18 8.25 一步克隆转化菌落PCR验证</figcaption>
-</figure>
-<h4>8.26进行大肠杆菌质粒提取，浓度与纯度如下。</h4>
-<p>表9 8.26 大肠杆菌质粒提取结果</p>
-<h4>7.3 酵母转化与验证</h4>
-<h4>8.25进行一步克隆产物和质粒酵母转化。</h4>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img031.jpeg" alt="img031.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img032.jpeg" alt="img032.jpeg" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img033.jpeg" alt="图19 8.25 一步克隆产物和质粒酵母转化结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/信号识别模块/docx-media/img034.jpeg" alt="图19 8.25 一步克隆产物和质粒酵母转化结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图19 8.25 一步克隆产物和质粒酵母转化结果</figcaption>
-</figure>
-<p>8.26进行酵母转化菌落PCR，目标条带为472 bp，酵母转化成功。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img035.png" alt="图20 8.26 酵母转化菌落PCR结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图20 8.26 酵母转化菌落PCR结果</figcaption>
-</figure>
-<h4>7.4 蛋白质表达与功能验证</h4>
-<p>8.30-8.31进行WB实验，60 kD附近有条带，但与阳性和阴性都有且杂带较多，待改进。说明目标蛋白有表达，但特异性不够理想，后续可通过优化抗体浓度、封闭条件与洗膜条件改善。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img036.png" alt="img036.png" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img037.png" alt="img037.png" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<p>涵盖从DNA合成/提取 → 质粒构建 → 转化 → 筛选 → 表征 → 最终功能验证的全部过程</p>
-<h4>8.30-8.31 WB实验结果</h4>
-<h4>7.5 功能验证</h4>
-<p>9.11-9.13进行功能验证，结果用酶标仪读取荧光值，TEV与HA两组信号均无明显结果。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img038.png" alt="img038.png" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/信号识别模块/docx-media/img039.png" alt="img039.png" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-</figure>
-<h4>9.11-9.13 功能验证结果</h4>
-<h3 id="results-pager-8">8 小结</h3>
-<p>本模块完成了PAGER质粒的大肠杆菌转化、质粒提取与双酶切验证，并进一步完成了酵母转化、酵母质粒提取、菌落PCR与蛋白表达检测。大肠杆菌转化与酶切结果符合预期；酵母转化可获得阳性菌落，但部分批次存在染菌与提取浓度偏低的问题；菌落PCR可初步筛选阳性克隆；SDS-PAGE与WB在40 kD附近出现条带，与预期60多kD不符，提示蛋白可能存在截短或降解；一步克隆与酵母转化菌落PCR在472 bp处获得目的条带，说明一步克隆与酵母转化成功。整体来看，质粒构建与转化体系基本建立，但蛋白表达与功能验证仍需进一步优化，也可能需要继续改进DNA序列。</p>
-<!-- RS-PAGER-9：源文档「9 在途与下一步」按 README 5.14 口径不渲染——WB（8.30—8.31）杂带较多待优化；功能验证（9.11—9.13）96 孔板原始读数未与孔位建立对应，相关数值暂按趋势描述；后续优化酵母质粒提取、蛋白表达条件与 WB 特异性，并完成功能验证数据整理。 -->
-          </div>
+        <div id="results-signal" class="content-card">
+          <h2>PAGER Antigen-Gated Fusion Receptor Protein Design</h2>
         </div>
 
         <div id="results-gpa1" class="content-card">
-          <div class="content-text-frame">
-<h2>GPA1 C 端人源化改造</h2>
-<p>材料来源：郑师姐的文档</p>
-<p>日期：2026 年 9 月 21 日</p>
-<h3 id="results-gpa1-1">1  概述</h3>
-<p>本模块对酿酒酵母 GPA1 基因 C 端的 5 个氨基酸进行人源化替换，并在其后引入终止密码子，依靠酵母自身的同源重组完成基因组定点编辑，URA3 作为筛选标记。改造的目标是让人源受体 hM1Dq 能够通过 Gpa1 接入酵母的 G 蛋白通路。</p>
-<p>改造完成后，需要单独确认酵母原有的 α-factor 交配通路是否受影响。验证从三个层面展开：细胞形态、增殖能力、G 蛋白下游基因表达。</p>
-<p>供体片段的制备设计了两条技术路线，本章先交代两条路线的取舍与结果，再给出改造菌株的确证与表型数据。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img001.png" alt="图 1  编辑原理示意图。供体片段由上游同源臂、人源化 5 个氨基酸与终止密码子" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 1  编辑原理示意图。供体片段由上游同源臂、人源化 5 个氨基酸与终止密码子、URA3 表达盒、下游同源臂组成；右侧为编辑后的基因组位点</figcaption>
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img002.png" alt="图 2  路线一（pRS426 载体二次线性化）构建流程示意图" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 2  路线一（pRS426 载体二次线性化）构建流程示意图</figcaption>
-</figure>
-<h3 id="results-gpa1-2">2  两条路线：把线性供体片段做出来</h3>
-<h4>2.1  路线一：pRS426 载体二次线性化</h4>
-<p>载体初次 PCR 线性化以 pRS426 质粒为模板，使用引物 VecLinearf1 / VecLinearr1 扩增。产物主条带位置与理论片段大小 5601 bp 相吻合，同时出现多条非特异性杂带，无法直接用 PCR 产物纯化试剂盒回收，改用切胶回收。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img003.png" alt="图 3  载体初次 PCR 线性化产物电泳。泳道 1：15000 bp mark" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 3  载体初次 PCR 线性化产物电泳。泳道 1：15000 bp marker；2：空白对照；3–4：PCR 产物</figcaption>
-</figure>
-<p>表 1  初次线性化载体切胶回收后的浓度与纯度</p>
-<p>第一轮一步无缝克隆按片段摩尔比 3:1 组装，随后用引物 ValHomUf / ValHomUr 做 PCR 验证。泳道 2–5 均扩增出约 640 bp 的目的条带，与理论预期一致；空白对照组无扩增条带。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img004.png" alt="图 4  第一轮一步克隆验证 PCR。泳道 1：2000 bp marker；2" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 4  第一轮一步克隆验证 PCR。泳道 1：2000 bp marker；2–5：验证产物；6：空白对照</figcaption>
-</figure>
-<p>组装产物转化大肠杆菌 TOP10 时遇到阻碍。平板 1 空白对照无菌落生长；平板 2 为转入 pRS426 空质粒的阳性对照，长出形态蓬松发散的异常菌落，判断为杂菌污染，该组无法作为可靠阳性参照。一步克隆产物按浓缩 10 倍、浓缩 5 倍、原液、25%、50%、75% 六种浓度梯度涂布，所有平板均无目标转化菌落长出。</p>
-<p>考虑到体内转化筛选持续受阻，实验不再重复转化，跳过中间重组质粒的体内获得步骤，直接以一步克隆反应产物为模板开展载体二次 PCR 线性化。二次线性化产物条带位置与理论片段大小 6092 bp 相匹配，条带单一、无明显非特异性杂带，但亮度偏弱，凝胶背景存在弥散发白现象。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img005.png" alt="图 5  载体二次 PCR 线性化产物电泳。泳道 1：10000 bp mark" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 5  载体二次 PCR 线性化产物电泳。泳道 1：10000 bp marker；2–3：PCR 产物；4：空白对照</figcaption>
-</figure>
-<p>表 2  二次线性化载体切胶回收后的浓度与纯度</p>
-<p>第二轮一步无缝克隆将下游同源臂与二次线性化骨架组装，验证 PCR 扩增出约 527 bp 的目的条带，与理论片片段大小相符。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img006.png" alt="图 6  第二轮一步克隆验证 PCR。泳道 1：2000 bp marker；2" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 6  第二轮一步克隆验证 PCR。泳道 1：2000 bp marker；2：验证产物；3：空白对照</figcaption>
-</figure>
-<p>以重组质粒为模板，使用引物 Donorf / Donorr 扩增得到完整线性供体片段。泳道 4 的产物条带大小为2289 bp，与理论片段大小吻合；空白对照组与空质粒对照组均无对应条带。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img007.png" alt="图 7  完整线性供体片段扩增产物电泳。泳道 1：10000 bp marker" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 7  完整线性供体片段扩增产物电泳。泳道 1：10000 bp marker；2：空白对照；3：空质粒；4：改造后的质粒</figcaption>
-</figure>
-<p>基于前期大肠杆菌转化多次失败的教训，同时考虑到多轮 PCR 存在累积错配的风险，实验调整顺序：暂不进行酿酒酵母转化，先将线性供体片段直接送测序。测序结果显示两处问题：一是未针对 2289 bp 的长片段设计多组测序引物，常规单引物有效读长仅 800–1000 bp，造成测序覆盖不全；二是片段 500 bp 位置之后出现大量碱基错配，推测是多轮 PCR 扩增累积引入的突变。据此判定该质粒 PCR 扩增制备供体片段的策略可行性较差，放弃该技术路线，转为采用融合 PCR 方案。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img008.png" alt="图 8  线性供体片段测序比对结果。可见多处碱基错配标记" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 8  线性供体片段测序比对结果。可见多处碱基错配标记</figcaption>
-</figure>
-<h4>2.2  路线二：多片段融合 PCR</h4>
-<p>三段片段分别用 PCR 获取。URA3 表达盒的预实验设置 62 ℃、60 ℃、58 ℃ 三组退火温度，三组均可扩增出 1262 bp 的目的条带，但伴随较多非特异性杂带；正式实验改为切胶回收纯化。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img009.png" alt="图 9  URA3 表达盒获取预实验。泳道 1：2000 bp marker；2" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 9  URA3 表达盒获取预实验。泳道 1：2000 bp marker；2：空白对照；3–5：退火温度分别为 62 ℃、60 ℃、58 ℃</figcaption>
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img010.png" alt="图 10  URA3 表达盒正式实验。泳道 1：5000 bp marker；2" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 10  URA3 表达盒正式实验。泳道 1：5000 bp marker；2：空白对照；3–6：PCR 产物</figcaption>
-</figure>
-<p>表 3  URA3 表达盒切胶回收后的浓度与纯度</p>
-<p>上下游同源臂从质粒 pUC57_上臂与 pUC57_下臂扩增，目的条带分别为 558 bp 与 540 bp，空白对照均无扩增条带。产物同样伴随非特异性杂带，正式实验切胶回收。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img011.png" alt="图 11  上下游同源臂获取预实验。泳道 1：2000 bp marker；2：" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 11  上下游同源臂获取预实验。泳道 1：2000 bp marker；2：上游同源臂空白对照；3–4：上游同源臂产物；5：下游同源臂空白对照；6–7：下游同源臂产物</figcaption>
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img012.png" alt="图 12  上下游同源臂正式实验。泳道 1–4：上游同源臂产物；5：上游同源臂空" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 12  上下游同源臂正式实验。泳道 1–4：上游同源臂产物；5：上游同源臂空白对照；6：2000 bp marker；7：下游同源臂空白对照；8–11：下游同源臂产物</figcaption>
-</figure>
-<p>表 4  上下游同源臂切胶回收后的浓度与纯度</p>
-<p>融合 PCR 的预实验对片段做了排列组合。各片段单独扩增与两两组合均未出现明显融合产物条带，仅三片段共同融合组扩增出清晰的目的条带，条带位置与完整供体片段理论大小基本相符，说明三片段融合拼接策略可行。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img013.png" alt="图 13  融合 PCR 预实验。泳道 1：5000 bp marker；2：空" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 13  融合 PCR 预实验。泳道 1：5000 bp marker；2：空白；3：上游同源臂；4：URA3；5：下游同源臂；6：上游同源臂+URA3；7：URA3+下游同源臂；8：上游同源臂+下游同源臂；9：上游同源臂+URA3+下游同源臂</figcaption>
-</figure>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img014.png" alt="图 14  融合 PCR 正式实验。泳道 1：5000 bp marker；2：" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 14  融合 PCR 正式实验。泳道 1：5000 bp marker；2：空白；3–6：上游同源臂+URA3+下游同源臂</figcaption>
-</figure>
-<h4>2.3  两条路线对照</h4>
-<p>表 5  两条技术路线的结果对照</p>
-<h3 id="results-gpa1-3">3  改造菌株的确证</h3>
-<p>融合 PCR 产物转化酿酒酵母后，四块实验组平板均长出大小较为均一的单菌落。其中 2 号平板因培养基厚度不足发生塌陷，存在污染风险，弃用，后续从 3–5 号平板挑取单菌落。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img015.png" alt="图 15  酵母转化平板。1：空白对照；2–5：装入融合 PCR 产物的实验组" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 15  酵母转化平板。1：空白对照；2–5：装入融合 PCR 产物的实验组</figcaption>
-</figure>
-<p>挑取 24 个菌落先做溶解点板留存扩增，过夜培养后进行菌落 PCR 初筛。点板留存结果显示 2、4、9 号过夜培养没有长出，判定为假阳性，不参与后续筛选，剩余 21 株进入鉴定。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img016.png" alt="图 16  挑取的菌落与点板留存。1–3：随机挑取的 24 个菌落；4–5：点板" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 16  挑取的菌落与点板留存。1–3：随机挑取的 24 个菌落；4–5：点板留存</figcaption>
-</figure>
-<p>使用引物 T1_f / T1_r 对剩余 21 株转化子做第一轮菌落 PCR。1、3、5、6、8、10、11、12、13、14、17、18、20、21、22、23、24 号共 17 株在 558 bp 目标位置出现清晰目的条带，初步判定为潜在阳性克隆；其余样本无对应特异性条带，视为阴性。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img017.png" alt="图 17  第一轮菌落 PCR（引物 T1_f / T1_r）。泳道 1：500" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 17  第一轮菌落 PCR（引物 T1_f / T1_r）。泳道 1：5000 bp marker；2–24：各待测转化子</figcaption>
-</figure>
-<p>考虑到单对引物的菌落 PCR 存在假阳性风险，换用引物 T2_f / T2_r 对上述 17 株做第二轮复核。全部待测样本均在 849 bp 目标位置扩增出清晰目的条带，无明显非特异性杂带，候选阳性得到加固。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img018.png" alt="图 18  第二轮菌落 PCR（引物 T2_f / T2_r）。泳道 1：200" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 18  第二轮菌落 PCR（引物 T2_f / T2_r）。泳道 1：2000 bp marker；2–18：各候选菌株</figcaption>
-</figure>
-<p>从候选中随机选取 5、11、12、14、17、21 号共 6 株送测序，与理论参考序列比对。结果显示 6 株的大部分序列均与理论序列匹配；5、11、14、21 号在人源化位点下游附近存在不同程度的碱基错误，序列不符合预期；12 号与 17 号的人源化改造位点及周边序列与理论设计序列完全一致，GPA1 基因 C 末端 5 个氨基酸人源化改造成功。后续表型与功能验证优先选用这两株工程菌。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img019.png" alt="图 19  6 株候选菌株测序比对结果。1–6 依次为 5、11、12、14、1" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 19  6 株候选菌株测序比对结果。1–6 依次为 5、11、12、14、17、21 号菌株，标蓝区域为目标人源化改造位点</figcaption>
-</figure>
-<h3 id="results-gpa1-4">4  响应与表达</h3>
-<h4>4.1  形态响应</h4>
-<p>选取测序验证正确的 12 号、17 号工程菌株，设置 0 μM、1 μM、10 μM 三个 α-factor 浓度梯度诱导，诱导培养 3 小时后镜检，重点观察交配突起（shmoo）的生成情况。结果显示 0 μM 与 1 μM 条件下两株菌均未观察到 shmoo；10 μM 高浓度处理组仅有极少量细胞出现 shmoo。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img020.png" alt="图 20  镜检照片。1–3：12 号菌在 0、1、10 μM α-factor" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 20  镜检照片。1–3：12 号菌在 0、1、10 μM α-factor 诱导下；4–6：17 号菌在 0、1、10 μM α-factor 诱导下（100×，标尺 20 μm）</figcaption>
-</figure>
-<h4>4.2  生长响应</h4>
-<p>选取野生型 BY4741、12 号与 17 号菌株测定生长曲线，设置 0 μM、1 μM、10 μM 三个 α-factor 浓度，初始 OD600 调至 0.4 后开始诱导，每小时测定一次，连续检测 10 小时。</p>
-<p>野生型 BY4741 在 0 μM 与 1 μM 条件下生长趋势接近，10 μM 高浓度处理组生长受到明显抑制，OD600 整体低于另外两组。这是高浓度 α-factor 激活 G 蛋白信号通路、引发细胞周期阻滞的正常表现。12 号与 17 号在三种浓度下的生长曲线无明显差异，高浓度 α-factor 并未造成显著的生长抑制。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img021.png" alt="图 21  生长曲线。1：BY4741；2：12 号菌；3：17 号菌；每组含 " loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 21  生长曲线。1：BY4741；2：12 号菌；3：17 号菌；每组含 0、1、10 μM 三条曲线（n=3）</figcaption>
-</figure>
-<h4>4.3  下游基因表达</h4>
-<p>向对照菌株与人源化改造菌株转入荧光报告质粒，设置 0 μM、0.375 μM、0.75 μM、1.5 μM、3 μM、6 μM、12 μM、24 μM 共 8 个 α-factor 浓度梯度开展诱导，定时取样测定荧光强度，以相对荧光单位RFU 记录通路激活随时间的动态变化。</p>
-<p>在全部诱导浓度下，对照组的荧光强度均随诱导时间延长持续升高；随 α-factor 浓度提升，对照组能够达到的最大荧光信号同步上升，体现出典型的浓度-效应关系。改造菌株在所有浓度梯度下荧光整体水平低于对照组，荧光仅在前期小幅上升，到达峰值之后便开始下降；即使在 24 μM 最高浓度刺激下，仍无法产生与对照组相当的荧光响应。0 μM 无诱导的空白组中，两组均存在本底荧光，改造菌株本底信号同样低于对照组。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/GPA1人源化改造总结/docx-media/img022.png" alt="图 22  荧光时序曲线。1–8 依次为 24、12、6、3、1.5、0.75、" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 22  荧光时序曲线。1–8 依次为 24、12、6、3、1.5、0.75、0.375、0 μM α-factor 诱导下的荧光强度随时间变化</figcaption>
-</figure>
-<p>本实验直接检测体系总荧光信号，未采用 OD600 进行归一化处理，实验结果会受到菌株生长差异的干扰。</p>
-<h3 id="results-gpa1-5">5  小结</h3>
-<p>本模块利用酵母内源同源重组完成了 GPA1 基因 C 端 5 个氨基酸的人源化定点改造，从 24 个转化子中确证获得 12 号、17 号两株序列完全符合设计的工程菌株。</p>
-<p>以 α-factor 作为交配信号分子开展多浓度梯度诱导后，形态、生长、下游通路三个层面的结果方向一致：改造菌株对 α-factor 的形态响应不明显，高浓度诱导下仅极少量细胞产生交配突起；野生型受高浓度α-factor 刺激会发生细胞周期阻滞、生长受抑，而改造菌株在不同诱导浓度下生长无明显差异；荧光报告实验进一步显示改造菌株下游信号通路激活水平低于对照组。</p>
-<p>综合以上结果，GPA1 的 C 端是酵母感知 α-factor、完整激活交配信号通路所需要的区段。</p>
-<!-- RS-GPA1-6：源文档「6 在途与下一步」与「附录 原始数据清单」按 README 5.14 口径不渲染——荧光时序曲线原始读数未与 96 孔板孔位对应（数值暂按趋势描述）；61 张显微照片未做细胞计数与芽殖率量化（形态维持定性表述）；下一步研究 GPA1 改造与人源门控的关系；附表 1 为原始数据位置与内容清单。 -->
-          </div>
+          <h2>Humanized G-Protein Engineering — Gpa1-G&alpha;q Chimera</h2>
         </div>
 
         <div id="results-reporter" class="content-card">
           <div class="content-text-frame">
-<h2>FUS1 启动子驱动 yEGFP 报告基因表达体系的构建实验结果报告</h2>
-<p>α-因子（α-factor）是酿酒酵母分泌的交配信息素，其结合受体 Ste2 后经 MAPK 级联磷酸化激活下游 FUS1 等交配应答基因的转录，构成酵母交配信息素信号通路的核心。该通路响应迅速、诱导剂量可控，是构建可诱导表达体系的经典元件。为建立 α-因子可诱导的荧光报告系统，本研究以 pESC-HIS-yEGFP（以 BamH I 与 EcoR I 双酶切将 yEGFP 片段定向连接至 pESC-HIS 所得）为载体骨架，利用 Gibson 无缝克隆将 FUS1 启动子片段连接至 yEGFP 编码序列上游，转化 BY4741 酿酒酵母，经营养缺陷型筛选与分子鉴定获得阳性重组子，并考察梯度浓度 α-因子诱导下菌株生长与 yEGFP 荧光响应。现将体系构建各步骤的实验结果汇总如下。</p>
-<h3 id="results-reporter-1">一、目的片段与线性化载体的制备</h3>
-<h4>（一）带同源臂的 FUS1 启动子片段扩增</h4>
-<p>以 FUS1 启动子序列为模板设计引物，并在正反引物 5′ 端各引入 20 bp 与线性化载体末端重叠的同源臂，PCR 扩增 FUS1 启动子片段。电泳结果如图 1 所示：左侧 Marker 标注 750 bp 与 500 bp 档位；泳道 1～4 的扩增产物均在约 475 bp 处呈现单一、明亮且迁移整齐的条带，与预期大小相符，条带下方未见引物二聚体、上方无非特异性扩增条带，扩增特异性良好。PCR 产物经纯化后用于后续 Gibson 反应。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img001.jpeg" alt="图 1  两端各带 20 bp 同源臂的 FUS1 启动子 PCR 扩增电泳结果" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 1  两端各带 20 bp 同源臂的 FUS1 启动子 PCR 扩增电泳结果（约 475 bp）</figcaption>
-</figure>
-<h4>（二）pESC-HIS-yEGFP 载体的线性化</h4>
-<p>pESC-HIS-yEGFP 质粒以反向 PCR 方式实现载体线性化，使线性化产物两端携带可与 FUS1 启动子同源臂相互重叠的序列，从而为 Gibson 重组提供同源区。电泳结果如图 2 所示：左侧 Marker 标注 10 kb、8 kb、6 kb 档位，泳道 1～4均在 6 kb 与 8 kb 之间（略高于 6 kb）均显示一条清晰、明亮的单一主条带，与右侧标注的约 6746 bp 高度一致，但条带上方有轻微拖尾。线性化产物经纯化后备用。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img002.jpeg" alt="图 2  pESC-HIS-yEGFP 质粒线性化 PCR 电泳结果（约 674" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 2  pESC-HIS-yEGFP 质粒线性化 PCR 电泳结果（约 6746 bp）</figcaption>
-</figure>
-<h3 id="results-reporter-2">二、Gibson 无缝克隆与酵母转化筛选</h3>
-<h4>（一）Gibson 一步无缝克隆</h4>
-<p>将纯化后的 FUS1 启动子片段与线性化载体按适宜片段/载体摩尔比混合，加入 Gibson Assembly Mix 一步反应。在 20 bp 同源臂介导下，经外切酶暴露单链、同源退火、聚合酶补缺、连接酶封闭切口，将 FUS1 启动子无缝替换至 yEGFP 编码序列上游，构建获得可诱导表达质粒 pESC-HIS-P(FUS1)-yEGFP。由于采用无缝连接，启动子与 yEGFP 起始密码子之间的间距与读码框保持不变。</p>
-<h4>（二）BY4741 转化与营养缺陷型筛选</h4>
-<p>将连接产物转化 BY4741 感受态细胞，涂布于 SD-His 营养缺陷型筛选平板。平板继续培养约 6 天后，三个平板（图 3）上仅长出数个单菌落：菌落呈白色点状、边缘清晰、形态规则，数量极少且生长缓慢。菌落稀少与转化效率偏低及 SD-His 较强筛选压力（仅重组子在 HIS 缺陷背景下得以存活）相符，属营养缺陷筛选体系的预期结果。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img003.jpeg" alt="图 3  转化后 SD-His 缺陷平板培养约 6 天长出的少量小单菌落" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/报告体系构建/docx-media/img004.jpeg" alt="图 3  转化后 SD-His 缺陷平板培养约 6 天长出的少量小单菌落" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <img src="../static/image/result/报告体系构建/docx-media/img005.jpeg" alt="图 3  转化后 SD-His 缺陷平板培养约 6 天长出的少量小单菌落" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd; margin:0 .3rem;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 3  转化后 SD-His 缺陷平板培养约 6 天长出的少量小单菌落</figcaption>
-</figure>
-<h3 id="results-reporter-3">三、阳性重组子的分子鉴定</h3>
-<h4>（一）菌落 PCR 验证</h4>
-<p>从筛选平板挑取单菌落直接裂解作模板进行菌落 PCR 验证，电泳结果如图 4 所示：共 5 条泳道，最左侧为 DNA Marker（可见 2 kb、1 kb、750 bp 档位），泳道 1～4 为待验证菌落。其中泳道 1、3、4 条带位于 750 bp～1 kb 之间、泳道 4 位于 750 bp 附近，均小于 1152 bp，属非特异性或假阳性扩增。；泳道 2 在 1 kb 与 2 kb 之间出现一条明显亮带，大小约 1152 bp（图中红框标注），与 FUS1 启动子—yEGFP 接头扩增的预期产物相符，判定为阳性。据此选取条带正确的样品 2 送 Sanger 测序确认。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img006.jpeg" alt="图 4  单菌落验证菌落 PCR 电泳结果（2 号泳道 1152 bp 条带正确" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 4  单菌落验证菌落 PCR 电泳结果（2 号泳道 1152 bp 条带正确）</figcaption>
-</figure>
-<h4>（二）测序结果比对</h4>
-<p>对验证正确的单菌落（样品 2）目的片段进行测序，并将测序峰图与预期序列比对，结果如图 5 所示。所选比对区段为第 8～1066 位、共 1059 个碱基（读段总长 1126 碱基），比对图中蓝色高亮区表示序列匹配一致：中间区段序列与预期完全一致，确认 FUS1 启动子已正确无缝连接于 yEGFP 上游、读码框未发生移码；读段首、尾各存在少量差异或信号杂乱，系测序读长末端信号衰减及比对边界所致，属正常现象，不影响对连接正确性的判定。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img007.png" alt="图 5  测序结果与预期序列比对图（中间序列完全一致，首尾为末端信号衰减）" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 5  测序结果与预期序列比对图（中间序列完全一致，首尾为末端信号衰减）</figcaption>
-</figure>
-<h3 id="results-reporter-4">四、α-因子梯度诱导表达分析</h3>
-<p>对鉴定正确的阳性菌株以梯度浓度 α-因子（0、0.375、0.75、1.5、3、6、12、24 μM，共 8 组）进行诱导，同步监测菌体生长（OD600）与 yEGFP 荧光强度，以考察 P(FUS1) 启动子的诱导响应特性。</p>
-<h4>（一）菌体生长（OD600）分析</h4>
-<p>OD600 随诱导时间的变化如图 6 所示。各组 OD600 均随时间推移呈上升趋势；0 μM 对照组生长最快、终点 OD600 最高，随 α-因子浓度升高菌体生长受到明显抑制，浓度 ≥1.5 μM 时抑制尤为显著，最高浓度 24 μM 组终点 OD600 最低，数据带误差棒。该结果与 α-因子激活交配信号通路后引起细胞周期停滞（G1 arrest）的预期一致，表明外源 α-因子有效激活了内源 P(FUS1) 通路并对生长产生浓度依赖性抑制。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img008.png" alt="图 6  梯度浓度 α-因子诱导下菌株 OD600 生长曲线" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 6  梯度浓度 α-因子诱导下菌株 OD600 生长曲线</figcaption>
-</figure>
-<h4>（二）yEGFP 荧光强度分析</h4>
-<p>yEGFP 荧光强度随诱导时间（0～16 h）的变化如图 7 所示。0 μM 对照组荧光处于低水平且保持平稳；随 α-因子浓度升高，各组荧光强度随时间延长而上升，且浓度越高、上升越快、终点荧光值越高，呈现明显的剂量依赖与时间依赖诱导效应。上述结果证明 FUS1 启动子可在 α-因子诱导下驱动下游 yEGFP 表达，且诱导强度随 α-因子浓度递增而增强。</p>
-<figure style="margin:1.5rem 0; text-align:center;">
-  <img src="../static/image/result/报告体系构建/docx-media/img009.png" alt="图 7  梯度浓度 α-因子诱导下 yEGFP 荧光强度变化" loading="lazy" style="max-width:100%; height:auto; border:1px solid #ddd;">
-  <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">图 7  梯度浓度 α-因子诱导下 yEGFP 荧光强度变化</figcaption>
-</figure>
-<h3 id="results-reporter-5">五、总结</h3>
-<p>本研究以带 20 bp 同源臂的 PCR 扩增 FUS1 启动子、反向 PCR 线性化 pESC-HIS-yEGFP（约 6746 bp），经 Gibson 一步无缝克隆将 FUS1 启动子连接至 yEGFP 上游并转化 BY4741，于 SD-His 缺陷平板筛选获得阳性重组子。菌落 PCR 获得 1152 bp 正确条带、测序比对中间序列完全一致，证实报告载体构建正确。α-因子梯度诱导实验中，yEGFP 荧光强度呈剂量—时间依赖性上升，同时伴随浓度依赖的细胞生长抑制，二者变化方向一致，符合交配信息素信号通路被激活的预期。综上，FUS1 启动子驱动 yEGFP 的 α-因子可诱导报告表达体系构建成功，可作为酵母交配信息素信号通路研究的荧光报告系统。</p>
+            <h2>Reporter Output Module: FUS1 Promoter Reporter System</h2>
+            <h3 id="results-reporter-1">Vector construction, transformation and positive-clone screening</h3>
+            <p>
+              To construct the S. cerevisiae fluorescent reporter system, the constructed yEGFP fluorescent expression vector was transformed into competent BY4741 cells using a S. cerevisiae transformation kit and screened on SD-His selective medium. As shown in Fig. 1, the negative-control transformation plate (A) showed no colonies, whereas only a few tiny, translucent single colonies appeared on the positive transformation plate (B), indicating that the yEGFP reporter plasmid had been successfully introduced and marker-positive transformants were obtained. Single positive colonies from Fig. 1B were then picked for colony PCR, and the gel electrophoresis (Fig. 1C) showed a correct band at 1152 bp for sample 2, consistent with the expected size, preliminarily confirming that the yEGFP reporter fragment had been correctly integrated into the yeast genome, with the positive clones requiring further sequencing verification.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig01-transformation-colony-pcr.png" alt="Fig. 1." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 1. Transformation, positive-clone screening and colony PCR identification of the yEGFP fluorescent reporter vector A: negative-control plate with no colonies; B: positive plate showing only a few tiny single colonies; C: colony-PCR gel electrophoresis of positive clones, in which sample 2 shows a correct band at 1152 bp (SD-His selective medium).</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-2">Sequencing verification of the reporter gene</h3>
+            <p>
+              The positive clones obtained above were sent for Sanger sequencing. Sequence alignment showed that the blue-highlighted central main body of the amplicon was completely identical to the P_FUS1+yEGFP reference sequence, with no point mutations or frameshifts introduced. Only minor differences were observed at the two ends, which resulted from the limited read length and reduced base-call quality toward the ends in that sequencing direction, and did not affect the reading frame or the integrity of the reporter coding sequence, confirming the sequence correctness of the constructed reporter system (Fig. 2).
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig02-sequencing-verification.png" alt="Fig. 2." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 2. Sequencing verification of the yEGFP reporter gene The chromatogram matches the blue-highlighted central region of the reference; minor differences at the ends are due to limited read length and do not affect the reading frame.</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-3">Confocal fluorescence imaging under gradient α-factor induction</h3>
+            <p>
+              To verify the single-cell response of the reporter system to the mating pheromone α-factor, the strains were induced with gradient concentrations of α-factor and imaged by confocal laser scanning microscopy (Fig. 3). Panel A is the parental BY4741 strain without the fluorescent plasmid and panel B is the negative-clone control induced with 0 μM; both showed almost no green fluorescence. Panels C–I are positive clones induced with 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM α-factor, respectively. As the α-factor concentration increased, the intracellular yEGFP green fluorescence gradually intensified and became more uniform, indicating that α-factor activates the downstream MAPK cascade via the Ste2 receptor and dose-dependently drives reporter-gene expression.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig03-confocal-imaging.png" alt="Fig. 3." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 3. Confocal fluorescence imaging of S. cerevisiae after gradient α-factor induction A: parental BY4741 without the fluorescent plasmid; B: negative clone induced with 0 μM; C–I: positive clones induced with 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM α-factor. Fluorescence intensified with increasing concentration.</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-4">Effect of α-factor on yeast growth (OD<sub>600</sub>)</h3>
+            <p>
+              The effect of gradient α-factor concentrations on yeast growth was examined by monitoring OD<sub>600</sub> growth curves (Fig. 4). The 0 μM control grew fastest and reached the highest final cell density, whereas both the growth rate and the final biomass decreased in a concentration-dependent manner as the α-factor concentration rose, with the high-concentration groups (6–24 μM) most strongly inhibited. These results reflect that α-factor induces G1-phase mating arrest and suppresses proliferation, confirming the biological activity of the pheromone signaling pathway.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig04-growth-curve.png" alt="Fig. 4." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 4. Effect of gradient α-factor concentrations on the growth of S. cerevisiae Growth monitored by OD<sub>600</sub>; both growth rate and final density decreased in a concentration-dependent manner with increasing α-factor (0–24 μM).</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-5">Time course of yEGFP fluorescence</h3>
+            <p>
+              The time-dependent change in yEGFP fluorescence under gradient α-factor induction was further measured (Fig. 5). Fig. 5A is the line plot of fluorescence intensity for each concentration over 1–16 h, and Fig. 5B is the bar chart over 1–23 h. At a given time point the relative fluorescence increased monotonically and gradually plateaued as the α-factor concentration rose, showing a clear dose-response relationship; at a given concentration the fluorescence increased with induction time and plateaued after about 10–16 h, indicating that the α-factor-induced fluorescent output depends on both time and concentration. The reporter system quantitatively converts α-factor signaling into a detectable fluorescent readout, providing the reporting platform for subsequent engineering and application of the yeast sensor.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig05-timecourse-fluorescence.png" alt="Fig. 5." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 5. Time course of yEGFP fluorescence under gradient α-factor induction A: line plot of fluorescence for each concentration over 1–16 h; B: bar chart over 1–23 h. Fluorescence showed dual time- and concentration-dependence.</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-6">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
+            <p>
+              Building on the above, to further apply this fluorescent reporter system in constructing an influenza A virus biosensor that outputs a detectable fluorescent signal upon virus recognition, and considering that the time at which the virus appears is unpredictable in real-world detection, the system must yield a readable signal within an uncertain but short time window. We therefore examined how the starting cell density (initial OD<sub>600</sub>) affects the strength of the early post-induction signal (Fig. 6), with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively. Using the background fluorescence of uninduced and negative-clone cells as the baseline, a signal-to-noise ratio (SNR) ≥ 3 was defined as an evident signal. The SNR increased with induction time: at 1 h the SNR stayed below the SNR = 3 threshold for all starting OD<sub>600</sub> values and was hard to read within 1 h; at 1.5 h it approached or exceeded the threshold across a broad OD range; and at 2 h it was highest, reaching SNR ≥ 3 over an initial OD<sub>600</sub> range of about 0.6–2.1, i.e., an evident signal appeared reliably within 2 h. Accordingly, in practical applications the initial OD<sub>600</sub> can be set to about 0.6, which ensures a sensitive response to the virus signal within 2 h and, thanks to the growth and signal-retention capacity at this starting density, provides a continuous detection window of roughly 12 h before a new yeast sensor needs to be replaced, giving the operational basis for field deployment of the influenza A yeast sensor.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__placeholder" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='480'%20height='480'%3E%3Crect%20width='100%25'%20height='100%25'%20fill='%23D4A574'/%3E%3C/svg%3E" alt="Fig. 6." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 6. Signal-to-noise ratio (SNR) response of the reporter system at different starting OD<sub>600</sub> during early induction. SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor, ● and ■ denote the 1 h and 2 h data, respectively, and the dashed line marks the SNR = 3 threshold. The SNR rose with induction time, and at 2 h it was largely ≥ 3 for an initial OD<sub>600</sub> of about 0.6–2.1, giving an evident signal within 2 h.</figcaption>
+            </figure>
+
+            <h3 id="results-chassis-1">Construction and verification of the sgRNA knockout vectors</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig07-sgrna-vector-pcr.png" alt="Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout. M: DNA marker; lanes 1–2: pML104-Far1 construct (11258 bp); lanes 3–4: pML104-Sst2 construct (11258 bp).</figcaption>
+            </figure>
+            <p>
+              To construct CRISPR-Cas9 knockout vectors targeting Far1 and Sst2, a universal strategy was applied in which 20 bp guide sequences specific to each gene were introduced into the pML104 vector via primers, and the constructs were verified by plasmid PCR. As shown in Figure 7, agarose gel electrophoresis showed a clear, single band between 10000 bp and 15000 bp for both the pML104-Far1 and pML104-Sst2 constructs, consistent with the expected size of 11258 bp. Lanes 1–2 correspond to the plasmid PCR products of the pML104-Far1 construct, and lanes 3–4 correspond to those of the pML104-Sst2 construct, with no obvious non-specific bands or smearing. These results indicate that the guide sequences targeting Far1 and Sst2 were successfully cloned into pML104, and both knockout vectors were correctly constructed for subsequent yeast transformation and gene knockout experiments.
+            </p>
+
+            <h3 id="results-chassis-2">Amplification of the FAR1 and SST2 repair templates</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig08-repair-template-pcr.png" alt="Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout. M: DNA marker; lane 1: Far1 homologous recombination template (1146 bp); lane 2: Sst2 homologous recombination template (993 bp); lane 3: negative control.</figcaption>
+            </figure>
+            <p>
+              To construct repair templates for Far1 and Sst2 knockout, primers were designed to target the knockout sites, and the homology arms flanking each target site were amplified from BY4741 genomic DNA. The repair templates contain a 4 bp deletion relative to the original genomic sequence, which introduces a frameshift mutation after CRISPR-Cas9 cleavage via homologous recombination. As shown in Figure 8, agarose gel electrophoresis revealed a clear, single band between 1000 bp and 1500 bp in lane 1 (expected size, 1146 bp), a clear, single band between 750 bp and 1000 bp in lane 2 (expected size, 993 bp), and no band in the negative control (lane 3).. These results indicate that both the Far1 and Sst2 repair templates were successfully amplified and can be used for subsequent CRISPR-Cas9 co-transformation and gene knockout experiments.
+            </p>
+
+            <h3 id="results-chassis-3">Transformation and colony PCR verification</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig09-transformation-colony-pcr.png" alt="Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout. (A) Transformants of Far1 knockout; (B) Colony PCR screening of Far1 knockout transformants, with positive clones F1–F6, F8, and F9; (C) Transformants of Sst2 knockout based on the Far1-knockout strain; (D) Colony PCR screening of Sst2 knockout transformants, with positive clones S1, S5–S7, and S15. M: DNA marker; BY / BY4741: wild-type control.</figcaption>
+            </figure>
+            <p>
+              To obtain Far1 and Sst2 double-knockout strains, a stepwise knockout strategy was applied. First, the linearized pML104 plasmid and the Far1 repair template were co-transformed into BY4741 competent cells and plated on SD-His+URA selective medium, yielding single colonies (Figure 9A). Colony PCR was then performed for verification: because the Far1 verification primers were designed across the deleted 4-bp site, a 548-bp band was expected when the FAR1 locus remained unknocked out, whereas successful knockout abolished efficient primer binding and prevented amplification of the 548-bp product. Clones F1–F6, F8, and F9 did not produce the 548-bp band and were identified as positive clones (Figure 9B), confirming successful Far1 knockout. Using this Far1-knockout strain as the chassis, the Sst2 knockout vector and repair template were subsequently transformed, yielding transformants (Figure 9C). Colony PCR showed that clones S1, S5–S7, and S15 did not produce the 562-bp band and were identified as positive clones (Figure 9D), confirming successful Sst2 knockout. These results indicate that a Far1 single-knockout strain was successfully constructed, and Far1/Sst2 double-knockout strains were further obtained for subsequent functional validation.
+            </p>
+
+            <h3 id="results-chassis-4">Sanger sequencing confirmation of the knockouts</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig10-sanger-sequencing.png" alt="Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout. (A) Successful Sst2 knockout, showing a 4 bp deletion (TGTC) at the target site; (B) Non-knockout (wild-type) Sst2, shown for comparison; (C) Successful Far1 knockout, showing a 4 bp deletion (CACT) at the target site; (D) Non-knockout (wild-type) Far1, shown for comparison.</figcaption>
+            </figure>
+            <p>
+              To confirm successful knockout of Far1 and Sst2, colony PCR-positive clones were subjected to Sanger sequencing, and the sequencing chromatograms of knockout clones were compared with those of non-knockout (wild-type) clones to identify the exact deletion site and deleted sequence. The successfully knocked-out Sst2 clone showed a 4 bp deletion (TGTC) at the target site (Figure 10A), while the non-knockout clone matched the wild-type sequence (Figure 10B), allowing clear identification of the deletion site. The successfully knocked-out Far1 clone showed a 4 bp deletion (CACT) at the target site (Figure 10C), while the non-knockout clone also matched the wild-type sequence (Figure 10D). These 4 bp deletions are expected to cause frameshift mutations and disrupt gene function. The sequencing results confirmed that Far1 and Sst2 knockout strains were successfully obtained.
+            </p>
+
+            <h3 id="results-chassis-5">Effect of knockout on growth</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig11-growth-curves.png" alt="Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae. (A) Growth curves of the Far1 knockout strain (ΔFar1) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis; (B) Growth curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis.</figcaption>
+            </figure>
+            <p>
+              To verify whether Far1 and Sst2 knockout relieves α-factor-induced growth inhibition, growth curves were measured at different α-factor concentrations, with wild-type BY4741 as the control. Wild-type BY4741 showed obvious growth inhibition at 10 μM α-factor, whereas the Far1 knockout strain (ΔFar1) maintained a relatively high growth rate under the same condition (Figure 11A), indicating that Far1 knockout effectively relieved α-factor-induced G1 arrest. After further knocking out Sst2 in the Far1-knockout background, the double-knockout strain (ΔFar1 ΔSst2) showed no obvious growth inhibition at different α-factor concentrations compared with BY4741 (Figure 11B), suggesting that double knockout of Far1 and Sst2 further enhanced the strain's tolerance to α-factor.
+            </p>
+
+            <h3 id="results-chassis-6">Effect of knockout on α-factor-induced fluorescence</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig12-fluorescence-signal.png" alt="Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal. (A) Fluorescence intensity curves of the FAR1 knockout strain (ΔFar1) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM); (B) Fluorescence intensity curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM).</figcaption>
+            </figure>
+            <p>
+              To verify the effect of Far1 and Sst2 knockout on downstream signaling, fluorescence intensity was measured at different α-factor concentrations. The Far1 knockout strain (ΔFar1) showed a slight increase in fluorescence with increasing α-factor concentration, but the overall enhancement was limited (Figure 12A). In contrast, the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) exhibited a more pronounced signal enhancement (Figure 12B): at 1 μM α-factor, its fluorescence was already much higher than that of the yE-GFP control, indicating that the knockout lowered the response threshold and enabled strong signaling at low inducer concentrations; at 10 μM α-factor, the fluorescence of the double-knockout strain continued to rise until 22 h without reaching a peak, whereas the control peaked at around 18 h and then declined, suggesting enhanced response amplitude and impaired negative feedback regulation. These results indicate that double knockout of Far1 and Sst2 enhances the yeast fluorescence response to α-factor, characterized by higher sensitivity at low concentrations and a more sustained response at high concentrations, supporting its potential as a low-concentration signal-amplifying biosensor element.
+            </p>
+
+            <h3 id="results-chassis-7">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
+            <figure class="result-fig">
+              <img class="result-fig__placeholder" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='480'%20height='480'%3E%3Crect%20width='100%25'%20height='100%25'%20fill='%23D4A574'/%3E%3C/svg%3E" alt="Fig. 13." loading="lazy">
+              <figcaption class="result-fig__cap">Fig. 13. Signal-to-noise ratio (SNR) response of the reporter system at different starting OD<sub>600</sub> during early induction A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. ●, ■ and ▲ denote the 1 h, 1.5 h and 2 h data, respectively, and the dashed line marks the SNR = 3 threshold. The SNR rose with induction time, and at 2 h it was largely ≥ 3 for an initial OD<sub>600</sub> of about 0.6–2.1, giving an evident signal within 2 h.</figcaption>
+            </figure>
+            <p>
+              Building on the above, to further apply this fluorescent reporter system in constructing an influenza A virus biosensor that outputs a detectable fluorescent signal upon virus recognition, and considering that the time at which the virus appears is unpredictable in real-world detection, the system must yield a readable signal within an uncertain but short time window. We therefore examined how the starting cell density (initial OD<sub>600</sub>) affects the strength of the early post-induction signal (Fig. 13), with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively. Using the background fluorescence of uninduced and negative-clone cells as the baseline, a signal-to-noise ratio (SNR) ≥ 3 was defined as an evident signal. The SNR increased with induction time: at 1 h the SNR stayed below the SNR = 3 threshold for all starting OD<sub>600</sub> values and was hard to read within 1 h; at 1.5 h it approached or exceeded the threshold across a broad OD range; and at 2 h it was highest, reaching SNR ≥ 3 over an initial OD<sub>600</sub> range of about 0.6–2.1, i.e., an evident signal appeared reliably within 2 h. Accordingly, in practical applications the initial OD<sub>600</sub> can be set to about 0.6, which ensures a sensitive response to the virus signal within 2 h and, thanks to the growth and signal-retention capacity at this starting density, provides a continuous detection window of roughly 12 h before a new yeast sensor needs to be replaced, giving the operational basis for field deployment of the influenza A yeast sensor.
+            </p>
+
+            <h3 id="results-gpa1-1">Construction of the homologous targeting template</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig14-homologous-template-pcr.jpeg" alt="Figure 14. Construction of homologous template for Gpa1 humanization." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 14. Construction of homologous template for Gpa1 humanization. (A) Amplification of GPA1 upstream and downstream homologous arms. Lanes 1–4: upstream homologous arm (experimental); Lane 5: upstream negative control; Lane 6: 2000 bp marker; Lane7: downstream negative control; Lanes 8–11: downstream homologous arm (experimental). (B) Amplification of URA3 marker. Lane 1: 2000 bp marker; Lane 2: negative control; Lanes 3–4: URA3 experimental groups. (C) Overlap-extension fusion PCR for target fragment assembly. Lane 1: 5000 bp marker; Lane 2: negative control; Lanes 3–6: fusion PCR experimental groups.</figcaption>
+            </figure>
+            <p>
+              To realize humanization modification of yeast Gpa1 protein, we first amplified the GPA1 upstream homologous arm, downstream homologous arm and selection marker gene URA3 via PCR. Agarose gel electrophoresis (Figure 14A, 14B) showed that the bands of each amplified product matched the expected theoretical size with few non-specific bands, confirming successful amplification of homologous arms and marker gene. Overlap-extension fusion PCR was then performed to assemble the three fragments into a complete homologous targeting template. The electrophoresis result of fusion PCR products (Figure 12C) exhibited specific bands consistent with the target length, while no amplification band was observed in the negative control group. These results verified the successful construction of the homologous recombination targeting template, providing qualified DNA materials for subsequent gene editing of yeast chassis to achieve Gpa1 humanization.
+            </p>
+
+            <h3 id="results-gpa1-2">Yeast transformation and positive-clone validation</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig15-transformation-colony-pcr.png" alt="Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization. (A)Colony growth after transforming Saccharomyces cerevisiae BY4741 with fusion PCR targeting fragment. Plate 1: negative control; Plates 2–5: transformation groups. Uniform single colonies appeared on experimental plates. Plate 2 was discarded due to medium collapse and potential contamination. Single colonies were picked from plates 3–5 for subsequent verification. (B)Agarose gel electrophoresis of colony PCR products. Lane 1: 5000 bp DNA Marker; Lanes 2–24: PCR products from picked colonies. Multiple samples displayed bands at the expected size, which were preliminarily identified as positive clones with Gpa1 humanization.</figcaption>
+            </figure>
+            <p>
+              The assembled homologous targeting fragment for Gpa1 humanization was transformed into competent Saccharomyces cerevisiae BY4741 cells, which were spread onto SD-Ura selective plates. Colony growth (Figure 15A) showed single colonies on experimental plates while no colonies grew on the negative control plate, confirming valid transformation and selection. Single colonies were picked from qualified plates and verified by colony PCR for genomic integration. The electrophoresis result of colony PCR (Figure 15B) indicated that multiple colonies yielded amplicons of expected size. Positive yeast strains with Gpa1 humanization were preliminarily obtained, providing the engineered chassis for subsequent assembly and functional test of the yeast gated biosensor.
+            </p>
+
+            <h3 id="results-gpa1-3">Sequence confirmation of the humanized locus</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig16-sequence-alignment.png" alt="Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization. 1: Alignment between sequencing result of Sample 12 and original yeast GPA1 sequence; 2: Alignment between sequencing result of Sample 17 and original yeast GPA1 sequence; 3: Alignment between sequencing result of Sample 12 and expected humanized sequence; 4: Alignment between sequencing result of Sample 17 and expected humanized sequence. The blue highlighted region represents the replaced gene fragment.</figcaption>
+            </figure>
+            <p>
+              To further confirm site-specific genomic integration, candidate clones positive in colony PCR were selected for Sanger sequencing verification. Sequence alignment (Figure 16) showed obvious differences between Sample12, Sample17 and the original yeast GPA1 sequence. When aligned with the expected humanized sequence, both strains perfectly matched in the target replacement region. These results demonstrated successful homologous recombination. The endogenous yeast Gpa1 gene was site-specifically replaced as designed, and the Gpa1-humanized yeast chassis strain was successfully obtained.
+            </p>
+
+            <h3 id="results-gpa1-4">Morphology after humanization</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig17-morphology-microscopy.png" alt="Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains. 1–3: Cell morphology of strain 12 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. 4–6: Cell morphology of strain 17 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. Magnification: 100×, scale bar = 20 μm.</figcaption>
+            </figure>
+            <p>
+              To verify the response of the MAPK pathway to α-factor after Gpa1 humanization, positive strains were induced with gradient concentrations of α-factor and observed under a microscope. After treatment with 0, 1 and 10 μM α-factor, no obvious shmoo protrusions were observed. This indicates that after humanization replacement of endogenous Gpa1, the native yeast G-protein-MAPK pathway shows drastically reduced response to the native ligand α-factor. This result confirms that our engineered chassis no longer responds to α-factor, eliminating background interference from the native mating pathway and making it suitable for our gated biosensor built upon heterologous receptors.
+            </p>
+
+            <h3 id="results-gpa1-5">Growth of the humanized strains</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig18-growth-curves.png" alt="Figure 18. Growth curve measurement of Gpa1-humanized yeast strains." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 18. Growth curve measurement of Gpa1-humanized yeast strains. 1: Wild-type BY4741; 2: Gpa1-humanized strain 12; 3: Gpa1-humanized strain 17. For each group, 0 μM, 1 μM and 10 μM α-factor were supplemented. Cell growth was monitored by OD<sub>600</sub> measurement, n=3 biological replicates.</figcaption>
+            </figure>
+            <p>
+              We measured the growth curves of wild-type BY4741 and Gpa1-humanized strains 12 and 17 under treatment with different concentrations of α-factor to evaluate the effects of humanization modification and α-factor stimulation on yeast proliferation. Wild-type BY4741 exhibited obvious growth inhibition under 10 μM α-factor. In contrast, for Gpa1-humanized strain 12 and strain 17, their growth profiles showed no significant difference between 0–10 μM α-factor groups and the untreated control. These results further demonstrate that Gpa1-humanized yeast loses the growth inhibitory response triggered by α-factor. Meanwhile, this gene editing modification does not significantly impair yeast proliferation, and the chassis maintains good growth performance, which is suitable for subsequent transformation of sensor plasmids and functional characterization.
+            </p>
+
+            <h3 id="results-gpa1-6">Effect on the native α-factor fluorescence response</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/result/result-fig19-fluorescence-response.png" alt="Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response." loading="lazy">
+              <figcaption class="result-fig__cap">Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response. 1–8: Time-course fluorescence intensity curves under gradient α-factor induction at 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM. Blue curve (yEGFP): Wild-type BY4741 with FUS1-yEGFP reporter system. Red curve (GPA1/hGα): Gpa1-humanized chassis with FUS1-yEGFP reporter system.</figcaption>
+            </figure>
+            <p>
+              To quantitatively characterize the inhibitory effect of Gpa1 humanization on the native mating pathway, we transformed the FUS1-yEGFP reporter plasmid into wild-type BY4741 and humanized chassis respectively. Gradient concentrations of α-factor were applied for long-term induction, and fluorescence signals were continuously recorded. In wild-type strains, yEGFP fluorescence increased markedly with rising α-factor concentration, showing obvious dose-dependent activation. In contrast, the Gpa1-humanized strain maintained very low fluorescence across all α-factor concentrations, with almost no dose-dependent signal activation. This quantitative fluorescence result further confirms that the native yeast α-factor-MAPK pathway is substantially blocked after Gpa1 human replacement. The FUS1 promoter cannot be activated by α-factor, greatly reducing basal leakage of the biosensor and providing a low-background chassis for our heterologous receptor gated sensing circuit.
+            </p>
           </div>
         </div>
+
+        <!-- 原 results-pager（报告 §4 Antigen-Gated Receptor Module，Fig 20–25）按 2026-10-07 用户指令暂不做到页面；
+             待一手数据复核后再补。 -->
 
 <div id="results-discussion" class="content-card">
-          <h2>五、综合讨论</h2>
+          <h2>Discussion</h2>
           <div class="content-text-frame">
             <p class="executive-summary">
-              四节结果各自成立，合起来看这条检测链目前的实测状态。
+              The three parts reported above establish the foundational strains of the yeast influenza-A biosensor and characterize them independently.
             </p>
             <p class="content-intro">
-              底盘这一节给出两株敲除菌（FAR1 与 SST2 均经测序确认），并观察到敲除后菌株对 α-factor 的荧光响应增强、生长不再受高浓度 α-factor 抑制。受体这一节把克隆链走通（第三次构建：一步克隆 472 bp → 菌落 PCR 472 bp → 酵母转化成功），蛋白层在 60 kD 附近有条带、杂带较多，功能验证给出 96 孔读板图。接口这一节得到 12 号、17 号两株序列一致的工程菌，并测到改造后细胞对 α-factor 的形态、生长、下游表达三层响应都减弱——这是改造本身的后果，需要讲清楚，因为项目最终要用人源受体驱动通路，而不是靠 α-factor。报告体系这一节完成构建（菌落 PCR 1152 bp、测序比对一致），并拿到剂量-时间依赖的荧光响应。
+              <strong>Chassis.</strong> FAR1 and SST2 were knocked out and confirmed by sequencing (4 bp deletions TGTC for SST2, CACT for FAR1). The double-knockout strain relieves α-factor-induced growth arrest and, more importantly, lowers the response threshold and sustains the fluorescence signal at high α-factor concentrations, indicating amplified and prolonged signaling — a useful low-concentration signal-amplifying element.
             </p>
             <p class="content-intro">
-              把四段并起来看：识别端（底盘与接口）与输出端（报告体系）各自拿到了实测数据，受体层完成了克隆链与表达检测。四条线的方向清楚：敲除放大对 α-factor 的响应，人源化改造改变了 α-factor 响应，FUS1-yEGFP 报告体系呈剂量-时间依赖。
+              <strong>Gpa1-humanized chassis.</strong> Site-specific replacement of the endogenous Gpa1 C-terminal residues was confirmed (Samples 12 and 17 matched the designed humanized sequence). After humanization, the native α-factor–MAPK response collapses across morphology, growth and downstream fluorescence, giving a low-background chassis whose FUS1 promoter can no longer be activated by α-factor.
             </p>
             <p class="content-intro">
-              各节使用各自的 α-factor 浓度体系：底盘为 0 / 1 / 10 μM 三档，接口与报告为八档梯度；数值按各自体系呈现。
+              <strong>Reporter system.</strong> The FUS1-yEGFP reporter was successfully constructed (1152 bp colony-PCR band; sequencing-confirmed) and shows α-factor-dose- and time-dependent yEGFP expression, while α-factor simultaneously suppresses proliferation in a concentration-dependent manner. It provides a quantitative fluorescent readout platform.
+            </p>
+            <p class="content-intro">
+              Taken together, the output (reporter) and the two interface layers (chassis and Gpa1 humanization) each have measured data. Each part retains its own α-factor concentration scheme (chassis: 0 / 1 / 10 μM; reporter and Gpa1: 8-step gradient), and values are presented within their respective schemes.
             </p>
           </div>
         </div>
 
-        <!-- 原「六、在途与下一步」「七、原始数据」两节按 2026-09-26 指令从页面移除（页面只呈现已得结果，进度与待办不进页面）。
-             移除内容的去处：
-             - 在途四项、失败与教训、下一步 → static/expriments/00-跨模块索引与接口.md §六、各模块 md/10-一手分析.md
-             - 原始数据索引 → 各模块 md/result-图片提取/00-图片索引与分析.md、99-result-逐字校验记录.md、02-页面用图映射.md
-        -->
+        <!-- 原 results-pager（报告 §4 Antigen-Gated Receptor Module，Fig 20–25）按 2026-10-07 用户指令暂不做到页面；
+             待一手数据复核后再补。 -->
 
       </div>
     </div>
@@ -1079,6 +673,7 @@
   <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
   <script src="../static/js/core/search.js" defer></script>
   <script src="../static/js/components/section-fold.js" defer></script>
+  <script src="../static/js/components/media-reveal.js" defer></script>
   <script src="../static/js/components/mascot-portal.js" defer></script>
   <script src="../static/js/components/sidebar-progress.js" defer></script>
   

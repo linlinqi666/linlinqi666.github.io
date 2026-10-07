@@ -5,13 +5,14 @@
      - 站内相对路径（old/doc.pdf）：按 basePath 前缀解析；
      - 绝对 URL（https://static.igem.wiki/... 或 //cdn/...）：原样使用，
        不再拼接 basePath——否则会生成 ../https://... 这类非法地址，浏览器报「协议不支持」。
-   data URL 追加 #toolbar=0&navpanes=0：隐藏浏览器内置 PDF 阅读器工具条
-   （含 Chrome 的「绘制/Draw」按钮，其语言跟随浏览器设置，页面无法切换）。 #}
+   2026-10-07 按用户要求恢复浏览器 PDF 阅读器基础功能（缩放/下载/打印工具条），
+   不再追加 #toolbar=0&navpanes=0。阅读器 UI 语言跟随浏览器设置（中文系统显示中文），
+   这是浏览器界面而非页面内容；页面正文保持全英文。 #}
 {% set pdfHref = pdfUrl if (pdfUrl | isRemoteUrl) else (basePath | default('')) + pdfUrl %}
 <div class="pdf-embed">
   <object class="pdf-embed__object" type="application/pdf"
-          data="{{ pdfHref }}#toolbar=0&navpanes=0"
+          data="{{ pdfHref }}"
           aria-label="{{ pdfLabel | default('PDF document') }}">
-    <p class="pdf-embed__fallback">{{ pdfFallback | default('该文档尚未上传，敬请期待。 / The document is not available yet.') }}</p>
+    <p class="pdf-embed__fallback">{{ pdfFallback | default('This document is not available yet.') }}</p>
   </object>
 </div>
