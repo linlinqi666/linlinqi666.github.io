@@ -1,22 +1,20 @@
-/* 成员页全屏引导封面（#members-intro）
-   状态机由 <html> 上的类驱动（与首页 GIF 开场同构）：
-     无类                      = 不显示（无 JS 降级 / 未 arm）
-     members-intro-armed       = 封面显示、锁滚动、页面内容 inert
-     members-intro-finished    = 已进入成员页：封面淡出并移除，导航恢复
-   控制器见 static/js/components/members-intro.js，arm 脚本在
-   src/_includes/head-extra/team-members.njk。 */
+/*
+ * 成员页全屏引导封面（#members-intro） 状态机由 <html> 上的类驱动（与首页 GIF 开场同构）： 无类 = 不显示（无 JS 降级 / 未 arm） members-intro-armed = 封面显示、
+ * 锁滚动、页面内容 inert members-intro-finished = 已进入成员页：封面淡出并移除，导航恢复 控制器见 static/js/components/members-intro.js，
+ * arm 脚本在 src/_includes/head-extra/team-members.njk。
+ */
 
-/* 封面图走队伍实际上传目录（实测 34/34 可达）。注意 media() 宏产出的
-   `2026/szpu-china/...` 前缀在 iGEM CDN 上一律返回 403（iGEM 用 403 表示对象不存在），
-   浏览器里只表现为"背景图不显示"，所以这里直写 CDN 绝对路径。
-   探测记录：对话归档/temporary-tools/2026-09/2026-09-30-probe-team-cdn.py */
+/*
+ * 封面图走队伍实际上传目录（实测 34/34 可达）。注意 media() 宏产出的 `2026/szpu-china/...` 前缀在 iGEM CDN 上一律返回 403（iGEM 用 403 表示对象不存在）
+ * 浏览器里只表现为"背景图不显示"，所以这里直写 CDN 绝对路径。
+ */
 .members-intro {
-  --members-cover-img: url("https://static.igem.wiki/teams/6373/wiki/team/00-team-cover.png");
+  
+  --members-cover-img: url("https://static.igem.wiki/teams/6373/wiki/team/00-team-cover.avif");
   display: none;
 }
 
-/* 显示期：整屏覆盖，层级低于全站加载遮罩(100003)、高于导航(9999)与进度条(100001)。
-   加载遮罩先播、封面后显，用户不会看到半成品。 */
+/* 显示期：整屏覆盖，层级低于全站加载遮罩(100003)、高于导航(9999)与进度条(100001)。 加载遮罩先播、封面后显，用户不会看到半成品。 */
 html.members-intro-armed:not(.members-intro-finished) .members-intro {
   position: fixed;
   inset: 0;
@@ -60,8 +58,10 @@ html.members-intro-armed:not(.members-intro-finished) body {
   opacity: 0.9;
 }
 
-/* 根站桌面端换用的是 total.webp 全尺寸版；CDN 上只发布了 00-team-cover.webp 一张，
-   没有 960 宽变体，故两个断点共用同一张（衬层经 blur(26px) 处理，尺寸差异不可见）。 */
+/*
+ * 根站桌面端换用的是 total.webp 全尺寸版；CDN 上只发布了 00-team-cover.webp 一张， 没有 960 宽变体，故两个断点共用同一张（衬层经 blur(26px) 处理，
+ * 尺寸差异不可见）。
+ */
 
 /* 前景照片：桌面铺满，竖屏/窄屏完整显示（不裁人头） */
 .members-intro__photo {
@@ -70,10 +70,9 @@ html.members-intro-armed:not(.members-intro-finished) body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* 生成照片是一行人的全身照，取景略偏上以完整保留头部（cover 会裁上下） */
+    /* 生成照片是一行人的全身照，取景略偏上以完整保留头部（cover 会裁上下） */
   object-position: center 28%;
-  /* 照片就绪前不显示，避免"动画已过、取景区空白"；由 members-intro.js 在
-     load/超时后给 .members-intro 加 is-photo-ready 触发淡入（2026-10-08 加载改造） */
+    /* 照片就绪前不显示，避免"动画已过、取景区空白"； */
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -174,8 +173,7 @@ html.members-intro-armed:not(.members-intro-finished) body {
   color: rgba(255, 248, 231, 0.75);
 }
 
-/* 无 JS 兜底：封面由 <html> 上的类驱动，本身不会显示（.members-intro 默认 display:none），
-   因此 noscript 环境下页面内容不会被遮挡。 */
+/* 无 JS 兜底：封面由 <html> 上的类驱动，本身不会显示（.members-intro 默认 display:none）， 因此 noscript 环境下页面内容不会被遮挡。 */
 @media (prefers-reduced-motion: reduce) {
   .members-intro,
   .members-intro__enter,

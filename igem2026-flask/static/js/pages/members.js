@@ -10,20 +10,13 @@
   const Utils = window.iGEMUtils;
   const raf = Utils.safeRequestAnimationFrame;
 
-  /**
-   * iGEM Layout Strategy: Data-driven rendering keeps member list and detail panel
-   * in sync, while grouping by primary role preserves the wet/dry/hp/designer narrative.
-   * The selected member's real photo is promoted to a full-bleed background layer
-   * with a cross-fade transition, so the story layer can stay frameless.
-   */
+    /* * * iGEM Layout Strategy: Data-driven rendering keeps member list and detail panel * in sync, while grouping by primary role preserves the wet/dry/hp/designer narrative. * The selected member's real photo is promoted to a full-bleed background layer * with a cross-fade transition, so the story layer can stay frameless. */
 
-  /** @typedef {{id:string,name:string,roles:string[],directions:string[],bio:string,photoPosition?:string,photoSize?:string,images?:Object}} Member */
+    /* * @typedef {{id:string,name:string,roles:string[],directions:string[],bio:string,photoPosition?:string,photoSize?:string,images?:Object}} Member */
 
-  /**
-   * Member data, role constants and grouping logic.
-   */
+    /* * * Member data, role constants and grouping logic. */
   const MemberData = (function () {
-    // 分类顺序即条带分组顺序：指导层（PI → Adviser）置顶，其后是执行层与视觉层。
+  // 分类顺序即条带分组顺序：指导层（PI → Adviser）置顶，其后是执行层与视觉层。
     const ROLE_ORDER = ['PI', 'Adviser', 'Wet Lab', 'Dry Lab', 'WIKI', 'HP', 'Art', 'Designer'];
     const CLASSIFICATION_ROLES = new Set(ROLE_ORDER);
     const ROLE_COLORS = {
@@ -37,9 +30,10 @@
       'Designer': '#7E22CE'
     };
 
-    /* 成员数据：顺序 id → index → name → roles → directions → bio →
-       photoPosition → photoSize；组内顺序即数组顺序。index 用于生成 CDN 文件名
-       （如 01-xj-photo.webp）。字段含义、标签规则与取景微调方法见 README §5.15。 */
+        /*
+     * 成员数据：顺序 id → index → name → roles → directions → bio → photoPosition → photoSize；组内顺序即数组顺序。
+     * index 用于生成 CDN 文件名 （如 01-xj-photo.webp）。字段含义、标签规则与取景微调方法见 README §5.15。
+     */
     const members = [
       {
         id: 'xj',
@@ -161,12 +155,7 @@
         photoPosition: '100% 15%',
         photoSize: '84% auto'
       },
-      // 2026-09-15 新增 PI 两位与 WIKI 两位；2026-09-16 补入 bio（directions 待团队补标签）。
-      // 2026-09-21 zjh/tyj/zlj/zlz 四张 _kt 卡通头像到位，统一走默认候选链（<index>-<id>-avatar.webp
-      // 优先，缺失时回退 <index>-<id>-photo.webp 本人照片），移除此前为 zlj/tyj 显式指定的头像覆盖。
-      // 2026-09-30 与根站对齐：CDN 上 `13-zlj-photo.webp` 是米黄背景版（152,712 B），原始照片被
-      // 上传为 `13-zlj-photo-alt.webp`（169,456 B）。根站要的是原始照片，故这里显式给出候选顺序：
-      // 原图优先、米黄版兜底。取景同步为 '55% 0%' / '36% auto'（与根站一致）。
+      // 根站要的是原始照片，故这里显式给出候选顺序： 原图优先、米黄版兜底。
       {
         id: 'tyj',
         index: '14',
@@ -220,11 +209,7 @@
     const primaryRoleCache = new Map();
     let cachedGroupedMembers = null;
 
-    /**
-     * Determine the first role from ROLE_ORDER that a member holds.
-     * @param {Member} member
-     * @returns {string}
-     */
+        /* * * Determine the first role from ROLE_ORDER that a member holds. * @param {Member} member * @returns {string} */
     function getPrimaryRole(member) {
       if (!member || !Array.isArray(member.roles)) return 'Wet Lab';
       if (primaryRoleCache.has(member)) return primaryRoleCache.get(member);
@@ -239,10 +224,7 @@
       return fallback;
     }
 
-    /**
-     * Group members by primary role according to ROLE_ORDER.
-     * @returns {{role:string,members:Member[]}[]}
-     */
+        /* * * Group members by primary role according to ROLE_ORDER. * @returns {{role:string,members:Member[]}[]} */
     function groupMembers() {
       if (cachedGroupedMembers) return cachedGroupedMembers;
       const groups = {};
@@ -266,18 +248,13 @@
     };
   })();
 
-  /**
-   * Image path resolution with templates, brace/wildcard expansion and fallback.
-   */
+    /* * * Image path resolution with templates, brace/wildcard expansion and fallback. */
   const ImageResolver = (function () {
     const DEFAULT_PHOTO_POSITION = 'center top';
     const DEFAULT_PHOTO_SIZE = 'cover';
 
-    // 基址 = 队伍实际上传目录 https://static.igem.wiki/teams/6373/wiki/team/。
-    // 旧写法 `2026/szpu-china/image/team/webp/` 在 CDN 上一律 403（iGEM 用 403 表示
-    // 对象不存在），浏览器里只表现为"图不显示"，所以基址必须按实测结果写死，
-    // 不能按根站 static/image/ 的目录结构推算。实测记录见
-    // 对话归档/temporary-tools/2026-09/2026-09-30-probe-team-cdn.py（34/34 可达）。
+    // 基址 = 队伍实际上传目录 https://static.igem.wiki/teams/6373/wiki/team/。 旧写法 `2026/szpu-china/image/team/webp/` 在 CDN 上一律 403（iGEM 用 403 表示 对象不存在）
+    // 浏览器里只表现为"图不显示"，所以基址必须按实测结果写死， 不能按根站 static/image/ 的目录结构推算。
     const IMAGE_PATH_TEMPLATES = {
       photo: {
         template: 'https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-photo.webp',
@@ -294,7 +271,7 @@
     };
 
     const IMAGE_PATH_MAPPINGS = [
-      // Example: { match: { roles: 'Adviser' }, templates: { photo: 'https://static.igem.wiki/teams/6373/wiki/team/adviser-${id}.webp' } }
+    // Example: { match: { roles: 'Adviser' }, templates: { photo: 'https://static.igem.wiki/teams/6373/wiki/team/adviser-${id}.webp' } }
     ];
 
     if (typeof window !== 'undefined') {
@@ -321,11 +298,7 @@
       return value.replace(/[^a-zA-Z0-9_\s-]/g, '').trim().replace(/\s+/g, '-');
     }
 
-    /**
-     * Expand brace patterns recursively into the Cartesian product of options.
-     * @param {string} template
-     * @returns {string[]}
-     */
+        /* * * Expand brace patterns recursively into the Cartesian product of options. * @param {string} template * @returns {string[]} */
     function expandBracePattern(template) {
       if (typeof template !== 'string') return [];
       const match = template.match(/\{([^{}]+)\}/);
@@ -339,12 +312,7 @@
       return results;
     }
 
-    /**
-     * Expand wildcard extension placeholders into concrete extensions.
-     * @param {string} template
-     * @param {string[]} extensions
-     * @returns {string[]}
-     */
+        /* * * Expand wildcard extension placeholders into concrete extensions. * @param {string} template * @param {string[]} extensions * @returns {string[]} */
     function expandWildcardExtensions(template, extensions) {
       if (typeof template !== 'string') return [];
       if (!template.includes('*')) return [template];
@@ -353,12 +321,7 @@
       return exts.map(ext => template.replace(/\*/g, String(ext)));
     }
 
-    /**
-     * Replace ${key} placeholders with values from vars.
-     * @param {string} template
-     * @param {Object} vars
-     * @returns {string}
-     */
+        /* * * Replace ${key} placeholders with values from vars. * @param {string} template * @param {Object} vars * @returns {string} */
     function interpolateTemplate(template, vars) {
       if (typeof template !== 'string') return '';
       return template.replace(/\$\{([a-zA-Z0-9_]+)\}/g, (match, key) => {
@@ -366,12 +329,7 @@
       });
     }
 
-    /**
-     * Check whether a member satisfies every condition in a mapping match object.
-     * @param {Member} member
-     * @param {Object} mapping
-     * @returns {boolean}
-     */
+        /* * * Check whether a member satisfies every condition in a mapping match object. * @param {Member} member * @param {Object} mapping * @returns {boolean} */
     function matchesMapping(member, mapping) {
       if (!member || !mapping || typeof mapping.match !== 'object' || mapping.match === null) return false;
       const conditions = mapping.match;
@@ -417,12 +375,7 @@
       return true;
     }
 
-    /**
-     * Resolve candidate image paths for a member and type in priority order.
-     * @param {Member} member
-     * @param {string} [type]
-     * @returns {string[]}
-     */
+        /* * * Resolve candidate image paths for a member and type in priority order. * @param {Member} member * @param {string} [type] * @returns {string[]} */
     function resolveImageCandidates(member, type) {
       const safeType = typeof type === 'string' ? type : 'photo';
       const config = IMAGE_PATH_TEMPLATES[safeType] || IMAGE_PATH_TEMPLATES.photo;
@@ -489,29 +442,18 @@
       return candidates;
     }
 
-    /**
-     * Return the first candidate path or an empty string.
-     * @param {Member} member
-     * @param {string} [type]
-     * @returns {string}
-     */
+        /* * * Return the first candidate path or an empty string. * @param {Member} member * @param {string} [type] * @returns {string} */
     function resolveImagePath(member, type) {
       const candidates = resolveImageCandidates(member, type);
       return candidates.length > 0 ? candidates[0] : '';
     }
 
-    /**
-     * @param {string} id
-     * @returns {string}
-     */
+        /* * * @param {string} id * @returns {string} */
     function realPhotoPath(id) {
       return resolveImagePath({ id }, 'photo');
     }
 
-    /**
-     * @param {string} id
-     * @returns {string}
-     */
+        /* * * @param {string} id * @returns {string} */
     function cartoonAvatarPath(id) {
       return resolveImagePath({ id }, 'avatar');
     }
@@ -526,30 +468,18 @@
     };
   })();
 
-  /**
-   * Builds the grouped member strip DOM and caches strip elements.
-   */
+    /* * * Builds the grouped member strip DOM and caches strip elements. */
   const Renderer = (function () {
     let stripElements = [];
 
-    /**
-     * Escape a string for safe HTML insertion.
-     * @param {string} text
-     * @returns {string}
-     */
+        /* * * Escape a string for safe HTML insertion. * @param {string} text * @returns {string} */
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
     }
 
-    /**
-     * Build a single member strip element.
-     * @param {Member} member
-     * @param {string} primaryRole
-     * @param {Function} onSelect
-     * @returns {HTMLElement}
-     */
+        /* * * Build a single member strip element. * @param {Member} member * @param {string} primaryRole * @param {Function} onSelect * @returns {HTMLElement} */
     function buildMemberStrip(member, primaryRole, onSelect) {
       const strip = document.createElement('div');
       strip.className = 'member-strip';
@@ -583,11 +513,7 @@
       return strip;
     }
 
-    /**
-     * Render grouped members into the container using DocumentFragments.
-     * @param {HTMLElement} container
-     * @param {Function} onSelect
-     */
+        /* * * Render grouped members into the container using DocumentFragments. * @param {HTMLElement} container * @param {Function} onSelect */
     function renderGroups(container, onSelect) {
       const groups = MemberData.groupMembers();
       container.innerHTML = '';
@@ -637,9 +563,7 @@
       stripElements = strips;
     }
 
-    /**
-     * @returns {HTMLElement[]}
-     */
+        /* * * @returns {HTMLElement[]} */
     function getStrips() {
       return stripElements;
     }
@@ -647,9 +571,7 @@
     return { renderGroups, getStrips, escapeHtml };
   })();
 
-  /**
-   * Dual-slide background cross-fade with generation guard.
-   */
+    /* * * Dual-slide background cross-fade with generation guard. */
   const BackgroundController = (function () {
     let activeSlide = 'a';
     let generation = 0;
@@ -658,14 +580,14 @@
     let lastPosition = null;
     let lastDomRefs = null;
 
-    /* 成员大图缓存 + 在途请求去重（2026-10-08 加载改造）：
-       - photoCache：已成功加载的 Image 对象；切换时同步命中，点击即时换图，
-         不再等 new Image() 下载完成才 applyLoaded（此前"点了没反应"的根因）；
-       - pendingLoads：同一 URL 的在途请求共享，预取与切换不会重复下载。 */
+        /*
+     * 切换时同步命中，点击即时换图， 不再等 new Image() 下载完成才 applyLoaded（此前"点了没反应"的根因）； - pendingLoads：同一 URL 的在途请求共享，
+     * 预取与切换不会重复下载。
+     */
     const photoCache = new Map();
     const pendingLoads = new Map();
 
-    /* 把 "N% auto" 解析为照片相对滑层宽度的百分比 N；cover / 未识别 → null（视为满铺） */
+        /* 把 "N% auto" 解析为照片相对滑层宽度的百分比 N；cover / 未识别 → null（视为满铺） */
     function parsePhotoSize(str) {
       if (!str) return null;
       const m = /^\s*([\d.]+)%\s+auto\s*$/.exec(str);
@@ -674,7 +596,7 @@
       return null;
     }
 
-    /* 把 "X% Y%" / "center top" 等解析为 [X, Y] 百分比（关键字按浏览器规则映射） */
+        /* 把 "X% Y%" / "center top" 等解析为 [X, Y] 百分比（关键字按浏览器规则映射） */
     function parsePhotoPosition(str) {
       const parts = (str || '').trim().split(/\s+/);
       const map = { center: 50, top: 0, bottom: 100, left: 0, right: 100 };
@@ -684,9 +606,10 @@
       return [isNaN(xv) ? 50 : xv, isNaN(yv) ? 50 : yv];
     }
 
-    /* 按照片实际渲染框写入 CSS 变量（.bg-mask 据此做米黄晕影羽化）。
-       纯 O(1) 计算 + 一次 CSS 变量写入，不触发强制同步布局，不参与动画。
-       缺省（无图 / 滑层尺寸为 0）时退回满铺，不绘制晕影。 */
+        /*
+     * 按照片实际渲染框写入 CSS 变量（.bg-mask 据此做米黄晕影羽化）。 纯 O(1) 计算 + 一次 CSS 变量写入，不触发强制同步布局，不参与动画。 缺省（无图 / 滑层尺寸为 0）
+     * 时退回满铺，不绘制晕影。
+     */
     function setPhotoBox(img, size, position, domRefs) {
       const layer = domRefs && domRefs.bgLayer;
       if (!layer || !img || !img.naturalWidth) return;
@@ -721,13 +644,7 @@
       st.setProperty('--photo-fade-y', fadeY + '%');
     }
 
-    /**
-     * Preload and display the next background image.
-     * @param {string[]} candidates
-     * @param {string} [position]
-     * @param {string} [size]
-     * @param {Object} domRefs
-     */
+        /* * * Preload and display the next background image. * @param {string[]} candidates * @param {string} [position] * @param {string} [size] * @param {Object} domRefs */
     function updateBackgroundWithCandidates(candidates, position, size, domRefs) {
       const bgLayer = domRefs.bgLayer;
       const slideA = domRefs.slideA;
@@ -763,7 +680,7 @@
         }
       }
 
-      /* 未命中缓存才走网络加载；命中缓存时在下一 microtask 立即换图 */
+            /* 未命中缓存才走网络加载；命中缓存时在下一 microtask 立即换图 */
       if (!candidates.length) {
         applyLoaded('');
         return;
@@ -774,11 +691,7 @@
       );
     }
 
-    /**
-     * 加载单张图片：缓存命中直接返回；同 URL 在途请求复用；失败 reject（不写缓存）。
-     * @param {string} url
-     * @returns {Promise<{url:string,img:HTMLImageElement}>}
-     */
+        /* * * 加载单张图片：缓存命中直接返回；同 URL 在途请求复用；失败 reject（不写缓存）。 * @param {string} url * @returns {Promise<{url:string,img:HTMLImageElement}>} */
     function loadImage(url) {
       if (photoCache.has(url)) {
         return Promise.resolve({ url: url, img: photoCache.get(url) });
@@ -801,11 +714,7 @@
       return pending;
     }
 
-    /**
-     * 候选链依次尝试：前一个失败（403/404）时自动降级到下一个，全部失败则 reject。
-     * @param {string[]} candidates
-     * @returns {Promise<{url:string,img:HTMLImageElement}>}
-     */
+        /* * * 候选链依次尝试：前一个失败（403/404）时自动降级到下一个，全部失败则 reject。 * @param {string[]} candidates * @returns {Promise<{url:string,img:HTMLImageElement}>} */
     function loadFirst(candidates) {
       let chain = Promise.reject(new Error('no candidates'));
       candidates.forEach((url) => {
@@ -814,21 +723,13 @@
       return chain;
     }
 
-    /**
-     * 后台预取（不改变当前显示）：把候选链加载进 photoCache，
-     * 供之后 updateBackground 命中秒切。失败静默（切换路径仍有完整降级）。
-     * @param {string[]} candidates
-     * @returns {Promise<void>}
-     */
+        /* * * 后台预取（不改变当前显示）：把候选链加载进 photoCache， * 供之后 updateBackground 命中秒切。失败静默（切换路径仍有完整降级）。 * @param {string[]} candidates * @returns {Promise<void>} */
     function prefetch(candidates) {
       if (!candidates || !candidates.length) return Promise.resolve();
       return loadFirst(candidates).then(() => {}, () => {});
     }
 
-    /**
-     * 按成员顺序串行预取全部成员大图（并发 1）：
-     * 不抢首屏封面与当前背景图的带宽；用户切换时命中缓存即时换图。
-     */
+        /* * * 按成员顺序串行预取全部成员大图（并发 1）： * 不抢首屏封面与当前背景图的带宽；用户切换时命中缓存即时换图。 */
     function prefetchAllPhotos() {
       const queue = MemberData.members
         .map((member) => ImageResolver.resolveImageCandidates(member, 'photo'))
@@ -841,18 +742,12 @@
       step();
     }
 
-    /* 视口变化时重新计算渲染框（照片百分比随滑层尺寸变化），仅 O(1) 计算 */
+        /* 视口变化时重新计算渲染框（照片百分比随滑层尺寸变化），仅 O(1) 计算 */
     function refreshPhotoBox() {
       if (lastImg) setPhotoBox(lastImg, lastSize, lastPosition, lastDomRefs);
     }
 
-    /**
-     * Accept a single path or an array of candidate paths.
-     * @param {string|string[]} pathOrCandidates
-     * @param {string} [position]
-     * @param {string} [size]
-     * @param {Object} domRefs
-     */
+        /* * * Accept a single path or an array of candidate paths. * @param {string|string[]} pathOrCandidates * @param {string} [position] * @param {string} [size] * @param {Object} domRefs */
     function updateBackground(pathOrCandidates, position, size, domRefs) {
       const candidates = Array.isArray(pathOrCandidates)
         ? pathOrCandidates
@@ -863,9 +758,7 @@
     return { updateBackground, updateBackgroundWithCandidates, refreshPhotoBox, prefetch, prefetchAllPhotos };
   })();
 
-  /**
-   * Pointer drag-to-dismiss for the bio rail.
-   */
+    /* * * Pointer drag-to-dismiss for the bio rail. */
   const RailDrag = (function () {
     const DISTANCE_THRESHOLD = 100;
     const VELOCITY_THRESHOLD = 0.6;
@@ -875,12 +768,7 @@
         typeof Element !== 'undefined' && 'setPointerCapture' in Element.prototype;
     }
 
-    /**
-     * Bind drag interactions to a rail inner element.
-     * @param {HTMLElement} rail
-     * @param {HTMLElement} inner
-     * @param {{setCollapsed:function(boolean)}} callbacks
-     */
+        /* * * Bind drag interactions to a rail inner element. * @param {HTMLElement} rail * @param {HTMLElement} inner * @param {{setCollapsed:function(boolean)}} callbacks */
     function bind(rail, inner, callbacks) {
       if (!rail || !inner || !supportsPointerEvents()) return;
 
@@ -964,11 +852,9 @@
     return { bind };
   })();
 
-  /**
-   * Application bootstrap, event binding and selection state.
-   */
+    /* * * Application bootstrap, event binding and selection state. */
   const App = (function () {
-    /* 必须与 members.css 的堆叠断点(max-width:1099px)一致：> 值为桌面分栏，≤ 值为堆叠布局 */
+        /* 必须与 members.css 的堆叠断点(max-width:1099px)一致：> 值为桌面分栏，≤ 值为堆叠布局 */
     const DESKTOP_BREAKPOINT = 1100;
 
     const domRefs = {
@@ -1038,9 +924,10 @@
       cachedScrollbarWidth = null;
     }
 
-    /* 仅把实测滚动条宽度写入 CSS 变量；.rail-edge-filler 的纵向几何已由纯 CSS
-       (top:0;bottom:0) 接管，不再需要 JS 回写 top/height，避免展开动画中同步滞后
-       造成的右缘短暂脱离视口。 */
+        /*
+     * 仅把实测滚动条宽度写入 CSS 变量；.rail-edge-filler 的纵向几何已由纯 CSS (top:0;bottom:0) 接管，不再需要 JS 回写 top/height，
+     * 避免展开动画中同步滞后 造成的右缘短暂脱离视口。
+     */
     function updateRailEdgeFiller() {
       const scrollbarWidth = measureScrollbarWidth();
       document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
@@ -1083,19 +970,18 @@
       if (domRefs.railInner) domRefs.railInner.style.transform = '';
     }
 
-    /** 堆叠布局：用实测高度驱动展开动画（CSS 只留兜底上限），详情见 README §5.16 */
+        /* * 堆叠布局：用实测高度驱动展开动画（CSS 只留兜底上限），详情见 README §5.16 */
     function setStripGroupsExpanded(expanded, instant) {
       const strip = domRefs.membersStrip;
       const groups = domRefs.stripGroups;
       if (!strip || !groups) return;
 
       if (expanded) {
-        /* 折叠态下子元素仍有布局，scrollHeight 即自然高度 */
+                /* 折叠态下子元素仍有布局，scrollHeight 即自然高度 */
         groups.style.setProperty('--strip-groups-max', `${groups.scrollHeight}px`);
         strip.classList.add('is-expanded');
       } else if (instant) {
-        /* 选中成员后立刻收起列表：关闭过渡让布局同步落定，否则紧跟的
-           bringDetailIntoView 会按收起前的旧位置滚动，终点越过详情卡落到页脚。 */
+                /* 选中成员后立刻收起列表：关闭过渡让布局同步落定，否则紧跟的 bringDetailIntoView 会按收起前的旧位置滚动，终点越过详情卡落到页脚。 */
         const prevTransition = groups.style.transition;
         groups.style.transition = 'none';
         strip.classList.remove('is-expanded');
@@ -1110,7 +996,7 @@
       }
     }
 
-    /** 视口变化或组内折叠后重新测量；切回桌面布局时清理自定义属性 */
+        /* * 视口变化或组内折叠后重新测量；切回桌面布局时清理自定义属性 */
     function resyncStripGroupsHeight() {
       const strip = domRefs.membersStrip;
       const groups = domRefs.stripGroups;
@@ -1131,11 +1017,10 @@
       }
     }
 
-    /** 堆叠布局下详情卡若完全移出视口则带入，避免"点了没反应"的错觉。
-       注意：选中成员时会同步折叠列表，且浏览器会对被点击条带做"焦点滚动"，
-       二者都发生在同步阶段。这里用双 rAF 等布局稳定后，再按"收起后"的真实
-       位置确定性滚动，避免平滑 scrollIntoView 与焦点滚动竞争、导致终点越过
-       详情卡落到页脚（此前移动端点击末尾成员会滚到底部导航栏）。 */
+        /*
+     * * 堆叠布局下详情卡若完全移出视口则带入，避免"点了没反应"的错觉。 注意：选中成员时会同步折叠列表，且浏览器会对被点击条带做"焦点滚动"， 二者都发生在同步阶段。这里用双 rAF 等布局稳定后，
+     * 再按"收起后"的真实 位置确定性滚动，避免平滑 scrollIntoView 与焦点滚动竞争、导致终点越过 详情卡落到页脚（此前移动端点击末尾成员会滚到底部导航栏）。
+     */
     function bringDetailIntoView() {
       const card = domRefs.detailCard;
       if (!card || card.hidden) return;
@@ -1155,10 +1040,7 @@
       });
     }
 
-    /**
-     * Select a member by id and update the UI.
-     * @param {string} id
-     */
+        /* * * Select a member by id and update the UI. * @param {string} id */
     function selectMember(id) {
       selectedId = id;
 
@@ -1209,7 +1091,7 @@
       }
       if (domRefs.railBio) domRefs.railBio.textContent = member.bio;
 
-      /* 桌面布局用右侧信息条承载简介；堆叠布局信息条收起，简介在详情卡内 */
+            /* 桌面布局用右侧信息条承载简介；堆叠布局信息条收起，简介在详情卡内 */
       const stacked = window.innerWidth <= DESKTOP_BREAKPOINT;
       if (stacked) {
         closeRail();
@@ -1273,7 +1155,7 @@
         domRefs.stripToggle.addEventListener('click', stripToggleHandler);
       }
 
-      /* 组内折叠会改变整条列表高度：展开态下重新测量，避免裁掉后面的组 */
+            /* 组内折叠会改变整条列表高度：展开态下重新测量，避免裁掉后面的组 */
       if (domRefs.stripGroups) {
         stripGroupsClickHandler = function (e) {
           const target = e.target;
@@ -1295,17 +1177,14 @@
         });
       }
 
-      /* 所有断点都默认选中首位成员：桌面端展示其背景与右侧信息条，
-         堆叠布局展示 hero 人像与详情卡（此前移动端不选中导致首屏无任何成员内容） */
+            /* 所有断点都默认选中首位成员：桌面端展示其背景与右侧信息条， 堆叠布局展示 hero 人像与详情卡（此前移动端不选中导致首屏无任何成员内容） */
       if (MemberData.members.length > 0) {
         selectMember(MemberData.members[0].id);
       } else {
         closeRail();
       }
 
-      /* 全量预取成员大图（2026-10-08 加载改造）：首张已随 selectMember 开始加载，
-         延迟 500ms 起串行预取其余成员，用户在 intro 封面停留期间即完成大部分；
-         之后点击成员命中 photoCache 即时换图，不再"点了等图片下载"。 */
+            /* 之后点击成员命中 photoCache 即时换图，不再"点了等图片下载"。 */
       if (MemberData.members.length > 1) {
         setTimeout(function () { BackgroundController.prefetchAllPhotos(); }, 500);
       }
@@ -1331,7 +1210,7 @@
           resizeRafId = null;
           invalidateScrollbarWidth();
           const width = window.innerWidth;
-          /* 断点切换：桌面 ↔ 堆叠；同时重新测量条带展开高度 */
+                    /* 断点切换：桌面 ↔ 堆叠；同时重新测量条带展开高度 */
           if (domRefs.rail) {
             if (lastWidth > DESKTOP_BREAKPOINT && width <= DESKTOP_BREAKPOINT) {
               closeRail();
@@ -1361,9 +1240,7 @@
       updateRailEdgeFiller();
     }
 
-    /**
-     * 清理所有监听器、Observer、RAF 与 DOM 引用。
-     */
+        /* * * 清理所有监听器、Observer、RAF 与 DOM 引用。 */
     function destroy() {
       if (railResizeObserver) {
         railResizeObserver.disconnect();
