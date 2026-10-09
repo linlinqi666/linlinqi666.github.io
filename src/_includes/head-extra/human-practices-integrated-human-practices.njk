@@ -415,24 +415,55 @@
   .hp-photo-slot { display: grid; place-items: center; min-height: 170px; margin: 1rem 0; border: 1px dashed rgba(139,115,85,.45); border-radius: 12px; background: rgba(139,115,85,.08); color: #8b7355; font-size: .85rem; letter-spacing: .04em; }
 
   /* ===== 专家详情：会议照片画廊 =====
-     与头像的竖版 2:3 框区分开——会议照片多为 16:9 或超宽截图，一律按原始比例自适应，不裁切。 */
+     与活动照片墙同一套规格：统一 4:3 + cover 铺满，不留白；图注图下常显。 */
   .hz-detail-card__gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin-top: 1.15rem; align-items: start; max-width: 960px; }
-  .hz-detail-card__gallery figure { margin: 0; }
-  .hz-detail-card__gallery img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
+  .hz-detail-card__gallery figure { margin: 0; overflow: hidden; border-radius: 12px; }
+  .hz-detail-card__gallery img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
   .hz-detail-card__gallery figcaption { margin-top: .3rem; font-size: .76rem; letter-spacing: .02em; color: #8b7355; }
+
+  /* ===== 专家卡「返回地图」按钮：收起收纳条并滚回地图（行为见 hp-map.js setupBackToMap） ===== */
+  .hz-detail-card__back { grid-column: 1 / -1; margin-top: 1.1rem; }
+  .hz-back-to-map {
+    appearance: none; border: 1px solid rgba(139,115,85,.35); background: rgba(139,115,85,.08);
+    color: #7d6d5a; font: inherit; font-size: .8rem; letter-spacing: .03em;
+    padding: .45rem .95rem; border-radius: 999px; cursor: pointer;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .hz-back-to-map:hover { background: rgba(139,115,85,.18); color: #5f5347; }
+  .hz-back-to-map:focus-visible { outline: 2px solid rgba(139,115,85,.55); outline-offset: 2px; }
   /* 单图：限宽不限高，避免超宽截图被拉成整卡宽 */
   .hz-detail-card__gallery--single { grid-template-columns: minmax(0, 1fr); }
   .hz-detail-card__gallery--single figure { max-width: 780px; }
   @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
 
-  /* ===== 活动照片墙：按原图比例流式排布 =====
-     覆盖 .hp-photo-grid 的固定 240px 行高 + object-fit:cover，避免 16:9 与竖构图照片被裁切；
-     图注由「悬停浮层」改为图片下方常显，配合不等高排布更好读。 */
+  /* ===== 活动照片墙：统一比例铺满网格 =====
+     用户要求：比例不同的图必须铺满存放图片的容器，不留白。
+     img 统一 4:3 + object-fit:cover 裁切铺满，同排所有图等高、图注底对齐；
+     图注仍为图片下方常显（不改回悬停浮层）。 */
   .hp-photo-grid--flow { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; overflow: visible; }
-  .hp-photo-grid--flow .hp-photo-item { overflow: visible; }
-  .hp-photo-grid--flow .hp-photo-item img { height: auto; object-fit: contain; }
+  .hp-photo-grid--flow .hp-photo-item { overflow: hidden; border-radius: 12px; }
+  .hp-photo-grid--flow .hp-photo-item img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
   .hp-photo-grid--flow .hp-photo-item figcaption { position: static; opacity: 1; transform: none; background: none; color: #7d6d5a; padding: .45rem .1rem 0; font-size: .8rem; }
   .hp-photo-grid--dense { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+  /* ===== 全页图片统一动效 =====
+     照片墙 / 会议画廊 / 专家头像共用同一套过渡时值与 hover 放大倍率，避免各容器手感不一。 */
+  .hp-photo-item img,
+  .hz-detail-card__gallery img,
+  .hz-detail-card__photo {
+    transition: transform .6s ease, opacity .3s cubic-bezier(.16, 1, .3, 1);
+  }
+  .hp-photo-item:hover img,
+  .hz-detail-card__gallery figure:hover img,
+  .hz-detail-card__photo:hover { transform: scale(1.05); }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-photo-item img,
+    .hz-detail-card__gallery img,
+    .hz-detail-card__photo { transition: none; }
+    .hp-photo-item:hover img,
+    .hz-detail-card__gallery figure:hover img,
+    .hz-detail-card__photo:hover { transform: none; }
+  }
 
   /* ===== 浮层与图钉动画 ===== */
   @keyframes hzPopoverIn {

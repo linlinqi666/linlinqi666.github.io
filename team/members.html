@@ -28,6 +28,10 @@
 <!-- 全屏引导封面样式（与首页 GIF 开场同为 components/ 下的页级组件） -->
 <link rel="stylesheet" href="../static/css/components/members-intro.css">
 
+<!-- 首屏封面图预载（2026-10-08 加载改造）：head 阶段即发起请求，
+     不等 <body> 解析到 <img> 才排队；配合 members-intro.js 的 is-photo-ready 淡入 -->
+<link rel="preload" as="image" href="../static/image/any-icon/character/webp/total.webp" fetchpriority="high">
+
 <!-- 引导封面 arm：必须在 <body> 渲染前同步执行，否则会先闪出成员页再被封面盖住。
      - 触发：直接访问 / 站内跳转 / 站外进入都显示（用户要求"进入成员页先看整队照片"）；
        如需改为"每个会话只显示一次"，把 ONCE_PER_SESSION 改为 true 即可。

@@ -288,6 +288,19 @@
   /**
    * 锚点命中某小节（或某张折叠卡）时展开对应收纳条。
    */
+  /**
+   * 滚动到元素：优先复用 sidebar-progress 的带重锚定滚动（落点会被持续校正到稳定），
+   * 否则退回原生 scrollIntoView。
+   */
+  function scrollToEl(el) {
+    var sp = window.SidebarProgress;
+    if (sp && typeof sp.scrollToElement === 'function') {
+      sp.scrollToElement(el);
+      return;
+    }
+    el.scrollIntoView();
+  }
+
   function expandForHash() {
     var hash = window.location.hash.slice(1);
     if (!hash) return;
@@ -300,13 +313,13 @@
 
     if (!animEnabled(fold)) {
       fold.open = true;
-      window.requestAnimationFrame(function () { el.scrollIntoView(); });
+      window.requestAnimationFrame(function () { scrollToEl(el); });
       return;
     }
 
-    window.requestAnimationFrame(function () { el.scrollIntoView(); });
+    window.requestAnimationFrame(function () { scrollToEl(el); });
     // 展开会顶动上方内容，动画结束后再校正一次落点
-    openFold(fold, function () { el.scrollIntoView(); });
+    openFold(fold, function () { scrollToEl(el); });
   }
 
   function init() {

@@ -91,13 +91,16 @@
   opacity: 0.7;
 }
 
-/* iGEM Layout Strategy: 复用 description.css 的 h2 样式，避免自定义标题破坏系统统一性 */
+/* iGEM Layout Strategy: 复用 description.css 的 h2 样式，避免自定义标题破坏系统统一性
+   2026-10-08：中文短标题时代遗留的 white-space:nowrap 会让英文长标题横向溢出卡片
+   （实测最长达 1524px / 容器 782px），改为正常换行并允许长词内断行。 */
 .content-card h2.hp-section-title {
   text-align: center;
   border-bottom: none;
   margin-bottom: var(--desc-spacing-xs);
   padding-bottom: 0;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 /* 选择器需带 .content-card p 前缀：navigation.css 的 `.content-card p`（特异性 0,1,1）
@@ -111,7 +114,9 @@
   margin: 0 auto;
   text-align: center;
   text-indent: 0;
-  white-space: nowrap;
+  /* 2026-10-08：英文副标题同样可能超宽（实测 648/600），放开换行 */
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 /* ===== HP 文章（公众号转载） ===== */

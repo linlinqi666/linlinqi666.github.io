@@ -439,24 +439,55 @@
   .hp-photo-slot { display: grid; place-items: center; min-height: 170px; margin: 1rem 0; border: 1px dashed rgba(139,115,85,.45); border-radius: 12px; background: rgba(139,115,85,.08); color: #8b7355; font-size: .85rem; letter-spacing: .04em; }
 
   /* ===== 专家详情：会议照片画廊 =====
-     与头像的竖版 2:3 框区分开——会议照片多为 16:9 或超宽截图，一律按原始比例自适应，不裁切。 */
+     与活动照片墙同一套规格：统一 4:3 + cover 铺满，不留白；图注图下常显。 */
   .hz-detail-card__gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin-top: 1.15rem; align-items: start; max-width: 960px; }
-  .hz-detail-card__gallery figure { margin: 0; }
-  .hz-detail-card__gallery img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
+  .hz-detail-card__gallery figure { margin: 0; overflow: hidden; border-radius: 12px; }
+  .hz-detail-card__gallery img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
   .hz-detail-card__gallery figcaption { margin-top: .3rem; font-size: .76rem; letter-spacing: .02em; color: #8b7355; }
+
+  /* ===== 专家卡「返回地图」按钮：收起收纳条并滚回地图（行为见 hp-map.js setupBackToMap） ===== */
+  .hz-detail-card__back { grid-column: 1 / -1; margin-top: 1.1rem; }
+  .hz-back-to-map {
+    appearance: none; border: 1px solid rgba(139,115,85,.35); background: rgba(139,115,85,.08);
+    color: #7d6d5a; font: inherit; font-size: .8rem; letter-spacing: .03em;
+    padding: .45rem .95rem; border-radius: 999px; cursor: pointer;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .hz-back-to-map:hover { background: rgba(139,115,85,.18); color: #5f5347; }
+  .hz-back-to-map:focus-visible { outline: 2px solid rgba(139,115,85,.55); outline-offset: 2px; }
   /* 单图：限宽不限高，避免超宽截图被拉成整卡宽 */
   .hz-detail-card__gallery--single { grid-template-columns: minmax(0, 1fr); }
   .hz-detail-card__gallery--single figure { max-width: 780px; }
   @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
 
-  /* ===== 活动照片墙：按原图比例流式排布 =====
-     覆盖 .hp-photo-grid 的固定 240px 行高 + object-fit:cover，避免 16:9 与竖构图照片被裁切；
-     图注由「悬停浮层」改为图片下方常显，配合不等高排布更好读。 */
+  /* ===== 活动照片墙：统一比例铺满网格 =====
+     用户要求：比例不同的图必须铺满存放图片的容器，不留白。
+     img 统一 4:3 + object-fit:cover 裁切铺满，同排所有图等高、图注底对齐；
+     图注仍为图片下方常显（不改回悬停浮层）。 */
   .hp-photo-grid--flow { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; overflow: visible; }
-  .hp-photo-grid--flow .hp-photo-item { overflow: visible; }
-  .hp-photo-grid--flow .hp-photo-item img { height: auto; object-fit: contain; }
+  .hp-photo-grid--flow .hp-photo-item { overflow: hidden; border-radius: 12px; }
+  .hp-photo-grid--flow .hp-photo-item img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
   .hp-photo-grid--flow .hp-photo-item figcaption { position: static; opacity: 1; transform: none; background: none; color: #7d6d5a; padding: .45rem .1rem 0; font-size: .8rem; }
   .hp-photo-grid--dense { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+  /* ===== 全页图片统一动效 =====
+     照片墙 / 会议画廊 / 专家头像共用同一套过渡时值与 hover 放大倍率，避免各容器手感不一。 */
+  .hp-photo-item img,
+  .hz-detail-card__gallery img,
+  .hz-detail-card__photo {
+    transition: transform .6s ease, opacity .3s cubic-bezier(.16, 1, .3, 1);
+  }
+  .hp-photo-item:hover img,
+  .hz-detail-card__gallery figure:hover img,
+  .hz-detail-card__photo:hover { transform: scale(1.05); }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-photo-item img,
+    .hz-detail-card__gallery img,
+    .hz-detail-card__photo { transition: none; }
+    .hp-photo-item:hover img,
+    .hz-detail-card__gallery figure:hover img,
+    .hz-detail-card__photo:hover { transform: none; }
+  }
 
   /* ===== 浮层与图钉动画 ===== */
   @keyframes hzPopoverIn {
@@ -707,38 +738,60 @@
         <div class="description-nav-wrapper">
           <ul class="description-nav">
             <li class="level1">
-              <div class="nav-link-wrapper"><a href="#section-overview" class="nav-main-link">概述</a></div>
+              <div class="nav-link-wrapper"><a href="#section-overview" class="nav-main-link">Overview</a></div>
             </li>
             <li class="level1">
-              <div class="nav-link-wrapper"><a href="#section-framework" class="nav-main-link">行动研究框架</a></div>
+              <div class="nav-link-wrapper"><a href="#section-framework" class="nav-main-link">Action Research Framework</a></div>
             </li>
             <li class="level1">
-              <div class="nav-link-wrapper"><a href="#section-stakeholder" class="nav-main-link">利益相关者</a></div>
+              <div class="nav-link-wrapper"><a href="#section-stakeholder" class="nav-main-link">Stakeholders</a></div>
             </li>
             <li class="level1">
-              <div class="nav-link-wrapper"><a href="#section-experts" class="nav-main-link">专家访谈</a></div>
+              <div class="nav-link-wrapper"><a href="#section-experts" class="nav-main-link">Expert Interviews</a></div>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#section-southchina" class="nav-main-link">学术交流</a>
+                <a href="#section-southchina" class="nav-main-link">Academic Exchange</a>
                 <div class="toggle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#section-southchina">华南交流会</a></li>
-                <li class="level3"><a href="#section-apic">APiC 交流会</a></li>
+                <li class="level3"><a href="#section-southchina">South China Meetup</a></li>
+                <li class="level3"><a href="#section-apic">APiC Conference</a></li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#section-education" class="nav-main-link">教育科普</a>
+                <a href="#section-education" class="nav-main-link">Education &amp; Outreach</a>
                 <div class="toggle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#section-education">中职学校科普</a></li>
-                <li class="level3"><a href="#section-freshman">新生科普分享</a></li>
+                <li class="level3"><a href="#section-education">Vocational School Talk</a></li>
+                <li class="level3"><a href="#section-freshman">Freshman Session</a></li>
               </ul>
             </li>
           </ul>
+        </div>
+
+        <!-- 发酵进度容器：与 result/safety 等内容页同一组件，sidebar-progress.js 驱动 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">Fermentation Progress</div>
         </div>
       </aside>
       <!-- 内容区域 -->
@@ -748,10 +801,10 @@
 <section id="section-overview" class="content-card hp-overview-map-card">
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
-            <h2 class="hp-section-title">概述</h2>
+            <h2 class="hp-section-title">Overview</h2>
           </div>
-          <p class="hp-section-intro">甲流是一种季节性流感疾病，通常集中在每年特定时段暴发。尽管暴发周期有限，但甲流会在流行季造成极为沉重的全球疾病负担：根据世界卫生组织（WHO）报告，每年约有 300 万～500 万重症，并造成 29 万～65 万流感相关呼吸道死亡。甲流并不起源于人类，而是来自禽类；禽流感本身只能传染少数人类，却可能在猪体内与已存在的人流感重组，诞生可人际传播的全新毒株。流行高峰过后疫情快速回落，公众警惕随之淡化，待下一个流行季变异后的病毒又会卷土重来。</p>
-          <p class="hp-section-intro">为完善甲型流感的防控手段，我们希望借助合成生物学技术实现甲流病毒的捕获与检测，由此诞生了我们的项目 Echo Yeast。要做出可实际应用、有社会价值的装置，就不能局限于实验室内部的理论推演与实验验证，而需要与外界合作，从各位专家的质疑和建议中改进项目、使其符合社会实际需求和情况。我们首先梳理了项目的利益相关者——呼吸科临床医师、一线护士、研究人员以及机构工作人员——他们提出的建议为项目构思提供了现实依据、指导了方案优化、为模型构建提供了思路，也完善了设备应用场景与诸多落地细节。正是在各行各业专家的协助下，我们的项目设计才更加贴合实际使用需求。</p>
+          <p class="hp-section-intro">Influenza A is a seasonal influenza disease that usually breaks out during specific periods each year. Although the outbreak period is limited, influenza A imposes an extremely heavy global disease burden during each epidemic season. According to World Health Organization (WHO) reports, each year there are about 3–5 million severe cases and 290,000–650,000 influenza-related respiratory deaths. Influenza A does not originate in humans but comes from poultry, and influenza transmitted from poultry to humans has another name, “avian influenza”, such as “H5N1”. Avian influenza itself can only infect a small number of humans and cannot continue to spread from person to person, but it has undergone a terrifying change in pigs. This is because the respiratory tract of pigs carries both avian α-2,3 and human α-2,6 receptors. And by an unfortunate coincidence, when the same pig is infected with both avian influenza and an already circulating human influenza, the eight RNA segments of the two viruses reshuffle and reassort, directly producing a completely new strain. The new strain may at once acquire the ability to recognize human receptors, to replicate in human cells and to spread from person to person. Influenza A epidemics have a distinct cyclical character: after the peak of an epidemic, case numbers fall rapidly and public vigilance gradually fades; but by the next epidemic season, the mutated influenza A virus returns, once again threatening human health.</p>
+          <p class="hp-section-intro">To improve influenza A prevention and control, we hope to use synthetic biology to capture and detect influenza A virus, and this is how our project, Echo Yeast, came about. To build a device that is practically applicable and socially valuable, we cannot confine ourselves to theoretical reasoning and experimental validation inside the laboratory; we need to work with people outside, improving our project through the questions and suggestions of experts so that it matches the real conditions and needs of society. We first mapped out our project's stakeholders, including pulmonology clinicians, frontline nurses, researchers and institutional staff. The suggestions they raised provided a realistic basis for our project concept, guided the optimization of our approach, offered ideas for model construction, and refined the device's application scenarios and many practical details. It is precisely with the help of experts from all walks of life that our project design is able to fit actual user needs more closely.</p>
 
 </section>
 
@@ -764,26 +817,26 @@
 <div id="section-framework" class="content-card hp-education-card">
   <div class="hp-section-header">
     <span class="hp-section-number">02</span>
-    <h2 class="hp-section-title">行动研究框架：让人类实践真正驱动项目</h2>
-    <p class="hp-section-subtitle">Action Research · 把专家反馈转化为工程决策</p>
+    <h2 class="hp-section-title">Action Research Framework: Letting Human Practices Actually Drive the Project</h2>
+    <p class="hp-section-subtitle">Action Research · Turning expert feedback into engineering decisions</p>
   </div>
   <div class="hp-reveal-content">
-    <div class="hp-photo-slot">图片待补充</div>
+    <div class="hp-photo-slot">Photo to be added</div>
     <div class="hp-activity-overview">
-      <p>在 iGEM 中，Human Practices 不是比赛后才补的材料，而是贯穿项目始终、不断修正团队判断的过程。我们采用 Kurt Lewin 于 1946 年提出的行动研究（Action Research）作为组织人类实践的理论框架，把与外部专家、伙伴的交流变成可迭代、可追溯的闭环。</p>
+      <p>In iGEM, Human Practices is not material patched together after the competition; it is a process that runs through the entire project and continuously revises the team's judgments. We adopt action research, proposed by Kurt Lewin in 1946, as the theoretical framework for organizing our human practices, turning exchanges with external experts and partners into an iterable, traceable loop.</p>
     </div>
     <div class="hp-interview-context">
-      <h3 class="hp-subheading">什么是行动研究</h3>
-      <p>行动研究是一种"在做中研究、在研究中改进"的螺旋循环方法，包含四个阶段：诊断（Diagnosis）——厘清真实问题；规划（Planning）——设计干预方案；行动（Action）——实施方案；观察与反思（Observation &amp; Reflection）——评估结果并反哺下一轮。它强调实践者（我们）与研究者（专家）的协作，让外部反馈直接进入决策。</p>
+      <h3 class="hp-subheading">What is action research</h3>
+      <p>Action research is a spiral-cycle method of “researching while doing, improving through research”, with four stages: diagnosis — clarifying the real problem; planning — designing the intervention; action — implementing it; observation and reflection — evaluating the results and feeding them back into the next round. It emphasizes collaboration between practitioners (us) and researchers (the experts), letting external feedback enter decision-making directly.</p>
 
-      <h3 class="hp-subheading">项目级与访谈级的双层次循环</h3>
-      <p>我们把行动研究落到两个层面。项目级：每一轮人类实践都推动项目从"想法"走向"更可靠的设计"，所有 DBTL 循环都围绕"需求—设计—验证—学习"展开，最终目标是在 8–11 月周期内做出能用的活体病毒检测器。访谈级：每一次专家访谈也遵循"诊断 → 规划 → 行动 → 反思"——先摸清对方关注什么（诊断），再带着具体问题去问（规划），把建议落到方案里（行动），最后复盘哪些真正改变了项目（反思）。</p>
+      <h3 class="hp-subheading">Two-level cycles: project level and interview level</h3>
+      <p>We apply action research at two levels. At the project level: every round of human practices pushes the project from “an idea” toward “a more reliable design”, and all DBTL cycles revolve around “requirement — design — verification — learning”, with the ultimate goal of delivering a working live-virus detector within the August–November cycle. At the interview level: each expert interview also follows “diagnosis → planning → action → reflection” — first finding out what the other party cares about, then asking targeted questions, then acting on the advice, and finally reviewing what actually changed the project.</p>
 
-      <h3 class="hp-subheading">迭代中的重心迁移</h3>
-      <p>随着循环推进，团队关注点不断迁移：第一轮聚焦"这东西有没有用、用在哪"（需求验证）；第二轮转向"怎么做得准、做得稳"（技术可行性）；第三轮开始思考"怎么让人愿意用、用得起"（落地与推广）；到后期则回到"哪些反馈还没闭环、还缺什么证据"（查漏补缺）。每一次重心迁移，背后都是一轮行动研究的完成与下一轮的开始。</p>
+      <h3 class="hp-subheading">How the focus shifts across iterations</h3>
+      <p>As the cycles advance, the team's focus keeps shifting: the first round asks “is this useful, and where is it used” (requirement validation); the second turns to “how do we make it accurate and stable” (technical feasibility); the third starts asking “how do we make people willing to use it and able to afford it” (implementation and outreach); later rounds return to “which feedback is still not closed, and what evidence is missing” (filling the gaps). Each shift marks the completion of one action-research cycle and the start of the next.</p>
 
-      <h3 class="hp-subheading">把反思变成可追踪的记录</h3>
-      <p>为了让"反馈 → 决策"的链条可追溯，我们把每次访谈、每场交流的结论整理成结构化记录：专家是谁、提出了什么问题、我们做了什么回应、项目哪些部分因此改变。这些记录不只是汇报材料，更是项目自我修正的证据链，也让我们在评审面前能清楚回答"Human Practices 到底怎么影响了你的项目"。</p>
+      <h3 class="hp-subheading">Making reflection traceable</h3>
+      <p>To make the “feedback → decision” chain traceable, we compile the conclusions of every interview and every exchange into structured records: who the expert was, what questions were raised, how we responded, and which parts of the project changed as a result. These records are not just reporting material; they are the evidence chain of the project's self-correction, and they let us answer, clearly and in front of the judges, “how exactly did Human Practices change your project”.</p>
     </div>
   </div>
 </div>
@@ -792,11 +845,11 @@
 <div id="section-stakeholder" class="content-card hp-education-card">
   <div class="hp-section-header">
     <span class="hp-section-number">03</span>
-    <h2 class="hp-section-title">利益相关者：谁在影响这个项目</h2>
-    <p class="hp-section-subtitle">Stakeholder · 七类关键角色</p>
+    <h2 class="hp-section-title">Stakeholders: Who Shapes This Project</h2>
+    <p class="hp-section-subtitle">Stakeholders · Seven key groups</p>
   </div>
   <div class="hz-map-layout">
-    <div class="hz-expert-index" id="hzExpertIndex" role="navigation" aria-label="专家索引"></div>
+    <div class="hz-expert-index" id="hzExpertIndex" role="navigation" aria-label="Expert index"></div>
   <div class="app hz-map" id="hzMap">
 
   <div class="hz-container" id="hzMapContainer">
@@ -804,7 +857,7 @@
 
     <!-- 中国地图层：省份路径来自 MapSVG CC0 china.svg -->
     <div class="hz-layer hz-china" id="hzChinaLayer">
-      <svg id="chinaSvg" viewBox="460 200 314 360" preserveAspectRatio="none" aria-label="中国地图">
+      <svg id="chinaSvg" viewBox="460 200 314 360" preserveAspectRatio="none" aria-label="Map of China">
         <g id="chinaProvinces"><path
      d="m 541.23752,336.50016 0.69,-0.2 0.83,1.29 1.23,0.89 -0.24,0.31 2.39,0.41 0.84,1.13 1.02,-0.3 0.66,0.24 0.11,1.7 1.07,0.62 -0.38,0.97 1.29,0.77 0.05,0.42 0.77,0.44 1.47,0.02 0.56,-0.34 0.79,0.97 1.2,-0.55 0.83,1.2 0.6,-0.68 0.57,0.52 0.45,1.61 0.69,0.03 -0.34,2.39 2.63,-0.03 0.32,-0.51 1.85,-0.01 0.92,0.34 -0.41,0.27 0.12,0.94 -0.62,0.69 0.01,2.1 -0.71,-0.26 -0.22,0.29 -0.19,1.52 -0.74,0.39 0.25,0.53 -0.61,1.31 0.56,0.01 0.08,0.69 0.65,0.58 1.43,-0.5 0.26,-0.65 0.42,0.24 0.47,3.1 0.88,0.49 -1.01,0.53 0.16,1.17 0.5,-0.17 0.18,1.2 0.84,0.12 0.04,0.76 1.03,-0.29 1.73,0.25 0.64,-0.34 0.93,0.39 0.52,-0.34 -0.13,-1.61 0.85,-0.11 -0.01,-0.9 0.39,-0.06 0.16,-0.56 1.03,0.3 1.05,-0.31 0,0.81 0.33,-0.07 0.79,1.26 0.98,-0.08 0.33,1.6 -0.22,0.77 0.49,0.98 -0.2,0.5 -0.44,-0.37 -0.41,1.58 -0.8,0.59 -0.64,-0.94 -0.68,0.14 -0.57,-0.76 -0.57,0.01 0.17,-0.51 -0.82,0.33 -0.24,-0.55 -0.41,0.33 -0.89,-0.39 -1.83,0.33 -0.1,0.41 0.63,0.67 -0.21,0.55 1.15,0.06 -0.12,1.29 0.33,0.72 -0.63,0.6 0.09,1.2 -1.96,0.36 -0.1,1.05 -1.34,0.62 -0.3,2.17 1.24,1.25 0.5,0.09 -0.26,0.68 0.55,0.81 1.25,-0.32 0.61,0.51 0.19,0.34 -0.56,0.45 0.14,0.5 0.86,0.14 0.6,-0.73 0.33,0.87 0.81,0.04 0.31,1.48 -0.22,1.4 -0.75,0.82 -0.82,0.09 -0.56,0.92 0.72,0.37 0.36,0.69 3.81,-0.05 1.14,-1.01 0.25,0.46 1.02,0.29 0.8,-0.16 0.17,-0.55 0.36,0.5 -0.27,0.84 0.51,0.11 -0.18,0.32 3.12,0.62 0,0 -0.07,1.8 -0.86,1.47 0.14,1.14 -0.55,0.85 -0.52,-0.03 -0.01,1.02 -0.57,0.88 -0.37,0.06 -0.37,-0.58 -0.88,0.94 -0.92,0.09 0.32,0.52 -0.31,0.62 0.39,0.36 0.67,-0.27 0.29,1.66 0.64,0.71 -0.48,0.24 -0.45,-0.31 -0.94,0.43 -0.3,0.74 -1.77,-0.49 -0.54,0.28 -1.13,-0.79 -0.92,0.64 0.13,1.25 0.39,0.29 -0.94,0.76 0.57,0.1 -0.33,0.69 0.41,1.18 -0.08,1.1 -0.69,0.17 -0.17,0.79 -0.9,0.57 -0.2,1.6 -1.13,1.21 -1.27,0.53 -0.82,1.5 -0.83,0 -0.24,0.45 -1.08,-0.24 -0.11,1.03 -0.79,-0.14 -0.64,0.57 0,0 -0.8,-0.43 0.07,-1.2 -1.56,-1.03 -1.01,0.4 -1.54,-0.36 -1.32,0.37 -0.64,-0.94 -0.85,0.42 -0.62,-0.18 -0.34,-0.4 0.21,-0.42 -0.97,-0.49 0.02,-0.89 -0.58,-0.66 0.14,-0.78 -0.78,0.52 -0.28,-0.54 -0.56,0.4 -0.43,-0.13 -0.06,-1.12 -0.52,-0.27 -0.98,0.34 -0.06,0.58 -0.72,0.46 0.79,0.74 -0.29,1 -1.47,0.41 -1.96,1.63 -0.57,0.06 -0.44,-0.47 -0.5,0.49 -0.87,-1.04 0.37,-0.56 -0.35,-0.27 1.24,-1.49 0.76,-0.21 1.11,-2 -0.4,-0.44 -0.49,0.13 -0.04,-0.55 -0.36,0.07 -0.18,-0.45 -1.47,-0.56 -0.97,0.29 -0.67,2.27 -0.85,-0.01 -2.64,1.68 -0.72,-0.71 -0.88,0.13 0,0 -0.03,-0.96 -0.74,-1.08 0.22,-1.06 -0.33,-2.45 -0.89,-0.73 -0.17,-0.6 -0.97,-0.21 0.15,-0.36 -0.41,-0.69 0.76,-0.62 -0.62,-0.41 0.24,-0.95 -0.55,-1.03 -0.74,-0.1 -0.08,-0.72 -0.58,-0.57 0.26,-1.03 1.1,-0.3 -0.32,-0.87 0.32,-0.46 2.61,-1.44 -0.36,-0.75 -1.33,-0.42 -0.84,-1.51 -1.31,0.5 -0.88,-1.3 -0.57,-0.14 -0.97,0.94 -0.65,-1.57 -0.8,-0.25 -0.04,-0.66 -0.34,-0.51 -0.59,0.07 -0.22,-0.85 0,0 0.08,-1.42 1.39,-1.63 0.14,-0.94 2.26,-1.57 0.61,0.27 0.53,-0.35 0.6,0.38 1.23,-0.53 -0.25,-1.18 0.37,-0.59 0.2,-3.69 -0.37,-0.83 -0.34,-4 -0.48,-0.29 1.04,-0.92 -0.38,-0.12 -1.46,1.67 -0.19,-0.58 -0.15,0.42 -0.78,-0.28 -0.38,1.26 -0.87,-0.26 -0.52,0.37 0.17,-0.23 -1.98,-2.32 -1.32,0.33 -0.01,-0.5 -1.33,-0.05 0,-3.98 -0.77,-0.68 -1.32,-0.09 -0.26,-0.48 -0.9,0.06 -0.74,-0.73 0.61,-0.55 -0.43,-0.96 0.11,-0.66 0.41,-0.46 1.2,1.08 1.44,0.03 0.52,-0.55 1.32,-0.19 0.92,-2.9 -0.63,-0.79 0.39,-1.85 0.36,-0.27 0.31,0.25 0.19,-0.82 1.82,0 1.02,-0.41 -0.9,-2.87 0.63,-0.12 0.2,-1.33 -1.07,-0.15 0.66,-2.3 0.64,-0.51 1.99,-0.09 0.57,1.03 0.44,-0.44 1.01,0.47 0.41,0.56 -0.2,0.89 0.95,0.66 -0.17,0.47 0.36,0.75 1.1,1.13 3.47,-1.46 0.07,-0.74 1.01,-0.27 0.54,-0.56 0.97,0.27 0.09,-1.27 -1.52,-2.15 0.52,-0.89 -0.34,-0.82 0.47,-0.76 -0.96,-0.28 -0.59,0.42 -0.14,-0.36 -0.99,0.33 -0.05,-0.7 -1.89,-1 -0.68,-1.22 0.51,-0.8 -0.11,-0.97 0,0 0.59,0.41 0.54,-0.85 0.47,0.1 z"
      title="Anhui"
@@ -949,36 +1002,36 @@
   </div>
 
   <div class="hz-legend">
-    <span class="hz-note">底图：MapSVG CC0 中国地图</span>
+    <span class="hz-note">Base map: MapSVG CC0 China map</span>
   </div>
 </div>
   </div>
   <div class="hp-reveal-content">
-    <div class="hp-photo-slot">图片待补充</div>
+    <div class="hp-photo-slot">Photo to be added</div>
     <div class="hp-activity-overview">
-      <p>在行动研究中，我们明确了本项目相关的利益相关者。他们来自临床、疾控、产业、学术与公众等不同领域，从各自的专业视角，为项目的检测目标、应用场景与风险边界提供了反馈。</p>
+      <p>Through action research we identified the stakeholders relevant to this project. They come from clinical practice, disease control, industry, academia and the public, and each has provided feedback on the project's detection targets, application scenarios and risk boundaries from their own professional perspective.</p>
     </div>
     <div class="hp-interview-context">
-      <h3 class="hp-subheading">临床医疗与终端需求方</h3>
-      <p>包括呼吸科临床医师（王文杰、付凯）与儿科临床医生（邓蔓青）。他们从真实医疗场景出发，指出当前 IVD 产业"病毒爆发后才检测"的滞后性，提醒我们关注灵敏度、假阳性与有效测量范围，并建议优先在密闭空间验证、明确应用边界。</p>
+      <h3 class="hp-subheading">Clinical care and end-user needs</h3>
+      <p>These are pulmonology clinicians (Wenjie Wang, Kai Fu) and a pediatric clinician (Manqing Deng). Starting from real clinical settings, they pointed out how far the current IVD industry lags — it only tests after a virus has already spread — and reminded us to watch sensitivity, false positives and the effective measurement range, recommending that we prioritize validation in enclosed spaces and define the application boundary clearly.</p>
 
-      <h3 class="hp-subheading">公共卫生与监管</h3>
-      <p>包括深圳市疾控中心病原所（房师松）与深圳市卫健委审批处（罗义武）。疾控专家从监测体系与病原检测流程角度指出选题严谨性与空气采样瓶颈；卫健委专家从行业管理与政策角度明确产品合规归类、生物安全规范与高价值应用场景。</p>
+      <h3 class="hp-subheading">Public health and regulation</h3>
+      <p>These are the Pathogen Institute of the Shenzhen Center for Disease Control and Prevention (Shisong Fang) and the Review and Approval Division of the Shenzhen Municipal Health Commission (Yiwu Luo). The CDC expert addressed the rigor of our topic and the bottleneck in air sampling from the perspective of surveillance systems and pathogen testing workflows; the Health Commission expert clarified product compliance classification, biosafety requirements and high-value application scenarios from the perspective of industry management and policy.</p>
 
-      <h3 class="hp-subheading">学术科研与技术顾问</h3>
-      <p>包括合成生物学专家邱鑫源、厦门大学罗周卿、大连理工大学吴辉、南京工业大学贾红华、中科院数学与系统科学研究院张海丽等。他们在底盘工程、信号通路、报告系统、建模与统计数据方法上给予关键指导，帮助团队识别技术瓶颈并明确验证路径。</p>
+      <h3 class="hp-subheading">Academic research and technical advisors</h3>
+      <p>These are synthetic biology expert Xinyuan Qiu, Zhouqing Luo of Xiamen University, Hui Wu of Dalian University of Technology, Honghua Jia of Nanjing Tech University, and Haili Zhang of the Academy of Mathematics and Systems Science, Chinese Academy of Sciences. They gave key guidance on chassis engineering, signaling pathways, reporter systems, modeling and statistical methods, helping the team identify technical bottlenecks and define the validation path.</p>
 
-      <h3 class="hp-subheading">教育科普与宣传</h3>
-      <p>包括深圳市第一职业技术学校与本校 2026 级新生。面向他们的科普宣讲，让合成生物学走出实验室，也让团队在"把复杂逻辑讲给非专业听众"的过程中重新梳理项目，并收集到来自终端用户的真实建议。</p>
+      <h3 class="hp-subheading">Education and outreach</h3>
+      <p>These are the Shenzhen First Vocational Technical School and the 2026 undergraduate cohort of our own university. Outreach talks given to them took synthetic biology out of the laboratory, made the team re-work the project while “explaining complex logic to a non-specialist audience”, and collected genuine suggestions from end users.</p>
 
-      <h3 class="hp-subheading">产业转化与商业化</h3>
-      <p>以深圳某生物科技公司经理邓荣康为代表。他从医疗器械硬件开发与工程化角度，指出空气病毒富集是最大瓶颈，并为研发流程、竞赛交付与知识产权规避提供现实路径。</p>
+      <h3 class="hp-subheading">Industrial translation and commercialization</h3>
+      <p>Represented by Rongkang Deng, a manager at a biotechnology company in Shenzhen. From the perspective of medical-device hardware development and engineering, he identified airborne-virus enrichment as the biggest bottleneck and offered a realistic path for the R&D process, competition delivery and intellectual-property avoidance.</p>
 
-      <h3 class="hp-subheading">内部项目支持</h3>
-      <p>包括纳米抗体分子对接与建模指导教师刘小龙，以及项目指导与顾问黄林森。他们从分子对接方法学、建模验证流程与跨学科协作角度，持续参与团队推进与关键决策。</p>
+      <h3 class="hp-subheading">Internal project support</h3>
+      <p>These are Xiaolong Liu, our supervisor for nanobody docking and modeling, and Linsen Huang, project advisor. They have taken part continuously in the team's progress and key decisions through docking methodology, modeling validation workflows and interdisciplinary collaboration.</p>
 
-      <h3 class="hp-subheading">学术社区与同行交流</h3>
-      <p>包括华南地区 iGEM 交流会、亚太地区 iGEM 交流会（APiC）以及与多所高校共同组织的酵母专题交流会。在这些同行反馈中，我们展示项目、讨论困难、借鉴经验，不断校准方向。</p>
+      <h3 class="hp-subheading">Academic community and peer exchange</h3>
+      <p>These are the South China iGEM meetup, the Asia-Pacific iGEM Community Conference (APiC), and the online yeast workshop co-organized with several universities. In these peer exchanges we present the project, discuss difficulties and learn from others' experience, continuously recalibrating our direction.</p>
     </div>
   </div>
 </div>
@@ -988,7 +1041,7 @@
 
       <p class="hz-detail-card__eyebrow">Human Practices · Stakeholder interviews</p>
 
-      <h2 id="hzDetailsTitle">访谈对象与项目反馈</h2>
+      <h2 id="hzDetailsTitle">Interviewees and Project Feedback</h2>
 
 
 
@@ -996,33 +1049,33 @@
 
         <div class="hz-intro-block">
 
-          <h3>这张地图是什么？</h3>
+          <h3 class="hp-subheading">What is this map?</h3>
 
-          <p>上方的中国地图标注了我们在项目推进过程中访谈过的关键利益相关者。我们的项目"基于工程化酿酒酵母的甲型流感病毒生物传感器"从一套实验室技术设想出发，需要回到真实场景中去接受检验。我们参照 Kurt Lewin 的行动研究（Action Research）螺旋循环模型来组织这些访谈：诊断 → 规划 → 行动 → 观察与反思，每一轮循环都让项目更贴近实际需求。地图中的每一位受访者都从各自的专业视角——临床医疗与终端需求方、公共卫生与监管、学术科研与技术顾问、教育科普与宣传、产业转化商业化、内部项目支持、学术社区与同行交流——为项目的检测目标、应用场景与风险边界提供了反馈。</p>
-
-        </div>
-
-        <div class="hz-intro-block">
-
-          <h3>图钉代表什么？</h3>
-
-          <p>不同颜色的图钉对应不同领域：<span class="hz-legend-dot science"></span> 科学与学术界 <span class="hz-legend-dot industry"></span> 产业与临床 <span class="hz-legend-dot policy"></span> 政策与监管 <span class="hz-legend-dot public"></span> 公众与社会。点击任意图钉或左侧头像，即可自动展开并跳转到对应人物的访谈记录；所有访谈按下方顺序依次排列，默认收纳，展开后可见该专家最相关的反馈，以及这些反馈与项目设计和实验计划的联系。</p>
+          <p>The map above marks the key stakeholders we interviewed as the project progressed. Our project — an influenza A virus biosensor based on engineered <i>Saccharomyces cerevisiae</i> — started as a laboratory concept and needed to be tested against real-world scenarios. We used Kurt Lewin's action research spiral to organize these interviews: diagnosis → planning → action → observation and reflection, with each round bringing the project closer to actual needs. Every person on the map provided feedback on the project's detection targets, application scenarios and risk boundaries from their own professional perspective — clinical care and end users, public health and regulation, academic research and technical advice, education and outreach, industrial translation and commercialization, internal project support, and academic community and peer exchange.</p>
 
         </div>
 
         <div class="hz-intro-block">
 
-          <h3>我们为什么做这些访谈？</h3>
+          <h3 class="hp-subheading">What do the pins mean?</h3>
 
-          <p>Human Practices 的核心是把实验室里的技术设想放到真实社会场景中去检验，并让反馈真正进入项目决策。通过与一线医生、研究人员和潜在使用者交流，我们持续确认：检测目标是否回应了临床痛点、使用场景是否符合现实条件、性能与成本边界是否被合理评估，并据此迭代设计——例如重新聚焦"检测到空气病毒而非区分亚型"、明确密闭空间有效范围与变量控制。</p>
+          <p>Pin colors map to different fields: <span class="hz-legend-dot science"></span> science and academia <span class="hz-legend-dot industry"></span> industry and clinical practice <span class="hz-legend-dot policy"></span> policy and regulation <span class="hz-legend-dot public"></span> public and society. Click any pin or an avatar on the left to expand and jump to that person's interview record; all interviews are listed in order below, collapsed by default, and once expanded you can see that expert's most relevant feedback and how it connects to the project design and experimental plan.</p>
 
         </div>
 
         <div class="hz-intro-block">
 
-          <h3>如何阅读这些访谈？</h3>
+          <h3 class="hp-subheading">Why did we do these interviews?</h3>
 
-          <p>你可以通过左侧专家索引（按领域分色）快速定位，或点击地图图钉 / 头像，页面会展开并平滑滚动到对应人物的访谈记录，地图仍保留在上方，方便对照人物所在位置。所有访谈记录按顺序纵向排列、默认收纳，页面按不同访谈对象的关注重点呈现反馈，并说明其与项目设计和实验计划的联系。</p>
+          <p>The core of Human Practices is to test a laboratory concept against real social scenarios and let the feedback genuinely enter project decisions. By talking with frontline clinicians, researchers and potential users, we continuously confirm whether the detection target answers a clinical pain point, whether the usage scenario matches real conditions, and whether performance and cost boundaries have been assessed properly — and we iterate the design accordingly, for example by refocusing on “detecting airborne virus rather than distinguishing subtypes” and by defining the effective range and variable control in enclosed spaces.</p>
+
+        </div>
+
+        <div class="hz-intro-block">
+
+          <h3 class="hp-subheading">How to read these interviews</h3>
+
+          <p>You can use the expert index on the left (color-coded by field) to jump straight to someone, or click a map pin or an avatar; the page will expand and scroll smoothly to that person's interview record while the map stays above for reference. All interview records are arranged vertically in order and collapsed by default. Each record presents the feedback according to what that interviewee focused on, and explains how it connects to the project design and experimental plan.</p>
 
         </div>
 
@@ -1032,7 +1085,7 @@
 
     <details class="section-fold hz-expert-fold-all">
 
-      <summary><span class="hz-expert-fold-all__title">全部专家访谈详情</span><span class="hz-expert-fold-all__hint">点击展开 / 收起 · 也可点击地图图钉或上方头像直达</span></summary>
+      <summary><span class="hz-expert-fold-all__title">All expert interview details</span><span class="hz-expert-fold-all__hint">Click to expand / collapse · or click a map pin or an avatar above to jump straight to an expert</span></summary>
 
       <div class="section-fold__body">
 
@@ -1042,53 +1095,50 @@
 
     <article class="hz-detail-card" id="hz-detail-wang-wenjie" data-module-id="HP-INTERVIEW-WANGWENJIE" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/wangwenjie.png" alt="王文杰" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/wangwenjie.png" alt="Wenjie Wang" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Industry · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-wang-wenjie">王文杰</h3>
+        <h3 id="expert-wang-wenjie">Wenjie Wang</h3>
 
-        <p class="hz-detail-card__meta">深圳某二甲医院｜医技科主任</p>
+        <p class="hz-detail-card__meta">Director of the Medical Technology Department at a Grade II Class A hospital in Shenzhen</p>
 
-        <p class="hz-detail-card__copy">团队已基本确定技术路线：以工程化酵母为底盘，表面展示纳米抗体识别甲流病毒 HA 茎部保守区，构建可捕捉空气中病毒并输出检测信号的生物传感器。但技术路线确定不等于项目成立，我们更需要一线临床检验专家评估其实际应用性，于是与临床检验专家王文杰医生直接对话，了解甲流在真实医疗场景中的检测痛点、治疗策略和预防需求。</p>
+        <p class="hz-detail-card__copy"><strong>The project's technical direction and its practical application positioning are still unclear, and the team lacks first-hand knowledge of real influenza A testing scenarios.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>The team designed interview questions around mutation mechanisms, clinical testing, treatment windows, test-kit updates, application scenarios and the feasibility of self-testing.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interviewed Dr. Wenjie Wang to learn about hospital testing logic, the use of specific antiviral drugs, test-kit updates and his suggestions on air monitoring.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>We recognized the gap between laboratory models and real needs and decided to focus on the conserved HA stalk region, enclosed-space testing and proactive early-warning applications.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目技术方向与实际应用定位尚不清晰，团队缺乏对甲流真实检测场景的一线认知。规划：围绕变异机制、临床检测、治疗窗口、试剂更新、应用场景与自检可行性设计访谈问题。行动：访谈王文杰医生，获取医院检测逻辑、特效药使用、试剂盒更新及空气检测建议。反思：认识到实验室模型与真实需求的鸿沟，决定聚焦 HA 茎部保守区、密闭空间测试与主动预警应用。</p>
+        <p class="hz-detail-card__copy">The team had largely settled on its technical route: use engineered yeast as the chassis, display nanobodies on its surface to recognize the conserved stalk region of influenza A virus HA, and build a biosensor that can capture airborne virus and output a detection signal. But a settled technical route does not mean the project is viable; we needed a frontline clinical laboratory expert to assess its practical applicability, and we wanted to talk directly with a clinical laboratory expert to understand the real pain points of influenza A testing in clinical settings, treatment strategies and prevention needs.</p>
 
+        <p class="hz-detail-card__copy">Dr. Wenjie Wang pointed out that the existing IVD industry always acts only after the virus has broken out in the human body and reached the detection threshold, whereas our air-monitoring sensor could shift prevention and control from passive diagnosis and treatment to proactive prevention, issuing a warning before the virus enters the body — which has significant public health value. He also identified shortcomings in both the technical and the application side of our project:</p>
 
+        <p class="hz-detail-card__copy">Air monitoring involves many variables, virus concentrations in open environments are low, and the sensor's effective range may be limited.</p>
 
-        <p class="hz-detail-card__copy"><strong>从被动诊治到主动预防</strong></p>
+        <p class="hz-detail-card__copy">The effective range and limiting conditions are still unclear. We need to test the effective measurement range, the size of the environment, the stage the virus is at and so on; otherwise it is difficult to define the real application boundary. (link to the hardware section)</p>
 
-        <p class="hz-detail-card__copy">王文杰医生指出现有 IVD 产业总是在病毒于人体爆发、达到检测阈值后才发挥作用，而我们的空气监测传感器有望将防控逻辑从被动诊治转向主动预防，在病毒侵入人体前发出预警，这具有重要的公共卫生价值。但也指出了项目技术与应用部分的不足：空气检测变量多，开放环境病毒浓度低，传感器有效范围可能有限；有效范围与限制条件尚不明确，需测试有效测量范围、环境大小、病毒所处阶段等，否则难以定义真实应用边界；假阳性与特异性风险突出，自检类试剂假阳性率可能达 50%—70%，传感器若走向便携自检必须解决特异性与阈值判定问题；临床以病毒阴阳性指导治疗、不区分亚型，分型由疾控发布；落地与标准化不足，仍处实验室原型阶段。</p>
+        <p class="hz-detail-card__copy">False-positive and specificity risks are prominent. The false-positive rate of self-test reagents can reach 50%–70%; if the sensor moves toward portable self-testing, specificity and threshold determination must be solved.</p>
 
+        <p class="hz-detail-card__copy">The clinical need for subtyping is limited: hospitals focus on detecting whether the virus is positive or negative in order to guide treatment and do not distinguish subtypes; subtyping is announced by the CDC.</p>
 
+        <p class="hz-detail-card__copy">Translation and standardization are insufficient: the project is still at the laboratory prototype stage, and production, cost, standardization and actual deployment still need to be addressed.</p>
 
-        <p class="hz-detail-card__copy"><strong>专家建议如何转化为设计</strong></p>
+        <p class="hz-detail-card__copy">Drawing on frontline experience, the doctor also advised us to focus on “detecting airborne virus” rather than distinguishing subtypes; to test the effective range first in enclosed spaces, controlling invariant factors before studying variables; to clarify limiting conditions such as the effective measurement range, the size of the environment and the stage of the virus; to refer to immunochromatography in developing portable self-testing while strictly controlling false positives; and to actively contact reagent manufacturers to promote translation of the results. In essence, these suggestions require us to fill four categories of data: sensitivity, specificity, environmental adaptability and application boundaries.</p>
 
-        <p class="hz-detail-card__copy">老师建议我们聚焦"检测到空气中病毒"而非区分亚型；优先在密闭空间中测试有效范围，先控制不变量，再研究变量；明确有效测量范围、环境大小、病毒阶段等限制条件；参考免疫层析法发展便携式自检，但必须控制假阳性；主动联系试剂厂商，推动成果转化。这些建议实质上要求我们补齐灵敏度、特异性、环境适应性和应用边界四类数据。</p>
+        <p class="hz-detail-card__copy">The team turned the expert's suggestions into action: first, firmly choose the conserved HA stalk region to achieve broad-spectrum detection and de-emphasize subtype discrimination; second, prioritize the design of enclosed-space experiments and establish a variable-control plan; third, make specificity and false-positive control a focus of subsequent optimization; fourth, define the effective measurement range and environmental limits; and fifth, this interview moved the project from a technical concept toward a problem-driven one and made us keenly aware that a cutting-edge sensor, if it is truly to serve public health, requires not only innovation but also the ability to withstand the test of clinical scenarios, environmental variables and real-world use.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>结论</strong></p>
-
-        <p class="hz-detail-card__copy">团队将专家建议转化为：第一，坚定选择 HA 茎部保守区实现广谱检测，弱化亚型区分；第二，优先设计密闭空间实验，建立变量控制方案；第三，把特异性与假阳性控制作为后续优化重点；第四，明确有效测量范围与环境限制条件。这次访谈让项目从技术构想走向问题导向，也让我们清醒认识到：一个前沿传感器要真正服务公共卫生，不仅需要创新，更需要经得起临床场景、环境变量和实际应用的检验。</p>
-
-
-
-
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wang-wenjie-1.jpg" alt="Interview session" loading="lazy"><figcaption>Interview session</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wang-wenjie-2.jpg" alt="Online meeting" loading="lazy"><figcaption>Online meeting</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wang-wenjie-1.jpg" alt="访谈现场" loading="lazy"><figcaption>访谈现场</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wang-wenjie-2.jpg" alt="线上交流" loading="lazy"><figcaption>线上交流</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1097,51 +1147,40 @@
 
     <article class="hz-detail-card" id="hz-detail-fu-kai" data-module-id="HP-INTERVIEW-FUKAI" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/fukai.jpg" alt="付凯" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/fukai.jpg" alt="Kai Fu" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Industry · Guangzhou, Guangdong</p>
 
-        <h3 id="expert-fu-kai">付凯</h3>
+        <h3 id="expert-fu-kai">Kai Fu</h3>
 
-        <p class="hz-detail-card__meta">中山大学｜临床医学博士</p>
+        <p class="hz-detail-card__meta">MD in clinical medicine, Sun Yat-sen University</p>
 
-        <p class="hz-detail-card__copy">项目已聚焦 HA 茎部保守区，弱化亚型区分，并初探空气监测方向。但酵母传感器响应时间、报告体系、成本、酵母存活周期、与现有技术对比、环境空气与人体呼气孰优、能否拓展乙流或肺癌等问题，仍需校准，于是访谈中山大学临床医学博士付凯，获取临床可行性、呼气检测与基层推广建议。</p>
+        <p class="hz-detail-card__copy"><strong>Although the air-monitoring direction was recognized, questions remained about timeliness, virus concentration, cost and the boundaries of expansion.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Questions were designed around response speed, the reporter system, yeast survival, device cost, clinical scenarios and future expansion.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interviewed Dr. Kai Fu, MD in clinical medicine at Sun Yat-sen University, to obtain advice on clinical feasibility, breath testing and grassroots promotion.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that a single-person breath mode is superior, and that response time must be shortened, costs controlled and expansion into lung cancer approached cautiously.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：环境空气监测方向虽获认可，但时效性、病毒浓度、成本与拓展边界仍存疑。规划：围绕响应速度、报告体系、酵母存活、装置成本、临床场景与未来拓展设计问题。行动：访谈付凯博士，获取临床可行性、呼气检测与基层推广建议。反思：确认单人呼气模式更优，需缩短响应时间、控制成本、审慎拓展肺癌方向。</p>
+        <p class="hz-detail-card__copy">The project had already focused on the conserved HA stalk region, de-emphasized subtype discrimination and begun exploring air monitoring. However, questions such as the yeast sensor's response time, reporter system, cost, yeast lifespan, comparison with existing technologies, whether ambient air or human breath is superior, and whether it could be extended to influenza B or lung cancer still needed to be calibrated.</p>
 
+        <p class="hz-detail-card__copy">During the interview, Dr. Kai Fu endorsed the concept of “using an organic organism to detect another organic organism”, which he considered uniquely valuable in synthetic biology. He particularly noted that the breath of people with respiratory or lung infections carries virus particles expelled with aerosols, and that the device would detect such people more effectively. But he also cautioned that the yeast signaling pathway takes about 1–2 hours from receiving a signal to expressing fluorescence; if it takes too long, the device is not timely enough. Airborne virus in ambient air is diluted, and influenza A can survive in air for only a few hours, whereas virus in the human body is more concentrated and easier to detect.</p>
 
+        <p class="hz-detail-card__copy">Based on these judgments, Dr. Kai Fu's advice centered on four directions. First, prioritize a single-person breath mode, supported by an enrichment device, with environmental sampling as a supplement. Second, optimize the signaling pathway to shorten response time; fluorescence requires photoelectric conversion and software readout, while blue–white screening can be judged with the naked eye but its expression time is still to be determined. Third, control hardware costs — an active breath device is expected to come down to around 10 yuan, which is what makes grassroots promotion feasible. Fourth, conduct cross-disciplinary interviews with experts in respiratory medicine, biomedical engineering, virus research and other fields, defer lung cancer testing and focus on respiratory viruses such as influenza A; expansion could follow if highly specific breath markers are identified in future. In addition, he reminded us to clarify the yeast's lifespan and replacement plan: activity peaks 2–3 days after revival and can be maintained for 1–2 weeks.</p>
 
-        <p class="hz-detail-card__copy"><strong>"用有机生物检测另一有机生物"</strong></p>
+        <p class="hz-detail-card__copy">Dr. Kai Fu advised us to focus subsequently on shortening detection response time and controlling hardware cost, and to assess clinical compatibility prudently when expanding the technology. The team thereby understood the possibility of moving from “ambient air monitoring” to “single-person breath testing”. What we had gained: the technical direction was recognized, single-person breath testing is superior to environmental sampling, and low false positives, high sensitivity and ease of operation constitute differentiating advantages. What still needed to be supplemented: the expression time of blue–white screening, the cost of the complete device, long-term yeast survival and replacement plans, quantitative specificity and sensitivity data, a systematic comparison with PCR/test strips, and validation in grassroots applications. This interview advanced the project's clinical feasibility and reminded us that a cutting-edge technology must answer four questions at once: is it accurate, is it fast, is it affordable, and where is it used?</p>
 
-        <p class="hz-detail-card__copy">付凯博士认可这一构思在合成生物学领域有独到价值，认为呼吸道感染或肺部感染者呼出的气体中会携带随气溶胶排出的病毒颗粒，装置对这类人群的检测效果更好。但他也提醒：酵母信号通路从接受信号到表达荧光约需 1—2 小时，若时间过长，装置时效性不高；环境空气病毒会被稀释且甲流在空气中只能维持几个小时，人体内病毒更富集、检测更方便。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>四个方向的建议</strong></p>
-
-        <p class="hz-detail-card__copy">第一，主推单人呼气模式，辅以富集装置，环境采样作为补充。第二，优化信号通路，缩短响应时间；荧光需光电转换后软件查看，蓝白斑可裸眼判断但表达时间待定。第三，控制硬件成本，主动呼气装置预计可降至 10 元左右，基层推广才具可行性。第四，与呼吸科、生物医学工程、病毒研究等多领域专家交叉访谈，暂缓肺癌检测，聚焦甲流等呼吸道病毒；未来若发现高特异性呼气标志物再拓展。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>结论</strong></p>
-
-        <p class="hz-detail-card__copy">团队由此了解了从"环境空气监测"到"单人呼气检测"的可能性。已得到的是：技术方向获认可，单人呼气优于环境采样，假阳性低、灵敏度高、操作便捷构成差异化优势。仍需补充的是：蓝白斑表达时间、完整装置成本、酵母长期存活与更换方案、特异性与灵敏度定量数据、与 PCR/试纸条的系统对比、基层应用验证。这次访谈让项目在临床可行性上更进一步，也提醒我们：前沿技术必须同时回答"准不准、快不快、贵不贵、用在哪"四个问题。</p>
-
-
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/fu-kai-1.jpg" alt="Online interview" loading="lazy"><figcaption>Online interview</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/fu-kai-2.jpg" alt="Project walkthrough" loading="lazy"><figcaption>Project walkthrough</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/fu-kai-1.jpg" alt="线上访谈" loading="lazy"><figcaption>线上访谈</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/fu-kai-2.jpg" alt="项目讲解" loading="lazy"><figcaption>项目讲解</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1154,38 +1193,43 @@
 
         <p class="hz-detail-card__eyebrow">Science and academia · iGEM mentor</p>
 
-        <h3 id="expert-qiu-xinyuan">邱鑫源</h3>
+        <h3 id="expert-qiu-xinyuan">Xinyuan Qiu</h3>
 
-        <p class="hz-detail-card__copy">我们团队以酿酒酵母（<em>S. cerevisiae</em>）为底盘，基于 PAGERs 系统构建空气传播的甲型流感生物传感器；我们已完成部分遗传元件的构建，但在实验设计、底盘工程与 iGEM 评审策略上屡遇瓶颈，于是邀请邱鑫源老师就当前实验方案以及 iGEM 事项进行指导。专家指出了项目目前存在的问题，明确当前缺少的关键验证，并提出了宝贵意见。</p>
+        <p class="hz-detail-card__meta">Synthetic biology expert</p>
 
+        <p class="hz-detail-card__copy">Our team uses the yeast [[i]]Saccharomyces cerevisiae[[/i]] ([[i]]S. cerevisiae[[/i]]) as the chassis and builds an airborne influenza A biosensor based on the PAGERs system; we have completed the construction of some genetic elements, but have repeatedly hit bottlenecks in experimental design, chassis engineering and iGEM judging strategy. We therefore invited Xinyuan Qiu to guide our current experimental plan and our iGEM work. The expert pointed out the problems in our project, clarified the key validations currently missing, and offered valuable advice.</p>
 
+        <p class="hz-detail-card__copy"><strong>Chassis and route: validate the premise first, then talk about simplification</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>底盘与路线：先验证前提，再谈简化</strong></p>
+        <p class="hz-detail-card__copy">The expert raised a key question that we had long overlooked: “Can an intact virus pass through the cell wall and reach the cell membrane?” He pointed out that this is the physical premise for whether the device can work: the yeast cell wall is thick, and there is currently no evidence that intact virus particles can penetrate the cell wall and bind the antibodies on hM1Dq; if validation fails, we should resolutely change the chassis (for example, to Xenopus oocytes) rather than continue investing in complex modifications. Based on this judgment, the expert's core advice was “the simpler the better”: we had previously been stuck on issues such as knocking out endogenous interfering genes and validating the gating system, whereas the expert preferred modifying the yeast's own RTK (receptor tyrosine kinase) system, replacing only the extracellular domain with an influenza A surface antibody protein, and verifying downstream phosphorylation by Western blot. On the reporter system, he offered two routes: adjust the number of PREs or switch to a weaker promoter to reduce leakage; at the same time, molecular-level evidence must be added, using a Western blot of MAPK phosphorylation to prove signal activation rather than relying only on indirect judgment from growth phenotype. The expert also stressed that “strong antigen–antibody specificity” does not equal “high detection sensitivity”: sensitivity must be defined as the number of detectable virus particles per unit volume, and our team precisely lacks the quantitative basis for “the minimum detectable number of particles per unit volume”. For serial knockout of multiple genes, he suggested switching to Golden Gate cloning for plasmid construction to improve the success rate of cloning short sgRNA fragments.</p>
 
-        <p class="hz-detail-card__copy">专家提出一个长期被忽视的关键问题："完整病毒能否穿过细胞壁抵达细胞膜？"酵母细胞壁较厚，目前并无证据表明完整病毒颗粒能穿透细胞壁并与 hM1Dq 上的抗体结合；若验证失败，应果断更换底盘（如非洲爪蟾卵母细胞），而不是继续在复杂改造上投入。基于此，专家核心建议是"越简单越好"：改造酵母自身的 RTK（受体酪氨酸激酶）系统，仅将胞外结构域更换为甲流表面抗体蛋白，并通过 Western blot 验证下游磷酸化；报告系统方面，调整 PRE 数量或改用更弱的启动子以减少泄漏，并必须补充分子层面的证据——用 MAPK 磷酸化的 Western blot 证明信号激活，而非仅凭生长表型间接判断。"强抗原–抗体特异性"并不等于"高检测灵敏度"：灵敏度必须用每单位体积内可检到的病毒颗粒数定义，而团队恰恰缺乏这一定量依据。对于多基因串行敲除，建议在质粒构建上改用 Golden Gate 克隆提高短 sgRNA 片段克隆成功率。</p>
+        <p class="hz-detail-card__copy"><strong>Modeling: use it smartly, not exhaustively</strong></p>
 
+        <p class="hz-detail-card__copy">We had hesitated over whether to build a full-chain ODE (ordinary differential equation) model from antigen to GFP, even though most parameters could only be obtained by fitting. The expert considered it acceptable in review to approximate a multi-step reaction with a single Hill function, but the parameters must come from experimental fitting or literature citations and must never be set arbitrarily; the derivation of that approximation must also be written clearly on the wiki. The real value of a model lies in first validating it by matching curves to experimental data, and then using parameter sensitivity analysis to trace back the most sensitive steps in order to guide experiments. Regarding our treating PAGERs as a cascade of “antigen recognition → release of MT1 inhibition → GPCR activation” and trying to encapsulate it with a three-state gate, the expert judged that an ODE description of the input–output relationship and dynamic response is more appropriate than three-state gate logic; mature algorithms already exist for sgRNA, so there is no need to spend effort on over-engineered forms such as Fourier transforms. The expert particularly reminded us that reviewers care about whether the model solves experimental problems, not whether the formalism is fancy; rather than stacking modules, it is better to make the model capable of predicting the whole “response–recovery” process.</p>
 
+        <p class="hz-detail-card__copy"><strong>HP and the competition: necessity first, and the loop must be real</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>模型：聪明使用，而非面面俱到</strong></p>
+        <p class="hz-detail-card__copy">The expert pointed out that we must think about the “why” and build a complete project background and rationale. He also mentioned that expert statements and outreach cannot replace factual evidence and that “appeals to authority” should be avoided; we should use epidemiological and literature data to demonstrate the value of “airborne transmission detection” and the irreplaceability of the “yeast chassis”. Human Practices is not about quantity or formality; it focuses more on whether the practice actually influenced the project and drove improvement — for example, interview feedback at the hardware level must be translated into design improvements and be validated. The expert's strategy for moving forward was clear: the immediate priority is to produce a functional receptor that can recognize influenza A antigen and to complete the first “simple and clear” DBTL (Design-Build-Test-Learn) cycle before iterating; he also suggested studying the judging handbook and contributing to the community by submitting new parts or education projects.</p>
 
-        <p class="hz-detail-card__copy">专家判断，用一个 Hill 函数对多步反应做近似在评审中可接受，但参数必须来自实验拟合或文献引用，绝不能任意设定，且需在 Wiki 上清楚写出近似的推导过程。模型的真正价值在于：先通过与实验数据的曲线匹配进行验证，然后用参数敏感性分析回溯最敏感环节以指导实验。针对把 PAGERs 视为"抗原识别 → 解除 MT1 抑制 → GPCR 激活"的级联并尝试用三态门封装，专家判断用 ODE 描述输入–输出与动态响应比三态门逻辑更合适；sgRNA 已有成熟算法，无需在傅里叶变换等过度工程化形式上耗费精力。评审关注的是模型是否解决了实验问题，而不是形式是否花哨。</p>
+        <p class="hz-detail-card__copy"><strong>Three shifts brought about by the interview</strong></p>
 
+        <p class="hz-detail-card__copy">(1) Necessity first: the epidemiological basis for airborne transmission detection, the irreplaceability of the yeast chassis and the differentiating advantages over existing technologies are all essentially questions of “why the project exists”, and none of them currently has supporting data.</p>
 
+        <p class="hz-detail-card__copy">(2) Review and reflection: we had focused our energy on humanizing the GPCR while neglecting the premise of “whether the virus can pass through the cell wall”; simplified routes such as RTK that “change only the extracellular domain” deserve repeated self-scrutiny in subsequent decisions.</p>
 
-        <p class="hz-detail-card__copy"><strong>HP 与竞赛：必要性优先，闭环必须真实</strong></p>
+        <p class="hz-detail-card__copy">(3) Data are the only language of argument: the background cannot stop at verbal endorsement by experts, model parameters cannot be set by experience, and sensitivity must have quantitative metrics. The expert also affirmed the value of the innovative idea of transplanting PAGERs into yeast.</p>
 
-        <p class="hz-detail-card__copy">专家强调要对"为什么"做出思考，构建完整的项目背景及意义；专家表述与社会实践不能替代事实证据，应避免"诉诸权威"。应以流行病学与文献数据证明"空气传播检测"的价值及"酵母底盘"的不可替代性。Human Practices 不看数量和形式，更注重实践是否真正影响到项目并推动改进，例如硬件层面的访谈反馈必须落实到器件设计的改进并得到验证。当务之急是先产出一个能识别甲流抗原的功能性受体，跑通第一个"简单、清晰"的 DBTL（Design-Build-Test-Learn）循环，再做迭代；同时建议研读评审手册，通过提交新部件或教育项目为社区做出贡献。</p>
+        <p class="hz-detail-card__copy">After the interview, we raised project background research and chassis/receptor feasibility validation to the highest priority, and on that basis continue to iterate and optimize the project.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>访谈带来的三点转变</strong></p>
-
-        <p class="hz-detail-card__copy">(1) 必要性优先：空气传播检测的流行病学依据、酵母底盘的不可替代性，以及相较现有技术的差异化优势，本质上都是"项目为何存在"的问题，目前都缺乏数据证明。(2) 复盘反思：曾把精力放在 GPCR 人源化上，却忽略了"病毒能否穿过细胞壁"的前提；像 RTK 这类"只改胞外结构域"的简化路线，值得在后续决策中反复自我审视。(3) 数据是唯一的论证语言：背景不能停留在专家口头认可，模型参数不能凭经验设定，灵敏度必须有定量指标。专家也肯定了将 PAGERs 移植到酵母这一创新思路的价值。访谈后，我们将项目背景研究与底盘/受体可行性验证提升至最高优先级，并在此基础上持续迭代优化项目。</p>
+      
 
 
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1198,40 +1242,29 @@
 
         <p class="hz-detail-card__eyebrow">Healthcare frontline · Hangzhou, Zhejiang</p>
 
-        <h3 id="expert-luo-juan">ICU 一线护理</h3>
+        <h3 id="expert-luo-juan">Juan Luo</h3>
 
-        <p class="hz-detail-card__meta">重症监护室（ICU）一线护理人员</p>
+        <p class="hz-detail-card__meta">ICU frontline nurse, Grade III Class A hospital, Hangzhou</p>
 
-        <p class="hz-detail-card__copy">我们想确认这台环境检测装置到底能不能扎进真实的医院感染防控链条里，于是请一位每天做呼吸机管理、吸痰、插管等高频操作的 ICU 一线护理从落地角度帮我们把关。她既是最清楚空气里藏着什么风险的人，也是离"设备好不好用"最近的人。</p>
+        <p class="hz-detail-card__copy">Working in an intensive care unit, she performs high-frequency procedures such as ventilator management and sputum suction for intubated or tracheostomized patients, giving her a frontline view of hospital air management, protective procedures and nosocomial infection control.</p>
 
+        <p class="hz-detail-card__copy">Existing air disinfection in hospitals cannot fully inactivate aerosolized virus; high-risk procedures such as sputum suction require graded protection. The hardest part of prevention and control is visitors who are infectious without knowing it. If entrances and wards could display airborne virus readings in real time and grade them as low / medium / high risk, it would ease families' concerns; miniaturizing the device and integrating it into a ventilator's exhalation valve would enable per-patient monitoring.</p>
 
+        <p class="hz-detail-card__copy">Hospitals rank equipment quality first and operation must not be cumbersome; hospitals also carry drug-resistant organisms such as Acinetobacter baumannii and Klebsiella pneumoniae, so swapping the nanobody could extend the yeast sensor to multiple pathogens. Public hospitals, however, must procure equipment through open tender, and using it for diagnosis would require formal certification.</p>
 
-        <p class="hz-detail-card__copy"><strong>最薄弱的环节：探视家属"有病而不自知"</strong></p>
+        <p class="hz-detail-card__copy">After the interview we folded ventilator-valve integration and graded result display into the application design, and listed formal certification, tendering procedures, regulatory communication and modular multi-pathogen extension as follow-up directions. Note that the device has not entered any hospital system; the relevant approvals and certifications are still outstanding, not accomplished results.</p>
 
-        <p class="hz-detail-card__copy">我们原以为装置的重心在病房内部净化。她却提醒我们，ICU 虽有层流、单间负压、空气不外循环和空气消毒机，但常规空调滤网只挡灰尘粉尘、挡不住气溶胶病毒，而真正让她头疼的是"有病而不自知"——不适的家属仍来探视、握手、摘口罩近距离交谈，公众对甲流严重性认知不足、常误当普通感冒。顺着这个判断，我们重新理解了装置的价值锚点：与其只做病房净化指标，不如在入口、病房实时显示空气病毒浓度，既减轻家属顾虑、也增强信任。这把我们的应用定位从"环境净化配套"拉回到"无症状传播的预警哨点"。</p>
+      
 
-
-
-        <p class="hz-detail-card__copy"><strong>呼吸机呼气阀：被确认的理想哨点</strong></p>
-
-        <p class="hz-detail-card__copy">我们请教装置该以什么形态嵌入 ICU。她的反馈很具体：把传感器微缩集成到呼吸机呼气阀，就能对每位患者呼出气体做个体化监测、精准筛查感染者，这尤其契合 ICU 需求；而结果若只显示"有/无"不够，按低/中/高危分级呈现才更具临床指导意义。这一点直接落到我们的报告输出设计上——<code>yEGFP/lacZ</code> 双报告体系需要被重构成可分级量化的显示逻辑，而非单一阈值报警；呼气阀集成也由此从设想变成值得优先评估的部署方案。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>产品化落地的真实壁垒：准入、认证与监管沟通</strong></p>
-
-        <p class="hz-detail-card__copy">我们问"进医院"到底要跨过什么。她给出的答案很现实：公立医院设备必须公开招标，要用途明确、价格合理、符合实际需求；若要纳入诊断体系，还需权威认证、对接疾控中心并争取学校函件背书。这也让我们清醒——定期更换酵母干粉与培养基的维护方案在临床频率上可接受、操作不算繁琐，但"好用"和"能进院"之间还隔着一整套合规与治理流程。这部分影响的是我们项目的应用边界与推进路径（属于风险治理与产品化规划层面），而非实验参数本身；目前装置尚未进入任何医院体系，相关准入与认证均为待办，不能写成已达成结果。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>多病原体拓展的想象与边界</strong></p>
-
-        <p class="hz-detail-card__copy">我们还聊到装置的远期可能。她指出医院里鲍曼不动杆菌、肺炎克雷伯菌等耐药菌快速检测需求迫切，若装置能区分识别对精准用药很有帮助；而病原体持续变异，检测系统必须可迭代。由于我们的酵母传感器基于抗原–抗体特异性结合，理论上更换表面纳米抗体即可拓展到其他病原体，这条"模块化替换"路线被我们列入后续路线图——但同样要说明，这属于面向未来的设计方向，跨病原体的识别性能与临床适配仍待验证，不能当作已具备的能力。整体而言，这次访谈主要来自一线护理视角的需求反馈与团队后续计划，团队将其作为产品化与场景设计的参考，待后续与监管和临床进一步对接复核。</p>
+      
 
 
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1240,57 +1273,44 @@
 
     <article class="hz-detail-card" id="hz-detail-shenzhen-cdc" data-module-id="HP-INTERVIEW-SHENZHENCDC" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/fangshisong.png" alt="房师松" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/fangshisong.png" alt="Shisong Fang" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Policy and public health · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-shenzhen-cdc">房师松</h3>
+        <h3 id="expert-shenzhen-cdc">Shisong Fang</h3>
 
-        <p class="hz-detail-card__meta">深圳市疾控中心病原所｜副所长</p>
+        <p class="hz-detail-card__meta">Deputy Director of the Pathogen Institute, Shenzhen Center for Disease Control and Prevention</p>
 
-        <p class="hz-detail-card__copy">项目技术路线虽已确定，但作为疾控与公共卫生视角，我们想检验选题与技术设计的严谨性。我们的思路是先聚焦甲流，把甲流的识别做出来作为第一步，再考虑后续拓展。因此我们访谈了房师松专家，从流感监测与检验验证的政府机构视角，请疾控专家帮我们审视"先聚焦甲流识别、再逐步拓展"这一思路是否站得住脚，并指出技术设计与后续落地中容易被忽略的规范问题。</p>
+        <p class="hz-detail-card__copy"><strong>The project had settled on a technical route for influenza A detection, but the rigor of the topic selection, the choice of target genes, the bottleneck in air sampling, the registration pathway and the methods of scientific validation remained unanswered.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Shisong Fang of the Pathogen Institute of the Shenzhen CDC, consulting on influenza typing, the rigor of the topic, detection technology design, air sampling, implementation and registration, and research methods.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Present the project and gather the expert's feedback on virus fundamentals, target-gene and antigen design, air collection, registration and translation, the surveillance system, and research for the competition.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>We confirmed that testing for influenza A alone carries a risk of missed detection and that dual testing for influenza A and B should be included; target genes should preferentially be conserved regions; air sampling is the bottleneck of the whole chain; registration needs to distinguish research use from clinical use; and research must rely on real samples and statistical validation, while also requiring detailed investigation of influenza A's background and other details.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目已确定甲流检测技术路线，但选题严谨性、检测靶基因选择、空气采样瓶颈、注册路径与科研验证方法仍无答案。规划：访谈深圳疾控中心病原所房师松专家，围绕流感分型、选题严谨性、检测技术设计、空气采样、落地注册与科研方法展开咨询。行动：介绍项目，听取专家对病毒基础、靶基因与抗原设计、空气采集、注册转化、监测体系与竞赛科研的反馈。反思：我们确认只做甲流存在漏检风险，应将甲流与乙流双重检测纳入考虑；靶基因应优先选择保守区；空气采样是整个链路的瓶颈；注册需区分科研与临床；科研则需依靠真实样本与统计学验证，同时还需要对甲流的背景等各方面细节做详细调查。</p>
+        <p class="hz-detail-card__copy">Although the project's technical route was settled, from the perspective of the CDC and public health we wanted to test the rigor of the topic selection and technical design. Our thinking was to focus on influenza A first, achieve influenza A recognition as a first step, and then consider subsequent expansion. We therefore interviewed the expert Shisong Fang; from the perspective of a government agency for influenza surveillance and laboratory verification, we wanted a CDC expert to review whether the idea of “focusing on influenza A recognition first and expanding step by step” holds up, and to point out regulatory issues in the technical design and later implementation that are easily overlooked.</p>
 
+        <p class="hz-detail-card__copy">Shisong Fang began with the rigor of the topic selection, reminding us that testing for influenza A alone carries a risk of missed detection, that the clinical mainstream is dual testing for influenza A and B, and that the project presentation must face up to this shortcoming. On technical design, he recommended using conserved genes such as M/NP/NS for typing, designing primers with reference to sequences from the past 3–5 years and using BLAST to screen conserved fragments of about 200 bp; for antigen expression he preferred the conserved HA neck region, and suggested referring to the mosaic algorithm to cover circulating strains. He also stressed that a new project must be compared side by side with mature methods such as rapid antigen tests and fluorescence PCR across multiple dimensions, not only highlighting its advantages.</p>
 
+        <p class="hz-detail-card__copy">Regarding airborne virus detection, the expert affirmed its innovative value and recommended crowded places such as hospital emergency departments, metro stations and schools, but advised against ICUs. He pointed out that the core difficulty lies in air-sample collection: virus particles are small, retention by filter membranes is limited, and collection protocols for bacteria and viruses are not interchangeable, so the choice of collector, wet versus dry collection, and membrane and concentration processes must be studied in depth; if the front end cannot capture the virus, no matter how advanced the back-end detection is, it is useless. On sensitivity, airborne viral loads are generally low, which places extremely high demands on enrichment and detection.</p>
 
-        <p class="hz-detail-card__copy"><strong>选题严谨性：正视"只做甲流"的漏检风险</strong></p>
+        <p class="hz-detail-card__copy">On implementation, the expert distinguished two pathways — research equipment and clinical medical devices: research use requires no stringent registration, but the results have no clinical diagnostic validity; entering a hospital requires a Class III medical device registration certificate from the National Medical Products Administration, at least three clinical trial sites, and performance comparison against mature reagents. On research methodology, he advised obtaining real clinical samples, processing data with statistical methods, analyzing advantages and disadvantages objectively, and communicating more with industry experts rather than following textbooks blindly.</p>
 
-        <p class="hz-detail-card__copy">房师松专家首先从选题严谨性切入，提醒我们仅检测甲流存在漏检风险，临床主流为甲流+乙流双重检测，项目汇报需正视这一缺陷。技术设计上，他建议型别诊断优先选用 M/NP/NS 等保守基因，引物设计参考近 3—5 年序列、Blast 筛选 200bp 左右保守片段，抗原表达优先选 HA 颈部保守区，并可参考马赛克算法覆盖流行毒株；同时强调新项目须与抗原快检、荧光 PCR 等成熟手段做多维度横向对比，不能只讲优点。</p>
+        <p class="hz-detail-card__copy">At the end of the interview, the expert and the team agreed on follow-up work: the team would go back and improve the background research on influenza viruses and detection technologies; advance experimental validation with real samples and refine performance metrics and statistical analysis; subsequently engage medical-device industry experts to discuss device design, evaluate the pros and cons of the plan and determine the R&D steps; and stay in contact with the CDC expert whenever questions arose, with the expert also willing to visit the school later to review the project.</p>
 
+        <p class="hz-detail-card__copy">From the perspective of public health and the CDC, this interview provided criteria different from those of clinical end users and industrial translation. On topic selection, we must face up to the risk of missed detection when testing only for influenza A and include dual testing for influenza A + B in subsequent planning; technically, prioritizing conserved target genes, choosing the HA neck for antigen expression and referring to the mosaic algorithm gave clear guidance for molecular design; on air sampling, the expert identified front-end capture as the bottleneck of the chain, requiring focused study of collectors, membranes and concentration processes; on implementation, the registration requirements differ between research equipment and clinical medical devices, so the goal must be clarified as early as possible; and in research methodology, real samples, statistical validation, side-by-side comparison and reproducibility became the basic principles for our subsequent experiments and reporting. The expert also said he would be available for contact at any time and was willing to come to the school to review the project, which provided important support for its continued progress.</p>
 
-
-        <p class="hz-detail-card__copy"><strong>空气病毒检测：瓶颈在前端采集</strong></p>
-
-        <p class="hz-detail-card__copy">针对空气病毒检测，专家肯定其创新价值，推荐医院急诊科、地铁、学校等人群密集场所，但不建议进入 ICU。他指出核心难点在空气样本采集：病毒颗粒小、滤膜截留有限、细菌与病毒收集方案不通用，需重点研究收集器选型、干湿法收集、滤膜与浓缩工艺；前端捕获不到，后端检测再先进也无用。灵敏度上，空气病毒载量普遍偏低，对富集和检测提出极高要求。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>落地与科研方法</strong></p>
-
-        <p class="hz-detail-card__copy">落地方面，专家区分科研设备与临床医疗器械两条路径：科研用途无需严苛注册，但结果不具临床诊断效力；进入医院需国家药监局三类医疗器械注册证，至少三家临床试验基地，并与成熟试剂比对性能。科研方法上，他建议获取真实临床样本、用统计学方法处理数据、客观分析优缺点、多与行业专家交流，不盲从教材。访谈最后，专家与团队商定后续工作安排：团队回去完善流感病毒与检测技术相关背景调研；推进真实样本实验验证，完善性能指标与统计学分析；后续对接医疗器械行业专家探讨设备方案设计；专家也可后续入校为项目把关。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>结论</strong></p>
-
-        <p class="hz-detail-card__copy">这次访谈从公共卫生与疾控视角，为项目提供了不同于临床终端和产业转化的判断标准。选题上，我们需正视只做甲流的漏检风险，将甲流+乙流双重检测纳入后续规划；技术上，靶基因优先保守区、抗原表达选 HA 颈部、参考马赛克算法，为分子设计提供了明确指引；空气采样上，专家点明前端捕获是链路瓶颈，需重点研究收集器、滤膜与浓缩工艺；落地上，科研设备与临床医疗器械两条路径的注册要求不同，需尽早明确目标；科研方法上，真实样本、统计学验证、横向对比、可重复性，成为我们后续实验与汇报的基本准则。专家还表示后续可随时对接，并愿意入校为项目把关，为项目持续推进提供了重要支持。</p>
-
-
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/shenzhen-cdc-1.jpg" alt="Roundtable session" loading="lazy"><figcaption>Roundtable session</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/shenzhen-cdc-2.jpg" alt="Discussion" loading="lazy"><figcaption>Discussion</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/shenzhen-cdc-1.jpg" alt="座谈会现场" loading="lazy"><figcaption>座谈会现场</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/shenzhen-cdc-2.jpg" alt="交流讨论" loading="lazy"><figcaption>交流讨论</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1303,51 +1323,40 @@
 
         <p class="hz-detail-card__eyebrow">Industry and engineering · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-deng-gong">邓荣康</h3>
+        <h3 id="expert-deng-gong">Rongkang Deng</h3>
 
-        <p class="hz-detail-card__meta">深圳某生物科技公司｜经理</p>
+        <p class="hz-detail-card__meta">Manager at a biotechnology company in Shenzhen</p>
 
-        <p class="hz-detail-card__copy">项目计划开发可采集环境空气中甲流病毒、富集后完成检测并给出风险预警的设备，面向学校、游轮等密闭空间。但我们在硬件工程化方面经验不足，尤其空气病毒富集、器件选型、研发流程与比赛交付方式都不清楚，因此请邓工从医疗器械开发角度帮我们判断哪些现实可行、比赛阶段该做到什么程度。</p>
+        <p class="hz-detail-card__copy"><strong>The project's device concept is clear, but the core bottleneck of airborne-virus enrichment has not yet been solved, and we lack experience in hardware engineering, R&D processes, component selection and competition delivery strategy.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Deng, a medical-device hardware development engineer, consulting on the device plan, enrichment technology, R&D process, intellectual property and competition delivery.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Report the device concept and working mode, and gather Mr. Deng's feedback on enrichment approaches, R&D processes, competition strategy and industry practice.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that airborne-virus enrichment is the greatest difficulty, that during the competition we should prioritize the principle block diagram and a partial demonstration unit rather than pursuing a complete prototype, and that the defense must show a thorough grasp of the principles to avoid being judged as fabricating results.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目设备设想已明确，但空气病毒富集这一核心瓶颈尚未解决，硬件工程化、研发流程、器件选型与竞赛交付策略均缺乏经验。规划：访谈医疗器械硬件开发工程师邓工，围绕设备方案、富集技术、研发流程、知识产权与竞赛交付展开咨询。行动：汇报设备设想与工作模式，听取邓工对富集思路、研发流程、比赛策略与行业实践的反馈。反思：确认空气病毒富集是最大难点，比赛阶段应优先完成原理框图与局部演示件，而非追求完整样机；答辩须吃透原理，避免被判定作假。</p>
+        <p class="hz-detail-card__copy">The project plans to develop a device that can collect influenza A virus from ambient air, enrich it, complete detection and issue a risk warning, targeting enclosed spaces such as schools and cruise ships. But we lack experience in hardware engineering, and in particular are unclear about airborne-virus enrichment, component selection, R&D processes and competition delivery. We therefore asked Mr. Deng, from the perspective of medical-device development, to help us judge what is realistic and what the competition stage should aim for.</p>
 
+        <p class="hz-detail-card__copy">Mr. Deng first helped us organize our thinking: the detection chemistry and optics are actually manageable, and the real bottleneck is the capture and liquid-phase enrichment of virus in the air. Virus particles are extremely small, so if air is bubbled directly into the reaction liquid, most of the virus escapes as bubbles and dissolves with difficulty, and after prolonged bubbling the liquid also evaporates. He proposed two approaches: first, vortex agitation, so that air and liquid make full swirling contact; second, membrane filtration, with multiple membrane layers — the upper layer retaining bacteria and the lower nanomembrane retaining viruses, which are then washed off with eluent. The trouble with membrane filtration is that viruses easily pass through the membrane and high pressure causes clogging, which can be alleviated with pulsed pressurization or shaking. He also mentioned that exosome enrichment from urine follows a similar logic: it can be done in the lab, but in engineering it runs into practical problems such as time, clogging and impurities.</p>
 
+        <p class="hz-detail-card__copy">On timing, Mr. Deng felt that producing a complete prototype in two or three months is unrealistic. He suggested first producing the appearance drawing, the working-principle block diagram and the module-level schematic diagrams to explain the logic clearly, and also making a partial demonstration unit of the core function rather than a fully connected machine. But he particularly reminded us that the team must thoroughly master the whole plan and must not present drawings while being unable to explain the principles, as that would be treated as fabricating results.</p>
 
-        <p class="hz-detail-card__copy"><strong>富集才是真正的瓶颈</strong></p>
+        <p class="hz-detail-card__copy">He also laid out a fairly clear line for the R&D process: first write the Product Technical Requirements, setting out clearly everything that can be quantified — sampling duration, air-pump flow rate, liquid volume, temperature and humidity, false-positive/false-negative metrics and validation methods — while checking industry standards and similar devices; then determine the technical route, first building a simple simulation device to verify whether the virus can enter the liquid phase and how efficient the enrichment is, without rushing to build the complete machine; then split hardware and software, with the lower-level controller handling the air pump, solenoid valves and temperature control, and the host computer providing the human–machine interface, defining the communication protocol properly; then build a prototype and iterate through testing to find the balance between performance and cost. Since the device involves live virus, internal inactivation plans and safety validation must also be considered in advance.</p>
 
-        <p class="hz-detail-card__copy">邓工先帮我们理了理思路：检测化学和光学部分其实难度可控，真正的瓶颈是空气里病毒的捕获和液相富集。病毒粒径太小，直接通气进反应液，大多以气泡逸出，很难溶进去，通久了液体还会挥发。他提出了两种方案：一是涡旋搅拌，让空气和液体充分旋流接触；二是膜过滤，多层滤膜，上层截细菌，下层纳米膜截病毒，再用洗脱液洗下来。膜过滤的麻烦在于病毒容易穿膜、压力高了容易堵，可以用脉冲加压或震荡缓解。他还提到尿液外泌体富集也是类似逻辑，实验室能做，工程化就会碰上时间、堵塞、杂质这些现实问题。</p>
+        <p class="hz-detail-card__copy">On tools and intellectual property, he suggested learning programming in a targeted way around subtasks rather than studying broadly; AI can be used, but key parameters and regulations must be checked against the original sources. On innovation, the vast majority of products are not original from scratch: one can refer to air purification equipment and enrichment devices in published papers, adapting parameters on an existing basis and prioritizing reuse of mature modules. On patents, the situation is relatively relaxed for students, but once commercialized, freedom-to-operate searches and design-arounds are required, and one must not directly copy or disassemble a competitor's product. Regarding yeast recognizing HA protein, he said he had not investigated commercial products of the same kind; fragment-level research might exist in laboratories, but complete devices are rare, and we would need to search the literature ourselves.</p>
 
+        <p class="hz-detail-card__copy">Finally, he suggested that we prioritize producing the Product Technical Requirements document, then use it as the basis for the appearance, structure and principle block diagrams as competition materials; drawing and refining the plan can be discussed further later.</p>
 
+        <p class="hz-detail-card__copy">This interview made the team realize that the main difficulty in building a complete device lies in airborne-virus enrichment. Subsequently we will prioritize completing the Product Technical Requirements document, clarifying the required specifications of the device we are building; based on the technical requirements, draw the appearance drawing, the working-principle block diagram and the module-level schematic diagrams as competition materials; and at the same time produce a partial demonstration unit of the core function. On component selection, we will prioritize reusing mature submodules, referring to air purification equipment and published enrichment devices and making adaptive adjustments rather than developing everything ourselves; on patents, we will carry out freedom-to-operate searches and design-arounds. For defense preparation, team members will thoroughly master the logic of the whole plan to ensure they can answer the judges' questions. Mr. Deng also said that further drawing and plan refinement can be discussed and coordinated later, providing continuing support for the project's hardware progress.</p>
 
-        <p class="hz-detail-card__copy"><strong>研发流程与竞赛交付</strong></p>
-
-        <p class="hz-detail-card__copy">在时间上，邓工觉得两三个月做出完整样机不太现实，建议先把外观图、工作原理框图、分模块原理图做出来，把逻辑讲清楚，也可以做个局部核心功能演示件，不用整机全通。但他特别提醒，团队必须吃透整套方案，不能只拿图纸却讲不清原理，那样会被当成作假。研发流程上，他建议先写《产品技术要求》，把采样时长、气泵流量、液体体积、温湿度、假阳性/假阴性指标、验证方法这些能量化的都写清楚，同时查行业标准和同类器械；再定技术路线，先搭简易模拟装置验证病毒能不能进液相、富集效率如何；然后拆硬件和软件，下位机管气泵、电磁阀、温控，上位机做人机交互，定义好通信协议；接着做样机、迭代测试，找性能和成本的平衡点。设备里涉及活病毒，内部灭活方案和安全验证也得提前考虑。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>工具、知识产权与后续</strong></p>
-
-        <p class="hz-detail-card__copy">工具和知识产权方面，他建议编程围绕子任务针对性学，不用泛学；AI 可以用，但关键参数和法规必须核对原始资料。创新上绝大多数产品不是从零原创，可以参考空气净化设备、已发表论文里的富集装置，在现有基础上调参数适配，优先复用成熟模块。专利上学生阶段相对宽松，一旦商业化就要做检索和规避设计，不能直接照抄拆解竞品。关于酵母识别 HA 蛋白，他说自己没调研过同类商业化产品，实验室片段研究可能有，完整设备少见，需要我们自行查文献。最后他建议我们优先把产品技术要求文档做出来，再基于它画外观、结构、原理框图作为参赛材料，后续画图和细化方案可以再沟通。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>结论</strong></p>
-
-        <p class="hz-detail-card__copy">这次访谈让团队意识到，要做出一套完整的设备，主要困难在于空气病毒富集。后续我们将优先完成产品技术要求文档，明确设备的各项指标需求；基于技术要求绘制外观图、工作原理框图与分模块原理图，作为参赛材料；同时制作局部核心功能演示件。器件选型上，优先复用成熟子模块，参考空气净化设备与已发表富集装置，做适配调整而非全部自研；专利方面做好检索与规避设计。答辩准备上，团队成员将吃透整套方案逻辑，确保能回答评委提问。邓工也表示后续画图、细化方案可再沟通对接，为项目硬件推进提供了持续支持。</p>
-
-
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/deng-gong-1.jpg" alt="Design discussion" loading="lazy"><figcaption>Design discussion</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/deng-gong-2.jpg" alt="Lab visit" loading="lazy"><figcaption>Lab visit</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/deng-gong-1.jpg" alt="方案讨论" loading="lazy"><figcaption>方案讨论</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/deng-gong-2.jpg" alt="实验室参观" loading="lazy"><figcaption>实验室参观</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1360,52 +1369,37 @@
 
         <p class="hz-detail-card__eyebrow">Science and academia · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-liu-xiaolong">刘小龙</h3>
+        <h3 id="expert-liu-xiaolong">Xiaolong Liu</h3>
 
-        <p class="hz-detail-card__meta">纳米抗体分子对接与建模方向｜指导教师</p>
+        <p class="hz-detail-card__meta">Mathematical modeling section</p>
 
-        <p class="hz-detail-card__copy">当前阶段，团队正在用分子对接为项目提供计算模拟支撑，已完成 16 个纳米抗体的结构预测和三个亚型 HA 抗原的获取，并用在线网站做了初步对接。但我们不确定这些工具是否适用于纳米抗体—蛋白体系，也不清楚结果分析是否足够专业、能否经得起评审追问，因此请刘老师帮我们把关方法学与验证流程。</p>
+        <p class="hz-detail-card__copy"><strong>The team has completed structure prediction for 16 nanobodies and obtained H1N1/H2N2/H3N2 HA antigens, and has carried out preliminary docking with an online website, but the applicability of the tools, the quality of the modeling, the structural preprocessing and the depth of the result analysis have not been verified.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Xiaolong Liu, consulting on the choice of molecular docking tools, modeling methods, presentation of results and the validation workflow.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Report the current docking progress and the way results are analyzed, and gather Mr. Liu's feedback on tool algorithms, modeling software, free-energy decomposition, MD simulation and wet-lab validation.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that the current methodology has systematic deficiencies: we need to remodel with AlphaFold 3.0, verify the scope of application of the docking tools, add MM/GBSA decomposition and MD simulation, and ultimately close the loop between computation and experiment through SPR/MST.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：团队已完成 16 个纳米抗体结构预测与 H1N1/H2N2/H3N2 HA 抗原获取，并用在线网站完成初步对接，但工具适用性、建模质量、结构预处理与结果分析深度均未验证。规划：访谈刘小龙老师，围绕分子对接工具选择、建模方法、结果呈现与验证流程展开咨询。行动：汇报当前对接进展与结果分析方式，听取刘老师对工具算法、建模工具、自由能拆解、MD 模拟与湿实验验证的反馈。反思：确认当前方法学存在系统性不足，需用 AlphaFold 3.0 重新建模、核查对接工具适用范围、补充 MM/GBSA 拆解与 MD 模拟，并最终通过 SPR/MST 形成计算与实验闭环。</p>
+        <p class="hz-detail-card__copy">At the current stage, the team is using molecular docking to provide computational simulation support for the project; we have completed structure prediction for 16 nanobodies and obtained HA antigens of three subtypes, and carried out preliminary docking with an online website. But we are not sure whether these tools are applicable to nanobody–protein systems, nor whether the result analysis is professional enough and able to withstand reviewers' follow-up questions. We therefore asked Mr. Liu to review our methodology and validation workflow.</p>
 
+        <p class="hz-detail-card__copy">Mr. Liu first pointed out that the online docking website the team currently uses may not be designed specifically for protein–protein or antibody–antigen docking, and that the scope of application of its algorithm needs to be verified; nanobodies have a special structure, unlike Y-shaped IgGs, so general protein docking algorithms may not apply. He stressed that the fact that a website produces a result does not mean its methodology supports our system: we must read the original literature and confirm whether the sampling algorithm covers protein–protein docking and whether it is applicable to nanobodies.</p>
 
+        <p class="hz-detail-card__copy">On modeling and structural preprocessing, homology modeling tools such as Swiss-Model are unreliable when template homology is below 25%, and he suggested switching to AlphaFold 3.0, whose predictions are more accurate and come with confidence scores; after modeling, a Ramachandran plot assessment is needed, requiring more than 95% of residues to fall in allowed regions; HA structures downloaded from the PDB need to have water, metal ions and salt ions removed, and hydrogen atoms added with charge balance.</p>
 
-        <p class="hz-detail-card__copy"><strong>方法学适用性：能出结果≠方法站得住</strong></p>
+        <p class="hz-detail-card__copy">On result analysis and validation, presenting only the total binding energy is not enough; MM/GBSA free-energy decomposition should be performed, analyzing the contribution of each residue to verify whether the key interactions are concentrated in the CDR region; for visualization, heat maps and PyMOL are recommended to show binding details. Docking results represent only a rigid or semi-flexible state, so molecular dynamics simulation of at least 100 ns must be added to verify the stability of the complex; ultimately, SPR or MST wet-lab experiments should verify the actual affinity, forming a complete loop of “modeling–docking–analysis–MD–wet lab”. As for tools, industrial-grade software such as Rosetta and Boltz is authoritative but has a high deployment threshold; at this stage we can continue using online tools, but must confirm that the algorithm is public, has original literature and is widely cited by peers; PLIP can be used for interaction analysis. AI-assisted computation is acceptable, but the method must come from an open-source, peer-validated path.</p>
 
-        <p class="hz-detail-card__copy">刘老师首先指出，团队当前使用的在线对接网站可能并非专为蛋白—蛋白或抗体—抗原对接设计，算法适用范围需要核实；纳米抗体结构特殊，不同于 Y 字型 IgG，通用蛋白对接算法未必适用。他强调，一个网站能出结果，不代表方法学支持我们的体系，必须去看原始文献，确认采样算法是否覆盖蛋白—蛋白对接、是否适用于纳米抗体。</p>
+        <p class="hz-detail-card__copy">This interview made the team realize that molecular docking is not finished once a result is produced — the methodology itself must withstand scrutiny. Subsequently we will use AlphaFold 3.0 to remodel the 16 nanobodies and add Ramachandran plot assessments; preprocess the HA protein by removing ions, adding hydrogen and balancing charges; verify the original literature and scope of application of the existing docking website; perform MM/GBSA free-energy decomposition and produce residue-contribution heat maps; add molecular dynamics simulation to verify the stability of the complex; and ultimately close the loop with SPR/MST wet-lab experiments. In the wiki and the report, we will cite the original literature of the methods used, provide model evaluation data, and state clearly the scope of application of the tools and the reasons for choosing them. In addition, Mr. Xiaolong Liu will continue to guide our mathematical modeling work, helping us continuously improve the connection between modeling ideas and experimental data.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>建模与结构预处理</strong></p>
-
-        <p class="hz-detail-card__copy">Swiss-Model 等同源建模在模板同源性低于 25% 时结果不可靠，建议改用 AlphaFold 3.0，其预测更准确且能提供置信度评分；建模后需做拉氏图评估，要求 95% 以上残基落在允许区域；PDB 下载的 HA 结构需去水、去金属离子、去盐离子，并加氢与电荷平衡。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>结果分析与验证：从刚接到动态，从计算到实验</strong></p>
-
-        <p class="hz-detail-card__copy">仅展示总结合能不够，应做 MM/GBSA 自由能拆解，逐残基分析贡献，验证关键作用是否集中在 CDR 区；可视化建议用热图与 PyMOL 展示结合细节。对接结果仅为刚性或半柔性状态，需补充分子动力学模拟至少 100 ns，验证复合物稳定性；最终通过 SPR 或 MST 湿实验验证实际亲和力，形成"建模—对接—分析—MD—湿实验"的完整闭环。工具上，Rosetta、Boltz 等工业级软件权威但部署门槛高，现阶段可继续用在线工具，但须确认算法公开、有原始文献、被同行广泛引用；PLIP 可用于相互作用分析。AI 辅助计算可以接受，但方法必须来自已开源、经同行验证的路径。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>结论</strong></p>
-
-        <p class="hz-detail-card__copy">这次访谈让团队意识到，分子对接不是"跑出结果"就算完成，方法学本身必须经得起推敲。后续我们将用 AlphaFold 3.0 重新进行 16 个纳米抗体建模并补充拉氏图评估；对 HA 蛋白做去离子、加氢、电荷平衡预处理；核查现有对接网站的原始文献与适用范围；进行 MM/GBSA 自由能拆解并制作残基贡献热图；补充分子动力学模拟验证复合物稳定性；最终通过 SPR/MST 湿实验形成闭环。在 Wiki 与报告中将引用所用方法的原始文献，提供模型评估数据，明确工具适用范围与选择理由。此外，后续刘小龙老师也将持续指导我们的数学建模工作，帮助我们不断完善建模思路与实验数据的衔接。</p>
-
-
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/liu-xiaolong-1.jpg" alt="Presentation material discussion" loading="lazy"><figcaption>Presentation material discussion</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/liu-xiaolong-2.jpg" alt="Online meeting" loading="lazy"><figcaption>Online meeting</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/liu-xiaolong-3.jpg" alt="Methodology reference" loading="lazy"><figcaption>Methodology reference</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/liu-xiaolong-1.jpg" alt="汇报材料讨论" loading="lazy"><figcaption>汇报材料讨论</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/liu-xiaolong-2.jpg" alt="线上会议" loading="lazy"><figcaption>线上会议</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/liu-xiaolong-3.jpg" alt="方法学资料" loading="lazy"><figcaption>方法学资料</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1416,42 +1410,40 @@
 
     <article class="hz-detail-card" id="hz-detail-deng-manqing" data-module-id="HP-INTERVIEW-DENGMANQING" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/dengmanqing.png" alt="邓蔓青" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/dengmanqing.png" alt="Manqing Deng" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Industry · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-deng-manqing">邓蔓青</h3>
+        <h3 id="expert-deng-manqing">Manqing Deng</h3>
 
-        <p class="hz-detail-card__meta">深圳某三甲医院药学部｜副主任药师</p>
+        <p class="hz-detail-card__meta">Deputy Chief Pharmacist, Department of Pharmacy, a Grade III Class A hospital in Shenzhen</p>
 
-        <p class="hz-detail-card__copy">我们清晰了解了应用技术方向，但不等于项目的落地，于是询问一位儿科临床医生，了解几个当时没有答案的问题：儿童是甲流高发人群，他们能否配合呼气检测？家长对检测和预防用药持什么态度？学校和幼儿园这类场景是否真的欢迎？产品到底算检测试剂还是药品？在临床路径中处于预防、诊断还是治疗环节？如果进入医院或校园，需要过哪些流程？生物安全和伦理审查有什么要求？目标受众应该优先家庭、学校、医疗机构还是政府？定价多少才有竞争力？</p>
+        <p class="hz-detail-card__copy"><strong>The product is positioned as a detection reagent aimed at prevention, but there are still no answers on the practical side: adaptation to susceptible populations, target audience, biosafety, clinical translation and pricing.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Manqing Deng, a pediatric clinical expert, to learn about the cooperation of susceptible populations, parents' acceptance, scenario selection, the market pathway and ethical review.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Present the project and gather Ms. Deng's feedback on the current pediatric situation, the timing of medication, non-pharmaceutical prevention, the technical route, market prospects, special populations and clinical translation.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Through this interview we further confirmed the project's positioning as a detection reagent aimed at prevention, and recognized that the B2B side (institutions such as schools and government public-health programs) should take priority over the B2C side (households and individual users); at the same time, low-load sensitivity, distinguishing live virus from fragments, cost control and compliance review are the keys to whether the project can be implemented.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：产品定位为检测试剂、面向预防，但在易感人群适配、目标受众、生物安全、临床转化与定价等落地层面仍无答案。规划：访谈儿科临床专家邓蔓青，了解易感人群配合度、家长接受度、场景选择、上市路径与伦理审查。行动：介绍项目，听取邓老师对儿科现状、用药时机、非药物预防、技术路线、市场前景、特殊人群与临床转化的反馈。反思：通过这次访谈，我们进一步确认了项目作为检测试剂、面向预防的定位，并认识到 B 端（学校、政府公共卫生项目等机构端）应优先于 C 端（家庭个人用户）；同时，低载量灵敏度、活病毒与碎片区分、成本控制与合规审查，是决定项目能否落地的关键所在。</p>
+        <p class="hz-detail-card__copy">We had a clear understanding of the application direction of the technology, but that does not equal implementation of the project. We asked a pediatric clinician about several questions we could not answer at the time: children are a high-incidence group for influenza A — can they cooperate with breath testing? What is parents' attitude toward testing and preventive medication? Are settings such as schools and kindergartens really receptive? Is the product a detection reagent or a drug? In the clinical pathway, does it fall under prevention, diagnosis or treatment? What processes must be completed to enter a hospital or a campus? What are the requirements for biosafety and ethical review? Should the target audience prioritize families, schools, medical institutions or the government? What price is competitive?</p>
 
+        <p class="hz-detail-card__copy">Ms. Deng endorsed the project's preventive positioning, holding that it is essentially a detection reagent rather than a drug and belongs to the “prevention” stage. If the virus can be identified at a low viral load, that is of great value for early isolation. Physical isolation (masks), frequent hand washing, school closures and influenza vaccines remain the most effective means of prevention. On biosafety, regarding the safety measures the team uses — auxotrophic medium + filter membrane + suicide system — Ms. Deng commented that as long as it is not sprayed into the human body and is used only for environmental/breath testing, the biological hazard is controllable.</p>
 
+        <p class="hz-detail-card__copy">On market and implementation, Ms. Deng recommended prioritizing the B2B side: schools are highly receptive, medical institutions are the most receptive, and the government can reduce medical-insurance expenditure; on the B2C side, households depend on price, and the product must benchmark against free vaccines and influenza drugs costing a few tens of yuan. She also suggested making the biological components into replaceable modules to extend to detecting other viruses, bacteria or drug-resistant mycoplasma. Clinical translation requires engaging GCP-certified institutions and hospital equipment departments early, striving to enter clinical guidelines and accumulating real-world epidemiological data; campus promotion must ensure safety and ease of operation, and for susceptible populations in particular there must be “zero operating threshold”.</p>
 
-        <p class="hz-detail-card__copy"><strong>预防定位与生物安全</strong></p>
-
-        <p class="hz-detail-card__copy">邓老师认可项目的预防定位，认为本质是检测试剂而非药品，属于"预防"环节。若能在低病毒载量阶段识别病毒，对及早隔离有重要价值。物理隔绝（口罩）、勤洗手、停课、流感疫苗仍是最有效预防手段。生物安全方面，对于团队使用的营养缺陷型培养基+过滤膜+自杀系统的安全措施，邓老师评价只要不向人体内喷洒，仅作环境/呼气检测，生物危害可控。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>市场与落地</strong></p>
-
-        <p class="hz-detail-card__copy">市场与落地方面，邓老师建议优先 B 端：学校欢迎度高，医疗机构最受欢迎，政府可减少医保支出；C 端：家庭取决于价格，需对标免费疫苗和几十元流感药物。她还建议将生物元件做成可替换模块，拓展其他病毒、细菌或支原体耐药检测。临床转化需尽早对接 GCP 机构与医院设备科，争取进入临床指南，积累真实世界流调数据；校园推广必须确保安全性与操作便利性，易感人群端尤其要"零操作门槛"。</p>
-
+      
       </div>
 
           <div class="hz-detail-card__gallery hz-detail-card__gallery--single">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/deng-manqing-1.jpg" alt="线上交流" loading="lazy"><figcaption>线上交流</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/deng-manqing-1.jpg" alt="Online meeting with Manqing Deng" loading="lazy"><figcaption>Online meeting</figcaption></figure>
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1460,43 +1452,42 @@
 
     <article class="hz-detail-card" id="hz-detail-luo-zhouqing" data-module-id="HP-INTERVIEW-LUOZHOUQING" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/luozhouqing.jpg" alt="罗周卿" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/luozhouqing.jpg" alt="Zhouqing Luo" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Science and academia · Xiamen, Fujian</p>
 
-        <h3 id="expert-luo-zhouqing">罗周卿</h3>
+        <h3 id="expert-luo-zhouqing">Zhouqing Luo</h3>
 
-        <p class="hz-detail-card__meta">厦门大学｜生命科学学院教授</p>
+        <p class="hz-detail-card__meta">Professor, School of Life Sciences, Xiamen University</p>
 
-        <p class="hz-detail-card__copy">我们的项目在 WB 膜蛋白表征、蛋白表达膜定位、报告系统稳定性、细胞壁屏障等方面遇到较大阻力，尤其膜蛋白检测非特异性条带多、内参跑不出，人源 GPCR 在酵母中能否正确折叠与定位也不确定。我们希望借罗老师在酵母工程改造方面的经验，识别问题根源并明确优化方向。</p>
+        <p class="hz-detail-card__copy"><strong>The project encountered bottlenecks in yeast sensor experiments, including difficulty in Western blot characterization of membrane proteins, uncertain membrane localization of the human GPCR, plasmid fluctuation in the reporter system, and doubts about cell-wall penetration.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Zhouqing Luo of Xiamen University, consulting on membrane protein detection, receptor routes, the reporter system, cell-wall permeability, signal amplification and responses to viral mutation.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Report the project's progress and problems, and gather Prof. Luo's feedback on experimental procedures, receptor modification, the reporter system, application scenarios and directions for iteration.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that the yeast endogenous Ste2 receptor should be modified first, with short antigen epitope peptides used to get the system running; that the reporter system should be changed to genomic integration; that intercellular communication-based signal amplification should be introduced; and that conserved epitopes should be targeted with multiple parallel targets to cope with mutation.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目在酵母传感器实验上遇到瓶颈，包括 WB 膜蛋白表征困难、人源 GPCR 膜定位不确定、报告系统质粒波动、细胞壁穿透存疑。规划：访谈厦门大学罗周卿老师，围绕膜蛋白检测、受体路线、报告系统、细胞壁通透性、信号放大与病毒变异应对展开咨询。行动：汇报项目进展与问题，听取罗老师对实验操作、受体改造、报告系统、应用场景与迭代方向的反馈。反思：确认应优先改造酵母内源 Ste2 受体，前期用抗原表位短肽跑通系统；报告系统改基因组整合；引入细胞间通讯信号放大；聚焦保守表位，多靶点并联应对变异。</p>
+        <p class="hz-detail-card__copy">Our project encountered considerable resistance in Western blot characterization of membrane proteins, membrane localization of protein expression, reporter-system stability and the cell-wall barrier — in particular, membrane protein detection produced many non-specific bands and the internal control would not run, and it was uncertain whether the human GPCR could fold and localize correctly in yeast. We hoped to draw on Prof. Luo's experience in yeast engineering to identify the root causes and clarify the direction for optimization.</p>
 
+        <p class="hz-detail-card__copy">Drawing on his own experience in yeast membrane protein research, Prof. Luo first helped us sort out the problems with Western blot characterization and the receptor route. Membrane proteins cannot be boiled at high temperature in the usual way; he suggested gentle heating at 50–70 °C for a short time, preferentially extracting proteins by mechanical disruption, using dedicated membrane-protein solubilization reagents, and introducing an HA tag to improve detection specificity and sensitivity. On the receptor, he considered that the human GPCR is affected by glycosylation differences and carries high functional uncertainty, and preferred modifying the yeast endogenous Ste2 (α-factor receptor), designing the protein structure so that it recognizes the target antigen; the signal peptide could also be replaced with a yeast surface-display signal peptide to improve membrane localization.</p>
 
+        <p class="hz-detail-card__copy">On the cell wall and the reporter system, Prof. Luo did not recommend the protoplast approach, because the cells are fragile and the procedure is cumbersome, which would lose the core advantage of a yeast sensor; a yeast mutant defective in cell-wall synthesis could be used instead. He also pointed out that the HA protein is only 30–40 kDa, so penetration is not the main obstacle, and short antigen epitope peptides can be used directly in early validation to get the system running first. On the reporter system, he suggested changing from a plasmid-based format to genomic integration to eliminate copy-number fluctuation; mature modification approaches for MEL1 leakage have already been reported in the literature and can be found and referenced, so there is no need to build a library blindly.</p>
 
-        <p class="hz-detail-card__copy"><strong>膜蛋白、受体路线与细胞壁</strong></p>
+        <p class="hz-detail-card__copy">On application scenarios and subsequent iteration, Prof. Luo stressed the need to articulate the unique advantages over PCR and colloidal gold, and to clarify the positioning of “direct sensing of intact virus, portable detection”. Airborne virus concentrations are low, and if only a small amount of yeast is activated it is hard to detect, so he suggested using the yeast α-factor native cell-communication pathway to build an intercellular communication + positive feedback signal amplification system. To address viral mutation, he recommended a multi-target parallel strategy: load recognition elements for influenza A, influenza B and different mutant strains into the same chassis, preferentially recognizing conserved antigen epitopes and avoiding high-frequency mutation epitopes.</p>
 
-        <p class="hz-detail-card__copy">罗老师结合自己在酵母膜蛋白研究中的经验，首先帮我们理清了 WB 表征与受体路线的问题。膜蛋白不能按常规方法高温煮沸，建议 50—70℃ 短时间温和加热，优先用机械破碎法提取蛋白，搭配专用膜蛋白溶解试剂，还可引入 HA 标签提升检测特异性与灵敏度；受体方面，他认为人源 GPCR 受糖基化差异影响、功能不确定性高，更推荐改造酵母内源 Ste2（α-因子受体），结合蛋白结构设计使其识别目标抗原，信号肽也可替换为酵母表面展示信号肽以改善膜定位。关于细胞壁，他不推荐原生质体方案，建议选用细胞壁合成缺陷酵母突变株；HA 蛋白仅三四十 kDa，穿透并非主要障碍，前期验证可直接使用抗原表位短肽，先跑通系统。</p>
+        <p class="hz-detail-card__copy">This interview gave the team clear adjustments in both experimental route and project positioning. Experimentally, we will move to modifying the yeast endogenous Ste2 receptor, using short antigen epitope peptides to get the system running first; the reporter system is planned for genomic integration; we will investigate intercellular communication plus positive-feedback signal amplification; and membrane protein detection will switch to gentle heating and mechanical disruption, with the HA tag evaluated. In the literature, we will consult iScience methods for membrane protein Western blotting, Cell papers on yeast GPCR modification, yeast surface-display signal peptides, cell-wall-defective mutant strains, and MEL1 leakage modifications. On project materials, the HP team will compile the materials and send them to Prof. Luo for review, sort out the reporting logic, and distill the unique advantages of this technology compared with existing detection methods.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>应用场景与后续迭代</strong></p>
-
-        <p class="hz-detail-card__copy">罗老师强调要讲清相较 PCR、胶体金的独特优势，明确"完整病毒直接感知、便携检测"的定位；空气中病毒浓度低，少量酵母被激活难以检出，建议利用酵母 α-因子天然细胞通讯通路构建细胞间通讯+正反馈信号放大系统。针对病毒变异，他建议采用多靶点并联策略，在同一底盘中共装甲流、乙流及不同变异株识别元件，优先识别保守抗原表位，规避高频突变表位。这次访谈让团队在实验路线与项目定位上都有了明确调整：转向酵母内源 Ste2 受体改造，报告系统规划基因组整合，调研细胞间通讯正反馈信号放大；HP 组将整理资料发给罗老师审阅，并梳理汇报逻辑，提炼本技术相比现有检测手段的独特优势。</p>
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/luo-zhouqing-1.jpg" alt="Online briefing" loading="lazy"><figcaption>Online briefing</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/luo-zhouqing-2.jpg" alt="Experiment progress discussion" loading="lazy"><figcaption>Experiment progress discussion</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/luo-zhouqing-1.jpg" alt="线上汇报" loading="lazy"><figcaption>线上汇报</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/luo-zhouqing-2.jpg" alt="实验进展讨论" loading="lazy"><figcaption>实验进展讨论</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1509,38 +1500,37 @@
 
         <p class="hz-detail-card__eyebrow">Policy and public health · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-luo-yiwu">罗义武</h3>
+        <h3 id="expert-luo-yiwu">Yiwu Luo</h3>
 
-        <p class="hz-detail-card__meta">深圳市卫生健康委员会审批处｜四级调研员</p>
+        <p class="hz-detail-card__meta">Level-IV Research Officer, Review and Approval Division, Shenzhen Municipal Health Commission</p>
 
-        <p class="hz-detail-card__copy">从卫生健康行业管理与政策视角，我们希望了解空气病毒监测在现有卫生体系中是否有业务基础、有没有官方标准、产品应如何定位与合规。我们想请罗义武专家帮我们判断：空气病毒监测目前是否具备行业应用条件，产品应归入哪类管理，实验验证与生物安全需要遵循哪些规范。</p>
+        <p class="hz-detail-card__copy"><strong>The project already had preliminary directions in technical route, testing scenarios and product implementation strategy, but still lacked guidance from the perspective of health-sector administration on industry standards for airborne virus monitoring, product compliance classification, biosafety regulatory requirements and defense strategies for innovation and entrepreneurship competitions.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview the Health Commission expert Yiwu Luo, consulting on the current state of the industry, scenario selection, experimental validation, biosafety, qualification and compliance, and competition defense.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>After presenting the project, gather the expert's feedback on the current state of airborne virus monitoring, high-value scenarios, product positioning, validation plans, safety design and compliance pathways.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Through this interview we realized that airborne virus monitoring has no mature standards or commercial products, that the project should target risk early warning in enclosed environments rather than taking a clinical diagnostic route, and that biosafety and compliance design are necessary components of the implementation plan.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目在技术路线、检测场景与产品落地策略上已有初步方向，但在空气病毒监测的行业标准、产品合规归类、生物安全法规要求以及创新创业竞赛的答辩策略上，仍缺乏来自卫生健康行业管理视角的指导。规划：访谈卫健委专家罗义武，围绕行业现状、场景选择、实验验证、生物安全、资质合规与竞赛答辩展开咨询。行动：介绍项目后，听取专家对空气病毒监测现状、高价值场景、产品定位、验证方案、安全设计与合规路径的反馈。反思：通过这次访谈，我们认识到空气病毒监测尚无成熟标准与商业化产品，项目应锁定密闭环境风险预警，不走临床诊断路线，并把生物安全与合规设计作为落地方案的必要组成部分。</p>
+        <p class="hz-detail-card__copy">From the perspective of health-sector administration and policy, we wanted to know whether airborne virus monitoring has a business basis in the existing health system, whether there are official standards, and how the product should be positioned and made compliant. We asked the expert Yiwu Luo to help us judge: does airborne virus monitoring currently meet the conditions for industry application, which category of management should the product fall under, and what regulations must experimental validation and biosafety follow.</p>
 
+        <p class="hz-detail-card__copy">Based on his understanding of industry rules, Mr. Luo first noted that the health system does not routinely test for airborne viruses, that there are no official standards or testing methods for airborne virus detection in China, and that such equipment cannot serve as a basis for medical diagnosis — it can only provide general environmental screening and risk early warning, and is not a medical device; existing air sampling mostly relies on laboratory equipment, and there is no commercially mature integrated unit for online virus monitoring. Drawing on his experience in public health management, he stressed that scenarios must not be generalized: open, large spaces have low value, whereas high-value scenarios are fever clinics, elevators, high-speed rail, buses and enclosed classrooms, among which fever clinics have the highest value and can be linked with disinfection equipment to form a management loop; the product could be considered as a supporting sensor accessory for air disinfection machines, with sampling points at both the air inlet and outlet to compare disinfection performance.</p>
 
+        <p class="hz-detail-card__copy">On experimental validation, he suggested combining laboratory simulation chambers with on-site testing, using pseudovirus and dyed aerosols to simulate sneezing, varying distance, air speed, temperature and humidity to test detection capability, and establishing a reference threshold for risk concentration to answer “how much detected counts as high risk”, while avoiding false positives such as those caused by influenza B. On biosafety and compliance, he reminded us to add UV-LED ultraviolet disinfection at the air outlet, automatic shutdown and alarm if the membrane ruptures, periodic self-disinfection of the membrane module, and lysis buffer in the collection system to inactivate live virus; since no clinical diagnosis is involved, integrating a disinfection module would classify it as a disinfection device, requiring filing under a disinfection-product license (xiaozihao), and in the absence of a national standard an enterprise standard can be drafted first.</p>
 
-        <p class="hz-detail-card__copy"><strong>行业现状与高价值场景</strong></p>
+        <p class="hz-detail-card__copy">On biosafety and compliance, he reminded us to add UV-LED ultraviolet disinfection at the air outlet, automatic shutdown and alarm if the membrane ruptures, periodic self-disinfection of the membrane module, and lysis buffer in the collection system to inactivate live virus; since no clinical diagnosis is involved, integrating a disinfection module would classify it as a disinfection device, requiring filing under a disinfection-product license (xiaozihao), and in the absence of a national standard an enterprise standard can be drafted first.</p>
 
-        <p class="hz-detail-card__copy">根据对行业行规的理解，罗老师首先谈到，卫生系统日常没有空气病毒的常规检测业务，国内也没有空气病毒检测的官方标准与检测方法，这类设备不能作为医学诊断依据，只能做环境普筛与风险预警，不属于医疗器械；现有空气采样多依赖实验室设备，尚无商业化成熟的病毒在线监测整机。结合公共卫生管理经验，他强调场景切忌泛化：开放式大空间价值低，高价值场景是发热门诊、电梯、高铁、大巴、密闭教室等，其中发热门诊价值最高，可联动消杀设备形成管理闭环；产品可考虑作为空气消毒机的配套传感配件，在进风口、出风口分别布点对比消杀效果。</p>
+        <p class="hz-detail-card__copy">For the competition defense, he advised focusing on the detection principle, the scientific logic and the simulated experiment plan, with hardware as a future expansion direction; explaining clearly that the scenario pain point is risk early warning in enclosed environments, not disease diagnosis; and stating the innovation points as general screening and early warning of airborne virus in enclosed environments, linkage with air disinfection equipment, and future expansion to multi-virus detection.</p>
 
+        <p class="hz-detail-card__copy">This interview helped us draw clear boundaries: we only provide risk early warning for enclosed environments and do not make human diagnostic devices; we target core scenarios such as fever clinics, elevators, high-speed rail and enclosed classrooms; we focus on the route of sensor accessories for air disinfection machines; we design two validation schemes — laboratory simulation and on-site testing — establish a risk concentration threshold, and write biosafety and compliance design into the project materials and defense slides.</p>
 
-
-        <p class="hz-detail-card__copy"><strong>实验验证、生物安全与合规</strong></p>
-
-        <p class="hz-detail-card__copy">实验验证上，他建议实验室模拟箱体与现场测试结合，用假病毒、染色气溶胶模拟打喷嚏，改变距离、风速、温湿度测试检出能力，并建立风险浓度参照阈值，回答"检出多少算高风险"，同时避免乙流等误报。生物安全与合规方面，他提醒出风口增加 UV-LED 紫外消杀，膜破裂自动停机报警，膜组件定时自消杀，收集体系加裂解液灭活活病毒；不做临床诊断，集成消杀模块则归消毒器械，需消字号备案，暂无国标可先做企业标准。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>竞赛答辩策略</strong></p>
-
-        <p class="hz-detail-card__copy">针对竞赛答辩，他建议重点讲检测原理、科学逻辑与模拟实验方案，硬件作为未来拓展方向；场景痛点讲清楚是密闭环境风险预警，不是疾病诊断；创新点可写密闭环境空气病毒普筛预警、与空气消毒设备联动、未来拓展多病毒检测。这次访谈帮我们划清边界：我们只做密闭环境风险预警，不做人体诊断设备；锁定发热门诊、电梯、高铁、密闭教室等核心场景；重点研究空气消毒机配套传感配件路线；设计实验室模拟与现场测试两套验证方案，建立风险浓度阈值，把生物安全与合规设计写进项目材料与答辩 PPT。</p>
+      
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1549,49 +1539,42 @@
 
     <article class="hz-detail-card" id="hz-detail-wu-hui" data-module-id="HP-INTERVIEW-WUHUI" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/wuhui.jpg" alt="吴辉" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/wuhui.jpg" alt="Hui Wu" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Science and academia · Dalian, Liaoning</p>
 
-        <h3 id="expert-wu-hui">吴辉</h3>
+        <h3 id="expert-wu-hui">Hui Wu</h3>
 
-        <p class="hz-detail-card__meta">大连理工大学｜教授</p>
+        <p class="hz-detail-card__meta">Professor, Dalian University of Technology</p>
 
-        <p class="hz-detail-card__copy">项目推进过程中各模块陆续遇到阻力：WB 检测膜蛋白条带不理想、人源化受体在酵母中表达不佳、MEL1 报告系统泄漏严重、CRISPR 敲除效率不稳定。我们希望通过吴老师的指导，判断问题根源，明确当前阶段最该优先做什么。</p>
+        <p class="hz-detail-card__copy"><strong>The project hit bottlenecks in all three modules — signal recognition, transduction and response: Western blot characterization was unsatisfactory, membrane protein expression was uncertain, and reporter-system leakage was serious; problems existed at every node.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Hui Wu of Dalian University of Technology, consulting on experimental progress, membrane protein expression, reporter-system leakage, CRISPR knockout and iGEM strategy.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Report the project's overall concept and the progress of each module, and gather Prof. Wu's feedback on experimental optimization, getting the pathway to work, part submission and detection formats.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that we should first get one complete pathway working and achieve a visual response before optimizing components; that membrane protein expression should repeat literature conditions; and that reporter-system leakage could be addressed by adding a repressor or switching promoters.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目在信号识别、传导、响应三个模块均遇到瓶颈，WB 表征不理想、膜蛋白表达不确定、报告系统泄漏严重，各节点都存在问题。规划：访谈大连理工大学吴辉老师，围绕实验进展、膜蛋白表达、报告系统泄漏、CRISPR 敲除与 iGEM 策略展开咨询。行动：汇报项目整体思路与各模块进展，听取吴老师对实验优化、通路打通、元件提交与检测形式的反馈。反思：确认应先打通一条完整通路、实现可视化响应，再优化元件；膜蛋白表达需重复文献条件，报告系统泄漏可加抑制子或换启动子。</p>
+        <p class="hz-detail-card__copy">As the project advanced, each module ran into resistance: Western blot detection of membrane proteins gave unsatisfactory bands, the humanized receptor expressed poorly in yeast, the MEL1 reporter system leaked seriously, and CRISPR knockout efficiency was unstable. We hoped that Prof. Wu's guidance would help us identify the root causes and clarify what should be prioritized at this stage.</p>
 
+        <p class="hz-detail-card__copy">Prof. Wu first affirmed that the project idea is novel and that using living cells to detect viruses has application potential. But he also pointed out directly that, from signal recognition to transduction to response, every node currently has problems and uncertainty is high; he suggested first repeating conditions that have already worked in the literature rather than innovating on every component ourselves. He stressed that the immediate priority is to get one complete pathway working and achieve a visual response before considering replacing components to improve sensitivity and speed; only after a complete story is in place is there room for optimization.</p>
 
+        <p class="hz-detail-card__copy">For specific experimental problems, Prof. Wu gave advice based on his experience. Membrane protein expression is inherently very difficult, and cross-species expression is even harder; he suggested first referring to conditions in the literature that achieve active expression. On Western blot, he noted that yeast cell disruption cannot rely on snailase alone and recommended liquid-nitrogen grinding; a low protein amount on SDS-PAGE is very likely an extraction problem. On reporter-system leakage, the FUS1 promoter already has background expression without α-factor, so one can try adding a repressor or screening other, more stringent promoters. On CRISPR knockout, he suggested designing several targets and doing them in parallel to save time on repeated attempts. Regarding iGEM part submission, he encouraged submitting as long as there is a slight trend — a signal-detection element with preliminary effects is enough.</p>
 
-        <p class="hz-detail-card__copy"><strong>先跑通一条完整通路</strong></p>
+        <p class="hz-detail-card__copy">On application scenarios and detection formats, Prof. Wu suggested comparing against RT-PCR for environmental sampling and finding differences in time cost and sensitivity; freeze-dried yeast powder could serve as the basis of a detection reagent, and serial dilution should be performed during testing to establish a standard curve. He also mentioned that detection speed matters: RT-PCR takes about a day, whereas yeast culture may take two to three days, so we need to think about how to shorten the response time.</p>
 
-        <p class="hz-detail-card__copy">吴老师首先肯定项目想法新颖，用活细胞检测病毒具有应用潜力。但他也直接指出，当前从信号识别到传导再到响应，每个节点都有问题，不确定性较大，建议先重复文献中已成功的条件，不要所有元件都自己创新。他强调，当务之急是先打通一条完整通路，实现可视化响应，再考虑替换元件提高灵敏度和速度；只有先做出完整故事，后面才有优化空间。</p>
+        <p class="hz-detail-card__copy">This interview led the team to readjust its priorities: instead of pursuing perfection in all modules at once, get one complete pathway working and achieve a visual response; experimentally, switch to liquid-nitrogen grinding for cell disruption, optimize membrane protein extraction, try adding a repressor to the reporter system or switching promoters, and run CRISPR with multiple targets in parallel; at the same time, compile elements with preliminary trends for iGEM submission and design a standard-curve experiment to evaluate the freeze-dried powder detection format. Prof. Wu also affirmed the novelty of the project and encouraged us to build a complete story first and then progressively replace components to improve performance.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>具体实验建议</strong></p>
-
-        <p class="hz-detail-card__copy">针对具体实验问题，吴老师结合经验给出了建议。膜蛋白表达本身非常困难，跨物种表达更难，建议先参考文献中能实现活性表达的条件；WB 方面，他指出酵母破壁不能只用蜗牛酶，建议用液氮研磨，SDS-PAGE 蛋白量少很可能是提取问题。报告系统泄漏方面，FUS1 启动子在不加 α-factor 时已有本底表达，可尝试加抑制子或筛选其他更严谨的启动子。CRISPR 敲除方面，建议多设计几个靶点同时做，节省反复尝试的时间。关于 iGEM 元件提交，他鼓励只要有一点趋势就可以提交，信号检测元件有初步效果即可。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>检测形式与结论</strong></p>
-
-        <p class="hz-detail-card__copy">应用场景与检测形式上，吴老师建议对比环境采样 RT-PCR，在时间成本和灵敏度上找差异；酵母冻干粉可作为检测试剂基础，测试时做梯度稀释建立标准曲线。他还提到，检测速度也很重要，RT-PCR 约一天，酵母培养可能需两三天，需要思考如何缩短响应时间。这次访谈让团队重新调整了优先级：不再追求各模块同时完美，而是先打通一条完整通路，实现可视化响应；实验上改用液氮研磨破壁、优化膜蛋白提取、尝试报告系统加抑制子或换启动子、CRISPR 多靶点并行；同时整理有初步趋势的元件提交 iGEM，并设计标准曲线实验评估冻干粉检测形式。吴老师也肯定了项目的新颖性，鼓励我们先做出完整故事，再逐步替换元件提升性能。</p>
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wu-hui-1.jpg" alt="Comparing design options" loading="lazy"><figcaption>Comparing design options</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wu-hui-2.jpg" alt="Humanization design discussion" loading="lazy"><figcaption>Humanization design discussion</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wu-hui-1.jpg" alt="方案对比讨论" loading="lazy"><figcaption>方案对比讨论</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/wu-hui-2.jpg" alt="人源化改造讨论" loading="lazy"><figcaption>人源化改造讨论</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1600,49 +1583,42 @@
 
     <article class="hz-detail-card" id="hz-detail-jia-honghua" data-module-id="HP-INTERVIEW-JIAHONGHUA" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
-      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/jiahonghua.png" alt="贾红华" loading="lazy">
+      <img class="hz-detail-card__photo" src="../static/image/any-icon/HP/expert_img/jiahonghua.png" alt="Honghua Jia" loading="lazy">
 
       <div>
 
         <p class="hz-detail-card__eyebrow">Science and academia · Nanjing, Jiangsu</p>
 
-        <h3 id="expert-jia-honghua">贾红华</h3>
+        <h3 id="expert-jia-honghua">Honghua Jia</h3>
 
-        <p class="hz-detail-card__meta">南京工业大学｜生命与制药工程学院研究员</p>
+        <p class="hz-detail-card__meta">Research Fellow, College of Life Science and Pharmaceutical Engineering, Nanjing Tech University</p>
 
-        <p class="hz-detail-card__copy">项目推进至今，构建已完成，但功能表达与验证仍未完全走通。我们希望请贾老师从合成生物学工程化角度，帮我们判断当前设计的核心问题，以及接下来最该优先验证什么。</p>
+        <p class="hz-detail-card__copy"><strong>The project encountered resistance in protein expression, membrane localization, Western blot characterization and reporter-system leakage; the modules were not yet fully working, and we also needed to clarify how our work differs from existing work.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Honghua Jia of Nanjing Tech University to examine the project design, performance metrics and validation methods from a synthetic-biology and engineering perspective.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Report the project concept and the progress of each module, and gather Prof. Jia's feedback on literature comparison, membrane protein validation, the reporter system, chassis choice and iGEM strategy.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that we should focus on final outcomes such as sensitivity and limit of detection, use fluorescent fusion to verify membrane localization, and refer to existing yeast surface-display work to clarify our novelty.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目在蛋白表达、膜定位、WB 表征与报告系统泄漏等环节遇到阻力，各模块尚未完全走通，同时需要明确自身与已有工作的差异。规划：访谈南京工业大学贾红华老师，从合成生物学与工程化视角审视项目设计、效果指标与验证方法。行动：汇报项目思路与各模块进展，听取贾老师对文献对比、膜蛋白验证、报告系统、底盘选择与 iGEM 策略的反馈。反思：确认应聚焦灵敏度与检测线等最终效果，用荧光融合验证膜定位，并参考已有酵母表面展示工作明确新意。</p>
+        <p class="hz-detail-card__copy">As the project has progressed, construction is complete, but functional expression and validation are still not fully working. We asked Prof. Jia, from the perspective of synthetic-biology engineering, to help us judge the core problems in the current design and what should be validated first next.</p>
 
+        <p class="hz-detail-card__copy">Prof. Jia said that his own research area is not yeast, but after listening to the whole presentation he found the project idea interesting, although the workload is considerable and some steps are not yet fully working. He particularly mentioned a paper published in ACS Synthetic Biology in September 2024 by Wei Na's team at the University of Illinois, which also used a yeast biosensor to detect H1N1, displaying a signal protein on the yeast surface — a relatively simple and effective approach. He suggested the team consult that paper, compare the differences between surface display and membrane-anchored approaches, and clarify our own novelty. He stressed that iGEM values both innovation and final outcomes; a biosensor ultimately comes down to two key metrics — sensitivity and limit of detection/linearity. Results are what matter most.</p>
 
+        <p class="hz-detail-card__copy">Regarding the uncertain membrane protein expression and localization, he suggested fusing a fluorescent protein to the tail of the membrane component, first verifying whether it successfully reaches the membrane and then using confocal microscopy to observe the fluorescence localization; if membrane expression is difficult, consider whether surface display might be more sensitive than full membrane anchoring. On the cell wall, Tang mentioned using co-incubation with a low concentration of lytic enzyme to hydrolyze some glycosidic bonds and enlarge the pore size in order to detect bacteria; Prof. Jia considered this approach usable for virus detection and thought it a very good combination of ideas.</p>
 
-        <p class="hz-detail-card__copy"><strong>与已有工作的对比</strong></p>
+        <p class="hz-detail-card__copy">On reporter-system leakage, Prof. Jia considered that the problem is not necessarily only in the promoter — cascade regulation is complex; switching to a weak promoter or knocking out the chassis are both worth trying, but they are difficult and he had no particularly good suggestion. The recognition element has little to do with the chassis; the key is whether it can be expressed correctly. Regarding iGEM judging, he considered that the final result depends on the judges and that student performance also matters a great deal, and he recommended that Liu Guangna (who has led teams to multiple gold medals) and Liu Wanlong (who has worked with yeast and can advise on iGEM) talk with the team.</p>
 
-        <p class="hz-detail-card__copy">贾老师表示，自己的研究方向不是酵母，整体听下来认为项目思路有意思，不过工作量不小，部分环节目前尚未完全走通。他特别提到 2024 年 9 月 ACS Synthetic Biology 上伊利诺伊大学魏娜团队的一篇工作，同样是用酵母生物传感器检测 H1N1，思路是将信号蛋白表面展示在酵母表面，相对简单且有效。他建议团队查阅该文献，比较表面展示与膜结合方案的差异，明确自身新意。他强调，iGEM 既看重创新，也看重最终效果；生物传感器最终要落实两个关键指标——灵敏度和检测线/线性度，效果为王。</p>
+        <p class="hz-detail-card__copy">This interview moved the team from “burying ourselves in complex design” to “validate first, then optimize, and look at results”. We plan to consult the 2024 ACS Synthetic Biology paper and compare surface display with membrane-anchored approaches; use fluorescent protein fusion to verify whether the membrane protein successfully reaches the membrane and locate it by confocal microscopy; evaluate the feasibility of treating the cell wall with lytic enzyme; continue trying solutions to reporter-system leakage; and sort out outcome metrics such as sensitivity, limit of detection and linearity, while contacting Liu Guangna and Liu Wanlong for advice on iGEM and yeast experience. Prof. Jia also affirmed the ingenuity of the project idea and the team's efforts, reminding us that we must ultimately deliver demonstrable results.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>膜蛋白、细胞壁与报告系统</strong></p>
-
-        <p class="hz-detail-card__copy">针对膜蛋白表达与定位不确定的问题，他建议在膜上元件尾部融合荧光蛋白，先验证是否成功上膜，再用共聚焦显微镜观察荧光定位；若膜上表达困难，可思考表面展示是否比全贴合膜更灵敏。关于细胞壁，唐老师提到用低浓度溶壁酶共孵育水解部分糖键、增大孔径以检测细菌，贾老师认为这一思路可用于病毒检测，是一个很好的 idea 组合。对于报告系统泄漏，贾老师认为问题不一定只在启动子，级联调控较为复杂，换弱启动子或敲底盘都可尝试，但难度较大，没有太好建议。识别元件与底盘关系不大，关键是能否正确表达。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>iGEM 策略与结论</strong></p>
-
-        <p class="hz-detail-card__copy">针对 iGEM 评审，他认为最终结果取决于评委，学生表现也很重要，并推荐刘光娜老师（多次金奖带队经验）和刘万龙老师（做过酵母、可请教 iGEM）与团队交流。这次访谈让团队从"埋头做复杂设计"转向"先验证、再优化、看效果"。我们计划查阅 2024 ACS Synthetic Biology 相关文献，比较表面展示与膜结合方案；用荧光蛋白融合验证膜蛋白是否成功上膜，并用共聚焦定位；评估溶壁酶处理细胞壁的可行性；继续尝试报告系统泄漏解决方案；梳理灵敏度、检测线、线性度等效果指标；同时联系刘光娜、刘万龙老师请教 iGEM 与酵母经验。贾老师也肯定了项目思路的巧妙与团队的努力，提醒我们最终要拿出可展示的效果。</p>
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/jia-honghua-1.jpg" alt="Validation experiment discussion" loading="lazy"><figcaption>Validation experiment discussion</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/jia-honghua-2.jpg" alt="Design summary" loading="lazy"><figcaption>Design summary</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/jia-honghua-1.jpg" alt="验证实验讨论" loading="lazy"><figcaption>验证实验讨论</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/jia-honghua-2.jpg" alt="方案总结" loading="lazy"><figcaption>方案总结</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1655,43 +1631,36 @@
 
         <p class="hz-detail-card__eyebrow">Science and academia · Beijing</p>
 
-        <h3 id="expert-zhang-haili">张海丽</h3>
+        <h3 id="expert-zhang-haili">Haili Zhang</h3>
 
-        <p class="hz-detail-card__meta">中国科学院数学与系统科学研究院｜博士</p>
+        <p class="hz-detail-card__meta">PhD, Academy of Mathematics and Systems Science, Chinese Academy of Sciences</p>
 
-        <p class="hz-detail-card__copy">项目已有人源化改造和信号报告的部分实验数据，包括 α-factor 梯度下的 OD 时序与荧光时序，但如何从这些数据中提炼出可支撑 iGEM 建模板块的内容，团队并不清楚。我们同时列出了 ODE、空气富集、启动子筛选、信号通路等多个方向，但时间紧张，需要专家帮我们判断哪些值得做、哪些可以暂缓。</p>
+        <p class="hz-detail-card__copy"><strong>The project's wet-lab work has produced some data, but the modeling direction is still unclear: ODE, air diffusion and promoter screening are running in parallel with no priority; the existing growth curves and fluorescence time-series data show differences visible to the eye but lack quantitative statistical support.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Interview Haili Zhang of the mathematics teaching and research group at Shenzhen Polytechnic University, consulting on possible modeling modules, statistical methods for the data, two-way validation between modeling and experiments, and practical constraints.</strong></p>
 
+        <p class="hz-detail-card__copy"><strong>Present the project rationale, the modular experimental strategy and four potential modeling directions, and gather Ms. Zhang's feedback on the feasibility, priority and implementation path of each direction.</strong></p>
 
-        <p class="hz-detail-card__copy"><strong>诊断 · 规划 · 行动 · 反思</strong></p>
+        <p class="hz-detail-card__copy"><strong>Confirmed that priority should go to fluorescence time-series prediction and statistical hypothesis testing based on existing data, with ODE as a fallback and the air diffusion model deferred; modeling must serve the wet lab and avoid over-complexity.</strong></p>
 
-        <p class="hz-detail-card__copy">诊断：项目湿实验已产出部分数据，但建模方向尚不明确，ODE、空气扩散、启动子筛选等多个方向并行，缺乏优先级；现有生长曲线与荧光时序数据肉眼可辨差异，但缺少定量统计支撑。规划：访谈深圳职业技术大学数学教研室张海丽老师，围绕可选建模模块、数据统计方法、建模与实验双向验证及现实约束展开咨询。行动：汇报项目原理、模块化实验策略与四个潜在建模方向，听取张老师对各方向可行性、优先级与实现路径的反馈。反思：确认应优先做基于现有数据的荧光时序预测与统计假设检验，ODE 作为备选，空气扩散模型暂缓；建模须服务湿实验，避免过度复杂。</p>
+        <p class="hz-detail-card__copy">The project already has some experimental data from the humanization modification and the signaling reporter, including OD time series and fluorescence time series under an α-factor gradient, but the team is not clear how to distill content that can support the iGEM modeling section from these data. We also listed several directions — ODE, air enrichment, promoter screening, the signaling pathway — but time is tight and we needed an expert to help us judge which are worth doing and which can be deferred.</p>
 
+        <p class="hz-detail-card__copy">Ms. Zhang evaluated the four modeling directions the team had laid out one by one and gave clear priority judgments. She considered that the ODE model depends on complete experimental data, that the current data are insufficient and implementation would be rather difficult; that the air diffusion model is hard to validate with this project's wet-lab experiments, is weakly coupled to the project and therefore ranks last; and that the promoter screening model can be referenced but is not the most urgent direction at present.</p>
 
+        <p class="hz-detail-card__copy">Her strongest recommendation was statistical analysis and time-series prediction based on the existing OD–fluorescence time-series data. On one hand, hypothesis testing can be used to calculate P-values, providing quantitative evidence for experimental differences visible to the eye; on the other hand, the first and second derivatives of the fluorescence and OD time-series curves can be used to predict later trends from early data alone, shortening detection time and moving toward real-time detection. She pointed out that this direction can feed back into experiments and aligns with the orientation of iGEM modeling scoring. On the humanization modification, she considered that it can currently only be assessed indirectly through growth curves and that statistical testing could be introduced; an experiment to measure G-protein binding efficiency directly and completely has not yet been done.</p>
 
-        <p class="hz-detail-card__copy"><strong>建模优先级</strong></p>
+        <p class="hz-detail-card__copy">Taking into account the project's current time and data conditions, Ms. Zhang also reminded us that successful data have not yet been obtained for some modules in the wet lab and that modeling depends heavily on measured data; that time is tight, so it is inadvisable to open up several complex modeling efforts at once; that modeling need not pursue over-complexity; and that the core of modeling is to serve experiments and solve practical problems, not to be formally sophisticated.</p>
 
-        <p class="hz-detail-card__copy">张老师逐一评估了团队梳理的四个建模方向，并给出了明确的优先级判断。她认为 ODE 模型依赖完整实验数据，现阶段数据不足，实现难度偏大；空气扩散模型难以用本项目湿实验验证，与本项目耦合弱，优先级靠后；启动子筛选模型可参考，但并非当前最紧迫的方向。她最推荐的是基于现有 OD-荧光时序数据做统计分析与时间序列预测。</p>
+        <p class="hz-detail-card__copy">This interview helped the team clarify its modeling priorities: the highest priority is derivative-based time-series prediction using the existing OD–fluorescence time-series data, exploring the feasibility of predicting later results from early data alone and shortening detection time; the second priority is to supplement statistical hypothesis testing for the humanization modification and control experiments and provide P-values; the multi-equation ODE system serves as a fallback, prioritizing reuse of literature parameters and attempting fitting once more data are produced; the air enrichment and virus spatial diffusion models can be deferred if time is tight. The team will continue to collect OD time series and fluorescence time series under the α-factor gradient, and growth-curve data for each group of the humanization modification, retaining biological replicates; complete comparative validation of single-module, dual-module and full-pathway engineered strains; confirm with Zhang Lijun whether P-values for statistical significance need to be output; and, once preliminary time-series prediction results are produced, schedule a second interview with Ms. Haili Zhang to review the statistical methods, model logic and fitting scheme. Ms. Zhang also reminded us that modeling need not pursue sophisticated formalism; being able to serve experiments and solve practical problems is what matters.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>统计检验与时间序列预测</strong></p>
-
-        <p class="hz-detail-card__copy">一方面，用假设检验计算 P 值，为肉眼可辨的实验差异提供定量证据；另一方面，利用荧光、OD 时序曲线的一阶、二阶导数，仅依靠前期数据预测后期走向，缩短检测时长，向实时检测靠拢。她指出，这一方向能反哺实验，符合 iGEM 建模评分导向。关于人源化改造，她认为目前只能通过生长曲线间接评估，可引入统计检验；完整直接测量 G 蛋白结合效率的实验尚未完成。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>结论</strong></p>
-
-        <p class="hz-detail-card__copy">考虑到项目当前的时间与数据条件，张老师也提醒我们，部分模块湿实验尚未拿到成功数据，建模高度依赖实测数据；时间紧张，不宜同时铺开多个复杂建模；建模不必追求过度复杂，建模的核心是服务实验、解决实际问题，而非形式上的高级。这次访谈帮团队明确了建模优先级：最高优先级是基于现有 OD-荧光时序数据做导数-时间序列预测，探究只用前期数据预测后期结果、缩短检测时长的可行性；次优先级是对人源化改造和对照实验补充统计假设检验，给出 P 值；ODE 多微分方程组作为备选，优先复用文献参数，待更多数据产出后尝试拟合；空气富集与病毒空间扩散模型若时间紧张可暂缓。后续团队将继续收集数据，保留生物学重复；完成单模块、双模块、全通路改造菌株对比验证；向老师确认是否需要输出统计显著性 P 值；产出时序预测模型初步结果后，再预约二次访谈，复核统计方法、模型逻辑与拟合方案。</p>
-
+      <div class="hz-detail-card__gallery">
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/zhang-haili-1.jpg" alt="In-person meeting" loading="lazy"><figcaption>In-person meeting</figcaption></figure>
+        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/zhang-haili-2.jpg" alt="Modeling plan discussion" loading="lazy"><figcaption>Modeling plan discussion</figcaption></figure>
       </div>
 
-          <div class="hz-detail-card__gallery">
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/zhang-haili-1.jpg" alt="线下交流" loading="lazy"><figcaption>线下交流</figcaption></figure>
-        <figure><img src="../static/image/any-icon/HP/expert_img/meeting/zhang-haili-2.jpg" alt="建模方案讨论" loading="lazy"><figcaption>建模方案讨论</figcaption></figure>
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
       </div>
-
     </article>
 
         </div>
@@ -1704,32 +1673,27 @@
 
         <p class="hz-detail-card__eyebrow">Public and society · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-sz-vocational">深圳市第一职业技术学校</h3>
+        <h3 id="expert-sz-vocational">Shenzhen First Vocational Technical School</h3>
 
-        <p class="hz-detail-card__meta">科普宣讲合作学校｜制药相关专业学生</p>
+        <p class="hz-detail-card__meta">Outreach partner school (Pingshan campus)</p>
 
-        <p class="hz-detail-card__copy">我们面向深圳市第一职业技术学校制药相关专业学生开展宣讲，由团队成员进行分享。这些同学日常学习偏向传统制药工艺，很少有机会接触合成生物学前沿内容，也容易对生命科学类科研形成"高深难懂"的刻板印象。</p>
+        <p class="hz-detail-card__copy">We gave a talk to students in pharmaceutical-related majors at the Shenzhen First Vocational Technical School. Their studies focus on traditional pharmaceutical processes, so they rarely encounter frontier synthetic biology and can easily form the impression that life-science research is abstruse and hard to understand.</p>
 
+        <p class="hz-detail-card__copy">We again prioritized synthetic biology in the outreach, explaining its application prospects in drug synthesis and biological detection against the backdrop of the pharmaceutical industry's current state, so the students could see the frontier tracks their major extends into. Through accessible examples we showed that synthetic biology combines playful creativity with scientific rigor, dispelling their fear of frontier research and showing that young students can also run hands-on synthetic biology projects.</p>
 
+        <p class="hz-detail-card__copy">We introduced the iGEM competition and the value of science-innovation practice for young people, explaining that the competition is not just laboratory experiments but an activity combining experiments, hardware, design and social research. Using the airborne influenza A biosensor as an example, we walked through the project's inspiration, background, experimental concept, hardware design, wiki and IP visual design; a team member with a pharmacy background also shared how they taught themselves programming out of interest, showing that interdisciplinary skills are not exclusive to students of the related major.</p>
 
-        <p class="hz-detail-card__copy"><strong>我们分享了什么</strong></p>
+        <p class="hz-detail-card__copy">We also shared the team's human practices, academic exchanges and competition experience, and handed out custom merchandise to lift on-site engagement. In the Q&A session we answered the students' questions and collected genuine suggestions from end users, such as improving device portability and shortening detection time.</p>
 
-        <p class="hz-detail-card__copy">我们同样优先围绕合成生物学开展科普，结合制药行业发展现状，讲解合成生物学在药物合成、生物检测等方向的应用前景，让同学们看到本专业可以延伸的前沿赛道。通过通俗案例，我们展现合成生物学兼具趣味创意与科学严谨的特点，消除大家对前沿科研的畏惧心理，也让同学们知道青年学生同样可以动手做合成生物学创新项目。</p>
+        <p class="hz-detail-card__copy">For the participating students, the talk brought them close to synthetic biology research, let them see in advance where their major leads in research and industry, and deepened their understanding of their own field beyond the textbook. For the iGEM team, explaining the project to a non-specialist audience forced us to rework and simplify complex technical logic, deepening every member's understanding of the project as a whole. The shortcoming was that time was too limited for an in-depth hands-on workshop; we hope to build a regular science-communication channel for young audiences.</p>
 
-
-
-        <p class="hz-detail-card__copy"><strong>iGEM 与青年科创</strong></p>
-
-        <p class="hz-detail-card__copy">我们介绍了 iGEM 竞赛以及青少年科创实践的价值，说明比赛不只是实验室实验，而是实验、硬件、设计、社会调研多维度结合的科创活动。在项目介绍环节，我们以空气甲流病毒生物传感器为实例，讲解项目灵感、背景、实验构思、硬件设计、Wiki 网页与 IP 视觉设计；团队中具有药学背景的队员也分享了自己凭借兴趣自学编程的经历，说明跨学科技能并非只有相关专业才能掌握。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>双向收获</strong></p>
-
-        <p class="hz-detail-card__copy">我们还分享了团队的人类实践、学术交流与参赛经历，并发放定制文创提升现场参与感。互动交流环节中，我们解答了同学们的疑问，同时收集来自终端用户的真实建议，例如提升设备便携性、缩短检测耗时等。对参与学生而言，这次分享让他们近距离接触了合成生物学相关科研内容，提前看到本专业对应的科研与行业发展方向，跳出课本局限，加深了对自身专业的立体理解；对 iGEM 团队而言，为了面向非专业群体讲清项目，我们重新梳理并简化了复杂的技术逻辑，加深了全体成员对项目整体的理解；参与者提出的便携性、检测时长等建议，也成为原型迭代和应用场景细化的重要参考。不足的是，时间有限，未能开展深度动手实践工作坊，未来我们希望搭建面向青年群体的常态化科普交流渠道。</p>
+      
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1742,26 +1706,25 @@
 
         <p class="hz-detail-card__eyebrow">Public and society · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-freshman">2026 新生宣传</h3>
+        <h3 id="expert-freshman">2026 Freshman Outreach</h3>
 
-        <p class="hz-detail-card__meta">本校 2026 级药学和制药工程技术本科新生</p>
+        <p class="hz-detail-card__meta">2026 pharmacy and pharmaceutical engineering technology undergraduates</p>
 
-        <p class="hz-detail-card__copy">分享会由 iGEM 学生团队与指导老师共同完成。我们从合成生物学本身切入，帮助同学们建立基础认知：它不只是基因编辑，更需要有"设计—构建—测试—学习"的工程化思维，用来解决医疗健康、环境治理、新材料开发等现实问题。我们结合生活案例，打破"合成生物学离日常生活很遥远"的刻板印象，让同学们体会这门学科既有趣又严谨。</p>
+        <p class="hz-detail-card__copy">The session was delivered jointly by the iGEM student team and our supervising teachers. We started from synthetic biology itself to help the students build a basic understanding: it is not just gene editing, but requires the engineering mindset of “design–build–test–learn” to solve real problems in healthcare, environmental governance and new materials development.</p>
 
+        <p class="hz-detail-card__copy">We introduced research projects, academic competitions, conferences and social practice, emphasizing that extracurricular practice must rest on a solid foundation in the professional courses. Since most students had never encountered iGEM, we introduced this global synthetic biology student competition: it is not limited to wet-lab work but also covers hardware, modeling, human practices, wiki development and poster defense, developing literature research, experimental operation, stakeholder interviews and teamwork.</p>
 
+        <p class="hz-detail-card__copy">We focused on the airborne influenza A virus biosensor project, explained its positioning for infection-risk early warning in enclosed spaces, and shared our interview experience with experts in disease control, the health commission, hardware development and synthetic biology, showing that expert opinions were genuinely applied to project iteration. During the activity we distributed an influenza A prevention handbook written by the team, linking laboratory research with public health needs; the supervising teachers also explained how coursework relates to science-innovation practice.</p>
 
-        <p class="hz-detail-card__copy"><strong>我们介绍了什么</strong></p>
+        <p class="hz-detail-card__copy">In terms of outcomes, most participants built a basic understanding of synthetic biology, the iGEM competition and the influenza A detection sensor project, and shed the fixed impression that research is far removed from young learners. The activity also completed influenza A prevention outreach and raised awareness of respiratory infectious disease prevention. The shortcoming was that, limited by session length, we could not explain the experimental principles and hardware details in depth, and the handbook was distributed in bulk without item-by-item explanation. We plan to open a consultation channel, hold small themed salons, and collect feedback on the handbook to iterate later outreach materials.</p>
 
-        <p class="hz-detail-card__copy">我们介绍了科研项目、学科竞赛、学术会议、社会实践等内容，强调课外实践需要建立在扎实的专业课基础之上。针对多数同学从未接触过 iGEM 的情况，我们介绍了这项全球合成生物学学生竞赛：它不局限于湿实验，还涵盖硬件搭建、建模、人类实践、Wiki 网页制作、海报答辩等模块，可以锻炼文献调研、实验操作、利益相关者访谈、团队协作等综合能力。</p>
-
-
-
-        <p class="hz-detail-card__copy"><strong>项目展示与成效</strong></p>
-
-        <p class="hz-detail-card__copy">我们重点介绍了空气甲流病毒生物传感器项目，说明其面向密闭空间感染风险预警的定位，并分享了对接疾控、卫健委、硬件开发、合成生物学领域专家的访谈经历，说明专家意见切实用于项目迭代。活动中，我们发放了团队自主编写的甲流防护科普手册，将实验室研究与公共健康需求联系起来；指导老师也补充解读了专业课程学习与科创实践之间的关系。从成效来看，大部分参与者建立起了对合成生物学、iGEM 竞赛和甲流检测传感器项目的基础认知，也初步了解了基因工程相关内容，破除了"科研距离青年学习者十分遥远"的固有印象。活动同时完成了甲流防护科普，提升了同学们的呼吸道传染病防护意识。不足的是，受宣讲时长限制，我们无法细致讲解实验原理与硬件细节；科普手册批量发放，没有现场逐条讲解。后续我们计划面向感兴趣的参与者开放咨询渠道，开展小型主题沙龙，并收集手册反馈，迭代后续科普材料。</p>
+      
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1774,14 +1737,23 @@
 
         <p class="hz-detail-card__eyebrow">Science and academia · Shenzhen, Guangdong</p>
 
-        <h3 id="expert-huang-linsen">黄林森</h3>
+        <h3 id="expert-huang-linsen">Linsen Huang</h3>
 
-        <p class="hz-detail-card__meta">项目指导 / 顾问</p>
+        <p class="hz-detail-card__meta">Project advisor</p>
 
-        <p class="hz-detail-card__copy">黄林森老师作为项目指导与顾问团队成员之一，参与项目方向与跨学科协作的讨论与把关，从合成生物学与跨学科视角为团队提供反馈，并作为内部项目支持的一部分，持续参与团队推进与关键决策。</p>
+        <p class="hz-detail-card__copy">Linsen Huang, one of the project's instructors and advisors, took part in discussions on the project's direction and key decisions, contributing feedback from synthetic biology and interdisciplinary perspectives.</p>
+
+        <p class="hz-detail-card__copy">Drawing on experience in synthetic biology and interdisciplinary supervision, he exchanged views with the team on the project's overall direction and stage priorities, helping keep expert interviews, experimental design and competition preparation coherent.</p>
+
+        <p class="hz-detail-card__copy">The feedback has been folded into the team's project progress and internal coordination, and continues to function as part of internal project support.</p>
+
+      
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1794,14 +1766,21 @@
 
         <p class="hz-detail-card__eyebrow">Science and academia · Online</p>
 
-        <h3 id="expert-yeast-online">酵母线上交流会</h3>
+        <h3 id="expert-yeast-online">Online Yeast Workshop</h3>
 
-        <p class="hz-detail-card__meta">多所高校共同组织｜酵母专题交流会</p>
+        <p class="hz-detail-card__meta">Co-organized with several universities</p>
 
-        <p class="hz-detail-card__copy">在项目推进过程中，我们不仅通过专家访谈获得来自临床、疾控、产业与建模等领域的指导，也积极与其他 iGEM 队伍展开交流。从华南地区 iGEM 队伍交流会，到亚太地区 iGEM 队伍交流会（APiC），再到与多所高校共同组织的酵母专题交流会，我们分享项目、讨论困难、借鉴经验，在同行反馈中不断校准方向。这些交流不仅让我们看到其他队伍的亮点，也帮助我们正视自身不足；在讨论各自项目困难的同时，我们也从其他队伍那里获得了不少启发。</p>
+        <p class="hz-detail-card__copy">Beyond expert interviews, the team actively exchanged with other iGEM teams. In the online yeast workshop co-organized with several universities, we discussed shared technical challenges — yeast chassis, signaling pathways, reporter systems and hardware enrichment — sharing what each team had learned and where they had stumbled.</p>
+
+        <p class="hz-detail-card__copy">These exchanges showed us other teams' strengths and helped us confront our own shortcomings; while discussing each other's difficulties we also took away a good deal of inspiration, and recalibrated our direction accordingly.</p>
+
+      
 
       </div>
 
+          <div class="hz-detail-card__back">
+        <button type="button" class="hz-back-to-map">↑ Back to the map</button>
+      </div>
     </article>
 
         </div>
@@ -1819,29 +1798,29 @@
 <div id="section-southchina" class="content-card hp-education-card">
           <div class="hp-section-header">
             <span class="hp-section-number">05</span>
-            <h2 class="hp-section-title">HP探险篇—这次我们来到了华南交流会！</h2>
-            <p class="hp-section-subtitle">HP 探险篇系列 · 华南地区科普交流活动记录</p>
+            <h2 class="hp-section-title">HP Expedition: This Time We Came to the South China Meetup!</h2>
+            <p class="hp-section-subtitle">HP Expedition series · Record of the South China outreach event</p>
           </div>
           <div class="hp-photo-grid hp-photo-grid--flow">
-            <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/southchina/hp-southchina--01-presentation.jpg" alt="华南交流会项目展示" loading="lazy"><figcaption>项目展示</figcaption></figure>
-            <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/southchina/hp-southchina--02-group-photo.jpg" alt="华南交流会合影" loading="lazy"><figcaption>交流会合影</figcaption></figure>
-            <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/southchina/hp-southchina--03-scene.jpg" alt="华南交流会现场" loading="lazy"><figcaption>活动现场</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/southchina/hp-southchina--01-presentation.jpg" alt="Project presentation at the South China meetup" loading="lazy"><figcaption>Project presentation</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/southchina/hp-southchina--02-group-photo.jpg" alt="Group photo at the South China meetup" loading="lazy"><figcaption>Group photo</figcaption></figure>
+            <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/southchina/hp-southchina--03-scene.jpg" alt="South China meetup on site" loading="lazy"><figcaption>On site</figcaption></figure>
           </div>
-          <p class="hp-image-caption">图 1. 团队在华南地区 iGEM 交流会中进行项目展示与讨论</p>
+          <p class="hp-image-caption">Figure 1. The team presenting and discussing the project at the South China iGEM meetup</p>
           <div class="hp-reveal-content">
           <div class="hp-interview-context">
 
-            <h3 class="hp-subheading">华南 iGEM 交流会总结</h3>
-            <p>此次华南 iGEM 交流会，团队与华南地区多支 iGEM 队伍进行了面对面交流，在项目分享、学术讨论和模拟审查中收获颇多。我们带着项目走出去，既展示自己，也从同行与评审的视角发现此前被忽略的问题。</p>
+            <h3 class="hp-subheading">Summary of the South China iGEM meetup</h3>
+            <p>At this South China iGEM meetup, the team had face-to-face exchanges with several iGEM teams from South China and gained a great deal from project sharing, academic discussion and mock review. We took the project out into the world: presenting ourselves, and discovering problems we had overlooked through the eyes of peers and reviewers.</p>
 
-            <h3 class="hp-subheading">项目展示与模拟审查</h3>
-            <p>交流会上，各地队伍都可以分享自己的项目。团队在大屏幕前介绍了甲流空气检测项目，从酵母底盘、信号识别到报告系统，阐述了整体设计思路。其他队伍针对空气病毒浓度低、酵母灵敏度、报告系统泄漏以及与传统检测手段的差异等问题提出疑问。随后进行的模拟审查环节，让我们提前体验了 iGEM 答辩节奏；部分回答不够完善，但也正因此暴露出项目展示中的薄弱环节。这些问题与反馈我们逐一记录，并在会后整理成清单，纳入后续改进方向。从收集到的问题来看，主要集中于四类：实验层面关注酵母响应时间、信号通路验证与病毒浓度阈值；机械与成本层面关注模型计算、成本控制与酵母更换；应用场景层面关注设备安装位置、大场景数据覆盖与家用自检可行性；其他方面则关注与现有检测技术的优势、项目实际作用、是否有同类研究以及生物安全审批。这些问题基本覆盖了项目从实验到落地的关键环节。</p>
+            <h3 class="hp-subheading">Project presentation and mock review</h3>
+            <p>At the meetup, teams from different places could share their projects. Our team presented the influenza A air-detection project on the big screen, explaining the overall design logic from the yeast chassis and signal recognition to the reporter system. Other teams raised questions about low airborne virus concentrations, yeast sensitivity, reporter-system leakage and the differences from traditional detection methods. The mock review session that followed let us experience the pace of an iGEM defense in advance; some of our answers were not polished enough, but precisely for that reason they exposed the weak points in our project presentation. We recorded these questions and pieces of feedback one by one and, after the meeting, compiled them into a list for subsequent improvement. Looking at the questions collected, they mainly fell into four categories: at the experimental level, yeast response time, signaling pathway validation and virus concentration thresholds; at the mechanical and cost level, model calculations, cost control and yeast replacement; at the application-scenario level, where the device would be installed, data coverage in large scenarios and the feasibility of home self-testing; and other aspects such as the advantages over existing detection technologies, the project's actual function, whether similar research exists and biosafety approval. These questions basically covered the key links of the project from experiments to implementation.</p>
 
-            <h3 class="hp-subheading">平行交流与互动</h3>
-            <p>除正式交流外，团队参观了其他队伍的项目展示，了解他们在环境检测、治疗和材料等方向上的设计思路与实验安排。不同队伍在建模、硬件和人类实践上的做法各有特色，给我们提供了不少参考。交流会设置的游戏与互动环节，则让各队在轻松氛围中沟通进展与困难，一些平时不会写进 wiki 的经验也在交流中得以分享。</p>
+            <h3 class="hp-subheading">Parallel exchanges and interaction</h3>
+            <p>Besides the formal exchanges, the team visited other teams' project displays and learned about their design ideas and experimental arrangements in environmental detection, therapeutics and materials. Different teams had distinctive approaches to modeling, hardware and human practices, which provided us with plenty of reference points. The games and interactive sessions arranged at the meetup allowed teams to communicate progress and difficulties in a relaxed atmosphere, and some experience that would not normally be written into a wiki was shared during those exchanges.</p>
 
-            <h3 class="hp-subheading">此次交流对项目的意义</h3>
-            <p>此次交流会让我们看到自身差距，也明确了改进方向。团队将把收到的建议落实到实验与展示中，继续完善项目，筹备后续工作。这些来自多支队伍的提问与对照，与我们的专家访谈形成互补，共同把"反馈 → 决策"的链条补全。</p>
+            <h3 class="hp-subheading">What this exchange meant for the project</h3>
+            <p>This meetup showed us where we fall short and clarified the direction for improvement. The team will put the suggestions received into practice in experiments and presentations, continue to refine the project, and prepare for follow-up work. These questions and contrasts from many teams complement our expert interviews, and together they complete the “feedback → decision” chain.</p>
 
           </div>
         </div>
@@ -1852,33 +1831,33 @@
 <div id="section-apic" class="content-card hp-education-card">
   <div class="hp-section-header">
     <span class="hp-section-number">06</span>
-    <h2 class="hp-section-title">学术交流（二）：APiC 亚太 iGEM 团队交流会</h2>
-    <p class="hp-section-subtitle">第一届亚太地区 iGEM 队伍交流会</p>
+    <h2 class="hp-section-title">Academic Exchange (II): APiC Asia-Pacific iGEM Team Conference</h2>
+    <p class="hp-section-subtitle">The first Asia-Pacific iGEM team conference</p>
   </div>
   <div class="hp-reveal-content">
     <div class="hp-photo-grid hp-photo-grid--flow hp-photo-grid--dense">
-    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--01-scene.jpg" alt="APiC 活动现场" loading="lazy"><figcaption>活动现场</figcaption></figure>
-    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--02-students.jpg" alt="APiC 队伍交流" loading="lazy"><figcaption>队伍交流</figcaption></figure>
-    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--03-poster.jpg" alt="APiC 海报展示" loading="lazy"><figcaption>海报展示</figcaption></figure>
-    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--04-hku-group.jpg" alt="APiC 港大阶段合影" loading="lazy"><figcaption>港大阶段合影</figcaption></figure>
-    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--05-hku-desk.jpg" alt="APiC 港大报到现场" loading="lazy"><figcaption>港大报到现场</figcaption></figure>
-    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--06-lecture.jpg" alt="APiC 专家讲座" loading="lazy"><figcaption>专家讲座</figcaption></figure>
+    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--01-scene.jpg" alt="APiC on site" loading="lazy"><figcaption>On site</figcaption></figure>
+    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--02-students.jpg" alt="APiC team exchange" loading="lazy"><figcaption>Team exchange</figcaption></figure>
+    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--03-poster.jpg" alt="APiC poster session" loading="lazy"><figcaption>Poster session</figcaption></figure>
+    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--04-hku-group.jpg" alt="APiC HKU group photo" loading="lazy"><figcaption>HKU group photo</figcaption></figure>
+    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--05-hku-desk.jpg" alt="APiC HKU registration" loading="lazy"><figcaption>HKU registration</figcaption></figure>
+    <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/apic/hp-apic--06-lecture.jpg" alt="APiC expert lecture" loading="lazy"><figcaption>Expert lecture</figcaption></figure>
     </div>
     <div class="hp-activity-overview">
-      <p>APiC（Asia-Pacific iGEM Community Conference）是由南方科技大学与香港大学联合举办的第一届亚太地区 iGEM 团队交流会。我们团队全程参与了南科大与港大两个阶段的交流，在讲座、模拟评审、项目展示与互动活动中，与来自亚太地区的多支 iGEM 队伍相互学习、共同打磨项目。</p>
+      <p>APiC (Asia-Pacific iGEM Community Conference) was the first Asia-Pacific iGEM team conference, jointly hosted by the Southern University of Science and Technology (SUSTech) and the University of Hong Kong (HKU). Our team took part in both stages — at SUSTech and at HKU — learning from multiple iGEM teams across the Asia-Pacific region and polishing our project together through lectures, mock reviews, project presentations and interactive activities.</p>
     </div>
     <div class="hp-interview-context">
-      <h3 class="hp-subheading">南科大阶段：模拟评审与项目互访</h3>
-      <p>在南科大，我们首先参与了多场专家讲座，内容涵盖合成生物学前沿进展、项目验证方法与规范化实践。随后，iGEM 比赛工作人员线上介绍了赛事流程与评审要点，让我们对今年的规则与评分重点有了更清晰的认识。模拟评审是这次交流的重头戏：我们按正式答辩流程完整走了一遍，从问题定义、技术路线到验证设计逐项复盘。评审老师建议我们进一步聚焦应用场景、补充数据证据、注意合规表达。我们把这些建议逐条记录，并标注为下一步改进清单。在项目互访环节，我们介绍了甲流空气检测项目的缘起、核心机制与预期应用，也了解了其他队伍的技术路径与验证思路，并学习了各队 poster 的设计与内容组织。</p>
+      <h3 class="hp-subheading">SUSTech stage: mock review and project exchange</h3>
+      <p>At SUSTech, we first attended several expert lectures covering frontier advances in synthetic biology, project validation methods and standardized practice. Then iGEM competition staff introduced the competition process and judging criteria online, giving us a clearer understanding of this year's rules and scoring priorities. The mock review was the highlight of the exchange. We went through the complete formal defense process, reviewing item by item from problem definition and technical route to validation design. The reviewers advised us to focus further on application scenarios, supplement data evidence and pay attention to compliant expression. We recorded these suggestions one by one and marked them as a list for the next round of improvement. In the project exchange session, we introduced the origins, core mechanism and expected application of the influenza A air-detection project, and also learned about other teams' technical routes and validation ideas. We also studied the design and content organization of each team's poster — from layout and figures to the story line — and gained a good deal of presentation experience.</p>
 
-      <h3 class="hp-subheading">互动活动：让项目"可玩、可感、可反馈"</h3>
-      <p>我们向大会申请了现场互动活动，并获得了专门场地设置两个环节。第一个是围绕目标奖项设计的问答卡片：其他团队可根据自身目标奖项查看我们的问题并写下答案，我们现场讲解每张卡片的设计思路与评审关注点，同时收集跨队反馈。第二个是把项目设计概念做成"飞机大战"类型的小游戏，参与者根据故事指引闯关，在轻松氛围中了解我们的项目。玩家反馈也将用于优化故事节奏与关卡设计。此外，在实验经验交流中，我们围绕实验设计、质控与数据处理与其他队伍互换了不少可落地的小技巧。</p>
+      <h3 class="hp-subheading">Interactive activities: making the project “playable, tangible and open to feedback”</h3>
+      <p>We applied to the conference for on-site interactive activities and were given a dedicated space to set up two sessions. The first was question cards designed around the target prizes: other teams could look at our questions according to their own target prize and write down their answers, while we explained on site the design idea behind each card and the judging criteria of concern, collecting cross-team feedback at the same time. The second turned the project design concept into a “Plane War”-style mini-game, in which participants advanced through levels following the story guide and learned about our project in a relaxed atmosphere. Player feedback will also be used to optimize the story pacing and level design. In addition, during exchanges on experimental experience, we swapped many practical tips with other teams on experimental design, quality control and data handling.</p>
 
-      <h3 class="hp-subheading">港大阶段：讲座与往届选手讨论会</h3>
-      <p>在香港大学，我们继续参与专家讲座，并参加了往届 iGEM 选手的讨论会。大家围绕参赛收获、团队协作、项目推进中的困难与解决方式展开交流。往届选手的分享让我们对 iGEM 的节奏与重点有了更具体的认识。港大阶段同样设有海报展示与自由交流环节，我们与其他队伍就项目设计、验证方案和展示方式进行了深入讨论。</p>
+      <h3 class="hp-subheading">HKU stage: lectures and a discussion session with past participants</h3>
+      <p>At the University of Hong Kong, we continued to attend expert lectures and joined a discussion session with past iGEM participants. Everyone exchanged views on what they gained from the competition, teamwork, and the difficulties encountered in advancing projects and how they were solved. The sharing by past participants gave us a more concrete understanding of iGEM's rhythm and priorities. The HKU stage also included a poster display and free-exchange session, where we had in-depth discussions with other teams on project design, validation plans and presentation approaches.</p>
 
-      <h3 class="hp-subheading">收获与后续</h3>
-      <p>APiC 是我们第一次参加亚太级别的 iGEM 团队交流会，也是第一届。通过南科大与港大两阶段的交流，我们不仅学习了前沿讲座与评审经验，也通过自己设计的互动活动让更多队伍了解了我们的项目。接下来，我们将根据评审建议与交流收获，优化验证方案与交互设计，完善项目材料，并继续与各队保持联系与合作。</p>
+      <h3 class="hp-subheading">Outcomes and follow-up</h3>
+      <p>APiC was our first time taking part in an Asia-Pacific-level iGEM team conference, and it was also the very first edition. Through the two stages at SUSTech and HKU, we not only learned from frontier lectures and review experience, but also helped more teams learn about our project through the interactive activities we designed ourselves. Next, we will optimize the validation plan and interaction design according to the reviewers' suggestions and what we gained from the exchange, refine the project materials, and continue to stay in contact and cooperate with the other teams.</p>
     </div>
   </div>
 </div>
@@ -1888,29 +1867,27 @@
 <div id="section-education" class="content-card hp-education-card hp-section-offset-2">
           <div class="hp-section-header">
             <span class="hp-section-number">07</span>
-            <h2 class="hp-section-title">面向中学生的科学传播与项目交流：让合成生物学走近未来的探索者</h2>
-            <p class="hp-section-subtitle">深圳市第一职业技术学校坪山校区 · 高二学生科普交流活动</p>
+            <h2 class="hp-section-title">Science Communication and Project Exchange for Secondary Students: Bringing Synthetic Biology to Future Explorers</h2>
+            <p class="hp-section-subtitle">Shenzhen First Vocational Technical School, Pingshan campus · Outreach with Grade 11 students</p>
           </div>
 
           <!-- 活动现场照片墙 -->
           <div class="hp-photo-grid hp-photo-grid--flow">
             <figure class="hp-photo-item">
-              <img src="../static/image/any-icon/HP/vocational/hp-vocational--01-group.jpg" alt="中职学校宣讲合影" loading="lazy">
-              <figcaption>活动合影</figcaption>
+              <img src="../static/image/any-icon/HP/vocational/hp-vocational--01-group.jpg" alt="Group photo at the vocational school talk" loading="lazy">
+              <figcaption>Group photo</figcaption>
             </figure>
             <figure class="hp-photo-item">
-              <img src="../static/image/any-icon/HP/vocational/hp-vocational--02-classroom.jpg" alt="宣讲课堂现场" loading="lazy">
-              <figcaption>课堂现场</figcaption>
+              <img src="../static/image/any-icon/HP/vocational/hp-vocational--02-classroom.jpg" alt="Classroom at the vocational school talk" loading="lazy">
+              <figcaption>Classroom</figcaption>
             </figure>
           </div>
-          <p class="hp-image-caption">图 2. 校园宣讲现场：团队向高二学生介绍 iGEM 理念与工程化酵母生物传感器项目</p>
+          <p class="hp-image-caption">Figure 2. On-campus outreach: the team introducing the iGEM concept and the engineered yeast biosensor project to Grade 11 students</p>
 
           <div class="hp-reveal-content" id="reveal-education-content">
             <!-- 活动背景 -->
             <div class="hp-activity-overview">
-                <p>为了践行 iGEM
-                  所提倡的科学传播与社会责任，也为了摸清普通学生对甲型流感病毒检测技术到底知道多少、又盼着什么，我们走进深圳市第一职业技术学校坪山校区，和一群高二学生做了一次项目科普交流。活动一方面向非专业听众讲清国际基因工程机器大赛（iGEM）的理念和价值，另一方面展示我们的"基于工程化酵母的甲型流感病毒生物传感器"项目，让更多年轻学生看到，合成生物学怎样靠跨学科创新去碰现实里的社会问题。
-                </p>
+                <p>We gave a talk to students majoring in pharmaceutical-related fields at the Shenzhen First Vocational Technical School, presented by team members. These students focus on traditional pharmaceutical processes in their daily studies, rarely have the chance to encounter cutting-edge synthetic biology, and easily form a stereotype of life-science research as “abstruse and hard to understand”.</p>
               </div>
 
               <!-- 交流亮点 -->
@@ -1922,8 +1899,8 @@
                       <path d="M8 21h8M12 17v4" />
                     </svg>
                   </div>
-                  <h3>我们分享了什么</h3>
-                  <p>我们优先围绕合成生物学开展科普，结合制药行业发展现状，讲解合成生物学在药物合成、生物检测等方向的应用前景，让同学们看到本专业可以延伸的前沿赛道。通过通俗案例，我们展现合成生物学兼具趣味创意与科学严谨的特点，消除大家对前沿科研的畏惧心理，也让同学们知道青年学生同样可以动手做合成生物学创新项目。</p>
+                  <h3 class="hp-subheading">What we shared</h3>
+                  <p>We likewise prioritized synthetic biology in our outreach, explaining its application prospects in drug synthesis, biological detection and other directions in the context of the current state of the pharmaceutical industry, so that the students could see the frontier directions their major can extend into. Through accessible examples, we showed that synthetic biology combines playful creativity with scientific rigor, dispelling the students' fear of frontier research and letting them know that young students can likewise carry out hands-on synthetic biology innovation projects.</p>
                 </article>
 
                 <article class="hp-edu-highlight hp-edu-highlight-accent">
@@ -1933,8 +1910,8 @@
                         d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5a8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                     </svg>
                   </div>
-                  <h3>iGEM 与青年科创</h3>
-                  <p>我们介绍了 iGEM 竞赛以及青少年科创实践的价值，说明比赛不只是实验室实验，而是实验、硬件、设计、社会调研多维度结合的科创活动。在项目介绍环节，我们以空气甲流病毒生物传感器为实例，讲解项目灵感、背景、实验构思、硬件设计、Wiki 网页与 IP 视觉设计；团队中具有药学背景的队员也分享了自己凭借兴趣自学编程的经历，说明跨学科技能并非只有相关专业才能掌握。</p>
+                  <h3 class="hp-subheading">iGEM and youth science innovation</h3>
+                  <p>We introduced the iGEM competition and the value of science-innovation practice for young people, explaining that the competition is not just laboratory experiments but a science-innovation activity combining experiments, hardware, design and social research. In the project introduction, we used the airborne influenza A virus biosensor as an example, explaining the project's inspiration, background, experimental concept, hardware design, wiki and IP visual design; team members with a pharmacy background also shared how they taught themselves programming out of personal interest, showing that interdisciplinary skills are not exclusive to students of the related major.</p>
                 </article>
 
                 <article class="hp-edu-highlight">
@@ -1943,8 +1920,8 @@
                       <path d="M6 21v-8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8M6 9l6-6 6 6" />
                     </svg>
                   </div>
-                  <h3>双向收获</h3>
-                  <p>我们还分享了团队的人类实践、学术交流与参赛经历，并发放定制文创提升现场参与感。互动交流环节中，我们解答了同学们的疑问，同时收集来自终端用户的真实建议，例如提升设备便携性、缩短检测耗时等。对参与学生而言，这次分享让他们近距离接触了合成生物学相关科研内容，提前看到本专业对应的科研与行业发展方向；对团队而言，为了面向非专业群体讲清项目，我们重新梳理并简化了复杂的技术逻辑。不足的是，时间有限，未能开展深度动手实践工作坊，未来我们希望搭建面向青年群体的常态化科普交流渠道。</p>
+                  <h3 class="hp-subheading">Mutual gains</h3>
+                  <p>We also shared the team's human practices, academic exchanges and competition experience, and distributed custom merchandise to boost on-site engagement. In the interactive session, we answered the students' questions and collected genuine suggestions from end users, such as improving device portability and shortening detection time.</p>
                 </article>
               </div>
 
@@ -1957,25 +1934,25 @@
 <div id="section-freshman" class="content-card hp-education-card">
   <div class="hp-section-header">
     <span class="hp-section-number">08</span>
-    <h2 class="hp-section-title">面向新生的科普分享：把合成生物学讲给未来探索者</h2>
-    <p class="hp-section-subtitle">2026 级药学和制药工程技术本科新生</p>
+    <h2 class="hp-section-title">Outreach for Freshmen: Explaining Synthetic Biology to Future Explorers</h2>
+    <p class="hp-section-subtitle">2026 pharmacy and pharmaceutical engineering technology undergraduates</p>
   </div>
   <div class="hp-reveal-content">
     <div class="hp-photo-grid hp-photo-grid--flow">
-      <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/freshman/hp-freshman--01-hall.jpg" alt="新生分享会现场" loading="lazy"><figcaption>分享会现场</figcaption></figure>
-      <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/freshman/hp-freshman--02-classroom.jpg" alt="新生分享会课堂" loading="lazy"><figcaption>课堂交流</figcaption></figure>
+      <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/freshman/hp-freshman--01-hall.jpg" alt="Freshman session on site" loading="lazy"><figcaption>Session on site</figcaption></figure>
+      <figure class="hp-photo-item"><img src="../static/image/any-icon/HP/freshman/hp-freshman--02-classroom.jpg" alt="Freshman session classroom" loading="lazy"><figcaption>Classroom exchange</figcaption></figure>
     </div>
     <div class="hp-activity-overview">
-      <p>分享会由 iGEM 学生团队与指导老师共同完成。我们从合成生物学本身切入，帮助同学们建立基础认知，也借机向他们科普合成生物学的基本概念、研究方式与应用前景，并介绍我们的空气甲流病毒生物传感器项目。</p>
+      <p>The session was delivered jointly by the iGEM student team and our supervising teachers. We started from synthetic biology itself to help the students build a basic understanding: it is not just gene editing, but requires the engineering mindset of “design–build–test–learn” to solve real-world problems in healthcare, environmental governance, new materials development and so on. We used everyday examples to break the stereotype that “synthetic biology is far removed from daily life”, letting the students appreciate that the discipline is both interesting and rigorous.</p>
     </div>
     <div class="hp-interview-context">
-      <h3 class="hp-subheading">我们介绍了什么</h3>
-      <p>我们从合成生物学本身切入，帮助同学们建立基础认知：它不只是基因编辑，更需要有"设计—构建—测试—学习"的工程化思维，用来解决医疗健康、环境治理、新材料开发等现实问题。我们结合生活案例，打破"合成生物学离日常生活很遥远"的刻板印象，让同学们体会这门学科既有趣又严谨。</p>
-      <p>我们介绍了科研项目、学科竞赛、学术会议、社会实践等内容，强调课外实践需要建立在扎实的专业课基础之上。针对多数同学从未接触过 iGEM 的情况，我们介绍了这项全球合成生物学学生竞赛：它不局限于湿实验，还涵盖硬件搭建、建模、人类实践、Wiki 网页制作、海报答辩等模块，可以锻炼文献调研、实验操作、利益相关者访谈、团队协作等综合能力。</p>
+      <h3 class="hp-subheading">What we introduced</h3>
+      <p>We started from synthetic biology itself to help the students build a basic understanding: it is not just gene editing, but requires the engineering mindset of “design–build–test–learn” to solve real problems in healthcare, environmental governance and new materials development. We used everyday examples to break the stereotype that “synthetic biology is far removed from daily life”, letting the students feel that the discipline is both fun and rigorous.</p>
+      <p>We introduced research projects, academic competitions, academic conferences and social practice, emphasizing that extracurricular practice needs to be built on a solid foundation in professional courses. Since most of the students had never encountered iGEM, we introduced this global synthetic biology student competition: it is not limited to wet-lab work but also covers hardware construction, modeling, human practices, wiki development and poster defense, and can develop a comprehensive skill set covering literature research, experimental operation, stakeholder interviews and teamwork.</p>
 
-      <h3 class="hp-subheading">项目展示与成效</h3>
-      <p>我们重点介绍了空气甲流病毒生物传感器项目，说明其面向密闭空间感染风险预警的定位，并分享了对接疾控、卫健委、硬件开发、合成生物学领域专家的访谈经历，说明专家意见切实用于项目迭代。活动中，我们发放了团队自主编写的甲流防护科普手册，将实验室研究与公共健康需求联系起来；指导老师也补充解读了专业课程学习与科创实践之间的关系。</p>
-      <p>从成效来看，大部分参与者建立起了对合成生物学、iGEM 竞赛和甲流检测传感器项目的基础认知，也初步了解了基因工程相关内容，破除了"科研距离青年学习者十分遥远"的固有印象。活动同时完成了甲流防护科普，提升了同学们的呼吸道传染病防护意识。不足的是，受宣讲时长限制，我们无法细致讲解实验原理与硬件细节；科普手册批量发放，没有现场逐条讲解。后续我们计划面向感兴趣的参与者开放咨询渠道，开展小型主题沙龙，并收集手册反馈，迭代后续科普材料。</p>
+      <h3 class="hp-subheading">Project presentation and outcomes</h3>
+      <p>We focused on introducing the airborne influenza A virus biosensor project, explaining its positioning for infection-risk early warning in enclosed spaces, and shared our interview experience with experts in disease control, the health commission, hardware development and synthetic biology, showing that expert opinions were genuinely applied to project iteration. During the activity we distributed an influenza A prevention handbook written by the team, linking laboratory research with public health needs; the supervising teachers also added explanations of the relationship between professional coursework and science-innovation practice.</p>
+      <p>In terms of outcomes, most participants built a basic understanding of synthetic biology, the iGEM competition and the influenza A detection sensor project, gained preliminary knowledge of genetic engineering, and dispelled the fixed impression that “research is very distant from young learners”. The activity also completed influenza A prevention outreach and raised the students' awareness of respiratory infectious disease prevention. The shortcoming was that, limited by the length of the talk, we could not explain the experimental principles and hardware details in depth, and the handbook was distributed in bulk without item-by-item explanation on site. Going forward we plan to open a consultation channel for interested participants, hold small themed salons, and collect feedback on the handbook to iterate subsequent outreach materials.</p>
     </div>
   </div>
 </div>

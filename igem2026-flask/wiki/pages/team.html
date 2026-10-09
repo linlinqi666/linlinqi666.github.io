@@ -3,6 +3,11 @@
 {% set active_page = "team" %}
 {% block title %}Members{% endblock %}
 {% block head_extra %}
+<!-- 首屏封面图最高优先级预载（2026-10-08 加载改造）：head 阶段即发起 CDN 请求，
+     不等 <body> 解析到 <img> 才排队；配合 members-intro.js 的 is-photo-ready 淡入，
+     避免"动画已过、照片还是空的"。 -->
+<link rel="preload" as="image" href="{{ media('team/00-team-cover.avif') }}" fetchpriority="high">
+
 <!-- 全屏引导封面 arm：必须同步（非 defer）执行，先于 <body> 渲染，
      否则会先闪出成员页再被封面盖住。逻辑与根站 head-extra/team-members.njk 一致 -->
 <script src="{{ url_for('static', filename='js/components/members-intro-arm.js') }}"></script>
@@ -24,10 +29,10 @@
   <div class="members-intro__media" aria-hidden="true">
     <span class="members-intro__backdrop"></span>
     <!-- 封面图走 media() 宏（macros.html 已指向 teams/6373/wiki 新基址）；
-         实测可达，记录见 对话归档/temporary-tools/2026-09/2026-09-30-probe-team-cdn.py -->
+         2026-10-08 实际上传为 avif（283.7 KiB），引用同步由 .png 改 .avif -->
     <img class="members-intro__photo" id="members-intro-photo" data-critical loading="eager" fetchpriority="high"
       decoding="async" alt="SZPU-China 2026 team photo"
-      src="{{ media('team/00-team-cover.png') }}">
+      src="{{ media('team/00-team-cover.avif') }}">
     <span class="members-intro__shade"></span>
   </div>
   <div class="members-intro__panel">

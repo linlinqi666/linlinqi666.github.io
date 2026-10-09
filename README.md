@@ -376,7 +376,7 @@ node static/js/core/search-index-generator.js
 
 | 素材 | 尺寸 | 单轮时长 | 顺序 |
 |---|---|---|---|
-| `static/image/Animation/index/boot animation.GIF` | 1920×1080 | 9.2s | 第 1 段 |
+| `static/image/Animation/index/gif/boot-animation.webp`（动画 WebP，2026-10-09 由 29.1MB 的 `boot animation.GIF` 转码降载：960×540 / 1.26MB，帧时长原样保留，浏览器解码成本降一个量级） | 960×540 | 9.2s | 第 1 段 |
 
 **状态机（全部由 `<html>` 上的类驱动）：**
 
@@ -392,7 +392,7 @@ node static/js/core/search-index-generator.js
 - **同步 arm 脚本必须留在 `<head>`**：它需要在 `<body>` 渲染前完成导航栏隐藏，否则导航栏会先闪现再消失。
 - **触发条件（2026-09-09 调整）**：arm 脚本仅在 `document.referrer` 为**站外**或**空（直接访问 / 书签 / 新标签）**时才给 `<html>` 打 `intro-gif-armed`；**站内跳转**（从本站其它页面点回首页，referrer 与本站同源）不重复播放开场动画，导航栏与滚动保持原样。这样避免了每进入一次首页都重播的问题。
 - 该 GIF 为**无限循环**，没有"播放结束"事件可监听，因此时长由 `data-duration` 显式声明；更换素材时必须同步改这个值。
-- 覆盖层 `position:fixed` + `object-fit:cover` 占满视口；素材仅 712×400，全屏会放大，如需更清晰须重新导出高分辨率素材（或转 WebP/视频）。
+- 覆盖层 `position:fixed` + `object-fit:cover` 占满视口；素材 960×540（2026-10-09 起为动画 WebP），全屏会有轻度放大；`<img>` 对动画 WebP 的播放与 GIF 同接口（`src` + `data-duration`），控制器无需感知格式。
 - 下一帧用 `new Image()` 预取进 HTTP 缓存，切帧时才把 `src` 赋给 `<img>`，保证从第 1 帧起播，同时不与当前帧争抢带宽。
 - **降级红线（不可回退）**：JS 禁用、`prefers-reduced-motion: reduce`、组件脚本 404、单帧下载超 20s，任一情况都必须让导航栏正常显示；`<head>` 内另设 6s 看门狗兜底。末帧若加载/解码失败，不再提前结束整段动画，而是由"各帧时长之和"的总时长兜底收尾，继续展示上一帧直到导航栏淡入，避免"播一半就消失"（超大 GIF 在浏览器/部署环境下较易加载失败）。
 - 用户可随时点击「跳过动画」或按 `Esc` 立即收尾；该按钮为无边框、无背景的纯文字按钮，直接压在 GIF 画面上。

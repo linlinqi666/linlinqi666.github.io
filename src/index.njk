@@ -24,7 +24,7 @@ js:
      无 JS / prefers-reduced-motion / 脚本加载失败时自动跳过，导航栏照常显示） -->
     <div class="intro-gif" id="intro-gif">
       <div class="intro-gif__stage">
-        <img class="intro-gif__frame" alt="" data-gif-src="static/image/Animation/index/gif/boot%20animation.GIF"
+        <img class="intro-gif__frame" alt="" data-gif-src="static/image/Animation/index/gif/boot-animation.webp"
           data-duration="9200">
       </div>
       <p class="intro-gif__loading">Loading…</p>
@@ -85,6 +85,14 @@ js:
             width="1600" height="1600" decoding="async">
         </div>
 
+        <!-- 居中大图（2026-10-09）：生病酵母 + 病毒群。落点取"屏中心"实测出的空档
+             （左侧计数器正文止于 x≈43%、右侧三年占比表起于 x≈68%），所以虽然它是本屏
+             z 最高层，实际不遮挡任何文字。进入本屏时淡入并停留，只播一次；纯装饰
+             aria-hidden；无 JS / prefers-reduced-motion 下即静态停在中心。 -->
+        <img class="burden-hero"
+          src="static/image/Animation/index/webp/second-section/burden-patient.png"
+          alt="" aria-hidden="true" width="1600" height="1600" loading="lazy" decoding="async">
+
         <p class="burden-eyebrow">Influenza A · every year</p>
 
         <p class="burden-lead">
@@ -92,9 +100,17 @@ js:
           <span class="burden-lead__copy">people worldwide are infected by influenza A every year</span>
         </p>
 
-        <!-- 12 席位：每格代表人口里的 1 人，1 格亮蓝 -->
+        <!-- 12 席位（2026-10-09 改版）：每格代表人口里的 1 人 —— 由「蓝方块」换成「酵母」，
+             11 只没生病（彩色）+ 1 只生病（灰，最右）= 每 12 人里 1 人。
+             进入本屏时 12 只先全部叠在第 1 格位置，再自左向右逐只"发牌"滑出到各自席位；
+             生病的最后落位并做一次脉冲（沿用原「亮点位」语义）。
+             无 JS / prefers-reduced-motion 下就是静态的一排 12 只 = 设计稿落位。
+             z-index 内联：第 1 只最上、后面依次压在下面 —— 叠放时才露得出"最左那只"。 -->
         <ul class="burden-grid" aria-hidden="true">
-          {% for i in range(0, 12) %}<li class="burden-grid__dot{{ ' is-lit' if i == 0 else '' }}"></li>{% endfor %}
+          {% for i in range(0, 12) %}<li class="burden-grid__dot{{ ' is-lit' if i == 11 else '' }}" style="z-index: {{ 12 - i }}"><img
+              class="burden-grid__yeast"
+              src="static/image/Animation/index/webp/second-section/{{ 'yeast-sick' if i == 11 else 'yeast-healthy' }}.png"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li>{% endfor %}
         </ul>
 
         <!-- 实时感染计数器（无 JS 时读的是「每年 660,000,000 人」这一静态事实） -->

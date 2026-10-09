@@ -23,289 +23,289 @@
     public: "#F5A623"
   };
   const provinceCoordinates = {
-    "CN-44": { top: 83.2, left: 13.7 }, // 广东（几何质心）
-    "CN-33": { top: 60.4, left: 40.9 }, // 浙江（几何质心）
-    "CN-43": { top: 66.6, left: 7.1 }, // 湖南（几何质心）
-    "CN-35": { top: 72.3, left: 32.2 }, // 福建（几何质心）
-    "CN-21": { top: 8.2, left: 51.0 }, // 辽宁（几何质心）
-    "CN-32": { top: 44.9, left: 38.1 }, // 江苏（几何质心）
-    "CN-11": { top: 13.4, left: 26.1 }  // 北京（几何质心）
+    "CN-44": { top: 83.2, left: 13.7 }, // Guangdong (geometric centroid)
+    "CN-33": { top: 60.4, left: 40.9 }, // Zhejiang (geometric centroid)
+    "CN-43": { top: 66.6, left: 7.1 }, // Hunan (geometric centroid)
+    "CN-35": { top: 72.3, left: 32.2 }, // Fujian (geometric centroid)
+    "CN-21": { top: 8.2, left: 51.0 }, // Liaoning (geometric centroid)
+    "CN-32": { top: 44.9, left: 38.1 }, // Jiangsu (geometric centroid)
+    "CN-11": { top: 13.4, left: 26.1 }  // Beijing (geometric centroid)
   };
   const chinaExperts = [
     {
       slug: "wang-wenjie",
-      name: "王文杰",
+      name: "Wenjie Wang",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "industry",
       coord: { top: 90.8, left: 27.3 },
       photo: "../static/image/any-icon/HP/expert_img/wangwenjie.png",
-      org: "深圳某二甲医院",
-      role: "医技科主任",
-      desc: "长期从事临床检验与体外诊断相关工作，从一线医疗场景出发，就甲流检测痛点、治疗策略与预防需求提供反馈。",
-      why: "作为团队成立后的第一次正式社会实践，我们带着一套还停留在纸面构想的酵母传感器去找了王文杰老师，最想弄明白两件事：真实医疗场景里甲流到底是怎么被检、怎么被治的，以及我们的装置究竟该瞄准“区分亚型”还是“先检得到空气里的病毒”。",
-      what: "王文杰医生指出现有 IVD 产业总是在病毒于人体爆发、达到检测阈值后才发挥作用，而我们的空气监测传感器有望将防控逻辑从被动诊治转向主动预防，在病毒侵入人体前发出预警。但也指出：空气检测变量多、开放环境病毒浓度低；有效范围与限制条件尚不明确；假阳性与特异性风险突出，自检类试剂假阳性率可能达 50%—70%；临床以病毒阴阳性指导治疗、不区分亚型，分型由疾控发布；项目仍处实验室原型阶段，生产、成本、标准化与部署仍需补充。",
-      how: "团队将专家建议转化为：坚定选择 HA 茎部保守区实现广谱检测、弱化亚型区分；优先设计密闭空间实验、建立变量控制方案；把特异性与假阳性控制作为后续优化重点；明确有效测量范围与环境限制条件。这次访谈让项目从技术构想走向问题导向，也让我们认识到：一个前沿传感器要真正服务公共卫生，既需要创新，更需要经得起临床场景、环境变量与实际应用的检验。"
+      org: "A Grade II Class A hospital in Shenzhen",
+      role: "Director of the Medical Technology Department",
+      desc: "Long engaged in clinical laboratory testing and in vitro diagnostics; provides frontline feedback on influenza A testing pain points, treatment strategies and prevention needs.",
+      why: "As the team's first formal social practice after its founding, we brought a yeast sensor that existed only on paper to Dr. Wenjie Wang, hoping to clarify two things: how influenza A is actually tested and treated in real medical settings, and whether our device should aim at distinguishing subtypes or at first detecting the virus in the air.",
+      what: "Dr. Wenjie Wang pointed out that the existing IVD industry always acts only after the virus has broken out in the human body and reached the detection threshold, whereas our air-monitoring sensor could shift prevention and control from passive diagnosis and treatment to proactive prevention, issuing a warning before the virus enters the body. He also noted: air testing involves many variables and virus concentrations in open environments are low; the effective range and limiting conditions remain unclear; false-positive and specificity risks are prominent, and the false-positive rate of self-test reagents can reach 50%-70%; clinically, viral positive/negative results guide treatment without subtyping, which is announced by the CDC; the project is still at the laboratory prototype stage, and production, cost, standardization and deployment remain to be addressed.",
+      how: "The team translated the expert's advice into action: firmly choosing the conserved HA stalk region for broad-spectrum detection while de-emphasizing subtyping; prioritizing enclosed-space experiments with variable-control plans; making specificity and false-positive control the focus of subsequent optimization; and defining the effective measurement range and environmental limits. This interview moved the project from a technical concept toward problem orientation, and taught us that a cutting-edge sensor serving public health needs not only innovation but also validation against clinical scenarios, environmental variables and real-world application."
     },
     {
       slug: "fu-kai",
-      name: "付凯",
+      name: "Kai Fu",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Guangzhou, Guangdong",
       category: "industry",
       coord: { top: 86.1, left: 21.9 },
       photo: "../static/image/any-icon/HP/expert_img/fukai.jpg",
-      org: "中山大学",
-      role: "临床医学博士",
-      desc: "从临床可行性与基层推广角度，就空气监测与单人呼气检测、装置成本与未来拓展提出系统性建议。",
-      why: "项目已聚焦 HA 茎部保守区、弱化亚型区分，并初探空气监测方向，但酵母传感器响应时间、报告体系、成本、酵母存活周期、与现有技术对比、环境空气与人体呼气孰优、能否拓展乙流或肺癌等问题仍需校准，于是访谈中山大学临床医学博士付凯。",
-      what: "付凯博士认可“用有机生物检测另一有机生物”的构思，认为在合成生物学领域有独到价值，并指出呼吸道感染或肺部感染者呼出的气体会携带随气溶胶排出的病毒颗粒，装置对这类人群检测效果更好。但他也提醒：酵母信号通路从接收信号到表达荧光约需 1—2 小时，时间过长则时效性不高；环境空气病毒会被稀释且甲流在空气中只能维持几个小时，人体内病毒更富集、检测更方便。",
-      how: "团队由此确认：主推单人呼气模式、辅以富集装置；优化信号通路、缩短响应时间；控制硬件成本（主动呼气装置预计可降至 10 元左右）；与多领域专家交叉访谈，暂缓肺癌检测、聚焦甲流等呼吸道病毒。已得到的是技术方向获认可、单人呼气优于环境采样；仍需补充蓝白斑表达时间、完整装置成本、酵母长期存活与更换方案、特异性与灵敏度定量数据等。"
+      org: "Sun Yat-sen University",
+      role: "MD in clinical medicine",
+      desc: "Offers systematic advice on air monitoring versus single-person breath testing, device cost and future expansion from the perspective of clinical feasibility and grassroots adoption.",
+      why: "The project had already focused on the conserved HA stalk region, de-emphasized subtyping and begun exploring air monitoring, but questions such as the yeast sensor's response time, reporter system, cost, yeast survival period, comparison with existing technologies, ambient air versus human breath, and possible extension to influenza B or lung cancer still needed calibration, so we interviewed Dr. Kai Fu, MD in clinical medicine at Sun Yat-sen University.",
+      what: "Dr. Kai Fu endorsed the concept of ”using an organic organism to detect another organic organism” as uniquely valuable in synthetic biology, and noted that the breath of people with respiratory or lung infections carries virus particles expelled with aerosols, so the device would work better for such groups. He also cautioned: the yeast signaling pathway takes about 1-2 hours from receiving a signal to expressing fluorescence, which limits timeliness; airborne virus is diluted and influenza A survives in air for only a few hours, while virus inside the human body is more concentrated and easier to detect.",
+      how: "The team accordingly confirmed: prioritizing the single-person breath mode supported by an enrichment device; optimizing the signaling pathway to shorten response time; controlling hardware cost (an active breath device is expected to come down to around 10 yuan); and conducting cross-disciplinary interviews while deferring lung cancer testing and focusing on respiratory viruses such as influenza A. What has been obtained is recognition of the technical direction and that single-person breath outperforms ambient sampling; still to be supplemented are blue-white screening expression time, total device cost, long-term yeast survival and replacement plans, and quantitative specificity and sensitivity data."
     },
     {
       slug: "deng-manqing",
-      name: "邓蔓青",
+      name: "Manqing Deng",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "industry",
       coord: { top: 91.1, left: 27.8 },
       photo: "../static/image/any-icon/HP/expert_img/dengmanqing.png",
-      org: "深圳某三甲医院药学部",
-      role: "副主任药师",
-      desc: "从儿科临床与用药安全角度，就产品定位、易感人群适配、目标受众、生物安全与临床转化提出反馈。",
-      why: "我们清晰了解了应用技术方向，但不等于项目能落地，于是询问一位儿科临床医生：儿童能否配合呼气检测、家长态度、校园场景是否欢迎、产品算检测试剂还是药品、进入医院或校园需过哪些流程、生物安全与伦理要求、目标受众与定价。",
-      what: "邓老师认可项目的预防定位，认为本质是检测试剂而非药品，属于“预防”环节；若能在低病毒载量阶段识别病毒，对及早隔离有重要价值。生物安全方面，营养缺陷型培养基 + 过滤膜 + 自杀系统的措施，只要不向人体内喷洒、仅作环境/呼气检测，生物危害可控。",
-      how: "团队进一步确认项目作为检测试剂、面向预防的定位，并认识到 B 端（学校、政府公共卫生项目等机构端）应优先于 C 端（家庭个人用户）；低载量灵敏度、活病毒与碎片区分、成本控制与合规审查，是决定项目能否落地的关键。市场与落地应优先 B 端，并将生物元件做成可替换模块以拓展其他病毒、细菌或支原体耐药检测。"
+      org: "Pharmacy Department of a Grade III Class A hospital in Shenzhen",
+      role: "Associate Chief Pharmacist",
+      desc: "Provides feedback on product positioning, adaptation for susceptible populations, target audiences, biosafety and clinical translation from a pediatric clinical and medication-safety perspective.",
+      why: "Understanding the applied technical direction does not mean the project can land in the real world, so we asked a pediatric clinician: whether children can cooperate with breath testing, how parents feel, whether campuses would welcome it, whether the product counts as a diagnostic reagent or a drug, what procedures are needed to enter hospitals or schools, biosafety and ethics requirements, and target audiences and pricing.",
+      what: "Dr. Deng recognized the project's prevention-oriented positioning, holding that it is essentially a diagnostic reagent rather than a drug and belongs to the ”prevention” link; identifying the virus at a low viral load stage would be highly valuable for early isolation. On biosafety, with auxotrophic medium plus filtration membranes plus a kill switch, the biological hazard is controllable as long as nothing is sprayed into the human body and the device is used only for environmental/breath testing.",
+      how: "The team further confirmed the project's positioning as a prevention-oriented diagnostic reagent, and recognized that the B side (institutional customers such as schools and government public health programs) should take priority over the C side (household individual users); low-load sensitivity, distinguishing live virus from fragments, cost control and compliance review are key to whether the project can land. Market entry should prioritize the B side, and biological parts should be built as replaceable modules to extend to other viruses, bacteria or mycoplasma resistance testing."
     },
     {
       slug: "deng-gong",
-      name: "邓荣康",
+      name: "Rongkang Deng",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "industry",
       coord: { top: 90.5, left: 26.8 },
       photo: "",
-      org: "深圳某生物科技公司",
-      role: "经理",
-      desc: "从医疗器械硬件开发与工程化、研发流程与竞赛交付策略角度，就空气病毒富集瓶颈与产品化路径提出反馈。",
-      why: "项目计划开发可采集环境空气中甲流病毒、富集后检测并给出风险预警的设备，面向学校、游轮等密闭空间，但团队在硬件工程化方面经验不足，尤其空气病毒富集、器件选型、研发流程与比赛交付方式都不清楚，因此请邓工从医疗器械开发角度把关。",
-      what: "邓工指出检测化学与光学难度可控，真正的瓶颈是空气里病毒的捕获和液相富集：病毒粒径太小，直接通气进反应液大多以气泡逸出；两种方案：涡旋搅拌、多层膜过滤（上层截细菌、下层纳米膜截病毒再洗脱）。膜过滤病毒易穿膜、压力高易堵，可用脉冲加压或震荡缓解。建议先写《产品技术要求》量化各项指标，再定技术路线、拆硬件软件、做样机迭代；涉及活病毒须提前考虑内部灭活方案与安全验证。",
-      how: "团队意识到主要困难在于空气病毒富集，后续将优先完成产品技术要求文档，基于它绘制外观图、工作原理框图与分模块原理图作为参赛材料，同时制作局部核心功能演示件；器件选型优先复用成熟子模块，专利方面做好检索与规避设计；答辩须吃透整套方案逻辑，避免被判定作假。"
+      org: "A biotechnology company in Shenzhen",
+      role: "Manager",
+      desc: "Provides feedback on the air-virus enrichment bottleneck and the path to productization from the perspective of medical-device hardware development, engineering, R&D processes and competition deliverables.",
+      why: "The project plans to develop a device that captures influenza A virus from ambient air, enriches it for detection and issues risk warnings for enclosed spaces such as schools and cruise ships, but the team lacks hardware engineering experience and was unclear about air-virus enrichment, component selection, R&D processes and competition deliverables, so we asked Engineer Deng to review the plan from a medical-device development perspective.",
+      what: "Engineer Deng noted that the detection chemistry and optics are manageable, and the real bottleneck is capturing virus from air and enriching it into liquid: virus particles are so small that blowing air directly into the reaction liquid mostly lets them escape as bubbles. Two options exist: vortex stirring, and multi-layer membrane filtration (the upper layer intercepts bacteria, the lower nano-membrane intercepts virus for subsequent elution). With membrane filtration, virus easily passes through and high pressure causes clogging, which pulse pressurization or shaking can mitigate. He advised writing a Product Technical Requirements document to quantify each indicator first, then fixing the technical route, splitting hardware and software, and iterating prototypes; work involving live virus requires an internal inactivation plan and safety verification in advance.",
+      how: "The team realized the main difficulty lies in air-virus enrichment. Next it will prioritize completing the product technical requirements document, and based on it draw the appearance design, working-principle block diagram and per-module schematics as competition materials, while building demonstration pieces of core local functions; component selection should reuse mature submodules, patents require thorough searching and design-around work; and for the defense the team must fully master the whole solution logic to avoid being judged as fabrication."
     },
     {
       slug: "qiu-xinyuan",
-      name: "邱鑫源",
+      name: "Xinyuan Qiu",
       provinceId: "CN-43",
-      provinceName: "湖南省",
+      provinceName: "Hunan",
       region: "Changsha, Hunan",
       category: "science",
       coord: { top: 65.5, left: 12.5 },
       photo: "",
-      org: "合成生物学专家 · 多年 iGEM 指导经验",
-      role: "iGEM 中期指导",
-      desc: "在底盘工程、信号通路与 iGEM 评审策略方面给予指导，指出项目当前关键问题并提供宝贵意见。",
-      why: "团队以酿酒酵母（S. cerevisiae）为底盘、基于 PAGERs 系统构建空气传播的甲型流感生物传感器，已完成部分遗传元件构建，但在实验设计、底盘工程与 iGEM 评审策略上屡遇瓶颈，于是邀请邱鑫源老师指导。",
-      what: "专家提出一个长期被忽视的前提：“完整病毒能否穿过细胞壁抵达细胞膜？”酵母细胞壁较厚，目前并无证据表明完整病毒颗粒能穿透细胞壁并与受体结合；若验证失败应果断更换底盘。核心建议是“越简单越好”：改造酵母自身 RTK 系统、仅更换胞外结构域，并用 Western Blot 验证下游磷酸化；灵敏度须用单位体积可检病毒颗粒数定义。模型方面，Hill 函数近似可接受但参数须来自实验或文献；HP 不看数量与形式，更看重实践是否真正影响项目并推动改进。",
-      how: "访谈带来三点转变：必要性优先（流行病学依据、酵母底盘不可替代性、差异化优势都缺乏数据证明）；复盘反思（曾忽略“病毒能否穿过细胞壁”的前提，应反复审视简化路线）；数据是唯一的论证语言。访谈后，团队将项目背景研究与底盘/受体可行性验证提升至最高优先级，并持续迭代优化。"
+      org: "Synthetic biology expert with years of iGEM mentoring experience",
+      role: "Mid-term iGEM advisor",
+      desc: "Advises on chassis engineering, signaling pathways and iGEM judging strategy, identifying the project's current key problems and offering valuable opinions.",
+      why: "The team uses Saccharomyces cerevisiae as the chassis and builds an airborne influenza A biosensor based on the PAGERs system. Having completed part of the genetic part construction, we repeatedly hit bottlenecks in experiment design, chassis engineering and iGEM judging strategy, so we invited Mr. Xinyuan Qiu to advise us.",
+      what: "The expert raised a long-overlooked premise: ”Can an intact virus pass through the cell wall and reach the cell membrane?” The yeast cell wall is fairly thick, and there is currently no evidence that intact virus particles can penetrate it and bind receptors; if validation fails, the chassis should be changed decisively. The core advice was ”the simpler the better”: engineer yeast's own RTK system by swapping only the extracellular domain, and verify downstream phosphorylation by Western Blot; sensitivity must be defined as the number of detectable virus particles per unit volume. On modeling, a Hill-function approximation is acceptable but parameters must come from experiments or literature; HP does not judge by quantity or format but by whether the practice genuinely influences the project and drives improvement.",
+      how: "The interview brought three shifts: necessity first (epidemiological evidence, the irreplaceability of the yeast chassis and differentiated advantages all lack data-based proof); retrospective reflection (we had overlooked the premise of whether virus can pass through the cell wall and should repeatedly re-examine the simplified route); and data as the only language of argument. Afterwards, the team raised project background research and chassis/receptor feasibility validation to top priority and kept iterating."
     },
     {
       slug: "shenzhen-cdc",
-      name: "房师松",
+      name: "Shisong Fang",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "policy",
       coord: { top: 91.0, left: 27.5 },
       photo: "../static/image/any-icon/HP/expert_img/fangshisong.png",
-      org: "深圳市疾控中心病原所",
-      role: "副所长",
-      desc: "从公共卫生监测与疾控视角，就选题严谨性、检测靶基因选择、空气采样瓶颈、注册路径与科研验证方法提供判断标准。",
-      why: "项目技术路线虽已确定，但想从疾控与公共卫生视角检验选题与技术设计的严谨性，访谈房师松专家，审视“先聚焦甲流识别、再逐步拓展”这一思路是否站得住脚，并指出技术设计与落地中容易被忽略的规范问题。",
-      what: "专家提醒仅检测甲流存在漏检风险，临床主流为甲流+乙流双重检测；型别诊断优先选用 M/NP/NS 等保守基因，抗原表达优先选 HA 颈部保守区，并可参考马赛克算法覆盖流行毒株；须与抗原快检、荧光 PCR 等成熟手段做多维度横向对比。空气病毒检测核心难点在样本采集（收集器选型、干湿法收集、滤膜与浓缩工艺）。落地方面，科研设备与临床医疗器械两条路径注册要求不同；科研须依靠真实样本与统计学验证。",
-      how: "团队确认：将甲流+乙流双重检测纳入后续规划；靶基因优先保守区、抗原表达选 HA 颈部、参考马赛克算法；空气采样前端捕获是链路瓶颈，须重点研究；科研设备与临床医疗器械两条路径注册要求不同，须尽早明确目标；真实样本、统计学验证、横向对比、可重复性成为后续实验与汇报的基本准则。"
+      org: "Institute of Pathogen Biology, Shenzhen CDC",
+      role: "Deputy Director",
+      desc: "Provides judgment criteria on topic rigor, target gene selection, air-sampling bottlenecks, registration pathways and scientific validation methods from a public-health surveillance and CDC perspective.",
+      why: "Although the technical route was settled, we wanted to examine the rigor of the topic and technical design from a CDC and public-health perspective, so we interviewed Expert Shisong Fang to test whether the idea of ”focusing on influenza A first, then expanding step by step” holds up, and to surface regulatory issues easily overlooked in technical design and implementation.",
+      what: "The expert cautioned that testing influenza A alone risks missed detections and that the clinical mainstream is dual influenza A+B testing; for typing diagnosis, conserved genes such as M/NP/NS should be preferred, for antigen expression the conserved HA stalk region should be chosen, and mosaic algorithms can be referenced to cover circulating strains; multi-dimensional comparison with mature methods such as antigen rapid tests and fluorescent PCR is required. The core difficulty of air-virus detection lies in sampling (collector selection, dry/wet collection, filtration membranes and concentration processes). For implementation, research equipment and clinical medical devices follow different registration pathways; research must rely on real samples and statistical validation.",
+      how: "The team confirmed: incorporating dual influenza A+B testing into subsequent planning; preferring conserved regions for target genes, choosing the HA stalk for antigen expression, and referencing mosaic algorithms; treating front-end air-sampling capture as the pipeline bottleneck requiring focused research; clarifying early between the research-equipment and clinical-device registration pathways; and making real samples, statistical validation, horizontal comparison and reproducibility the ground rules for subsequent experiments and reporting."
     },
     {
       slug: "luo-zhouqing",
-      name: "罗周卿",
+      name: "Zhouqing Luo",
       provinceId: "CN-35",
-      provinceName: "福建省",
+      provinceName: "Fujian",
       region: "Xiamen, Fujian",
       category: "science",
       coord: { top: 79.4, left: 40.4 },
       photo: "../static/image/any-icon/HP/expert_img/luozhouqing.jpg",
-      org: "厦门大学",
-      role: "生命科学学院教授",
-      desc: "在酵母工程改造、膜蛋白检测与受体路线方面经验丰富，就实验操作、受体改造、报告系统、细胞壁通透性与信号放大提供咨询。",
-      why: "项目在 WB 膜蛋白表征、蛋白表达膜定位、报告系统稳定性、细胞壁屏障等方面遇到较大阻力，尤其膜蛋白检测非特异性条带多、人源 GPCR 在酵母中能否正确折叠与定位不确定，希望借罗老师在酵母工程改造方面的经验识别根源。",
-      what: "罗老师建议膜蛋白 50—70℃ 短时间温和加热、优先机械破碎法提取、搭配专用膜蛋白溶解试剂、引入 HA 标签；受体方面更推荐改造酵母内源 Ste2（α-因子受体），信号肽替换为酵母表面展示信号肽。细胞壁方面不推荐原生质体方案，可选用细胞壁合成缺陷酵母突变株；HA 蛋白仅三四十 kDa，穿透并非主要障碍，前期可用抗原表位短肽跑通系统。报告系统建议基因组整合以消除拷贝数波动。",
-      how: "团队调整：转向酵母内源 Ste2 受体改造，前期用抗原表位短肽跑通系统；报告系统规划基因组整合；调研细胞间通讯正反馈信号放大；膜蛋白检测改用温和加热与机械破碎并评估 HA 标签。HP 组将整理资料发给罗老师审阅，并提炼本技术相比现有检测手段的独特优势。"
+      org: "Xiamen University",
+      role: "Professor, School of Life Sciences",
+      desc: "Experienced in yeast engineering, membrane-protein detection and receptor routes; consults on experimental operations, receptor engineering, reporter systems, cell-wall permeability and signal amplification.",
+      why: "The project met significant obstacles in WB membrane-protein characterization, membrane localization of expressed protein, reporter-system stability and the cell-wall barrier — especially many nonspecific bands in membrane-protein detection and uncertainty about whether the humanized GPCR can fold and localize correctly in yeast — so we hoped Professor Luo's yeast-engineering experience would help identify the root causes.",
+      what: "Professor Luo suggested mild short-time heating of membrane proteins at 50-70 degrees C, preferring mechanical disruption for extraction with dedicated membrane-protein solubilization reagents and introducing an HA tag; for the receptor he recommended engineering yeast's endogenous Ste2 (alpha-factor receptor) with the signal peptide replaced by a yeast surface-display signal peptide. For the cell wall he did not recommend the protoplast route; a yeast mutant defective in cell-wall synthesis could be used. HA protein is only 30-40 kDa, so penetration is not the main obstacle, and antigen-epitope short peptides can be used early on to get the system running. For the reporter system he advised genomic integration to eliminate copy-number fluctuation.",
+      how: "The team adjusted course: switching to engineering yeast's endogenous Ste2 receptor and using antigen-epitope short peptides early to get the system running; planning genomic integration for the reporter system; investigating positive-feedback signal amplification via cell-cell communication; and adopting mild heating and mechanical disruption for membrane-protein detection while evaluating the HA tag. The HP group will compile materials for Professor Luo's review and distill this technology's unique advantages over existing detection methods."
     },
     {
       slug: "luo-yiwu",
-      name: "罗义武",
+      name: "Yiwu Luo",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "policy",
       coord: { top: 90.7, left: 27.0 },
       photo: "",
-      org: "深圳市卫生健康委员会审批处",
-      role: "四级调研员",
-      desc: "从卫生健康行业管理与政策视角，就空气病毒监测现状、产品合规归类、生物安全法规要求与竞赛答辩策略提供指导。",
-      why: "项目在技术路线、检测场景与产品落地策略上已有初步方向，但在空气病毒监测的行业标准、产品合规归类、生物安全法规要求以及竞赛答辩策略上，仍缺乏来自卫生健康行业管理视角的指导，于是访谈罗义武专家。",
-      what: "罗老师指出卫生系统日常没有空气病毒常规检测业务，国内也没有官方标准与检测方法，这类设备不能作为医学诊断依据，只能做环境普筛与风险预警、不属于医疗器械；高价值场景是发热门诊、电梯、高铁、大巴、密闭教室等，其中发热门诊价值最高，可联动消杀设备形成管理闭环。实验验证建议实验室模拟箱体与现场测试结合，并建立风险浓度参照阈值。",
-      how: "团队划清边界：只做密闭环境风险预警、不做人体诊断设备；锁定发热门诊、电梯、高铁、密闭教室等核心场景；重点研究空气消毒机配套传感配件路线；设计实验室模拟与现场测试两套验证方案，把生物安全与合规设计写进项目材料与答辩 PPT。"
+      org: "Approval Division, Shenzhen Municipal Health Commission",
+      role: "Level-IV Researcher",
+      desc: "Guides on the current state of air-virus monitoring, product compliance classification, biosafety regulations and competition defense strategy from a health-industry administration and policy perspective.",
+      why: "The project had preliminary directions for its technical route, testing scenarios and productization strategy, but lacked guidance from the health-administration perspective on industry standards for air-virus monitoring, product compliance classification, biosafety regulations and defense strategy, so we interviewed Expert Yiwu Luo.",
+      what: "Mr. Luo pointed out that the health system has no routine air-virus testing service and China has no official standards or testing methods; such a device cannot serve as a basis for medical diagnosis and can only do environmental screening and risk warning, so it does not count as a medical device. High-value scenarios include fever clinics, elevators, high-speed rail, coaches and enclosed classrooms, with fever clinics the most valuable, where linkage with disinfection equipment can form a closed management loop. For experimental validation he recommended combining laboratory simulation chambers with field tests and establishing reference thresholds for risk concentrations.",
+      how: "The team drew clear boundaries: only enclosed-environment risk warning, no human diagnostic device; locking onto core scenarios such as fever clinics, elevators, high-speed rail and enclosed classrooms; focusing on the air-disinfector companion sensor accessory route; and designing both laboratory-simulation and field-test validation plans, writing biosafety and compliance design into project materials and the defense slides."
     },
     {
       slug: "wu-hui",
-      name: "吴辉",
+      name: "Hui Wu",
       provinceId: "CN-21",
-      provinceName: "辽宁省",
+      provinceName: "Liaoning",
       region: "Dalian, Liaoning",
       category: "science",
       coord: { top: 18.5, left: 54.7 },
       photo: "../static/image/any-icon/HP/expert_img/wuhui.jpg",
-      org: "大连理工大学",
-      role: "教授",
-      desc: "在信号识别、传导、响应各模块与 iGEM 策略方面给予指导，就实验优化、通路打通与元件提交提出具体建议。",
-      why: "项目推进中 WB 检测膜蛋白条带不理想、人源化受体在酵母中表达不佳、MEL1 报告系统泄漏严重、CRISPR 敲除效率不稳定，希望借吴老师指导判断问题根源，明确当前阶段最该优先做什么。",
-      what: "吴老师肯定项目想法新颖，但指出从信号识别到传导再到响应每个节点都有问题、不确定性较大，建议先重复文献中已成功的条件，不要所有元件都自己创新；当务之急是先打通一条完整通路、实现可视化响应，再考虑替换元件。膜蛋白表达建议参考文献条件；WB 建议液氮研磨破壁；报告系统可加抑制子或换更严谨启动子；CRISPR 建议多设计几个靶点同时做。",
-      how: "团队重新调整优先级：不再追求各模块同时完美，而是先打通一条完整通路、实现可视化响应；实验上改用液氮研磨破壁、优化膜蛋白提取、尝试报告系统加抑制子或换启动子、CRISPR 多靶点并行；整理有初步趋势的元件提交 iGEM，并设计标准曲线实验评估冻干粉检测形式。"
+      org: "Dalian University of Technology",
+      role: "Professor",
+      desc: "Advises on the signal-recognition, transduction and response modules and iGEM strategy, with concrete suggestions on experiment optimization, pathway completion and part submission.",
+      why: "As the project advanced, WB membrane-protein bands were unsatisfactory, the humanized receptor expressed poorly in yeast, the MEL1 reporter system leaked badly and CRISPR knockout efficiency was unstable, so we hoped Professor Wu's guidance would help diagnose the root causes and clarify what to prioritize at this stage.",
+      what: "Professor Wu affirmed the novelty of the idea but noted that every node from signal recognition through transduction to response has problems and high uncertainty, advising us to first replicate conditions already proven in the literature rather than innovating on every part; the urgent task is to complete one full pathway with a visualizable response before considering part replacement. For membrane-protein expression he suggested following literature conditions; for WB, liquid-nitrogen grinding to break the cell wall; the reporter system could add an inhibitor or use a tighter promoter; and for CRISPR he suggested designing several targets in parallel.",
+      how: "The team re-prioritized: no longer pursuing perfection in all modules simultaneously, but first completing one full pathway with a visualizable response; experimentally switching to liquid-nitrogen grinding, optimizing membrane-protein extraction, trying reporter-system inhibitors or promoter swaps, and running CRISPR with multiple targets in parallel; organizing parts with preliminary trends for iGEM submission and designing standard-curve experiments to evaluate the freeze-dried powder detection format."
     },
     {
       slug: "jia-honghua",
-      name: "贾红华",
+      name: "Honghua Jia",
       provinceId: "CN-32",
-      provinceName: "江苏省",
+      provinceName: "Jiangsu",
       region: "Nanjing, Jiangsu",
       category: "science",
       coord: { top: 48.9, left: 29.3 },
       photo: "../static/image/any-icon/HP/expert_img/jiahonghua.png",
-      org: "南京工业大学",
-      role: "生命与制药工程学院研究员",
-      desc: "从合成生物学工程化视角审视项目设计、效果指标与验证方法，就文献对比、膜蛋白验证、报告系统、底盘选择与 iGEM 策略提供反馈。",
-      why: "项目构建已完成，但功能表达与验证仍未完全走通，希望请贾老师从合成生物学工程化角度判断当前设计的核心问题，以及接下来最该优先验证什么。",
-      what: "贾老师研究方向不是酵母，但认为项目思路有意思、工作量不小，部分环节尚未完全走通。他特别提到 2024 年 9 月 ACS Synthetic Biology 上魏娜团队用酵母生物传感器检测 H1N1 的工作，建议团队比较表面展示与膜结合方案的差异、明确自身新意。iGEM 既看重创新也看重最终效果；生物传感器最终要落实灵敏度与检测线/线性度两个关键指标，效果为王。",
-      how: "团队从“埋头做复杂设计”转向“先验证、再优化、看效果”：查阅 ACS Synthetic Biology 相关文献比较方案；用荧光蛋白融合验证膜蛋白是否上膜并用共聚焦定位；评估溶壁酶处理细胞壁的可行性；继续尝试报告系统泄漏解决方案；梳理灵敏度、检测线、线性度等效果指标；联系刘光娜、刘万龙老师请教 iGEM 与酵母经验。"
+      org: "Nanjing Tech University",
+      role: "Researcher, College of Life Sciences and Pharmaceutical Engineering",
+      desc: "Reviews the project design, performance metrics and validation methods from a synthetic-biology engineering perspective, with feedback on literature comparison, membrane-protein verification, reporter systems, chassis choice and iGEM strategy.",
+      why: "The project's construction was complete, but functional expression and validation had not fully worked, so we hoped Professor Jia would judge, from a synthetic-biology engineering angle, the core problems of the current design and what should be validated first.",
+      what: "Professor Jia's research is not on yeast, but he found the project idea interesting and the workload substantial, with some steps not yet fully working. He specifically mentioned the September 2024 ACS Synthetic Biology work by Wei Na's team using a yeast biosensor to detect H1N1, and suggested the team compare surface-display versus membrane-bound schemes and clarify its own novelty. iGEM values both innovation and final performance; a biosensor must ultimately deliver two key metrics — sensitivity and detection limit/linearity. Performance is king.",
+      how: "The team shifted from ”burying ourselves in complex design” to ”validate first, then optimize, then look at performance”: reviewing ACS Synthetic Biology literature to compare schemes; verifying membrane localization with fluorescent-protein fusion and confocal imaging; assessing the feasibility of lyticase treatment of the cell wall; continuing to try solutions for reporter-system leakage; sorting out performance metrics such as sensitivity, detection limit and linearity; and reaching out to Liu Guangna and Liu Wanlong for iGEM and yeast experience."
     },
     {
       slug: "zhang-haili",
-      name: "张海丽",
+      name: "Haili Zhang",
       provinceId: "CN-11",
-      provinceName: "北京市",
+      provinceName: "Beijing",
       region: "Beijing",
       category: "science",
       coord: { top: 13.3, left: 26.3 },
       photo: "",
-      org: "中国科学院数学与系统科学研究院",
-      role: "博士",
-      desc: "就可选建模模块、数据统计方法、建模与实验双向验证及现实约束提供咨询，帮助团队明确建模优先级。",
-      why: "项目已有人源化改造和信号报告的部分实验数据（α-factor 梯度下的 OD 时序与荧光时序），但如何提炼出可支撑 iGEM 建模板块的内容并不清楚，多个建模方向并行、缺乏优先级，于是访谈张海丽老师。",
-      what: "张老师认为 ODE 模型依赖完整实验数据、现阶段数据不足；空气扩散模型与本项目耦合弱、优先级靠后；启动子筛选模型可参考但非最紧迫。最推荐的是基于现有 OD-荧光时序数据做统计分析与时间序列预测：用假设检验计算 P 值提供定量证据；利用曲线一阶、二阶导数仅依靠前期数据预测后期走向，缩短检测时长。建模须服务湿实验、避免过度复杂。",
-      how: "团队明确建模优先级：最高是基于现有 OD-荧光时序数据做导数-时间序列预测；次优先是对人源化改造和对照实验补充统计假设检验给出 P 值；ODE 作为备选，优先复用文献参数；空气富集与病毒空间扩散模型若时间紧张可暂缓。后续继续收集数据，产出时序预测模型初步结果后预约二次访谈复核。"
+      org: "Academy of Mathematics and Systems Science, Chinese Academy of Sciences",
+      role: "PhD",
+      desc: "Consults on optional modeling modules, statistical methods, two-way modeling-experiment validation and real-world constraints, helping the team clarify modeling priorities.",
+      why: "The project already had partial experimental data on humanization and signal reporting (OD and fluorescence time series under alpha-factor gradients), but it was unclear how to distill content supporting the iGEM modeling section; several modeling directions ran in parallel without priorities, so we interviewed Dr. Haili Zhang.",
+      what: "Dr. Zhang held that ODE models depend on complete experimental data, which is insufficient at this stage; the air-diffusion model couples weakly with this project and ranks low in priority; the promoter-screening model is referenceable but not the most urgent. What she recommended most was statistical analysis and time-series prediction based on the existing OD-fluorescence time-series data: using hypothesis testing to compute P values as quantitative evidence, and using first- and second-order derivatives of the curves to predict later trends from early data alone, shortening detection time. Modeling must serve wet-lab experiments and avoid excessive complexity.",
+      how: "The team set modeling priorities: highest is derivative-based time-series prediction on the existing OD-fluorescence data; next is supplementing humanization and control experiments with statistical hypothesis tests giving P values; ODE as a fallback, reusing literature parameters first; air enrichment and viral spatial-diffusion models can wait if time is tight. Data collection continues, and a second interview will be scheduled to review the preliminary time-series prediction results."
     },
     {
       slug: "sz-vocational",
       onMap: false,
-      name: "深圳市第一职业技术学校",
+      name: "Shenzhen First Vocational Technical School",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "public",
       coord: { top: 91.3, left: 28.0 },
       photo: "",
-      org: "深圳市第一职业技术学校（坪山校区）",
-      role: "科普宣讲合作学校",
-      desc: "面向制药相关专业学生开展合成生物学科普宣讲，团队分享项目灵感、背景、实验构思、硬件设计与 Wiki/IP 视觉设计。",
-      why: "为把合成生物学带出实验室、让更多青年了解前沿领域，团队面向深圳市第一职业技术学校学生开展宣讲，这些同学日常学习偏向传统制药工艺，很少接触合成生物学前沿内容。",
-      what: "团队优先围绕合成生物学开展科普，结合制药行业发展现状讲解其在药物合成、生物检测等方向的应用前景；介绍 iGEM 竞赛以及青少年科创实践的价值，并以空气甲流病毒生物传感器为实例讲解项目灵感与实验构思。互动环节解答同学疑问，收集到提升设备便携性、缩短检测耗时等来自终端用户的真实建议。",
-      how: "对参与学生而言，这次分享让他们近距离接触科研内容、提前看到专业对应的科研与行业发展方向；对团队而言，为了面向非专业群体讲清项目，重新梳理并简化了复杂技术逻辑。不足的是时间有限，未能开展深度动手实践工作坊，未来希望搭建面向青年群体的常态化科普交流渠道。"
+      org: "Shenzhen First Vocational Technical School (Pingshan Campus)",
+      role: "Partner school for science outreach",
+      desc: "Gave a synthetic-biology outreach talk to pharmaceutical students, sharing the project's inspiration, background, experimental concept, hardware design and Wiki/IP visual design.",
+      why: "To bring synthetic biology out of the laboratory and help more young people learn about the frontier, the team gave a talk to students of Shenzhen First Vocational Technical School, whose daily coursework leans toward traditional pharmaceutical processes and rarely touches synthetic biology.",
+      what: "The team focused its outreach on synthetic biology, explaining its application prospects in drug synthesis and biological detection against the current state of the pharmaceutical industry; introduced the iGEM competition and the value of youth science-practice activities, and used the airborne influenza A biosensor as a case to explain the project's inspiration and experimental concept. In the Q&A session we answered questions and collected real end-user suggestions such as improving device portability and shortening detection time.",
+      how: "For the students, the session offered close contact with research content and an early view of the research and industry directions their major maps to; for the team, explaining the project to a non-specialist audience forced us to reorganize and simplify complex technical logic. The limitation was time — no in-depth hands-on workshop was possible — and in future we hope to build a regular outreach channel for young audiences."
     },
     {
       slug: "freshman",
       onMap: false,
-      name: "2026 新生宣传",
+      name: "2026 Freshman Outreach",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "public",
       coord: { top: 90.3, left: 26.6 },
       photo: "",
-      org: "本校 2026 级药学和制药工程技术本科新生",
-      role: "新生科普分享会",
-      desc: "由 iGEM 学生团队与指导老师共同完成，面向 2026 级本科新生科普合成生物学与甲流空气检测项目。",
-      why: "在推进项目研究的同时，团队也希望把合成生物学带出实验室，于是面向本校 2026 级药学和制药工程技术本科新生开展宣讲，介绍甲流空气检测项目设计思路，并科普合成生物学基本概念、研究方式与应用前景。",
-      what: "分享会从合成生物学本身切入，帮助同学建立“设计—构建—测试—学习”的工程化思维；介绍科研项目、学科竞赛、学术会议、社会实践等内容，并重点介绍空气甲流病毒生物传感器项目及其面向密闭空间感染风险预警的定位，分享对接疾控、卫健委、硬件开发等领域专家的访谈经历。活动中发放团队自主编写的甲流防护科普手册。",
-      how: "大部分参与者建立起对合成生物学、iGEM 竞赛和甲流检测传感器项目的基础认知，也初步了解基因工程相关内容，破除了“科研距离青年学习者十分遥远”的固有印象，同时完成甲流防护科普。不足的是受宣讲时长限制无法细致讲解实验原理与硬件细节，后续计划开放咨询渠道、开展小型主题沙龙并收集手册反馈。"
+      org: "2026 freshman undergraduates in pharmacy and pharmaceutical engineering at our school",
+      role: "Freshman science outreach session",
+      desc: "Delivered jointly by the iGEM student team and advisors, introducing synthetic biology and the airborne influenza A detection project to 2026 freshmen.",
+      why: "While advancing the research, the team also wanted to bring synthetic biology out of the laboratory, so we gave a session to 2026 freshmen in pharmacy and pharmaceutical engineering, introducing the design thinking of the airborne influenza A detection project and popularizing basic concepts, research approaches and application prospects of synthetic biology.",
+      what: "Starting from synthetic biology itself, the session helped students build the ”design-build-test-learn” engineering mindset; introduced research projects, academic competitions, conferences and social practice, highlighted the airborne influenza A biosensor project and its positioning for infection-risk warning in enclosed spaces, and shared our interview experiences with experts from the CDC, health commission and hardware development. The team's self-written influenza A protection handbook was distributed.",
+      how: "Most participants built a basic understanding of synthetic biology, the iGEM competition and the influenza A detection sensor project, gained initial exposure to genetic engineering, broke the fixed impression that research is far removed from young learners, and received influenza A protection education. The limitation was session length, which did not allow detailed explanation of experimental principles and hardware details; next we plan to open consultation channels, hold small themed salons and collect handbook feedback."
     },
     {
       slug: "liu-xiaolong",
-      name: "刘小龙",
+      name: "Xiaolong Liu",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "science",
       coord: { top: 90.8, left: 27.3 },
       photo: "",
-      org: "纳米抗体分子对接与建模方向",
-      role: "指导教师",
-      desc: "在纳米抗体结构建模、分子对接方法学与计算验证流程方面给予指导，就干实验方法选择、建模质量与结果呈现提出系统性批评与改进方向。",
-      why: "干实验已跑完一轮流程：16 个纳米抗体结构预测、取得 H1N1/H2N2/H3N2 三个亚型 HA 抗原、在线对接、自建公式处理结合能，但团队对这些数字能否支撑纳米抗体选择没有把握，于是请刘小龙老师把关方法学与验证流程。",
-      what: "刘老师指出当前在线对接网站未必适用于纳米抗体—蛋白体系，必须核查原始文献与适用范围；模板同源性低于 25% 时同源建模不可靠，建议改用 AlphaFold 3.0 并做拉氏图评估；PDB 的 HA 结构需去水、去金属/盐离子、加氢与电荷平衡。仅展示总结合能不够，应做 MM/GBSA 自由能拆解答疑关键作用是否集中 CDR 区；对接结果仅刚性/半柔性，需补至少 100 ns 分子动力学模拟，最终通过 SPR/MST 湿实验验证亲和力，形成“建模—对接—分析—MD—湿实验”闭环。",
-      how: "团队意识到分子对接不是“跑出结果”就算完成：后续将用 AlphaFold 3.0 重新建模 16 个纳米抗体并补拉氏图评估；对 HA 蛋白做去离子/加氢/电荷平衡预处理；核查对接网站原始文献；进行 MM/GBSA 拆解并制作残基贡献热图；补充 MD 模拟；最终通过 SPR/MST 湿实验形成闭环。刘小龙老师也将持续指导数学建模工作。"
+      org: "Nanobody molecular docking and modeling",
+      role: "Advisor",
+      desc: "Advises on nanobody structural modeling, molecular-docking methodology and computational validation workflows, with systematic critique and improvement directions on dry-lab method choice, modeling quality and result presentation.",
+      why: "The dry lab had completed one round: structure prediction of 16 nanobodies, obtaining HA antigens of the H1N1/H2N2/H3N2 subtypes, online docking, and self-built formulas to process binding energies — but the team was unsure whether these numbers could support nanobody selection, so we asked Mr. Xiaolong Liu to review the methodology and validation workflow.",
+      what: "Mr. Liu pointed out that current online docking websites are not necessarily applicable to nanobody-protein systems and the original literature and scope of applicability must be checked; homology modeling is unreliable when template identity is below 25%, and he suggested switching to AlphaFold 3.0 with Ramachandran plot evaluation; HA structures from the PDB need water removal, metal/salt-ion removal, hydrogen addition and charge equilibration. Showing only total binding energy is insufficient — MM/GBSA free-energy decomposition should be done to answer whether key interactions concentrate in the CDR region; docking results are rigid/semi-flexible only and at least 100 ns of molecular dynamics simulation is needed, with affinity finally validated by SPR/MST wet-lab experiments, closing the loop of ”modeling-docking-analysis-MD-wet lab”.",
+      how: "The team realized molecular docking is not ”done” once results are produced: next we will remodel the 16 nanobodies with AlphaFold 3.0 and add Ramachandran plot evaluation; preprocess HA proteins with desalting/hydrogenation/charge equilibration; verify the docking websites' original literature; perform MM/GBSA decomposition with residue-contribution heatmaps; add MD simulations; and finally close the loop with SPR/MST wet-lab validation. Mr. Xiaolong Liu will continue advising the mathematical modeling work."
     },
     {
       slug: "huang-linsen",
-      name: "黄林森",
+      name: "Linsen Huang",
       provinceId: "CN-44",
-      provinceName: "广东省",
+      provinceName: "Guangdong",
       region: "Shenzhen, Guangdong",
       category: "science",
       coord: { top: 90.2, left: 26.3 },
       photo: "",
-      org: "合成生物学与计算指导",
-      role: "项目指导教师 / 顾问",
-      desc: "作为项目指导与顾问团队成员之一，参与项目方向与跨学科协作的讨论与把关。",
-      why: "在项目推进过程中，黄林森老师作为指导与顾问团队成员，参与项目方向与关键决策的讨论，为团队提供来自合成生物学与跨学科视角的反馈。",
-      what: "黄林森老师结合其在合成生物学与跨学科指导方面的经验，就项目整体方向与阶段性重点与团队交流，帮助团队在专家访谈、实验设计与竞赛准备之间保持连贯。",
-      how: "相关反馈已纳入团队的项目推进与内部协作安排，作为内部项目支持的一部分持续发挥作用。"
+      org: "Synthetic biology and computation advisory",
+      role: "Project advisor / consultant",
+      desc: "As a member of the project's advising and consulting team, participates in discussions and reviews of project direction and interdisciplinary collaboration.",
+      why: "During the project, Mr. Linsen Huang, as a member of the advising and consulting team, participated in discussions of project direction and key decisions, providing feedback from synthetic-biology and interdisciplinary perspectives.",
+      what: "Drawing on his experience in synthetic biology and interdisciplinary mentoring, Mr. Linsen Huang discussed the project's overall direction and stage priorities with the team, helping keep expert interviews, experiment design and competition preparation coherent.",
+      how: "The relevant feedback has been incorporated into the team's project advancement and internal collaboration arrangements, continuing to serve as part of internal project support."
     },
     {
       slug: "yeast-online",
       onMap: false,
-      name: "酵母线上交流会",
+      name: "Online Yeast Workshop",
       provinceId: "CN-44",
-      provinceName: "广东省",
-      region: "Online · 多校联合",
+      provinceName: "Guangdong",
+      region: "Online · multi-university",
       category: "science",
       coord: { top: 91.4, left: 28.3 },
       photo: "",
-      org: "多所高校共同组织",
-      role: "酵母专题线上交流会",
-      desc: "与多所高校共同组织的酵母专题交流会，团队在同行反馈中分享项目、讨论困难、借鉴经验。",
-      why: "在项目推进过程中，团队不仅通过专家访谈获得指导，也积极与其他 iGEM 队伍展开交流。酵母专题线上交流会是其中跨校同行交流的重要一环。",
-      what: "在酵母专题线上交流会上，团队与多所高校的队伍围绕酵母底盘、信号通路、报告系统与硬件富集等共同关心的技术难题展开讨论，分享各自在酵母工程化与生物传感器构建中的经验与踩坑。",
-      how: "这些交流让团队看到其他队伍的亮点，也帮助团队正视自身不足；在讨论各自项目困难的同时，从其他队伍获得不少启发，并据此校准后续研究方向。"
+      org: "Co-organized by multiple universities",
+      role: "Online yeast-themed exchange meeting",
+      desc: "A yeast-themed online exchange co-organized with multiple universities, where the team shared the project, discussed difficulties and learned from peers.",
+      why: "While advancing the project, the team not only gained guidance from expert interviews but also actively exchanged with other iGEM teams. The online yeast workshop was a key part of this cross-university peer exchange.",
+      what: "At the online yeast workshop, the team discussed shared technical challenges — yeast chassis, signaling pathways, reporter systems and hardware enrichment — with teams from multiple universities, sharing experiences and pitfalls in yeast engineering and biosensor construction.",
+      how: "These exchanges let the team see other teams' strengths and face its own shortcomings; while discussing each project's difficulties, the team gained considerable inspiration and calibrated subsequent research directions accordingly."
     },
     {
       slug: "luo-juan",
-      name: "罗娟",
+      name: "Juan Luo",
       provinceId: "CN-33",
-      provinceName: "浙江省",
+      provinceName: "Zhejiang",
       region: "Hangzhou, Zhejiang",
       category: "industry",
       coord: { top: 55.2, left: 40.4 },
       photo: "",
-      org: "杭州三甲医院",
-      role: "重症监护室一线护理人员",
-      desc: "重症监护室（ICU）一线护理人员，日常执行呼吸机管理、气管插管/切开患者吸痰等高频操作，对医院空气管理、防护流程与院感防控具有一线视角。（本页原有节，docx 未单列，按用户要求保留。）",
-      why: "为验证甲流病毒环境检测装置在临床场景中的实际需求与落地可行性，团队邀请杭州三甲医院重症监护室一线护理人员进行深度访谈，从院感防控一线视角确认装置的应用价值与产品化挑战。",
-      what: "医院现有空气消毒无法全面消杀气溶胶病毒；吸痰等高危操作需分级防护。防控最头疼“有病而不自知”的探视家属。若入口/病房实时显示空气病毒指标并按低/中/高危分级，可减轻家属顾虑；将装置微缩集成至呼吸机呼气阀可实现个体化监测。医院引进设备质量首位且操作不宜繁琐；医院存在鲍曼不动杆菌、肺炎克雷伯菌等耐药菌，酵母传感器换纳米抗体可拓展多病原体；但公立医院设备须公开招标、纳入诊断须权威认证。",
-      how: "访谈后，团队将呼吸机呼气阀集成与结果分级显示纳入应用设计重点，并把权威认证、招标流程、监管沟通及模块化多病原体拓展列为产品化落地后续方向。需说明：装置尚未进入医院体系，相关准入与认证均为待办，非已达成结果。"
+      org: "A Grade III Class A hospital in Hangzhou",
+      role: "Frontline ICU nurse",
+      desc: "A frontline ICU nurse who daily performs high-frequency procedures such as ventilator management and sputum suction for intubated/tracheostomized patients, with a frontline perspective on hospital air management, protection workflows and infection control. (An original section of this page, not listed separately in the docx; kept at the user's request.)",
+      why: "To verify the real clinical demand and implementation feasibility of the airborne influenza A detection device, the team conducted an in-depth interview with a frontline ICU nurse at a Grade III Class A hospital in Hangzhou, confirming the device's application value and productization challenges from the front line of hospital infection control.",
+      what: "The hospital's current air disinfection cannot fully eliminate aerosolized virus, and high-risk procedures such as sputum suction require tiered protection. The hardest part of control is visitors ”who are sick without knowing it”. If entrances/wards displayed real-time air-virus indicators graded low/medium/high risk, families' concerns could be eased; miniaturizing the device into a ventilator exhalation valve would enable individualized monitoring. Quality comes first for hospital equipment purchases and operation should not be cumbersome; drug-resistant bacteria such as Acinetobacter baumannii and Klebsiella pneumoniae exist in hospitals, and swapping the yeast sensor's nanobody could extend coverage to multiple pathogens; but public-hospital equipment requires open tendering, and inclusion in diagnosis requires authoritative certification.",
+      how: "After the interview, the team made ventilator exhalation-valve integration and graded result display priorities of the application design, and listed authoritative certification, tendering procedures, regulatory communication and modular multi-pathogen expansion as subsequent productization directions. Note: the device has not entered the hospital system; the relevant access and certification items are all to-do, not achieved results."
     }
   ];
 
@@ -313,7 +313,7 @@
     return name.replace(/^(Dr\.|Prof\.)\s*/, "").charAt(0).toUpperCase();
   }
 
-  // 默认人像剪影：替代不方便出镜的专家头像（针头与浮层小头像共用）
+  // Default portrait silhouette: fallback for experts without photos (shared by pin head and popover avatar)
   const SILHOUETTE_SVG = '<svg class="hz-cluster__silhouette" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="4.1"></circle><path d="M3.6 20.6c0-4.5 3.9-6.7 8.4-6.7s8.4 2.2 8.4 6.7z"></path></svg>';
 
   function faceHTML(expert) {
@@ -323,13 +323,13 @@
     return SILHOUETTE_SVG;
   }
 
-  // 专家详情卡与地图是同一篇文章中的相邻区块，不能限制在 #hzMap 内查询。
+  // Expert detail cards and the map are adjacent blocks of the same article; queries must not be scoped to #hzMap.
   const articleSlide = root.closest(".detail-slide");
   const detailCard = articleSlide && articleSlide.querySelector(".hz-details-card.hz-details");
   const expertStack = detailCard && detailCard.querySelector(".hz-expert-stack");
   const expertIndex = articleSlide && articleSlide.querySelector("#hzExpertIndex");
   if (!detailCard || !expertStack) {
-    console.warn("[HP map] 未找到专家详情容器，地图图钉交互未初始化。");
+    console.warn("[HP map] Expert detail container not found; pin interactions skipped.");
     return;
   }
   const detailSlides = Array.from(expertStack.querySelectorAll(".hz-detail-slide"));
@@ -337,17 +337,17 @@
   detailSlides.forEach(slide => {
     const slug = slide.dataset.hzExpert;
     if (!slug || detailSlidesByExpert.has(slug)) {
-      console.warn("[HP map] 忽略缺失或重复 data-hz-expert 的专家详情。", slide);
+      console.warn("[HP map] Ignored expert detail with missing/duplicate data-hz-expert.", slide);
       return;
     }
     detailSlidesByExpert.set(slug, slide);
   });
 
-  /** 展开某位专家的收纳条并滚动定位（锚点 expert-<slug>）。 */
+  /** Expand an expert's fold and scroll to it (anchor expert-<slug>). */
   function navigateToExpert(slug) {
     const anchor = document.getElementById("expert-" + slug);
     if (!anchor) {
-      console.warn("[HP map] 未找到专家“" + slug + "”的锚点，无法定位。");
+      console.warn("[HP map] Anchor for expert '" + slug + "' not found; cannot scroll.");
       return;
     }
     const fold = anchor.closest ? anchor.closest("details.section-fold") : null;
@@ -363,14 +363,17 @@
   }
 
   function scrollToExpert(anchor) {
-    if (typeof anchor.scrollIntoView === "function") {
+    const sp = window.SidebarProgress;
+    if (sp && typeof sp.scrollToElement === "function") {
+      // Use the site-wide reanchored scroll so the landing point clears the sticky nav (incl. progress section)
+      sp.scrollToElement(anchor);
+    } else if (typeof anchor.scrollIntoView === "function") {
       anchor.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    const sp = window.SidebarProgress;
     if (sp && typeof sp.recalculate === "function") sp.recalculate();
   }
 
-  /** 左侧专家索引：按类别分色分组，只显示头像 + 姓名，点击导航到对应专家。 */
+  /** Left expert index: grouped and colored by category, avatar + name only, click to navigate. */
   function renderExpertIndex() {
     if (!expertIndex) return;
     expertIndex.innerHTML = "";
@@ -392,7 +395,7 @@
         const link = document.createElement("a");
         link.className = "hz-expert-index__item";
         link.href = "#expert-" + expert.slug;
-        link.setAttribute("aria-label", "查看" + expert.name + "的访谈记录");
+        link.setAttribute("aria-label", "View the interview with " + expert.name);
         link.innerHTML = '<span class="hz-expert-index__avatar">' + faceHTML(expert) +
           '</span><span class="hz-expert-index__name">' + expert.name + '</span>';
         link.addEventListener("click", function (event) {
@@ -405,7 +408,7 @@
   }
   renderExpertIndex();
 
-  /** 专家索引与地图容器严格等高（地图高度随宽度按比例变化，用 JS 同步）。 */
+  /** Keep the expert index exactly as tall as the map (map height scales with width; synced via JS). */
   function syncIndexHeight() {
     if (!expertIndex) return;
     const mapBox = document.getElementById("hzMapContainer");
@@ -464,7 +467,7 @@
       if (expert.onMap === false) return;
       if (!expert.provinceId) return;
       if (!expert.slug || !detailSlidesByExpert.has(expert.slug)) {
-        console.warn("[HP map] 专家 “" + (expert.name || expert.slug) + "” 缺少可映射的详情卡，已跳过渲染。");
+        console.warn("[HP map] Expert '" + (expert.name || expert.slug) + "' has no matching detail card; skipped.");
         return;
       }
       if (!clusters.has(expert.provinceId)) {
@@ -499,8 +502,8 @@
     popover.className = "hz-cluster-popover";
     popover.id = "hz-cluster-popover-" + cluster.id;
     popover.setAttribute("role", "dialog");
-    popover.setAttribute("aria-label", cluster.name + "专家列表");
-    popover.innerHTML = '<div class="hz-cluster-popover__header"><strong>' + cluster.name + '</strong><span>' + cluster.experts.length + ' 位专家</span></div><ul></ul>';
+    popover.setAttribute("aria-label", "Experts in " + cluster.name);
+    popover.innerHTML = '<div class="hz-cluster-popover__header"><strong>' + cluster.name + '</strong><span>' + cluster.experts.length + (cluster.experts.length > 1 ? ' experts' : ' expert') + '</span></div><ul></ul>';
     const list = popover.querySelector("ul");
     cluster.experts.forEach(expert => {
       const item = document.createElement("li");
@@ -524,7 +527,7 @@
     const buttonTop = (parseFloat(button.style.top) / 100) * mapHeight;
     popover.style.width = Math.min(popoverWidth, mapWidth - 24) + "px";
     const popoverHeight = popover.offsetHeight;
-    // 图钉以针尖对准坐标（translate(-50%,-100%)）；避让需覆盖「图钉全高 + hover 放大(1.14)」
+    // Pin tip sits on the coordinate (translate(-50%,-100%)); clearance covers full pin height + hover scale (1.14)
     const pinClearance = 60;
     popover.style.left = Math.max(12, Math.min(mapWidth - popover.offsetWidth - 12, buttonLeft - popover.offsetWidth / 2)) + "px";
     popover.style.top = buttonTop > popoverHeight + pinClearance ? buttonTop - popoverHeight - pinClearance + "px" : Math.min(mapHeight - popoverHeight - 12, buttonTop + 10) + "px";
@@ -549,9 +552,9 @@
     button.setAttribute("aria-expanded", "false");
     const onlyExpert = cluster.experts.length === 1 ? cluster.experts[0] : null;
     if (onlyExpert) {
-      button.setAttribute("aria-label", onlyExpert.name + "，1 位专家");
+      button.setAttribute("aria-label", onlyExpert.name + ", 1 expert");
     } else {
-      button.setAttribute("aria-label", cluster.name + "，" + cluster.experts.length + " 位专家");
+      button.setAttribute("aria-label", cluster.experts.length + (cluster.experts.length > 1 ? " experts" : " expert") + " in " + cluster.name);
     }
     const categoryList = Array.from(cluster.categories.keys());
     const primaryColor = onlyExpert ? categoryColors[onlyExpert.category] || "#8B7355" : categoryColors[categoryList[0]] || "#8B7355";
@@ -559,10 +562,10 @@
     button.classList.remove("hz-cluster--mixed");
     if (onlyExpert) button.classList.add("hz-cluster--single");
     if (onlyExpert) {
-      // 单专家：针头内放该专家照片（或默认人像剪影）
+      // Single expert: show the expert's photo (or default silhouette) inside the pin head
       button.innerHTML = '<span class="hz-cluster__head">' + faceHTML(onlyExpert) + '</span>';
     } else {
-      // 多专家同省：优先用首位有照片的专家头像，缺照片时回退人数
+      // Multiple experts in one province: prefer the first expert with a photo, else fall back to a count
       const withPhoto = cluster.experts.find(expert => expert.photo);
       button.innerHTML = withPhoto
         ? '<span class="hz-cluster__head">' + faceHTML(withPhoto) + '</span><span class="hz-cluster__badge">' + cluster.experts.length + '</span>'
@@ -605,10 +608,35 @@
     if (event.key === "Escape") closeCluster(true);
   });
 
+  /** "Back to the map" inside expert cards: collapse the fold and scroll back to the map. */
+  function setupBackToMap() {
+    if (!detailCard) return;
+    detailCard.querySelectorAll(".hz-back-to-map").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const slide = btn.closest(".hz-detail-slide");
+        const fold = slide ? slide.closest("details.section-fold") : null;
+        if (fold) fold.open = false;   // auto-collapse the big fold
+        const target = document.getElementById("hzMap") || document.getElementById("section-experts");
+        if (!target) return;
+        const sp = window.SidebarProgress;
+        if (sp && typeof sp.scrollToElement === "function") {
+          // let the collapse settle into layout first, then reanchored-scroll back to the map
+          window.requestAnimationFrame(function () { sp.scrollToElement(target); });
+        } else {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        if ((window.location.hash || "").indexOf("#expert-") === 0) {
+          window.history.replaceState(null, "", "#section-experts");
+        }
+      });
+    });
+  }
+  setupBackToMap();
+
   renderPins();
   }
 
-  // 直接初始化：DOM 就绪后立即渲染图钉，避免 IntersectionObserver 与 content-visibility 等优化策略冲突导致图钉不显示。
+  // Initialize directly: render pins as soon as DOM is ready, avoiding conflicts with IntersectionObserver / content-visibility that could hide pins.
   initMap();
 })();
 

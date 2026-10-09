@@ -11,8 +11,12 @@
  *   这两者是本屏"持续抓住视觉"的核心，入场动画只负责第一次亮相。
  *
  *   播放顺序（进入该屏才播，每次加载只播一次）：
- *     eyebrow → 「1 in 12」弹出 → 句子右先左后逐词下落 → 12 席位错峰铺开（1 格亮蓝）
- *     → 计数器整块升起并开始实时跳动 → 秒节拍光点启动 → 三年占比表推进 → 注脚淡入。
+ *     eyebrow → 「1 in 12」弹出 → 句子右先左后逐词下落 → 居中大图（生病酵母）淡入并停留
+ *     → 12 只酵母从「叠在最左」自左向右逐只发牌滑出（前 11 只彩色 = 没生病，
+ *       第 12 只灰的 = 生病，最后落位并脉冲一次）→ 计数器整块升起并开始实时跳动
+ *     → 秒节拍光点启动 → 三年占比表推进 → 注脚淡入。
+ *   素材门控（2026-10-09）：酵母与大图先等解码完成再开播（最多等 IMG_WAIT_MAX），
+ *   避免"动画已开播、图还没到"时先看到空位。
  *
  * 工程质量约定（与 statistics-reveal.js / dbtl-pump.js 同一套）：
  *   - 降级红线：reduced-motion / 无 IO / 无 WAAPI → 完全不接管，标记里的静态年值
@@ -51,30 +55,37 @@
 
   /** ==== 入场时间轴参数（调参入口，单位 ms）==== */
   var T = {
+    /* 2026-10-09 重排节奏（用户要求）：① 整体放慢给观众反应时间；
+       ② 顺序必须清晰 —— 先「上面的字体」（eyebrow → 1 in 12 → 句子）出完，
+          然后才是叠加图（居中大图 → 12 只酵母发牌）。 */
     eyebrowAt: 0,
-    eyebrowDur: 420,
-    numAt: 120,
-    numDur: 560,
-    copyAt: 300,
-    copyStagger: 58,
-    copyDur: 640,
-    seatAt: 620,
-    seatStagger: 36,
-    seatDur: 420,
-    counterAt: 900,
-    counterDur: 620,
-    trackAt: 1300,
-    trackDur: 520,
-    yearsAt: 1150,
-    yearStagger: 130,
-    yearDur: 560,
-    noteAt: 1700,
-    noteDur: 460
+    eyebrowDur: 500,
+    numAt: 250,
+    numDur: 700,
+    copyAt: 550,          // 句子 8 词，末词 550+7*90=1180 起播、1980 收尾
+    copyStagger: 90,
+    copyDur: 800,
+    heroAt: 2100,         // 文字出完之后，居中大图才淡入（用户指定的先后）
+    heroDur: 1100,
+    seatAt: 2500,         // 12 只酵母最后登场：从「叠在最左」逐只向右拉出
+    seatStagger: 120,
+    seatDur: 750,
+    sickPopDur: 500,      // 生病那只落位后的重点脉冲
+    counterAt: 2900,
+    counterDur: 800,
+    trackAt: 3400,
+    trackDur: 600,
+    yearsAt: 3100,
+    yearStagger: 200,
+    yearDur: 700,
+    noteAt: 4400,
+    noteDur: 600
   };
   var TOTAL = T.noteAt + T.noteDur;
 
-  var SEAT_POP = 1.16;          // 亮蓝席位格的轻微过冲
+  var SEAT_POP = 1.16;          // 生病席位落位后的轻微过冲
   var RECT_CHECK_MS = 400;      // 计数循环内可见性自检间隔
+  var IMG_WAIT_MAX = 2500;      // 等酵母/大图解码的最长时间（超时照播，不空转）
 
   function ready(fn) {
     if (document.readyState === 'loading') {
@@ -118,6 +129,8 @@
     var copy = stage.querySelector('.burden-lead__copy');
     var seats = [].slice.call(stage.querySelectorAll('.burden-grid__dot'));
     var litSeat = stage.querySelector('.burden-grid__dot.is-lit');
+    var heroImg = stage.querySelector('.burden-hero');
+    var seatImgs = seats.map(function (s) { return s.querySelector('.burden-grid__yeast'); });
     var counter = stage.querySelector('.burden-counter');
     var cLabel = stage.querySelector('[data-burden-label]');
     var cValue = stage.querySelector('[data-burden-value]');
@@ -153,6 +166,22 @@
       });
       running.push(a);
       return a;
+    }
+
+    /** 等动画素材就绪再开播（酵母两种各一张 + 居中大图；最多等 IMG_WAIT_MAX） */
+    function whenReady(cb) {
+      var imgs = [];
+      if (seatImgs.length) imgs.push(seatImgs[0], seatImgs[seatImgs.length - 1]);
+      if (heroImg) imgs.push(heroImg);
+      var jobs = imgs.filter(Boolean).map(function (im) {
+        if (im.complete && im.naturalWidth) return Promise.resolve();
+        return new Promise(function (res) {
+          im.addEventListener('load', res, { once: true });
+          im.addEventListener('error', res, { once: true });   // 失败也放行，不留空转
+        });
+      });
+      var timeout = new Promise(function (res) { window.setTimeout(res, IMG_WAIT_MAX); });
+      Promise.race([Promise.all(jobs), timeout]).then(cb);
     }
 
     // ===== 实时计数器：单 rAF 循环，可见性自检见文件头「离屏判定」 =====
@@ -262,19 +291,44 @@
         ], { duration: T.copyDur, delay: T.copyAt + idx * T.copyStagger, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
       });
 
-      seats.forEach(function (s, i) {
-        play(s, [
-          { transform: 'scale(0.5)', opacity: 0, offset: 0 },
+      // 居中大图（生病酵母）：淡入后停留，只播一次。
+      if (heroImg) {
+        play(heroImg, [
+          { transform: 'scale(0.94)', opacity: 0, offset: 0 },
+          { transform: 'scale(1.015)', opacity: 1, offset: 0.72 },
           { transform: 'scale(1)', opacity: 1, offset: 1 }
-        ], { duration: T.seatDur, delay: T.seatAt + i * T.seatStagger });
+        ], { duration: T.heroDur, delay: T.heroAt });
+      }
+
+      // 12 只酵母：先全部叠在第 1 格，再自左向右逐只滑出（发牌）。
+      // 每只的起始偏移 = 第 1 席 left − 自己席位 left —— 逐只量测，不写死断点百分比，
+      // 也不受 gap 的 clamp 非整数影响（叠放因此能精确重合）。
+      // ⚠ 必须先把 12 个 left 全部量完再 play：某只一旦挂上 fill:'both' 的动画，
+      //   它的 rect 就带上了 transform，后续量测会被污染。
+      var baseLeft = seats.length ? seats[0].getBoundingClientRect().left : 0;
+      var froms = seats.map(function (s) { return baseLeft - s.getBoundingClientRect().left; });
+      var lastSeatAnim = null;
+      seats.forEach(function (s, i) {
+        var a = play(s, [
+          { transform: 'translateX(' + froms[i].toFixed(1) + 'px) scale(0.9)', opacity: 0, offset: 0 },
+          { transform: 'translateX(0px) scale(1)', opacity: 1, offset: 1 }
+        ], { duration: T.seatDur, delay: T.seatAt + i * T.seatStagger, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+        if (s === litSeat) lastSeatAnim = a;
       });
 
-      if (litSeat) {
-        play(litSeat, [
-          { transform: 'scale(1)', opacity: 1, offset: 0 },
-          { transform: 'scale(' + SEAT_POP + ')', opacity: 1, offset: 0.45 },
-          { transform: 'scale(1)', opacity: 1, offset: 1 }
-        ], { duration: 520, delay: T.seatAt + seats.length * T.seatStagger, easing: 'cubic-bezier(0.3, 0.7, 0.3, 1)' });
+      // 生病那只（第 12 席）：等它真的滑到位，再补一次重点脉冲。
+      // ⚠ 不能用"固定延时"提前把这条挂上：WAAPI 同属性是后挂的胜出，而 fill:'both'
+      //   会让它在延迟期就压住 translateX —— 那样这只在整个叠放阶段都散不了队
+      //   （2026-10-09 实测：其余 11 只叠到 left=88 时，它独自留在 511）。
+      //   所以用上一段动画的 finished 串接；被 finish() 取消时 reject，忽略即可。
+      if (litSeat && lastSeatAnim) {
+        lastSeatAnim.finished.then(function () {
+          play(litSeat, [
+            { transform: 'scale(1)', offset: 0 },
+            { transform: 'scale(' + SEAT_POP + ')', offset: 0.45 },
+            { transform: 'scale(1)', offset: 1 }
+          ], { duration: T.sickPopDur, easing: 'cubic-bezier(0.3, 0.7, 0.3, 1)' });
+        }).catch(function () { /* finish() 取消了动画，忽略 */ });
       }
 
       // 计数器整块升起（之后由 goLive 接手持续增长）
@@ -330,8 +384,11 @@
         if (e.isIntersecting && e.intersectionRatio >= 0.45 && !entered) {
           entered = true;
           io.disconnect();
-          entrance();
-          window.setTimeout(finish, TOTAL + 120);
+          // 先等素材解码（最多 IMG_WAIT_MAX）再开播，避免酵母/大图"先空后闪"
+          whenReady(function () {
+            entrance();
+            window.setTimeout(finish, TOTAL + 120);
+          });
           return;
         }
       }

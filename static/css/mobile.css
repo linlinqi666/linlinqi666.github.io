@@ -1273,16 +1273,23 @@ img.loaded {
   }
 
   .home-page .art-stage--influenza-burden .burden-grid {
+    --seat-size: clamp(24px, 7vw, 34px);   /* 窄屏 3 倍放不下整排（366px 视口），尺寸减半保重叠 */
     left: 6%;
     top: 24%;
     max-width: 88%;
-    gap: clamp(5px, 1.6vw, 9px);
   }
 
   .home-page .art-stage--influenza-burden .burden-grid__dot {
-    width: clamp(13px, 3.4vw, 20px);
-    height: clamp(13px, 3.4vw, 20px);
-    border-radius: 4px;
+    width: var(--seat-size);
+    height: var(--seat-size);
+  }
+
+  /* 居中大图（2026-10-09）：窄屏是纵向堆满的版面，唯一空档在「计数器」与
+     「三年占比表」之间（实测 y≈48.6–57.5%，约 70px）。缩到该条带内，同样不压文字。 */
+  .home-page .art-stage--influenza-burden .burden-hero {
+    left: 40.5%;
+    top: 48.8%;
+    width: 19%;
   }
 
   .home-page .art-stage--influenza-burden .burden-counter {

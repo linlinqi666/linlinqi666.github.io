@@ -26,7 +26,19 @@
      * 用户主动滚动（滚轮/触摸/翻页键）会立即解锁。
      * @type {number}
      */
-    clickLockMs: 1200,
+    /**
+     * 点击导航后的重锚定参数：懒加载图片/收纳条展开会在平滑滚动进行中改变文档高度，
+     * 原生锚点跳转只在点击瞬间算一次目标偏移，会「滚到一半停住」。
+     * 这里在滚动过程中反复校正，直到目标稳定落在预期位置或超过重试上限。
+     */
+    reanchorMaxTries: 20,
+    reanchorIntervalMs: 140,
+    reanchorTolerancePx: 8,
+    /**
+     * 锁定高亮后，若滚动位置已偏离被点击目标超过该阈值，视为用户自己接管了滚动，解除锁定。
+     * 用于覆盖「拖滚动条」这类不会触发 wheel/touch 的场景。
+     */
+    lockReleaseDistancePx: 240,
     debugMode: false,
     enableValidation: true,
     validateOnLoad: true,
@@ -67,8 +79,86 @@
     scrollHandler: null,
     resizeHandler: null,
     clickLockHash: null,
-    clickLockAt: 0
+    clickLockAt: 0,
+    /** 重锚定是否已收敛；收敛后才允许按滚动偏离解除锁定 */
+    clickLockSettled: false,
+    /** 锁定目标当前的绝对滚动位置（随布局变化刷新） */
+    clickLockTargetY: null,
+    reanchorTimer: null
   };
+
+  /**
+   * 顶部固定导航高度 + 呼吸间距：导航落点与高亮判定线都基于它，二者保持一致，
+   * 否则点击后标题停在 scroll-margin 位置、判定线却在别处，高亮会跳到相邻章节。
+   * @returns {number} 距视口顶部的偏移
+   */
+  function getHeaderOffset() {
+    const nav = document.querySelector('nav');
+    if (nav && window.getComputedStyle(nav).position === 'fixed') {
+      return nav.getBoundingClientRect().height + 24;
+    }
+    return 100;
+  }
+
+  /**
+   * 取当前滚动位置（兼容 window 与内部滚动容器）。
+   */
+  function getCurrentScrollTop() {
+    if (state.scrollInfo && !state.scrollInfo.isWindow && state.scrollInfo.element) {
+      return state.scrollInfo.element.scrollTop || 0;
+    }
+    return window.scrollY || window.pageYOffset || 0;
+  }
+
+  /**
+   * 滚动到指定绝对位置（尊重 prefers-reduced-motion）。
+   */
+  function scrollToY(y) {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior = reduce ? 'auto' : 'smooth';
+    if (state.scrollInfo && !state.scrollInfo.isWindow && state.scrollInfo.element) {
+      try { state.scrollInfo.element.scrollTo({ top: y, behavior: behavior }); }
+      catch (e) { state.scrollInfo.element.scrollTop = y; }
+      return;
+    }
+    try { window.scrollTo({ top: y, behavior: behavior }); }
+    catch (e) { window.scrollTo(0, y); }
+  }
+
+  /**
+   * 带重锚定的章节滚动：滚动过程中文档高度可能继续变化（懒加载图片、收纳条展开），
+   * 原生锚点只算一次会落点偏短，这里反复校正到目标稳定为止。
+   * @param {HTMLElement} el - 目标元素
+   * @param {Function} [onDone] - 收敛后的回调
+   */
+  function scrollToSection(el, onDone) {
+    if (!el) return;
+    const offset = getHeaderOffset();
+    const wantedY = function () {
+      const sy = getCurrentScrollTop();
+      return Math.max(0, el.getBoundingClientRect().top + sy - offset);
+    };
+
+    state.clickLockSettled = false;
+    scrollToY(wantedY());
+
+    let tries = 0;
+    const tick = function () {
+      tries += 1;
+      const want = wantedY();
+      const cur = getCurrentScrollTop();
+      state.clickLockTargetY = want;
+      if (Math.abs(want - cur) > CONFIG.reanchorTolerancePx && tries <= CONFIG.reanchorMaxTries) {
+        scrollToY(want);
+        state.reanchorTimer = window.setTimeout(tick, CONFIG.reanchorIntervalMs);
+        return;
+      }
+      state.clickLockSettled = true;
+      state.reanchorTimer = null;
+      if (onDone) onDone();
+    };
+    state.reanchorTimer = window.setTimeout(tick, 220);
+  }
 
   /**
    * 在调试模式下输出日志。
@@ -268,11 +358,10 @@
      * @returns {string} 当前章节 ID
      */
     findCurrentSection: function (scrollTop) {
-      // 以视口中线为判定线：原文用「顶部 + navHighlightOffset」，在小节被 result-sections.js
-      // 折叠成 <details> 后，各小节间距坍塌为一行标题，区间判定会高亮跳太远。改用中线判定，
-      // 折叠态（间距小）与展开态（间距大）下都能稳定高亮当前阅读的小节。
-      const viewportHeight = (state.scrollInfo && Utils.getClientHeight(state.scrollInfo.element, state.scrollInfo.isWindow)) || window.innerHeight || 800;
-      const line = scrollTop + viewportHeight / 2;
+      // 以视口顶部（固定导航下沿）为判定线：与 scrollToSection 的落点同一套偏移，
+      // 点击导航后标题停在导航下沿，判定线也在那里，高亮才不会跳到相邻章节。
+      // 折叠成 <details> 的小节每个标题各占一行，顶部线同样能区分，不会跨节误判。
+      const line = scrollTop + getHeaderOffset() + 40;
 
       // 优先使用缓存的绝对偏移（无强制重排）
       if (state.cachedSectionOffsets && state.cachedSectionOffsets.length) {
@@ -364,13 +453,23 @@
       const result = ProgressCalculator.calculateProgress();
       ProgressCalculator.updateProgressUI(result.progressPercent);
 
-      // 点击导航后短时间内把高亮锁定在被点击项：点击引起的滚动会让目标停在视口顶部，
-      // 若立即按「视口中线」重算，高亮会跳到下一个锚点，与用户点击意图不符。
-      if (state.clickLockHash && Date.now() - state.clickLockAt < CONFIG.clickLockMs) {
-        NavigationHighlighter.highlightNavigation(state.clickLockHash);
-        return;
+      // 点击导航后把高亮锁定在被点击项：点击引起的滚动不该改写高亮，
+      // 否则（旧实现按视口中线重算）会跳到相邻锚点，表现为「点了 A 却高亮 B」。
+      // 锁定不再按时间过期，而是由用户主动滚动（wheel/touch/键盘）或滚动偏离目标来解除，
+      // 这样拖滚动条这类不触发 wheel 的场景也能自动解锁。
+      if (state.clickLockHash) {
+        if (state.clickLockSettled && state.clickLockTargetY != null) {
+          const cur = getCurrentScrollTop();
+          if (Math.abs(cur - state.clickLockTargetY) > CONFIG.lockReleaseDistancePx) {
+            log('滚动已偏离点击目标，解除高亮锁定');
+            state.clickLockHash = null;
+          }
+        }
+        if (state.clickLockHash) {
+          NavigationHighlighter.highlightNavigation(state.clickLockHash);
+          return;
+        }
       }
-      state.clickLockHash = null;
 
       const currentSection = NavigationHighlighter.findCurrentSection(result.scrollTop);
       NavigationHighlighter.highlightNavigation(currentSection);
@@ -417,15 +516,40 @@
       const el = Elements.getCachedElements();
 
       el.navLinks.forEach(function (link) {
-        link.addEventListener('click', function () {
+        link.addEventListener('click', function (e) {
           const href = link.getAttribute('href') || '';
           if (href.charAt(0) !== '#') return;
-          state.clickLockHash = href.slice(1);
+          const id = href.slice(1);
+          const target = document.getElementById(id);
+          if (!target) return;   // 找不到目标时不干预，交回浏览器默认行为
+
+          e.preventDefault();
+          if (state.reanchorTimer) {
+            window.clearTimeout(state.reanchorTimer);
+            state.reanchorTimer = null;
+          }
+          state.clickLockHash = id;
           state.clickLockAt = Date.now();
+          state.clickLockSettled = false;
+          // 立刻给反馈，不等滚动结束
+          NavigationHighlighter.highlightNavigation(id);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', '#' + id);
+          }
+          scrollToSection(target, function () {
+            // 布局可能已变化（懒加载/展开），刷新偏移缓存后再定一次高亮
+            buildSectionCache();
+            NavigationHighlighter.highlightNavigation(state.clickLockHash || id);
+          });
         });
       });
 
-      const unlock = function () { state.clickLockHash = null; };
+      const unlock = function () {
+        state.clickLockHash = null;
+        state.clickLockSettled = false;
+        state.clickLockTargetY = null;
+      };
+
       window.addEventListener('wheel', unlock, { passive: true });
       window.addEventListener('touchmove', unlock, { passive: true });
       window.addEventListener('keydown', function (e) {
@@ -433,6 +557,37 @@
           unlock();
         }
       });
+    },
+
+    /**
+     * hash 导航（带锚点刷新页面、非导航链接触发的 hash 变化）同样走重锚定：
+     * 浏览器的原生锚点跳转只在落地那一刻算一次偏移，之后折叠展开/懒加载图片
+     * 都会把目标顶走，表现为落点偏短。这里持续校正到稳定。
+     */
+    setupHashNavigation: function () {
+      const handleHash = function () {
+        const id = (window.location.hash || '').slice(1);
+        if (!id) return;
+        const el = document.getElementById(id);
+        if (!el) return;
+        state.clickLockHash = id;
+        state.clickLockAt = Date.now();
+        state.clickLockSettled = false;
+        scrollToSection(el, function () {
+          buildSectionCache();
+          NavigationHighlighter.highlightNavigation(id);
+        });
+      };
+
+      window.addEventListener('hashchange', handleHash);
+
+      if (window.location.hash) {
+        // 等折叠组件先展开、首屏图片先占位，再校正落点
+        window.setTimeout(handleHash, 80);
+        window.addEventListener('load', function () {
+          window.setTimeout(handleHash, 80);
+        });
+      }
     }
   };
 
@@ -453,6 +608,36 @@
       buildSectionCache();
       MainLoop.updateScrollProgress();
       log('已强制重新计算进度');
+    },
+
+    /**
+     * 滚动到指定元素（带重锚定）。供 section-fold.js / hp-map.js 等复用，
+     * 让「锚点命中折叠区」「带锚点刷新页面」与侧边栏点击共用同一套落点修正。
+     * @param {HTMLElement} el - 目标元素
+     * @param {Function} [onDone] - 收敛后的回调
+     */
+    scrollToElement: function (el, onDone) {
+      if (!el) return;
+      if (state.reanchorTimer) {
+        window.clearTimeout(state.reanchorTimer);
+        state.reanchorTimer = null;
+      }
+      state.clickLockSettled = false;
+      scrollToSection(el, function () {
+        buildSectionCache();
+        if (onDone) onDone();
+      });
+    },
+
+    /**
+     * 按 id 滚动（带重锚定）。
+     * @param {string} id - 目标元素 id
+     * @param {Function} [onDone]
+     */
+    scrollToSectionId: function (id, onDone) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      window.SidebarProgress.scrollToElement(el, onDone);
     },
 
     /**
@@ -488,6 +673,10 @@
    * 清理所有事件监听与缓存引用。
    */
   function destroy() {
+    if (state.reanchorTimer) {
+      window.clearTimeout(state.reanchorTimer);
+      state.reanchorTimer = null;
+    }
     if (state.scrollHandler) {
       state.scrollHandler.cancel && state.scrollHandler.cancel();
     }
@@ -544,6 +733,7 @@
 
     NavigationInteractions.setupDirectoryToggle();
     NavigationInteractions.setupClickHighlight();
+    NavigationInteractions.setupHashNavigation();
 
     MainLoop.updateScrollProgress();
 

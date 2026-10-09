@@ -658,6 +658,13 @@
     let lastPosition = null;
     let lastDomRefs = null;
 
+    /* 成员大图缓存 + 在途请求去重（2026-10-08 加载改造）：
+       - photoCache：已成功加载的 Image 对象；切换时同步命中，点击即时换图，
+         不再等 new Image() 下载完成才 applyLoaded（此前"点了没反应"的根因）；
+       - pendingLoads：同一 URL 的在途请求共享，预取与切换不会重复下载。 */
+    const photoCache = new Map();
+    const pendingLoads = new Map();
+
     /* 把 "N% auto" 解析为照片相对滑层宽度的百分比 N；cover / 未识别 → null（视为满铺） */
     function parsePhotoSize(str) {
       if (!str) return null;
@@ -756,19 +763,82 @@
         }
       }
 
-      function tryCandidate(index) {
-        if (currentGeneration !== generation) return;
-        if (index >= candidates.length) {
-          applyLoaded('');
-          return;
-        }
-        const img = new Image();
-        img.onload = () => applyLoaded(candidates[index], img);
-        img.onerror = () => tryCandidate(index + 1);
-        img.src = candidates[index];
+      /* 未命中缓存才走网络加载；命中缓存时在下一 microtask 立即换图 */
+      if (!candidates.length) {
+        applyLoaded('');
+        return;
       }
+      loadFirst(candidates).then(
+        (res) => { if (currentGeneration === generation) { applyLoaded(res.url, res.img); } },
+        () => { if (currentGeneration === generation) { applyLoaded(''); } }
+      );
+    }
 
-      tryCandidate(0);
+    /**
+     * 加载单张图片：缓存命中直接返回；同 URL 在途请求复用；失败 reject（不写缓存）。
+     * @param {string} url
+     * @returns {Promise<{url:string,img:HTMLImageElement}>}
+     */
+    function loadImage(url) {
+      if (photoCache.has(url)) {
+        return Promise.resolve({ url: url, img: photoCache.get(url) });
+      }
+      if (pendingLoads.has(url)) return pendingLoads.get(url);
+      const pending = new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          photoCache.set(url, img);
+          pendingLoads.delete(url);
+          resolve({ url: url, img: img });
+        };
+        img.onerror = () => {
+          pendingLoads.delete(url);
+          reject(new Error('image load failed: ' + url));
+        };
+        img.src = url;
+      });
+      pendingLoads.set(url, pending);
+      return pending;
+    }
+
+    /**
+     * 候选链依次尝试：前一个失败（403/404）时自动降级到下一个，全部失败则 reject。
+     * @param {string[]} candidates
+     * @returns {Promise<{url:string,img:HTMLImageElement}>}
+     */
+    function loadFirst(candidates) {
+      let chain = Promise.reject(new Error('no candidates'));
+      candidates.forEach((url) => {
+        chain = chain.catch(() => loadImage(url));
+      });
+      return chain;
+    }
+
+    /**
+     * 后台预取（不改变当前显示）：把候选链加载进 photoCache，
+     * 供之后 updateBackground 命中秒切。失败静默（切换路径仍有完整降级）。
+     * @param {string[]} candidates
+     * @returns {Promise<void>}
+     */
+    function prefetch(candidates) {
+      if (!candidates || !candidates.length) return Promise.resolve();
+      return loadFirst(candidates).then(() => {}, () => {});
+    }
+
+    /**
+     * 按成员顺序串行预取全部成员大图（并发 1）：
+     * 不抢首屏封面与当前背景图的带宽；用户切换时命中缓存即时换图。
+     */
+    function prefetchAllPhotos() {
+      const queue = MemberData.members
+        .map((member) => ImageResolver.resolveImageCandidates(member, 'photo'))
+        .filter((list) => list && list.length);
+      let index = 0;
+      function step() {
+        if (index >= queue.length) return;
+        prefetch(queue[index++]).then(step);
+      }
+      step();
     }
 
     /* 视口变化时重新计算渲染框（照片百分比随滑层尺寸变化），仅 O(1) 计算 */
@@ -790,7 +860,7 @@
       updateBackgroundWithCandidates(candidates, position, size, domRefs);
     }
 
-    return { updateBackground, updateBackgroundWithCandidates, refreshPhotoBox };
+    return { updateBackground, updateBackgroundWithCandidates, refreshPhotoBox, prefetch, prefetchAllPhotos };
   })();
 
   /**
@@ -1231,6 +1301,13 @@
         selectMember(MemberData.members[0].id);
       } else {
         closeRail();
+      }
+
+      /* 全量预取成员大图（2026-10-08 加载改造）：首张已随 selectMember 开始加载，
+         延迟 500ms 起串行预取其余成员，用户在 intro 封面停留期间即完成大部分；
+         之后点击成员命中 photoCache 即时换图，不再"点了等图片下载"。 */
+      if (MemberData.members.length > 1) {
+        setTimeout(function () { BackgroundController.prefetchAllPhotos(); }, 500);
       }
 
       // 登记首屏关键图给加载遮罩：默认成员形象两种布局都在首屏；条带头像仅桌面端首屏可见

@@ -72,6 +72,14 @@ html.members-intro-armed:not(.members-intro-finished) body {
   object-fit: cover;
   /* 生成照片是一行人的全身照，取景略偏上以完整保留头部（cover 会裁上下） */
   object-position: center 28%;
+  /* 照片就绪前不显示，避免"动画已过、取景区空白"；由 members-intro.js 在
+     load/超时后给 .members-intro 加 is-photo-ready 触发淡入（2026-10-08 加载改造） */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.members-intro.is-photo-ready .members-intro__photo {
+  opacity: 1;
 }
 
 @media (max-width: 768px),
@@ -170,7 +178,8 @@ html.members-intro-armed:not(.members-intro-finished) body {
    因此 noscript 环境下页面内容不会被遮挡。 */
 @media (prefers-reduced-motion: reduce) {
   .members-intro,
-  .members-intro__enter {
+  .members-intro__enter,
+  .members-intro__photo {
     transition: none !important;
   }
 }

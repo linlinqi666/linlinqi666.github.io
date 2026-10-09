@@ -29,6 +29,29 @@
   html.classList.add('members-intro-ready');
   var SESSION_KEY = 'szpu-members-intro-seen';
 
+  /* 首屏封面照片就绪揭幕（2026-10-08 加载改造）：<head> 里的 preload 已让图
+     尽早开始下载；此处等 img load 后给 overlay 加 is-photo-ready 触发淡入，
+     保证"页面动画过后看到的就是照片"，而不是先空着再慢慢出现。
+     4s 超时或加载失败也放行（模糊衬层兜底），不阻塞进入交互。 */
+  var photo = document.getElementById('members-intro-photo');
+  var photoSettled = false;
+  function markPhotoReady() {
+    if (photoSettled) return;
+    photoSettled = true;
+    overlay.classList.add('is-photo-ready');
+  }
+  if (photo) {
+    if (photo.complete && photo.naturalWidth > 0) {
+      markPhotoReady();
+    } else {
+      photo.addEventListener('load', markPhotoReady, { once: true });
+      photo.addEventListener('error', markPhotoReady, { once: true });
+      setTimeout(markPhotoReady, 4000);
+    }
+  } else {
+    markPhotoReady();
+  }
+
   var inertTargets = [
     document.querySelector('nav'),
     document.getElementById('members-redesign-app'),
