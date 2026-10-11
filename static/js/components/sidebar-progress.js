@@ -48,7 +48,7 @@
      * @type {string[]}
      */
     sectionIdPrefixes: [
-      'design-', 'protocol-', 'results-',
+      'engineering-', 'design-', 'protocol-', 'results-', 'notebook-',
       'section-', 'module-', 'the-', 'chassis-', 'chassis',
       'gene-', 'nanobody-', 'fusion-', 'fusion-gpa', 'fusion-pager',
       'pager-', 'gpcr-', 'g-protein-', 'dual-', 'sensing-',

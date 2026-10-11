@@ -3,7 +3,79 @@
 {% block title %}Results{% endblock %}
 {% set active_page = "results" %}
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+<style>
+/* 湿实验组实验结果页面样式（flask 站）
+   作用域：.results-page（results.html 的 .description-container 上带此类） */
+
+/* ==========================================================
+   摘要条：覆盖 index.css 的首页 300vh 规则
+   ----------------------------------------------------------
+   index.css 为首页滚动动画区定义了 .executive-summary{height:300vh;padding-top:100vh}。
+   contribution.css 只在 .contribution-page 作用域下还原，本页没有该类，故在此按
+   内容页口径重写一遍（选择器多一层 .results-page，顺序无关且不会外溢）。
+   ========================================================== */
+.results-page .executive-summary {
+  position: static;
+  height: auto;
+  min-height: 0;
+  width: auto;
+  padding: 0.85rem 1.1rem;
+  margin: 0 0 1.25rem;
+  border-left: 3px solid var(--desc-color-primary, #8B5A2B);
+  border-radius: 0 0.375rem 0.375rem 0;
+  background: linear-gradient(90deg, rgba(139, 90, 43, 0.07) 0%, rgba(139, 90, 43, 0.02) 100%);
+  display: block;
+}
+
+.results-page .executive-summary::before {
+  content: none;
+}
+
+/* ==========================================================
+   文档插图：一图一注，统一宽度
+   ----------------------------------------------------------
+   图序、图片与图注严格对应源报告 Result(1).doc，每图独立一块。
+   统一 width:100% 使各图在正文列内等宽，避免"一张大一张小"。
+   ========================================================== */
+.results-page .result-fig {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.results-page .result-fig__img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  /* mobile.css 的全局 img{content-visibility:auto} 未配 contain-intrinsic-size：
+     离屏图片会被当成 0 高，滚动到时页面高度跳变。本页图多且大，按真实尺寸参与布局。 */
+  content-visibility: visible;
+}
+
+.results-page .result-fig__cap {
+  margin-top: 0.6rem;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+/* 图片占位块：图注先到位、真图后补（Fig. 6 / Fig. 13） */
+.results-page .result-fig__placeholder {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: 12rem;
+  margin: 0 auto;
+  border: 1px dashed #D4A574;
+  border-radius: 4px;
+  object-fit: cover;
+  content-visibility: visible;
+}
+</style>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/contribution.css') }}">
 {% endblock %}
 {% block page_content %}
@@ -28,22 +100,7 @@
                 <a href="#results-overview" class="nav-main-link">Results Overview</a>
               </div>
             </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#results-chassis" class="nav-main-link">Chassis</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#results-signal" class="nav-main-link">PAGER Receptor</a>
-              </div>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#results-gpa1" class="nav-main-link">G-Protein</a>
-              </div>
-            </li>
-            <li class="level1">
+<li class="level1">
               <div class="nav-link-wrapper">
                 <a href="#results-reporter" class="nav-main-link">Reporter</a>
               </div>
@@ -54,6 +111,13 @@
                 <li class="level3"><a href="#results-reporter-4">Reporter: growth curves</a></li>
                 <li class="level3"><a href="#results-reporter-5">Time-course fluorescence</a></li>
                 <li class="level3"><a href="#results-reporter-6">Reporter: early signal-to-noise</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-chassis" class="nav-main-link">Chassis</a>
+              </div>
+              <ul class="level2">
                 <li class="level3"><a href="#results-chassis-1">sgRNA vector construction</a></li>
                 <li class="level3"><a href="#results-chassis-2">Repair templates</a></li>
                 <li class="level3"><a href="#results-chassis-3">Transformation &amp; colony PCR</a></li>
@@ -61,6 +125,13 @@
                 <li class="level3"><a href="#results-chassis-5">Knockout: growth curves</a></li>
                 <li class="level3"><a href="#results-chassis-6">Knockout: fluorescence</a></li>
                 <li class="level3"><a href="#results-chassis-7">Knockout: early signal-to-noise</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-gpa1" class="nav-main-link">G-Protein</a>
+              </div>
+              <ul class="level2">
                 <li class="level3"><a href="#results-gpa1-1">Homologous template</a></li>
                 <li class="level3"><a href="#results-gpa1-2">Transformation &amp; validation</a></li>
                 <li class="level3"><a href="#results-gpa1-3">Sequence confirmation</a></li>
@@ -69,12 +140,21 @@
                 <li class="level3"><a href="#results-gpa1-6">Fluorescence response</a></li>
               </ul>
             </li>
-            <li class="level1">
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-signal" class="nav-main-link">PAGER Receptor</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#results-signal-1">Membrane-expression vector</a></li>
+                <li class="level3"><a href="#results-signal-2">Sequencing verification</a></li>
+                <li class="level3"><a href="#results-signal-3">Further characterization</a></li>
+              </ul>
+            </li>
+<li class="level1">
               <div class="nav-link-wrapper">
                 <a href="#results-discussion" class="nav-main-link">Discussion</a>
               </div>
             </li>
-
           </ul>
         </div>
 
@@ -108,27 +188,14 @@
           <h2>Results Overview</h2>
           <div class="content-text-frame">
             <p class="executive-summary">
-              This page reports the experimental results of the yeast influenza-A biosensor project. It is organized by the four project modules, in the order of the yeast signalling pathway: chassis engineering, the signal recognition module, Gpa1 humanization, and reporter system construction.
+              This page reports the experimental results of the yeast influenza-A biosensor project. It is organized by the four project modules, following the order of the consolidated results report: reporter system construction, chassis engineering (gene knockout), Gpa1 humanization, and the antigen-gated receptor (signal recognition) module.
             </p>
             <p class="content-intro">
-              The results reported below belong to the reporter system construction module; figures and captions follow the consolidated experimental results report.
+              Results are grouped by the four project modules: reporter system construction (Fig. 1–6), chassis engineering (Fig. 7–13), Gpa1 humanization (Fig. 14–19) and the antigen-gated receptor module (Fig. 20–25); figures and captions follow the consolidated experimental results report.
             </p>
           </div>
         </div>
-
-        <div id="results-chassis" class="content-card">
-          <h2>Chassis Cell Engineering — Knockout of FAR1 and SST2</h2>
-        </div>
-
-        <div id="results-signal" class="content-card">
-          <h2>PAGER Antigen-Gated Fusion Receptor Protein Design</h2>
-        </div>
-
-        <div id="results-gpa1" class="content-card">
-          <h2>Humanized G-Protein Engineering — Gpa1-G&alpha;q Chimera</h2>
-        </div>
-
-        <div id="results-reporter" class="content-card">
+<div id="results-reporter" class="content-card">
           <div class="content-text-frame">
             <h2>Reporter Output Module: FUS1 Promoter Reporter System</h2>
             <h3 id="results-reporter-1">Vector construction, transformation and positive-clone screening</h3>
@@ -184,10 +251,14 @@
               <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig06-snr-early-induction.avif') }}" alt="Fig. 6." loading="lazy" width="1301" height="457" decoding="async">
               <figcaption class="result-fig__cap">Fig. 6. Signal-to-noise ratio (SNR) response of the reporter system at different starting OD<sub>600</sub> during early induction A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. Red circles and blue squares denote the 1 h and 2 h data, respectively. The SNR rose with induction time and peaked over a moderate range of starting OD<sub>600</sub>.</figcaption>
             </figure>
-
+          </div>
+        </div>
+<div id="results-chassis" class="content-card">
+          <div class="content-text-frame">
+            <h2>Chassis Cell Engineering — Knockout of FAR1 and SST2</h2>
             <h3 id="results-chassis-1">Construction and verification of the sgRNA knockout vectors</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig07-sgrna-vector-pcr.avif') }}" alt="Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout." loading="lazy" width="1105" height="324" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig07-sgrna-vector-pcr.avif') }}" alt="Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout." loading="lazy" width="1105" height="324" decoding="async">
               <figcaption class="result-fig__cap">Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout. M: DNA marker; lanes 1–2: pML104-Far1 construct (11258 bp); lanes 3–4: pML104-Sst2 construct (11258 bp).</figcaption>
             </figure>
             <p>
@@ -196,7 +267,7 @@
 
             <h3 id="results-chassis-2">Amplification of the FAR1 and SST2 repair templates</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig08-repair-template-pcr.avif') }}" alt="Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout." loading="lazy" width="678" height="303" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig08-repair-template-pcr.avif') }}" alt="Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout." loading="lazy" width="678" height="303" decoding="async">
               <figcaption class="result-fig__cap">Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout. M: DNA marker; lane 1: Far1 homologous recombination template (1146 bp); lane 2: Sst2 homologous recombination template (993 bp); lane 3: negative control.</figcaption>
             </figure>
             <p>
@@ -205,7 +276,7 @@
 
             <h3 id="results-chassis-3">Transformation and colony PCR verification</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig09-transformation-colony-pcr.avif') }}" alt="Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout." loading="lazy" width="1378" height="609" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig09-transformation-colony-pcr.avif') }}" alt="Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout." loading="lazy" width="1378" height="609" decoding="async">
               <figcaption class="result-fig__cap">Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout. (A) Transformants of Far1 knockout; (B) Colony PCR screening of Far1 knockout transformants, with positive clones F1–F6, F8, and F9; (C) Transformants of Sst2 knockout based on the Far1-knockout strain; (D) Colony PCR screening of Sst2 knockout transformants, with positive clones S1, S5–S7, and S15. M: DNA marker; BY / BY4741: wild-type control.</figcaption>
             </figure>
             <p>
@@ -214,7 +285,7 @@
 
             <h3 id="results-chassis-4">Sanger sequencing confirmation of the knockouts</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig10-sanger-sequencing.avif') }}" alt="Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout." loading="lazy" width="1291" height="400" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig10-sanger-sequencing.avif') }}" alt="Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout." loading="lazy" width="1291" height="400" decoding="async">
               <figcaption class="result-fig__cap">Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout. (A) Successful Sst2 knockout, showing a 4 bp deletion (TGTC) at the target site; (B) Non-knockout (wild-type) Sst2, shown for comparison; (C) Successful Far1 knockout, showing a 4 bp deletion (CACT) at the target site; (D) Non-knockout (wild-type) Far1, shown for comparison.</figcaption>
             </figure>
             <p>
@@ -223,7 +294,7 @@
 
             <h3 id="results-chassis-5">Effect of knockout on growth</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig11-growth-curves.avif') }}" alt="Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae." loading="lazy" width="780" height="684" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig11-growth-curves.avif') }}" alt="Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae." loading="lazy" width="780" height="684" decoding="async">
               <figcaption class="result-fig__cap">Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae. (A) Growth curves of the Far1 knockout strain (ΔFar1) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis; (B) Growth curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis.</figcaption>
             </figure>
             <p>
@@ -232,7 +303,7 @@
 
             <h3 id="results-chassis-6">Effect of knockout on α-factor-induced fluorescence</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig12-fluorescence-signal.avif') }}" alt="Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal." loading="lazy" width="1036" height="843" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig12-fluorescence-signal.avif') }}" alt="Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal." loading="lazy" width="1036" height="843" decoding="async">
               <figcaption class="result-fig__cap">Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal. (A) Fluorescence intensity curves of the FAR1 knockout strain (ΔFar1) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM); (B) Fluorescence intensity curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM).</figcaption>
             </figure>
             <p>
@@ -241,16 +312,20 @@
 
             <h3 id="results-chassis-7">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig13-snr-early-induction.avif') }}" alt="Fig. 13." loading="lazy" width="1340" height="566" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/chassis-module/result-fig13-snr-early-induction.avif') }}" alt="Fig. 13." loading="lazy" width="1340" height="566" decoding="async">
               <figcaption class="result-fig__cap">Fig. 13. SNR assay at different starting OD<sub>600</sub> after Far1 and Sst2 knockout A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. purple circles, red squares and blue triangles denote the 1 h, 1.5 h and 2 h data, respectively, and the dashed line marks the SNR = 3 threshold. The SNR rose with induction time, and at an initial OD<sub>600</sub> of about 0.6–2.1 it was largely ≥ 3, giving an evident signal within 2 h.</figcaption>
             </figure>
             <p>
               After knocking out the Far1 and Sst2 genes to amplify the fluorescent signal, a complete signal-to-noise ratio (SNR) assay at different starting OD was performed again (Fig. 13, with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively). Using the background fluorescence of uninduced and negative-clone cells as the baseline, SNR ≥ 3 was defined as an evident signal. The results showed that the SNR generally reached 3 or above over an initial OD<sub>600</sub> range of about 0.6–2.1, i.e., an evident signal appeared reliably within 2 h. Accordingly, in practical applications the initial OD<sub>600</sub> can be set to about 0.6, which ensures a sensitive response to the virus signal within 2 h and, thanks to the growth and signal-retention capacity at this starting density, provides a continuous detection window of roughly 12 h before a new yeast sensor needs to be replaced, giving the operational basis for the practical detection deployment of the influenza A yeast sensor.
             </p>
-
+          </div>
+        </div>
+<div id="results-gpa1" class="content-card">
+          <div class="content-text-frame">
+            <h2>Humanized G-Protein Engineering — Gpa1-G&alpha;q Chimera</h2>
             <h3 id="results-gpa1-1">Construction of the homologous targeting template</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig14-homologous-template-pcr.avif') }}" alt="Figure 14. Construction of homologous template for Gpa1 humanization." loading="lazy" width="455" height="407" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/gpa1-module/result-fig14-homologous-template-pcr.avif') }}" alt="Figure 14. Construction of homologous template for Gpa1 humanization." loading="lazy" width="455" height="407" decoding="async">
               <figcaption class="result-fig__cap">Figure 14. Construction of homologous template for Gpa1 humanization. (A) Amplification of GPA1 upstream and downstream homologous arms. Lanes 1–4: upstream homologous arm (experimental); Lane 5: upstream negative control; Lane 6: 2000 bp marker; Lane7: downstream negative control; Lanes 8–11: downstream homologous arm (experimental). (B) Amplification of URA3 marker. Lane 1: 2000 bp marker; Lane 2: negative control; Lanes 3–4: URA3 experimental groups. (C) Overlap-extension fusion PCR for target fragment assembly. Lane 1: 5000 bp marker; Lane 2: negative control; Lanes 3–6: fusion PCR experimental groups.</figcaption>
             </figure>
             <p>
@@ -259,7 +334,7 @@
 
             <h3 id="results-gpa1-2">Yeast transformation and positive-clone validation</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig15-transformation-colony-pcr.avif') }}" alt="Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization." loading="lazy" width="1598" height="824" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/gpa1-module/result-fig15-transformation-colony-pcr.avif') }}" alt="Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization." loading="lazy" width="1400" height="722" decoding="async">
               <figcaption class="result-fig__cap">Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization. (A)Colony growth after transforming Saccharomyces cerevisiae BY4741 with fusion PCR targeting fragment. Plate 1: negative control; Plates 2–5: transformation groups. Uniform single colonies appeared on experimental plates. Plate 2 was discarded due to medium collapse and potential contamination. Single colonies were picked from plates 3–5 for subsequent verification. (B)Agarose gel electrophoresis of colony PCR products. Lane 1: 5000 bp DNA Marker; Lanes 2–24: PCR products from picked colonies. Multiple samples displayed bands at the expected size, which were preliminarily identified as positive clones with Gpa1 humanization.</figcaption>
             </figure>
             <p>
@@ -268,7 +343,7 @@
 
             <h3 id="results-gpa1-3">Sequence confirmation of the humanized locus</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig16-sequence-alignment.avif') }}" alt="Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization." loading="lazy" width="1672" height="844" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/gpa1-module/result-fig16-sequence-alignment.avif') }}" alt="Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization." loading="lazy" width="1400" height="707" decoding="async">
               <figcaption class="result-fig__cap">Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization. 1: Alignment between sequencing result of Sample 12 and original yeast GPA1 sequence; 2: Alignment between sequencing result of Sample 17 and original yeast GPA1 sequence; 3: Alignment between sequencing result of Sample 12 and expected humanized sequence; 4: Alignment between sequencing result of Sample 17 and expected humanized sequence. The blue highlighted region represents the replaced gene fragment.</figcaption>
             </figure>
             <p>
@@ -277,7 +352,7 @@
 
             <h3 id="results-gpa1-4">Morphology after humanization</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig17-morphology-microscopy.avif') }}" alt="Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains." loading="lazy" width="1488" height="745" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/gpa1-module/result-fig17-morphology-microscopy.avif') }}" alt="Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains." loading="lazy" width="1400" height="701" decoding="async">
               <figcaption class="result-fig__cap">Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains. 1–3: Cell morphology of strain 12 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. 4–6: Cell morphology of strain 17 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. Magnification: 100×, scale bar = 20 μm.</figcaption>
             </figure>
             <p>
@@ -286,7 +361,7 @@
 
             <h3 id="results-gpa1-5">Growth of the humanized strains</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig18-growth-curves.avif') }}" alt="Figure 18. Growth curve measurement of Gpa1-humanized yeast strains." loading="lazy" width="582" height="1361" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/gpa1-module/result-fig18-growth-curves.avif') }}" alt="Figure 18. Growth curve measurement of Gpa1-humanized yeast strains." loading="lazy" width="582" height="1361" decoding="async">
               <figcaption class="result-fig__cap">Figure 18. Growth curve measurement of Gpa1-humanized yeast strains. 1: Wild-type BY4741; 2: Gpa1-humanized strain 12; 3: Gpa1-humanized strain 17. For each group, 0 μM, 1 μM and 10 μM α-factor were supplemented. Cell growth was monitored by OD<sub>600</sub> measurement, n=3 biological replicates.</figcaption>
             </figure>
             <p>
@@ -295,7 +370,7 @@
 
             <h3 id="results-gpa1-6">Effect on the native α-factor fluorescence response</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="{{ media('lab/wetlab/result/reporter-module/result-fig19-fluorescence-response.avif') }}" alt="Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response." loading="lazy" width="1103" height="1544" decoding="async">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/gpa1-module/result-fig19-fluorescence-response.avif') }}" alt="Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response." loading="lazy" width="1103" height="1544" decoding="async">
               <figcaption class="result-fig__cap">Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response. 1–8: Time-course fluorescence intensity curves under gradient α-factor induction at 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM. Blue curve (yEGFP): Wild-type BY4741 with FUS1-yEGFP reporter system. Red curve (GPA1/hGα): Gpa1-humanized chassis with FUS1-yEGFP reporter system.</figcaption>
             </figure>
             <p>
@@ -303,9 +378,45 @@
             </p>
           </div>
         </div>
+<div id="results-signal" class="content-card">
+          <div class="content-text-frame">
+            <h2>PAGER Antigen-Gated Fusion Receptor Protein Design</h2>
+            <h3 id="results-signal-1">Construction of the membrane-expression vector and transformation screening</h3>
+            <p>
+              To construct the membrane-targeted expression vector for our yeast sensor recognition protein, the coding sequence of recognition protein was cloned into the yeast membrane-localized expression backbone vector. The constructed plasmid was transformed into Saccharomyces cerevisiae competent cells and spread onto SD-His-Leu selective medium(Figure 20). The negative control plate (A) showed no colony growth, confirming no contamination and validating the selection pressure. Visible single colonies appeared on selective plates B-E. We picked 12 independent colonies and performed colony PCR. Agarose gel electrophoresis (F) displayed distinct target bands at the expected size in lanes 1–10 and lane 12 (601bp), while lane 11 showed no detectable amplification product, with little non-specific amplification in positive samples. These results indicate that the membrane-expression plasmid encoding the sensor recognition protein was successfully transformed into yeast, and multiple positive candidate clones were obtained for subsequent sequencing validation.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/pager-module/result-fig20-transformation-colony-pcr.avif') }}" alt="Figure 20. Yeast transformation and colony PCR verification of the yeast sensor recognition protein membrane-expression vector." loading="lazy" width="830" height="497" decoding="async">
+              <figcaption class="result-fig__cap">Figure 20. Yeast transformation and colony PCR verification of the yeast sensor recognition protein membrane-expression vector. A: Negative control plate for yeast transformation; B–E: SD-His-Leu selective plates with yeast transformants; F: agarose gel electrophoresis of colony PCR products. M: DNA marker; lanes 1–12: PCR products of picked single colonies (601 bp).</figcaption>
+            </figure>
 
-                <!-- 待一手数据复核后再补。 -->
+            <h3 id="results-signal-2">Sequencing verification of the surface-expression construct</h3>
+            <p>
+              The surface-expression construct was first assembled and then used as a template for PCR amplification of the target fragment. The amplified products were subjected to Sanger sequencing and aligned against the designed reference sequence. Sample 2 showed 98.61% identity with 0.87% gaps over a 577 bp aligned length; sample 3 achieved 99.29% identity with only 0.35% gaps over 564 bp; and sample 7 exhibited 94.82% identity with 3.67% gaps over 599 bp. Samples 2 and 3 showed high sequence identity to the designed construct, with only minor gaps at the 5' sequencing start region and no critical mutations, insertions, or deletions within the coding sequence of the PAGER receptor fusion protein. In contrast, sample 7 displayed more mismatches and gaps at the 5' terminal region and was therefore excluded from further experiments. These results confirm that clones 2 and 3 contain the correctly assembled surface-expression construct with an intact open reading frame, and they were selected for subsequent heterologous protein expression in Saccharomyces cerevisiae.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="{{ media('lab/wetlab/result/pager-module/result-fig21-sequencing-verification.avif') }}" alt="Figure 21. Sanger sequencing verification of the yeast sensor surface-expression construct." loading="lazy" width="831" height="793" decoding="async">
+              <figcaption class="result-fig__cap">Figure 21. Sanger sequencing verification of the yeast sensor surface-expression construct. A: sequence alignment of sample 2; B: sequence alignment of sample 3; C: sequence alignment of sample 7. The right panel shows alignment statistics for each sample, including aligned length, sequence identity, and gap proportion.</figcaption>
+            </figure>
 
+            <h3 id="results-signal-3">Further characterization of the recognition module</h3>
+            <p class="content-intro">
+              The following items are recorded in the consolidated results report without a figure embedded in the source document; captions are kept verbatim and images are pending.
+            </p>
+            <p class="content-intro">
+              图22. 酵母传感器识别蛋白WB结果
+            </p>
+            <p class="content-intro">
+              图23. 酵母传感器识别蛋白自抑可逆性验证。使用 TEV 处理工程化酵母，检测TEV 切 MT1 后，无抗原也能激活信号传感系统（证明自抑机制）
+            </p>
+            <p class="content-intro">
+              图24. 酵母传感器识别蛋白功能验证。1. 载体对照，2. PAGER-Spike + DMSO，3. PAGER-Spike + DCZ，4. PAGER-Spike + H1N1-HA，5. PAGER-Spike + H1N1-HA + DCZ，6. PAGER-Spike + 其他病毒抗原 + DCZ（特异性对照）
+            </p>
+            <p class="content-intro">
+              图25. 酵母传感器剂量响应与动力学。1. H1N1-HA dose-response：固定 DCZ 50 nM，H1N1-HA 0.1–100 nM，计算 EC50，2. DCZ dose-response：固定 H1N1-HA 10 nM，DCZ 1–500 nM，3. 动力学：加 H1N1-HA + DCZ 后，每 30 min 取样测荧光强度。
+            </p>
+          </div>
+        </div>
 <div id="results-discussion" class="content-card">
           <h2>Discussion</h2>
           <div class="content-text-frame">

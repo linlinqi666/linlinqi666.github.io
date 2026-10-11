@@ -83,6 +83,30 @@
   color: var(--log-text-lighter);
 }
 
+/* 全站概述 */
+.notebook-intro {
+  padding: var(--log-space-lg) var(--log-space-xl);
+  background: var(--log-bg-card);
+  border: 1px solid var(--log-brown-border);
+  border-radius: var(--log-radius-md);
+  box-shadow: var(--log-shadow-card);
+}
+
+.notebook-intro p {
+  margin: 0;
+  font-size: var(--log-font-size-sm);
+  line-height: 1.8;
+  color: var(--log-text-light);
+}
+
+/* 当前模块的实验记录概述（由 log-pdf.js 按所选文档填充） */
+.pdf-doc-desc {
+  margin: 0;
+  font-size: var(--log-font-size-sm);
+  line-height: 1.8;
+  color: var(--log-text-light);
+}
+
 /* -------------------- 工具条 -------------------- */
 .pdf-toolbar {
   display: flex;
@@ -386,4 +410,38 @@
   .pdf-skeleton__bar {
     animation: none;
   }
+}
+
+/* -------------------- Notebook 容器下方资源条 -------------------- */
+/* protocol 站内精确跳转 + PDF 中识别出的网址（以文件内网页名呈现，不直接暴露 URL） */
+.notebook-resources {
+  margin-top: var(--log-space-lg);
+  padding-top: var(--log-space-md);
+  border-top: 1px dashed var(--log-brown-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--log-space-xs) var(--log-space-md);
+  font-size: var(--log-font-size-sm);
+  line-height: 1.9;
+}
+.notebook-resources__label {
+  color: var(--log-text-lighter);
+  font-weight: 600;
+}
+.notebook-resources__protocol {
+  font-weight: 600;
+  color: var(--log-brown-dark);
+}
+.notebook-resources a {
+  color: var(--log-brown);
+  text-decoration: none;
+  border-bottom: 1px solid var(--log-brown-border);
+  padding-bottom: 1px;
+  transition: color var(--log-duration-fast) var(--log-ease-smooth),
+              border-color var(--log-duration-fast) var(--log-ease-smooth);
+}
+.notebook-resources a:hover {
+  color: var(--log-brown-dark);
+  border-color: var(--log-brown);
 }

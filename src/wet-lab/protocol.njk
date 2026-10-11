@@ -11,22 +11,20 @@ js:
   - static/js/components/sidebar-progress.js
 ---
 
-{# 本页（2026-09-30 回退后微调）：恢复为整份 protocol.pdf 内嵌，无侧栏、无页首装饰大字；
-   页首加介绍卡说明本页用途，PDF 由 content-card 容器包裹（样式在 pdf-embed.css 的
-   .protocol-page 作用域内）。2026-10-07 起不再追加 #toolbar=0，恢复阅读器基础功能。
-   拆分版（6 板块 / 22 大目录）已弃用；整份 PDF 已托管于 static.igem.wiki。
-   改动需与 Flask 站 wiki/pages/protocol.html 同步。 #}
+{# This page (reverted 2026-09-30, fine-tuned): restored to a single embedded
+   protocol.pdf — no sidebar, no large hero title; an intro card explains the
+   page purpose and the PDF is wrapped by a content-card (styles live in the
+   .protocol-page scope of pdf-embed.css). Since 2026-10-07 the #toolbar=0 flag
+   is dropped to restore basic reader controls. The split version (6 sections /
+   22 headings) is deprecated; the full PDF is hosted on static.igem.wiki.
+   Changes must stay in sync with Flask wiki/pages/protocol.html. #}
 {% extends "layouts/base.njk" %}
 
 {% block main %}
 <main class="pdf-page protocol-page">
   <section class="content-card protocol-intro" aria-labelledby="protocol-intro-title">
     <h2 id="protocol-intro-title">Protocol</h2>
-    <p>
-      本页提供 PAGER-Yeast 项目湿实验的完整操作规程手册（Protocol，PDF 共 32 页），
-      按项目实验链的四个模块组织：底盘菌株改造、报告体系构建、Gpa1-Gα 人源化，
-      以及 PAGER 融合受体相关实验的转化、表达验证与诱导检测。
-    </p>
+
     <p>
       The full wet-lab protocols of the PAGER-Yeast project are provided here as a
       single handbook (PDF, 32 pages), organized into the four modules of the

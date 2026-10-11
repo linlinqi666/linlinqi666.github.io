@@ -49,6 +49,33 @@
     return node;
   }
 
+  /**
+   * 渲染模块概述。只认 <i>…</i> 一种标记，其余一律按纯文本插入，
+   * 保证绝不走 innerHTML。
+   */
+  function setDesc(markup) {
+    if (!el.desc) return;
+    while (el.desc.firstChild) el.desc.removeChild(el.desc.firstChild);
+    if (!markup) {
+      el.desc.hidden = true;
+      return;
+    }
+    el.desc.hidden = false;
+    var italic = false;
+    String(markup).split(/(<i>|<\/i>)/).forEach(function (part) {
+      if (part === '<i>') { italic = true; return; }
+      if (part === '</i>') { italic = false; return; }
+      if (!part) return;
+      if (italic) {
+        var em = document.createElement('i');
+        em.textContent = part;
+        el.desc.appendChild(em);
+      } else {
+        el.desc.appendChild(document.createTextNode(part));
+      }
+    });
+  }
+
   function setStatus(message, level) {
     if (!el.status) return;
     el.status.textContent = message || '';
@@ -121,7 +148,7 @@
     state.mode = 'iframe';
     clearStage();
     var frame = make('iframe', 'pdf-frame');
-    frame.src = doc.src + '#view=FitH&toolbar=1&navpanes=0';
+    frame.src = doc.src + '#page=1&view=FitH&toolbar=1&navpanes=0';
     frame.title = doc.title || doc.label;
     frame.setAttribute('loading', 'lazy');
     el.stage.appendChild(frame);
@@ -253,6 +280,7 @@
 
     setActiveNav(id);
     if (el.title) el.title.textContent = doc.title || doc.label;
+    setDesc(doc.desc || '');
     if (el.download) el.download.disabled = !doc.src;
 
     if (!doc.src) {
@@ -435,6 +463,7 @@
     el.stage = byId('pdf-stage');
     el.status = byId('pdf-status');
     el.title = byId('pdf-doc-title');
+    el.desc = byId('pdf-doc-desc');
     el.pageInput = byId('pdf-page-input');
     el.pageTotal = byId('pdf-page-total');
     el.searchInput = byId('pdf-search-input');

@@ -1,0 +1,547 @@
+/* 全站组件样式合集（2026-10-10 合并）
+   由 static/css/components/ 下 6 个小文件按 layout.html 原引用顺序保序拼接而成，
+   层叠顺序与合并前完全一致（已做等价性自检）。
+   原文件已删除；如需拆分回溯见 git 历史。 */
+
+/* ==== 合并自 static/css/components/page-progress-bar.css ==== */
+/* ================================================== */
+/* 页面加载进度条组件 - Page Loading Progress Bar     */
+/* 重构版：顶部水平进度条，加载完成后自动隐藏          */
+/* ================================================== */
+
+/* ===== 进度条容器 ===== */
+#page-progress-bar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 0.25rem !important;
+  z-index: 100001 !important;
+  pointer-events: none !important;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#page-progress-bar.is-visible {
+  opacity: 1;
+}
+
+#page-progress-bar.is-completed {
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
+}
+
+/* ===== 轨道 ===== */
+#page-progress-bar .ppb-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(139, 90, 43, 0.08);
+  overflow: hidden;
+}
+
+/* ===== 填充条 ===== */
+#page-progress-bar .ppb-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,
+      #8B5A2B 0%,
+      #A67C52 40%,
+      #D4A574 70%,
+      #8B5A2B 100%);
+  transition: width 0.35s ease;
+  will-change: width;
+}
+
+/* ===== 光泽动画 ===== */
+#page-progress-bar .ppb-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 100%);
+  transform: translateX(-100%);
+}
+
+#page-progress-bar.is-loading .ppb-fill::after {
+  animation: ppb-shimmer 1.8s infinite;
+}
+
+@keyframes ppb-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ===== 发光效果 ===== */
+#page-progress-bar .ppb-glow {
+  position: absolute;
+  top: -0.125rem;
+  bottom: -0.125rem;
+  right: -0.25rem;
+  width: 1.25rem;
+  background: rgba(139, 90, 43, 0.35);
+  border-radius: 50%;
+  filter: blur(0.25rem);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#page-progress-bar.is-loading .ppb-glow {
+  opacity: 1;
+}
+
+/* ===== 百分比标签 ===== */
+#page-progress-bar .ppb-label {
+  position: fixed !important;
+  z-index: 100002 !important;
+  top: 0.625rem !important;
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  font-family: Arial, sans-serif !important;
+  color: #8B5A2B !important;
+  padding: 0.1875rem 0.375rem !important;
+  border-radius: 0.1875rem !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 0.0625rem 0.25rem rgba(0, 0, 0, 0.1) !important;
+  pointer-events: none !important;
+  opacity: 0;
+  transition: opacity 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+#page-progress-bar.is-loading .ppb-label {
+  opacity: 1;
+}
+
+/* ===== 完成脉冲 ===== */
+#page-progress-bar .ppb-fill--pulse {
+  animation: ppb-pulse 0.6s ease-out;
+}
+
+@keyframes ppb-pulse {
+  0% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.4);
+  }
+
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* ===== 减少动画 ===== */
+@media (prefers-reduced-motion: reduce) {
+
+  #page-progress-bar .ppb-fill,
+  #page-progress-bar .ppb-glow,
+  #page-progress-bar .ppb-label {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  #page-progress-bar {
+    height: 0.1875rem !important;
+  }
+
+  #page-progress-bar .ppb-label {
+    font-size: 0.625rem !important;
+    padding: 0.125rem 0.3125rem !important;
+  }
+}
+
+/* ==== 合并自 static/css/components/back-to-top.css ==== */
+/* ==========================================================================
+   back-to-top.css — 全站「返回顶部」悬浮按钮
+   结构（两层图叠合，见 partials/back-to-top.njk）：
+     .back-to-top          固定定位按钮（右下角），hover 时整体上下浮动
+       .back-to-top__ring  外圈图（自带环绕文字）→ 无限顺时针旋转
+       .back-to-top__core  内芯图 → 静止
+   约束：只动 transform / opacity；hover 与常驻动画都是 GPU 合成层；
+        prefers-reduced-motion 下停止旋转与浮动（保留可点击）。
+   ========================================================================== */
+
+.back-to-top {
+  --btt-size: 126px;          /* 按钮直径 */
+  --btt-ring-duration: 14s;  /* 外圈一圈 */
+  --btt-float-duration: 1.1s;/* hover 上下浮动 */
+
+  position: fixed;
+  right: clamp(14px, 2.2vw, 30px);
+  bottom: calc(clamp(14px, 2.2vw, 30px) + env(safe-area-inset-bottom, 0px));
+  z-index: 9998;             /* 高于页面内容，低于导航(9999)与加载遮罩(100003) */
+  width: var(--btt-size);
+  height: var(--btt-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.28s ease, visibility 0s linear 0.28s, transform 0.28s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 滚过一屏后出现（由 JS 打 .back-to-top--visible） */
+.back-to-top--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.28s ease, visibility 0s, transform 0.28s ease;
+}
+
+.back-to-top__ring,
+.back-to-top__core {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.back-to-top__ring-img,
+.back-to-top__core-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 外圈：环绕文字无限顺时针旋转 */
+.back-to-top__ring {
+  animation: back-to-top-spin var(--btt-ring-duration) linear infinite;
+  will-change: transform;
+}
+
+.back-to-top__core {
+  transform: scale(0.62);   /* 内芯缩在中心，外圈文字留出可读空间 */
+}
+
+@keyframes back-to-top-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* hover / 键盘聚焦：外圈与内芯作为整体一起上下浮动 */
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  animation: back-to-top-float var(--btt-float-duration) ease-in-out infinite;
+}
+
+/* 按下瞬间暂停浮动：既是点击精度（移动中的目标难点中）也避免抖动 */
+.back-to-top:active {
+  animation-play-state: paused;
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--color-echo-blue, #4c9dd3);
+  outline-offset: 4px;
+}
+
+@keyframes back-to-top-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+/* 移动端略小 */
+@media (max-width: 768px) {
+  .back-to-top { --btt-size: 99px; }
+}
+
+/* 减弱动效：停止旋转与浮动，保留点击功能 */
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top,
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    animation: none;
+  }
+
+  /* 外圈旋转挂在子元素上，必须单独停（父级 animation:none 管不到它） */
+  .back-to-top__ring {
+    animation: none;
+  }
+}
+
+/* ==== 合并自 static/css/components/section-fold.css ==== */
+/* 通用正文小节收纳条
+ * 配套 static/js/components/section-fold.js（全站加载）。
+ * 2026-09-27 建立；2026-10-07 增加展开/收起动画。
+ *
+ * 运行时把 .content-card 内带 id 的 h3 及其后续内容包成 <details class="section-fold">，默认折叠。
+ * 任何页面只要给正文小节 h3 加 id（<页面前缀>-<语义>），即自动获得收纳条 + 展开动画，无需写 JS/CSS。
+ *
+ * ⚠️ .section-fold__body 的 padding 是 human-practices/integrated-human-practices 页
+ *    手写收纳条（.hz-expert-fold-all + hpFoldReveal）的既有依赖，不能删、不能搬。
+ *    组件自己生成的收纳条因此改用内层 .section-fold__inner 承载内边距，
+ *    让 .section-fold__body 的高度可以真正收到 0（padding 会抵住 height:0，收不干净）。
+ */
+
+/* ===== 展开/收起动画参数（唯一入口）=====
+ * 时长与缓动一律走全站令牌（README §4.6），只在这里改即可全站生效；
+ * JS 通过 getComputedStyle 读取，读不到时用 0.3s / --ease-smooth 兜底。 */
+.section-fold {
+  --fold-dur-open: var(--duration-normal, 0.3s);
+  --fold-dur-close: var(--duration-normal, 0.3s);
+  --fold-ease: var(--ease-smooth, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+/* 锚点跳转双保险：目标标题留出固定顶栏空间，避免被导航栏遮挡导致「点不准」 */
+.content-card h2,
+.content-card h3,
+.section-fold > summary h3 {
+  scroll-margin-top: 130px;
+}
+
+/* 收纳条本体 */
+.section-fold {
+  margin: 0.75rem 0;
+}
+.section-fold > summary {
+  cursor: pointer;
+  list-style: none;
+}
+.section-fold > summary::-webkit-details-marker {
+  display: none;
+}
+.section-fold > summary::before {
+  content: '▸';
+  display: inline-block;
+  margin-right: 0.45rem;
+  color: inherit;
+  transition: transform var(--duration-fast, 0.2s) var(--ease-smooth, ease);
+}
+.section-fold[open] > summary::before {
+  transform: rotate(90deg);
+}
+.section-fold > summary h3 {
+  margin: 0;
+}
+.section-fold > summary:hover {
+  opacity: 0.88;
+}
+
+/* 手写收纳条（.hz-expert-fold-all 等非组件生成的 details）沿用的内边距——保持原值 */
+.section-fold__body {
+  padding: 0.5rem 0 0.25rem;
+}
+
+/* 动画作用层：只在展开/收起过程中由 JS 写 height + overflow，静态时不设任何高度。
+   padding 移到内层，收起时高度才能真正归零（选择器多一层 .section-fold，优先于上面那条）。 */
+.section-fold > .section-fold__body {
+  padding: 0;
+  overflow: visible;
+}
+.section-fold__inner {
+  padding: 0.5rem 0 0.25rem;
+}
+
+/* 减少动态：不做动画，交回原生 details 行为 */
+@media (prefers-reduced-motion: reduce) {
+  .section-fold > summary::before {
+    transition: none;
+  }
+}
+
+/* ==== 合并自 static/css/components/media-reveal.css ==== */
+/*
+ * 图片到达动画 * 配套 static/js/components/media-reveal.js（全站加载）。 * * 规定写法（写对了就自动获得「加载前预留空间 + 到达淡入」，
+ * 两站通用）： * <img src="…" alt="…" width="1200" height="800" loading="lazy" decoding="async"> * - width / height 写图片真实像素：浏览器据此在**加载前**就按比例预留位置，
+ * 页面不会跳； * - loading="lazy" 交给浏览器按需加载，decoding="async" 避免解码阻塞主线程； * - 到达淡入由本组件的 JS 负责，HTML 侧不需要写任何 class。
+ * * * 降级红线（不得回退）： * - 默认状态不隐藏任何图片：无 JS、reduced-motion、脚本 404 时图片照常直接显示； * - 隐藏类 .media-reveal--pending 只由 JS 在读不到「已解码」状态时添加；
+ * * - 图片加载失败（error）也照常显示，不会因为等不到 load 而永久隐身。
+ */
+.media-reveal {
+  transition: opacity var(--duration-normal, 0.3s) var(--ease-smooth, ease);
+}
+
+/* 隐藏必须是瞬时的：否则从 opacity 1 淡到 0 会先闪一下要淡入的图 */
+.media-reveal--pending {
+  opacity: 0;
+  transition: none;
+}
+
+/* ==== 合并自 static/css/components/page-loader.css ==== */
+/*
+ * ========================================================================== page-loader.css — 全站页级加载遮罩（根站）
+ * 米黄/暖棕设计系统；2 帧插画硬切伪动画 + 纯 CSS 兜底 说明：遮罩默认 display:none，仅当 <head> 内同步脚本 page-loader-arm.js 给 <html> 打上 .page-loader-armed 后才启用 —— JS 禁用 / 脚本 404 时页面完全不受影响（不会永久遮挡）
+ * ==========================================================================
+ */
+
+:root {
+  --pl-bg: #FFF8E7;      /* 米黄主色（与 --color-beige 同值） */
+  --pl-bg-2: #FCE7CB;    /* 次米黄（页面背景） */
+  --pl-line: #8B5A2B;    /* 暖棕 */
+  --pl-dark: #5D3A1A;    /* 深棕 */
+  --pl-soft: #D4A574;    /* 浅棕 */
+  --pl-frame: 240px;     /* 单帧显示尺寸 */
+  --pl-duration: 1.2s;   /* 一轮 2 帧时长（每帧 0.6s） */
+  --pl-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 遮罩默认不显示 */
+.page-loader { display: none; }
+
+html.page-loader-armed,
+html.page-loader-done { background-color: var(--pl-bg); }
+
+/* arm 期间隐藏原生内容，避免半成品闪烁；用 visibility 保持布局稳定不抖动 */
+html.page-loader-armed body > :not(.page-loader) { visibility: hidden; }
+
+/* arm 期间锁定滚动 */
+html.page-loader-armed { overflow: hidden; }
+
+html.page-loader-armed .page-loader,
+html.page-loader-done .page-loader { display: flex; }
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100003;               /* 高于导航(9999) 与首页 GIF 开场层(100002) */
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(120% 90% at 50% 42%, var(--pl-bg-2) 0%, var(--pl-bg) 62%);
+  opacity: 1;
+  transition: opacity 0.34s var(--pl-ease);
+}
+
+/* 收尾：淡出 + 让出交互，随后由 JS 移除 done 类彻底隐藏 */
+html.page-loader-done .page-loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.34s var(--pl-ease), visibility 0s linear 0.36s;
+}
+
+.page-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 24px
+           calc(24px + env(safe-area-inset-bottom, 0px));
+}
+
+.page-loader__stage {
+  position: relative;
+  width: var(--pl-frame);
+  height: var(--pl-frame);
+  display: grid;
+  place-items: center;
+}
+
+/* 柔和光晕，增加纵深（纯 CSS，无额外请求） */
+.page-loader__halo {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+              rgba(212, 165, 116, 0.30) 0%, rgba(212, 165, 116, 0) 68%);
+  animation: page-loader-halo 2.4s var(--pl-ease) infinite;
+}
+
+/* 帧容器默认可见 —— 原先等 frames-ready 才显示，弱网下整段加载期只剩 Loading 文字（无动画），现改为图未到时留空、到一帧显一帧；兜底三点仅在两帧全部失败时保留。 */
+.page-loader__frames {
+  position: relative;
+  width: var(--pl-frame);
+  height: var(--pl-frame);
+  opacity: 1;
+}
+
+.page-loader__frame {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.page-loader__frame--1 {
+  background-image: url("https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/loader-frame-1.avif");
+  animation: page-loader-frame-1 var(--pl-duration) linear infinite;
+}
+
+.page-loader__frame--2 {
+  background-image: url("https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/loader-frame-2.avif");
+  animation: page-loader-frame-2 var(--pl-duration) linear infinite;
+}
+
+.page-loader__text {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pl-line);
+  opacity: 0.6;
+  animation: page-loader-fade 1.6s var(--pl-ease) infinite alternate;
+}
+
+@keyframes page-loader-frame-1 {
+  0%, 49.99% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes page-loader-frame-2 {
+  0%, 49.99% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
+@keyframes page-loader-halo {
+  0%, 100% { transform: scale(0.94); opacity: 0.72; }
+  50%      { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes page-loader-fade {
+  from { opacity: 0.36; }
+  to   { opacity: 0.72; }
+}
+
+/* 移动端等比缩小 */
+@media (max-width: 640px) {
+  :root { --pl-frame: 184px; }
+  .page-loader__inner { gap: 14px; }
+}
+
+/* 无障碍：尊重减弱动效偏好（定格首帧，去掉一切循环动画与过渡） */
+@media (prefers-reduced-motion: reduce) {
+    /* 减弱动效：定格第 1 帧（不再硬切），其余循环动画一并停止 */
+  .page-loader__frame { animation: none; }
+  .page-loader__frame--1 { opacity: 1; }
+  .page-loader__frame--2 { opacity: 0; }
+  .page-loader__halo,
+  .page-loader__text { animation: none; }
+  .page-loader,
+  html.page-loader-done .page-loader { transition: none; }
+}
+
+/* ==== 合并自 static/css/components/scroll-progress-bar.css ==== */
+/* ================================================== */
+/* 滚动阅读进度条样式已禁用                                */
+/* 原因：右侧垂直蓝色进度条与首页章节速览面板视觉冲突          */
+/* 如需恢复，请参考历史版本或改用顶部极细进度条方案            */
+/* ================================================== */
+
+/* #scroll-progress-bar,
+#scroll-progress-fill {
+  display: none;
+} */

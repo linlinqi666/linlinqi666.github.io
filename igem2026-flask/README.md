@@ -58,7 +58,7 @@ flask freeze             # writes public/
 
 Per the iGEM 2026 rule (and matching `2025/szu-china`), `static/` may contain **only JS and
 CSS** — no images. All images are uploaded to the iGEM Uploads CDN and referenced as
-`https://static.igem.wiki/2026/szpu-china/image/...`. The repository's `static/image/`
+`https://static.igem.wiki/teams/6373/wiki/image/...`. The repository's `static/image/`
 folder has been removed; page references were rewritten to the CDN by `fix_assets.py` (archived under ../对话归档/research-reports/gitlab/).
 
 **To go live:** upload the files from the workspace `static/image/` (keep the `image/`
@@ -73,6 +73,10 @@ rule set and pre-commit checklist.
 now contains JS/CSS only (verified: 0 remaining local image references).
 
 **Page loading animation (page-loader) — 2026-09-29 起整体暂缓，不随本轮上线。**
+> **2026-10-10 订正**：暂缓的是"播放"而非"文件"——`wiki/layout.html` 仍引用
+> `static/css/components/page-loader.css`，且 4 个页面保留 `<div class="page-loader">` 标记；
+> 组件处于「CSS 兜底 `display:none` 隐藏遮罩」的停用态。要彻底撤出，需同时移除
+> layout 的 `<link>`、各页 body 标记与该 CSS（缺一件就会出现遮罩显形破块）。
 原因：美工未出雪碧图素材。原来每页都会显示一个米黄/暖棕全屏遮罩，伪动画是 6 帧雪碧图
 翻页（`steps(6)`），遮罩只在页面声明过的首屏关键插画就绪后才放行
 （`window.PageLoader.register(...)`，例如 Members 页的队长大图）。
@@ -98,6 +102,23 @@ now contains JS/CSS only (verified: 0 remaining local image references).
   控制器 → ④ `<body>` 标记；然后把两个文件加回推送清单的 CSS / JS 组，并把
   `2026-09-29-test-public-build.js` 的脚本数断言从 7 改回 8。
 
+## Asset layout & upload workflow (2026-10-10)
+
+- **组件样式合集**：`static/css/components.css`——由 `static/css/components/` 下 6 个小文件按
+  layout 原引用顺序**保序合并**而成（等价性自检：去注释后有效行 384/384 一致）。
+  **必须置于 `mobile.css` 之后加载**（原 `section-fold` / `media-reveal` / `page-loader` /
+  `scroll-progress-bar` 的 link 本就在 mobile 之后，移动位置会反转层叠关系）。
+- **页面专属资源**：只被单页引用且 < 10 KB 的 CSS/JS 可内嵌进页面；> 20 KB 与多页共享的资源
+  **保留为文件**（可被浏览器缓存，内嵌反而更慢）。`static/js/vendor/flexsearch.bundle.min.js`
+  与 `static/js/3dmol/` 属于必需的第三方库，保留。
+- **图片**：一律走 `{{ media('<path>') }}` → `https://static.igem.wiki/teams/6373/wiki/<path>`；
+  `static/` 只放 CSS/JS（`static/image/` 仅作上传中转，不入库）。
+- **上传工作流（完整版）**：见 `.codebuddy/skills/igem-wiki-migration-guard/SKILL.md`
+  步骤 3 / 3b / 3c、事故档案 `references/push-incidents-2026-10.md`、资源治理
+  `references/asset-consolidation-and-comments.md`。核心顺序：
+  **查官方仓库并对内容比对 → CI 就绪度 = 0 → 隔离区模拟 freeze → 分批（同页结构+样式+脚本同批）
+  → 图片逐张探测归零**。
+
 ## Team page: member categories and order (parity with root site)
 
 `wiki/pages/members.html` renders entirely from `static/js/pages/members.js`; the single
@@ -114,7 +135,7 @@ root static site (root is authoritative — see root `README.md` **§5.15**):
   no header.
 - Adding a category needs three edits in lockstep: `ROLE_ORDER`, `ROLE_COLORS` in
   `members.js`, and `.group-indicator[data-role="…"]` in `static/css/members.css`.
-- This file mirrors the root version with the `https://static.igem.wiki/2026/szpu-china/image/...`
+- This file mirrors the root version with the `https://static.igem.wiki/teams/6373/wiki/image/...`
   prefix, so every new member photo (`webp/<id>.webp`, optionally `webp/<id>_kt.webp`) must be
   uploaded to the iGEM Uploads CDN before it shows on the live site.
 - Each member carries the same 7 fields in a fixed order —
@@ -255,7 +276,7 @@ Homepage GIF intro 条目，卡在 CDN 素材未上传）。
 
 ### 6. 注释与对外文案红线
 - 推送到官方仓库的文件（模板/JS/CSS）里**不要**出现内部引用：本地归档路径（`对话归档/...`）、内部脚本名（`temporary-tools/...`）、内部日期（`2026-09-xx`）、已删除模块名（`site_nav`）、以及 `文件:行号` 形式的引用注释。功能说明性中文注释（如"默认折叠"）保留即可。
-- 图片一律走 iGEM Uploads CDN（`https://static.igem.wiki/2026/szpu-china/image/...`），`static/` 只允许 JS/CSS。模板用 `{{ media("image/...") }}`，JS 读 `window.MEDIA_BASE`。
+- 图片一律走 iGEM Uploads CDN（`https://static.igem.wiki/teams/6373/wiki/image/...`），`static/` 只允许 JS/CSS。模板用 `{{ media("image/...") }}`，JS 读 `window.MEDIA_BASE`。
 
 ### 7. 搜索索引
 - 改完页面后重建：`python tools/search_index_generator.py`（在 `flask freeze` 之后跑；CI 里 `.gitlab-ci.yml` 已串接）。产物 `static/js/core/search-index.json` 需提交。

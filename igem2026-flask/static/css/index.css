@@ -1553,6 +1553,27 @@ html.home-scroll-snap #footer.section-footer {
   overflow: hidden;
 }
 
+/* ≥769px：hero 收敛为固定 16:9 等比画布（设计稿基准 1080×607 ≈ 16:9）。
+   此前的实现是「stage 满幅 + 元素 top 用 calc(% + 50px) 混合定位」，
+   视口宽高比一变（如 1.92:1 的窗口），横向按宽度缩放、纵向按高度缩放，
+   元素相对位置随之漂移（多视口实测：logo 的 top 由 23.0% 漂到 26.6%）。
+   画布化后所有百分比统一相对画布 → 任何分辨率下相对位置恒定、整体等比缩放。
+   移动端（≤768px）不加画布：竖屏下 16:9 画布会把纵向重排的布局压扁。 */
+@media (min-width: 769px) {
+  .echo-stage {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 注意：不能同时设 top/bottom: 0——绝对定位下会拉伸高度、使 aspect-ratio 失效，
+       必须只约束宽度、让高度由宽高比推导。 */
+    width: min(100%, calc(100vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    height: auto;
+    max-height: 100%;
+  }
+}
+
 .echo-art {
   position: absolute;
   object-fit: contain;
@@ -1560,8 +1581,9 @@ html.home-scroll-snap #footer.section-footer {
   user-select: none;
   z-index: 2;
   opacity: 0;
-  transform: translateY(18px);
-    /* 入场动画 + 入场后持续柔和浮动（见 floatYeastSoft）。 入场延迟由各变体的 animation-delay 控制，浮动与之同步开始（淡入期间即轻微浮动）。 */
+    /* 2026-10-10：入场位移从静态规则移入 echoIn 的 from 帧——
+       静态 translateY(18px) 会按 stage 高度占比在不同视口下产生额外偏移
+       （18px 在 1080 高里是 1.7%、在 562 高里是 3.2%），是纯百分比定位外残留的漂移源。 */
   --echo-in-delay: 0s;
   animation-name: echoIn, floatYeastSoft;
   animation-duration: 0.9s, 6s;
@@ -1574,8 +1596,9 @@ html.home-scroll-snap #footer.section-footer {
 /* 已按 alpha 紧裁为 1510×526（原件备份 backups/webp-original/hero-echo-logo.1600square.png）， 坐标换算自设计稿 1080×607：字区 x100–580 / y115–280 → left 8.8% / top 19% / width 44.9%。 */
 .echo-art--logo {
   left: 8.8%;
-  
-  top: calc(19% + 50px);
+  /* 回归设计稿值（1080×607：字区 x100–580 / y115–280 → left 8.8% / top 19% / width 44.9%）。
+     2026-10-10：去掉后加的 `+ 50px` 硬偏移——它是多视口位置漂移的直接原因。 */
+  top: 19%;
   width: 44.9%;
   animation-delay: 0.05s;
 }
@@ -1595,9 +1618,9 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 .echo-art--mascot {
-  left: 52.2%;
-  
-  top: calc(6.6% + 50px);
+  left: 53.2%;
+  /* 定位参数按用户指定值：top 用 calc 兼顾百分比锚点与固定下移量。 */
+  top: calc(-3.4% + 50px);
   width: 43%;
   height: auto;
   animation-delay: 0.15s;
@@ -1627,6 +1650,11 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 @keyframes echoIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
   to {
     opacity: 1;
     transform: translateY(0);

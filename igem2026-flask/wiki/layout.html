@@ -61,23 +61,16 @@
 })();
 </script>
 
-    <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 组件 → 移动端（最后，确保覆盖） -->
+    <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 移动端 → 组件（见下方 components.css） -->
   
   <link rel="stylesheet" href="{{ url_for('static', filename='iconfont/iconfont.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation/navigation.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/page-progress-bar.css') }}">
-  
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/back-to-top.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
-    <!-- 内容页小节收纳条样式（section-fold.js 的配套样式，含展开/收起动画） -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/section-fold.css') }}">
-    <!-- 图片到达动画样式（media-reveal.js 的配套样式）；空间预留靠 img 的 width/height 属性 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/media-reveal.css') }}">
-    <!-- 标记与控制器配套） -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/page-loader.css') }}">
-    <!-- 滚动进度条样式（scroll-progress-bar.js 配套） -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components/scroll-progress-bar.css') }}">
+    <!-- 全站组件样式合集（2026-10-10：components/ 下 6 个小文件保序合并；等价性自检 384/384 行一致）。
+         必须置于 mobile.css 之后：原 section-fold / media-reveal / page-loader /
+         scroll-progress-bar 的 link 本就在 mobile.css 之后，移动位置会反转层叠关系。 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
   {% block styles %}{% endblock %}
 
   
@@ -99,6 +92,10 @@
   <script src="{{ url_for('static', filename='js/vendor/flexsearch.bundle.min.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/core/search.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/section-fold.js') }}" defer></script>
+  <!-- 返回顶部按钮 / 图片到达淡入：此前只有 CSS 被引用、JS 缺引用（组件半成品），
+       2026-10-10 补齐其脚本引用，使功能与样式配套。 -->
+  <script src="{{ url_for('static', filename='js/components/back-to-top.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/media-reveal.js') }}" defer></script>
   {% block scripts %}{% endblock %}
 </head>
 
@@ -132,12 +129,13 @@
   </main>
   {% block footer %}{% include "footer.html" %}{% endblock %}
 
-    <!-- 全站「返回顶部」悬浮按钮：两张图叠合（外圈自带环绕文字并持续旋转，hover 时整体上下浮动）。 -->
+    <!-- 全站「返回顶部」悬浮按钮：两张图叠合（外圈为透明底美工图并持续旋转，hover 时整体上下浮动）。
+       2026-10-11 换用美工新图（透明底，取代旧版自带环绕文字+底色的 avif）。 -->
   <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
     <span class="back-to-top__ring" aria-hidden="true">
       
       <img class="back-to-top__ring-img"
-        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-ring.avif" alt="" width="320" height="320"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-ring.avif" alt="" width="1280" height="1280"
         decoding="async">
     </span>
     <span class="back-to-top__core" aria-hidden="true">

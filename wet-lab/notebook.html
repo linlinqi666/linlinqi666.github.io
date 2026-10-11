@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <link rel="icon" type="image/png" href="../static/image/any-icon/teamlogo.png">
   <meta charset="UTF-8">
@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="../static/iconfont/iconfont.css">
 <link rel="stylesheet" href="../static/css/navigation/navigation.css">
 <link rel="stylesheet" href="../static/css/log.css">
+<link rel="stylesheet" href="../static/css/components/pdf-embed.css">
 
 <link rel="stylesheet" href="../static/css/mobile.css">
 <link rel="stylesheet" href="../static/css/components/page-loader.css">
@@ -84,7 +85,6 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
@@ -139,7 +139,6 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
           <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
           <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
           <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
@@ -193,8 +192,7 @@
 
   <main class="">
     
-<div class="description-container">
-  <!-- 左侧文档导航（与其它内容页统一形态） -->
+<div class="description-container notebook-page">
   <aside class="description-sidebar">
     <div class="yeast-decoration">
       <div class="yeast-cell yeast-cell-1"></div>
@@ -209,27 +207,27 @@
       <ul class="description-nav">
         <li class="level1">
           <div class="nav-link-wrapper">
-            <a href="#wet-lab" class="nav-main-link">Wet Lab</a>
+            <a href="#notebook-overview" class="nav-main-link">Notebook Overview</a>
           </div>
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
-            <a href="#dry-lab" class="nav-main-link">Dry Lab</a>
+            <a href="#notebook-chassis" class="nav-main-link">Chassis Engineering</a>
           </div>
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
-            <a href="#human-practices" class="nav-main-link">Human Practices</a>
+            <a href="#notebook-gpa1" class="nav-main-link">Humanized G-Protein Chimera</a>
           </div>
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
-            <a href="#wiki" class="nav-main-link">Wiki</a>
+            <a href="#notebook-pager" class="nav-main-link">PAGER Fusion Receptor</a>
           </div>
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
-            <a href="#team-management" class="nav-main-link">Team Management</a>
+            <a href="#notebook-reporter" class="nav-main-link">Reporter Module</a>
           </div>
         </li>
       </ul>
@@ -237,50 +235,93 @@
   </aside>
 
   <div class="description-content">
-    <div class="pdf-viewer" id="pdf-viewer" data-pdfjs-base="https://static.igem.org/2026/szpu-china/pdfjs/" data-pdfjs-local="../static/js/pdfjs/">
-      <div class="pdf-viewer__header">
-        <h1 class="pdf-doc-title" id="pdf-doc-title">实验记录</h1>
-        <span class="pdf-doc-hint">PDF 文档在线阅读</span>
+    <div id="notebook-overview" class="content-card">
+      <h2>Notebook</h2>
+      <p class="content-intro">
+        These notebooks serve as the main entry for our wet-lab documentation of the yeast-based biosensor targeting airborne influenza A virus (IAV). Our PAGER (Protein-fragment Assisted GPCR Expression Reporter) antigen-gated receptor system is built in four independent functional modules. Below you can access experimental records for chassis engineering, humanized G-protein chimera construction, PAGER fusion-receptor assembly, and reporter-module validation respectively. Each record links to the Protocol page, and to external resources cited inside the document.
+      </p>
+    </div>
+
+    <div id="notebook-chassis" class="content-card">
+      <h2>Chassis Engineering</h2>
+      <p class="content-intro">
+        This notebook records wet-lab procedures for chassis optimization of our yeast biosensor. We performed CRISPR-Cas9-mediated knockout of endogenous FAR1 and SST2 in <i>Saccharomyces cerevisiae</i> BY4741, aiming to eliminate cell-cycle arrest and G-protein-signaling negative feedback, so as to improve signal sensitivity for our downstream PAGER antigen-gated receptor system.
+      </p>
+      
+      
+      
+      
+
+<div class="pdf-embed">
+  <object class="pdf-embed__object" type="application/pdf"
+          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-chassis-far1-sst2-knockout.pdf#page=1"
+          aria-label="Notebook - Construction of the FAR1/SST2 Knockout Yeast Strain">
+    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+  </object>
+</div>
+
+      <div class="notebook-resources">
+        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Chassis Engineering →</a>
+        <span class="notebook-resources__label">Resources in document:</span>
+        <a href="https://www.yeastgenome.org/" target="_blank" rel="noopener">SGD</a>
+        <a href="https://www.benchling.com" target="_blank" rel="noopener">Benchling</a>
       </div>
+    </div>
 
-      <div class="pdf-toolbar">
-        <div class="pdf-toolbar__group">
-          <button type="button" class="pdf-btn is-icon" data-action="prev" aria-label="上一页" disabled>‹</button>
-          <input type="number" class="pdf-page-input" id="pdf-page-input" value="1" min="1" aria-label="页码" disabled>
-          <span class="pdf-page-total" id="pdf-page-total">/ 1</span>
-          <button type="button" class="pdf-btn is-icon" data-action="next" aria-label="下一页" disabled>›</button>
-        </div>
+    <div id="notebook-gpa1" class="content-card">
+      <h2>Humanized G-Protein Chimera</h2>
+      <p class="content-intro">
+        This notebook records the humanization engineering of GPA1 in <i>Saccharomyces cerevisiae</i> — replacing the native C-terminal KIGII motif with the human Gαq EYNLV sequence to retune G-protein coupling for the PAGER receptor.
+      </p>
+      
+      
+      
+      
 
-        <div class="pdf-toolbar__group">
-          <button type="button" class="pdf-btn is-icon" data-action="zoom-out" aria-label="缩小" disabled>−</button>
-          <button type="button" class="pdf-btn is-icon" data-action="zoom-in" aria-label="放大" disabled>+</button>
-          <button type="button" class="pdf-btn" data-action="fit" disabled>适应宽度</button>
-        </div>
+<div class="pdf-embed">
+  <object class="pdf-embed__object" type="application/pdf"
+          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-gpa1-humanization.pdf#page=1"
+          aria-label="Notebook - Humanization Engineering of GPA1 in Saccharomyces cerevisiae">
+    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+  </object>
+</div>
 
-        <div class="pdf-toolbar__spacer"></div>
-
-        <div class="pdf-toolbar__group pdf-toolbar__group--search">
-          <div class="pdf-search">
-            <input type="search" class="pdf-search__input" id="pdf-search-input" placeholder="搜索关键词" aria-label="在文档中搜索" disabled>
-            <button type="button" class="pdf-btn is-icon" data-action="search-prev" aria-label="上一处" disabled>↑</button>
-            <button type="button" class="pdf-btn is-icon" data-action="search-next" aria-label="下一处" disabled>↓</button>
-          </div>
-        </div>
-
-        <div class="pdf-toolbar__group">
-          <button type="button" class="pdf-btn" data-action="download" disabled>下载</button>
-        </div>
+      <div class="notebook-resources">
+        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Humanized G-Protein Chimera →</a>
       </div>
+    </div>
 
-      <div class="pdf-stage" id="pdf-stage">
-        <noscript>
-          <div class="pdf-noscript">
-            当前浏览器已禁用 JavaScript，无法在页面内预览文档。请点击上方「下载」获取 PDF 后使用本地阅读器查看。
-          </div>
-        </noscript>
+    <div id="notebook-pager" class="content-card">
+      <h2>PAGER Fusion Receptor</h2>
+      <p class="content-intro">
+        This notebook records the construction of the PAGER antigen-gated system for Influenza A virus detection — assembly of the membrane-anchored scFv–Gα–Gγ fusion receptor, yeast transformation, expression validation, and HA-antigen-induced activation detection.
+      </p>
+      
+      
+      
+      
+
+<div class="pdf-embed">
+  <object class="pdf-embed__object" type="application/pdf"
+          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-pager-antigen-gated.pdf#page=1"
+          aria-label="Notebook - Construction of the PAGER Antigen-Gated System for Influenza A Virus Detection">
+    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+  </object>
+</div>
+
+      <div class="notebook-resources">
+        <a class="notebook-resources__protocol" href="protocol.html">Protocol: PAGER Fusion Receptor →</a>
       </div>
+    </div>
 
-      <div class="pdf-status" id="pdf-status"></div>
+    <div id="notebook-reporter" class="content-card">
+      <h2>Reporter Module</h2>
+      <p class="notebook-pending">
+        Experimental records for this module are being prepared; the notebook PDF will be published here once available.
+      </p>
+      <div class="notebook-resources">
+        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Reporter Module →</a>
+      </div>
     </div>
   </div>
 </div>
@@ -351,7 +392,7 @@
             <div class="footer-column">
               <h4>Wet Lab</h4>
               <ul>
-                <li><a href="../wet-lab/design.html">Design</a></li>
+                <li><a href="../project/design.html">Design</a></li>
                 <li><a href="../wet-lab/protocol.html">Protocol</a></li>
                 <li><a href="../wet-lab/result.html">Results</a></li>
                 <li><a href="../wet-lab/parts.html">Parts</a></li>
@@ -437,16 +478,8 @@
   <script src="../static/js/components/section-fold.js" defer></script>
   <script src="../static/js/components/media-reveal.js" defer></script>
   <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/pages/log-pdf-data.js" defer></script><script src="../static/js/pages/log-pdf.js" defer></script>
+  <script src="../static/js/components/sidebar-progress.js" defer></script>
   
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    if (window.LogPdfViewer) {
-      window.LogPdfViewer.init({ root: '#pdf-viewer' });
-    }
-  });
-</script>
-
 
   
   <script>

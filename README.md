@@ -75,7 +75,6 @@ SZPU-2026 wiki/
 │   ├── model.html
 │   └── software.html
 ├── wet-lab/                        # 湿实验板块
-│   ├── design.html                 # 实验设计（2026-09-26 由原 experiments.html 拆出）
 │   ├── protocol.html               # 实验方案：材料 / 配方 / 步骤 / 对照（同上拆出）
 │   ├── parts.html
 │   ├── result.html
@@ -171,11 +170,10 @@ static/js/core/nav-scroll-behavior.js
 | dry-lab/hardware.html | hardware.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/model.html | model.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/software.html | software.css(空) | 是 | 是 | sidebar-progress.js |
-| wet-lab/design.html | experiments.css | 是 | 是 | sidebar-progress.js |
 | wet-lab/protocol.html | experiments.css | 是 | 是 | sidebar-progress.js |
 | wet-lab/result.html | result.css(空) | 是 | 是 | sidebar-progress.js |
 | wet-lab/safety.html | — | 是 | 是 | sidebar-progress.js |
-| wet-lab/notebook.html | log.css(实) | 否 | 否 | — |
+| wet-lab/notebook.html | —（页内内联） | 是 | 是 | sidebar-progress.js |
 | wet-lab/parts.html | parts.css(空) | 否 | 否 | — |
 | human-practices/education.html | education.css(空) | 是 | 是 | sidebar-progress.js |
 | human-practices/integrated human-practices.html | integrated human-practices.css | 是 | 是 | hp-reveal-box.js |
@@ -402,7 +400,7 @@ node static/js/core/search-index-generator.js
 
 四页按 `static/expriments/The extreme/` 下三套页面资料包（`exepriment/experiments/`、`result/`、`contribution/` 的 `output/15-*内容大纲.md`）重建，内容来源为 `static/expriments/` 四个模块的一手分析。原 `wet-lab/experiments.html` 于 2026-09-26 按用户指令拆分为 `wet-lab/design.html`（实验设计）与 `wet-lab/protocol.html`（实验方案）两页：原页删除，导航（`nav.njk` 移动 + 桌面两处）、页脚（`footer.njk`）、首页页脚与 `src/_data/contribution.js` 引用同步改到新页，搜索索引 `PAGES` 同步（需求 `REQ-20260926-002`）；他队样本分析与拆分方案见 `对话归档/2026-09/2026-09-26-experiments-split/`。
 
-**Design 页**（`src/wet-lab/design.njk`）五节，承接设计层内容：
+**Design 页**（`src/project/design.njk`，2026-10-11 由 `wet-lab/design.njk` 合并而来，全站仅此一设计页）五节，承接设计层内容：
 
 | 小节 | 锚点 | 内容 |
 |---|---|---|
@@ -418,7 +416,7 @@ node static/js/core/search-index-generator.js
 - 侧边栏 TOC 与页内 id 同步更新（Design 页两级：节 + 模块；Protocol 页四个模块一级项）；改锚点须同步 TOC。`sidebar-progress.js` 的 `sectionIdPrefixes` 已加入 `design-` / `protocol-` 前缀，TOC 可下钻到模块级。
 - 内部待核项（KQ- / SQ- / RC- / GC- / RS-）记录在 `static/expriments/` 语料层与各模块分析文档；Protocol 页为源文档直录，不携带此类注释。
 
-**Results 页**（`src/wet-lab/result.njk`，2026-09-26 按四份 result 源重写）六节：`#results-overview` 概览 → `#results-chassis` 底盘改造 → `#results-pager` 受体构建 → `#results-gpa1` 接口改造 → `#results-reporter` 报告体系（FUS1-yEGFP）→ `#results-discussion` 综合讨论。失败与在途不单列成页，穿插在对应模块内。2026-09-27：侧边栏 TOC 升级为两级（四个模块 level1 下各挂小节 `level3`，正文小节标题加锚点 `results-<模块>-<序号>`）；`sidebar-progress.js` 的 `sectionIdPrefixes` 已补 `results-` 前缀（否则高亮失效）；源 docx 的「目录」「在途与下一步」「原始数据清单」等元结构不进正文——目录转侧边导航，其余转模板 HTML 注释。侧边栏二级导航默认折叠，点击模块（level1）才展开其下小节（level3）；已移除 `:hover` 自动展开以避免布局抖动。正文小节由全站组件 `static/js/components/section-fold.js` 收纳条化（见 §5.14.1 / §5.14.2）：脚本运行时把 `.content-card` 内带 id 的 h3 小节包成原生 `<details class="section-fold">`（默认折叠、点击小节标题展开、侧边栏锚点命中自动展开；无 JS 时保持全展开降级），样式在全站 `static/css/components/section-fold.css`。
+**Results 页**（`src/wet-lab/result.njk`，源文档 `static/expriments/Result(2).doc`，按酵母内部通路四节组织）五节：`#results-overview` 概览 → `#results-chassis` 底盘改造 → `#results-pager` 受体构建 → `#results-gpa1` 接口改造 → `#results-reporter` 报告体系（FUS1-yEGFP）。源文档不含"综合讨论"节——旧版记的 `#results-discussion` 已撤销（该节不在源文档内、属 AI 合成，结论分散在各模块正文），页面不单列讨论。失败与在途不单列成页，穿插在对应模块内。2026-09-27：侧边栏 TOC 升级为两级（四个模块 level1 下各挂小节 `level3`，正文小节标题加锚点 `results-<模块>-<序号>`）；`sidebar-progress.js` 的 `sectionIdPrefixes` 已补 `results-` 前缀（否则高亮失效）；源 docx 的「目录」「在途与下一步」「原始数据清单」等元结构不进正文——目录转侧边导航，其余转模板 HTML 注释。侧边栏二级导航默认折叠，点击模块（level1）才展开其下小节（level3）；已移除 `:hover` 自动展开以避免布局抖动。正文小节由全站组件 `static/js/components/section-fold.js` 收纳条化（见 §5.14.1 / §5.14.2）：脚本运行时把 `.content-card` 内带 id 的 h3 小节包成原生 `<details class="section-fold">`（默认折叠、点击小节标题展开、侧边栏锚点命中自动展开；无 JS 时保持全展开降级），样式在全站 `static/css/components/section-fold.css`。
 
 ### 5.14.1 内容页耦合组件与集合测试约束（2026-09-27）
 
@@ -460,7 +458,9 @@ node static/js/core/search-index-generator.js
 
 **例外与边界（2026-09-27 确认）**：
 
-- `wet-lab/notebook` 是**例外页**：正文仅 PDF 阅读器、无小节，**不做收纳条**；其侧边栏 5 项（`#wet-lab` / `#dry-lab` / `#human-practices` / `#wiki` / `#team-management`）是 **PDF 文档切换器**（清单见 `static/js/pages/log-pdf-data.js` 的 `docs`，`defaultId: 'wet-lab'`，脚本注释明确 `href="#id"` 与文档 id 一一对应、不要随意更改）。点击不跳转（`log-pdf.js` 的 `bindSidebar` 内 `preventDefault`），由 `setActiveNav()` 给当前文档链接加 `.active` + `aria-current="page"` 实现高亮。**不纳入本规范的锚点/收纳条体系，但高亮必须保持工作**（验证脚本 `对话归档/temporary-tools/check-notebook-highlight.js`）。
+- `wet-lab/notebook`（**2026-10-11 改为标准内容页**）：正文为「内容卡 + `<object>` 内嵌 CDN PDF」，与 `wet-lab/protocol` 同源（`.pdf-embed` / `.pdf-embed__object` / `.pdf-embed__fallback`，样式页内内联、两页改动需同步）；**已停用 pdf.js 阅读器与 `log-pdf.js`**（iGEM flask 版不再加载）。侧边栏改为普通章节导航，四个模块各占一张内容卡，id 前缀 `notebook-`（已登记 `sectionIdPrefixes`），已纳入本规范的锚点/收纳条体系。`sidebar-progress.js` 与本页说明均按标准内容页处理。
+  - **模块入口**：`#notebook-overview`（Notebook Overview）／`#notebook-chassis`（Chassis Engineering）／`#notebook-gpa1`（Humanized G-Protein Chimera）／`#notebook-pager`（PAGER Fusion Receptor）／`#notebook-reporter`（Reporter Module）；未收录 PDF 的模块在卡内注明"记录整理中"。**PDF 一律托管于 CDN** `https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/`（两站引用同一套地址，本地不保留副本）：`notebook-chassis-far1-sst2-knockout.pdf`、`notebook-gpa1-humanization.pdf`、`notebook-pager-antigen-gated.pdf`（均实测 `200`）。上传文件名统一用**干净名**——原文件名含空格与括号，URL 编码易出错。文档来源为各模块 `.doc`，经 Word COM 转 PDF（脚本 `对话归档/temporary-tools/2026-10-10-doc2pdf-notebook.ps1`）。PDF.js 阅读器（`log-pdf.js` / `log-pdf-data.js`）已弃用，两站改用 `<object>` 直连 CDN PDF。
+  - **旧实现（PDF 文档切换器 + `log-pdf.js` / pdfjs）仍保留在根站** `src/wet-lab/notebook.njk`；旧高亮验证脚本 `对话归档/temporary-tools/check-notebook-highlight.js` 只对旧实现有效，两站如需一致需另行同步改造。
 - `team/attributions`（自带 `.jump-to-nav` + 独立 scrollspy）与 `human-practices/integrated human-practices`（209 KB 自定义地图结构）结构特殊，用户已确认**不在改造范围，不要改动**。
 - `index`（幻灯式全屏）、`wet-lab/parts`（模板循环 + 原生 `<details>`）、`team/members`（数据驱动）无 `description-nav`，不适用本规范。
 
@@ -468,7 +468,7 @@ node static/js/core/search-index-generator.js
 
 - 数据来源为四个模块各自的 result 源 docx（语料层见各模块 `md/result-正文逐字对照/`、`md/result-图片提取/`，逐字对账与图片核验记录见 `99-result-逐字校验记录.md`；跨源冲突编号 `RS-` 见 `static/expriments/00-跨模块索引与接口.md` §六）。
 - **页面只呈现已得结果**（2026-09-26 口径）：`在途与下一步`、`原始数据` 两节不进页面；进度、待办、自我审核与跨源冲突一律写入**模板源码的 HTML 注释**（`src/wet-lab/result.njk` 页首的 `RS-` 清单，构建后保留在页面源码中、不对读者渲染），审核与结论交由实验组。
-- 页面配图 18 张，放 `static/image/result/<模块>/`，由内嵌图转 webp（≤150 KB，宽 ≤1400 px）；源图与站点图的映射表在各模块 `md/result-图片提取/02-页面用图映射.md`。新增图沿用「`<figure>` + 句首编号图注」写法，示意图须在图注注明「示意图，非实验结果」。
+- 页面配图放 `static/image/result/<模块>/`，**源 docx 解包后按原始格式原样使用（不转码、不缩放）**。~~由内嵌图转 webp（≤150 KB，宽 ≤1400 px）~~ —— **该做法 2026-10-11 废止**：既有损压缩又降采样，违反第 24 条「禁止擅自转码」。源图与站点图的映射表在各模块 `md/result-图片提取/02-页面用图映射.md`。新增图沿用「`<figure>` + 句首编号图注」写法，示意图须在图注注明「示意图，非实验结果」。
 
 **Contribution 页**（`src/project/contribution.njk` + `src/_data/contribution.js` 数据源）分章：概览 → 1 部件（`#contribution-parts`，4 条）→ 2 协议与方法（`#contribution-protocols`，4 条）→ 3 其他贡献（`#contribution-others`，3 条）→ 获取与许可（`#contribution-access`）→ 归属与致谢（`#contribution-attribution`）。每条贡献按三件套写：是什么、为什么对后续队伍有用、怎么拿到；卡片 id 规则为 `parts-*` / `protocol-*` / `other-*`。软件、硬件、教育三章无产出，整章不设。
 
@@ -780,6 +780,9 @@ python "对话归档/temporary-tools/2026-09/2026-09-16-dev-server-nostore.py" 8
 19. **性能预算：** 单页并存独立 `scroll` 监听不超过必要数量；新增持续动画前先评估其合成/绘制成本，长页面尤甚。
 20. **页面只呈现已得结果，冲突与审核事项写进代码注释（2026-09-26）：** 内容页正文只写已得结果与对应数据，不写进度、待办、自我审核或"还需核对"类陈述；跨源冲突、单位口径、归一化缺口等一律写入**模板源码的 HTML 注释**（构建后保留在页面源码中，读者不可见）。`在途与下一步`、`原始数据` 这类收尾节不进页面。一切审核与结论交由实验组，页面不作自我判定。当前实例：`src/wet-lab/result.njk` 页首的 `RS-1…RS-8` 注释块。
 21. **进度/状态与官方对照内容一律不渲染（2026-09-16，最高优先级）：** 页面上不得出现任何实验进度状态（Progress Status、进度汇总表、✅/🔄/⏳、status-badge 徽章、"已完成/进行中/待进行"类字样）与"官方要求项 → 落实方式"对照表（iGEM Check 自检内容）。此类信息只允许三种去处：① 源码 HTML/JS 注释；② `对话归档/` 计划文档；③ 本 README 第七.18 警告区。实验页与贡献页已按此清理，后续新增内容必须遵守；对外页面没有资料的条目直接留空。
+22. **菌种拉丁名必须斜体（2026-10-11，全站标准 + 迁移标准）：** 正文/图注/数据中出现酿酒酵母拉丁名 `Saccharomyces cerevisiae` 及其缩写 `S. cerevisiae` 时，必须渲染为斜体（HTML 用 `<i>` 或 `<em>`）；菌株号（如 `S288C`、`BY4741`）保持正体不斜体。此规则优先级高于"原样照录"，适用全站所有内容页与 `_data` 数据文件（数据字段若渲染纯文本需加 `| safe` 才能使其内 `<i>` 生效）。**迁移到 flask 时同样必须保留 `<i>` 斜体**，不得把拉丁名压平为纯文本；igem-wiki-migration-guard 校验应把"拉丁名未斜体"列为问题。
+23. **侧栏分级目录必须限制最大高度，酵母发酵罐进度容器常驻可见（2026-10-11）：** 含左侧分级目录（`.description-nav`）与酵母发酵罐进度容器（`.progress-section` / `<!-- 发酵进度容器 -->`）的内容页，侧栏 `.description-sidebar` 必须 `position: sticky` 且锁定 `max-height: calc(100vh - 12rem); overflow: hidden`；其内部 `.description-nav-wrapper` 用 `flex: 1 1 auto; min-height: 0; overflow-y: auto` 自行滚动，`.progress-section` 用 `flex: 0 0 auto` 固定在侧栏底部。某页 TOC 条目过多时只允许目录内部滚动，**绝不允许把发酵进度容器顶出视口下方**。该规则已写入 `static/css/navigation/navigation.css`（通用，覆盖全站），`static/css/contribution.css` 的 `.contribution-page` 作用域版本须与之同步。
+24. **禁止擅自转码：素材一律保持原始格式与原始文件名（2026-10-11，用户明确；优先级最高）：** 任何图片/动画素材必须以**原始格式、原始文件名**使用与投放，**不得为压缩体积或"性能优先"擅自转码**（PNG→WebP、PNG/JPEG→AVIF、GIF→WebP 等）或改名。需要控体积时**只允许降质量 / 降尺寸并保持原格式**（且需说明参数与前后体积）。关键机制：iGEM `static.igem.wiki` 上传器**会自行把 png/jpeg 落地为 `.avif`**（实测：上传 `eng-chassis-fig01.png` → CDN 得到 `eng-chassis-fig01.avif`，尺寸与 alpha 完全保留），**所以本地无需转码，页面引用按上传器产物写 `.avif` 即可**。**本条优先级高于 README 中任何"优先使用 WebP/AVIF""照片统一 webp"类表述及 `.codebuddy/rules/` 中的同类表述**；冲突时一律以本条为准。反面案例（2026-10-11）：把 `Result(2).doc` 解包出的 PNG 擅自转成有损 `webp`（`quality=85`）写入上传暂存区，造成画质损失——已全部改回原始格式（20 个 `.png` + 1 个 `.jpeg`）。
 
 ---
 
@@ -1007,7 +1010,11 @@ node tools/check-performance-budget.js          # 性能预算（见 14.5；memb
 
 ### 16.5 媒体外链策略（合规）
 
-- **flask（生产站）**：`static/` 只允许 JS/CSS；**所有图片必须走 iGEM 自有 CDN** `https://static.igem.wiki/2026/szpu-china/image/...`，**禁止任何第三方 CDN**。取址入口：模板用 `wiki/macros.html` 的 `media(rel)` / `igem_img(name,alt,cls)`；JS 用 `window.MEDIA_BASE`（由 `static/js/core/utils.js` 暴露）。本轮已删除 flask 本地 `static/image/`，46 条本地引用全部改为 CDN。
+- **flask（生产站）**：`static/` 只允许 JS/CSS；**所有图片与 PDF 必须走 iGEM 自有 CDN** `https://static.igem.wiki/teams/6373/wiki/<归属>/<页面>/<文件>`（wet-lab 页面 `lab/wetlab/`、dry-lab 页面 `lab/drylab/`）。**旧基址 `static.igem.wiki/2026/szpu-china/...` 与 `static.igem.org/...` 整片 403，已废弃，禁止再使用**；**禁止任何第三方 CDN**。取址入口：模板用 `wiki/macros.html` 的 `media(rel)` / `igem_img(name,alt,cls)`；JS 用 `window.MEDIA_BASE`（由 `static/js/core/utils.js` 暴露）。flask 本地 `static/image/` 已删除，本地引用全部改为 CDN。
+- **`403 application/xml` = 对象不存在（待上传）**，不是权限问题；`200` 才是已在 CDN。逐张探测用 `.codebuddy/skills/igem-wiki-migration-guard/scripts/check_images.py`。
+- **iGEM 上传器单文件上限 10 MB（2026-10-11 记录）**：`static.igem.wiki` 一次性上传的单个文件**不得超过 10 MB**；超限文件必须先在本地压缩（或换体积更小的等价文件）再上传。上传前对 `igem2026-flask/static/image/wait/**` 逐文件核对体积。素材**按原格式原文件名直传**（上传器会自动转 avif 压体积），本地不擅自转码。
+- **"透明底黑线图"必须先铺白底再上传（2026-10-11 实测）**：Origin/Excel 等导出的图表若**背景全透明、且不透明内容几乎全黑**（RGB 平面单调、细节全在 alpha 平面），上传器转 avif 时会把位元几乎全分给 RGB、alpha 只给极低位元 → **文字与细线被压糊**（实例：`result-fig13` 源图 50 KB，CDN 上只剩 3.1 KB，MAE 5.07 / 明显差异 2.94%）。处置：把透明区域**铺成页面卡片底色**（本站 `--bg-card: #ffffff`）再上传，细节回到 RGB 平面即无损。判据：图片 `mode=RGBA` 且不透明像素占比很低（< 5%）+ 不透明像素近黑 → 必须铺底。
+- **上传暂存区纪律（2026-10-11）**：`igem2026-flask/static/image/wait/**` 是**上传中转站**，只允许存放「本次要上传的最终文件」。① 文件名必须是**页面引用名**——需要改名的，直接产出成目标名，**不要"原件 + 副本"两套并存**（曾因此留下两份逐字节相同的底盘 PDF）；② 已上传成功（CDN 探测 200）的文件随即删除，避免下次误传；③ 一切中间产物（扁平化副本、临时改名件、转码件）用完即删，或移入 `对话归档/misc/`；④ 上传前先跑重复检测：**同内容多份 = 待清理**。
 - **根站（历史参考站）**：按用户确认保留本地 `static/image/`，仅共享同一套加载器逻辑（雪碧图用本地路径）。
 - **根站插画入库边界（2026-10-04 更新）**：加载器插画改为两张独立帧图 `static/image/any-icon/loader/loader-frame-{1,2}.jpg`（原 6 帧雪碧图与逐帧导出已删除，不再有「多帧冗余副本」问题）；`.gitignore` 里针对旧 `static/image/loader/` 的排除项可保留（已无匹配文件）。
 - **待上传清单（2026-10-04）**：见 `Requirements/REQ-20261004-001.md` §4——本轮新增 6 张需上传 CDN（首页 4 张吉祥物 + 全站返回顶部 2 张）；加载器插画**不再需要上传**（flask 侧组件暂缓）。未上传前吉祥物与返回顶部图标会退化为空白/缺图，页面结构不破版。
@@ -1050,8 +1057,8 @@ git diff --cached --stat                       # ③ 暂存区只含本次任务
 
 ### 17.3 二进制体积预算
 
-- 单张图片默认目标 **≤ 300 KB**；**> 1 MB 必须在提交信息里写明原因**；单文件 **≥ 10 MB 一律先压缩**（转 WebP / 降采样 / 改视频格式）再入库。
-- 照片统一 `.webp`（长边 ≤ 1920px、质量 82–88、`method=6`、按 EXIF 纠正方向）；源图只放 `static/image/**/源图片/` 且**必须同时提供 webp**，页面只引用 webp。
+- 单张图片默认目标 **≤ 300 KB**；**> 1 MB 必须在提交信息里写明原因**；单文件 **≥ 10 MB 一律先压缩**再入库——压缩方式为**降质量 / 降尺寸并保持原格式**，**不得擅自转码**（PNG→WebP、PNG/JPEG→AVIF 等）或改名（见第 24 条）。
+- **成员页既有照片**为 `.webp`（长边 ≤ 1920px、质量 82–88、`method=6`、按 EXIF 纠正方向）——属**历史产物，沿用即可**；本行**不构成"新素材也要转 webp"的依据**（见第 24 条：新增素材一律保持原格式）。源图放 `static/image/**/源图片/`（已在 `.gitignore` 排除）。
 - **源图工作区不入库（2026-09-16）**：`static/image/**/源图片/` 存放的是转换产物的**上游素材**，不是运行资源，已在 `.gitignore` 排除，本地物理保留。**页面、页面脚本、数据源一律只引用 `webp/`**；任何指向 `源图片/` 的 `src` / `candidates` 都视为待修缺陷（它会让仓库必须携带原图才能正常显示）。
   - 现实例：`static/image/character/源图片/` 38 个文件 / 48.5 MB → 不入库；同目录 `character/webp/` 32 个文件入库，是唯一运行副本（每个成员 id 的 `.webp` 与 `_kt.webp` 齐备）。
   - 落地时的连带动作（缺一不可）：① 改页面引用指向 webp → ② 重建根站产物 → ③ 重建搜索索引 → ④ `.gitignore` 加规则 → ⑤ `git rm -r --cached <路径>`（**只加规则不会停止跟踪**，已跟踪文件必须显式从索引移除）。
