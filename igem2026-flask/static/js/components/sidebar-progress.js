@@ -62,7 +62,11 @@
       // 小节 model-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
       'model-',
       // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）
-      'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution'
+      'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution',
+      // Hardware 页正文小节（卡片 hardware-overview / -problem / -worth / -origin / -goals /
+      // -iterations / -log / -architecture / -specifications / -bom / -instrument / -test-plan /
+      // -challenges / -future，小节 hardware-<语义>；未登记则滚动高亮失效）
+      'hardware-'
     ]
   };
 

@@ -16,7 +16,7 @@ js:
    改动需与 Flask 站 wiki/pages/notebook.html 同步。
    每个 PDF 容器下方放置「Protocol 站内导航（页面级，跳到 protocol.html）」与
    「PDF 中识别出的网址（以文件内网页名呈现，不直接暴露 URL）」。
-   三份 PDF 均托管于 static.igem.wiki（lab/wetlab/notebook/），本地不保留副本。 #}
+   四份 PDF 均托管于 static.igem.wiki（lab/wetlab/notebook/），本地不保留副本。 #}
 {% extends "layouts/base.njk" %}
 
 {% block main %}
@@ -117,9 +117,13 @@ js:
 
     <div id="notebook-reporter" class="content-card">
       <h2>Reporter Module</h2>
-      <p class="notebook-pending">
-        Experimental records for this module are being prepared; the notebook PDF will be published here once available.
+      <p class="content-intro">
+        This notebook records the construction and validation of our reporting system — the output module that converts PAGER receptor activation into a measurable luminescence/colorimetric signal for influenza A virus detection.
       </p>
+      {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-reporter-module.pdf" %}
+      {% set pdfLabel = "Notebook - Construction of the Reporting System" %}
+      {% set pdfFallback = "This notebook PDF is not available yet." %}
+      {% include "partials/pdf-embed.njk" %}
       <div class="notebook-resources">
         <a class="notebook-resources__protocol" href="protocol.html">Protocol: Reporter Module →</a>
       </div>

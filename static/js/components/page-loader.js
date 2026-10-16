@@ -9,20 +9,24 @@
  *   任一超时（MAX_WAIT / 单图 IMG_TIMEOUT）都强制收尾，绝不永久阻塞。
  *
  * 对外接口（IIFE，挂 window.PageLoader）：
- *   window.PageLoader.register(urls)  // 登记首屏关键图；字符串 | [url] | [[候选1,候选2]]
+ *   window.PageLoader.register(urls[, opts])  // 登记首屏关键图；字符串 | [url] | [[候选1,候选2]]
  *   window.PageLoader.done(cb)        // 收尾回调（首页 GIF 交接用）
  *   window.PageLoader.isDone()
+ *   window.PageLoader.whenIdle(cb)    // 页面全部资源就绪（window load）回调；已就绪则同步执行
+ *   window.PageLoader.gate([opts])    // 二次门控：重新显示遮罩直到页面就绪或超时
+ *                                    //（首页开场动画放完、页面资源仍未就绪时回显加载动画用）
  */
 (function () {
   'use strict';
 
   var MIN_SHOW = 600;     // 最小展示时长（防闪烁），ms
-  var MAX_WAIT = 8000;    // 全局强制收尾兜底，ms
-  var IMG_TIMEOUT = 3000; // 单张关键图超时，ms
+  var MAX_WAIT = 12000;   // 全局强制收尾兜底，ms
+  var IMG_TIMEOUT = 3000; // 单张关键图默认超时，ms
   var EXIT_BUFFER = 420;  // 淡出后清理 done 类的延迟，ms
 
   var root = document.documentElement;
   var overlay = null;
+  var gateTimer = null;   // 二次门控计时器（开场动画收尾时的页面就绪等待）
   var state = {
     start: now(),
     pending: 0,
@@ -77,19 +81,20 @@
   }
 
   /* ---- 预加载：候选回退（首个成功者结清）+ 单图超时 ---- */
-  function loadGroup(candidates) {
+  function loadGroup(candidates, timeout) {
     if (!candidates || !candidates.length) return;
     state.pending++;
 
     var idx = 0;
     var settled = false;
+    var limit = (typeof timeout === 'number' && timeout > 0) ? timeout : IMG_TIMEOUT;
     var timer = setTimeout(function () {
       if (settled) return;
       settled = true;
       state.pending--;
       warn('critical image timeout', candidates[0]);
       evaluate();
-    }, IMG_TIMEOUT);
+    }, limit);
 
     function settle() {
       if (settled) return;
@@ -115,6 +120,21 @@
     next();
   }
 
+  /* ---- 2026-10-16：页面脚本请求是否全部结清（Resource Timing 判定）----
+     readyState 推到 'interactive' 只代表解析器走完文档；defer 脚本可能还在
+     网络队列里排队（弱网实测排队 44s，期间用户翻页看到无动画静态降级页）。
+     正常网络下脚本毫秒级结清，本检查不增加任何等待。 */
+  function allScriptsSettled() {
+    var loaded = {};
+    var entries = performance.getEntriesByType('resource');
+    for (var i = 0; i < entries.length; i++) loaded[entries[i].name] = true;
+    var scripts = document.querySelectorAll('script[src]');
+    for (var j = 0; j < scripts.length; j++) {
+      if (!loaded[scripts[j].src]) return false;
+    }
+    return true;
+  }
+
   /* ---- 收尾判定（幂等） ---- */
   function evaluate() {
     if (state.done) return;
@@ -123,9 +143,10 @@
     if (elapsed >= MAX_WAIT) return finish('timeout');
 
     var domReady = document.readyState !== 'loading';
+    var scriptsSettled = allScriptsSettled();
     var minShow = prefersReducedMotion() ? 0 : MIN_SHOW;
 
-    if (domReady && state.pending === 0 && elapsed >= minShow) {
+    if (domReady && scriptsSettled && state.pending === 0 && elapsed >= minShow) {
       return finish('ready');
     }
 
@@ -141,6 +162,10 @@
     if (state.done) return;
     state.done = true;
     clearTimeout(state.timer);
+    if (gateTimer) {
+      clearTimeout(gateTimer);
+      gateTimer = null;
+    }
 
     root.classList.remove('page-loader-armed');
     root.classList.add('page-loader-done');
@@ -164,9 +189,10 @@
 
   window.PageLoader = {
     /** 登记首屏关键图。字符串 | [url] | [[候选1, 候选2]] */
-    register: function (urls) {
+    register: function (urls, opts) {
       if (!urls) return;
       var groups = [];
+      var timeout = opts && typeof opts.timeout === 'number' ? opts.timeout : 0;
       if (typeof urls === 'string') {
         groups = [[urls]];
       } else if (Object.prototype.toString.call(urls) === '[object Array]') {
@@ -176,7 +202,7 @@
           for (var i = 0; i < urls.length; i++) groups.push([urls[i]]);
         }
       }
-      for (var g = 0; g < groups.length; g++) loadGroup(groups[g]);
+      for (var g = 0; g < groups.length; g++) loadGroup(groups[g], timeout);
       evaluate();
     },
     /** 收尾回调（已收尾则同步执行） */
@@ -188,6 +214,35 @@
       }, { once: true });
     },
     isDone: function () { return state.done; },
+    /** 页面全部资源就绪（window load）回调；已就绪则同步执行 */
+    whenIdle: function (cb) {
+      if (typeof cb !== 'function') return;
+      if (document.readyState === 'complete') { try { cb(); } catch (e) {} return; }
+      window.addEventListener('load', function () {
+        try { cb(); } catch (e) {}
+      }, { once: true });
+    },
+    /**
+     * 二次门控（2026-10-16）：开场动画已结束、但页面资源仍未就绪时，
+     * 重新显示加载遮罩（加载动画），直到 window load 或超时后再收尾。
+     * 幂等：已有门控在进行中则直接复用，不会叠加多个遮罩周期。
+     */
+    gate: function (opts) {
+      var timeout = opts && typeof opts.timeout === 'number' ? opts.timeout : MAX_WAIT;
+      if (gateTimer) return;
+      root.classList.remove('page-loader-done');
+      root.classList.add('page-loader-armed');
+      if (overlay) overlay.removeAttribute('aria-hidden');
+      state.done = false;
+      clearTimeout(state.timer);
+      whenIdle(function () {
+        if (!state.done) finish('gate-idle');
+      });
+      gateTimer = setTimeout(function () {
+        gateTimer = null;
+        if (!state.done) finish('gate-timeout');
+      }, timeout);
+    },
     MIN_SHOW: MIN_SHOW,
     MAX_WAIT: MAX_WAIT
   };

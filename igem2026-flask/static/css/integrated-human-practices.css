@@ -1443,8 +1443,33 @@
   }
 }
 
+/* iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined [ ] Color Universal Design Verified [ ] High Contrast Mode Tested */
+
+/* 外层文章分页：顶部图片轮播是唯一导航入口，详情轨道一次只展示一篇文章。 */
+.hp-flat-detail-panel > .detail-viewport {
+  overflow: hidden;
+  transition: height .42s cubic-bezier(.22, 1, .36, 1);
+}
+
+.hp-flat-detail-panel > .detail-viewport > .detail-track {
+  display: flex;
+  align-items: flex-start;
+  transition: transform .42s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+
+.hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hp-flat-detail-panel > .detail-viewport,
+  .hp-flat-detail-panel > .detail-viewport > .detail-track {
+    transition: none;
   }
+}
 
 /* Interactive Expert Map Component (from communication/demos/map.html)
    Scope: .hz-map root namespace | Theme: HP warm brown/cream palette */
@@ -1470,6 +1495,8 @@
     color: #5c4d3c;
   }
   .hz-map .hz-header .hz-hint { font-size: 13px; color: var(--hz-fg-muted, #8b7355); }
+
+
 
   .hz-map .hz-container {
     position: relative; width: 100%;

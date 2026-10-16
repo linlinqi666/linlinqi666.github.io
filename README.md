@@ -167,12 +167,12 @@ static/js/core/nav-scroll-behavior.js
 | 页面 | 专属 CSS | 是否 description.css | 是否侧边栏 | 额外 JS |
 |---|---|---|---|---|
 | index.html | — | 否 | 否 | executive-summary-animation.js + index-intro-gif.js |
-| dry-lab/hardware.html | hardware.css(空) | 是 | 是 | sidebar-progress.js |
+| dry-lab/hardware.html | hardware.css(实，2026-10-15) | 是 | 是 | sidebar-progress.js |
 | dry-lab/model.html | model.css(空) | 是 | 是 | sidebar-progress.js |
 | dry-lab/software.html | software.css(空) | 是 | 是 | sidebar-progress.js |
 | wet-lab/protocol.html | experiments.css | 是 | 是 | sidebar-progress.js |
 | wet-lab/result.html | result.css(空) | 是 | 是 | sidebar-progress.js |
-| wet-lab/safety.html | — | 是 | 是 | sidebar-progress.js |
+| wet-lab/safety.html | safety.css(实，2026-10-15) | 是 | 是 | sidebar-progress.js |
 | wet-lab/notebook.html | —（页内内联） | 是 | 是 | sidebar-progress.js |
 | wet-lab/parts.html | parts.css(空) | 否 | 否 | — |
 | human-practices/education.html | education.css(空) | 是 | 是 | sidebar-progress.js |
@@ -282,6 +282,37 @@ static/js/core/nav-scroll-behavior.js
 - **顶部页面进度条**（page-progress-bar）：横贯顶部，蓝色 `#4a90e2`，由 `page-progress-bar.js` 驱动。
 - **侧边滚动进度条**（scroll-progress-bar）：竖条，棕色系，由 `scroll-progress-bar.js` 驱动。两者均为全局组件，CSS 位于 `static/css/components/`。
 
+**2026-10-15 侧边进度条两项改动（用户反馈）**：
+
+1. **修复「收纳条展开后进度提前拉满」**：旧实现把 `scrollHeight/clientHeight` 缓存在 `metrics` 里，
+   只在 init/resize/load 刷新；收纳条（`details.section-fold`）展开会改变整页高度，缓存失真后
+   `scrollTop / (缓存高度 - 视口)` 就会在中途算出 100%。现改为：
+   - 新增 `ResizeObserver`（观察 `documentElement` / `body` / 内部滚动容器及其内容子树）+
+     `MutationObserver`（`class`/`style`/`open`/`hidden` 变化兜底，进度条自身的 style 写入会被过滤）
+     → 布局一变即刷新缓存尺寸并重算；滚动热路径仍只读 `scrollTop`，不违反约束 15。
+   - **只有真正触底（距底部 ≤2px）才给 100%**，其余情况最高 99%，杜绝中途满格。
+   - 暴露 `ScrollProgressBar.refresh()`，供折叠类组件在改布局后主动刷新。
+   - 实测（1440×900，`dry-lab/hardware`）：展开 6 个收纳条后 `totalHeight` 13619→16060 自动同步；
+     `max-400`→97%、`max-60`→99%、`max-1`/触底→100%、半程→50%。
+2. **进度条上下两端新增「快速滚动」隐形触区**（用户提案，同日按用户口径简化——**可见小三角方案已废弃**）：
+   `js/components/scroll-speed-control.js` + `navigation.css` 内 `.scroll-speed-control` 段。
+   - 视觉：**无任何可见图形**（2026-10-15 用户拍板"不要小三角"），只保留隐形触区。
+   - 判定区：**隐形**约 100×100px，右贴视口；宽度由 JS 实测「正文右边界到视口右缘的留白」决定
+     （`--ssc-gutter`），**保证永不压住正文**；留白 <44px 挂 `.is-tight` 不启用；≤900px 由媒体查询关闭。
+     实测 1920 宽 = 100×100、1440 宽 = 52×52（正文右边界 1388 → 触区 1388–1440，`overlap:false`）。
+   - 提示：2026-10-15 二次简化——**连提示文字也去掉**，控件为纯隐形触区（无任何可见图形与文字），
+     `z-index:100000` 已无提示覆盖之忧；点击/按住即滚动。
+   - 点击/按住 = 滚动，按住为有加速度快滚，**加速慢、减速快**：加速时间常数 0.85s、减速 0.10s。实测时间线
+     （velocity px/s）：152ms→484、453→1234、755→1761、1055→2130；滚到边界 260ms 无位移自动停机
+     （protocol 页实测触底 y=1367=max 正确停机），速度归零即停 rAF（约束 16）。
+   - **关键坑（已修）**：站点全局 `html{scroll-behavior:smooth}` 会把逐帧 `scrollBy` 变成一次次平滑动画
+     （帧帧重启，3 秒只挪 44px）。组件在按住期间临时把根滚动器 `scroll-behavior` 置 `auto`
+     （`setInstantScrollMode`），并统一用 `scrollBy({behavior:'instant'})`，完全停下后还原。
+   - 中断源：松手 / 指针取消或离开 / 失焦 / 切标签页 / Esc / 滚轮触摸介入 / resize → 立刻减速停机。
+   - flask 站同步：该站的滚动进度条逻辑此前**内联在 `wiki/layout.html`**（同一缓存缺陷），已迁出为
+     `igem2026-flask/static/js/core/scroll-progress-bar.js` 并在脚本区挂载；同时补上了该站
+     **一直缺失的进度条 markup**（此前只有 CSS/JS，元素从未渲染），并挂上快滚组件。
+
 ### 5.5 内容卡片与区块
 
 - `.content-section` 容器：`max-width:1200px`、居中、内嵌 `section` 卡片（背景 `--color-bg-gray`、圆角 `md`、轻棕阴影）。
@@ -345,7 +376,7 @@ node static/js/core/search-index-generator.js
 
 ### 5.12 首页分屏结构（index.njk + index.css）
 
-首页 `index.njk` 为**全屏滚动叙事页**，由 11 个 `presentation-section`（`.yeast-screen`）分屏组成，每屏 `min-height:100vh` 且 flex 垂直水平居中（**屏序已于 2026-10-01/03 重排**，见下方表格实际顺序）：
+首页 `index.njk` 为**全屏滚动叙事页**，由 11 个 `presentation-section`（`.yeast-screen`）分屏组成，每屏 `min-height:100vh` 且 flex 垂直水平居中（**屏序已于 2026-10-01/03 重排，2026-10-13 在 human-practices 与 statistics 之间新增 `#passive-to-active`**，见下方表格实际顺序）：
 
 | 屏 ID | 内容 | 背景（`--section-bg-img`） |
 |---|---|---|
@@ -357,6 +388,7 @@ node static/js/core/search-index-generator.js
 | `#statistics` | 实验结果 | `画板+5.webp` |
 | `#safety` | 生物安全 | `画板+6.webp` |
 | `#human-practices` | 人类实践 | `画板+7.webp` |
+| `#passive-to-active` | 被动→主动过渡屏（2026-10-13 新增：左 EchoYeast 采样插画 + 中缝竖向虚线长线 + 右文案自下而上渐入，引出下一屏三个现有检测方法；详见 §5.17 同日条目） | `--color-echo-bg`（与其他屏一致） |
 | `#future-vision` | 未来愿景 | 复用 `画板+7.webp` |
 | `#team-highlight` | 团队亮点 | 暖棕渐变（无画板） |
 | `#final-cta` | 8 个 Wiki 门户导航（`.portal-grid`/`.portal-card` 毛玻璃卡片） | 暖棕渐变（无画板） |
@@ -450,11 +482,19 @@ node static/js/core/search-index-generator.js
 
 **protocol 页特别说明（2026-09-27 第三轮）**：`src/wet-lab/protocol.njk` 由生成脚本 `对话归档/2026-09/2026-09-27-protocol-from-source/temporary-tools/build_protocol_njk.py` 从实验组源文档逐字生成，**锚点与两级导航已写进生成脚本**——正文 h3 为 `protocol-<模块>-purpose|materials|steps`（报告体系 6 份方案为 `protocol-reporter-plan-1..6`），侧边栏四个模块各挂对应 `level3`。维护该页须改脚本并重跑：`python build_protocol_njk.py` → 将 `generated/protocol.njk` 复制到 `src/wet-lab/protocol.njk` → `npx @11ty/eleventy` → 跑 §5.14.1 两套验证。**直接编辑 `src/wet-lab/protocol.njk` 会在下次重跑脚本时被覆盖。**
 
-**已回退（2026-09-27，用户确认改造范围仅湿实验）**：dry-lab `software` / `hardware`、project `description` / `design` / `engineering` / `contribution`、human-practices `education` 共 7 页的锚点与折叠改造已用 git 精确还原（`src/` 下对应 `.njk` 回到改造前状态），为它们新增的 `sectionIdPrefixes` 前缀（`software-` / `hardware-` / `project-` / `engineering-` / `build-` / `test-` / `learn-` / `education-` / `description-` / `biological-` / `modular-` / `innovation-` / `references` 等）已一并撤除。这 7 页恢复原状：侧边栏 `level3` 指向页面中不存在的 id（点击无反应）、滚动高亮不生效。如未来要重启这些页的改造，按本节三步 + §5.14.1 两套验证执行。
+> 更新（2026-10-15）：该页自 2026-09-30 起已回退为**整份 PDF 单卡页**（无侧栏、无 h3 锚点；正文为介绍卡 + `<object>` 内嵌 CDN `lab/wetlab/protocol/protocol-2026-10-12.pdf`，47 页）。上文的生成脚本与「直接编辑会被覆盖」仅适用于已弃用的拆分版；现行维护方式为直接编辑 `src/wet-lab/protocol.njk`（与 flask `wiki/pages/protocol.html` 同步）。
+>
+> 更新（2026-10-16）：protocol 源 PDF 更换为 `static/expriments/protocol(3).pdf`（仍 47 页），CDN 引用文件名按日期惯例改为 `lab/wetlab/protocol/protocol-2026-10-16.pdf`（根站 `src/wet-lab/protocol.njk` 与 flask `wiki/pages/protocol.html` 同步修改）；待上传副本在 `igem2026-flask/static/image/wait/lab/wetlab/protocol/`，本地源副本在 `static/pdf/protocol/protocol-2026-10-16.pdf`，旧 `protocol-2026-10-12.pdf` 已从暂存区移除（CDN 上未上传过，无需替换）。
+
+**已回退（2026-09-27，用户确认改造范围仅湿实验）**：dry-lab `software`、project `description` / `design` / `engineering` / `contribution`、human-practices `education` 等页的锚点与折叠改造已用 git 精确还原（`src/` 下对应 `.njk` 回到改造前状态），为它们新增的 `sectionIdPrefixes` 前缀（`software-` / `project-` / `engineering-` / `build-` / `test-` / `learn-` / `education-` / `description-` / `biological-` / `modular-` / `innovation-` / `references` 等）已一并撤除。这些页恢复原状：侧边栏 `level3` 指向页面中不存在的 id（点击无反应）、滚动高亮不生效。如未来要重启这些页的改造，按本节三步 + §5.14.1 两套验证执行。
 
 **dry-lab `model` 页重新纳入（2026-09-27 重写，`REQ-20260927-001`）**：Model 页正文按干实验建模文档整体重写，同时按本规范重建锚点与两级导航，共 10 个小节（id 前缀 `model-`，已登记到 `sectionIdPrefixes`）；两套验证脚本的页面清单已加入 `dry-lab/model.html`（e2e target 由 `model-dose-response` 改为 `model-screening`）。
 
+> 2026-10-15 补充：上面「已回退」的 `project/contribution`、`project/description`、`project/engineering`、`project/design` 四页曾按 §5.14.4 试过整卡折叠，第二轮（同日）按用户口径改为「阈值 20 000 px + 仅 h3 小分类折叠」后，这四页展开高度均 < 20 000 px，已全部**回退为不折叠**（侧栏 level1/level3 跳转与高亮沿用既有体系，无需改动）。
+
 > 该页的素材、运行资源、打分数据与待核项**不在这里展开**，统一见 **`static/expriments/drylab/model/00-文件归属.md`**（该文件同时取代了同目录 `plan.md`）。
+
+**dry-lab `hardware` 页重建（2026-10-15，`REQ-20261015-001`）**：硬件页按 `static/expriments/drylab/hardware/` 下四份源文件（正文 docx、模块技术需求 docx、整机技术需求 docx、采购清单 xlsx）整体重写，14 张内容卡、8 张表、27 张插图（`static/image/hardware/image1~27.jpg`，docx 内嵌图原字节导出，不转码），三份附件以 `<object>` 内嵌在源稿留位处（第七节末 = 模块需求、第八节末 = 采购清单、第九节末 = 整机需求）。表格与图数据抽到 `src/_data/hardware.js`，插图统一走 `src/_includes/partials/hardware-figure.njk`；`sectionIdPrefixes` 已重新登记 `hardware-`。**收纳形态**：概览卡常显，其余 6 张含小节的卡走 h3 收纳条（共 28 个小节：Problem / Origin / Iterations / Log 各若干、Architecture 3、BOM 1），无 h3 的 7 张卡（Worth / Goals / Specifications / Instrument / Test plan / Challenges / Future）按用户口径保持展开——页面由 44 165 px 压到 13 619 px；`e2e-content-pages.js` 以 `hardware-cup` 为目标纳入本页。源稿里的中文文件名（收集杯/收集杯2/激发端/检测端）已英化为 `Collection_Cup.SLDPRT`、`Collection_Cup_2.SLDPRT`、`Emitter_End 10.3.SLDPRT`、`Receiver_End 10.4.SLDPRT`。PDF 与图片当前指向根站本地 `static/pdf/hardware/`、`static/image/hardware/`，同步 flask 站时改为 `static.igem.wiki/teams/6373/wiki/lab/drylab/hardware/`。
 
 **例外与边界（2026-09-27 确认）**：
 
@@ -512,6 +552,53 @@ node static/js/core/search-index-generator.js
 - 现状：flask `wiki/pages/results.html` 的 17 张配图已按此写法（宽高取自 CDN 实测像素）；其余页面按需补齐——**新写图片请直接照此格式**。
 
 **本轮验证（可复跑）**：`对话归档/temporary-tools/2026-10/2026-10-07_verify_animations.py`（逐帧采样 + 双重降级 + 图片预留共 31 项，全绿；报告 `…/verify-production/anim-verify.txt`）；§5.14.1 的两套耦合回归（结构层 jsdom + 真实 Chrome 几何层）均通过，报告 `…/verify-production/coupling-tests.txt`。
+
+### 5.14.4 长页收纳标准（2026-10-15，`REQ-20261015-002`）
+
+**判据**：1440 宽视口、图片全部加载后量得的 `document.body.scrollHeight` 超过 **20 000 px**（体感「一直滚鼠标要 10 秒以上」）即视为长页，必须做收纳处理。测量工具：`对话归档/temporary-tools/audit-page-lengths.cjs`（`CHROME_PATH=<chrome 路径> node …`，逐页输出 height / folds / cards / h3id / sidebar）。
+
+**收纳口径**：**只折叠「小分类」小节（`<h3 id="…">`），绝不整卡折叠。** 与 `result` / `safety` / `model` 既有页面一致——卡片本身保持展开，卡片内的小节标题折叠。具体规则：
+
+- 概览卡（页面最前面那张介绍卡，如 Engineering Success / Overview / Background）保持常显，读者先看到「这页讲什么」；
+- 其余卡片内凡是有 `<h3 id="<页面前缀>-<语义>">` 的小节，一律交给 `section-fold.js` 折成收纳条（§5.14.2 原规范，前缀登记 `sectionIdPrefixes`）；
+- **不使用整卡折叠（`data-fold-card` + `.content-body`）作为全站收纳手段**——那是 `contribution` 这类「一条内容一张卡、正文由数据渲染」页面的专用能力，`section-fold.js` 仍支持，但不在长页收纳标准里（2026-10-15 第二轮用户明确纠正：折叠应落在小分类上，而不是一整个大容器）。
+
+`section-fold.js` 零配置接管：默认全折叠、点击标题展开/收起、URL hash 或侧边栏锚点命中自动展开（`expandForHash` 同时支持「锚点在收纳条内」与「收纳条在锚点元素内」），`SidebarProgress.recalculate()` 联动高亮。
+
+**2026-10-15 全站实测**（1440 宽，图片加载后；仅越过 20 000 px 的页做收纳，且只折 h3 小节）：
+
+| 页面 | 展开高度 | 折叠后高度 | 折叠数 | 形态 |
+|---|---|---|---|---|
+| `dry-lab/hardware.html` | 44 165 | 13 619 | 28（h3 小节条） | 概览常显 + 6 张卡内 28 小节折叠 |
+| `project/engineering.html` | 20 613 | 6 394 | 24（h3 小节条） | 概览常显 + 6 个 Cycle 卡内 Design/Build/Test/Learn 折叠 |
+| `wet-lab/result.html` / `safety` / `dry-lab/model` / `human-practices/sustainability` | — | 3 828–7 930 | 7–24 | 既有 h3 收纳体系 |
+| `project/contribution` / `description` / `design`（16 560 / 7 882 / 8 540）及以下页面 | — | 均 < 20 000 | 0 | 不折叠（阈值以下） |
+
+**暂不适用的页面（低于阈值或结构特殊，不要套模板硬改）**：
+
+- `index.html`（10 887 px，幻灯式全屏分屏，每屏 100vh + 滚动驱动动画，折叠会破坏分屏叙事）；
+- `human-practices/integrated human-practices.html`（14 684 px，自定义地图 / 轮播 / 专家详情体系 `hp-map.js` / `hp-flat-carousel.js` / `hp-reveal-box.js`，隐藏容器会导致几何计算失效，须与这些组件一起改造并单独回归）；
+- `team/attributions.html`（7 444 px，自定义双面板 + 成员网格，无 `.content-card` 结构，折叠粒度需先定）；
+- 其余页面（`notebook` 4 878 / `parts` 4 550 / `education` 4 313 / `software` 4 302 / `protocol` 2 267 / `members` 1 887 / `description` 7 882 / `design` 8 540 / `contribution` 16 560）均低于 20 000 px 判据，保持展开不折叠。
+
+**验证（可复跑）**：结构层 `node 对话归档/temporary-tools/check-content-pages.js`（9 页，`折叠 === h3[id]` 必须相等、level3 无死链、id 唯一）；几何层 `$env:CHROME_PATH='…'; node 对话归档/temporary-tools/e2e-content-pages.js`（默认全折叠 / 滚动高亮 / 锚点跳转自动展开）。改造前/后逐卡文本比对脚本见 `对话归档/2026-10/2026-10-15-hardware-page/temporary-tools/verify_site_folding_text.py`。
+
+### 5.14.5 Safety 页重建与 Hardware 页改版（2026-10-15，`REQ-20261015-004`）
+
+**Safety 页（`src/wet-lab/safety.njk`）**按 `static/expriments/safety/Safety Revised Edition (EN) 10.12.pdf` 整体重写，取代此前中英混排的占位稿（原稿含多处 `[待补充]`）：
+
+- 6 张内容卡：Overview / LS Risk Matrix / Laboratory Safety Environment / Personal Safety / Project Safety / References；
+- 4 张表：L 分级、S 分级、风险值换算、**15 步逐项评估表（10 列）**；表格与图数据抽到 `src/_data/safety.js`；
+- 5 张插图 `static/image/safety/safety-fig1~5.jpg`，由 PDF 第 9–13 页导出（原图 1725×2300，统一缩到 1100 px 宽后转 JPEG）；Figure 1 的打码说明按源稿保留为图注附注；
+- 17 条参考文献，正文 `[n]` 角标可点击跳转（与 Hardware 页同一套 `.safety-cite` / `.safety-references` 写法）；
+- 折叠：两个 h3 小节（`safety-grading` / `safety-matrix`）带 id，由 `section-fold.js` 折成收纳条并默认折叠，与 result / model 同写法；页面展开 13 363 px，低于 20 000 px 判据，卡片本身不折叠。
+
+**Hardware 页第二版改版**：按 `static/expriments/drylab/hardware/Hardware Wiki page content (English) 2026.10.14 (1).pdf` 更新正文——补入 `[1]–[12]` 文献引用，新增三处论述（气溶胶实测浓度与粒径 `[2]`、旋风采样在高流速下的收集损失 `[4]`、DREADD 家族与 DCZ 高亲和力激动剂 `[9][10]`），改写 Design Goals 的 Optics 条目，并新增文末 References 一节（12 条）。27 张图题注、8 张表与三份附件在新版中均未变，故图片与附件沿用不动。改版后页面 13 812 px。
+
+**2026-10-16 追改（同日反馈）**：
+
+- **References 不再渲染外链**：按 iGEM 要求，Safety / Hardware 两页文末参考文献只保留条目文字，`link` 字段（DOI / 官网地址）仍留在 `src/_data/*.js` 里作溯源存档，页面不输出 `<a>`。正文中的 `[n]` 角标（页内锚点跳转）保留。
+- **收纳条背景铺满修复（全站组件级）**：全局 `.content-card h3` 自带背景条，h3 在 summary 里改为 `inline-block` 后背景条缩到文字宽度。修复方式是把条状样式（背景 / 左边框 / 内边距）从 h3 上移到 `summary`，并在 `section-fold.css` 里把 summary 内的 h3 清成纯文字——result / safety / model / hardware / engineering 所有使用收纳条的页面同时受益，实测 summary 宽度与卡片内容宽一致（1440 宽下无截断）。
 
 ### 5.15 Team 成员页分类与顺序（2026-09-15 重组）
 
@@ -641,9 +728,11 @@ node static/js/core/search-index-generator.js
 
 **素材目录已按屏分组（2026-10-06f）**：`webp/` 顶层不再放图，素材按滚动顺序入 `first-section/`（hero）→ `second-section/`（甲流负担）→ `third-section/`（human-practices 图表屏）→ `fourth-section/`（statistics）→ `fifth-section/`（safety）→ `sixth-section/`（public-health）→ `seventh-section/`（project-intro）→ `eighth-section/`（dbtl-cycle）→ `ninth-section/`（future-vision）→ `tenth-section/`（final-cta，含原 `explore/` 子树）；跨屏复用切片统一在 `shared/`。新增素材请放入对应屏文件夹，引用路径 `static/image/Animation/index/webp/<屏文件夹>/<文件名>`。
 
+**2026-10-13 新增 `#passive-to-active` 过渡屏**（仅根站，flask 站不动）：位于 human-practices 与 statistics 之间，叙事为「现有检测方法都建立在被动检测之上（等发病→上医院→采样→等结果），本队不做技术超越，而是把检测起点前移」，向下引出 statistics 屏的 qPCR / ELISA / CGIS 三方法。结构：左插画（EchoYeast 被采样，素材 `webp/passive-to-active/passive-detection-swab.png`，用户提供 2048×2048 PNG 按 alpha 紧裁为 1625×1653，格式与画质不变）＋中缝竖向虚线长线（`.pta-thread`，两端 mask 渐隐，移动端隐藏）＋右文案三条 `.reveal` 自下而上错峰淡入。**实现要点**：① 全站 `.reveal` 原本没有基础 CSS（JS 加的 `.reveal--visible` 无人消费，属既有现状），本屏的隐藏/过渡样式只在 index.css「passive-to-active」段内**按屏作用域**补齐，不改动其他屏现状；② 插画浮动为纯 CSS 无限动画（`ptaFloat`），离屏暂停复用 home-idle-motion.js 已有的 `data-offscreen` 停表（index.css `[data-offscreen]` 段），reduced-motion 直接静止；③ 降级：无 JS 走 head-extra/index.njk 的 noscript 覆盖，reduced-motion 走 media query，文案均静态可见；④ 背景已把 `#passive-to-active` 加入 index.css 两组背景选择器（基础组 + 移动端组）与每屏 `--section-bg-img` 簇。样式定位只有一处：index.css 搜「passive-to-active」。验收：`npx eleventy` EXIT=0、1440×810 桌面/边界 + 390×844 移动端截图（`对话归档/screenshots/2026-10/pta-*.png`）、console 0 错误 0 警告。
+
 **本轮同屏改动（2026-10-06f）**：① `#future-vision` 内容栏加宽至约 60% 页宽、纵向间距按 810px 视口收敛不溢出，正文段落/列表/占位句全部由中文译为英文（保持未来时态）；② statistics 屏新增 ELISA→qPCR 连线（内联 SVG，`.art--statistics-link`），揭示顺序改为「CGIS 弧画出 → ELISA 落位 → 连线擦出 → qPCR 落位」（`statistics-reveal.js` 时间轴 linkDelay/linkDraw/qpcrDelay=1420），降级红线不变（无 JS/reduced-motion 静态可见）。
 
-**2026-10-07 三屏微调**（Q1–Q5 由用户拍板）：① 新素材 `shared/shared-wave-5.webp`（用户提供的透明细波，抠掉 63 万低 alpha 噪点 + 167 处白斑后按 alpha 紧裁为 1080×95），设计原理屏 `art--dbtl-cycle-wave` 换新素材并改为**满宽贴底、高度走原比例**、退出浮动动画（贴底横条浮动会露底缝）；② 安全屏新增 `.art--safety-sky`＝底部云波 `shared-cloud-1.webp` 垂直翻转（`scaleY(-1)`）满宽贴顶，同源同宽必对称；③ 安全屏星星补齐 3 颗（复用 `shared-sparkle.webp`，新增 `-star-a` 左上 / `-star-b` 右上），移动端断点同步；④ 轮播屏药丸 `clamp(15px,3.3vh,34px)→clamp(17px,4vh,40px)`、外盒 `top 16.5%/h 64%→top 18%/h 58%` 收紧行距、吉祥物 `height 55.2%→59%`，并**去掉椭圆条带蓝色描边**（`--intro-pill-lw: 0`）。验收：1440×810 三屏 + 与设计稿并排对照（`对话归档/2026-10-07-visual-tuning/verification/compare-*.png`）+ 390×844 回归（无横向溢出）。**同日返工（b 轮）**：① 安全屏两波贴边——精测云波直边在画布 y84.2%，底部云波改 `bottom:-7.06%` 并退出浮动动画，上波改用离线翻转+纵压 72% 的新素材 `fifth-section/safety-sky.webp`（直边在素材顶边）并 `left:-3%/width:106%` 左移缩幅；② 轮播屏吉祥物再放大 1.3×（`height 77% / left 30% / top 20.5%`）；③ statistics 吉祥物按用户提供的 `34.png` 覆盖替换（同比例 1345×1387，CSS 零改动，旧图备份 `*.overcropped.webp`）。**同日动画顺滑化（c 轮）**：statistics 揭示动画取消二段式（先画线→等落位→再画线→再飞），改**一段式连贯揭示**——两段虚线一笔向上画（`linkDelay 1180→260`，紧接弧线尾端）、两圆随线起飞（`elisaDelay 280→180`、`qpcrDelay 1420→640`、`fly 950→900`，各环节互相重叠不空等），顺序仍为 CGIS→ELISA→qPCR，总时长 ≈2.4s→≈1.6s；位置/几何参数不动（保留用户 DevTools 实调值）。时序帧验收：`对话归档/screenshots/2026-10/2026-10-07-stat-t*.png`。
+**2026-10-07 三屏微调**（Q1–Q5 由用户拍板）：① 新素材 `shared/shared-wave-5.webp`（用户提供的透明细波，抠掉 63 万低 alpha 噪点 + 167 处白斑后按 alpha 紧裁为 1080×95），设计原理屏 `art--dbtl-cycle-wave` 换新素材并改为**满宽贴底、高度走原比例**、退出浮动动画（贴底横条浮动会露底缝）；② 安全屏新增 `.art--safety-sky`＝底部云波 `shared-cloud-1.webp` 垂直翻转（`scaleY(-1)`）满宽贴顶，同源同宽必对称；③ 安全屏星星补齐 3 颗（复用 `shared-sparkle.webp`，新增 `-star-a` 左上 / `-star-b` 右上），移动端断点同步；④ 轮播屏药丸 `clamp(15px,3.3vh,34px)→clamp(17px,4vh,40px)`、外盒 `top 16.5%/h 64%→top 18%/h 58%` 收紧行距、吉祥物 `height 55.2%→59%`，并**去掉椭圆条带蓝色描边**（`--intro-pill-lw: 0`）。验收：1440×810 三屏 + 与设计稿并排对照（`对话归档/2026-10/2026-10-07-visual-tuning/verification/compare-*.png`）+ 390×844 回归（无横向溢出）。**同日返工（b 轮）**：① 安全屏两波贴边——精测云波直边在画布 y84.2%，底部云波改 `bottom:-7.06%` 并退出浮动动画，上波改用离线翻转+纵压 72% 的新素材 `fifth-section/safety-sky.webp`（直边在素材顶边）并 `left:-3%/width:106%` 左移缩幅；② 轮播屏吉祥物再放大 1.3×（`height 77% / left 30% / top 20.5%`）；③ statistics 吉祥物按用户提供的 `34.png` 覆盖替换（同比例 1345×1387，CSS 零改动，旧图备份 `*.overcropped.webp`）。**同日动画顺滑化（c 轮）**：statistics 揭示动画取消二段式（先画线→等落位→再画线→再飞），改**一段式连贯揭示**——两段虚线一笔向上画（`linkDelay 1180→260`，紧接弧线尾端）、两圆随线起飞（`elisaDelay 280→180`、`qpcrDelay 1420→640`、`fly 950→900`，各环节互相重叠不空等），顺序仍为 CGIS→ELISA→qPCR，总时长 ≈2.4s→≈1.6s；位置/几何参数不动（保留用户 DevTools 实调值）。时序帧验收：`对话归档/screenshots/2026-10/2026-10-07-stat-t*.png`。
 
 **hero 标语归位与主题色（2026-10-06h）**：`hero-echo-logo.png` 与 `shared-blue-curve.png` 原都是 1600×1600 大画布，字只占中间一条带（logo 字区 y541–1043、标语字区 y719–986），按整幅定位会算错位置——标语因此整体落到屏底被裁（用户报"字体掉下去了"）。两张图已按 alpha 紧裁（1510×526 / 1475×291，原件备份 `对话归档/2026-09/2026-09-22-homepage-assembly/backups/webp-original/*.1600square.png`），CSS 坐标换算自设计稿 1080×607：logo `left 8.8% / top 19% / width 44.9%`、标语 `left 8.8% / top 49% / width 43%`。**教训：设计切片务必紧裁后再定位，否则盒子≠内容区，位置全错。** `#future-vision` 正文改主题色（正文 `#2f6f96`、列表小标题 `#1f6ea6`、占位句 `#4f86a8`，与 `influenza-burden` 屏同口径；不用 `--color-echo-blue` 纯色，因米黄底上长段正文对比度仅 ≈2.6:1）。排查脚本 `对话归档/temporary-tools/audit-uncropped.py` 可复检全目录"未紧裁画布"隐患，当前仅剩 `shared-wave-alt-c/d.png` 两个未被引用的备用图。
 
@@ -730,7 +819,7 @@ python "对话归档/temporary-tools/2026-09/2026-09-16-dev-server-nostore.py" 8
 
 ## 七、已发现的问题与不一致（需警惕）
 
-1. **占位空 CSS 文件：** `contribution.css`、`engineering.css`、`education.css`、`hardware.css`、`model.css`、`parts.css`、`result.css`、`software.css` 均为 0~44 字节占位文件，其页面样式实际来自 `description.css`。新增样式可写入对应文件，但**切勿删除这些占位文件**（HTML 仍引用它们）。
+1. **占位空 CSS 文件：** `contribution.css`、`engineering.css`、`education.css`、`model.css`、`parts.css`、`result.css`、`software.css` 均为 0~44 字节占位文件，其页面样式实际来自 `description.css`。新增样式可写入对应文件，但**切勿删除这些占位文件**（HTML 仍引用它们）。（`hardware.css`、`safety.css` 2026-10-15 起已写入真实样式，分别见 §5.14.2 的 hardware 页说明与 §5.15 的 safety 页说明。）
 2. **页面样式模式不一致：** 部分页（design/notebook/members/attributions/sustainability/parts）未加载 `description.css` 也无侧边栏，与"标准内容页"模式偏离。新增内容页应优先采用标准模式，除非确有自定义布局需求。
 3. **图片路径风险（历史教训）：** 曾出现将 `expert.jpg` 误写为 `WWJ.png`、将 `school1~4.jpg` 误写为 `lecture-1~4.jpg` 导致全站破图。任何图片改动都需先核对文件存在性。
 4. **`file://` 协议受限：** 本地直接双击打开 HTML 会被浏览器以 `file:` 协议拦截脚本/资源；测试须通过本地 HTTP 服务（如 `python -m http.server`）访问。
@@ -782,6 +871,23 @@ python "对话归档/temporary-tools/2026-09/2026-09-16-dev-server-nostore.py" 8
 21. **进度/状态与官方对照内容一律不渲染（2026-09-16，最高优先级）：** 页面上不得出现任何实验进度状态（Progress Status、进度汇总表、✅/🔄/⏳、status-badge 徽章、"已完成/进行中/待进行"类字样）与"官方要求项 → 落实方式"对照表（iGEM Check 自检内容）。此类信息只允许三种去处：① 源码 HTML/JS 注释；② `对话归档/` 计划文档；③ 本 README 第七.18 警告区。实验页与贡献页已按此清理，后续新增内容必须遵守；对外页面没有资料的条目直接留空。
 22. **菌种拉丁名必须斜体（2026-10-11，全站标准 + 迁移标准）：** 正文/图注/数据中出现酿酒酵母拉丁名 `Saccharomyces cerevisiae` 及其缩写 `S. cerevisiae` 时，必须渲染为斜体（HTML 用 `<i>` 或 `<em>`）；菌株号（如 `S288C`、`BY4741`）保持正体不斜体。此规则优先级高于"原样照录"，适用全站所有内容页与 `_data` 数据文件（数据字段若渲染纯文本需加 `| safe` 才能使其内 `<i>` 生效）。**迁移到 flask 时同样必须保留 `<i>` 斜体**，不得把拉丁名压平为纯文本；igem-wiki-migration-guard 校验应把"拉丁名未斜体"列为问题。
 23. **侧栏分级目录必须限制最大高度，酵母发酵罐进度容器常驻可见（2026-10-11）：** 含左侧分级目录（`.description-nav`）与酵母发酵罐进度容器（`.progress-section` / `<!-- 发酵进度容器 -->`）的内容页，侧栏 `.description-sidebar` 必须 `position: sticky` 且锁定 `max-height: calc(100vh - 12rem); overflow: hidden`；其内部 `.description-nav-wrapper` 用 `flex: 1 1 auto; min-height: 0; overflow-y: auto` 自行滚动，`.progress-section` 用 `flex: 0 0 auto` 固定在侧栏底部。某页 TOC 条目过多时只允许目录内部滚动，**绝不允许把发酵进度容器顶出视口下方**。该规则已写入 `static/css/navigation/navigation.css`（通用，覆盖全站），`static/css/contribution.css` 的 `.contribution-page` 作用域版本须与之同步。
+24-b. **页面可见内容一律英文——全站硬约束（2026-10-15，用户明确）：** 页面上不得出现中文，范围包括正文、标题、
+   按钮/导航/侧栏标签（含进度容器 `Fermentation Progress`）、图注、`sr-only` 文本、`<title>`，以及会被读取或被脚本
+   消费的 `alt` / `aria-label` / `data-title` / `data-hp-title` 等属性（`data-hp-title` 由 `hp-flat-carousel.js` 读取，
+   属运行时可见，优先级等同正文）。中文只允许出现在三处：① 源码注释（`<!-- -->`、`{# #}`、CSS/JS 注释）；
+   ② `对话归档/` 下的文档；③ README 与规范文件。
+   **判据**：把产物源码中的注释、`<script>`、`<style>` 剥离后不应再匹配到任何 CJK 字符（`[\u4e00-\u9fff]`），
+   并对属性值单独扫一遍（脚本 B 类）。**检查范围以"现在还有源（permalink）的页面"为准**——删源后遗留的产物属孤儿，
+   一律删除（2026-10-15 已删 `dry-lab/software.html`、`human-practices/education.html`；排查脚本
+   `对话归档/temporary-tools/2026-10-15-find-orphans.py`）。
+   自检脚本 `对话归档/temporary-tools/2026-10-15-cjk-scan.py`（A 类=可见文本、B 类=属性、C 类=注释仅计数），
+   报告存 `对话归档/logs/2026-10/2026-10-15-cjk-report.txt`。
+   **2026-10-15 已清**：共享组件 6 处 `aria-label`（覆盖全站 96 处）、首页 `data-title`×10 + `alt`×9、
+   集成式 HP 页 `data-hp-title`×4、7 处侧栏进度标签、首页 `<title>` 与 `sr-only` h1、页脚 Attribution 4.0 超链接。
+   **当前未清项（均为未成稿内容，成稿即英文，不计为新增违规）**：① `contribution` / `description` / `safety` / `parts`
+   四页仍是中文草稿（用户 2026-10-15 明确：成稿时自会用英文）；② `team/attributions` 的中文占位符 `[待补充 - 姓名/机构]`
+   待团队填真名；③ `wet-lab/result` 的图 22–25 四条中文图注（英文译稿待团队确认）；④ `dry-lab/hardware` 仍在改版中。
+
 24. **禁止擅自转码：素材一律保持原始格式与原始文件名（2026-10-11，用户明确；优先级最高）：** 任何图片/动画素材必须以**原始格式、原始文件名**使用与投放，**不得为压缩体积或"性能优先"擅自转码**（PNG→WebP、PNG/JPEG→AVIF、GIF→WebP 等）或改名。需要控体积时**只允许降质量 / 降尺寸并保持原格式**（且需说明参数与前后体积）。关键机制：iGEM `static.igem.wiki` 上传器**会自行把 png/jpeg 落地为 `.avif`**（实测：上传 `eng-chassis-fig01.png` → CDN 得到 `eng-chassis-fig01.avif`，尺寸与 alpha 完全保留），**所以本地无需转码，页面引用按上传器产物写 `.avif` 即可**。**本条优先级高于 README 中任何"优先使用 WebP/AVIF""照片统一 webp"类表述及 `.codebuddy/rules/` 中的同类表述**；冲突时一律以本条为准。反面案例（2026-10-11）：把 `Result(2).doc` 解包出的 PNG 擅自转成有损 `webp`（`quality=85`）写入上传暂存区，造成画质损失——已全部改回原始格式（20 个 `.png` + 1 个 `.jpeg`）。
 
 ---

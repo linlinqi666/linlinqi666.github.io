@@ -2000,6 +2000,58 @@ body:not(.home-page) main { padding-top: 6.25rem; }
   will-change: height;
 }
 
+/* ================================================== */
+/* 滚动进度条上下两端的「快速滚动」触区（2026-10-15 新增，同日按用户口径简化）  */
+/* 无可见图形（原小三角方案已废弃）：隐形触区约 100×100px，右贴视口、不压正文；  */
+/* 悬停/聚焦显示纯文字提示（无背景无边框），点击/按住即滚动。<900px 不启用。      */
+/* 逻辑见 static/js/components/scroll-speed-control.js                         */
+/* ================================================== */
+.scroll-speed-control {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  /* 高于内容与侧栏(10001)，低于加载遮罩(100003)：提示文字不允许被正文盖住 */
+  z-index: 100000;
+  height: clamp(5rem, 18vh, 10rem);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.scroll-speed-control .ssc-target {
+  position: absolute;
+  right: 0;
+  width: min(100px, var(--ssc-gutter, 100px));
+  height: 100px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scroll-speed-control .ssc-target:focus { outline: none; }
+
+/* 判定区以进度条上下两端为中心各展开 50px */
+.scroll-speed-control .ssc-target--up { top: -50px; }
+.scroll-speed-control .ssc-target--down { bottom: -50px; }
+
+/* 右侧留白不足时由 JS 挂 .is-tight：宁可不给快滚，也绝不压住正文 */
+.scroll-speed-control.is-tight { display: none; }
+
+@media (max-width: 1200px) {
+  .scroll-speed-control .ssc-target { height: 88px; }
+}
+
+/* 窄屏不启用：原生惯性滚动更快，且触区容易压到正文 */
+@media (max-width: 900px) {
+  .scroll-speed-control { display: none; }
+}
+
 @keyframes ppb-shimmer {
   to { transform: translateX(100%); }
 }
@@ -4405,41 +4457,41 @@ footer {
 .wechat-qr-container {
   position: absolute;
   left: 50%;
-  bottom: 100%;
+  top: 100%;
   transform: translateX(-50%) translateY(0) scale(0.8);
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: none;
   z-index: 100;
-  margin-bottom: 16px;
+  margin-top: 8px;
 }
 
 /* 悬浮时显示二维码 */
 .wechat-qr-wrapper:hover .wechat-qr-container {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-8px) scale(1);
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
 /* 二维码箭头 */
 .wechat-qr-arrow {
   position: absolute;
   left: 50%;
-  bottom: -12px;
+  top: -12px;
   transform: translateX(-50%);
   width: 0;
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-top: 12px solid #ffffff;
+  border-bottom: 12px solid #ffffff;
   z-index: 2;
 }
 
 /* 二维码图片样式 */
 .wechat-qr-image {
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   border-radius: 16px;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.15),

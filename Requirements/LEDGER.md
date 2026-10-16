@@ -1,4 +1,4 @@
-# 需求台账
+﻿# 需求台账
 
 > 记录每个非 Bug 的功能/功能优化/体验优化需求。Bug 见文末「Bug 区」。复杂、长期或跨模块需求须另建 `REQ-YYYYMMDD-NNN.md` 详细记录，并在此登记链接。
 
@@ -24,7 +24,16 @@
 | REQ-20261004-001 | 加载动画 6 帧→2 帧 + 探索屏四吉祥物门户 + 全站返回顶部组件 | 功能（素材替换 / 区块改版 / 新组件） | 根站 + flask（已同步，6 张图待传 CDN） | 已完成 | `REQ-20261004-001.md` | — | 2026-10-04 |
 | REQ-20261003-002 | Model 页对接卡牌：刚性/半柔性双模式 + 随机抽 6 选 1 排名 + 真实复合物 + 卡面图标 + 修 Reload | 功能（交互改造） | 跨工程（已双站同步） | 已完成 | `REQ-20261003-002.md` | — | 2026-10-03 |
 | REQ-20261005-001 | 首页 statistics 三方法信息条二段动画 + 首页离屏动画停表 | 功能（交互动画）+ 性能优化 | 根站（flask 待同步） | 已完成 | \REQ-20261005-001.md\ | — | 2026-10-05 |
+| REQ-20261015-001 | 根站 Hardware 页重建（正文 + 27 图 + 三份附件 PDF 内嵌 + 收纳条 + 中文文件名英化） | 功能（内容重建） | 根站（flask 待同步） | 已完成（根站） | `REQ-20261015-001.md` | — | 2026-10-15 |
+| REQ-20261015-002 | 长页收纳标准（概览外全部收纳）+ 四个长页落地 | 体验优化（信息架构） | 根站（flask 待同步） | 已完成（根站） | `REQ-20261015-002.md` | — | 2026-10-15 |
+| REQ-20261015-003 | Engineering 页（chassis 修改版 + Reporter 模块）/ Protocol / Notebook 构建 | 功能（内容重建） | 根站（flask 已同步） | 已完成（根站+flask 构建；CDN/GitLab 待上传） | REQ-20261015-003.md | — | 2026-10-15 |
+| REQ-20261015-005 | Hardware 页按第二版 PDF 改版（补 [1]–[12] 引用 + 三处新增论述 + References 节）+ Safety 页按新 PDF 重建（6 卡 / 4 表 / 5 图 / 17 条文献） | 功能（内容重建） | 根站（flask 待同步） | 已完成（根站） | `REQ-20261015-005.md` | — | 2026-10-15 |
+| REQ-20261015-004 | Model 页接入 new_model 三组对接报告（页内 tab+iframe，仅改色删 emoji）+ 卡牌游戏真实打分重做（柔性 HADDOCK 逐簇 / 刚性 ClusPro 26 簇表）+ 新增 Path A/B 章节 + 单卡拖拽即出 3D + 三库本地化 | 功能（内容接入 + 交互重做） | 根站（flask 待同步） | 进行中 | `REQ-20261015-004.md` | — | 2026-10-15 |
 | REQ-20261006-001 | 首页插画换新（美工 20 张透明图）+ 第二屏右下角病毒 + 轮播药丸白底 + 第一屏波浪/图例字体插图回归/统计图换新 | 体验优化 | 根站（flask 待同步） | 进行中（10-06c 回退 12 张角色装饰；10-06d 图例字号统一、错配字图清除；10-06e 五屏标题改美工字图 8/12/14/20 紧裁 + future-vision 标题 21/22 英文字图 + hero 9/10 重命名上屏删旧 webp） | `对话归档/implementation/2026-10-06-index-art-swap.md`、`对话归档/implementation/2026-10-06b-hero-wave-legends-gif-fix.md` | — | 2026-10-06 |
+| REQ-20261016-001 | 报告体系构建模块页面/PDF 更新（Result(3).doc、Engineering(1).doc 逐字核验 + 4 图换原始版；notebook 底盘/报告体系两份 PDF 替换；protocol 换 protocol-2026-10-16.pdf） | 内容更新（页面 + 素材替换） | 跨工程（根站+flask 已同步构建） | 已完成（根站+flask 构建；CDN/GitLab 待上传） | 验证记录：`对话归档/verification/2026-10-16-reporter-module-pages-and-pdf-update-verification.md` | — | 2026-10-16 |
+| REQ-20261016-002 | 官方仓库 vs 本地双站比对 + 下次推送包定稿（64 文件 / 4.29 MB，两道闸通过） | 迁移/合规（推送前闸门） | flask（官方仓库） | 已完成（清单与模拟 CI；实际上传待用户执行） | 验证记录：`对话归档/verification/2026-10-16-gitlab-push-package.md` | — | 2026-10-16 |
+| REQ-20261016-003 | 根站→flask 迁移（safety / hardware）+ Gpa1 两个工程循环上线（源 engineering（English）-Gpa1-Ga.doc）+ contribution 与 attributions 本轮回退不上传 + R3/R15 豁免 4 个标准页 + HP 头像路径修正 | 内容迁移（页面重建 + 新模块内容） | flask（根站已先改） | 已完成（双站构建通过；推送清单 64 文件已重算） | 验证记录：`对话归档/verification/2026-10-16-root-to-flask-migration-and-gpa1.md` | — | 2026-10-16 |
+| REQ-20261016-004 | 首页加载编排修复（开场动画优先 + 播放期间后台加载 + 未就绪回显加载动画）+ future-vision 收紧/去光晕/配色统一 + 多分辨率适配修复 + 根站全站体检 | 体验优化 + Bug 修复 | 根站（flask 本轮不动） | 已完成（根站） | 交付文档：`对话归档/2026-10/2026-10-16-homepage-loading-responsive/2026-10-16-homepage-loading-responsive-delivery.md` | — | 2026-10-16 |
 | （示例）REQ-20260823-001 | 示例需求 | 功能 | 根站 | 待确认 | `REQ-20260823-001.md` | — | 2026-08-23 |
 
 ## 记录规范
@@ -43,4 +52,3 @@
 | BUG-20261006-001 | 弱网下首页 GIF 入场动画被「挤掉」（开场层直接消失/跳过） | 网速慢时开场 GIF 播不出或播一半消失，直接进页面 | 根站 | head 内联看门狗（head-extra/index.njk）在 pageloader:done 后 6s 检查 `intro-gif-running`，弱网下 29MB GIF 尚未下载完即被强加 `intro-gif-finished`；叠加 masterFinishTimer 在 start() 即起算（GIF 未开播也 9.2s 掐）与 GIF 请求过晚发起（等 loader 收尾后才下载） | 组件 init 挂出 `window.__introGifWaiting`，看门狗见标志不强判（改交组件 20s 单帧超时收尾 + 30s 二级硬兜底）；masterFinishTimer 改首帧开播后起算、唯一帧加载失败直接 finish；init 即预取首帧与关键图并行 | route 挂起 GIF 实测：挂起 8s（越过 6s 看门狗）running 保持无 finished，放行后正常播放至收尾；组件 404 时 6s 兜底解锁保持（降级红线）；十屏回归 0 错误 0 断链 | 已完成 |
 | BUG-20261005-002 | 根站 protocol 页内嵌 PDF 无法显示，浏览器报「协议不支持」 | `wet-lab/protocol.html` 的 PDF 阅读区空白，只显示 fallback 文案；CDN 上的 PDF 本身正常（HTTP 200, application/pdf, 249,525 字节） | 根站 | `src/_includes/partials/pdf-embed.njk` 无条件把 front matter 的 `basePath`（protocol.njk 为 `../`）拼到 `pdfUrl` 前。2026-09-30 该页 `pdfUrl` 改用绝对地址 `https://static.igem.wiki/...`，拼出的 `data="../https://static.igem.wiki/..."` 被浏览器按未知协议解析，故报协议不支持（flask 站写的是纯绝对 URL，未受影响） | partial 改为按地址类型分支：绝对 URL（`http(s)://` 或 `//`）原样使用，仅站内相对路径才拼 `basePath`；绝对性判断用新增 `isRemoteUrl` filter（JS 正则），不用 Nunjucks 内置 `slice`——其底层 `Array.prototype.slice` 作用于字符串返回字符数组，与字符串比较恒为 false（此坑已踩过一次） | `npm run build:all` 通过且复跑幂等；产物 `wet-lab/protocol.html` 的 `data` 已是纯绝对 URL；`curl` 探测 CDN 200 / `application/pdf`；未做浏览器端渲染截图 | 已完成 |
 | BUG-20261009-003 | 线上全站图片 403、首页停留空白占位、education 等 3 个模板页仍在（**重大迁移失误**） | 线上每个页面的图片全部不显示（CDN 实测 403）；根路径 `/` 只有官方占位（title=Home，无插图）；`/education`、`/experiments`、`/software` 仍在线；导航指向的 `/parts`、`/attributions` 为 404 | 迁移流程 | 三层根因：① 远程 `wiki/macros.html` 的图床基址是官方模板默认的 `static.igem.wiki/2026/szpu-china/`（实测整片 403；团队图片实际都在 `teams/6373/wiki/`，本地 macros 早已改对并注释「旧基址已废弃」），而 **macros.html 从未进入任何一次上传清单**——清单按「批次」人工整理，没有「以提交树为准的引用差集」这道闸；② 首页结构错位：线上首页内容长期放在 `alternative-platform.html`，本地已重构为 `home.html`（GIF+8 屏插图）但从未推送；③ 本地 `flask freeze` 通过被误当作「线上就绪」，本地 macros 正确反而掩盖了远程基址错误 | ① 重建推送包：`wiki/macros.html`（基址改回 teams/6373）、`wiki/pages/home.html`（新版首页）、`alternative-platform.html`（占位替换）、`menu.html`/`footer.html`（导航对齐）；② 新增 `parts.html`/`attributions.html` + `parts.css`/`attributions.css`/`attributions.js`；③ 新增 `static/css/wiki.css`（占位页依赖）；④ 删除 `education/experiments/software.html` | 隔离区 worktree 模拟 CI：`sync_ci_readiness.py` 差集归零 → `flask freeze` 成功（19 页）→ education 等产物消失、parts/attributions 生成、首页插图 63 处、全站 `teams/6373` 193 处、坏图基址 0（页脚 gitlab 仓库链接误报 4 处已排除）、首页图 45/45 实测 200 | 已完成（推送待执行） |
-

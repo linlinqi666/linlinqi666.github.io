@@ -1250,11 +1250,20 @@ img.loaded {
     height: 40%;
   }
 
+  /* 2026-10-16：竖屏下注脚改为通栏（宽 88%），右下角虚线环再小也会蹭到
+     注脚右尾——直接隐藏（纯装饰，不承载信息），把右下角让给注脚与二维码。 */
   .home-page .art-stage--influenza-burden .burden-backdrop__ring {
-    right: -9%;
-    bottom: -4%;
-    width: clamp(150px, 42vw, 230px);
-    opacity: 0.45;
+    display: none;
+  }
+
+  /* 2026-10-16：右下角病毒图原为 right:1.5%/bottom:1%/150px，竖屏下压在
+     注脚文字上（实测 390x844 重叠注脚右半）。移到「三年表 → 注脚」之间的
+     空档带（y≈78%–88%）并缩到一臂之内，不再压任何文字。 */
+  .home-page .art-stage--influenza-burden .burden-backdrop__virus {
+    right: 5%;
+    bottom: 12%;
+    width: clamp(72px, 19vw, 100px);
+    opacity: 0.9;
   }
 
   .home-page .art-stage--influenza-burden .burden-lead {
@@ -1298,8 +1307,12 @@ img.loaded {
     width: 88%;
   }
 
+  /* 2026-10-16：原 clamp(52px, 17vw, 84px) 在 390px 视口取到 66px，
+     静态年值「660,000,000」11 位数字 ≈480px 宽，被 section overflow 硬切
+     （实测显示成「660,000,00」）。收到 10vw：390px 视口 39px ≈257px 宽，
+     320px 视口 32px ≈211px 宽，均留有边距；实时计数到千万位也放得下。 */
   .home-page .art-stage--influenza-burden .burden-counter__value {
-    font-size: clamp(52px, 17vw, 84px);
+    font-size: clamp(30px, 10vw, 84px);
   }
 
   .home-page .art-stage--influenza-burden .burden-counter__unit {

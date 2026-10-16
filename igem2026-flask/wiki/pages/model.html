@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
-{% from "macros.html" import media %}
 {% block title %}Model{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/model.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/contribution.css') }}">
 {% endblock %}
 {% block page_content %}
 
@@ -84,14 +82,41 @@
                 <li class="level3"><a href="#model-ranking">Conclusions &amp; Design Decisions</a></li>
               </ul>
             </li>
-            <li class="level1">
+            <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#model-validation" class="nav-main-link">Validation &amp; Discussion</a>
+                <a href="#model-path-a" class="nav-main-link">Path A: hM1Dq Gating</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
               </div>
+              <ul class="level2">
+                <li class="level3"><a href="#model-path-a-prep">Structure &amp; G-protein Engineering</a></li>
+                <li class="level3"><a href="#model-path-a-docking">Docking of the Two Coupling Interfaces</a></li>
+                <li class="level3"><a href="#model-path-a-interface">Interface Analysis</a></li>
+                <li class="level3"><a href="#model-path-a-md">Membrane MD &amp; Binding Energy</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#model-path-b" class="nav-main-link">Path B: Ste2p Gating</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#model-path-b-prep">Receptor &amp; Peptide Design</a></li>
+                <li class="level3"><a href="#model-path-b-docking">HADDOCK Docking</a></li>
+                <li class="level3"><a href="#model-path-b-interface">Interface Analysis</a></li>
+                <li class="level3"><a href="#model-path-b-md">Membrane MD &amp; Binding Energy</a></li>
+              </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#model-planned" class="nav-main-link">Planned Work</a>
+                <a href="#model-validation" class="nav-main-link">Validation &amp; Discussion</a>
               </div>
             </li>
           </ul>
@@ -125,7 +150,7 @@
         <div id="model-award" class="content-card">
           <h2>Best Model Award</h2>
           <p>We have 17 nanobody sequences, none of which has an experimental structure. We first use molecular docking to rank them, then decide which few are worth taking into experiments.</p>
-          <p>ClusPro rigid docking ranks the {{ model_docking.funnel.candidatesScreened }} candidates by their scores against three influenza A HA antigens (H1N1, H3N2, H5N1), and a specificity index quantifies which candidate is more biased toward H1N1. HADDOCK 2.5 semi-flexible refinement provides the HADDOCK score, cluster size, and buried surface area (BSA); PyMOL and SPICE give the interface residues and interaction types. GROMACS molecular dynamics and MM-GBSA check whether the complex is stable in water and what its binding free energy is. Docking results of the candidates against unrelated viral antigens (SARS, HIV1, RSVF) are used to rank cross-reactivity on a relative scale. This converges on a single lead candidate, R1aB6, and flags ARGB:31 as a target for subsequent mutagenesis studies.</p>
+          <p>ClusPro rigid docking ranks the 17 candidates by their scores against three influenza A HA antigens (H1N1, H3N2, H5N1), and a specificity index quantifies which candidate is more biased toward H1N1. HADDOCK 2.5 semi-flexible refinement provides the HADDOCK score, cluster size, and buried surface area (BSA); PyMOL and SPICE give the interface residues and interaction types. GROMACS molecular dynamics and MM-GBSA check whether the complex is stable in water and what its binding free energy is. Docking results of the candidates against unrelated viral antigens (SARS, HIV1, RSVF) are used to rank cross-reactivity on a relative scale. This converges on a single lead candidate, R1aB6, and flags ARGB:31 as a target for subsequent mutagenesis studies.</p>
           <p>These values come from molecular docking and simulation and are computational predictions; Section 9 of the modeling document states that there is "no experimental validation." Detection sensitivity, specificity, limit of detection, quantitative range, and clinical usability have not been measured. The 3D view shows antigen-source structures, not the project's docking complex.</p>
         </div>
 
@@ -274,24 +299,66 @@
 
             <p>The questions, methods, and outputs of the seven stages:</p>
 
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Stage</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Question Addressed</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Method</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Output</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Stage</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Question Addressed</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Method</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Output</th>
                 </tr>
               </thead>
               <tbody>
-                {% for stage in model_docking.display.pipeline %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.stage }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.question }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.method }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ stage.output }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Which antibody binds H1N1 best?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ClusPro rigid docking (untreated antigen)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Specificity-index ranking</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Does the processed antigen affect binding?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ClusPro rigid docking (post-complex-processing antigen)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cross-validate the binding mode</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Does it cross-react with unrelated viruses?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ClusPro rigid docking (SARS / HIV1 / RSVF)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cross-reactivity risk</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Is the binding mode stable?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">HADDOCK 2.5 semi-flexible refinement</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">HADDOCK score、BSA</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Which residues drive binding?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">PyMOL + SPICE</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Interface residues, interaction types</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Is the complex stable in water?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GROMACS MD + MM-GBSA</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RMSD、RMSF、Rg、ΔG_bind</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">What should be validated experimentally?</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Integrated analysis</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hotspot residue (ARGB:31)</td>
+                </tr>
+                
               </tbody>
             </table>
 
@@ -299,13 +366,22 @@
           </div>
         </div>
 
-        <div id="model-game" class="content-card" data-base-path="">
+        <div id="model-game" class="content-card" data-base-path="/">
           <h2>Interactive Demo: Nanobody × Influenza A HA Docking Cards</h2>
-          <p>Drag a card to the center, or click a card to select it. After choosing one antibody and one antigen, the result panel shows the docking result for that combination, and the ranking panel shows the {{ model_docking.funnel.candidatesRefined }} candidates ranked by specificity index. The demo covers only the {{ model_docking.funnel.candidatesRefined }} candidates with numerical values in the document.</p>
+          <p>Every card here is a real docking result. Drag a nanobody card or an antigen card into the centre and its
+            3D structure is drawn on its own; add the second card and the pair is drawn as a docked complex together
+            with the scores that ClusPro or HADDOCK actually produced for that combination. Semi-flexible results
+            come from HADDOCK 2.5 (50 clusters over 5
+            nanobodies, 200 structures); rigid results come from ClusPro
+            (83 structures over  and the two
+            comparison subtypes).</p>
 
           <div class="model-game">
             <div class="model-game__toolbar">
-              <p class="model-game__toolbar-hint">How to select: pick a docking mode, then click a card or drag it into the center slot; click a selected card again to deselect. With a pair selected, one of that combination's docking results is drawn at random.</p>
+              <p class="model-game__toolbar-hint">Pick a docking mode, then drag a card into the matching slot in the
+                middle &mdash; or just click the card. The result panel on the right follows your choice.
+                Semi-flexible refinement was only run against H1N1 HA, so switching to that mode
+                restricts the antigen side accordingly.</p>
 
               <div class="model-game__modes" role="group" aria-label="Docking mode">
                 <button type="button" id="model-game-mode-rigid" class="model-game__button model-game__button--mode is-active" aria-pressed="true">Rigid (ClusPro)</button>
@@ -313,77 +389,121 @@
               </div>
 
               <div class="model-game__toolbar-actions">
-                <button type="button" id="model-game-draw" class="model-game__button">Draw a Result</button>
                 <button type="button" id="model-game-random-pair" class="model-game__button model-game__button--ghost">Random Pair</button>
                 <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
               </div>
             </div>
 
-            <div class="model-game__board">
-              <section class="model-game__column">
-                <h3 id="model-game-antibodies-title" class="model-game__column-title" data-no-fold>Nanobodies ({{ model_docking.funnel.candidatesRefined }} candidates)</h3>
-                <div class="model-game__cards" id="model-game-antibodies"></div>
-              </section>
+            <div class="model-game__stage">
+              <div class="model-game__board">
+                <section class="model-game__column">
+                  <h3 id="model-game-antibodies-title" class="model-game__column-title" data-no-fold>
+                    <span class="model-game__column-title-main">Nanobodies</span>
+                    <span class="model-game__column-title-sub">5 candidates</span>
+                  </h3>
+                  <p class="model-game__column-hint" aria-hidden="true">Drag to the slot on the right</p>
+                  <div class="model-game__cards" id="model-game-antibodies"></div>
+                </section>
 
-              <div class="model-game__center">
-                <div class="model-game__slots">
-                  <button type="button" class="model-game__slot" id="model-game-slot-antibody">Drag in or click a nanobody card on the left</button>
-                  <span class="model-game__slot-times" aria-hidden="true">×</span>
-                  <button type="button" class="model-game__slot" id="model-game-slot-antigen">Drag in or click an antigen card on the right</button>
-                </div>
-
-                <div class="model-game__viewer-block">
-                  <div class="model-game__viewer-head">
-                    <p class="model-game__viewer-title">3D Structure &amp; Ranking</p>
-                    <div class="model-game__viewer-actions">
-                      <button type="button" id="model-game-view-nanobody" class="model-game__button model-game__button--ghost" disabled>View Nanobody</button>
-                      <button type="button" id="model-game-view-receptor" class="model-game__button model-game__button--ghost" disabled>View Antigen</button>
-                      <button type="button" id="model-game-load3d" class="model-game__button">Load 3D Structure</button>
-                      <button type="button" id="model-game-style" class="model-game__button model-game__button--ghost">Display Mode: Cartoon</button>
-                      <button type="button" id="model-game-viewer-toggle" class="model-game__button model-game__button--ghost" aria-expanded="false" aria-controls="model-game-viewer">Show Numbers</button>
+                <div class="model-game__center">
+                  <div class="model-game__slots">
+                    <div class="model-game__slot-wrap">
+                      <p class="model-game__slot-hint" aria-hidden="true">Nanobody</p>
+                      <button type="button" class="model-game__slot" id="model-game-slot-antibody">
+                        <span class="model-game__slot-arrow" aria-hidden="true"></span>
+                        <span class="model-game__slot-text">Drop here</span>
+                      </button>
+                    </div>
+                    <span class="model-game__slot-times" aria-hidden="true">&times;</span>
+                    <div class="model-game__slot-wrap">
+                      <p class="model-game__slot-hint" aria-hidden="true">Antigen</p>
+                      <button type="button" class="model-game__slot" id="model-game-slot-antigen">
+                        <span class="model-game__slot-arrow" aria-hidden="true"></span>
+                        <span class="model-game__slot-text">Drop here</span>
+                      </button>
                     </div>
                   </div>
-                  <div class="model-game__flip">
-                    <div class="model-game__flip-inner">
-                      <div class="model-game__flip-face model-game__flip-face--3d">
-                        <div class="model-game__viewer" id="model-game-viewer">
-                          <div class="model-game__viewer-empty">
-                            <svg class="model-game__viewer-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                              <circle cx="24" cy="24" r="7"></circle>
-                              <circle cx="10" cy="12" r="3.5"></circle>
-                              <circle cx="38" cy="12" r="3.5"></circle>
-                              <circle cx="10" cy="36" r="3.5"></circle>
-                              <circle cx="38" cy="36" r="3.5"></circle>
-                              <line x1="17" y1="20" x2="12.6" y2="14.6"></line>
-                              <line x1="31" y1="20" x2="35.4" y2="14.6"></line>
-                              <line x1="17" y1="28" x2="12.6" y2="33.4"></line>
-                              <line x1="31" y1="28" x2="35.4" y2="33.4"></line>
-                            </svg>
-                            <p>Click "Load 3D Structure" to fetch and display the selected structure. The 3D library is downloaded only at that step.</p>
+
+                  <div class="model-game__viewer-block">
+                    <div class="model-game__viewer-head">
+                      <p class="model-game__viewer-title">3D Structure &amp; Ranking</p>
+                      <div class="model-game__viewer-actions">
+                        <button type="button" id="model-game-load3d" class="model-game__button" title="Load 3D Structure">Load 3D</button>
+                        <button type="button" id="model-game-style" class="model-game__button model-game__button--ghost" title="Display Mode: Cartoon">Cartoon</button>
+                        <button type="button" id="model-game-viewer-toggle" class="model-game__button model-game__button--ghost" aria-expanded="false" aria-controls="model-game-viewer" title="Show the specificity ranking instead of the 3D view">Numbers</button>
+                      </div>
+                    </div>
+                    <div class="model-game__flip">
+                      <div class="model-game__flip-inner">
+                        <div class="model-game__flip-face model-game__flip-face--3d">
+                          <div class="model-game__viewer" id="model-game-viewer">
+                            <div class="model-game__viewer-empty">
+                              <svg class="model-game__viewer-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                                <circle cx="24" cy="24" r="7"></circle>
+                                <circle cx="10" cy="12" r="3.5"></circle>
+                                <circle cx="38" cy="12" r="3.5"></circle>
+                                <circle cx="10" cy="36" r="3.5"></circle>
+                                <circle cx="38" cy="36" r="3.5"></circle>
+                                <line x1="17" y1="20" x2="12.6" y2="14.6"></line>
+                                <line x1="31" y1="20" x2="35.4" y2="14.6"></line>
+                                <line x1="17" y1="28" x2="12.6" y2="33.4"></line>
+                                <line x1="31" y1="28" x2="35.4" y2="33.4"></line>
+                              </svg>
+                              <p>Pick a card to draw its structure. The 3D library is downloaded only at that step.</p>
+                            </div>
                           </div>
+                          <p class="model-game__viewer-note" id="model-game-viewer-note"></p>
+                          <p class="model-game__viewer-message" id="model-game-viewer-message" hidden></p>
                         </div>
-                        <p class="model-game__viewer-note" id="model-game-viewer-note"></p>
-                        <p class="model-game__viewer-message" id="model-game-viewer-message" hidden></p>
-                      </div>
-                      <div class="model-game__flip-face model-game__flip-face--numbers">
-                        <div class="model-game__panel model-game__panel--ranking" id="model-game-ranking"></div>
+                        <div class="model-game__flip-face model-game__flip-face--numbers">
+                          <div class="model-game__panel model-game__panel--ranking" id="model-game-ranking"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="model-game__panel" id="model-game-result"></div>
+                <section class="model-game__column">
+                  <h3 id="model-game-antigens-title" class="model-game__column-title" data-no-fold>
+                    <span class="model-game__column-title-main">HA Antigens</span>
+                    <span class="model-game__column-title-sub">Influenza A &middot; 3</span>
+                  </h3>
+                  <p class="model-game__column-hint" aria-hidden="true">Drag to the slot on the left</p>
+                  <div class="model-game__cards" id="model-game-antigens"></div>
+                </section>
               </div>
 
-              <section class="model-game__column">
-                <h3 id="model-game-antigens-title" class="model-game__column-title" data-no-fold>Influenza A HA Antigens ({{ model_docking.funnel.fluAntigens }} types)</h3>
-                <div class="model-game__cards" id="model-game-antigens"></div>
-              </section>
+              <aside class="model-game__rail" id="model-game-rail" data-rail-state="closed" aria-label="Docking result">
+                <button type="button" class="model-game__rail-toggle" id="model-game-rail-toggle"
+                        aria-expanded="false" aria-controls="model-game-rail-body">
+                  <span class="model-game__rail-toggle-label">Results</span>
+                  <svg class="model-game__rail-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                  <span class="model-game__rail-toggle-dot" data-rail-dot aria-hidden="true"></span>
+                </button>
+
+                <div class="model-game__rail-body" id="model-game-rail-body">
+                  <div class="model-game__selector">
+                    <label class="model-game__selector-label" for="model-game-select" id="model-game-select-label">ClusPro model</label>
+                    <select class="model-game__select" id="model-game-select" disabled></select>
+                  </div>
+
+                  <div class="model-game__panel" id="model-game-result"></div>
+                </div>
+              </aside>
             </div>
 
             <p class="model-game__fallback" id="model-game-fallback" hidden></p>
             <p class="model-game__status" id="model-game-status" role="status" aria-live="polite"></p>
-            <p class="model-game__caption">Data are from Sections 5.3 and 5.4 of the modeling document and are computational predictions. The "target subtype / control subtype" labels on the cards follow the document's convention: the specificity index is built from the score difference between H1N1 and H3N2/H5N1; the control subtypes are used to quantify specificity, not as detection targets.</p>
+            <p class="model-game__caption">Rigid scores are ClusPro weighted scores read from the docking output; the
+              ClusPro model files carry no cluster number, so the model selector is labelled by file and is
+              deliberately not tied to one row of the score table. Semi-flexible scores are HADDOCK scores for the
+              selected cluster, with its RMSD, structure count and intermolecular energy. The "control subtype" labels
+              follow the source document: the specificity index is built from the score difference between
+              H1N1 and the two comparison subtypes, which quantify specificity rather than
+              serving as detection targets. All values are computational predictions.</p>
           </div>
         </div>
 
@@ -396,39 +516,39 @@
             <p>The binding interface is treated regionally: the active residues on HA (HA1 25, 45–49, 305–307, 332; HA2 361–364, 381, 382, 384, 385, 388, 391, 392, 395, 396, 399) and the CDR residues of the nanobody are taken as the range participating in binding. Cross-reactivity is ranked relatively using the average docking score of candidates against unrelated viral antigens (SARS, HIV1, RSVF); it does not constitute a quantitative metric.</p>
 
             <h3 id="model-mathematical-assumptions">Computational &amp; Mathematical Assumptions</h3>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Assumption</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Rationale</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Potential Bias</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Assumption</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Rationale</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Potential Bias</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">Receptor treated as rigid in ClusPro</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Rapidly screens out many candidates</td>
-                  <td style="{{ model_docking.tableStyle.td }}">May miss induced-fit effects</td>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Receptor treated as rigid in ClusPro</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Rapidly screens out many candidates</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">May miss induced-fit effects</td>
                 </tr>
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">Interface treated as semi-flexible in HADDOCK</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Allows side-chain rearrangement</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Backbone remains fixed</td>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Interface treated as semi-flexible in HADDOCK</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Allows side-chain rearrangement</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Backbone remains fixed</td>
                 </tr>
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">Implicit solvent used in docking</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Standard practice for protein–protein docking</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Ignores explicit water bridges</td>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Implicit solvent used in docking</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Standard practice for protein–protein docking</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Ignores explicit water bridges</td>
                 </tr>
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">Amber99sbildn force field used</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Well-validated for protein systems</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Inherent approximations of the force field</td>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Amber99sbildn force field used</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Well-validated for protein systems</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Inherent approximations of the force field</td>
                 </tr>
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">10 ns MD suffices to check stability</td>
-                  <td style="{{ model_docking.tableStyle.td }}">Standard preliminary-validation timescale</td>
-                  <td style="{{ model_docking.tableStyle.td }}">May miss slow conformational changes</td>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">10 ns MD suffices to check stability</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Standard preliminary-validation timescale</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">May miss slow conformational changes</td>
                 </tr>
               </tbody>
             </table>
@@ -443,47 +563,69 @@
 
             <h3 id="model-data-targets">Target Proteins &amp; Antigen Processing</h3>
             <p>The three influenza A HA antigens are all taken from structures deposited in RCSB; the documented processing is: remove antibody chains, remove glycosylation and water molecules, split HA1 and HA2 into independent chains, and unify chain IDs (HA as A/B, nanobody as C).</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Antigen</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Strain</th>
-                  <th style="{{ model_docking.tableStyle.th }}">PDB ID</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Source</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Resolution</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Retained Chains</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Antigen</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Strain</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">PDB ID</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Source</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Resolution</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Retained Chains</th>
                 </tr>
               </thead>
               <tbody>
-                {% for antigen in model_docking.display.antigens %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.name }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.strain }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.pdbId }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.source }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.resolution }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ antigen.chainMap }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">H1N1 HA</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">A/Puerto Rico/8/1934</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">9VH4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RCSB</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.80 Å</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">A = HA1, B = HA2</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">H3N2 HA</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">A/Puerto Rico/8/1934-New York/55/2004</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">9VH5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RCSB</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.70 Å</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">A = HA1, B = HA2</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">H5N1 HA</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">A/Jiangsu/NJ210/2023</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">9MQ2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RCSB</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.06 Å</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">A = HA1 (this entry deposited no HA2)</td>
+                </tr>
+                
               </tbody>
             </table>
             <p>The 3D view uses these three structures, trimmed per the documented convention to "HA chains only": antibody chains, glycosylation, and heteroatoms are removed, and coordinates are unchanged. Each entry is further noted below.</p>
             <ul>
-              {% for antigen in model_docking.display.antigens %}
-              <li><strong>{{ antigen.pdbId }}（{{ antigen.name }}）：</strong>{{ antigen.structureNote }}</li>
-              {% endfor %}
+              
+              <li><strong>9VH4（H1N1 HA）：</strong>This entry is a co-crystal complex of HA with a single-domain antibody; per modeling document §5.1, the file has been trimmed to &#39;HA chains only.&#39; The co-crystallized binder is not R1aB6 selected by this project.</li>
+              
+              <li><strong>9VH5（H3N2 HA）：</strong>Same as 9VH4, trimmed to HA chains only; the co-crystallized binder is not R1aB6 of this project.</li>
+              
+              <li><strong>9MQ2（H5N1 HA）：</strong>This entry deposited only the HA1 chain (residues 13–321), so residue 332 and all HA2 active residues listed in the document are absent from this structure; the page accordingly converges when labeling H5.</li>
+              
             </ul>
 
             <h3 id="model-data-nanobodies">Nanobodies &amp; Structure Prediction</h3>
-            <p>The candidates are 17 brand-new nanobody sequences with no experimental structure in the PDB, about 114–123 residues long, and carrying no His-tag or linker; structure prediction uses a locally deployed AlphaFold2, taking high-confidence models with pLDDT above 90, and assigns the ligand chain ID as C. The predicted structures of the {{ model_docking.funnel.candidatesRefined }} candidates that entered refinement are self-hosted and shown in the "View Nanobody" button of the interactive demo above (single chain, produced by a structure-prediction model, not an experimental structure).</p>
-            <p>Scoring and refinement provide citable values only for {{ model_docking.funnel.candidatesRefined }} of these candidates (R1aB6, R2aF9, R1aA5, R2bE8, R2bD9); both the results section below and the interactive demo are limited to these {{ model_docking.funnel.candidatesRefined }}. The remaining {{ model_docking.funnel.candidatesScreened }} did not enter the refinement stage and have no citable values.</p>
+            <p>The candidates are 17 brand-new nanobody sequences with no experimental structure in the PDB, about 114–123 residues long, and carrying no His-tag or linker; structure prediction uses a locally deployed AlphaFold2, taking high-confidence models with pLDDT above 90, and assigns the ligand chain ID as C. The predicted structures of the 5 candidates that entered refinement are self-hosted and shown in the "View Nanobody" button of the interactive demo above (single chain, produced by a structure-prediction model, not an experimental structure).</p>
+            <p>Scoring and refinement provide citable values only for 5 of these candidates (R1aB6, R2aF9, R1aA5, R2bE8, R2bD9); both the results section below and the interactive demo are limited to these 5. The remaining 17 did not enter the refinement stage and have no citable values.</p>
 
             <h3 id="model-data-scoring">Scoring Functions &amp; Specificity Index</h3>
             <ul>
-              <li><strong>ClusPro score:</strong>{{ model_docking.scoring.cluspro.formula }}; the Top 10 conformations are retained for each "candidate × antigen" combination.</li>
-              <li><strong>Specificity index:</strong>{{ model_docking.scoring.specificityIndex.formula }}。{{ model_docking.scoring.specificityIndex.note }}</li>
-              <li><strong>HADDOCK 2.5:</strong>{{ model_docking.scoring.haddock.flow }}, outputting {{ model_docking.scoring.haddock.metrics }}. {{ model_docking.scoring.haddock.note }}</li>
-              <li><strong>Dynamics &amp; free energy:</strong>GROMACS molecular dynamics + MM-GBSA; force field {{ model_docking.md.forcefield }}, water model {{ model_docking.md.waterModel }}, random seed {{ model_docking.md.seed }}.</li>
+              <li><strong>ClusPro score:</strong>E = 0.40Erep − 0.40Eatt + 600Eelec + 1.00EDARS; the Top 10 conformations are retained for each "candidate × antigen" combination.</li>
+              <li><strong>Specificity index:</strong>( E_H1N1 − E_H3N2 + E_H1N1 − E_H5N1 ) / 2。A more negative value indicates better specificity for H1N1.</li>
+              <li><strong>HADDOCK 2.5:</strong>Rigid docking it0 → semi-flexible refinement it1 → water refinement itw, outputting HADDOCK score / cluster size / BSA (Å²). A more negative HADDOCK score indicates better interface quality.</li>
+              <li><strong>Dynamics &amp; free energy:</strong>GROMACS molecular dynamics + MM-GBSA; force field Amber99sbildn, water model TIP3P, random seed gen_seed = 1.</li>
               <li><strong>Positive control:</strong> re-docking of the experimentally resolved 9VH4 complex serves as the control for the docking pipeline.</li>
             </ul>
           </div>
@@ -497,85 +639,189 @@
             <p>Under the untreated antigen, the docking scores and average specificity advantage of the 17 candidates against the three influenza A HA antigens are as follows (the red flag marks the candidate with the best specificity). A more negative specificity index indicates that the candidate is more biased toward H1N1 relative to other subtypes.</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="{{ media('lab/drylab/model/model-cluspro-screen.webp') }}" alt="Figure 3. Left: ClusPro scores of the 17 candidates against H1N1, H3N2, H5N1 (weighted score; more negative means stronger binding); Right: average specificity advantage of each candidate against H1N1, with the red flag marking the most specific one" loading="lazy" width="1400" height="693" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/model-cluspro-screen.webp" alt="Figure 3. Left: ClusPro scores of the 17 candidates against H1N1, H3N2, H5N1 (weighted score; more negative means stronger binding); Right: average specificity advantage of each candidate against H1N1, with the red flag marking the most specific one" loading="lazy" width="1400" height="693" style="max-width:100%; height:auto; border:1px solid #ddd;">
               <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 3. ClusPro scores and average specificity advantage of the 17 candidates: left, scores against the three influenza A HA antigens; right, specificity advantage (more negative = more specific, red flag marks the best candidate) (computational prediction results)</figcaption>
             </figure>
 
-            <p>The {{ model_docking.funnel.candidatesRefined }} refined candidates' scores and specificity indices under the untreated antigen:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <p>The 5 refined candidates' scores and specificity indices under the untreated antigen:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
-                  <th style="{{ model_docking.tableStyle.th }}">H1N1</th>
-                  <th style="{{ model_docking.tableStyle.th }}">H3N2</th>
-                  <th style="{{ model_docking.tableStyle.th }}">H5N1</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Specificity Index</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Conclusion</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Nanobody</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H1N1</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H3N2</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H5N1</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Specificity Index</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Conclusion</th>
                 </tr>
               </thead>
               <tbody>
-                {% for row in model_docking.tables.untreated %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H1N1 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H3N2 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H5N1 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.index }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.outcome }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aB6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−933.9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−863.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−817.9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−93.25</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bD9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−997.0</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−845.0</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−1003.9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−72.55</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Rejected</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bE8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−921.7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−915.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−813.1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−57.35</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Rejected</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aA5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−1022.7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−950.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−1013.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−40.75</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2aF9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−792.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−764.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−867.9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">23.75</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected</td>
+                </tr>
+                
               </tbody>
             </table>
             <p>The ranking is R1aB6 &gt; R2bD9 &gt; R2bE8 &gt; R1aA5 &gt; R2aF9 (from most negative to least negative specificity index).</p>
 
-            <p>The same {{ model_docking.funnel.candidatesRefined }} candidates' results against the "post-complex-processing antigen":</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <p>The same 5 candidates' results against the "post-complex-processing antigen":</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
-                  <th style="{{ model_docking.tableStyle.th }}">H1N1</th>
-                  <th style="{{ model_docking.tableStyle.th }}">H3N2</th>
-                  <th style="{{ model_docking.tableStyle.th }}">H5N1</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Specificity Index</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Nanobody</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H1N1</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H3N2</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H5N1</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Specificity Index</th>
                 </tr>
               </thead>
               <tbody>
-                {% for row in model_docking.tables.treated %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H1N1 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H3N2 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.H5N1 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.index }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bE8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−928.1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−897.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−951.3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−3.85</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2aF9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−830.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−785.3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−875.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−0.15</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bD9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−842.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−796.0</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−930.3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">20.60</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aB6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−867.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−912.0</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−922.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">49.90</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aA5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−874.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−953.1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−1050.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">127.10</td>
+                </tr>
+                
               </tbody>
             </table>
             <p>After switching to the processed antigen, all candidates' specificity indices become positive or near zero, indicating that antigen conformational processing markedly changes the specificity ranking. The document therefore takes the untreated-antigen results as the primary basis, on the grounds that the untreated antigen is closer to the native conformation.</p>
 
             <p>Cross-reactivity risk is expressed as the average binding energy of candidates against unrelated viral antigens (SARS, HIV1, RSVF); a more negative value indicates stronger binding and higher cross-reactivity risk:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
-                  <th style="{{ model_docking.tableStyle.th }}">SARS</th>
-                  <th style="{{ model_docking.tableStyle.th }}">HIV1</th>
-                  <th style="{{ model_docking.tableStyle.th }}">RSVF</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Mean Binding Energy</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Cross-reactivity Risk</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Nanobody</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">SARS</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">HIV1</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">RSVF</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Mean Binding Energy</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Cross-reactivity Risk</th>
                 </tr>
               </thead>
               <tbody>
-                {% for row in model_docking.tables.cross %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.SARS }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.HIV1 }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.RSVF }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.mean }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.risk }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aA5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−905.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−939.8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−948.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−931.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Highest</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bE8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−840.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−936.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−894.7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−890.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Higher</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bD9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−824.1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−937.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−876.9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−879.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Moderate</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aB6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−754.3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−960.8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−883.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−866.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Moderate</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2aF9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−742.0</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−814.0</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−713.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−756.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Lowest</td>
+                </tr>
+                
               </tbody>
             </table>
             <!-- MQ-7: the source document has two additional 17-antibody charts (processed antigen, cross-reactivity) placed after 5.3.2 / 5.3.3,
@@ -583,161 +829,976 @@
                  and the related results are presented only in tables. See md/10-一手分析.md §5.1, §6. -->
 
             <h3 id="model-haddock">HADDOCK Semi-flexible Refinement</h3>
-            <p>Results after semi-flexible refinement of the {{ model_docking.funnel.candidatesRefined }} refined candidates against H1N1 HA:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <p>Results after semi-flexible refinement of the 5 refined candidates against H1N1 HA:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Nanobody</th>
-                  <th style="{{ model_docking.tableStyle.th }}">HADDOCK score</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Cluster Size</th>
-                  <th style="{{ model_docking.tableStyle.th }}">BSA (Å²)</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Nanobody</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">HADDOCK score</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Cluster Size</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">BSA (Å²)</th>
                 </tr>
               </thead>
               <tbody>
-                {% for row in model_docking.tables.haddock %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.id }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.score }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.clusterSize }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ row.bsa }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aB6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−93.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">16</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1890.1</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2aF9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−89.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">61</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2764.4</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aA5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−84.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">26</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2634.4</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bE8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−71.1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">16</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2538.9</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bD9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−68.8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2548.0</td>
+                </tr>
+                
               </tbody>
             </table>
             <p>The ranking is R1aB6 &gt; R2aF9 &gt; R1aA5 &gt; R2bE8 &gt; R2bD9. Plotting the two metrics together shows they do not always move in the same direction:</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="{{ media('lab/drylab/model/model-specificity-vs-haddock.webp') }}" alt="Figure 4. Combined view: horizontal axis is the ClusPro specificity index (more negative is better), vertical axis is the HADDOCK score (more negative is better); R1aB6 falls in the optimal lower-left region, while R2aF9 falls in the right region with poor specificity" loading="lazy" width="1269" height="952" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/model-specificity-vs-haddock.webp" alt="Figure 4. Combined view: horizontal axis is the ClusPro specificity index (more negative is better), vertical axis is the HADDOCK score (more negative is better); R1aB6 falls in the optimal lower-left region, while R2aF9 falls in the right region with poor specificity" loading="lazy" width="1269" height="952" style="max-width:100%; height:auto; border:1px solid #ddd;">
               <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 4. Combined view of the two metrics: horizontal axis is the ClusPro specificity index, vertical axis is the HADDOCK score, both better when more negative; R1aB6 sits at the optimal position in both directions (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="{{ media('lab/drylab/model/model-haddock-bars.webp') }}" alt="Figure 5. Bar chart of HADDOCK scores for the 5 candidates, with score, BSA, and cluster size N annotated on the bars" loading="lazy" width="1269" height="793" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 5. HADDOCK score, buried surface area (BSA), and cluster size (N) for the {{ model_docking.funnel.candidatesRefined }} candidates (computational prediction results)</figcaption>
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/model-haddock-bars.webp" alt="Figure 5. Bar chart of HADDOCK scores for the 5 candidates, with score, BSA, and cluster size N annotated on the bars" loading="lazy" width="1269" height="793" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 5. HADDOCK score, buried surface area (BSA), and cluster size (N) for the 5 candidates (computational prediction results)</figcaption>
             </figure>
 
             <h3 id="model-interface">Binding Interface &amp; Hotspot Residues</h3>
-            <p>Interface analysis targets the best combination, R1aB6 with H1N1 HA. PyMOL gives 30 interface residues on the HA side ({{ model_docking.interface.haSide.ranges | join(', ') }}) and 24 residues on the nanobody side (CDR1 27–37, CDR2 44–65, CDR3 101–104). SPICE gives the following counts of interaction types:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <p>Interface analysis targets the best combination, R1aB6 with H1N1 HA. PyMOL gives 30 interface residues on the HA side (27–32, 44–53, 303–332, 358–396) and 24 residues on the nanobody side (CDR1 27–37, CDR2 44–65, CDR3 101–104). SPICE gives the following counts of interaction types:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Interaction Type</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Count</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Interaction Type</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Count</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in model_docking.display.interactions %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.label }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Total contacts</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">61</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bonds</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">19</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Salt bridges</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrophobic interactions</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">39</td>
+                </tr>
+                
               </tbody>
             </table>
 
             <p>The residues with the shortest distances and repeated occurrences are promoted to hotspots:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Nanobody Residue</th>
-                  <th style="{{ model_docking.tableStyle.th }}">HA Residue</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Interaction</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Distance (Å)</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Nanobody Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">HA Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Interaction</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Distance (Å)</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in model_docking.display.hotspots %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.nanobody }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.ha }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.type }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.distance }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARGB:31</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ASNA:27</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.086</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARGB:31</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">SERA:29</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.180</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARGB:31</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">THRA:44</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.097</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARGB:31</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GLNA:51</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.086</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ASPB:55</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">THRA:30</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.725</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">THRB:54</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ASPA:31</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Salt bridge</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.480</td>
+                </tr>
+                
               </tbody>
             </table>
-            <p>{{ model_docking.interface.hotspotNote }}</p>
+            <p>ARGB:31 participates in 4 hydrogen bonds; it is the hotspot residue proposed by the document and is written as a target for the subsequent R31A mutant study.</p>
+
+            
+            
+<div class="model-report" id="model-report-cluster5" data-report-group data-report-key="cluster5">
+  <div class="model-report__head">
+    <h3 class="model-report__title" data-no-fold>Interaction Reports: R1aB6 × H1N1 HA Cluster 5</h3>
+    <p class="model-report__meta">HADDOCK 2.5 semi-flexible complex &middot; R1aB6 × H1N1 HA (Cluster 5)</p>
+    <p class="model-report__desc">Four analyses of the same complex, each opening as a standalone report page.</p>
+  </div>
+
+  <ul class="model-report__links">
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/cluster5/contact.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Contact Analysis</span>
+        <span class="model-report__link-note">3D view plus every residue contact, grouped by bond type.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/cluster5/interface.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Interface Analysis</span>
+        <span class="model-report__link-note">Interface residue grid with per-residue contact detail.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/cluster5/sasa.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">SASA Analysis</span>
+        <span class="model-report__link-note">Burial-depth and per-residue surface-area plots.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+      <p class="model-report__link-caveat">The file supplied for this slot in the source folder is byte-identical to the Contact Analysis report (sha256 b9487783ee3055c1), so no separate SASA report exists for this complex.</p>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/cluster5/tabular.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Tabular Data</span>
+        <span class="model-report__link-note">The same numbers as sortable tables, one tab per chain, with CSV export.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+  </ul>
+
+  <p class="model-report__note">
+    Each report opens in its own tab and is not part of the wiki navigation. Report colour scheme and
+    decorative icons were adjusted for this site; the analyses, tables and 3D models are the original
+    outputs. Figures are computational predictions that have not been validated by wet-lab experiments.
+  </p>
+</div>
+
+
             <!-- The source document has a note here for "Figure 4. Binding interface and interaction network. 3Dmol interaction," but the document does not embed that figure.
                  This page substitutes it with "antigen structure + interface-residue highlighting (interactive demo card) + the table above"; this project's docking-complex structure is not yet public,
                  and no substitute structure from outside this project is shown or used. -->
 
             <h3 id="model-kinetics">Dynamics &amp; Binding Free Energy</h3>
-            <p>The R1aB6–H1N1 HA complex was placed in a water box for molecular dynamics ({{ model_docking.md.reportedDuration }}, GROMACS, {{ model_docking.md.forcefield }} force field, {{ model_docking.md.waterModel }} water model) to observe whether it is stable:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <p>The R1aB6–H1N1 HA complex was placed in a water box for molecular dynamics (10 ns (per the document body; see caveats), GROMACS, Amber99sbildn force field, TIP3P water model) to observe whether it is stable:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Metric</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Result</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Metric</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Result</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in model_docking.display.md %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.metric }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RMSD</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.45 nm (document records as stable)</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RMSF (interface)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&lt; 0.17 nm</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Rg</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.87 nm (stable)</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bonds</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">462.1 ± 9.6</td>
+                </tr>
+                
               </tbody>
             </table>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="{{ media('lab/drylab/model/model-md-stability.webp') }}" alt="Figure 6. Left: RMSD of the R1aB6–H1N1 complex over time; Right: per-residue RMSF" loading="lazy" width="1400" height="467" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/model-md-stability.webp" alt="Figure 6. Left: RMSD of the R1aB6–H1N1 complex over time; Right: per-residue RMSF" loading="lazy" width="1400" height="467" style="max-width:100%; height:auto; border:1px solid #ddd;">
               <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 6. RMSD (left) and per-residue RMSF (right) of the R1aB6–H1N1 complex (computational prediction results)</figcaption>
             </figure>
             <!-- MQ-6: the document body states 10 ns and RMSD 0.45 nm (stable), but the figure's horizontal axis only reaches about 8 ns and the curve peak is about 0.70 nm,
                  so the two descriptions are inconsistent and await lab verification; this page's body follows the document's stated values and does not rewrite numbers based on the figure. -->
 
-            <p>The binding free energy was estimated by MM-GBSA ({{ model_docking.mmgbsa.engine }}, in kcal/mol):</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <p>The binding free energy was estimated by MM-GBSA (gmx_MMPBSA 1.5.0.3, in kcal/mol):</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Energy Term</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Value (kcal/mol)</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Energy Term</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Value (kcal/mol)</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in model_docking.display.mmgbsa %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.term }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔVDWAALS</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−59.41</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔEEL</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">5.22</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔEGB</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">57.69</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔESURF</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−7.23</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔTOTAL</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−3.74</td>
+                </tr>
+                
               </tbody>
             </table>
-            <p>{{ model_docking.mmgbsa.note }}</p>
+            <p>Document §9 states: MM-GBSA is based on only 10 frames, with large statistical error.</p>
 
             <h3 id="model-ranking">Conclusions &amp; Design Decisions</h3>
-            <p><strong>Selected candidates ({{ model_docking.display.leads | length }}):</strong></p>
+            <p><strong>Selected candidates (3):</strong></p>
             <ul>
-              {% for item in model_docking.display.leads %}
-              <li><strong>{{ item.id }}：</strong>{{ item.zh }}</li>
-              {% endfor %}
+              
+              <li><strong>R1aB6：</strong>Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA binding free energy −3.74 kcal/mol. The document therefore selects it as the recognition element.</li>
+              
+              <li><strong>R2aF9：</strong>Second-best HADDOCK score (−89.4), but the ClusPro specificity index is positive (+23.75); it has the lowest cross-reactivity risk yet poor H1N1 specificity.</li>
+              
+              <li><strong>R1aA5：</strong>Third-best HADDOCK score (−84.6), but the ClusPro specificity index is weaker (−40.75) and the cross-reactivity risk is the highest.</li>
+              
             </ul>
-            <p><strong>Rejected candidates ({{ model_docking.display.rejected | length }}):</strong></p>
+            <p><strong>Rejected candidates (2):</strong></p>
             <ul>
-              {% for item in model_docking.display.rejected %}
-              <li><strong>{{ item.id }}：</strong>{{ item.zh }}</li>
-              {% endfor %}
+              
+              <li><strong>R2bE8：</strong>Mid-range ClusPro specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk.</li>
+              
+              <li><strong>R2bD9：</strong>Second-best ClusPro specificity index (−72.55), but the worst HADDOCK score (−68.8), indicating poor interface quality.</li>
+              
             </ul>
 
             <p>These results correspond to concrete design actions:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Model Prediction</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Design Decision</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Model Prediction</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Design Decision</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in model_docking.designDecisions %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.prediction }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.decision }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R1aB6 has the highest H1N1 specificity</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected as the recognition element</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARGB:31 is a hotspot residue</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Proposed the R31A mutant as a target for subsequent studies</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">R2bD9 and R2bE8 have higher cross-reactivity risk</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Lowered priority</td>
+                </tr>
+                
               </tbody>
             </table>
             <p>What remains is experimental validation and model revision. The computational prediction and candidate selection steps are complete; the remaining two steps depend on subsequent wet-lab experiments.</p>
+          </div>
+        </div>
+
+        <div id="model-path-a" class="content-card">
+          <div class="content-text-frame">
+            <h2>Path A: hM1Dq Gating System</h2>
+
+            <p>Path A models the human DREADD receptor hM1Dq as the antigen-gated entry point. The inhibitory
+              toxin MT1 is docked onto the extracellular orthosteric site, and the C-terminus of the humanized
+              G&alpha; subunit is docked onto the intracellular loops, so that the two events can be reasoned
+              about on the same structure.</p>
+
+            <h3 id="model-path-a-prep">Structure Preparation &amp; G-protein Engineering</h3>
+            <p>The starting receptor is the wild-type structure in RCSB (5CXV, 2.7 &Aring;, residues 1&ndash;460).
+              Two point mutations were introduced by hand, the predicted structure was produced with ColabFold, and
+              the membrane orientation was set with PPM 3.0:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Check</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">AF2 prediction vs. 5CXV</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1.568 &Aring; over 1913 atoms</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">PPM alignment vs. 5CXV OPM</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.884 &Aring; over 141 atoms</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Mutation validation</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Y106C: 6 atoms to CYS; A196G: 4 atoms to GLY</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Membrane alignment (PPM 3.0)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hydrophobic layer 31.8 &Aring;, tilt 2&deg;, &Delta;G<sub>transfer</sub> &minus;71.8 kcal/mol, 7 transmembrane segments</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>MT1 is a 62-residue inhibitory toxin with three disulfide bonds (CYS 3&ndash;24 at 2.09 &Aring;,
+              CYS 17&ndash;42 at 2.11 &Aring;, CYS 46&ndash;58 at 2.09 &Aring;). The G-protein engineering follows the
+              design: the wild-type <i>Gpa1</i> C-terminus KIGII is replaced by the human G&alpha;q sequence EYNLV
+              followed by a stop codon, using RCSB 9SH6 (2.77 &Aring;) with chain D as G&alpha;, chain C as G&beta; and
+              chain G as G&gamma;.</p>
+
+            <h3 id="model-path-a-docking">HADDOCK Docking of the Two Coupling Interfaces</h3>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Docking System</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Best Cluster</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Score</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Cluster Size</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">RMSD (&Aring;)</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">BSA (&Aring;<sup>2</sup>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; MT1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster 1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;83.3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">76</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1531.9</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; Gpa1 (total)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster 6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;131.7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">12</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3715.9</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; G&alpha; single chain</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster 1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;149.4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">29</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">4007.7</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The single-chain result is better than the full trimer result, which supports the reading that the
+              receptor-to-G-protein coupling interface is mediated mainly by G&alpha;, and is the basis for using the
+              single-chain simplification in the membrane system. For the toxin complex, the best cluster has an RMSD
+              of 0.5 &Aring;, a Z-score of &minus;1.4 and an electrostatic term of &minus;309.1.</p>
+
+            <h3 id="model-path-a-interface">Interface Analysis of hM1Dq &times; MT1</h3>
+            <p>SPICE was run on the Cluster 1 complex with a 5.0 &Aring; distance threshold. Two salt bridges dominate
+              the interface, supported by a hydrophobic cluster:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">hM1Dq Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">MT1 Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Interaction</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Distance (&Aring;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GLU A:170</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARG B:53</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond + salt bridge</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.698 / 3.595 / 3.799</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GLU A:397</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARG B:34</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond + salt bridge</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.754 / 2.637</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GLN A:177</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ARG B:34</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.703</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ASP A:393</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">TRP B:28</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.677</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">LEU A:174</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">VAL B:32 / PRO B:33 / ILE B:31</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrophobic</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.435&ndash;4.423</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">PHE A:390</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">TRP B:28</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrophobic</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">4.088, 4.259</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Under the SPICE definition the interface comprises 20 residues on the hM1Dq side (GLY A:89, TRP A:164,
+              VAL A:168, GLU A:170, ARG A:171, THR A:172, VAL A:173, LEU A:174, GLN A:177, TYR A:179, SER A:184,
+              GLN A:185, PRO A:186, THR A:389, PHE A:390, CYS A:391, LYS A:392, ASP A:393, CYS A:394, GLU A:397) and
+              18 on the MT1 side (LYS B:26, TRP B:28, TYR B:30, ILE B:31, VAL B:32, PRO B:33, ARG B:34, TYR B:35,
+              SER B:36, ILE B:38, PRO B:49, ASN B:51, VAL B:52, ARG B:53, GLU B:54, THR B:55, ILE B:56, ARG B:57).</p>
+            <!-- MQ-7: section A.10 of the source document reports 50 interface residues (30 hM1Dq + 20 MT1),
+                 while the explicit SPICE lists in A.7 total 38 (20 + 18). This page follows the explicit A.7
+                 lists and does not assert either total. -->
+            <p>The functional consequence is the reason this complex matters for the design: MT1 occupies the
+              extracellular orthosteric site of hM1Dq, whereas the intracellular ICL2, ICL3 and H8 regions are reached
+              by the &alpha;5 helix C-terminus of G&alpha;. The two sites do not overlap in space, so in principle both
+              can be occupied at the same time.</p>
+
+            
+            
+<div class="model-report" id="model-report-hm1dq" data-report-group data-report-key="hM1Dq">
+  <div class="model-report__head">
+    <h3 class="model-report__title" data-no-fold>Interaction Reports: hM1Dq × MT1 Cluster 1</h3>
+    <p class="model-report__meta">Path A gating complex &middot; hM1Dq × MT1 (Cluster 1)</p>
+    <p class="model-report__desc">Four analyses of the Path A gating complex. MT1 occupies the extracellular orthosteric site of hM1Dq, which is where the inhibitory toxin acts before antigen arrival.</p>
+  </div>
+
+  <ul class="model-report__links">
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/hM1Dq/contact.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Contact Analysis</span>
+        <span class="model-report__link-note">3D view plus every residue contact, grouped by bond type.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/hM1Dq/interface.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Interface Analysis</span>
+        <span class="model-report__link-note">Interface residue grid with per-residue contact detail.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/hM1Dq/sasa.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">SASA Analysis</span>
+        <span class="model-report__link-note">Burial-depth and per-residue surface-area plots.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/hM1Dq/tabular.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Tabular Data</span>
+        <span class="model-report__link-note">The same numbers as a sortable table, with CSV export.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+  </ul>
+
+  <p class="model-report__note">
+    Each report opens in its own tab and is not part of the wiki navigation. Report colour scheme and
+    decorative icons were adjusted for this site; the analyses, tables and 3D models are the original
+    outputs. Figures are computational predictions that have not been validated by wet-lab experiments.
+  </p>
+</div>
+
+
+            <h3 id="model-path-a-md">Membrane System, Dynamics &amp; Binding Free Energy</h3>
+            <p>The complex was embedded with CHARMM-GUI using a rectangular box of 150 &Aring; with a 22.5 &Aring; water
+              layer, KCl at 0.15 M, 310 K, and the CHARMM36m force field with TIP3P water, giving 631,498 atoms. The
+              lipid composition approximates the <i>Saccharomyces cerevisiae</i> BY4741 plasma membrane (Ergosterol 30%,
+              POPI 28%, POPC 17%, POPE 14%, POPA 6%, POPS 5%). A 100 ns production simulation was completed, and
+              MM-GBSA gave:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Energy Term (kcal/mol)</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;V<sub>dW</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;57.36</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;E<sub>EL</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">+32.76</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;E<sub>GB</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;7.41</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;E<sub>SURF</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;8.36</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;G<sub>GAS</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;24.60</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;G<sub>SOLV</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;15.77</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;TOTAL</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;40.37 &plusmn; 1.27</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Per-residue decomposition marks the TRP 28 &ndash; TYR 35 pair of MT1 as the main binding anchors. The
+              membrane simulation of the hM1Dq&ndash;Gpa1 coupling interface is not part of this page: the full
+              G&alpha; single-chain system is about 850,000 atoms and was listed as future work.</p>
+          </div>
+        </div>
+
+        <div id="model-path-b" class="content-card">
+          <div class="content-text-frame">
+            <h2>Path B: Ste2p Gating System</h2>
+
+            <p>Path B models the yeast mating receptor Ste2p as an alternative entry point, gated by a redesigned
+              &alpha;-factor peptide. This route is modelled in parallel with Path A so that the two gating systems can
+              be compared on the same terms.</p>
+
+            <h3 id="model-path-b-prep">Receptor Preparation &amp; Peptide Design</h3>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Structure</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Source</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Resolution</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Qscore</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Ligand-free</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RCSB 7QB9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.10 &Aring;</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.501</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Main structure</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Agonist-bound</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RCSB 7QBC</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.53 &Aring;</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.422</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Alternative</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Predicted</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">AlphaFold DB P0CI39</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pLDDT 66.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&mdash;</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Insufficient quality, discarded</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>OPM orientation of the ligand-free structure gives a hydrophobic layer of 32.2 &Aring;, a tilt of
+              0&deg; and &Delta;G<sub>transfer</sub> of &minus;103.4 kcal/mol, with seven transmembrane segments
+              (50&ndash;71, 79&ndash;102, 129&ndash;151, 162&ndash;186, 206&ndash;224, 255&ndash;269, 273&ndash;293).
+              Eight &alpha;-factor-derived peptides were designed and predicted with ColabFold; MT1_5
+              (FHLLQLKPGQPMY, pLDDT 72.2) was carried forward.</p>
+
+            <h3 id="model-path-b-docking">HADDOCK Docking of Ste2p &times; Peptides</h3>
+            <p>All eight peptides were docked against Ste2p. The best overall is MT1_5 (Cluster 1), with an HADDOCK
+              score of &minus;99.2 over 33 structures at an RMSD of 0.6 &Aring;, a Z-score of &minus;2.1 and a van der
+              Waals contact term of &minus;72.0.</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Peptide</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Best Cluster</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Score</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Cluster Size</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">RMSD (&Aring;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;99.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">33</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.6</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;98.6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">125</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">5.3</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;96.5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">68</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.8</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;96.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">57</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.9</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;93.2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.7</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;92.7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1.0</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;91.7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">13</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.9</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;89.9</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.8</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3 id="model-path-b-interface">Interface Analysis of Ste2p &times; MT1_5</h3>
+            <p>SPICE was run on the Cluster 1 complex with the same 5.0 &Aring; threshold. The interface is polar and
+              dense: HIS B:2 of the peptide accepts hydrogen bonds from TYR A:106, TYR A:111, THR A:192,
+              VAL A:196 and ALA A:198, and stacks against TYR A:106 and TYR A:128. One salt bridge, ASP A:275 &ndash;
+              LYS B:7, anchors the lower part of the peptide.</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Ste2p Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">MT1_5 Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Interaction</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Distance (&Aring;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">TYR A:106</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">HIS B:2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.093</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ALA A:198</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">HIS B:2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.480, 3.421</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">LYS A:202</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GLN B:5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.638</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">TYR A:266</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">GLN B:10</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrogen bond</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.999, 3.122</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ASP A:275</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">LYS B:7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Salt bridge</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2.990</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">TYR A:111</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">PHE B:1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrophobic</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.393&ndash;4.482 (15 pairs)</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">PRO A:270</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">LEU B:6, PRO B:8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Hydrophobic</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3.562&ndash;4.468 (4 pairs)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The interface comprises 27 Ste2p residues and all 12 MT1_5 residues, and it is organised by region:
+              ECL2 (TYR A:106, TYR A:111, ALA A:112, GLY A:115, TYR A:128), ECL3 (THR A:192, ASP A:195,
+              VAL A:196, SER A:197, ALA A:198, THR A:199, GLN A:200, LYS A:202, PHE A:204, ASN A:205,
+              THR A:208, ILE A:209) and TM7 (TYR A:266, SER A:267, LEU A:268, LYS A:269, PRO A:270,
+              GLY A:273, THR A:274, ASP A:275, THR A:278). Within the peptide, the N-terminal PHE1 &ndash; HIS2 pair
+              and the middle LYS7 &ndash; PRO8 stretch act as the primary anchors.</p>
+
+            
+            
+<div class="model-report" id="model-report-ste2p" data-report-group data-report-key="Ste2p">
+  <div class="model-report__head">
+    <h3 class="model-report__title" data-no-fold>Interaction Reports: Ste2p × MT1_5 Cluster 1</h3>
+    <p class="model-report__meta">Path B gating complex &middot; Ste2p × MT1_5 (Cluster 1)</p>
+    <p class="model-report__desc">Four analyses of the Path B gating complex. The alpha-factor-derived peptide MT1_5 binds mainly through ECL2, ECL3 and TM7 of Ste2p.</p>
+  </div>
+
+  <ul class="model-report__links">
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/Ste2p/contact.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Contact Analysis</span>
+        <span class="model-report__link-note">3D view plus every residue contact, grouped by bond type.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/Ste2p/interface.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Interface Analysis</span>
+        <span class="model-report__link-note">Interface residue grid with per-residue contact detail.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/Ste2p/sasa.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">SASA Analysis</span>
+        <span class="model-report__link-note">Burial-depth and per-residue surface-area plots.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="../static/reports/model/Ste2p/tabular.html"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">Tabular Data</span>
+        <span class="model-report__link-note">The same numbers as a sortable table, with CSV export.</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      
+    </li>
+    
+  </ul>
+
+  <p class="model-report__note">
+    Each report opens in its own tab and is not part of the wiki navigation. Report colour scheme and
+    decorative icons were adjusted for this site; the analyses, tables and 3D models are the original
+    outputs. Figures are computational predictions that have not been validated by wet-lab experiments.
+  </p>
+</div>
+
+
+            <h3 id="model-path-b-md">Membrane System, Dynamics &amp; Binding Free Energy</h3>
+            <p>The complex was embedded with CHARMM-GUI in a 150 &Aring; box with a 22.5 &Aring; water layer, the same
+              <i>S. cerevisiae</i> lipid approximation, KCl at 0.15 M, 303.15 K (the yeast growth temperature),
+              CHARMM36m with TIP3P, giving 276,189 atoms. A 100 ns production simulation was completed at
+              68 ns/day, and MM-GBSA gave:</p>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Energy Term (kcal/mol)</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;V<sub>dW</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;52.93</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;E<sub>EL</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;123.14</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;E<sub>GB</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">+152.61</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;E<sub>SURF</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;7.97</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;G<sub>GAS</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;176.07</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;G<sub>SOLV</sub></td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">+144.63</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&Delta;TOTAL</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;31.43 &plusmn; 3.46</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Per-residue decomposition covered 63 interface residues, concentrated in the same ECL2, ECL3 and TM7
+              regions. The Ste2p&ndash;Gpa1 coupling was not simulated; as with Path A it is listed as future work.</p>
           </div>
         </div>
 
@@ -747,11 +1808,11 @@
 
             <p>Both the ClusPro untreated-antigen ranking and the HADDOCK refinement rank R1aB6 as the best; PyMOL and SPICE each give the same set of interface residues; molecular dynamics checks complex stability in water; MM-GBSA gives the binding free energy; and the cross-reactivity assessment gives the relative position of off-target risk. The document also re-docked the experimentally resolved 9VH4 complex as a control for the whole pipeline.</p>
 
-            {% set totalEnergy = model_docking.display.mmgbsa | last %}
+            
             <ul>
               <li>ClusPro (untreated antigen) and HADDOCK both rank R1aB6 as the top candidate.</li>
               <li>PyMOL and SPICE corroborate the same set of interface residues.</li>
-              <li>Molecular dynamics shows the complex remains stable over the simulation time; the MM-GBSA binding free energy is {{ totalEnergy.value }} kcal/mol, consistent in sign with stable binding.</li>
+              <li>Molecular dynamics shows the complex remains stable over the simulation time; the MM-GBSA binding free energy is −3.74 kcal/mol, consistent in sign with stable binding.</li>
               <li>The cross-reactivity assessment places R1aB6 at a moderate risk level, not in the highest tier.</li>
             </ul>
 
@@ -761,30 +1822,60 @@
               <li>R1aA5 has a larger interface area (BSA) than R1aB6 yet a lower HADDOCK score. Interface quality matters more than area size.</li>
             </ul>
 
-            <p>This round of modeling accomplished four things: it narrowed {{ model_docking.funnel.candidatesScreened }} candidates down to {{ model_docking.funnel.leads }} lead molecules, provided an atomic-level binding mode, proposed testable hotspot residues, and reduced off-target risk through cross-reactivity assessment.</p>
+            <p>This round of modeling accomplished four things: it narrowed 17 candidates down to 1 lead molecules, provided an atomic-level binding mode, proposed testable hotspot residues, and reduced off-target risk through cross-reactivity assessment.</p>
 
             <p><strong>Limitations.</strong></p>
             <ul>
-              {% for item in model_docking.limitations %}
-              <li>{{ item }}</li>
-              {% endfor %}
+              
+              <li>In ClusPro the receptor is treated as rigid, which may miss induced-fit effects.</li>
+              
+              <li>Docking uses implicit solvent and ignores explicit water bridges.</li>
+              
+              <li>In HADDOCK the interface is semi-flexible, allowing side-chain rearrangement while the backbone stays fixed.</li>
+              
+              <li>10 ns of MD may fail to capture slow conformational changes.</li>
+              
+              <li>MM-GBSA is based on only 10 frames, with large statistical error.</li>
+              
+              <li>The entire text has no experimental validation (document §9 states this).</li>
+              
             </ul>
 
             <p><strong>Reproducibility.</strong> Parameters are recorded as follows:</p>
-            <table style="{{ model_docking.tableStyle.table }}">
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
-                <tr style="{{ model_docking.tableStyle.headRow }}">
-                  <th style="{{ model_docking.tableStyle.th }}">Item</th>
-                  <th style="{{ model_docking.tableStyle.th }}">Content</th>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Item</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Content</th>
                 </tr>
               </thead>
               <tbody>
-                {% for item in model_docking.reproducibility %}
-                <tr style="{{ model_docking.tableStyle.row }}">
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.item }}</td>
-                  <td style="{{ model_docking.tableStyle.td }}">{{ item.value }}</td>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Software version</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ClusPro、HADDOCK 2.5、GROMACS 2026.3、PyMOL、SPICE、gmx_MMPBSA 1.5.0.3</td>
                 </tr>
-                {% endfor %}
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Force field</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Amber99sbildn</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Water model</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">TIP3P</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Random seed</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">gen_seed = 1</td>
+                </tr>
+                
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Parameter files</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">The document says &#39;uploaded to GitHub (mdp_files/),&#39; but the repository link is still to be filled in the document.</td>
+                </tr>
+                
               </tbody>
             </table>
 
@@ -794,25 +1885,19 @@
                  are an internal self-assessment and, per the site convention, are not included in the body; the original text is at the end of md/正文逐字对照/. -->
           </div>
         </div>
-      
-        <div id="model-planned" class="content-card">
-          <h2>Planned Work: Pathway ODE Model</h2>
-          <p>Beyond the docking and simulation screening described above, a second modeling track is planned for the receptor-to-reporter pathway: a deterministic ordinary-differential-equation description of antigen recognition, release of the MT1 block, hM1Dq activation, Gpa1-mediated MAPK signalling, and FUS1-driven yEGFP and lacZ output, with DCZ as the agonist input.</p>
-          <p>This track has not been performed yet: no parameters have been fitted and no simulated output has been produced. The parameter set is intended to combine literature values with the team's own measurements where those become available. The planned outputs are a dose-response relation against antigen concentration and a time-course simulation, both to be compared with the wet-lab readouts (flow-cytometry yEGFP fluorescence and X-Gal lacZ staining) once those are obtained. No sensitivity, limit-of-detection, quantitative-range, or clinical claim is made for this track on this page.</p>
-          <p>This subsection records intent only. It is not a result and must not be cited as one.</p>
-        </div>
-
-</div>
+      </div>
     </div>
 {% endblock %}
-
 {% block scripts %}
 <script>
-// Interactive demo payload: the same source as the body tables
-// (static/data/dry-lab/model/model-docking.json, injected by app.py).
-// static/js/pages/model-game.js is deferred, so this global is ready in time.
-window.MODEL_DOCKING_DATA = {{ model_docking.client | tojson }};
+  /* 交互演示的两份数据载荷：MODEL_DOCKING_DATA 供排名面板（与页面表格同源），
+     MODEL_GAME_DATA 供对接演示本身（ClusPro 刚体对接 + HADDOCK 半柔性精修）。
+     app.py 的 load_model_docking() / load_model_game() 复刻根站
+     src/_data/modelDocking.js 与 modelGame.js 的桥接口径；
+     页面脚本以 defer 加载，执行时这里已经就绪。 */
+  window.MODEL_DOCKING_DATA = {{ model_docking.client | tojson }};
+  window.MODEL_GAME_DATA = {{ model_game.client | tojson }};
 </script>
-<script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/pages/model-game.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
 {% endblock %}

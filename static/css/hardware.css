@@ -1,1 +1,271 @@
-/* 干实验组硬件页面样式 */
+/* 干实验组硬件页面样式
+   页面骨架、卡片与侧边栏沿用 navigation.css 的 description 体系（.description-container /
+   .content-card / .content-sidebar），本文件只补硬件页专属部件：
+   引文段、数据表与宽表横向滚动、硬件日志插图与图注、PDF 附件间距。
+   配色仍取全站令牌：暖棕 #8B5A2B / 深棕 #5D3A1A / 米黄 #FCE7CB / 边框 #D4A574。 */
+
+/* 仅读屏可见的一级标题：本页不加载 index.css（.sr-only 定义在那里），
+   故按页面前缀补一份等价规则，避免出现可见的重复大标题。 */
+.hardware-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== 引文段与说明 ===== */
+.hardware-page .hardware-lede {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--desc-color-primary-light, #D4A574);
+  background: rgba(139, 90, 43, 0.05);
+  border-radius: 4px;
+  color: var(--desc-color-primary-dark, #6B4A22);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.7;
+  text-indent: 0;
+  text-align: left;
+}
+
+/* 光路 / 温控 / 供电链路：单行过程描述，保持左对齐不缩进，窄屏可横向滚动 */
+.hardware-page .hardware-chain {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px dashed var(--desc-border-color-light, #e3d8c2);
+  border-radius: 8px;
+  background: rgba(139, 90, 43, 0.03);
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  text-indent: 0;
+  text-align: left;
+  overflow-x: auto;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* 八步流程用有序列表，序号与文字分开着色 */
+.hardware-page ol.hardware-steps {
+  padding-left: 1.6rem;
+  list-style: decimal;
+}
+
+.hardware-page ol.hardware-steps > li {
+  margin-bottom: 0.6rem;
+  line-height: 1.75;
+  font-size: 0.95rem;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.hardware-page ol.hardware-steps > li::marker {
+  color: var(--color-brown, #8B5A2B);
+  font-weight: 700;
+}
+
+/* ===== 数据表 ===== */
+.hardware-table-scroll {
+  width: 100%;
+  margin: 0 0 1.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hardware-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+.hardware-table caption {
+  caption-side: top;
+  padding: 0 0 0.5rem;
+  color: #8a7656;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.hardware-table th,
+.hardware-table td {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--desc-border-color-light, #e3d8c2);
+  vertical-align: top;
+  text-align: left;
+}
+
+.hardware-table thead th {
+  background: rgba(252, 231, 203, 0.75);
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-weight: 700;
+  white-space: normal;
+}
+
+.hardware-table tbody th[scope='row'] {
+  width: 12rem;
+  background: rgba(139, 90, 43, 0.04);
+  font-weight: 600;
+}
+
+.hardware-table tbody tr:nth-child(even) td {
+  background: rgba(139, 90, 43, 0.02);
+}
+
+/* 36 项物料明细：列多，给最小宽度让文字不挤成一列一个字；
+   52rem 在 1440 视口下正好落在卡片内，再窄则交给容器的横向滚动 */
+.hardware-table--bom {
+  min-width: 52rem;
+  font-size: 0.8rem;
+}
+
+.hardware-table--bom td:nth-child(1) {
+  width: 2.4rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.hardware-table--bom td:nth-child(5),
+.hardware-table--bom td:nth-child(6),
+.hardware-table--bom td:nth-child(7) {
+  white-space: nowrap;
+}
+
+.hardware-table tfoot .hardware-table__total td {
+  background: rgba(252, 231, 203, 0.85);
+  font-weight: 700;
+}
+
+/* ===== 硬件日志插图 ===== */
+.hardware-figure {
+  margin: 1.25rem 0 1.5rem;
+  text-align: center;
+}
+
+.hardware-figure img {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--desc-border-color-light, #e3d8c2);
+  border-radius: 8px;
+  background: #fffdf8;
+  transition: transform 0.6s ease, opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hardware-figure img:hover {
+  transform: scale(1.02);
+}
+
+.hardware-figure figcaption {
+  max-width: 900px;
+  margin: 0.5rem auto 0;
+  color: #6b5b45;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  text-align: center;
+  text-indent: 0;
+}
+
+/* ===== PDF 附件 ===== */
+.hardware-page .pdf-embed {
+  margin: 1rem 0 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hardware-figure img {
+    transition: none;
+  }
+
+  .hardware-figure img:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hardware-page .hardware-lede,
+  .hardware-page .hardware-chain {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.92rem;
+  }
+
+  .hardware-table {
+    font-size: 0.82rem;
+  }
+
+  .hardware-table tbody th[scope='row'] {
+    width: auto;
+  }
+
+  .hardware-figure {
+    margin: 1rem 0 1.25rem;
+  }
+
+  .hardware-figure figcaption {
+    font-size: 0.8rem;
+    text-align: left;
+  }
+}
+
+/* 正文链接：常态带下划线、蓝色，与 contribution / sustainability 页同一套
+   （2026-10-15 补：本页此前缺这条，链接回落到浏览器默认样式）。 */
+.hardware-page .content-card a {
+  color: var(--color-blue-link, #4285F4);
+  text-decoration: underline;
+  text-decoration-color: rgba(66, 133, 244, 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--desc-duration-fast, 0.2s) ease,
+              text-decoration-color var(--desc-duration-fast, 0.2s) ease;
+}
+
+.hardware-page .content-card a:hover,
+.hardware-page .content-card a:focus-visible {
+  color: var(--color-blue-link-dark, #1A73E8);
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+
+.hardware-page .content-card a:focus-visible {
+  outline: 2px solid var(--color-blue-link-dark, #1A73E8);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ===== 正文中的文献引用角标 [n] =====
+   上标样式、不换行，点击跳到文末对应条目。 */
+.hardware-cite {
+  font-size: 0.72em;
+  line-height: 1;
+  vertical-align: super;
+  white-space: nowrap;
+  padding: 0 0.05em;
+}
+
+/* ===== 参考文献列表 ===== */
+.hardware-references {
+  margin: 0.5rem 0 0;
+  padding-left: 1.6rem;
+}
+
+.hardware-references li {
+  margin-bottom: 0.5rem;
+  scroll-margin-top: 130px;
+}
+
+.hardware-references li:target {
+  background: rgba(26, 115, 232, 0.08);
+  border-radius: 4px;
+}
+
+.hardware-references a {
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,42 @@
+{# Model page: one docking-report group rendered as jump links.
+
+   The reports themselves are standalone pages under static/reports/model/. They are intentionally not
+   site pages (no nav entry, not in the search whitelist, not processed by Eleventy), so this component
+   only offers ordinary links — middle-click or ctrl-click opens them in a new tab — and no JavaScript
+   is involved at all.
+
+   Expects `reportGroup` in context. #}
+<div class="model-report" id="{{ reportGroup.anchor }}" data-report-group data-report-key="{{ reportGroup.id }}">
+  <div class="model-report__head">
+    <h3 class="model-report__title" data-no-fold>{{ reportGroup.title }}</h3>
+    <p class="model-report__meta">{{ reportGroup.system }} &middot; {{ reportGroup.label }}</p>
+    <p class="model-report__desc">{{ reportGroup.desc }}</p>
+  </div>
+
+  <ul class="model-report__links">
+    {% for link in reportGroup.links %}
+    <li class="model-report__link-item">
+      <a class="model-report__link" href="{{ basePath }}{{ modelReports.base }}{{ link.file }}"
+         target="_blank" rel="noopener noreferrer">
+        <span class="model-report__link-label">{{ link.label }}</span>
+        <span class="model-report__link-note">{{ link.note }}</span>
+        <span class="model-report__link-go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17 17 7"></path>
+            <path d="M8 7h9v9"></path>
+          </svg>
+        </span>
+      </a>
+      {% if link.caveat %}
+      <p class="model-report__link-caveat">{{ link.caveat }}</p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+  <p class="model-report__note">
+    Each report opens in its own tab and is not part of the wiki navigation. Report colour scheme and
+    decorative icons were adjusted for this site; the analyses, tables and 3D models are the original
+    outputs. Figures are computational predictions that have not been validated by wet-lab experiments.
+  </p>
+</div>

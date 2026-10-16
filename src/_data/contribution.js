@@ -789,9 +789,9 @@ module.exports = {
         {
           type: 'links',
           items: [
-            { href: 'team/attributions.html', zh: '人员与机构致谢见团队 Attributions 页', en: 'Personnel and institutional thanks are on the team Attributions page' },
-            { href: 'wet-lab/protocol.html', zh: '实验参数与材料清单见 Protocol 页', en: 'Experimental parameters and materials lists are on the Protocol page' },
-            { href: 'wet-lab/result.html', zh: '结果与原始数据见 Results 页', en: 'Results and raw data are on the Results page' }
+            { href: '../team/attributions.html', zh: '人员与机构致谢见团队 Attributions 页', en: 'Personnel and institutional thanks are on the team Attributions page' },
+            { href: '../wet-lab/protocol.html', zh: '实验参数与材料清单见 Protocol 页', en: 'Experimental parameters and materials lists are on the Protocol page' },
+            { href: '../wet-lab/result.html', zh: '结果与原始数据见 Results 页', en: 'Results and raw data are on the Results page' }
           ]
         }
       ]

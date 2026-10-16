@@ -3,61 +3,412 @@ permalink: "human-practices/sustainability.html"
 title: "Sustainability - iGEM SZPU-2026"
 lang: "en"
 basePath: "../"
+mainClass: "sustainability-page"
+description: "How the Echo Yeast project evaluates its ideas against six UN Sustainable Development Goals (SDG 3, 9, 11, 12, 4, 17)."
+css:
+  - static/css/sustainability.css
+js:
+  - static/js/components/sidebar-progress.js
 ---
 
 {% extends "layouts/base.njk" %}
 
 {% block main %}
-{# 2026-10-06i：由 inclusivity.njk 改名而来（原页仅有空壳小标题，Inclusivity Award 本队不申报，
-   依迁移技能 R3c 处理）。内容只写已在仓库内可查证的设计意图，不含未验证的性能数字。 #}
-<section id="human-practices-sustainability">
-  <h1>Sustainability</h1>
+<div class="description-container">
 
-  <p class="page-lead">
-    PAGER-Yeast is an engineered-yeast sensor for influenza A. For this project, sustainability means keeping the
-    system usable where influenza is most often missed — clinics without laboratory infrastructure, schools, border
-    checkpoints and homes — and keeping the parts reusable by other teams. Three design decisions follow from that:
-    a low-cost portable readout, a recognition module that can be re-targeted without new hardware, and an open,
-    standardised parts set.
-  </p>
+  <!-- 左侧导航栏 -->
+  <aside class="description-sidebar">
+    <div class="yeast-decoration">
+      <div class="yeast-cell yeast-cell-1"></div>
+      <div class="yeast-cell yeast-cell-2"></div>
+      <div class="yeast-cell yeast-cell-3"></div>
+      <div class="bubble bubble-1"></div>
+      <div class="bubble bubble-2"></div>
+      <div class="bubble bubble-3"></div>
+    </div>
 
-  <h2>Designed for low-resource settings</h2>
-  <p>
-    The reporter is read as fluorescence intensity, which a portable fluorimeter can measure; the workflow does not
-    require a qPCR thermocycler or an ELISA plate reader. The intended deployment settings are primary-care clinic
-    screening, school morning checks, border quarantine ports and at-home self-testing — places where a result has to
-    arrive quickly and at low cost. A semi-quantitative relationship between fluorescence intensity and viral load
-    is being established through DCZ concentration-gradient and induction-time optimisation, so that a reader
-    without calibration curves can still return an interpretable result.
-  </p>
+    <div class="description-nav-wrapper">
+      <ul class="description-nav">
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-overview" class="nav-main-link">Overview</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-metaphor">A smoke alarm, not a stethoscope</a></li>
+            <li class="level3"><a href="#sustainability-six-goals">One device, six goals</a></li>
+          </ul>
+        </li>
 
-  <h2>A recognition module that is swapped, not rebuilt</h2>
-  <p>
-    The membrane anchor — the α-factor secretion signal and the linker scaffold — stays fixed, and only the VHH
-    sequence is replaced to target a new antigen. Re-targeting the sensor to H5, H7, SARS-CoV-2 or RSV therefore
-    reuses the same chassis, the same reporter and the same reader: extending the analyte range costs a VHH
-    sequence, not a new instrument. The downstream GPCR signal rewiring and the dual-mode reporter are likewise kept
-    universal across targets.
-  </p>
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-sdg3" class="nav-main-link">SDG 3 · Good Health and Well-being</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-sdg3-why">Why an earlier alarm</a></li>
+            <li class="level3"><a href="#sustainability-sdg3-device">What a smoke alarm looks like</a></li>
+            <li class="level3"><a href="#sustainability-sdg3-clinical">What clinicians reshaped</a></li>
+            <li class="level3"><a href="#sustainability-sdg3-roadmap">Accurate, and complete</a></li>
+          </ul>
+        </li>
 
-  <h2>Open parts and reproducible protocols</h2>
-  <p>
-    The signalling and reporter components are being submitted as iGEM Registry-compatible parts, together with the
-    protocols and plasmid maps needed to reproduce each construct. Standardised, registry-indexed parts let other
-    teams reuse the module instead of re-optimising it, and keep the work auditable.
-  </p>
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-sdg9" class="nav-main-link">SDG 9 · Industry, Innovation and Infrastructure</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-sdg9-innovation">Low threshold, verifiable</a></li>
+            <li class="level3"><a href="#sustainability-sdg9-verify">Verify the premise first</a></li>
+            <li class="level3"><a href="#sustainability-sdg9-hardware">Hardware and the device</a></li>
+          </ul>
+        </li>
 
-  <h2>Limits of this assessment</h2>
-  <p>
-    This page states design intent and the reuse strategy; it is not a life-cycle assessment. The material footprint
-    of the reader, the disposal route of the used test components and the energy demand of long-term field
-    deployment have not been measured yet, and no environmental benefit is claimed on their behalf.
-  </p>
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-sdg11" class="nav-main-link">SDG 11 · Sustainable Cities and Communities</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-sdg11-where">Where alerts can matter</a></li>
+            <li class="level3"><a href="#sustainability-sdg11-boundary">A boundary that must hold</a></li>
+            <li class="level3"><a href="#sustainability-sdg11-users">Institutions first</a></li>
+            <li class="level3"><a href="#sustainability-sdg11-pilot">Unknowns into numbers</a></li>
+          </ul>
+        </li>
 
-  <!-- ⚠ 核验：目标场景清单（基层诊所初筛 / 校园晨检 / 出入境检疫 / 家庭自测）与「α-factor 锚定 +
-       linker 框架、仅换 VHH」「DCZ 浓度梯度与诱导时间优化」「iGEM Registry 兼容提交」三处表述，
-       均取自本站首页 Future Vision 屏与 wet-lab/design 的硬件设想，尚未与团队实验结果交叉核对。 -->
-  <!-- iGEM Check: [x] Design intent only, no unsupported performance claims [x] No placeholder text
-       [x] Reuse strategy stated [x] Limits stated explicitly [x] No fabricated figures -->
-</section>
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-sdg12" class="nav-main-link">SDG 12 · Responsible Consumption and Production</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-sdg12-reagent">From lyophilised powder</a></li>
+            <li class="level3"><a href="#sustainability-sdg12-compliance">Compliance as design input</a></li>
+            <li class="level3"><a href="#sustainability-sdg12-lca">Life-cycle assessment</a></li>
+          </ul>
+        </li>
+
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-sdg4" class="nav-main-link">SDG 4 · Quality Education</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-sdg4-outreach">Talking to non-specialists</a></li>
+            <li class="level3"><a href="#sustainability-sdg4-feedback">Feedback from end users</a></li>
+            <li class="level3"><a href="#sustainability-sdg4-next">From an event to a channel</a></li>
+          </ul>
+        </li>
+
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-sdg17" class="nav-main-link">SDG 17 · Partnerships for the Goals</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-sdg17-loop">Every loop, a new partner</a></li>
+            <li class="level3"><a href="#sustainability-sdg17-teams">What team exchanges gave us</a></li>
+            <li class="level3"><a href="#sustainability-sdg17-authority">Not appealing to authority</a></li>
+            <li class="level3"><a href="#sustainability-sdg17-method">A method to hand over</a></li>
+          </ul>
+        </li>
+
+        <li class="level1 has-submenu">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-summary" class="nav-main-link">Summary</a>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+          <ul class="level2">
+            <li class="level3"><a href="#sustainability-summary-impact">Where impact lands</a></li>
+            <li class="level3"><a href="#sustainability-summary-costs">Costs we watch closely</a></li>
+            <li class="level3"><a href="#sustainability-summary-next">The next measurable stop</a></li>
+          </ul>
+        </li>
+
+        <li class="level1">
+          <div class="nav-link-wrapper">
+            <a href="#sustainability-references" class="nav-main-link">References</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 发酵进度容器 -->
+    <div class="progress-section">
+      <div class="progress-flask">
+        <div class="flask-body">
+          <div class="flask-neck"></div>
+          <div class="flask-liquid">
+            <div class="liquid-fill"></div>
+            <div class="bubbling">
+              <div class="ferment-bubble f-bubble-1"></div>
+              <div class="ferment-bubble f-bubble-2"></div>
+              <div class="ferment-bubble f-bubble-3"></div>
+              <div class="ferment-bubble f-bubble-4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flask-progress">
+          <span class="progress-percentage" id="progress-percentage">0%</span>
+        </div>
+      </div>
+      <div class="progress-title">Fermentation Progress</div>
+    </div>
+  </aside>
+
+  <!-- 右侧内容区域 -->
+  <div class="description-content">
+
+    <!-- ============ Overview ============ -->
+    <div id="sustainability-overview" class="content-card" data-sdg="intro">
+      <div class="sustainability-head">
+        <h1>Sustainability</h1>
+        <p class="sustainability-head__sub">Evaluating Echo Yeast against six UN Sustainable Development Goals</p>
+        <div class="official-lead">
+          <span class="official-lead__tag">Lead</span>
+          <p>Describe how you have evaluated your project ideas against one or more of the SDGs.</p>
+        </div>
+        <div class="sustainability-head__rule" aria-hidden="true"></div>
+      </div>
+      <div class="content-body">
+        <h3 id="sustainability-metaphor" data-no-fold>A smoke alarm, not a stethoscope</h3>
+        <p>If Echo Yeast had to be summed up in one metaphor, it is closer to a <strong>smoke alarm</strong> than to a stethoscope.</p>
+        <p>Most influenza A testing today works like a stethoscope: it only hears the virus after it has already flared up inside a person and crossed the detection threshold. What we set out to build is a smoke alarm — one that smells the first wisp of smoke in the air before a fire starts.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig01-smoke-vs-stethoscope.png" alt="Line drawing: a horizontal timeline with a vertical dashed line marking the detection threshold; above the left segment sits an air-monitoring unit with a round intake grille and a screen, plus three outgoing warning arcs, and below it an open circle node; above the right segment sits a stethoscope, and below it a filled circle node." loading="lazy">
+          <figcaption>Fig. 1 — A smoke alarm warns before the fire; a stethoscope only hears the disease once it shows. (line illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-six-goals" data-no-fold>One device, six goals</h3>
+        <p>The idea began as an engineering choice. But when the team seriously asked what it means for sustainable development, it turned out to touch six goals at once: SDG 3 Good Health and Well-being, SDG 9 Industry, Innovation and Infrastructure, SDG 11 Sustainable Cities and Communities, SDG 12 Responsible Consumption and Production, SDG 4 Quality Education, and SDG 17 Partnerships for the Goals. The six sections below describe, for each goal, what we did, who changed our decisions, how certain the impact is, and where we go next.</p>
+      </div>
+    </div>
+
+    <!-- ============ SDG 3 ============ -->
+    <div id="sustainability-sdg3" class="content-card" data-sdg="3">
+      <h2><span class="sdg-chip sdg-chip--3">SDG 3</span>Good Health and Well-being</h2>
+      <div class="content-body">
+        <p>We put SDG 3 first because the problem the project addresses is singular: influenza A outbreaks are discovered too late.</p>
+
+        <h3 id="sustainability-sdg3-why">Why influenza A deserves an earlier alarm</h3>
+        <p>Influenza A is good at hiding. Its reservoir sits in birds, and avian-origin strains typically infect only a few people and do not sustain human-to-human transmission — until a variant appears that can.</p>
+        <p>Its rhythm makes things worse. Cases surge every epidemic season, public attention fades once the season ends, and the next season a mutated influenza A returns — an enemy that knocks once a year, each time catching us off guard. Most existing detection only fires after the virus has flared up inside the body, which means every season we enter the game halfway through. The value of acting one step earlier is moving the moment of detection from "already outbreak" to "before it enters the body".</p>
+        <p>The scale supports the same conclusion. WHO estimates that seasonal influenza causes roughly one billion infections worldwide every year, including 3–5 million severe cases and 290&nbsp;000–650&nbsp;000 respiratory deaths [2]. Influenza A is the subtype behind every recorded influenza pandemic and still dominates circulation in many regions: in Shenzhen CDC's 2024–2025 surveillance data compiled by our team, 83% of influenza-positive samples were typed as influenza A, with H1N1 predominant [4].</p>
+        <p>The three mainstream detection routes each carry a structural weakness. qRT-PCR is the most sensitive and quantitative — the accepted reference standard — but it requires laboratory equipment and trained staff and takes one to two hours. ELISA offers high throughput at lower cost for batch screening, but its sensitivity falls short of qPCR and it needs a reader and even longer handling time. Lateral-flow (colloidal gold) strips deliver an on-site result in 10–15 minutes without instruments, at the price of limited sensitivity, uncertain readings and frequent confirmatory retesting. None of the three covers the one thing that matters here: detection in the air, before the virus enters a body.</p>
+
+        <h3 id="sustainability-sdg3-device">What a smoke alarm looks like</h3>
+        <p>The device can be explained starting from the air. Virus-laden aerosols are drawn into a filter and captured; engineered yeast recognises them with nanobodies displayed on its surface; the recognition signal is amplified inside the cell and translated into light we can read; a handheld device completes the readout. Four steps, from a pinch of air to one early warning.</p>
+        <p>Choosing yeast (<em>Saccharomyces cerevisiae</em>, chassis <code>BY4741</code>) as the sensing element is less a quirk than a division of labour. Conventional test reagents are consumables — every run consumes a fresh batch of antibodies and colour reagents. A living cell is self-renewing: as long as it lives, it keeps translating molecular signals into measurable fluorescence. Inside this system, the nanobody works as a translator, converting "the virus's identity" into "chemical language the cell understands", while the PAGER system lifts repression and releases the readout.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig02-sdg3-air-sampling-warning.png" alt="Green line drawing: a horizontal timeline carrying four stage icons — airborne virus, virus entering a body, symptoms appearing, clinic door. Below the axis are two coverage bars: a short green solid bar with a light fill at the left end, and a long grey dashed bar at the right end; above the axis, towards the left, stands the same green air-monitoring unit used elsewhere on the page." loading="lazy">
+          <figcaption>Fig. 2 — Moving the warning point to before the virus enters the body: the air-sampling unit and two moments of discovery. (SDG 3 illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-sdg3-clinical">What frontline clinicians and public-health experts reshaped</h3>
+        <p>A device that only works in the laboratory contributes nothing to SDG 3. So the first people we brought into the project were clinicians and public-health practitioners.</p>
+        <p>Wenjie Wang, director of the medical technology department at Shenzhen Second People's Hospital, first endorsed the direction — as an industry, in vitro diagnostics only acts after a virus has flared up inside a person and crossed a threshold, so moving the line of defence earlier has genuine public-health value. He then raised three hard constraints: air detection involves many variables, virus concentrations in open environments are low, and a sensor's effective range may be limited — while self-test reagents on the market can reach false-positive rates of 50–70%. On that basis we promoted specificity and threshold decision from bonus features to primary optimisation targets, and wrote "environmental screening, not diagnosis" into every product statement: mistaking a screening result for a diagnosis costs far more than a missed detection.</p>
+        <p>Kai Fu, a clinical-medicine doctoral researcher at Sun Yat-sen University, added the physical-feasibility side: exhaled aerosols from people with respiratory infections already carry virus, so testing them works better than sampling ambient air. We therefore set single-person exhaled breath as the priority route and environmental sampling as a supplement. He also left us two questions to answer — the yeast signalling pathway needs roughly one to two hours from receiving a signal to expressing fluorescence, which weakens timeliness; and the hardware must be affordable for primary-care settings. The first drove us to optimise the signalling pathway and shorten the readout time; the second became a design target of roughly 10 RMB per active-breathing device — the order of magnitude Kai Fu suggested, which we now follow in our device plan.</p>
+        <p>Manqing Deng, a paediatric clinical pharmacist, pulled the focus back to people: children are a high-incidence group for influenza A, the product sits in prevention and belongs to the reagent category, and institutional users — schools and government public-health programmes — should come before households. We set institutions as our first users accordingly.</p>
+        <p>Shisong Fang, deputy director of the pathogen institute at Shenzhen CDC, tightened the rigour of the question: testing influenza A alone risks missed detections, since dual influenza A+B testing is standard in clinical practice, and target genes should favour conserved regions such as M, NP and NS; air sampling, moreover, is the bottleneck of the whole chain. The first turned dual A+B detection from a slogan into next-phase planning; the second put front-end capture at the top of our validation checklist.</p>
+        <p>Yiwu Luo of the approval division of the Shenzhen Health Commission drew the regulatory boundary: China has no official standard for airborne virus detection, so such a device cannot serve as a basis for medical diagnosis and can only perform environmental screening and risk warning. We wrote that boundary directly into our positioning.</p>
+        <p>After these rounds of conversation, SDG 3 translates, for us, into a set of concrete technical and positioning constraints — they come from real settings, and any of them may be rewritten again by the next interview.</p>
+
+        <h3 id="sustainability-sdg3-roadmap">Making it accurate, and making it complete</h3>
+        <p>Looking further out, what we care about is how much space the device can cover and how many institutions can keep using it. Answering those questions needs a first step that is already clear: turning deployment density into a measurable indicator.</p>
+        <p>The reliability line must move forward as well: drawing on immunochromatography to develop portable self-testing, pushing down the false positives Wenjie Wang flagged, and establishing quantifiable detection-limit metrics; and, on Shisong Fang's reminder, bringing dual A+B detection into the next phase.</p>
+      </div>
+    </div>
+
+    <!-- ============ SDG 9 ============ -->
+    <div id="sustainability-sdg9" class="content-card" data-sdg="9">
+      <h2><span class="sdg-chip sdg-chip--9">SDG 9</span>Industry, Innovation and Infrastructure</h2>
+      <div class="content-body">
+        <p>If SDG 3 is where we want to arrive, SDG 9 is how: a portable biosensing infrastructure that can be deployed for real.</p>
+
+        <h3 id="sustainability-sdg9-innovation">Innovation lies in the low threshold, not in complex parts</h3>
+        <p>The real ingenuity of the device is a "living" system that lowers the threshold of testing while keeping it verifiable. Yeast was not picked casually: it is cheap and easy to culture, it is a eukaryote with a mature signal-transduction network we can borrow, its biosafety profile is favourable and it tolerates the environment well, and its genetic-engineering toolbox is complete — together, these turn "a living cell as a sensor" from an idea into an executable plan.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig03-sdg9-yeast-nanobody.png" alt="Orange and grey line drawing: a cross-section of a round yeast cell with a double-lined cell wall and an inner plasma membrane; six orange Y-shaped nanobodies stand on the membrane, while a spiked virus particle sits outside the cell at upper left; a dashed arrow runs from the virus through a dashed gap in the cell wall towards one nanobody, with a question mark beside it; inside the cell a solid arrow curves from the membrane to the nucleus, which holds an orange filled dot emitting short rays; three legend rows sit at the right." loading="lazy">
+          <figcaption>Fig. 3 — Recognition and signal translation on the yeast cell surface: a nanobody capturing a virus particle. (SDG 9 illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-sdg9-verify">Verify the premise first: getting through the cell wall</h3>
+        <p>Xinyuan Qiu put a finger on a premise we had long overlooked — whether an intact virus can pass through the yeast's comparatively thick cell wall and reach the cell membrane decides whether the device can work at all. And "strong antigen–antibody specificity" is not the same as "high sensitivity": sensitivity must be defined as the smallest number of virus particles detectable per unit volume, and the quantitative basis for that has to be built from scratch. His path: get it running first, optimise later — run the system with antigenic-epitope short peptides, and if cell-wall penetration fails, switch chassis decisively rather than sink further work into complex engineering.</p>
+        <p>Zhouqing Luo and Hui Wu added the same preparation from different angles: on the receptor route, engineer yeast's endogenous Ste2 rather than a human GPCR; on validation order, first complete one full pathway with a visual response, then talk about swapping components. Methodology needed homework too — modelling advisor Haili Zhang suggested making the most of limited data: use first- and second-order derivatives of OD and fluorescence time series for prediction, and statistical hypothesis tests for p-values, so early data can project later trends, directly serving shorter detection times. On the molecular-docking side, Xiaolong Liu required rebuilding models with AlphaFold 3.0, MM/GBSA free-energy decomposition and molecular-dynamics simulations, closing the loop with SPR or MST wet-lab validation.</p>
+        <p>Weak signal is another problem to solve: virus concentrations in air are low, and too few activated yeast cells cannot be read. Zhouqing Luo suggested borrowing yeast's native α-factor cell-communication pathway, building inter-cell communication and positive-feedback amplification into the system so that even a small number of activated cells becomes visible.</p>
+        <p>Nor do we expect this device to stop at H1N1. The real value of the PAGER-Yeast platform is modularity and replaceability: the membrane nanobody recognition unit can iterate quickly against new antigens — swap the recognition head, and the same chassis points at the next target.</p>
+
+        <h3 id="sustainability-sdg9-hardware">Hardware and the integrated device</h3>
+        <p>The air path, enrichment, readout and integrated structure of the device are still in design; cost estimates and the deployment form factor are not finalised. This section will be completed when the hardware page is done, and we deliberately avoid pre-empting it here. One judgement can be recorded now — Shisong Fang's: if front-end capture fails to collect enough virus, however sensitive the recognition and readout behind it, nothing works. Once the hardware design is settled, enrichment efficiency is the first question to answer.</p>
+      </div>
+    </div>
+
+    <!-- ============ SDG 11 ============ -->
+    <div id="sustainability-sdg11" class="content-card" data-sdg="11">
+      <h2><span class="sdg-chip sdg-chip--11">SDG 11</span>Sustainable Cities and Communities</h2>
+      <div class="content-body">
+        <p>Where the project lands was actually decided by one sentence from Yiwu Luo: in large open spaces the value is limited; what deserves deployment are enclosed, crowded places.</p>
+
+        <h3 id="sustainability-sdg11-where">Alerts must land where they can matter</h3>
+        <p>The value of early warning is mostly collective — pulling a cluster outbreak back before it takes shape prevents more loss than catching any single case.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig04-sdg11-closed-spaces.png" alt="Amber and grey line drawing: four rounded rectangular room sections in a row — a clinic room with a bed and a door, a lift cabin with twin doors and a floor-button panel, a train carriage with windows and backed seats, and a classroom with a blackboard and desks. The same amber air-monitoring unit is mounted high in the centre of each section, with a dashed arrow below it pointing up into the unit from the middle of the room." loading="lazy">
+          <figcaption>Fig. 4 — Where the device lands: four crowded, poorly ventilated spaces where people linger. (SDG 11 illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-sdg11-boundary">A boundary that must hold</h3>
+        <p>Placed in crowded spaces, the capability boundary must be stated first: the device performs environmental risk warning — what it signals is that "the air in this space may have carried virus exposure". It points at spaces, not individuals.</p>
+
+        <h3 id="sustainability-sdg11-users">Who uses it first: institutions</h3>
+        <p>Manqing Deng's institutions-first judgement applies directly here: schools and government public-health programmes welcome the device, their decision chains are short, and the user side must reach zero-operation threshold.</p>
+
+        <h3 id="sustainability-sdg11-pilot">Turning the unknown into numbers for the manual</h3>
+        <p>If early warning can be deployed routinely, it has a chance to become an early-perception layer of urban public health. Whether it stands depends on measured data from real enclosed spaces: building one pilot each in a fever clinic and an enclosed classroom, and measuring the detection limit and risk-concentration thresholds, is the validation action we set for this goal.</p>
+      </div>
+    </div>
+
+    <!-- ============ SDG 12 ============ -->
+    <div id="sustainability-sdg12" class="content-card" data-sdg="12">
+      <h2><span class="sdg-chip sdg-chip--12">SDG 12</span>Responsible Consumption and Production</h2>
+      <div class="content-body">
+        <p>Compared with centralised RT-PCR testing, this device is lighter — fewer reagents, lower instrument requirements. That is what SDG 12 looks like inside our project.</p>
+
+        <h3 id="sustainability-sdg12-reagent">Reagent format: start from lyophilised powder</h3>
+        <p>The first thing this goal can ground today is reagent format. Lyophilised powder is easy to store and distribute, and combined with a reuse mindset it promises to push the per-test cost down; compared with centralised RT-PCR, which needs freshly prepared reagents and dedicated instruments, this route is lighter in both consumables and energy.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig05-sdg12-reuse-modules.png" alt="Line drawing split by a horizontal dashed line. The upper row holds a grey laboratory instrument, an arrow and six grey-filled test tubes; the lower row holds an orange air-monitoring unit, a filter cartridge pushed into it by an orange arrow, a three-part orange cycle arrow, and an orange reagent vial; each group of elements carries a short label above it." loading="lazy">
+          <figcaption>Fig. 5 — The circular orientation of SDG 12: replaceable components, reuse and low energy — making "saving resources" a property of the structure. (SDG 12 illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-sdg12-compliance">Compliance and biosafety, promoted to design requirements</h3>
+        <p>Yiwu Luo moved compliance and safety from afterthought to design requirement: a product with an integrated disinfection module falls under disinfection apparatus and needs disinfection-product registration; with no national standard yet, an enterprise standard can come first. Requirements such as UV disinfection, self-disinfecting components and virus inactivation in the collection system will be written into the specification together with the hardware design. They sound like burdens; they are exactly what allows the device to be permitted into real environments.</p>
+
+        <h3 id="sustainability-sdg12-lca">The missing puzzle piece: life-cycle assessment</h3>
+        <p>The tone of this goal is set: detection that uses fewer resources. A full life-cycle assessment — carbon footprint, consumables, disposal of electronic waste — is the piece still missing; it will turn this section from a claim into a set of citable numbers. Using data to support SDG 12 is the standard we set ourselves.</p>
+      </div>
+    </div>
+
+    <!-- ============ SDG 4 ============ -->
+    <div id="sustainability-sdg4" class="content-card" data-sdg="4">
+      <h2><span class="sdg-chip sdg-chip--4">SDG 4</span>Quality Education</h2>
+      <div class="content-body">
+        <p>For a frontier technology to be caught by society over the long run, a considerable share of people must first understand what it does.</p>
+
+        <h3 id="sustainability-sdg4-outreach">Explaining the project to non-specialists</h3>
+        <p>With that in mind, the team gave synthetic-biology outreach talks to pharmacy students at Shenzhen No. 1 Vocational School and to first-year 2026 pharmacy and pharmaceutical-engineering students at our university, and handed out a self-written influenza A protection handbook. To our surprise, the feedback came back from the "users".</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig06-sdg4-outreach-classroom.png" alt="Line drawing: a classroom seen from the side — a large whiteboard at the front left showing, in red line work, a virus particle, an arrow and an air-monitoring unit; below the board are a lectern, a laptop and a stack of leaflets; behind a long desk on the right sit five students seen from behind, the third one drawn with a heavier outline and a raised hand." loading="lazy">
+          <figcaption>Fig. 6 — Outreach talk: explaining the project to non-specialists. (SDG 4 illustration)</figcaption>
+        </figure>
+        <p>The talk also benefited us: to explain the project clearly to a non-specialist audience, the team had to re-organise and simplify the complex technical logic, which in turn deepened every member's understanding of the project as a whole.</p>
+
+        <h3 id="sustainability-sdg4-feedback">Unexpected feedback from end users</h3>
+        <p>Participants asked for a more portable device and faster testing. These two real suggestions from end users became direct references for prototype iteration and scenario refinement, and corrected our earlier bias toward laboratory metrics. They remind us: a device that "works technically" but is neither portable nor fast will never actually be used in the field.</p>
+
+        <h3 id="sustainability-sdg4-next">From one event to a channel</h3>
+        <p>The talk also shaped the next step: the session was too short to go deep into experimental principles and engineering details; the handbook was distributed in batches without on-site walkthroughs; and the event had no hands-on workshop. Turning SDG 4 from a one-off event into a channel is our next goal — opening a consultation channel for interested participants, running small themed salons, and iterating the handbook on collected feedback.</p>
+      </div>
+    </div>
+
+    <!-- ============ SDG 17 ============ -->
+    <div id="sustainability-sdg17" class="content-card" data-sdg="17">
+      <h2><span class="sdg-chip sdg-chip--17">SDG 17</span>Partnerships for the Goals</h2>
+      <div class="content-body">
+        <p>Almost every key decision in this project was pushed by external partners — people from different fields came in round after round, tore the plan apart and rebuilt it.</p>
+
+        <h3 id="sustainability-sdg17-loop">Every loop brings a new partner</h3>
+        <p>Clinicians, CDC and health-commission experts, hardware engineers, academic peers and the public came in, one round after another, along the spiral of action research. Each round starts from the same move: diagnose the problem first, then plan, act, and look back at what we judged wrong — then enter the next round with new questions.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig07-sdg17-stakeholder-network.png" alt="Navy line drawing: an air-monitoring unit with an intake grille and a screen at the centre, with seven round badges around it, each connected to the centre by an arrow pointing inward. Clockwise from the top the badges contain a stethoscope, a shield, a gear, a conical flask, three simplified figures standing together, two overlapping rings, and a factory outline." loading="lazy">
+          <figcaption>Fig. 7 — Seven kinds of partners who pulled the project back to the real world. (SDG 17 illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-sdg17-teams">What inter-team exchange gave us</h3>
+        <p>At the South China iGEM meetup, other teams questioned us on low airborne virus concentration, yeast sensitivity, reporter leakage, and how we differ from conventional testing; the mock review exposed weak spots in our presentation. At the first Asia-Pacific iGEM Conference (APiC, held in two phases at SUSTech and HKU), mock judges asked us to focus the application scenario further, add data evidence and watch compliance wording — every point became an item on our improvement list. Online yeast-focused meetups with several universities let us exchange practical tricks in experimental design, quality control and data handling.</p>
+
+        <h3 id="sustainability-sdg17-authority">A self-imposed rule: do not appeal to authority</h3>
+        <p>Xinyuan Qiu's remark that "expert statements and social practice cannot substitute for factual evidence; avoid appealing to authority" applies to us too: interview quotes can serve as design criteria, never as project conclusions. It also sharpened our sense of which collaborations last: contact with a contract manufacturer made us realise that everyone's expectations must be stated and aligned at the start of a collaboration for it to grow into long-term cooperation.</p>
+
+        <h3 id="sustainability-sdg17-method">A method to hand to those who come after</h3>
+        <p>We expect this collaboration network across clinical care, regulation, industry and academia to lower the cost of repeated trial and error; and what we believe is most reusable is the method itself — the action-research spiral combined with inter-team review.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig08-sdg17-action-research-loop.png" alt="Navy line drawing: four round nodes evenly spaced on a ring, joined by four curved arrows into a closed loop. Clockwise from the top the nodes contain a magnifier, a writing board, an air-monitoring unit and a returning arrow, each with a short label outside the ring." loading="lazy">
+          <figcaption>Fig. 8 — The action-research loop: diagnose, plan, act, reflect — and back to diagnose. (SDG 17 illustration)</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- ============ Summary ============ -->
+    <div id="sustainability-summary" class="content-card" data-sdg="summary">
+      <h2>Summary</h2>
+      <div class="content-body">
+        <p>Taken together, the six goals show that the road already walked, the directions now moving, and the costs that must be taken seriously are all plainer than our first optimistic version.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig09-summary-impact-timeline.png" alt="Line drawing: three vertical bars of decreasing height standing on one shared horizontal base, their interiors filled with diagonal hatching; above the bars sit a shield, a leaf and a concentric-circle coin, each with a short label above it; two lines of text sit below the base." loading="lazy">
+          <figcaption>Fig. 9 — Three steps of long-term impact, and how sure we are of each. (line illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-summary-impact">Where the impact finally lands</h3>
+        <p>Where the impact lands depends on how widely the device can spread. Deployed for real in fever clinics and schools, the moment a cluster outbreak is noticed could move substantially earlier; once warning links to disinfection, blanket disinfection and drug overuse should also fall. The economic gain comes from the material itself — replacing freshly prepared reagents with lyophilised powder should cut the per-test cost. All three climbs rest on one premise: deployment density decides the scale of benefit, and density can only be accumulated through measurement and pilots.</p>
+
+        <h3 id="sustainability-summary-costs">Costs we watch closely</h3>
+        <p>We also fill in the cost column. The sharpest risk is misuse — if environmental screening is mistaken for diagnosis, or false positives trigger unnecessary school closures, what is wasted is not only resources but public trust; that is why "environmental screening, not a medical device" must appear in every product statement. Next is waste: consumables and e-waste must be planned together with deployment scale, or SDG 12's green narrative will not hold. The remaining two are technical premise and baseline: the premise "can the virus cross the cell wall" we choose to verify before investing rather than bet on; and biosafety is promoted to a design requirement, not patched on afterwards.</p>
+        <figure class="sdg-figure">
+          <img src="../static/image/sustainability/fig10-summary-risk-icons.png" alt="Line drawing: four rounded squares in a row containing an eye crossed out by a diagonal line, a waste bin holding a filter cartridge, a cell with a broken dashed arrow below it, and a shield; each square carries a short label along its lower edge." loading="lazy">
+          <figcaption>Fig. 10 — Four risks we actively watch: misuse, consumables and waste, a premise that fails, biosafety. (line illustration)</figcaption>
+        </figure>
+
+        <h3 id="sustainability-summary-next">The next measurable stop</h3>
+        <p>These questions are not abstract — they are already scattered through the six sections above, from detection-line reliability and the cell-wall premise, to real-space measurement and life-cycle assessment, to outreach channels and collaboration mechanisms. What we intend to do is turn one of them into the next measurable, answerable stop — and then the next.</p>
+      </div>
+    </div>
+
+    <!-- ============ References ============ -->
+    <div id="sustainability-references" class="content-card" data-sdg="refs">
+      <h2>References</h2>
+      <ol class="ref-list">
+        <li>United Nations. Sustainable Development Goals — the 17 goals and their indicators. <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener">https://sdgs.un.org/goals</a></li>
+        <li>World Health Organization. Influenza (seasonal) — fact sheet. <a href="https://www.who.int/news-room/fact-sheets/detail/influenza-(seasonal)" target="_blank" rel="noopener">https://www.who.int/news-room/fact-sheets/detail/influenza-(seasonal)</a></li>
+        <li>World Health Organization. FluNet / Global Influenza Surveillance and Response System (GISRS) — global influenza surveillance data on subtype detections and positivity. <a href="https://www.who.int/tools/flunet" target="_blank" rel="noopener">https://www.who.int/tools/flunet</a></li>
+        <li>Shenzhen Center for Disease Control and Prevention. Influenza surveillance summary 2024–2025 (subtype composition of positive samples; data compiled by the team).</li>
+        <li>Academic community and collaboration: South China iGEM meetup; the 1st Asia-Pacific iGEM Conference (APiC, SUSTech &amp; HKU); multi-university yeast-focused online meetups.</li>
+      </ol>
+    </div>
+
+  </div>
+</div>
 {% endblock %}

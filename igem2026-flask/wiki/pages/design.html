@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Design - iGEM SZPU-2026{% endblock %}
+{% block title %}Design{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/experiments.css') }}">
 {% endblock %}
@@ -90,7 +90,7 @@
               <span class="progress-percentage" id="progress-percentage">0%</span>
             </div>
           </div>
-          <div class="progress-title">Progress</div>
+          <div class="progress-title">Fermentation Progress</div>
         </div>
       </aside>
 
@@ -343,6 +343,12 @@
 {% endblock %}
 
 {% block scripts %}
-{# 页面加载进度条由 layout.html 末尾统一启动（带存在性守卫），此处不再重复内嵌。 #}
-<script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 页面加载进度条
+    new PageProgressBar().startAutoProgress();
+
+  });
+</script>
 {% endblock %}

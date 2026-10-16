@@ -3,11 +3,22 @@ permalink: "wet-lab/safety.html"
 title: "Safety - iGEM SZPU-2026"
 lang: "en"
 basePath: "../"
+bodyClass: "safety-page"
 css:
+  - static/css/safety.css
 js:
   - static/js/components/sidebar-progress.js
 ---
 
+{# 内容来源与口径（2026-10-15 重建）：
+   正文、表格与 5 张配图逐字取自 static/expriments/safety/Safety Revised Edition (EN) 10.12.pdf，
+   未增删事实、未改动数值与单位；拉丁学名按全站规则斜体。
+   图 Figure 1–5 由 PDF 第 9–13 页导出并缩放，落在 static/image/safety/。
+   小节 id 统一 safety- 前缀，已登记 sidebar-progress.js 的 sectionIdPrefixes。
+   折叠口径（README §5.14.4）：两个 h3 小节（How the matrix is graded / Item-by-item
+   assessment）带 id，由 section-fold.js 折成收纳条并保持默认折叠——与 result / model 等
+   既有页面同一套写法；卡片本身不整卡折叠。
+#}
 {% extends "layouts/base.njk" %}
 
 {% block main %}
@@ -29,12 +40,12 @@ js:
           <ul class="description-nav">
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#safety-award" class="nav-main-link">Safety and Security Award</a>
+                <a href="#safety-overview" class="nav-main-link">Overview</a>
               </div>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#risk-identification" class="nav-main-link">潜在风险识别</a>
+                <a href="#safety-risk-matrix" class="nav-main-link">LS Risk Matrix</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -42,40 +53,28 @@ js:
                 </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#safety-biological-risk">生物风险</a></li>
-                <li class="level3"><a href="#safety-chemical-risk">化学风险</a></li>
-                <li class="level3"><a href="#safety-physical-risk">物理风险</a></li>
-                <li class="level3"><a href="#safety-security-risk">安保风险</a></li>
+                <li class="level3"><a href="#safety-grading">How the matrix is graded</a></li>
+                <li class="level3"><a href="#safety-matrix">Item-by-item assessment</a></li>
               </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#risk-mitigation" class="nav-main-link">风险缓解与安全管理</a>
-              </div>
-            </li>
-            <li class="level1 has-submenu">
-              <div class="nav-link-wrapper">
-                <a href="#built-in-safety" class="nav-main-link">设计内置安全特性</a>
-                <div class="toggle-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
-              </div>
-              <ul class="level2">
-                <li class="level3"><a href="#safety-non-pathogenic-chassis">非致病底盘</a></li>
-                <li class="level3"><a href="#safety-safe-parts">低危害元件选择</a></li>
-                <li class="level3"><a href="#safety-kill-switch">Kill-switch 等控制</a></li>
-              </ul>
-            </li>
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#design-rationale" class="nav-main-link">设计选择 rationale</a>
+                <a href="#safety-lab-environment" class="nav-main-link">Laboratory Safety Environment</a>
               </div>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#safety-policy" class="nav-main-link">iGEM Safety Policies 遵循</a>
+                <a href="#safety-personal" class="nav-main-link">Personal Safety</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#safety-project" class="nav-main-link">Project Safety</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#safety-references" class="nav-main-link">References</a>
               </div>
             </li>
           </ul>
@@ -100,129 +99,151 @@ js:
               <span class="progress-percentage" id="progress-percentage">0%</span>
             </div>
           </div>
-          <div class="progress-title">发酵进度</div>
+          <div class="progress-title">Fermentation Progress</div>
         </div>
       </aside>
 
       <!-- 右侧内容区域 -->
       <div class="description-content">
-        <div id="safety-award" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>本页面向 iGEM Safety and Security 奖项要求，系统梳理 PAGER-Yeast 项目在设计、实验与部署全周期中的生物安全与生物安保风险，并说明已采取或计划采取的风险缓解措施。</p>
-          </div>
-          <h2>Safety and Security Award</h2>
-          <p>iGEM 安全与安保委员会鼓励各队伍运用生物工程手段识别并管理项目潜在风险。本页面需展示团队对合成生物学负责任创新的理解，以及将安全理念融入项目设计的具体做法。</p>
-          <p>[待补充：结合项目特色，简要说明本页将如何回应奖项评审维度。]</p>
+        <h1 class="sr-only">Safety</h1>
+
+        <div id="safety-overview" class="content-card">
+          <h2>Overview</h2>
+          <p>The laboratory is the core setting for scientific discovery and engineering innovation. Many advances that have transformed human health, the environment and society were born in laboratories, yet the laboratory is also a space that demands unusually strict standards of discipline and responsibility. We therefore hold that safety is not an add-on requirement outside the experiment: it is part of experimental design, execution and record-keeping. Every member who enters the laboratory must be responsible to themselves, to their teammates, to the laboratory and to the environment, and must treat every activity in the laboratory seriously.</p>
         </div>
 
-        <div id="risk-identification" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>从生物、化学、物理及技术安保四个维度识别项目潜在风险，为后续缓解措施提供依据。</p>
+        <div id="safety-risk-matrix" class="content-card">
+          <h2>LS Risk Matrix</h2>
+          <p>This table uses an LS (Likelihood × Severity) risk matrix to carry out an item-by-item safety assessment of the project's experimental workflow <a class="safety-cite" href="#safety-reference-1">[1]</a><a class="safety-cite" href="#safety-reference-2">[2]</a>. L denotes likelihood: the probability that the risk event occurs under the existing training, facilities, SOPs and protective conditions. S denotes severity: the consequence for human health, experimental progress and the environment once it occurs. L and S are each graded from 1 to 5, and the risk value is L × S: 1–4 low risk, 5–9 general risk, 10–16 moderately high risk, 17–25 high risk. The table also lists the initial risk, the existing control measures and the residual risk; the L and S of every item carry an independent scoring rationale rather than a blanket score, so each score corresponds one-to-one with a specific operation, material and set of control conditions.</p>
+          <p>When reading the table, the risk value is the initial risk before control measures are applied, and the residual risk is what remains after training, SOPs, PPE, clean benches, fume hoods, SDS consultation and waste inactivation have been applied. We assessed 15 experimental steps, covering HA hemagglutinin handling, BY4741 yeast culture and passaging, transformation, CRISPR-Cas9 knockout of FAR1/SST2, Gpa1-Gaq homologous recombination, PAGER receptor expression, DCZ1/DCZ small-molecule agonist handling, X-α-Gal and MEL1 colorimetric detection, yEGFP fluorescence detection, centrifugation and glassware handling, autoclave and UV equipment, the air-sampling interface, waste collection and inactivation, routine laboratory management, and the environmental release risk of the engineered yeast. Most steps carry an initial risk value of 1–2 and fall in the low-risk band. The highest risk value is DCZ1/DCZ small-molecule agonist handling, with L=2 and S=2 giving a risk value of 4, still within the low-risk band; the reason is that handling small-molecule chemicals may occasionally involve skin contact or inhalation, but after consulting the SDS, wearing gloves and goggles, working in a fume hood or clean bench and segregating waste liquids, the residual risk drops to low.</p>
+
+          <h3 id="safety-grading">How the matrix is graded</h3>
+          <div class="safety-table-scroll">
+            <table class="safety-table">
+              <caption>{{ safety.likelihood.caption }}</caption>
+              <thead>
+                <tr>
+                  {% for cell in safety.likelihood.head %}<th scope="col">{{ cell }}</th>{% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in safety.likelihood.rows %}
+                <tr>
+                  <th scope="row">{{ row[0] }}</th>
+                  <td>{{ row[1] }}</td>
+                  <td>{{ row[2] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
-          <h2>潜在风险识别</h2>
-          <div id="biological-risk">
-            <h3 id="safety-biological-risk">生物风险</h3>
-            <ul>
-              <li>所用底盘为 <em><i>Saccharomyces cerevisiae</i></em> BY4741，属 BSL-1 模式生物，无致病性。</li>
-              <li>抗原识别对象：灭活或重组 IAV HA 抗原（如有活病毒操作需单独说明生物安全等级与审批）。</li>
-              <li>基因改造后的酵母释放到环境中的潜在生态影响。</li>
-            </ul>
-            <p>[待补充：具体生物安全等级、实验操作等级、菌种保存与废弃物处理方案。]</p>
+          <div class="safety-table-scroll">
+            <table class="safety-table">
+              <caption>{{ safety.severity.caption }}</caption>
+              <thead>
+                <tr>
+                  {% for cell in safety.severity.head %}<th scope="col">{{ cell }}</th>{% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in safety.severity.rows %}
+                <tr>
+                  <th scope="row">{{ row[0] }}</th>
+                  <td>{{ row[1] }}</td>
+                  <td>{{ row[2] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
-          <div id="chemical-risk">
-            <h3 id="safety-chemical-risk">化学风险</h3>
-            <ul>
-              <li>限制酶、连接酶、DNA 染料等分子生物学试剂的安全使用。</li>
-              <li>DCZ 小分子激动剂、X-Gal 显色底物等化学品的储存与操作规范。</li>
-              <li>有机溶剂（如乙醇、异丙醇）的防火与通风要求。</li>
-            </ul>
-            <p>[待补充：每种危险化学品的安全数据表（SDS）与 PPE 要求。]</p>
+          <div class="safety-table-scroll">
+            <table class="safety-table">
+              <caption>{{ safety.riskLevels.caption }}</caption>
+              <thead>
+                <tr>
+                  {% for cell in safety.riskLevels.head %}<th scope="col">{{ cell }}</th>{% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in safety.riskLevels.rows %}
+                <tr>
+                  <th scope="row">{{ row[0] }}</th>
+                  <td>{{ row[1] }}</td>
+                  <td>{{ row[2] }}</td>
+                  <td>{{ row[3] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
-          <div id="physical-risk">
-            <h3 id="safety-physical-risk">物理风险</h3>
-            <ul>
-              <li>高压灭菌锅、离心机、电泳仪等设备的规范操作。</li>
-              <li>紫外透射仪、激光扫描仪等光辐射防护。</li>
-              <li>实验室用电、用水与消防安全。</li>
-            </ul>
-            <p>[待补充：设备操作规程与实验室安全培训记录。]</p>
-          </div>
-          <div id="security-risk">
-            <h3 id="safety-security-risk">安保风险</h3>
-            <ul>
-              <li>基因序列、菌株与质粒的获取、使用和分发合规性。</li>
-              <li>技术信息对外传播前的脱敏与审查机制。</li>
-              <li>防止技术被恶意滥用的设计考量（如选择安全底盘、避免毒性元件）。</li>
-            </ul>
-            <p>[待补充：项目遵循的 iGEM White List 与 Do Not Release 条款声明。]</p>
+
+          <h3 id="safety-matrix">Item-by-item assessment</h3>
+          <p>The 15 steps below are scored one by one. L and S are given as the grade followed by its rationale, so that every score can be traced back to the operation, the material and the control conditions it refers to. On a narrow screen the table scrolls sideways.</p>
+          <div class="safety-table-scroll">
+            <table class="safety-table safety-table--matrix">
+              <caption>{{ safety.matrix.caption }}</caption>
+              <thead>
+                <tr>
+                  {% for cell in safety.matrix.head %}<th scope="col">{{ cell }}</th>{% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in safety.matrix.rows %}
+                <tr>
+                  <th scope="row">{{ row.no }}</th>
+                  <td>{{ row.step }}</td>
+                  <td>{{ row.hazard }}</td>
+                  <td>{{ row.scenario }}</td>
+                  <td><span class="safety-grade">{{ row.l.v }}</span><span class="safety-rationale">{{ row.l.r }}</span></td>
+                  <td><span class="safety-grade">{{ row.s.v }}</span><span class="safety-rationale">{{ row.s.r }}</span></td>
+                  <td>{{ row.value }}</td>
+                  <td>{{ row.level }}</td>
+                  <td>{{ row.control }}</td>
+                  <td>{{ row.residual }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div id="risk-mitigation" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>针对已识别风险，说明实验室管理、操作规范、应急响应与培训机制。</p>
-          </div>
-          <h2>风险缓解与安全管理措施</h2>
-          <ul>
-            <li><strong>实验室准入与培训：</strong>所有成员须完成生物安全培训并通过考核。</li>
-            <li><strong>个人防护装备（PPE）：</strong>实验服、手套、护目镜的佩戴要求。</li>
-            <li><strong>废弃物处理：</strong>菌液、培养基、枪头等经高压灭菌后统一处置。</li>
-            <li><strong>化学品管理：</strong>专人专柜、分类存放、定期清点。</li>
-            <li><strong>应急预案：</strong>溅洒、泄漏、割伤、火灾等事故的处置流程。</li>
-          </ul>
-          <p>[待补充：实验室安全手册摘要、培训签到表、废弃物处理记录等可验证材料。]</p>
+        <div id="safety-lab-environment" class="content-card">
+          <h2>Laboratory Safety Environment</h2>
+          <p>The laboratory we work in has strict and well-developed safety management. Entry is controlled by access authorization, the areas are clearly divided, and operations of different risk levels are carried out in their corresponding areas. Warning signs for biological hazards, chemical hazards, flammability, corrosion, autoclaving, ultraviolet light, eyewash, first aid, fire extinguishers, emergency exits and waste segregation are posted throughout the laboratory, and SOPs, emergency contacts and safety reminders are posted at key locations <a class="safety-cite" href="#safety-reference-2">[2]</a>. A Safety Emergency Response Plan for Teaching Laboratories (Trial) is also posted in a prominent position, compiled in accordance with the Work Safety Law, the Fire Protection Law and the Emergency Response Law of the People's Republic of China and the Regulations on the Safety Management of Hazardous Chemicals; it sets out the emergency organizational structure, the escalation and reporting procedure and 24-hour emergency contact numbers (Figure 1). After entering the laboratory we can quickly identify the sources of risk, the boundaries of operation and the location of emergency equipment.</p>
+          <p>The laboratory is equipped with clean benches, fume hoods, an autoclave, an eyewash station, an emergency shower, first-aid kits, fire extinguishers, spill kits, absorbent materials, sharps containers, biohazard waste bags and chemical waste containers. Flammable liquids and other hazardous chemicals are kept in a dedicated storage cabinet with the corresponding SDS documentation on hand, and hazardous waste is placed in segregated collection containers and never poured away at will (Figure 3). The eyewash station and emergency shower (Figure 2) are always available. For microbiological work we operate inside a clean bench; for volatile or irritant chemicals we work in a fume hood (Figure 5). Our supervising teachers give safety reminders tailored to each specific experiment, and team members also remind and check one another. After experiments we handle biological waste and chemical waste by category and autoclave materials that need inactivation. Overall, the laboratory's level of safety, its warning system and its emergency provision give us a reliable basis for carrying out this project.</p>
+          {% for fig in safety.figures %}
+          <figure class="safety-figure">
+            <img src="{{ basePath }}{{ fig.src }}" alt="{{ fig.alt }}" width="{{ fig.width }}" height="{{ fig.height }}" loading="lazy" decoding="async">
+            <figcaption>{{ fig.caption }}{% if fig.note %}<span class="safety-figure-note">{{ fig.note }}</span>{% endif %}</figcaption>
+          </figure>
+          {% endfor %}
         </div>
 
-        <div id="built-in-safety" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>从项目设计层面说明如何通过底盘选择、元件选择与遗传控制降低风险。</p>
-          </div>
-          <h2>设计内置安全特性</h2>
-          <div id="non-pathogenic-chassis">
-            <h3 id="safety-non-pathogenic-chassis">非致病底盘</h3>
-            <p>本项目选用酿酒酵母 BY4741 作为传感器底盘。该菌株为实验室常用模式生物，遗传背景清晰、无人类致病性、无环境定植优势，且易于通过标准灭菌程序灭活。</p>
-          </div>
-          <div id="safe-parts">
-            <h3 id="safety-safe-parts">低危害元件选择</h3>
-            <ul>
-              <li>报告基因 yEGFP / lacZ 均为成熟、安全的标记基因。</li>
-              <li>anti-HA 纳米抗体仅用于抗原识别，不编码毒素或致病因子。</li>
-              <li>人源化 hM1Dq 受体与 Gpa1-Gαq 嵌合蛋白仅在酵母细胞内表达，不进入人类细胞。</li>
-            </ul>
-          </div>
-          <div id="kill-switch">
-            <h3 id="safety-kill-switch">Kill-switch 与其它安全控制</h3>
-            <p>[待补充：若设计中包含营养缺陷型依赖、温度敏感型致死基因或其它 kill-switch 机制，请在此详细说明原理与验证计划。]</p>
-          </div>
+        <div id="safety-personal" class="content-card">
+          <h2>Personal Safety</h2>
+          <p>All our members have received laboratory safety training and passed the laboratory access requirements <a class="safety-cite" href="#safety-reference-1">[1]</a><a class="safety-cite" href="#safety-reference-2">[2]</a>. We are familiar with the laboratory safety rules, emergency procedures and personal protective requirements. Before any laboratory activity in this project began, our supervising teachers gave us an additional targeted safety briefing, focusing on the biological materials involved, the risks of the reagents, the boundaries of operation and the record-keeping requirements. During the experiments our activities were recorded and reported, and we had studied the reagents we used in advance to confirm their risks.</p>
+          <p>For personal protection we select and correctly wear lab coats, gloves, goggles and masks according to the risk of the specific operation, keep proper working practice inside a clean bench or fume hood, wash our hands properly before and after experiments, and take off our lab coats before leaving the laboratory. We all know where the eyewash station, first-aid kit, fire extinguisher, spill kit and emergency shower are, and in the event of a spill, contact or suspected exposure we know how to respond immediately and report it. During experiments we supervise one another's protective equipment and working state, keep records complete, and never carry out high-risk operations alone. Overall, personal safety is not a paper rule for us but a practical habit and a team consensus in daily experiments.</p>
         </div>
 
-        <div id="design-rationale" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>解释上述安全设计选择背后的科学依据与工程权衡。</p>
-          </div>
-          <h2>设计选择 rationale</h2>
-          <ul>
-            <li>为何选择 BY4741 而非其它酵母或细菌底盘？</li>
-            <li>为何采用 yEGFP + lacZ 双报告系统？</li>
-            <li>为何通过 CRISPR 三敲除而非其他方式降低背景？</li>
-          </ul>
-          <p>[待补充：将每个设计选择与安全性、可生产性、可检测性之间的权衡进行说明。]</p>
+        <div id="safety-project" class="content-card">
+          <h2>Project Safety</h2>
+          <p>The target detected in this project is the hemagglutinin (HA) protein on the surface of influenza A virus. The HA hemagglutinin used in our experiments is purchased; it is not infectious and does not possess the physiological activity of influenza A virus. An influenza vaccine based on recombinant HA protein contains only hemagglutinin as a single antigenic protein and no viral genome, so it cannot self-replicate and is itself non-infectious <a class="safety-cite" href="#safety-reference-3">[3]</a>. The HA hemagglutinin used in this experiment therefore does not produce the infectious characteristics of influenza A virus, cannot infect people and cannot make people ill. We do not handle live virus, we introduce no replication-competent viral sequences, and we introduce no virulence-related genes.</p>
+          <p>For the recognition element we use an anti-HA nanobody (VHH) as the recognition domain <a class="safety-cite" href="#safety-reference-4">[4]</a>, and the human hM1Dq receptor as the signalling core <a class="safety-cite" href="#safety-reference-5">[5]</a>. The PAGER (Programmable Antigen-gated G-protein-coupled Engineered Receptors) receptor uses an "antigen-gated de-repression" logic <a class="safety-cite" href="#safety-reference-6">[6]</a>: in the absence of HA, the MT1 auto-inhibitory peptide occupies the orthosteric site of hM1Dq and holds the receptor at a low background; once HA binds the nanobody, steric hindrance relieves the MT1 inhibition, and the DCZ small molecule then activates hM1Dq <a class="safety-cite" href="#safety-reference-7">[7]</a>, triggering the downstream yeast MAPK pathway and FUS1 reporter gene output. This self-inhibitory design reduces background leakage and false-positive risk <a class="safety-cite" href="#safety-reference-6">[6]</a>.</p>
+          <p>For the chassis we use the non-pathogenic, laboratory-standard <em>Saccharomyces cerevisiae</em> BY4741. <em>S. cerevisiae</em> is classed at the lowest risk level in national biosafety listings, and this project is carried out entirely under biosafety level 1 (BSL-1) conditions <a class="safety-cite" href="#safety-reference-1">[1]</a>. BY4741 is an internationally used laboratory chassis with a well-defined genetic background; it is naturally auxotrophic for histidine (His), leucine (Leu), methionine (Met) and uracil (Ura), cannot synthesise these four essential nutrients and must obtain them from outside <a class="safety-cite" href="#safety-reference-8">[8]</a>. The vector system, the reporter system and the plasmids used for GPA1 humanisation/knockout constructed in this study carry LEU, HIS and URA selection markers respectively, complementing the corresponding auxotrophies.</p>
+          <p>To ensure biosafety we also designed a marker-removal strategy: the URA marker is removed by 5-fluoroorotic acid (5-FOA) counter-selection <a class="safety-cite" href="#safety-reference-9">[9]</a>, returning the engineered strain to a uracil-auxotrophic state after modification, which together with the chassis's original histidine, leucine and methionine auxotrophies makes it a quadruple auxotroph. This multiple-auxotrophy mechanism makes it difficult for the strain to proliferate effectively in environments lacking the corresponding nutrient supplements; conditions that supply all four free nutrients simultaneously and at sufficient concentration do not normally exist in the natural environment, so our engineered yeast survives and proliferates mainly in specially formulated media.</p>
+          <p>This design — genetically modifying an already auxotrophic strain and layering a marker-removal step on top — makes it difficult for the strain to proliferate effectively outside the specific supplemented medium, thereby reducing the risk of environmental release. It should be noted that auxotrophy is usually regarded as the first layer of biological containment, and its protective strength depends on the availability of the essential nutrients in the surrounding environment <a class="safety-cite" href="#safety-reference-10">[10]</a>; work elsewhere has pushed yeast escape frequencies below 10⁻⁹ by introducing stronger barriers such as dependence on an unnatural amino acid. We therefore do not rest the whole safety case on auxotrophy itself, but also adopt enclosed operation, autoclave inactivation of waste and standardised management, forming multiple layers of protection.</p>
+          <p>For chassis modification we use the CRISPR-Cas9 system <a class="safety-cite" href="#safety-reference-11">[11]</a> to knock out FAR1 <a class="safety-cite" href="#safety-reference-12">[12]</a> and SST2 <a class="safety-cite" href="#safety-reference-13">[13]</a>, removing interference from the yeast's own mating pathway with the cell cycle and signal strength; we also designed a Gpa1-Gaq chimeric G protein, replacing the five C-terminal amino acids KIGII of yeast Gpa1 with EYNLV from human Gαq <a class="safety-cite" href="#safety-reference-14">[14]</a>, so that hM1Dq can couple to the yeast MAPK pathway. The reporter module uses the pheromone-responsive FUS1 promoter <a class="safety-cite" href="#safety-reference-15">[15]</a> to drive yEGFP <a class="safety-cite" href="#safety-reference-16">[16]</a> or MEL1 <a class="safety-cite" href="#safety-reference-17">[17]</a> expression, producing green fluorescence or a blue colour respectively. These modifications target only signal transduction and reporter output; they introduce no pathogenic factors and do not enhance the yeast's pathogenicity or environmental fitness.</p>
+          <p>All cultures, consumables and waste containing the engineered yeast are collected according to the laboratory's biological waste rules and autoclaved or otherwise effectively inactivated before disposal. Waste liquids containing chemical reagents are collected separately and handed to a qualified institution. The whole system is modular: replacing only the nanobody domain would allow it to be extended to the detection of other respiratory pathogens <a class="safety-cite" href="#safety-reference-6">[6]</a>, and the safety assessment will be updated in step with any change of target.</p>
         </div>
 
-        <div id="safety-policy" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>确认本项目遵循 iGEM 官方安全政策，并提供相关表格或审批链接。</p>
-          </div>
-          <h2>iGEM Safety Policies 遵循</h2>
-          <p>本项目承诺遵守 iGEM 官方 <a href="https://competition.igem.org/safety" target="_blank" rel="noopener noreferrer">Safety Policies</a> 与 <a href="https://competition.igem.org/safety/do-not-release" target="_blank" rel="noopener noreferrer">Do Not Release</a> 条款。</p>
-          <ul>
-            <li>[待补充：安全表格（Safety Form）提交状态与编号]</li>
-            <li>[待补充：生物安全委员会或学校伦理/生物安全审批文件]</li>
-            <li>[待补充：所有涉及活病毒或高致病性样本操作的审批记录]</li>
-          </ul>
-          <!-- iGEM Check: [ ] Risks Listed [ ] Mitigation Measures Defined [ ] Safety Policies Linked -->
+        <div id="safety-references" class="content-card">
+          <h2>References</h2>
+          <ol class="safety-references">
+            {% for ref in safety.references %}
+            <li id="safety-reference-{{ ref.num }}">{{ ref.text }}</li>
+            {% endfor %}
+          </ol>
         </div>
       </div>
-    </div>
+</div>
 {% endblock %}
-

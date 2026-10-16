@@ -29,8 +29,13 @@
   var FINISHED = 'intro-gif-finished';
 
   var SWITCH_LEAD = 200; // 提前切帧，避开 GIF 循环回跳
-  var LOAD_TIMEOUT = 20000; // 单帧下载/解码最长等待，超时跳过该帧
+  var LOAD_TIMEOUT = 30000; // 单帧下载/解码最长等待，超时跳过该帧
+                              // 2026-10-16：20s → 30s。遮罩已按关键资源等过一轮，
+                              // 这里多等 10s 让弱网（如 400KB/s 下 GIF 需 ~25s）
+                              // 也能播上；期间遮罩/加载态 + skip 按钮始终可用，不会卡死。
   var FADE_DURATION = 450; // 与 CSS --duration-slow(0.4s) 对齐的收尾时间
+  var CRITICAL_TIMEOUT = 10000; // 开场动画登记为 page-loader 关键资源的超时（ms）
+  var GATE_TIMEOUT = 12000;     // 开场结束后「页面未就绪」二次门控的最长等待（ms）
 
   var root = document.documentElement;
   var overlay = null;
@@ -155,6 +160,18 @@
     overlay.classList.add('intro-gif--hiding');
     root.classList.add(FINISHED);
 
+    // 2026-10-16：过场动画结束 ≠ 页面就绪。若其余资源（图片 / 页面脚本）
+    // 仍在加载，先回显 page-loader 加载动画（z 轴高于本层，盖住淡出中的
+    // GIF），等 window load 或超时后再收尾——避免用户在上半成品页面里
+    // 翻页看到「静态年值 / 无动画三方法」的脚本降级态。
+    // PageLoader 缺失（脚本 404 等）时放弃门控，直接放行，绝不卡死。
+    if (window.PageLoader && typeof window.PageLoader.gate === 'function'
+      && document.readyState !== 'complete') {
+      try {
+        window.PageLoader.gate({ timeout: GATE_TIMEOUT });
+      } catch (e) { /* 门控失败不阻塞放行 */ }
+    }
+
     setTimeout(function () {
       // 释放解码帧，避免大体积 GIF 长期占用内存
       frames.forEach(function (frame) {
@@ -225,6 +242,15 @@
     // 就不再按 6s 强判 finished（原实现弱网下 GIF 还没下完就被挤掉）。
     // 撤除时机：start() / finish()。组件自身仍有 20s 单帧超时兜底。
     window.__introGifWaiting = true;
+
+    // 2026-10-16：把开场动画登记为 page-loader 的关键资源——遮罩（加载动画）
+    // 会一直展示直到 GIF 下载完成（超时 CRITICAL_TIMEOUT 才放行），
+    // 保证「优先加载开场动画」：GIF 未就绪前用户看到的是加载动画而不是首页。
+    if (window.PageLoader && typeof window.PageLoader.register === 'function') {
+      try {
+        window.PageLoader.register(frames[0].src, { timeout: CRITICAL_TIMEOUT });
+      } catch (e) { /* 登记失败不阻塞播放 */ }
+    }
 
     // 2026-10-06 弱网修复：首帧 GIF 立即预取，与 page-loader 的关键图下载并行。
     // 原实现要等 loader 收尾后才在 play(0) 里发起 GIF 请求，弱网下 GIF

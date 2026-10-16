@@ -115,7 +115,10 @@ nav {
     box-shadow var(--duration-slow) var(--ease-smooth),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.08);
+  /* 2026-10-12：移除基态 border-bottom（0.0625rem 白 8%）——
+     早期透明/深色导航留下的分隔线，在 cream×米色配色下是一条多余发丝线；
+     滚动态由 .scrolled 的 box-shadow 提供层次。 */
+  border-bottom: none;
 }
 
 nav.scrolled {
@@ -1979,6 +1982,58 @@ body:not(.home-page) main { padding-top: 6.25rem; }
   background: linear-gradient(180deg, #D4A574, #8B5A2B);
   transition: height 0.12s linear;
   will-change: height;
+}
+
+/* ================================================== */
+/* 滚动进度条上下两端的「快速滚动」触区（2026-10-15 新增，同日按用户口径简化）  */
+/* 无可见图形（原小三角方案已废弃）：隐形触区约 100×100px，右贴视口、不压正文；  */
+/* 悬停/聚焦显示纯文字提示（无背景无边框），点击/按住即滚动。<900px 不启用。      */
+/* 逻辑见 static/js/components/scroll-speed-control.js                         */
+/* ================================================== */
+.scroll-speed-control {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  /* 高于内容与侧栏(10001)，低于加载遮罩(100003)：提示文字不允许被正文盖住 */
+  z-index: 100000;
+  height: clamp(5rem, 18vh, 10rem);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.scroll-speed-control .ssc-target {
+  position: absolute;
+  right: 0;
+  width: min(100px, var(--ssc-gutter, 100px));
+  height: 100px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scroll-speed-control .ssc-target:focus { outline: none; }
+
+/* 判定区以进度条上下两端为中心各展开 50px */
+.scroll-speed-control .ssc-target--up { top: -50px; }
+.scroll-speed-control .ssc-target--down { bottom: -50px; }
+
+/* 右侧留白不足时由 JS 挂 .is-tight：宁可不给快滚，也绝不压住正文 */
+.scroll-speed-control.is-tight { display: none; }
+
+@media (max-width: 1200px) {
+  .scroll-speed-control .ssc-target { height: 88px; }
+}
+
+/* 窄屏不启用：原生惯性滚动更快，且触区容易压到正文 */
+@media (max-width: 900px) {
+  .scroll-speed-control { display: none; }
 }
 
 @keyframes ppb-shimmer {
@@ -3906,16 +3961,21 @@ footer {
   align-items: stretch;
 }
 
-/* 伙伴栏（2026-10-04 重设计）：原「白色大卡 + logo 走马灯」改为可扩展芯片栏，
-   新增伙伴只需在 footer 模板里复制一个 .partner-chip，自动换行排布；
-   与右侧 Contact 圆形图标共用同一套半透明白风格，蓝底上不再留大块空卡。 */
+/* 伙伴栏：可扩展芯片栏，新增伙伴只需在 footer 模板里复制一个 .partner-chip，
+   自动换行排布；外层与 Contact Us 同款半透明框，与右侧 5:5 分栏，
+   三张芯片白底、等宽等间距铺满整行。 */
 .footer-partners {
-  flex: 0 0 60%;
-  max-width: 60%;
+  flex: 0 0 50%;
+  max-width: 50%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl) var(--spacing-3xl);
+  border: 1px solid var(--bg-footer-border);
 }
 
 .partners-label {
@@ -3929,33 +3989,35 @@ footer {
 .partners-list {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing-md);
 }
 
 .partner-chip {
+  flex: 1 1 0;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-md) var(--spacing-3xl);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid var(--bg-footer-border);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--radius-lg);
   transition: background var(--duration-normal) var(--ease-smooth),
     transform var(--duration-normal) var(--ease-smooth),
-    border-color var(--duration-normal) var(--ease-smooth);
+    box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
 .partner-chip:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   transform: translateY(-0.125rem);
 }
 
 .partner-chip img {
   height: 3rem;
   width: auto;
-  max-width: 9.5rem;
+  max-width: 7rem;
   object-fit: contain;
 }
 
@@ -4187,7 +4249,7 @@ footer {
 
   .footer-partners {
     width: 100%;
-    max-width: 100%; /* 重置桌面 flex 布局的 max-width:60% */
+    max-width: 100%; /* 重置桌面 flex 布局的 max-width:50% */
     flex: 0 0 auto;
   }
 
@@ -4377,41 +4439,41 @@ footer {
 .wechat-qr-container {
   position: absolute;
   left: 50%;
-  bottom: 100%;
+  top: 100%;
   transform: translateX(-50%) translateY(0) scale(0.8);
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: none;
   z-index: 100;
-  margin-bottom: 16px;
+  margin-top: 8px;
 }
 
 /* 悬浮时显示二维码 */
 .wechat-qr-wrapper:hover .wechat-qr-container {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-8px) scale(1);
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
 /* 二维码箭头 */
 .wechat-qr-arrow {
   position: absolute;
   left: 50%;
-  bottom: -12px;
+  top: -12px;
   transform: translateX(-50%);
   width: 0;
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-top: 12px solid #ffffff;
+  border-bottom: 12px solid #ffffff;
   z-index: 2;
 }
 
 /* 二维码图片样式 */
 .wechat-qr-image {
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   border-radius: 16px;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.15),

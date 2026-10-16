@@ -10,6 +10,15 @@
   <!-- 首页 GIF 开场动画组件样式：在 mobile.css 之后加载，保证响应式覆盖生效 -->
   <link rel="stylesheet" href="static/css/components/index-intro-gif.css">
 
+  <!-- 2026-10-16：开场动画最高优先级预载。
+       原实现要等 DOMContentLoaded 后才由 index-intro-gif.js 用 new Image() 发起请求，
+       此时文档内约 40 张 eager 插画已被解析并占用连接，GIF（1.26MB 动画 webp）被排到
+       后面，弱网下常出现「加载一下下就能浏览、开场被挤掉、各屏动画已放完」。
+       preload + fetchpriority=high 让它在 head 解析期就以最高优先级起跑，
+       并与 page-loader-arm.js 同步预载的加载帧并行。 -->
+  <link rel="preload" as="image" href="static/image/Animation/index/gif/boot-animation.webp"
+    fetchpriority="high">
+
   <!-- 首页 GIF 开场动画：在 <body> 渲染前同步给 <html> 打标记，
        避免导航栏在 GIF 播放期间先闪现再隐藏。
        触发条件：仅当访客从「站外 / 直接访问」进入首页时播放。
@@ -45,11 +54,30 @@
         // 20s 单帧下载超时兜底（超时会自行 finish），此处再加 30s 二级
         // 硬兜底，绝不让导航被永久锁住。原实现 6s 一到就把还在等 GIF
         // 的开场层直接判死，弱网下 GIF 必被「挤掉」。
+        // 2026-10-16：再加一道 defer 脚本守卫——页面级脚本（含三个入场动画
+        // 脚本）还没执行完时绝不强判开场结束，重排 500ms 后复查（硬上限 60s）。
+        // 原实现在脚本仍在下载/排队时就解锁，用户翻页看到的就是
+        // 「静态年值 / 无动画的三方法」。注意不能只看 readyState：文档
+        // 「解析完成」会把 readyState 推到 interactive，但 defer 脚本可能
+        // 还在网络队列里（弱网实测排队 44s），以三个 armed 类为准。
+        var DEFER_GUARD_MAX = 60000;
+        var deferGuardStart = Date.now();
+        function pageScriptsRan() {
+          return !!(document.querySelector('.js-reveal-armed, .js-burden-armed, .js-pump-armed'));
+        }
+        function deferScriptsPending() {
+          if (pageScriptsRan()) return false;
+          return (Date.now() - deferGuardStart) < DEFER_GUARD_MAX;
+        }
         var watchdogStarted = false;
         function startWatchdogOnce() {
           if (watchdogStarted) return;
           watchdogStarted = true;
-          setTimeout(function () {
+          var tick = function () {
+            if (deferScriptsPending()) {
+              setTimeout(tick, 500);
+              return;
+            }
             if (window.__introGifWaiting) {
               // 组件在等 GIF：交给组件自己的超时收尾，另设二级硬兜底
               setTimeout(function () {
@@ -62,7 +90,8 @@
             if (!root.classList.contains('intro-gif-running')) {
               root.classList.add('intro-gif-finished');
             }
-          }, 6000);
+          };
+          setTimeout(tick, 6000);
         }
         if (root.classList.contains('page-loader-armed')) {
           document.addEventListener('pageloader:done', startWatchdogOnce);

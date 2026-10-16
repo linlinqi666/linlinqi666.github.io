@@ -33,19 +33,207 @@
   color: var(--color-text-light);
 }
 
-.model-game__board {
+/* ============ 舞台：卡牌区 + 右侧结果栏 ============ */
+
+/* 结果面板单独成栏并吸顶，26 行打分表不再把正文流拉长；
+   表格自身再限高滚动，双保险保证 .model-game 高度可控。 */
+/* ============ 舞台：卡牌区 + 可折叠结果栏 ============ */
+
+/* 收起态只给结果栏留一条窄边，board 因此拿回全部宽度；
+   展开时结果面板以覆盖层浮出，不推开 board —— 这样 1280/1366 这类
+   笔记本宽度也能保住「结果在右侧」的布局，而中间列不会窄到装不下 5 列表格。 */
+.model-game__stage {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(11rem, 13rem) minmax(0, 1fr) minmax(11rem, 13rem);
-  gap: var(--spacing-lg);
+  grid-template-columns: minmax(0, 1fr) 2.1rem;
+  gap: var(--spacing-md);
   align-items: start;
 }
 
+.model-game__rail {
+  position: relative;
+  min-width: 0;
+  align-self: stretch;
+}
+
+.model-game__rail-toggle {
+  /* 压在结果面板之上：面板即使铺过来，收起入口也始终可点 */
+  position: relative;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0.2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card-hover);
+  color: var(--color-primary-dark);
+  font: inherit;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.model-game__rail-toggle:hover {
+  background: #fff6e4;
+  border-color: var(--color-primary);
+}
+
+.model-game__rail-toggle-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.model-game__rail-toggle-icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  transform: rotate(0deg);
+  transition: transform var(--duration-fast) var(--ease-smooth);
+}
+
+.model-game__rail-toggle-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--color-text-lighter);
+}
+
+.model-game__rail[data-has-result="true"] .model-game__rail-toggle-dot {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.model-game__rail-body {
+  display: none;
+  position: absolute;
+  top: 0;
+  /* 让出切换按钮那一列：面板展开时「Results」标签仍露出，点它即可收起 */
+  right: calc(2.1rem + 0.4rem);
+  z-index: 20;
+  width: min(21rem, calc(100vw - 5.5rem));
+  max-height: min(34rem, calc(100vh - 10rem));
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: 0 0.6rem 1.6rem rgba(93, 58, 26, 0.18);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.model-game__rail.is-open .model-game__rail-body {
+  display: flex;
+}
+
+.model-game__rail.is-open .model-game__rail-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.model-game__rail .model-game__selector,
+.model-game__rail .model-game__panel {
+  margin-bottom: 0;
+}
+
+.model-game__rail .model-game__table-wrap {
+  max-height: 18rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* 右栏面板内的标题与摘要改为左对齐堆叠：
+   原本的 space-between 会把「Best weighted score」和数值拉到两端，
+   一旦换行就出现大片空洞。 */
+.model-game__rail .model-game__result-title {
+  font-size: var(--font-size-md);
+  line-height: 1.35;
+}
+
+.model-game__rail .model-game__result-best {
+  display: block;
+}
+
+.model-game__rail .model-game__table {
+  table-layout: fixed;
+  font-size: 0.7rem;
+}
+
+.model-game__rail .model-game__table th,
+.model-game__rail .model-game__table td {
+  padding: 0.28rem 0.25rem;
+  white-space: nowrap;
+}
+
+.model-game__rail .model-game__table th {
+  font-size: 0.6rem;
+  letter-spacing: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.model-game__rail .model-game__result-note {
+  font-size: var(--font-size-xs);
+  line-height: 1.45;
+}
+
+/* 游戏区自己生成的段落不继承正文的两端对齐与 2em 首行缩进：
+   .content-card p 的 justify 在窄栏里会把「Best weighted score」这类短句
+   的词间距拉到两端，读起来像被拆散。 */
+.model-game p {
+  text-align: left;
+  text-indent: 0;
+}
+
+.model-game__board {
+  display: grid;
+  grid-template-columns: minmax(7rem, 8.5rem) minmax(0, 1fr) minmax(7rem, 8.5rem);
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+
+/* 卡牌列标题：主标题一行 + 副标题（小字计数）一行。
+   窄列里靠「Nanobodies (5 candidates)」整体折行会折成三行、参差不齐，
+   拆成两个元素后每行都只放一个语义单元，基线才对齐。 */
 .model-game__column-title {
-  margin: 0 0 var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.1rem;
+  /* 两行高度：左右两列标题行数不同就会一个高一矮，底部边框与卡片起点全部错开。
+     固定高度后两侧基线一致。 */
+  min-height: calc(var(--font-size-md) * 1.2 + var(--font-size-xs) * 1.3 + 0.1rem);
+  margin: 0 0 var(--spacing-xs);
   padding-bottom: var(--spacing-xs);
   border-bottom: 2px solid var(--border-color);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
+  line-height: 1.25;
   color: var(--color-primary-dark);
+}
+
+.model-game__column-title-main {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.model-game__column-title-sub {
+  color: var(--color-text-lighter);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .model-game__cards {
@@ -164,16 +352,52 @@
 
 /* ============ Center column: slots / result / ranking / 3D ============ */
 
+.model-game__column-hint {
+  margin: 0 0 var(--spacing-md);
+  color: var(--color-text-lighter);
+  font-size: var(--font-size-xs);
+  line-height: 1.3;
+}
+
+.model-game__column:last-child .model-game__column-hint {
+  text-align: right;
+}
+
 .model-game__slots {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
 
+.model-game__slot-wrap {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.model-game__slot-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--color-text-lighter);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 槽位标签与列提示要压过上面 .model-game p 的左对齐重置（特异性 0,2,0 > 0,1,1）。 */
+.model-game .model-game__slot-hint {
+  text-align: center;
+}
+
 .model-game__slot {
   flex: 1;
-  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.5rem;
   padding: var(--spacing-sm) var(--spacing-md);
   border: 2px dashed var(--color-primary-light);
   border-radius: var(--radius-md);
@@ -200,7 +424,62 @@
   background: #f3fbf4;
 }
 
+/* 落点指示：槽位内的下箭头。常态轻微上下浮动提示「拖到这里」，
+   一旦开始拖卡就停止浮动并整体放大，避免和拖拽动作抢注意力。 */
+.model-game__slot-arrow {
+  flex: 0 0 auto;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.55rem;
+  border-right: 2.5px solid var(--color-primary-light);
+  border-bottom: 2.5px solid var(--color-primary-light);
+  transform: rotate(45deg) translateY(-0.15rem);
+  animation: model-slot-bob 1.8s var(--ease-smooth) infinite;
+}
+
+.model-game__slot.is-filled .model-game__slot-arrow {
+  display: none;
+}
+
+.model-game__slot-text {
+  min-width: 0;
+}
+
+@keyframes model-slot-bob {
+
+  0%,
+  100% {
+    transform: rotate(45deg) translateY(-0.2rem);
+  }
+
+  50% {
+    transform: rotate(45deg) translateY(0.1rem);
+  }
+}
+
+/* 拖拽进行中：槽位与列标题提示一起强调，让「拖到哪里」在拖动全程都可见。
+   注意 .model-game 是 #model-game 的子元素，拖拽态加在外层容器上，选择器必须写 #model-game。 */
+#model-game.is-dragging .model-game__slot {
+  border-style: solid;
+  border-color: var(--color-primary);
+  background: #fff6e4;
+  color: var(--color-primary-dark);
+  transform: scale(1.02);
+  box-shadow: 0 0.4rem 0.9rem rgba(139, 90, 43, 0.16);
+}
+
+#model-game.is-dragging .model-game__slot-arrow {
+  animation: none;
+  border-color: var(--color-primary);
+}
+
+#model-game.is-dragging .model-game__column-hint {
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
 .model-game__slot-times {
+  align-self: center;
   color: var(--color-text-lighter);
 }
 
@@ -466,6 +745,7 @@
   min-width: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
 }
 
 /* 背面（排名面）常驻转 180°：容器翻转后转正 */
@@ -485,6 +765,32 @@
 .model-game__flip-face .model-game__panel--ranking {
   min-height: 0;
   margin-bottom: 0;
+}
+
+/* 排名表有 5 列，中间列被结果栏压到 318px，auto 布局会按内容撑开并溢出到右侧卡列上。
+   固定表格布局 + 收窄内边距，让 5 列老实分掉可用宽度；
+   若仍放不下（超窄视口），退化为面板内横向滚动，绝不溢出到相邻列。 */
+.model-game__panel--ranking {
+  overflow-x: auto;
+}
+
+.model-game__panel--ranking .model-game__table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 15rem;
+  font-size: 0.74rem;
+}
+
+.model-game__panel--ranking .model-game__table th,
+.model-game__panel--ranking .model-game__table td {
+  padding: 0.3rem 0.2rem;
+  white-space: nowrap;
+}
+
+.model-game__panel--ranking .model-game__table th {
+  font-size: 0.66rem;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 /* 热点残基列表默认折叠，避免把结果面板撑得过长；展开时高度变化要通知侧栏重算 */
@@ -518,13 +824,26 @@
   margin: 0;
   font-size: var(--font-size-md);
   font-weight: 600;
+  flex: 1 1 100%;
   color: var(--color-primary-dark);
 }
 
+/* 三个控制按钮固定在同一排，不因标题抢位而换行；
+   极窄屏改为按钮组整体横向滚动，而不是把按钮拆成两行。 */
 .model-game__viewer-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex: 0 1 auto;
+  min-width: 0;
   gap: var(--spacing-sm);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+
+.model-game__viewer-actions .model-game__button {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .model-game__button {
@@ -785,9 +1104,49 @@
 
 /* ============ Responsive ============ */
 
+/* 窄屏：结果面板不再浮在右侧，改为占满整宽铺在卡牌区下方。
+   因为展开态是覆盖层而不是推开 board，断点可以压到 1100px —— 
+   1280/1366 这类笔记本宽度仍保留右侧折叠条。 */
+@media (max-width: 1100px) {
+  .model-game__stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .model-game__rail {
+    align-self: auto;
+  }
+
+  /* 铺开态不再是浮层，直接静态占位并显示 */
+  .model-game__rail-body {
+    position: static;
+    width: auto;
+    max-height: none;
+    box-shadow: none;
+  }
+
+  .model-game__rail-toggle {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .model-game__rail-toggle-label {
+    writing-mode: horizontal-tb;
+  }
+
+  .model-game__rail-toggle-icon {
+    transform: rotate(90deg);
+  }
+
+  .model-game__rail.is-open .model-game__rail-toggle-icon {
+    transform: rotate(270deg);
+  }
+}
+
 @media (max-width: 1100px) {
   .model-game__board {
-    grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr) minmax(9rem, 11rem);
+    grid-template-columns: minmax(6.5rem, 7.5rem) minmax(0, 1fr) minmax(6.5rem, 7.5rem);
   }
 
   .model-game__ranking-item {
@@ -909,6 +1268,14 @@
     transition: none;
   }
 
+  .model-game__slot-arrow {
+    animation: none;
+  }
+
+  #model-game.is-dragging .model-game__slot {
+    transform: none;
+  }
+
   .model-game__flip-inner {
     transition: none;
   }
@@ -920,5 +1287,288 @@
   .model-card:hover,
   .model-card:focus-visible {
     transform: none;
+  }
+}
+
+/* ============ Docking report groups (tab strip + in-place iframe) ============ */
+
+.model-report {
+  margin: var(--spacing-lg) 0 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--desc-shadow-xs, 0 1px 4px rgba(139, 90, 43, 0.04));
+}
+
+.model-report__title {
+  margin: 0 0 var(--spacing-xs);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-dark);
+}
+
+.model-report__meta {
+  margin: 0 0 var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-lighter);
+}
+
+.model-report__desc {
+  margin: 0 0 var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+/* 同上：note 也是 <p>，需压过 .content-card p 的大字号 */
+.model-report .model-report__note {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+  color: var(--color-text-lighter);
+}
+
+/* ============ Report jump links ============ */
+
+/* 报告是独立页面，不是站内页面：本区块只提供普通链接跳转，不做任何 iframe 内嵌。
+   两列自适应网格让 4 个入口在一屏内可见，避免读者以为要逐个展开。 */
+.model-report__links {
+  display: grid;
+  /* 显式两列，让 4 个入口稳定排成 2×2。不用 auto-fit + minmax(17rem)：
+     本站 root font-size 不是 16px，rem 下限算出来比预期小，会挤成 3+1。 */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0 0;
+  padding: 0;
+  list-style: none;
+  align-items: start;
+}
+
+/* li 自身也要显式关掉标记：display:grid 的容器里，ul 上的 list-style:none
+   在部分浏览器不会传递到 li，表现为每个入口左上角多一个小圆点。 */
+.model-report__links > .model-report__link-item {
+  min-width: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.model-report__links > .model-report__link-item::marker,
+.model-report__links > .model-report__link-item::before {
+  content: none;
+}
+
+.model-report__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "label go"
+    "note  go";
+  /* align-content:start 让标题与说明紧贴卡片顶部；
+     缺它时两行会被均分高度，说明文字被推到中部、底部留大片空白。 */
+  align-content: start;
+  align-items: start;
+  column-gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-smooth),
+    background var(--duration-fast) var(--ease-smooth),
+    transform var(--duration-fast) var(--ease-smooth);
+}
+
+.model-report__link:hover {
+  border-color: var(--color-primary);
+  background: #fff6e4;
+  transform: translateY(-2px);
+}
+
+.model-report__link:focus-visible {
+  outline: 2px solid var(--color-echo-blue);
+  outline-offset: 2px;
+}
+
+.model-report__link-label {
+  grid-area: label;
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.model-report__link-note {
+  grid-area: note;
+  margin-top: 0.15rem;
+  color: var(--color-text-lighter);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+}
+
+.model-report__link-go {
+  grid-area: go;
+  align-self: center;
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-primary);
+  transition: transform var(--duration-fast) var(--ease-smooth);
+}
+
+.model-report__link:hover .model-report__link-go {
+  transform: translate(2px, -2px);
+}
+
+/* 源导出本身有瑕疵时（如 cluster5 缺真正的 SASA 报告），如实标注，不靠标签掩饰。
+   选择器加一层 .model-report 前缀：caveat 是 <p>，全站 .content-card p 的
+   font-size 特异性 (0,1,1) 高于单类名 (0,1,0)，不加这层会被正文大字号盖掉。 */
+.model-report .model-report__link-caveat {
+  margin: 0.35rem 0 0;
+  padding-left: 0.6rem;
+  border-left: 2px solid var(--color-primary-light);
+  color: var(--color-text-lighter);
+  font-size: var(--font-size-xs);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* ============ Demo: cluster / model selector ============ */
+
+.model-game__selector {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+}
+
+.model-game__selector-label {
+  flex: 0 0 auto;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.model-game__select {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+}
+
+.model-game__select:disabled {
+  color: var(--color-text-lighter);
+  background: var(--bg-card-hover);
+  cursor: not-allowed;
+}
+
+/* ============ Demo: card faces ============ */
+
+.model-card__stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: var(--font-size-xs);
+  line-height: 1.6;
+}
+
+.model-card__stat-k {
+  color: var(--color-text-lighter);
+}
+
+.model-card__stat-v {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary-dark);
+}
+
+.model-card.is-disabled {
+  opacity: 0.55;
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+/* ============ Demo: result and score tables ============ */
+
+.model-game__panel-title {
+  margin: 0 0 var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.model-game__result-best {
+  margin: 0 0 var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.model-game__result-hint {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.model-game__result-note {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-lighter);
+}
+
+.model-game__table--scores {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+}
+
+.model-game__table--scores th {
+  width: auto;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-align: right;
+}
+
+.model-game__table--scores th:first-child,
+.model-game__table--scores td:first-child {
+  text-align: left;
+}
+
+.model-game__table--scores td {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.model-game__table tr.is-best {
+  background: rgba(245, 230, 211, 0.55);
+}
+
+.model-game__table tr.is-best td,
+.model-game__table tr.is-best th {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+/* Mobile: the score table scrolls sideways instead of squeezing the columns. */
+@media (max-width: 768px) {
+  .model-report__links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .model-game__selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .model-game__table--scores {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }

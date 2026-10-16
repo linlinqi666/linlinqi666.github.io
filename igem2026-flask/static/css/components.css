@@ -316,8 +316,15 @@
   margin: 0.75rem 0;
 }
 .section-fold > summary {
+  /* 条状样式（背景 / 左边框 / 内边距）由 summary 承担并铺满卡片内容宽：
+     全局 .content-card h3 自带这套条状样式，但 h3 在 summary 里收成 inline-block
+     后背景条会缩到文字宽度，故把样式上移到 summary，并把 summary 内的 h3 清成纯文字。 */
   cursor: pointer;
   list-style: none;
+  padding: var(--desc-spacing-sm, 0.5rem) var(--desc-spacing-md, 1rem);
+  background: rgba(139, 90, 43, 0.04);
+  border-radius: var(--desc-radius-xs, 4px);
+  border-left: 3px solid var(--desc-color-primary, #8B5A2B);
 }
 .section-fold > summary::-webkit-details-marker {
   display: none;
@@ -334,6 +341,16 @@
 }
 .section-fold > summary h3 {
   margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* 提高一级特异性，压过全局 .content-card h3 与各页 .page .content-card h3 的条状样式 */
+.content-card .section-fold > summary h3 {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
 }
 .section-fold > summary:hover {
   opacity: 0.88;

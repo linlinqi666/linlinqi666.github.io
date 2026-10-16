@@ -102,6 +102,38 @@ js:
                 <li class="level3"><a href="#model-ranking">Conclusions &amp; Design Decisions</a></li>
               </ul>
             </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#model-path-a" class="nav-main-link">Path A: hM1Dq Gating</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#model-path-a-prep">Structure &amp; G-protein Engineering</a></li>
+                <li class="level3"><a href="#model-path-a-docking">Docking of the Two Coupling Interfaces</a></li>
+                <li class="level3"><a href="#model-path-a-interface">Interface Analysis</a></li>
+                <li class="level3"><a href="#model-path-a-md">Membrane MD &amp; Binding Energy</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#model-path-b" class="nav-main-link">Path B: Ste2p Gating</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#model-path-b-prep">Receptor &amp; Peptide Design</a></li>
+                <li class="level3"><a href="#model-path-b-docking">HADDOCK Docking</a></li>
+                <li class="level3"><a href="#model-path-b-interface">Interface Analysis</a></li>
+                <li class="level3"><a href="#model-path-b-md">Membrane MD &amp; Binding Energy</a></li>
+              </ul>
+            </li>
             <li class="level1">
               <div class="nav-link-wrapper">
                 <a href="#model-validation" class="nav-main-link">Validation &amp; Discussion</a>
@@ -314,11 +346,20 @@ js:
 
         <div id="model-game" class="content-card" data-base-path="{{ basePath }}">
           <h2>Interactive Demo: Nanobody × Influenza A HA Docking Cards</h2>
-          <p>Drag a card to the center, or click a card to select it. After choosing one antibody and one antigen, the result panel shows the docking result for that combination, and the ranking panel shows the {{ modelDocking.funnel.candidatesRefined }} candidates ranked by specificity index. The demo covers only the {{ modelDocking.funnel.candidatesRefined }} candidates with numerical values in the document.</p>
+          <p>Every card here is a real docking result. Drag a nanobody card or an antigen card into the centre and its
+            3D structure is drawn on its own; add the second card and the pair is drawn as a docked complex together
+            with the scores that ClusPro or HADDOCK actually produced for that combination. Semi-flexible results
+            come from HADDOCK 2.5 ({{ modelGame.stats.flexClusters }} clusters over {{ modelGame.stats.antibodies }}
+            nanobodies, {{ modelGame.stats.flexModels }} structures); rigid results come from ClusPro
+            ({{ modelGame.stats.rigidModels }} structures over {{ modelGame.stats.flexAntigen }} and the two
+            comparison subtypes).</p>
 
           <div class="model-game">
             <div class="model-game__toolbar">
-              <p class="model-game__toolbar-hint">How to select: pick a docking mode, then click a card or drag it into the center slot; click a selected card again to deselect. With a pair selected, one of that combination's docking results is drawn at random.</p>
+              <p class="model-game__toolbar-hint">Pick a docking mode, then drag a card into the matching slot in the
+                middle &mdash; or just click the card. The result panel on the right follows your choice.
+                Semi-flexible refinement was only run against {{ modelGame.flexAntigen }} HA, so switching to that mode
+                restricts the antigen side accordingly.</p>
 
               <div class="model-game__modes" role="group" aria-label="Docking mode">
                 <button type="button" id="model-game-mode-rigid" class="model-game__button model-game__button--mode is-active" aria-pressed="true">Rigid (ClusPro)</button>
@@ -326,77 +367,121 @@ js:
               </div>
 
               <div class="model-game__toolbar-actions">
-                <button type="button" id="model-game-draw" class="model-game__button">Draw a Result</button>
                 <button type="button" id="model-game-random-pair" class="model-game__button model-game__button--ghost">Random Pair</button>
                 <button type="button" id="model-game-reset" class="model-game__button model-game__button--ghost">Reset Demo</button>
               </div>
             </div>
 
-            <div class="model-game__board">
-              <section class="model-game__column">
-                <h3 id="model-game-antibodies-title" class="model-game__column-title" data-no-fold>Nanobodies ({{ modelDocking.funnel.candidatesRefined }} candidates)</h3>
-                <div class="model-game__cards" id="model-game-antibodies"></div>
-              </section>
+            <div class="model-game__stage">
+              <div class="model-game__board">
+                <section class="model-game__column">
+                  <h3 id="model-game-antibodies-title" class="model-game__column-title" data-no-fold>
+                    <span class="model-game__column-title-main">Nanobodies</span>
+                    <span class="model-game__column-title-sub">{{ modelGame.stats.antibodies }} candidates</span>
+                  </h3>
+                  <p class="model-game__column-hint" aria-hidden="true">Drag to the slot on the right</p>
+                  <div class="model-game__cards" id="model-game-antibodies"></div>
+                </section>
 
-              <div class="model-game__center">
-                <div class="model-game__slots">
-                  <button type="button" class="model-game__slot" id="model-game-slot-antibody">Drag in or click a nanobody card on the left</button>
-                  <span class="model-game__slot-times" aria-hidden="true">×</span>
-                  <button type="button" class="model-game__slot" id="model-game-slot-antigen">Drag in or click an antigen card on the right</button>
-                </div>
-
-                <div class="model-game__viewer-block">
-                  <div class="model-game__viewer-head">
-                    <p class="model-game__viewer-title">3D Structure &amp; Ranking</p>
-                    <div class="model-game__viewer-actions">
-                      <button type="button" id="model-game-view-nanobody" class="model-game__button model-game__button--ghost" disabled>View Nanobody</button>
-                      <button type="button" id="model-game-view-receptor" class="model-game__button model-game__button--ghost" disabled>View Antigen</button>
-                      <button type="button" id="model-game-load3d" class="model-game__button">Load 3D Structure</button>
-                      <button type="button" id="model-game-style" class="model-game__button model-game__button--ghost">Display Mode: Cartoon</button>
-                      <button type="button" id="model-game-viewer-toggle" class="model-game__button model-game__button--ghost" aria-expanded="false" aria-controls="model-game-viewer">Show Numbers</button>
+                <div class="model-game__center">
+                  <div class="model-game__slots">
+                    <div class="model-game__slot-wrap">
+                      <p class="model-game__slot-hint" aria-hidden="true">Nanobody</p>
+                      <button type="button" class="model-game__slot" id="model-game-slot-antibody">
+                        <span class="model-game__slot-arrow" aria-hidden="true"></span>
+                        <span class="model-game__slot-text">Drop here</span>
+                      </button>
+                    </div>
+                    <span class="model-game__slot-times" aria-hidden="true">&times;</span>
+                    <div class="model-game__slot-wrap">
+                      <p class="model-game__slot-hint" aria-hidden="true">Antigen</p>
+                      <button type="button" class="model-game__slot" id="model-game-slot-antigen">
+                        <span class="model-game__slot-arrow" aria-hidden="true"></span>
+                        <span class="model-game__slot-text">Drop here</span>
+                      </button>
                     </div>
                   </div>
-                  <div class="model-game__flip">
-                    <div class="model-game__flip-inner">
-                      <div class="model-game__flip-face model-game__flip-face--3d">
-                        <div class="model-game__viewer" id="model-game-viewer">
-                          <div class="model-game__viewer-empty">
-                            <svg class="model-game__viewer-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                              <circle cx="24" cy="24" r="7"></circle>
-                              <circle cx="10" cy="12" r="3.5"></circle>
-                              <circle cx="38" cy="12" r="3.5"></circle>
-                              <circle cx="10" cy="36" r="3.5"></circle>
-                              <circle cx="38" cy="36" r="3.5"></circle>
-                              <line x1="17" y1="20" x2="12.6" y2="14.6"></line>
-                              <line x1="31" y1="20" x2="35.4" y2="14.6"></line>
-                              <line x1="17" y1="28" x2="12.6" y2="33.4"></line>
-                              <line x1="31" y1="28" x2="35.4" y2="33.4"></line>
-                            </svg>
-                            <p>Click "Load 3D Structure" to fetch and display the selected structure. The 3D library is downloaded only at that step.</p>
+
+                  <div class="model-game__viewer-block">
+                    <div class="model-game__viewer-head">
+                      <p class="model-game__viewer-title">3D Structure &amp; Ranking</p>
+                      <div class="model-game__viewer-actions">
+                        <button type="button" id="model-game-load3d" class="model-game__button" title="Load 3D Structure">Load 3D</button>
+                        <button type="button" id="model-game-style" class="model-game__button model-game__button--ghost" title="Display Mode: Cartoon">Cartoon</button>
+                        <button type="button" id="model-game-viewer-toggle" class="model-game__button model-game__button--ghost" aria-expanded="false" aria-controls="model-game-viewer" title="Show the specificity ranking instead of the 3D view">Numbers</button>
+                      </div>
+                    </div>
+                    <div class="model-game__flip">
+                      <div class="model-game__flip-inner">
+                        <div class="model-game__flip-face model-game__flip-face--3d">
+                          <div class="model-game__viewer" id="model-game-viewer">
+                            <div class="model-game__viewer-empty">
+                              <svg class="model-game__viewer-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                                <circle cx="24" cy="24" r="7"></circle>
+                                <circle cx="10" cy="12" r="3.5"></circle>
+                                <circle cx="38" cy="12" r="3.5"></circle>
+                                <circle cx="10" cy="36" r="3.5"></circle>
+                                <circle cx="38" cy="36" r="3.5"></circle>
+                                <line x1="17" y1="20" x2="12.6" y2="14.6"></line>
+                                <line x1="31" y1="20" x2="35.4" y2="14.6"></line>
+                                <line x1="17" y1="28" x2="12.6" y2="33.4"></line>
+                                <line x1="31" y1="28" x2="35.4" y2="33.4"></line>
+                              </svg>
+                              <p>Pick a card to draw its structure. The 3D library is downloaded only at that step.</p>
+                            </div>
                           </div>
+                          <p class="model-game__viewer-note" id="model-game-viewer-note"></p>
+                          <p class="model-game__viewer-message" id="model-game-viewer-message" hidden></p>
                         </div>
-                        <p class="model-game__viewer-note" id="model-game-viewer-note"></p>
-                        <p class="model-game__viewer-message" id="model-game-viewer-message" hidden></p>
-                      </div>
-                      <div class="model-game__flip-face model-game__flip-face--numbers">
-                        <div class="model-game__panel model-game__panel--ranking" id="model-game-ranking"></div>
+                        <div class="model-game__flip-face model-game__flip-face--numbers">
+                          <div class="model-game__panel model-game__panel--ranking" id="model-game-ranking"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="model-game__panel" id="model-game-result"></div>
+                <section class="model-game__column">
+                  <h3 id="model-game-antigens-title" class="model-game__column-title" data-no-fold>
+                    <span class="model-game__column-title-main">HA Antigens</span>
+                    <span class="model-game__column-title-sub">Influenza A &middot; {{ modelGame.stats.antigens }}</span>
+                  </h3>
+                  <p class="model-game__column-hint" aria-hidden="true">Drag to the slot on the left</p>
+                  <div class="model-game__cards" id="model-game-antigens"></div>
+                </section>
               </div>
 
-              <section class="model-game__column">
-                <h3 id="model-game-antigens-title" class="model-game__column-title" data-no-fold>Influenza A HA Antigens ({{ modelDocking.funnel.fluAntigens }} types)</h3>
-                <div class="model-game__cards" id="model-game-antigens"></div>
-              </section>
+              <aside class="model-game__rail" id="model-game-rail" data-rail-state="closed" aria-label="Docking result">
+                <button type="button" class="model-game__rail-toggle" id="model-game-rail-toggle"
+                        aria-expanded="false" aria-controls="model-game-rail-body">
+                  <span class="model-game__rail-toggle-label">Results</span>
+                  <svg class="model-game__rail-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                  <span class="model-game__rail-toggle-dot" data-rail-dot aria-hidden="true"></span>
+                </button>
+
+                <div class="model-game__rail-body" id="model-game-rail-body">
+                  <div class="model-game__selector">
+                    <label class="model-game__selector-label" for="model-game-select" id="model-game-select-label">ClusPro model</label>
+                    <select class="model-game__select" id="model-game-select" disabled></select>
+                  </div>
+
+                  <div class="model-game__panel" id="model-game-result"></div>
+                </div>
+              </aside>
             </div>
 
             <p class="model-game__fallback" id="model-game-fallback" hidden></p>
             <p class="model-game__status" id="model-game-status" role="status" aria-live="polite"></p>
-            <p class="model-game__caption">Data are from Sections 5.3 and 5.4 of the modeling document and are computational predictions. The "target subtype / control subtype" labels on the cards follow the document's convention: the specificity index is built from the score difference between H1N1 and H3N2/H5N1; the control subtypes are used to quantify specificity, not as detection targets.</p>
+            <p class="model-game__caption">Rigid scores are ClusPro weighted scores read from the docking output; the
+              ClusPro model files carry no cluster number, so the model selector is labelled by file and is
+              deliberately not tied to one row of the score table. Semi-flexible scores are HADDOCK scores for the
+              selected cluster, with its RMSD, structure count and intermolecular energy. The "control subtype" labels
+              follow the source document: the specificity index is built from the score difference between
+              {{ modelGame.flexAntigen }} and the two comparison subtypes, which quantify specificity rather than
+              serving as detection targets. All values are computational predictions.</p>
           </div>
         </div>
 
@@ -670,6 +755,10 @@ js:
               </tbody>
             </table>
             <p>{{ modelDocking.interface.hotspotNote }}</p>
+
+            {% set reportGroup = modelReports.groups[0] %}
+            {% include "partials/model-report-group.njk" %}
+
             <!-- The source document has a note here for "Figure 4. Binding interface and interaction network. 3Dmol interaction," but the document does not embed that figure.
                  This page substitutes it with "antigen structure + interface-residue highlighting (interactive demo card) + the table above"; this project's docking-complex structure is not yet public,
                  and no substitute structure from outside this project is shown or used. -->
@@ -754,6 +843,452 @@ js:
           </div>
         </div>
 
+        <div id="model-path-a" class="content-card">
+          <div class="content-text-frame">
+            <h2>Path A: hM1Dq Gating System</h2>
+
+            <p>Path A models the human DREADD receptor hM1Dq as the antigen-gated entry point. The inhibitory
+              toxin MT1 is docked onto the extracellular orthosteric site, and the C-terminus of the humanized
+              G&alpha; subunit is docked onto the intracellular loops, so that the two events can be reasoned
+              about on the same structure.</p>
+
+            <h3 id="model-path-a-prep">Structure Preparation &amp; G-protein Engineering</h3>
+            <p>The starting receptor is the wild-type structure in RCSB (5CXV, 2.7 &Aring;, residues 1&ndash;460).
+              Two point mutations were introduced by hand, the predicted structure was produced with ColabFold, and
+              the membrane orientation was set with PPM 3.0:</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Check</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">AF2 prediction vs. 5CXV</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">1.568 &Aring; over 1913 atoms</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">PPM alignment vs. 5CXV OPM</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.884 &Aring; over 141 atoms</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">Mutation validation</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Y106C: 6 atoms to CYS; A196G: 4 atoms to GLY</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">Membrane alignment (PPM 3.0)</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">hydrophobic layer 31.8 &Aring;, tilt 2&deg;, &Delta;G<sub>transfer</sub> &minus;71.8 kcal/mol, 7 transmembrane segments</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>MT1 is a 62-residue inhibitory toxin with three disulfide bonds (CYS 3&ndash;24 at 2.09 &Aring;,
+              CYS 17&ndash;42 at 2.11 &Aring;, CYS 46&ndash;58 at 2.09 &Aring;). The G-protein engineering follows the
+              design: the wild-type <i>Gpa1</i> C-terminus KIGII is replaced by the human G&alpha;q sequence EYNLV
+              followed by a stop codon, using RCSB 9SH6 (2.77 &Aring;) with chain D as G&alpha;, chain C as G&beta; and
+              chain G as G&gamma;.</p>
+
+            <h3 id="model-path-a-docking">HADDOCK Docking of the Two Coupling Interfaces</h3>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Docking System</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Best Cluster</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Score</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Cluster Size</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">RMSD (&Aring;)</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">BSA (&Aring;<sup>2</sup>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">hM1Dq &times; MT1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Cluster 1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;83.3</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">76</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">1531.9</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">hM1Dq &times; Gpa1 (total)</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Cluster 6</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;131.7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">12</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">1.5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3715.9</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">hM1Dq &times; G&alpha; single chain</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Cluster 1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;149.4</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">29</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.8</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">4007.7</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The single-chain result is better than the full trimer result, which supports the reading that the
+              receptor-to-G-protein coupling interface is mediated mainly by G&alpha;, and is the basis for using the
+              single-chain simplification in the membrane system. For the toxin complex, the best cluster has an RMSD
+              of 0.5 &Aring;, a Z-score of &minus;1.4 and an electrostatic term of &minus;309.1.</p>
+
+            <h3 id="model-path-a-interface">Interface Analysis of hM1Dq &times; MT1</h3>
+            <p>SPICE was run on the Cluster 1 complex with a 5.0 &Aring; distance threshold. Two salt bridges dominate
+              the interface, supported by a hydrophobic cluster:</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">hM1Dq Residue</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">MT1 Residue</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Interaction</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Distance (&Aring;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">GLU A:170</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">ARG B:53</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond + salt bridge</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.698 / 3.595 / 3.799</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">GLU A:397</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">ARG B:34</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond + salt bridge</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.754 / 2.637</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">GLN A:177</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">ARG B:34</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.703</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">ASP A:393</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">TRP B:28</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.677</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">LEU A:174</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">VAL B:32 / PRO B:33 / ILE B:31</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrophobic</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.435&ndash;4.423</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">PHE A:390</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">TRP B:28</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrophobic</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">4.088, 4.259</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Under the SPICE definition the interface comprises 20 residues on the hM1Dq side (GLY A:89, TRP A:164,
+              VAL A:168, GLU A:170, ARG A:171, THR A:172, VAL A:173, LEU A:174, GLN A:177, TYR A:179, SER A:184,
+              GLN A:185, PRO A:186, THR A:389, PHE A:390, CYS A:391, LYS A:392, ASP A:393, CYS A:394, GLU A:397) and
+              18 on the MT1 side (LYS B:26, TRP B:28, TYR B:30, ILE B:31, VAL B:32, PRO B:33, ARG B:34, TYR B:35,
+              SER B:36, ILE B:38, PRO B:49, ASN B:51, VAL B:52, ARG B:53, GLU B:54, THR B:55, ILE B:56, ARG B:57).</p>
+            <!-- MQ-7: section A.10 of the source document reports 50 interface residues (30 hM1Dq + 20 MT1),
+                 while the explicit SPICE lists in A.7 total 38 (20 + 18). This page follows the explicit A.7
+                 lists and does not assert either total. -->
+            <p>The functional consequence is the reason this complex matters for the design: MT1 occupies the
+              extracellular orthosteric site of hM1Dq, whereas the intracellular ICL2, ICL3 and H8 regions are reached
+              by the &alpha;5 helix C-terminus of G&alpha;. The two sites do not overlap in space, so in principle both
+              can be occupied at the same time.</p>
+
+            {% set reportGroup = modelReports.groups[1] %}
+            {% include "partials/model-report-group.njk" %}
+
+            <h3 id="model-path-a-md">Membrane System, Dynamics &amp; Binding Free Energy</h3>
+            <p>The complex was embedded with CHARMM-GUI using a rectangular box of 150 &Aring; with a 22.5 &Aring; water
+              layer, KCl at 0.15 M, 310 K, and the CHARMM36m force field with TIP3P water, giving 631,498 atoms. The
+              lipid composition approximates the <i>Saccharomyces cerevisiae</i> BY4741 plasma membrane (Ergosterol 30%,
+              POPI 28%, POPC 17%, POPE 14%, POPA 6%, POPS 5%). A 100 ns production simulation was completed, and
+              MM-GBSA gave:</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Energy Term (kcal/mol)</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;V<sub>dW</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;57.36</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;E<sub>EL</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">+32.76</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;E<sub>GB</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;7.41</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;E<sub>SURF</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;8.36</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;G<sub>GAS</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;24.60</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;G<sub>SOLV</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;15.77</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;TOTAL</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;40.37 &plusmn; 1.27</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Per-residue decomposition marks the TRP 28 &ndash; TYR 35 pair of MT1 as the main binding anchors. The
+              membrane simulation of the hM1Dq&ndash;Gpa1 coupling interface is not part of this page: the full
+              G&alpha; single-chain system is about 850,000 atoms and was listed as future work.</p>
+          </div>
+        </div>
+
+        <div id="model-path-b" class="content-card">
+          <div class="content-text-frame">
+            <h2>Path B: Ste2p Gating System</h2>
+
+            <p>Path B models the yeast mating receptor Ste2p as an alternative entry point, gated by a redesigned
+              &alpha;-factor peptide. This route is modelled in parallel with Path A so that the two gating systems can
+              be compared on the same terms.</p>
+
+            <h3 id="model-path-b-prep">Receptor Preparation &amp; Peptide Design</h3>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Structure</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Source</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Resolution</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Qscore</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">Ligand-free</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">RCSB 7QB9</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.10 &Aring;</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.501</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Main structure</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">Agonist-bound</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">RCSB 7QBC</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.53 &Aring;</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.422</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Alternative</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">Predicted</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">AlphaFold DB P0CI39</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">pLDDT 66.5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&mdash;</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Insufficient quality, discarded</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>OPM orientation of the ligand-free structure gives a hydrophobic layer of 32.2 &Aring;, a tilt of
+              0&deg; and &Delta;G<sub>transfer</sub> of &minus;103.4 kcal/mol, with seven transmembrane segments
+              (50&ndash;71, 79&ndash;102, 129&ndash;151, 162&ndash;186, 206&ndash;224, 255&ndash;269, 273&ndash;293).
+              Eight &alpha;-factor-derived peptides were designed and predicted with ColabFold; MT1_5
+              (FHLLQLKPGQPMY, pLDDT 72.2) was carried forward.</p>
+
+            <h3 id="model-path-b-docking">HADDOCK Docking of Ste2p &times; Peptides</h3>
+            <p>All eight peptides were docked against Ste2p. The best overall is MT1_5 (Cluster 1), with an HADDOCK
+              score of &minus;99.2 over 33 structures at an RMSD of 0.6 &Aring;, a Z-score of &minus;2.1 and a van der
+              Waals contact term of &minus;72.0.</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Peptide</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Best Cluster</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Score</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Cluster Size</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">RMSD (&Aring;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;99.2</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">33</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.6</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_8</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;98.6</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">125</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">5.3</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;96.5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">68</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.8</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_3</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;96.2</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">57</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.9</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_2</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C6</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;93.2</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.7</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_4</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C9</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;92.7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">6</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">1.0</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_6</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;91.7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">13</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.9</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">MT1_7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">C7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;89.9</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">8</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">0.8</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3 id="model-path-b-interface">Interface Analysis of Ste2p &times; MT1_5</h3>
+            <p>SPICE was run on the Cluster 1 complex with the same 5.0 &Aring; threshold. The interface is polar and
+              dense: HIS B:2 of the peptide accepts hydrogen bonds from TYR A:106, TYR A:111, THR A:192,
+              VAL A:196 and ALA A:198, and stacks against TYR A:106 and TYR A:128. One salt bridge, ASP A:275 &ndash;
+              LYS B:7, anchors the lower part of the peptide.</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Ste2p Residue</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">MT1_5 Residue</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Interaction</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Distance (&Aring;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">TYR A:106</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">HIS B:2</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.093</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">ALA A:198</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">HIS B:2</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.480, 3.421</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">LYS A:202</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">GLN B:5</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.638</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">TYR A:266</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">GLN B:10</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrogen bond</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.999, 3.122</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">ASP A:275</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">LYS B:7</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Salt bridge</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">2.990</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">TYR A:111</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">PHE B:1</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrophobic</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.393&ndash;4.482 (15 pairs)</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">PRO A:270</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">LEU B:6, PRO B:8</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">Hydrophobic</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">3.562&ndash;4.468 (4 pairs)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The interface comprises 27 Ste2p residues and all 12 MT1_5 residues, and it is organised by region:
+              ECL2 (TYR A:106, TYR A:111, ALA A:112, GLY A:115, TYR A:128), ECL3 (THR A:192, ASP A:195,
+              VAL A:196, SER A:197, ALA A:198, THR A:199, GLN A:200, LYS A:202, PHE A:204, ASN A:205,
+              THR A:208, ILE A:209) and TM7 (TYR A:266, SER A:267, LEU A:268, LYS A:269, PRO A:270,
+              GLY A:273, THR A:274, ASP A:275, THR A:278). Within the peptide, the N-terminal PHE1 &ndash; HIS2 pair
+              and the middle LYS7 &ndash; PRO8 stretch act as the primary anchors.</p>
+
+            {% set reportGroup = modelReports.groups[2] %}
+            {% include "partials/model-report-group.njk" %}
+
+            <h3 id="model-path-b-md">Membrane System, Dynamics &amp; Binding Free Energy</h3>
+            <p>The complex was embedded with CHARMM-GUI in a 150 &Aring; box with a 22.5 &Aring; water layer, the same
+              <i>S. cerevisiae</i> lipid approximation, KCl at 0.15 M, 303.15 K (the yeast growth temperature),
+              CHARMM36m with TIP3P, giving 276,189 atoms. A 100 ns production simulation was completed at
+              68 ns/day, and MM-GBSA gave:</p>
+            <table style="{{ modelDocking.tableStyle.table }}">
+              <thead>
+                <tr style="{{ modelDocking.tableStyle.headRow }}">
+                  <th style="{{ modelDocking.tableStyle.th }}">Energy Term (kcal/mol)</th>
+                  <th style="{{ modelDocking.tableStyle.th }}">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;V<sub>dW</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;52.93</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;E<sub>EL</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;123.14</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;E<sub>GB</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">+152.61</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;E<sub>SURF</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;7.97</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;G<sub>GAS</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;176.07</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;G<sub>SOLV</sub></td>
+                  <td style="{{ modelDocking.tableStyle.td }}">+144.63</td>
+                </tr>
+                <tr style="{{ modelDocking.tableStyle.row }}">
+                  <td style="{{ modelDocking.tableStyle.td }}">&Delta;TOTAL</td>
+                  <td style="{{ modelDocking.tableStyle.td }}">&minus;31.43 &plusmn; 3.46</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Per-residue decomposition covered 63 interface residues, concentrated in the same ECL2, ECL3 and TM7
+              regions. The Ste2p&ndash;Gpa1 coupling was not simulated; as with Path A it is listed as future work.</p>
+          </div>
+        </div>
+
         <div id="model-validation" class="content-card">
           <div class="content-text-frame">
             <h2>Validation &amp; Discussion</h2>
@@ -813,8 +1348,13 @@ js:
 
 {% block scripts %}
 <script>
-// Data payload for the interactive demo: same source as the body tables (static/data/dry-lab/model/model-docking.json).
-// The page script static/js/pages/model-game.js is loaded with defer, so this variable is ready when it executes.
+// Data payloads for the interactive demo.
+// MODEL_DOCKING_DATA backs the ranking panel (specificity index and cross-reactivity ranking that the
+// body tables also use, from static/data/dry-lab/model/model-docking.json).
+// MODEL_GAME_DATA backs the docking results themselves (static/data/dry-lab/model/game-docking.json,
+// generated from the raw ClusPro and HADDOCK output).
+// The page scripts are loaded with defer, so these are ready when they execute.
 window.MODEL_DOCKING_DATA = {{ modelDocking.client | dump | safe }};
+window.MODEL_GAME_DATA = {{ modelGame.client | dump | safe }};
 </script>
 {% endblock %}

@@ -3,20 +3,21 @@
   margin: 0;
   padding: 0;
   scrollbar-width: none;
-    /* Firefox */
+  /* Firefox */
   -ms-overflow-style: none;
-    /* IE and Edge */
+  /* IE and Edge */
 }
 
 *::-webkit-scrollbar {
   display: none;
-    /* Chrome, Safari, Opera */
+  /* Chrome, Safari, Opera */
 }
 
 html {
   scroll-behavior: smooth;
   min-height: 100%;
-    /* 使用 height:auto 替代 height:100%，让 <html> 随实际内容扩展， 避免固定高度导致页面无法滚动；主体最小高度由 body 的 min-height:100vh 保证。 */
+  /* 使用 height:auto 替代 height:100%，让 <html> 随实际内容扩展，
+     避免固定高度导致页面无法滚动；主体最小高度由 body 的 min-height:100vh 保证。 */
   height: auto;
 }
 
@@ -625,11 +626,10 @@ header {
 
 /* ================================================== */
 /* 首页滚动锁定功能（CSS scroll-snap） */
-/*
- * 每屏吸附由 html.home-scroll-snap 作为受约束滚动容器实现（见下方规则）。 body 这里只用 overflow-x: clip 裁掉横向溢出：必须用 clip 而绝不能写 hidden，
- * 因为 overflow-x:hidden 会让 overflow-y 计算为 auto，使 body 变成滚动容器， 此时各 section 的吸附目标变成 body（其 scroll-snap-type 为 none）
- * 吸附整体失效。
- */
+/* 每屏吸附由 html.home-scroll-snap 作为受约束滚动容器实现（见下方规则）。
+   body 这里只用 overflow-x: clip 裁掉横向溢出：必须用 clip 而绝不能写 hidden，
+   因为 overflow-x:hidden 会让 overflow-y 计算为 auto，使 body 变成滚动容器，
+   此时各 section 的吸附目标变成 body（其 scroll-snap-type 为 none），吸附整体失效。 */
 body.home-page {
   overflow-x: clip;
 }
@@ -652,7 +652,7 @@ body.home-page {
     opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: opacity, transform;
-    /* SVG 原图为 1920×1080 的全幅插画，使用 contain 确保小容器内显示完整内容 */
+  /* SVG 原图为 1920×1080 的全幅插画，使用 contain 确保小容器内显示完整内容 */
   object-fit: contain;
 }
 
@@ -780,10 +780,8 @@ body.home-page {
   75% { transform: translate(3px, -6px) rotate(-0.5deg); }
 }
 
-/*
- * 各内容屏 的 .art 形象原无动画，直接施加柔和浮动（.art 仅做 left/top/width 定位，transform 不冲突）。 仅对酵母吉祥物与装饰性小元素施加；功能性信息图（title/diagram/chart/圆图/轴/图例）
- * 保持静止。
- */
+/* 各内容屏 的 .art 形象原无动画，直接施加柔和浮动（.art 仅做 left/top/width 定位，transform 不冲突）。
+   仅对酵母吉祥物与装饰性小元素施加；功能性信息图（title/diagram/chart/圆图/轴/图例）保持静止。 */
 .art--public-health-mascot, .art--public-health-virus, .art--public-health-petri,
 .art--project-intro-mascot, .art--project-intro-cloud, .art--project-intro-sparkle,
 .art--dbtl-cycle-mascot, .art--dbtl-cycle-wave,
@@ -818,7 +816,7 @@ body.home-page {
 
 /* -------------------------------------------------- */
 /* 移动端适配（C 方案：直接用 CSS 缩放/重定位现有 webp 作备选，不新增素材） */
-
+/* 用户路线（2026-09-28）：先看 C 效果，再决定是否上 A（美工出移动端专属素材）。 */
 /* 1) 触屏与窄屏停用装饰形象浮动 —— 消除移动端掉帧 / 「粒子抽搐乱动」 */
 /* 2) 缩放装饰形象，缓解窄屏与正文重叠 / 拥挤 */
 /* -------------------------------------------------- */
@@ -839,7 +837,8 @@ body.home-page {
   }
 }
 
-/* 窄屏手机：hero 入场保留；板块装饰形象的「停浮动 + 放大重排」见基础定位规则之后的移动端块 （必须用完整选择器且置于 1722+ 基础规则之后，才能覆盖之） */
+/* 窄屏手机：hero 入场保留；板块装饰形象的「停浮动 + 放大重排」见基础定位规则之后的移动端块
+   （必须用完整选择器且置于 1722+ 基础规则之后，才能覆盖之） */
 @media (max-width: 768px) {
   .echo-art {
     animation: echoIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
@@ -928,7 +927,7 @@ body.home-page {
 
 .badge-gpa1-label {
   --gpa1-final-offset: 6.25rem;
-    /* Gpa1 标签动画阶段：progress 0~0.5 完成移动，0.5~1.0 保持最终位置 */
+  /* Gpa1 标签动画阶段：progress 0~0.5 完成移动，0.5~1.0 保持最终位置 */
   --gpa1-phase: clamp(0, calc(var(--es-progress, 0) * 2), 1);
   position: absolute;
   top: -85%;
@@ -1021,8 +1020,9 @@ body.home-page {
 .description-sidebar,
 .log-sidebar,
 .hp-sidebar {
-  width: 260px;
-  min-width: 260px;
+  /* 宽度由 navigation.css 的 --desc-sidebar-min/max-width 决定（17.5–20rem 内容自适应）。
+     根站只在首页加载本文件，flask 是全站加载，此处若再写死宽度会覆盖导航样式，
+     导致正文栏比根站宽（2026-10-16 同步 index.css 时再次删除）。 */
   position: -webkit-sticky;
   position: sticky;
   top: 120px;
@@ -1088,13 +1088,16 @@ body.home-page {
     width: 120px;
   }
 
+
+
 }
 
-/* iGEM Layout Strategy: 对首屏下方的酵母屏启用 content-visibility， 在 Chromium 内核浏览器中跳过视口外庞大 SVG 的渲染，降低滚动时主线程负担。 */
+/* iGEM Layout Strategy: 对首屏下方的酵母屏启用 content-visibility，
+   在 Chromium 内核浏览器中跳过视口外庞大 SVG 的渲染，降低滚动时主线程负担。 */
 /* 每屏滚动锁定：滚动停靠到各 section 顶部（配合 <html class="home-scroll-snap">） */
-/*
- * 必须让 <html> 成为「受约束的滚动容器」（固定高度 + overflow-y:auto）， scroll-snap 才能在根元素上生效；html 上的 overflow-x:clip / 未约束高度 会导致吸附传播失效（实测滚轮滚动后不吸附）
- */
+/* 必须让 <html> 成为「受约束的滚动容器」（固定高度 + overflow-y:auto），
+   scroll-snap 才能在根元素上生效；html 上的 overflow-x:clip / 未约束高度
+   会导致吸附传播失效（实测滚轮滚动后不吸附）。 */
 html.home-scroll-snap {
   height: 100vh;
   overflow-x: hidden;
@@ -1103,15 +1106,18 @@ html.home-scroll-snap {
   scroll-padding-top: 6.25rem; /* 让出固定顶栏 100px，避免内容被遮挡 */
 }
 
-/*
- * 导航栏收起（nav-hidden）时顶栏已不占位，吸附点应回到视口顶部， 否则每屏吸附后会留出 100px 顶部空白（露出上一屏底部）。 导航弹出时仍保留 100px 让位，避免内容被固定顶栏遮挡。
- * 由 nav-scroll-behavior.js 在收起/弹出时给 <html> 切换 nav-collapsed 类， 比 :has() 的实时重算更可靠。
- */
+/* 导航栏收起（nav-hidden）时顶栏已不占位，吸附点应回到视口顶部，
+   否则每屏吸附后会留出 100px 顶部空白（露出上一屏底部）。
+   导航弹出时仍保留 100px 让位，避免内容被固定顶栏遮挡。
+   由 nav-scroll-behavior.js 在收起/弹出时给 <html> 切换 nav-collapsed 类，
+   比 :has() 的实时重算更可靠。 */
 html.home-scroll-snap.nav-collapsed {
   scroll-padding-top: 0;
 }
 
-/* 首页底部 footer 作为最后一个吸附屏：footer 高度 > 100vh， 吸附到其顶部后可在 footer 内部继续自由滚动浏览，避免 mandatory 把它 拉回 final-cta 导致 footer 无法到达/浏览。 */
+/* 首页底部 footer 作为最后一个吸附屏：footer 高度 > 100vh，
+   吸附到其顶部后可在 footer 内部继续自由滚动浏览，避免 mandatory 把它
+   拉回 final-cta 导致 footer 无法到达/浏览。 */
 html.home-scroll-snap #footer.section-footer {
   scroll-snap-align: start;
   min-height: 100vh;
@@ -1188,6 +1194,7 @@ html.home-scroll-snap #footer.section-footer {
   margin-bottom: var(--spacing-lg);
 }
 
+/* 2026-10-09（用户指定）：Explore 屏标题改用页面主题蓝（其余 yeast 屏标题保持棕色） */
 #final-cta .yeast-screen__title {
   color: var(--color-echo-blue);
 }
@@ -1336,6 +1343,10 @@ html.home-scroll-snap #footer.section-footer {
   --section-bg-img: var(--color-echo-bg);
 }
 
+#passive-to-active {
+  --section-bg-img: var(--color-echo-bg);
+}
+
 #hero,
 #public-health,
 #project-intro,
@@ -1343,6 +1354,7 @@ html.home-scroll-snap #footer.section-footer {
 #statistics,
 #safety,
 #human-practices,
+#passive-to-active,
 #influenza-burden,
 #future-vision,
 #team-highlight,
@@ -1370,11 +1382,22 @@ html.home-scroll-snap #footer.section-footer {
   #dbtl-cycle,
   #statistics,
   #safety,
-  #human-practices {
+  #human-practices,
+  #passive-to-active {
     background-attachment: scroll, scroll;
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.62)),
       var(--section-bg-img);
+  }
+}
+
+/* 2026-10-16：矮视口（横屏手机 / 很矮的桌面窗口）同样关闭吸附。
+   future-vision 等内容屏在矮视口下可能仍超过一屏；mandatory 吸附会把
+   超出部分「弹回去」，导致底部内容滚不到。宽度 >768px 时不关吸附
+   （桌面正常分屏体验不受影响）。 */
+@media (min-width: 769px) and (max-height: 560px) {
+  html.home-scroll-snap {
+    scroll-snap-type: none;
   }
 }
 
@@ -1446,10 +1469,12 @@ html.home-scroll-snap #footer.section-footer {
   }
 }
 
-/*
- * 说明：原用 rotateY(360deg) 的 3D 翻转 —— 平面透明图在 90°~270° 会露空/露镜像， 透出页面奶白底色即"闪白"，已弃用；平面 2D 旋转全程可见、
- * 无闪白。 旋转作用在 .mascot-portal__img 上（独立合成层），不动布局属性。
- */
+/* ---------- final-cta：4 吉祥物门户（2026-10-04 替换原 8 张文字门户卡） ----------
+   四只吉祥物等宽平铺整行（各 25%），hover 时整只做平面 2D 整圈旋转（rotate 360°）
+   + 轻微上浮，落点仍是原朝向。
+   说明：原用 rotateY(360deg) 的 3D 翻转 —— 平面透明图在 90°~270° 会露空/露镜像，
+        透出页面奶白底色即"闪白"，已弃用；平面 2D 旋转全程可见、无闪白。
+   旋转作用在 .mascot-portal__img 上（独立合成层），不动布局属性。 */
 .mascot-portal-row {
   display: flex;
   align-items: stretch;
@@ -1485,7 +1510,8 @@ html.home-scroll-snap #footer.section-footer {
   object-fit: contain;
   transform-origin: 50% 50%;
   will-change: transform;
-  
+  /* 基础态不加 transition：旋转交给 keyframes，类移除时直接回到 rotate(0)/translateY(0)，
+     避免「移出瞬间反向回退」那一下（2026-10-04 要修的闪停问题）。 */
 }
 
 .mascot-portal__label {
@@ -1498,15 +1524,15 @@ html.home-scroll-snap #footer.section-footer {
 
 .mascot-portal:hover,
 .mascot-portal:focus-visible {
-  
+  /* 纯透明：不铺白色卡片底（用户 2026-10-04 反馈），仅留投影做轻微悬浮提示 */
   background-color: transparent;
   box-shadow: 0 10px 28px rgba(76, 157, 211, 0.16);
 }
 
-/*
- * 平面整圈旋转改为 keyframes，由 JS 加 .is-spinning 触发； mouseleave / blur 一律不撤类，动画跑满全程后在 animationend 才清除 （见 static/js/components/mascot-portal.js）
- * 与 :hover 彻底解耦。
- */
+/* 2026-10-04：「触发即播完」—— 鼠标移出 / 失焦都不再回退或停住。
+   平面整圈旋转改为 keyframes，由 JS 加 .is-spinning 触发；
+   mouseleave / blur 一律不撤类，动画跑满全程后在 animationend 才清除
+   （见 static/js/components/mascot-portal.js），与 :hover 彻底解耦。 */
 @keyframes mascot-portal-spin {
   from { transform: rotate(0deg) translateY(0); }
   to   { transform: rotate(360deg) translateY(-4px); }
@@ -1521,7 +1547,7 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    /* 减弱动效：直接关掉触发式整圈旋转（类仍可加，但无动画） */
+  /* 减弱动效：直接关掉触发式整圈旋转（类仍可加，但无动画） */
   .mascot-portal__img.is-spinning { animation: none; }
 }
 
@@ -1553,27 +1579,6 @@ html.home-scroll-snap #footer.section-footer {
   overflow: hidden;
 }
 
-/* ≥769px：hero 收敛为固定 16:9 等比画布（设计稿基准 1080×607 ≈ 16:9）。
-   此前的实现是「stage 满幅 + 元素 top 用 calc(% + 50px) 混合定位」，
-   视口宽高比一变（如 1.92:1 的窗口），横向按宽度缩放、纵向按高度缩放，
-   元素相对位置随之漂移（多视口实测：logo 的 top 由 23.0% 漂到 26.6%）。
-   画布化后所有百分比统一相对画布 → 任何分辨率下相对位置恒定、整体等比缩放。
-   移动端（≤768px）不加画布：竖屏下 16:9 画布会把纵向重排的布局压扁。 */
-@media (min-width: 769px) {
-  .echo-stage {
-    inset: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* 注意：不能同时设 top/bottom: 0——绝对定位下会拉伸高度、使 aspect-ratio 失效，
-       必须只约束宽度、让高度由宽高比推导。 */
-    width: min(100%, calc(100vh * 16 / 9));
-    aspect-ratio: 16 / 9;
-    height: auto;
-    max-height: 100%;
-  }
-}
-
 .echo-art {
   position: absolute;
   object-fit: contain;
@@ -1581,9 +1586,9 @@ html.home-scroll-snap #footer.section-footer {
   user-select: none;
   z-index: 2;
   opacity: 0;
-    /* 2026-10-10：入场位移从静态规则移入 echoIn 的 from 帧——
-       静态 translateY(18px) 会按 stage 高度占比在不同视口下产生额外偏移
-       （18px 在 1080 高里是 1.7%、在 562 高里是 3.2%），是纯百分比定位外残留的漂移源。 */
+  transform: translateY(18px);
+  /* 入场动画 + 入场后持续柔和浮动（见 floatYeastSoft）。
+     入场延迟由各变体的 animation-delay 控制，浮动与之同步开始（淡入期间即轻微浮动）。 */
   --echo-in-delay: 0s;
   animation-name: echoIn, floatYeastSoft;
   animation-duration: 0.9s, 6s;
@@ -1593,12 +1598,16 @@ html.home-scroll-snap #footer.section-footer {
   animation-delay: var(--echo-in-delay), calc(var(--echo-in-delay) + 0.9s);
 }
 
-/* 已按 alpha 紧裁为 1510×526（原件备份 backups/webp-original/hero-echo-logo.1600square.png）， 坐标换算自设计稿 1080×607：字区 x100–580 / y115–280 → left 8.8% / top 19% / width 44.9%。 */
+/* 以下 x/y/w 为模板匹配在成品图里实测所得（measure-fit.js），勿凭目测改
+   2026-10-06h：hero-echo-logo.png 原为 1600×1600 画布、ECHO 字只占 y541–1043，
+   盒子不等于字区（字落在盒内 34%–59% 处），标语上移后会与字重叠。已按 alpha
+   紧裁为 1510×526（原件备份 backups/webp-original/hero-echo-logo.1600square.png），
+   坐标换算自设计稿 1080×607：字区 x100–580 / y115–280 → left 8.8% / top 19% / width 44.9%。 */
 .echo-art--logo {
   left: 8.8%;
-  /* 回归设计稿值（1080×607：字区 x100–580 / y115–280 → left 8.8% / top 19% / width 44.9%）。
-     2026-10-10：去掉后加的 `+ 50px` 硬偏移——它是多视口位置漂移的直接原因。 */
-  top: 19%;
+  /* 2026-10-08：按用户要求整体下移约 50px。
+     2026-10-09 误把第五屏(safety)的「下移 100px」加到了首屏 —— 已撤销，恢复 +50px 原状 */
+  top: calc(19% + 50px);
   width: 44.9%;
   animation-delay: 0.05s;
 }
@@ -1618,15 +1627,17 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 .echo-art--mascot {
-  left: 53.2%;
-  /* 定位参数按用户指定值：top 用 calc 兼顾百分比锚点与固定下移量。 */
-  top: calc(-3.4% + 50px);
+  left: 52.2%;
+  /* 2026-10-08：按用户要求整体下移约 50px。
+     2026-10-09 误加的 100px 已撤销，恢复 +50px 原状 */
+  top: calc(6.6% + 50px);
   width: 43%;
   height: auto;
   animation-delay: 0.15s;
 }
 
-/* 移动端规则（bottom:0 width:100%）与之一致 */
+/* 2026-10-06：第一屏波浪换美工新图（1080×635 整幅双层波浪，非旧细条），
+   改为满宽贴底的背景层；移动端规则（bottom:0 width:100%）与之一致 */
 .echo-art--wave {
   left: 0;
   top: auto;
@@ -1637,24 +1648,21 @@ html.home-scroll-snap #footer.section-footer {
   animation-delay: 0.3s;
 }
 
-/*
- * 已按 alpha 紧裁为 1475×291 （原件备份 backups/webp-original/shared-blue-curve.1600square.png），盒子即字区，
- * 坐标换算自设计稿 1080×607：字区 x95–560 / y300–385 → left 8.8% / top 49% / width 43%。
- */
+/* 标语（2026-10-05）：原为真文本 → 换回艺术构图图 shared-blue-curve.png
+   （用户指定：蓝斜构图原图更贴近设计稿）。
+   2026-10-06h：原图是 1600×1600 大画布、标语字只占 y719–986 一条带，按 top:50%
+   摆放时字带整体落到屏底被裁（用户报"字体掉下去了"）。已按 alpha 紧裁为 1475×291
+   （原件备份 backups/webp-original/shared-blue-curve.1600square.png），盒子即字区，
+   坐标换算自设计稿 1080×607：字区 x95–560 / y300–385 → left 8.8% / top 49% / width 43%。 */
 .echo-art--tagline {
   left: 8.8%;
-  
+  /* 2026-10-08：整体下移约 50px（top:49% 已含该偏移）；2026-10-09 误加的 100px 已撤销 */
   top: 49%;
   width: 43%;
   animation-delay: 0.45s;
 }
 
 @keyframes echoIn {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1673,10 +1681,9 @@ html.home-scroll-snap #footer.section-footer {
 
 @media (max-width: 768px) {
 
-    /*
-   * hero 竖屏重排（C 方案）：logo 顶部、标语居中、mascot 右下、波浪满宽贴底。 修复旧规则缺陷：mascot 基础 left:52.2%/top:6.6% 未清除，
-   * 与 right:0/width:78% 过约束导致 right 被忽略、图形溢出右缘裁切；且全 % top 在竖屏拉出大片留白。
-   */
+  /* hero 竖屏重排（C 方案）：logo 顶部、标语居中、mascot 右下、波浪满宽贴底。
+     修复旧规则缺陷：mascot 基础 left:52.2%/top:6.6% 未清除，与 right:0/width:78%
+     过约束导致 right 被忽略、图形溢出右缘裁切；且全 % top 在竖屏拉出大片留白。 */
   .echo-art--logo {
     left: 6%;
     top: 13%;
@@ -1684,7 +1691,7 @@ html.home-scroll-snap #footer.section-footer {
   }
 
   .echo-art--dash-a {
-        /* 挪到 O 右上（模拟桌面 dash-b 位置），避免被收起态导航遮挡 */
+    /* 挪到 O 右上（模拟桌面 dash-b 位置），避免被收起态导航遮挡 */
     left: 55%;
     top: 14%;
     width: 8%;
@@ -1695,7 +1702,7 @@ html.home-scroll-snap #footer.section-footer {
   }
 
   .echo-art--mascot {
-        /* 必须显式清除基础 left/top，right/bottom 才能生效 */
+    /* 必须显式清除基础 left/top，right/bottom 才能生效 */
     left: auto;
     top: auto;
     right: 0;
@@ -1719,6 +1726,7 @@ html.home-scroll-snap #footer.section-footer {
   }
 }
 
+
 /* ================================================== */
 /* 各内容屏：组件拼装舞台（全视口铺满 + 百分比定位） */
 /* ================================================== */
@@ -1737,7 +1745,11 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 /* ================================================== */
-/* 图例色块 #acdaf2 / #f0a609），改为真文本后 可选中、可翻译、无障碍更优；字号按原图宽占比换算，行为与 图片版一致：定位/宽度仍走下方「手动微调区」同名规则。 */
+/* art 文字化（2026-10-05）：纯文字图 → 真文本
+   原 s2/s3/s4/s6/s7 标题、轴标签、图例、s3 药丸都是普通圆体蓝字
+   （取色 #4d9fd8；图例色块 #acdaf2 / #f0a609），改为真文本后
+   可选中、可翻译、无障碍更优；字号按原图宽占比换算，行为与
+   图片版一致：定位/宽度仍走下方「手动微调区」同名规则。 */
 /* ================================================== */
 .art-title-text,
 .art-legend,
@@ -1781,14 +1793,15 @@ html.home-scroll-snap #footer.section-footer {
 .art-stage--safety .art--safety-title               { font-size: clamp(13px, 4.1vw, 86px); }
 .art-stage--human-practices .art--human-practices-title            { font-size: clamp(10px, 2.5vw, 52px); }
 .art-stage--human-practices .art--human-practices-axis             { font-size: clamp(9px, 2.5vw, 52px); }
-/* 宽度由文本长度自然决定，高度（视觉大小）一致 */
+/* 2026-10-06d：三段图例字号统一（原 33/43/17px 视觉大小不一，用户要求一致），
+   实测以 1.6vw 为基准；宽度由文本长度自然决定，高度（视觉大小）一致 */
 .art-stage--human-practices .art--human-practices-legend-subtypes,
 .art-stage--human-practices .art--human-practices-legend-h1n1,
 .art-stage--human-practices .art--human-practices-legend-pos       { font-size: clamp(9px, 1.6vw, 33px); }
 
 /* ================================================== */
 /* 组件层级 z-index —— 只放层级，定位一律写在下方「手动微调区」 */
-/* 约定：0=背景(波浪/云/山) 1=被上层压住的装饰 2=默认 3=文字类 */
+/* 约定：0=背景(波浪/云/山)  1=被上层压住的装饰  2=默认  3=文字类 */
 /* ================================================== */
 .art-stage--public-health .art--public-health-title,
 .art-stage--project-intro .art--project-intro-title,
@@ -1810,7 +1823,8 @@ html.home-scroll-snap #footer.section-footer {
 .art-stage--safety .art--safety-curve,
 .art-stage--safety .art--safety-sparkle { z-index: 1; }
 
-/* 主题底色：首页各 section 统一用主题米白。 注意必须用 background-color：把颜色写进 background-image 会让整条声明失效。 */
+/* 主题底色：首页各 section 统一用主题米白。
+   注意必须用 background-color：把颜色写进 background-image 会让整条声明失效。 */
 #hero,
 #influenza-burden,
 #public-health,
@@ -1819,6 +1833,7 @@ html.home-scroll-snap #footer.section-footer {
 #statistics,
 #safety,
 #human-practices,
+#passive-to-active,
 #future-vision,
 #team-highlight,
 #final-cta,
@@ -1827,14 +1842,33 @@ html.home-scroll-snap #footer.section-footer {
   background-color: var(--color-echo-bg);
 }
 
-/*
- * ============================================================ ★★★ 手动微调区（你要改的就是这一块） ★★★ ------------------------------------------------------------ 1) 坐标系 每个板块都是一个 100vw × 100vh 的"舞台"，
- * 下面所有数字都是**百分比**： left = 距板块左边的比例 —— 数字变大 = 往右移 top = 距板块上边的比例 —— 数字变大 = 往下移 width = 占板块宽度的比例 —— 数字变大 = 变大（高度按图片比例自动跟随）
- * height 只在图片"比例不合适、需要按高对齐"时才写（写 height 就要把 width 写成 auto）。 3) 改完怎么生效 / 怎么验证 - 生效：CSS 是直出文件，
- * **改完刷新浏览器即可**，不需要重新构建。板块1 目前 8.1，低于它才算达标） - 看结构对不对：node "对话归档/.../compare-region.js" --mock <成品图> --sel <板块id> --rect x,y,w,h --out <png> （把该区域从成品图和实况图并排放大，
- * 并列出元件个数/质心，用来核对"谁在谁里面"） 4) 每条规则末尾的 right:auto; bottom:auto; 是为了"解掉"上面原有的锚定写法，别删；删了可能同时被左右两边拉伸。
- * ============================================================
- */
+/* ============================================================
+   ★★★ 手动微调区（你要改的就是这一块） ★★★
+   ------------------------------------------------------------
+   1) 坐标系
+      每个板块都是一个 100vw × 100vh 的"舞台"，下面所有数字都是**百分比**：
+        left  = 距板块左边的比例   —— 数字变大 = 往右移
+        top   = 距板块上边的比例   —— 数字变大 = 往下移
+        width = 占板块宽度的比例   —— 数字变大 = 变大（高度按图片比例自动跟随）
+      height 只在图片"比例不合适、需要按高对齐"时才写（写 height 就要把 width 写成 auto）。
+
+   2) 对照基准（成品图）
+      对话归档/2026-09/2026-09-22-homepage-assembly/mockups/
+        板块1 = 57a008...jpg    板块2 = 50314a...jpg   板块3 = 588dd7...jpg
+        板块4 = 32d8bc...jpg    板块5 = 2c38d1...jpg   板块6 = b6dd40...jpg
+        板块7 = 96673f...jpg
+      成品图尺寸 1080×607，可直接按像素量出比例换算成百分比。
+
+   3) 改完怎么生效 / 怎么验证
+      - 生效：CSS 是直出文件，**改完刷新浏览器即可**，不需要重新构建。
+      - 验证：node "对话归档/2026-09/2026-09-22-homepage-assembly/temporary-tools/verify-sections.js" --sel=#板块id
+              （打印 平均差异 + 最差区块坐标；板块1 目前 8.1，低于它才算达标）
+      - 看结构对不对：node "对话归档/.../compare-region.js" --mock <成品图> --sel <板块id> --rect x,y,w,h --out <png>
+              （把该区域从成品图和实况图并排放大，并列出元件个数/质心，用来核对"谁在谁里面"）
+
+   4) 每条规则末尾的 right:auto; bottom:auto;
+      是为了"解掉"上面原有的锚定写法，别删；删了可能同时被左右两边拉伸。
+   ============================================================ */
 
 /* 复位：默认所有组件只用 left/top 定位；需要贴底的元件在自己那一行写 bottom */
 .art-stage .art {
@@ -1851,17 +1885,23 @@ html.home-scroll-snap #footer.section-footer {
 /* ---------- project-intro：WHY EHCO Yeast ---------- */
 .art-stage--project-intro .art--project-intro-cloud { left: 0%; bottom: 0%; width: 100%; }     /* 浅蓝云（贴底锚定） */
 .art-stage--project-intro .art--project-intro-title { left: 22%; top: 9%; width: 56%; }          /* 标题 WHY EHCO Yeast? */
-
-/* 显微镜+书的吉祥物：切片比例 1.44:1，成品图该区域约 1.78:1。 按高对齐→右侧短一截；按宽对齐→顶部超出。现在"按高对齐"，想改按宽就把 height 换成 width。 */
-
+/* 6 条文字条（原设计稿 6 条）已改为「3 排 × 2 条 + 椭圆描边 + 边缘渐隐 + 流动轮播」，
+   不再逐个绝对定位，统一由 .intro-pills 盒子控制 → 见文件末尾「project-intro 文字条」段。 */
+/* 显微镜+书的吉祥物：切片比例 1.44:1，成品图该区域约 1.78:1。
+   按高对齐→右侧短一截；按宽对齐→顶部超出。现在"按高对齐"，想改按宽就把 height 换成 width。 */
+/* 2026-10-07b：按用户要求再放大 1.3×（59%→77%）并向屏幕中部靠拢（left 46.7%→30%，
+   top 43.5%→20.5%，底缘落在 97.5% 附近，右缘 92% 不出画） */
 .art-stage--project-intro .art--project-intro-mascot { left: 30%; top: 20.5%; height: 77%; width: auto; z-index: 4; }
 .art-stage--project-intro .art--project-intro-sparkle { left: 42.7%; top: 62.8%; width: 5.4%; }  /* 黄色星芒 */
 
 /* ---------- dbtl-cycle：Research content（流程图） ---------- */
-/* 不再用「画布高分数定位」。 同时退出浮动动画列表：贴底横条上下浮动会在底缘露出米黄底缝。 */
+/* 2026-10-07：波浪条改用美术「细」版 shared-wave-5.webp（1080×95，宽高比 11.4:1），
+   素材已按 alpha 紧裁 → 元素满宽贴底、高度走原比例即可；不再用「画布高分数定位」。
+   同时退出浮动动画列表：贴底横条上下浮动会在底缘露出米黄底缝。 */
 .art-stage--dbtl-cycle .art--dbtl-cycle-wave { left: 0; bottom: 0; width: 100%; height: auto; animation: none; }
 .art-stage--dbtl-cycle .art--dbtl-cycle-title { left: 3.7%; top: 7.9%; width: 37.4%; }     /* 标题文字（左上） */
-/* 流程图：原图里它坐在白色圆角卡片上；切片是 RGB 无 alpha 的白底直角矩形， 所以圆角与描边必须由 CSS 补，否则会是一块方角白块（见 README §5.17 根因 5） */
+/* 流程图：原图里它坐在白色圆角卡片上；切片是 RGB 无 alpha 的白底直角矩形，
+   所以圆角与描边必须由 CSS 补，否则会是一块方角白块（见 README §5.17 根因 5） */
 .art-stage--dbtl-cycle .art--dbtl-cycle-diagram {
   left: 46.7%;
   top: 13.2%;
@@ -1872,20 +1912,22 @@ html.home-scroll-snap #footer.section-footer {
 }
 .art-stage--dbtl-cycle .art--dbtl-cycle-mascot { left: 1%; bottom: 0; width: 30%; }        /* 笔记本吉祥物（贴底锚定） */
 
-/*
- * 首次滑入本屏：示意图以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大。 隐藏态只由 JS 加 js-pump-armed 类——无 JS / prefers-reduced-motion 直接呈现完整静态布局。
- * 动画期间示意图升到 z-index 4：DOM 里吉祥物在其后（默认盖住它）， 不抬层的话小图会藏在头部后面而不是“从头部泵出”。收尾时随类一起还原。
- */
+/* ---------- dbtl-cycle：原理示意图「想法泵出」入场（REQ-20261002-001） ---------- */
+/* 首次滑入本屏：示意图以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大。
+   隐藏态只由 JS 加 js-pump-armed 类——无 JS / prefers-reduced-motion 直接呈现完整静态布局。
+   动画期间示意图升到 z-index 4：DOM 里吉祥物在其后（默认盖住它），
+   不抬层的话小图会藏在头部后面而不是"从头部泵出"。收尾时随类一起还原。 */
 .js-pump-armed .art--dbtl-cycle-diagram {
   opacity: 0;
   z-index: 4;
   will-change: transform, opacity;
 }
 
-/*
- * 12 席位网格与三年占比表作为辅证。 本屏无 webp 拼装（吉祥物已移除，改由数据本身撑画面）；数值集中在本段。 全屏文字统一走主体色系（--color-echo-blue 的压暗版，
- * 保证奶油底上的对比度）。
- */
+/* ---------- influenza-burden：甲流负担（数据沉浸屏，REQ-20261003-001） ---------- */
+/* v2（2026-10-03 重做）：主体由「12 点阵」换成「实时感染计数器」——按 WHO 口径
+   ≈21 人/秒感染甲流，页面打开起数字持续跳动；12 席位网格与三年占比表作为辅证。
+   本屏无 webp 拼装（吉祥物已移除，改由数据本身撑画面）；数值集中在本段。
+   全屏文字统一走主体色系（--color-echo-blue 的压暗版，保证奶油底上的对比度）。 */
 .art-stage--influenza-burden {
   --burden-ink: #2f6f96;        /* 正文/说明：主体蓝压暗 */
   --burden-ink-soft: #4f86a8;   /* 次要标签、注脚：比正文浅，仍属主体色 */
@@ -1929,7 +1971,8 @@ html.home-scroll-snap #footer.section-footer {
   opacity: 0.8;
 }
 
-/* 只动 transform（合成层友好），离屏由 home-idle-motion 停表统一暂停。 */
+/* 2026-10-06：甲流病毒 —— 坐在右下角环区内、贴住画面角落，不遮挡正文与计数器。
+   只动 transform（合成层友好），离屏由 home-idle-motion 停表统一暂停。 */
 .burden-backdrop__virus {
   position: absolute;
   right: 1.5%;
@@ -2017,12 +2060,16 @@ html.home-scroll-snap #footer.section-footer {
   opacity: 0;
 }
 
-/* 一排的占位宽度刻意与原方块阵持平（≈31%），把右侧 x≈40% 之后让给居中大图。 */
+/* 12 席位（2026-10-09 改版）：每格代表人口里的 1 人 —— 由「蓝方块」换成「酵母」，
+   11 只没生病（彩色）+ 1 只生病（灰，最右）= 每 12 人里 1 人。
+   一排的占位宽度刻意与原方块阵持平（≈31%），把右侧 x≈40% 之后让给居中大图。 */
 .art-stage--influenza-burden .burden-grid {
-  --seat-size: clamp(48px, 6.4vw, 92px);   
+  --seat-size: clamp(48px, 6.4vw, 92px);   /* 2026-10-09：放大约 3 倍（31px → 92px） */
   position: absolute;
   left: 6%;
-  top: 30%;      /* 带区实测 y 24.2–45%，整排高 10.2%（92px），取 30–40.2% 居中偏上； 中间让出的插画因此往右下移（见 .burden-hero 两态落点） */
+  top: 30%;      /* 2026-10-09（用户指定）：整排放回「顶部文字 ↔ 计数器」之间。
+                    带区实测 y 24.2–45%，整排高 10.2%（92px），取 30–40.2% 居中偏上；
+                    中间让出的插画因此往右下移（见 .burden-hero 两态落点） */
   z-index: 3;
   display: flex;
   gap: 0;        /* 间距改为下面的负 margin，用重叠代替分界 */
@@ -2063,12 +2110,19 @@ html.home-scroll-snap #footer.section-footer {
   pointer-events: none;
 }
 
-/*
- * 素材 1600×1600（主体居中、上下顶满）， 只给 width，高度按比例。落点分两种状态 —— 两种状态的计数器宽度不同，空档也就不同： ① 默认 = 纯静态降级路径（无 JS / prefers-reduced-motion）
- * 此时计数器显示的是静态年值 "660,000,000"，实测宽达 x 6–81.3%、y 45–77.5%，屏中带全被占住；三年表占 x 68–94% / y 21–53%；
- * 12 席位行在 y 30–40.2%。降级态唯一完整空档是「三年表下方」的 x 82–94% / y 55–88% —— 大图收小放这里（不压任何文字）。 两态切换发生在 armed（opacity:0）
- * 期间，肉眼看不到跳位。 微调入口：只改下面 6 个百分数（width 每 +1% ≈ +14px）；移动端覆盖见 mobile.css。
- */
+/* 居中大图（2026-10-09）：生病酵母 + 病毒群。素材 1600×1600（主体居中、上下顶满），
+   只给 width，高度按比例。落点分两种状态 —— 两种状态的计数器宽度不同，空档也就不同：
+
+   ① 默认 = 纯静态降级路径（无 JS / prefers-reduced-motion）：此时计数器显示的是静态年值
+      "660,000,000"，实测宽达 x 6–81.3%、y 45–77.5%，屏中带全被占住；三年表占 x 68–94% /
+      y 21–53%；12 席位行在 y 30–40.2%。降级态唯一完整空档是「三年表下方」的
+      x 82–94% / y 55–88% —— 大图收小放这里（不压任何文字）。
+   ② 脚本接管后（动画中 .js-burden-armed、播完 .burden-done）：计数器切成实时模式
+      （"110" 之类，止于 x≈21%），且席位行只到 y 40.2% —— 大图按用户指定往右下移到
+      x 45–65% / y 46–78.2%，仍不压计数器轨道（x≤43.1）、三年表（x≥68）与注脚（y≥89）。
+
+   两态切换发生在 armed（opacity:0）期间，肉眼看不到跳位。
+   微调入口：只改下面 6 个百分数（width 每 +1% ≈ +14px）；移动端覆盖见 mobile.css。 */
 .art-stage--influenza-burden .burden-hero {
   position: absolute;
   left: 82.5%;
@@ -2258,38 +2312,38 @@ html.home-scroll-snap #footer.section-footer {
 
 /* ---------- statistics：检测方法 qPCR / ELISA / CGIS ---------- */
 /* statistics-cloud 是未裁剪的整幅画布（2720x1600），必须按整幅映射，不能按"云本身"给小宽度 */
-/*
- * statistics-cloud 是「上浅蓝 / 下白」的整幅切片，不是整幅画框内容：不能铺满 100%×100%， 否则顶部奶油底被浅蓝盖掉、白色云团被拉大居中（原图顶部约 8% 留奶油底）
- */
+/* statistics-cloud 是「上浅蓝 / 下白」的整幅切片，不是整幅画框内容：不能铺满 100%×100%，
+   否则顶部奶油底被浅蓝盖掉、白色云团被拉大居中（原图顶部约 8% 留奶油底）。 */
 .art-stage--statistics .art--statistics-cloud { left: 0; top: 8%; width: 100%; height: 92%; }
 /* s5-hill 采用与你 project-intro-cloud 相同的写法：满宽 + 贴底 + 不写 height（用素材原始比例） */
 .art-stage--statistics .art--statistics-hill { left: 0; right: auto; top: auto; bottom: 0; width: 100%; height: auto; }
-/*
- * 以下数值按原图（板块5）量取：原图里吉祥物完整坐在桌后，占宽约 38.9%、占高约 76.5%； 改前是 left 38%/bottom 6%/width 30%，尺寸偏小且下沉，
- * 导致下缘被截断。
- */
+/* 以下数值按原图（板块5）量取：原图里吉祥物完整坐在桌后，占宽约 38.9%、占高约 76.5%；
+   改前是 left 38%/bottom 6%/width 30%，尺寸偏小且下沉，导致下缘被截断。 */
 .art-stage--statistics .art--statistics-qpcr { left: 5.8%; top: 12.3%; width: 12%; }       /* 圆：qPCR */
 .art-stage--statistics .art--statistics-elisa { left: 21.5%; top: 28.3%; width: 14.4%; }   /* 圆：ELISA */
 .art-stage--statistics .art--statistics-cgis { left: 8.8%; top: 51.8%; width: 13%; }       /* 圆：CGIS */
-/*
- * 虚线弧：连接三个圆（原图里 qPCR→ELISA→CGIS 之间）。改前 left 0/top 0/width 7% 被挤在 左上角外，实际不可见。切片 494x361，一弧一用；
- * 若原图需要两段弧，要再加一个 img 节点。
- */
+/* 虚线弧：连接三个圆（原图里 qPCR→ELISA→CGIS 之间）。改前 left 0/top 0/width 7% 被挤在
+   左上角外，实际不可见。切片 494x361，一弧一用；若原图需要两段弧，要再加一个 img 节点。 */
 .art-stage--statistics .art--statistics-arc { left: 22%; top: 53%; width: 8%; }
-/*
- * 注意：不能用 rotate(180deg)：那会把走向也反过来（对角镜像），弧会从左下走向右上， 接不到 qPCR（左上）→ ELISA（右下）。盒位按两圆 facing 边缘量取（1440×810 实测 qPCR 圆心 (170,186) r≈86、
- * ELISA 圆心 (413,332) r≈103，两圆 facing 点中点 (284,255)）， 弧两端落在盒角上、藏进圆内（z-index 1 < 圆 2），读作"相连"。
- */
-
+/* 2026-10-06f：ELISA→qPCR 连线。2026-10-06i 改为复用第一条弧的切图，只关于水平线翻转
+   （scaleY(-1)）——与 CGIS–ELISA 弧上下对称，构成 S 形链。
+   注意：不能用 rotate(180deg)：那会把走向也反过来（对角镜像），弧会从左下走向右上，
+   接不到 qPCR（左上）→ ELISA（右下）。盒位按两圆 facing 边缘量取（1440×810 实测
+   qPCR 圆心 (170,186) r≈86、ELISA 圆心 (413,332) r≈103，两圆 facing 点中点 (284,255)），
+   弧两端落在盒角上、藏进圆内（z-index 1 < 圆 2），读作"相连"。 */
+/* 2026-10-07c：按用户 DevTools 实调固化——rotate(245deg) + 加大盒位，弧形与连接点
+   以用户调好的效果为准（qPCR→ELISA 连线自然搭在两圆 facing 边缘）。 */
 .art-stage--statistics .art--statistics-link { left: 17.2%; top: 19%; width: 10%; z-index: 1; transform: rotate(245deg); }
 .art-stage--statistics .art--statistics-bulb { left: 76.9%; top: 23%; width: 15.7%; }      /* 灯泡（右上） */
 .art-stage--statistics .art--statistics-mascot { left: 42.1%; top: 21.4%; width: 38.9%; }  /* 托腮吉祥物（改 top 锚定，避免被下缘截断） */
 .art-stage--statistics .art--statistics-sparkle { left: 4.8%; top: 68.4%; width: 3%; }     /* 黄色星芒 */
 
-/*
- * 降级红线：默认（无 JS / reduced-motion）三条静态可见——收起态只由 .js-methods-armed 控制；条本身 pointer-events:none，
- * 悬停热区是圆圈图。
- */
+/* ---------- statistics：三方法信息条（2026-10-05 REQ） ----------
+   三圆揭示完成后（statistics-reveal.js finish() 才绑定交互），移入圆圈 →
+   蓝底白字条从圆右侧「擦除」展开（clip-path inset 过渡，只动 clip-path/opacity/
+   visibility，均为可合成或零成本属性），移出收回。
+   降级红线：默认（无 JS / reduced-motion）三条静态可见——收起态只由
+   .js-methods-armed 控制；条本身 pointer-events:none，悬停热区是圆圈图。 */
 .method-info {
   position: absolute;
   z-index: 6;
@@ -2345,7 +2399,7 @@ html.home-scroll-snap #footer.section-footer {
 .art-stage--statistics.js-methods-armed .method-info.is-open {
   opacity: 1;
   visibility: visible;
-    /* 负 inset 把 box-shadow 一并露出（收起态正 inset 只裁内容盒） */
+  /* 负 inset 把 box-shadow 一并露出（收起态正 inset 只裁内容盒） */
   clip-path: inset(-40% -40% -40% -40% round 16px);
   transition: clip-path 0.38s var(--ease-smooth), opacity 0.2s ease,
     visibility 0s;
@@ -2362,9 +2416,9 @@ html.home-scroll-snap #footer.section-footer {
   transform: translateY(-3px);
 }
 
-/*
- * 1) 英文小标题：贴在动画区块顶部左侧（不居中）。无 JS 时静态可见；进入该屏时 statistics-reveal.js 拆词做「右先左后」下落（脚本只加类，默认态不做隐藏）
- */
+/* ---------- statistics：检测方法「揭示动画」交互层（REQ-20261001-001） ---------- */
+/* 1) 英文小标题：贴在动画区块顶部左侧（不居中）。无 JS 时静态可见；进入该屏时
+      statistics-reveal.js 拆词做「右先左后」下落（脚本只加类，默认态不做隐藏）。 */
 .art-stage--statistics .statistics-caption {
   position: absolute;
   left: 4%;
@@ -2393,10 +2447,9 @@ html.home-scroll-snap #footer.section-footer {
   opacity: 0;
 }
 
-/*
- * 2) 隐藏态：仅当脚本给舞台加上 .js-reveal-armed 才隐藏 ELISA / qPCR / 虚线弧； 无 JS 时三者保持原样可见（完整静态布局）。位置与缩放由脚本内联 transform 叠合到 CGIS 圆心，
- * 并缩到 CGIS 圆盒以内——杜绝"低层级大圆露边"。
- */
+/* 2) 隐藏态：仅当脚本给舞台加上 .js-reveal-armed 才隐藏 ELISA / qPCR / 虚线弧；
+      无 JS 时三者保持原样可见（完整静态布局）。位置与缩放由脚本内联 transform
+      叠合到 CGIS 圆心，并缩到 CGIS 圆盒以内——杜绝"低层级大圆露边"。 */
 .js-reveal-armed .art--statistics-elisa,
 .js-reveal-armed .art--statistics-qpcr {
   opacity: 0;
@@ -2404,12 +2457,13 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 .js-reveal-armed .art--statistics-arc {
-    /* 虚线弧先整体裁掉，点击后由脚本以 clip-path 从 CGIS 一侧扇形擦出 */
+  /* 虚线弧先整体裁掉，点击后由脚本以 clip-path 从 CGIS 一侧扇形擦出 */
   clip-path: polygon(0% 100%, 0% 100%, 0% 100%);
 }
 
 .js-reveal-armed .art--statistics-link {
-  
+  /* 2026-10-07c：连线（rotate 245°）先裁掉，点击后从 ELISA 一侧擦出：
+     局部左下角经 245° 旋转落在视觉右下（ELISA 侧） */
   clip-path: polygon(0% 100%, 0% 100%, 0% 100%);
 }
 
@@ -2481,20 +2535,25 @@ html.home-scroll-snap #footer.section-footer {
 }
 
 /* ---------- safety：Influenza A Virus Biosensor（项目标题页） ---------- */
-/* 按原图（板块6）：浅蓝云满宽铺在上半部；吉祥物居中偏左、占宽约 38.9%、占高约 74% （改前 left 8%/bottom 8%/width 30%，偏小偏下——与你把 public-health/project-intro 吉祥物放大上移的做法一致） */
-/*
- * shared-cloud-1 已键掉不透明白底（纯白 255,255,255 → 透明），蓝波在素材 y 38%~78%。 按此标定：放大到 260% 宽并把左上负偏，蓝波即落在板块 y 0%~46%，
- * 铺满上半部。
- */
-/* 改 bottom 锚定 -7.06% 使直边正好压在 视口底边（16:9 各分辨率比值恒定）；同时退出浮动动画（上浮会重新露出底缝）。 */
+/* 按原图（板块6）：浅蓝云满宽铺在上半部；吉祥物居中偏左、占宽约 38.9%、占高约 74%
+   （改前 left 8%/bottom 8%/width 30%，偏小偏下——与你把 public-health/project-intro 吉祥物放大上移的做法一致） */
+/* shared-cloud-1 已键掉不透明白底（纯白 255,255,255 → 透明），蓝波在素材 y 38%~78%。
+   按此标定：放大到 260% 宽并把左上负偏，蓝波即落在板块 y 0%~46%，铺满上半部。 */
+/* 2026-10-07b：贴底修正——蓝波直边在画布 y84.2%，画布底部还有 7.06% 透明区，
+   原 top:62% 让直边悬在屏内、底下漏出米黄条。改 bottom 锚定 -7.06% 使直边正好压在
+   视口底边（16:9 各分辨率比值恒定）；同时退出浮动动画（上浮会重新露出底缝）。 */
 .art-stage--safety .art--safety-cloud { left: 0; bottom: -7.06%; width: 100%; animation: none; }
 .art-stage--safety .art--safety-curve { left: 17.8%; top: 58.9%; width: 12.4%; }   /* 蓝色曲线 */
-
+/* 2026-10-09：用户要求第五屏(safety)吉祥物与标题「离顶部远一些，100px 左右」 */
 .art-stage--safety .art--safety-mascot { left: 5.5%; top: calc(3% + 100px); width: 36.9%; }    /* 披风吉祥物 */
 .art-stage--safety .art--safety-title { left: 56.1%; top: calc(30.4% + 100px); width: 40.2%; }   /* 标题文字（右侧） */
 .art-stage--safety .art--safety-sparkle { left: 39.9%; top: 62.5%; width: 6.7%; }  /* 黄色星芒 */
-
-/* 注意是绝对值： 更小视口下会多裁一点波带（移动端断点改用比例值 -2.32vw）。 */
+/* 2026-10-07b：上波改用离线「翻转+纵压 72%」的 fifth-section/safety-sky.webp
+   （直边在素材顶边，top:0 即贴屏幕顶，不再需要 transform）；按用户要求整体左移并
+   略缩：left -3% / width 106% 保证左右都出画， crest 移出左缘、不留缝。 */
+/* 2026-10-07c：按用户 DevTools 实调固化 top:-50px——素材直边上方还有 11.4% 透明带
+   （0.0232×视口宽 ≈33px@1440），-50px 再多压 17px 保证完全贴顶。注意是绝对值：
+   更小视口下会多裁一点波带（移动端断点改用比例值 -2.32vw）。 */
 .art-stage--safety .art--safety-sky { left: -3%; top: -50px; width: 106%; height: auto; z-index: 0; }
 .art-stage--safety .art--safety-star-a { left: 11%; top: 11%; width: 5.2%; }
 .art-stage--safety .art--safety-star-b { left: 88%; top: 15%; width: 4.6%; }
@@ -2503,7 +2562,8 @@ html.home-scroll-snap #footer.section-footer {
 /* 满宽横条：画布即画框，贴底锚定（切片宽高比自带正确高度） */
 .art-stage--human-practices .art--human-practices-wave { left: 0; right: auto; top: auto; bottom: 0; width: 100%; height: auto; }
 .art-stage--human-practices .art--human-practices-title { left: 18.1%; top: 5.9%; width: 63.3%; }    /* 图表标题 */
-/* 折线图：原图卡片比例约 2.97，切片本身 3.98 —— 用 padding 撑高卡片、background 补白； 圆角/描边/阴影由 CSS 补（切片是直角白底矩形） */
+/* 折线图：原图卡片比例约 2.97，切片本身 3.98 —— 用 padding 撑高卡片、background 补白；
+   圆角/描边/阴影由 CSS 补（切片是直角白底矩形） */
 .art-stage--human-practices .art--human-practices-chart {
   left: 5%;
   top: 20%;
@@ -2514,7 +2574,8 @@ html.home-scroll-snap #footer.section-footer {
   border: 1px solid rgba(120, 160, 200, 0.35);
   box-shadow: 0 4px 18px rgba(90, 130, 170, 0.10);
 }
-/* 右下角探出头的吉祥物（素材曾被误删，已从 backups/webp-original 取回； 位置按原图右下角量取） */
+/* 右下角探出头的吉祥物（素材曾被误删，已从 backups/webp-original 取回；
+   位置按原图右下角量取） */
 .art-stage--human-practices .art--human-practices-mascot { left: 77.6%; top: 70.4%; width: 15.9%; }
 .art-stage--human-practices .art--human-practices-axis { left: 40.9%; top: 76%; width: 20.4%; }      /* 横轴标题 Week start date */
 .art-stage--human-practices .art--human-practices-legend-subtypes { left: 7.4%; top: 91.4%; width: 15.4%; }  /* 图例：Influenza subtypes */
@@ -2524,10 +2585,10 @@ html.home-scroll-snap #footer.section-footer {
 /* ============================================================ */
 /* 移动端（≤768px）各内容屏 竖屏重排（C 方案：放大吉祥物/条带、拉开竖向分布、 */
 /* 标题内移避免裁切）。设计画布为 1080×607 横构图，竖屏需放大填充以免大面积留白。 */
-/* 本块置于基础定位规则之后，用同等完整选择器覆盖之。 */
+/* 本块置于基础定位规则之后，用同等完整选择器覆盖之。REQ-20260928-002 */
 /* ============================================================ */
 @media (max-width: 768px) {
-    /* 停浮动：消除触屏/窄屏掉帧抽搐（触屏另由 pointer:coarse 处理） */
+  /* 停浮动：消除触屏/窄屏掉帧抽搐（触屏另由 pointer:coarse 处理） */
   .art--public-health-mascot, .art--public-health-virus, .art--public-health-petri,
   .art--project-intro-mascot, .art--project-intro-cloud, .art--project-intro-sparkle,
   .art--dbtl-cycle-mascot, .art--dbtl-cycle-wave,
@@ -2537,28 +2598,31 @@ html.home-scroll-snap #footer.section-footer {
     animation: none !important;
   }
 
-    /* public-health：标题左上 / 病毒左中 / 吉祥物右(放大) / 培养皿贴底左下(放大) */
+  /* public-health：标题左上 / 病毒左中 / 吉祥物右(放大) / 培养皿贴底左下(放大) */
   .art-stage--public-health .art--public-health-title  { left: 4%;  top: 4%;  width: 56%; }
   .art-stage--public-health .art--public-health-virus  { left: 6%;  top: 45%; width: 40%; }
   .art-stage--public-health .art--public-health-mascot { left: 39%; top: 5%;  width: 60%; }
   .art-stage--public-health .art--public-health-petri  { left: -8%; top: auto; bottom: 3%; width: 80%; }
 
-    /* project-intro：标题上 / 吉祥物右中(放大) / 云贴底满宽 / 星芒 */
+  /* project-intro：标题上 / 吉祥物右中(放大) / 云贴底满宽 / 星芒 */
   .art-stage--project-intro .art--project-intro-title   { left: 20%; top: 6%;  width: 58%; }
   .art-stage--project-intro .art--project-intro-mascot  { left: 30%; top: 22%; width: 70%; height: auto; z-index: 4; }
   .art-stage--project-intro .art--project-intro-cloud   { left: 0;   top: auto; bottom: 0; width: 100%; }
   .art-stage--project-intro .art--project-intro-sparkle { left: 28%; top: 18%; width: 7%; }
-  
-    /* 移动端条带收小一号 + 边缘渐隐加宽：375px 视口下 14-22px 的条带相对过宽， 文字被视口硬切； */
+  /* 内容条盒子的竖屏位置与高度变量（图片高度保护已下沉到 mobile.css 全局响应式层，
+     避免 blanket 的 img{height:auto} 后加载覆盖 —— REQ-20260928-002） */
+  /* 移动端条带收小一号 + 边缘渐隐加宽：375px 视口下 14-22px 的条带相对过宽，
+     文字被视口硬切；吉祥物 z-index:4 压在条带(z-index:3)之上后，条带穿过吉祥物
+     呈"景深"效果而不是"遮挡"效果（用户 2026-10-03 实机反馈）。 */
   .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(12px, 3.4vw, 18px); --intro-fade: 16%; }
 
-    /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → 流程图近满宽居中 → 波浪+笔记本吉祥物贴底 */
+  /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → 流程图近满宽居中 → 波浪+笔记本吉祥物贴底 */
   .art-stage--dbtl-cycle .art--dbtl-cycle-title   { left: 4%;  top: 4%;  width: 58%; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-diagram { left: 6%;  top: 18%; width: 88%; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-wave    { left: 0;   bottom: 0;  width: 100%; height: auto; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-mascot  { left: 0;   top: auto; bottom: 0; width: 42%; }
 
-    /* statistics：云满宽上(放大) / 吉祥物右中(放大) / 三圆纵列放大(左) / 灯泡右上(放大) / 山贴底 */
+  /* statistics：云满宽上(放大) / 吉祥物右中(放大) / 三圆纵列放大(左) / 灯泡右上(放大) / 山贴底 */
   .art-stage--statistics .art--statistics-cloud   { left: 0; top: 0;   width: 100%; height: 55%; }
   .art-stage--statistics .art--statistics-mascot  { left: 38%; top: 16%; width: 52%; }
   .art-stage--statistics .art--statistics-qpcr    { left: 3%;  top: 12%; width: 22%; }
@@ -2568,13 +2632,13 @@ html.home-scroll-snap #footer.section-footer {
   .art-stage--statistics .art--statistics-bulb    { left: 74%; top: 18%; width: 22%; }
   .art-stage--statistics .art--statistics-sparkle { left: 4%;  top: 70%; width: 5%; }
 
-    /* 三方法信息条（移动端）：贴各自圆右侧，宽度放大补偿小屏字号 */
+  /* 三方法信息条（移动端）：贴各自圆右侧，宽度放大补偿小屏字号 */
   .art-stage--statistics .method-info--qpcr  { left: 27%; top: 19%; width: 42%; }
   .art-stage--statistics .method-info--elisa { left: 42%; top: 39%; width: 46%; }
   .art-stage--statistics .method-info--cgis  { left: 28%; top: 61%; width: 42%; }
 
-    /* safety：吉祥物左(放大) / 标题右上 / 云满宽贴底(作为底部色块填充) / 曲线+星芒 */
-  
+  /* safety：吉祥物左(放大) / 标题右上 / 云满宽贴底(作为底部色块填充) / 曲线+星芒 */
+  /* 2026-10-09：移动端随桌面同步下移 100px（自调，已校验不溢出） */
   .art-stage--safety .art--safety-mascot  { left: 1%;  top: calc(6% + 100px);  width: 56%; }
   .art-stage--safety .art--safety-title   { left: 52%; top: calc(20% + 100px); width: 46%; }
   .art-stage--safety .art--safety-cloud   { left: 0;   top: auto; bottom: 0; width: 100%; height: 55%; }
@@ -2584,25 +2648,33 @@ html.home-scroll-snap #footer.section-footer {
   .art-stage--safety .art--safety-star-a { left: 9%;  top: 9%;  width: 8%; }
   .art-stage--safety .art--safety-star-b { left: 86%; top: 13%; width: 7%; }
 
-    /* human-practices：竖屏紧凑纵排 —— 标题 → 图表满宽 → 横轴标题+三图例紧跟图表下方 → 吉祥物右中 → 波浪贴底 */
+  /* human-practices：竖屏紧凑纵排 —— 标题 → 图表满宽 → 横轴标题+三图例紧跟图表下方 → 吉祥物右中 → 波浪贴底 */
   .art-stage--human-practices .art--human-practices-title   { left: 8%;  top: 4%;  width: 84%; }
   .art-stage--human-practices .art--human-practices-chart   { left: 3%;  top: 12%; width: 94%; }
   .art-stage--human-practices .art--human-practices-axis    { left: 34%; top: 37%; width: 32%; }
   .art-stage--human-practices .art--human-practices-legend-subtypes { left: 5%;  top: 43%; width: 20%; }
   .art-stage--human-practices .art--human-practices-legend-h1n1     { left: 30%; top: 43%; width: 21%; }
   .art-stage--human-practices .art--human-practices-legend-pos      { left: 56%; top: 43%; width: 16%; }
-  .art-stage--human-practices .art--human-practices-mascot  { left: 62%; top: 64%; width: 36%; }
+  /* 2026-10-16：吉祥物从 top:64% 上移到 53%——图例带结束于 ~51%，原位置
+     在 64% 会在屏中留出一条约 13% 高的死区；上移后整屏竖向分布更匀。 */
+  .art-stage--human-practices .art--human-practices-mascot  { left: 60%; top: 53%; width: 38%; }
   .art-stage--human-practices .art--human-practices-wave    { left: 0;   top: auto; bottom: 0; width: 100%; }
 }
 
-/* 说明：project-intro 的药丸文字在成品图里本来就是「大小不一」的设计， 因此尺寸沿用上方的值，不要改成统一高度（实测会变差 13.1 -> 15.3）。 */
+/* 说明：project-intro 的药丸文字在成品图里本来就是「大小不一」的设计，
+   因此尺寸沿用上方的值，不要改成统一高度（实测会变差 13.1 -> 15.3）。 */
 
-/*
- * ============================================================ project-intro 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播 ------------------------------------------------------------ ▸ 盒子范围（对着成品图红框）
- * .intro-pills 的 left/top/width/height 四行 ▸ 文字条大小：--intro-pill-h（统一高度；图片按原比例缩放，不会变形） ▸ 描边颜色 / 粗细：--intro-pill-line / --intro-pill-lw ▸ 形状：--intro-pill-radius，
- * 默认 999px 得到「扁椭圆」胶囊； 写成 50% 是数学椭圆，但两端会切到文字，需同时把左右内距加大 ▸ 边缘淡化：--intro-fade，越大越早开始淡；到最边缘正好 100% 透明 ▸ 流动速度：--intro-flow-dur，
- * 越小越快；改成 0s 即静止 ============================================================
- */
+/* ============================================================
+   project-intro 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播
+   ------------------------------------------------------------
+   ▸ 盒子范围（对着成品图红框）：.intro-pills 的 left/top/width/height 四行
+   ▸ 文字条大小：--intro-pill-h（统一高度；图片按原比例缩放，不会变形）
+   ▸ 描边颜色 / 粗细：--intro-pill-line / --intro-pill-lw
+   ▸ 形状：--intro-pill-radius，默认 999px 得到「扁椭圆」胶囊；
+            写成 50% 是数学椭圆，但两端会切到文字，需同时把左右内距加大
+   ▸ 边缘淡化：--intro-fade，越大越早开始淡；到最边缘正好 100% 透明
+   ▸ 流动速度：--intro-flow-dur，越小越快；改成 0s 即静止
+   ============================================================ */
 .intro-pills {
   position: absolute;
   left: 1%;
@@ -2614,8 +2686,10 @@ html.home-scroll-snap #footer.section-footer {
   flex-direction: column;
   justify-content: space-evenly;
   pointer-events: none;
-    /* ↑ 上面 5 行 = 红框范围 ｜ 下面 5 行 = 可调参数 */
-  
+  /* ↑ 上面 5 行 = 红框范围 ｜ 下面 5 行 = 可调参数 */
+  /* 2026-10-07（Q4-A）：条带放大 ≈21%（3.3vh→4.0vh、上限 34→40px），外盒 64%→58% 高、
+     top 16.5%→18% —— 条带变大的同时把行间距收窄，整体仍居中不贴边。
+     2026-10-07：按用户要求去掉椭圆条带的蓝色描边（--intro-pill-lw: 0），保留白底。 */
   --intro-pill-h: clamp(17px, 4vh, 40px);
   --intro-pill-line: #4c9dd3;
   --intro-pill-bg: #ffffff;
@@ -2628,11 +2702,14 @@ html.home-scroll-snap #footer.section-footer {
 .intro-pills__row {
   flex: 0 0 auto;
   overflow: hidden;
-    /*
-   * 左右边缘渐隐：越靠近边缘越透明，边缘处 100% 消失（--intro-fade 由外盒继承）。去掉遮罩卡顿即消失（67ms→14ms）； ② 外盒自身不带合成层时，内部做 transform 动画的子层可能逃逸遮罩，
-   * 表现为条带在右缘“直接出现”而不是淡入（用户实机截图）。 把遮罩下沉到每排并 translateZ(0) 提升合成层后：滚动只是平移已栅格化图层， 实测滚动最大帧耗时 67ms → 13ms、
-   * 零丢帧，且双侧渐隐恢复正常。
-   */
+  /* 左右边缘渐隐：越靠近边缘越透明，边缘处 100% 消失（--intro-fade 由外盒继承）。
+     【遮罩必须挂在"排"上而不是外盒，且排要提升合成层】—— 2026-10-02 实测：
+     ① 遮罩挂外盒时，整页滚动（root scroller）会让这块 1254×461 的遮罩区域每帧
+        重栅格化，产生 60ms+ 主线程卡顿；去掉遮罩卡顿即消失（67ms→14ms）；
+     ② 外盒自身不带合成层时，内部做 transform 动画的子层可能逃逸遮罩，
+        表现为条带在右缘"直接出现"而不是淡入（用户实机截图）。
+     把遮罩下沉到每排并 translateZ(0) 提升合成层后：滚动只是平移已栅格化图层，
+     实测滚动最大帧耗时 67ms → 13ms、零丢帧，且双侧渐隐恢复正常。 */
   -webkit-mask-image: linear-gradient(to right, #0000 0%, #000 var(--intro-fade), #000 calc(100% - var(--intro-fade)), #0000 100%);
   mask-image: linear-gradient(to right, #0000 0%, #000 var(--intro-fade), #000 calc(100% - var(--intro-fade)), #0000 100%);
   -webkit-mask-size: 100% 100%;
@@ -2642,7 +2719,8 @@ html.home-scroll-snap #footer.section-footer {
   transform: translateZ(0);
 }
 
-/* 流动：每排由两段完全相同的 .intro-pills__group 首尾相接， 位移 50% 恰好等于一整段宽度 → 无缝、不跳帧（删掉第二段就会跳） */
+/* 流动：每排由两段完全相同的 .intro-pills__group 首尾相接，
+   位移 50% 恰好等于一整段宽度 → 无缝、不跳帧（删掉第二段就会跳） */
 .intro-pills__track {
   display: flex;
   width: max-content;
@@ -2661,6 +2739,8 @@ html.home-scroll-snap #footer.section-footer {
   to   { transform: translate3d(-50%, 0, 0); }
 }
 
+/* 单条文字条：外部轮廓（扁椭圆），内部文字 2026-10-05 起为真文本
+   （原图文字墨高 ≈ 0.85×条高 → 字号取 0.92×h，行盒 1.06×h 与原条高基本一致） */
 .intro-pill {
   flex: 0 0 auto;
   display: inline-flex;
@@ -2668,7 +2748,7 @@ html.home-scroll-snap #footer.section-footer {
   justify-content: center;
   border: var(--intro-pill-lw) solid var(--intro-pill-line);
   border-radius: var(--intro-pill-radius);
-  
+  /* 2026-10-06：药丸内部改白色填充（原为透明，透出米黄底），蓝描边+白底更清晰 */
   background: var(--intro-pill-bg);
   padding: calc(var(--intro-pill-h) * 0.42) calc(var(--intro-pill-h) * 1.5);
 }
@@ -2686,33 +2766,46 @@ html.home-scroll-snap #footer.section-footer {
 
 /* iGEM Check: [x] 100vh scroll-snap screens [x] 45/55 alternating layout [x] Float keyframes reused [x] Mobile responsive [x] Reduced motion supported [x] Per-section background placeholders */
 
-/*
- * home-idle-motion.js 给完全离屏的 section 打 data-offscreen，这里统一停表； 回到视口（含边界相切→开始进入）立即恢复，动画从暂停点继续，
- * 不跳帧。 仅作用于 CSS animation；WAAPI（秒节拍光点）由 influenza-burden.js 自行暂停。
- */
+/* ---------- 首页离屏动画停表（2026-10-05 性能优化） ----------
+   scroll-snap 满屏分屏下，相邻屏虽然看不到，其 infinite 合成动画（hero 浮动、
+   burden 背景漂移/呼吸、药丸轮播、秒节拍等）仍在合成器里持续跑，多屏叠加
+   放大 GPU/合成开销（用户实测第二屏计数与药丸轮播屏滚动卡顿）。
+   home-idle-motion.js 给完全离屏的 section 打 data-offscreen，这里统一停表；
+   回到视口（含边界相切→开始进入）立即恢复，动画从暂停点继续，不跳帧。
+   仅作用于 CSS animation；WAAPI（秒节拍光点）由 influenza-burden.js 自行暂停。 */
 .presentation-section[data-offscreen],
 .presentation-section[data-offscreen] * {
   animation-play-state: paused !important;
 }
 
-/* 正文段落/列表仍为真文本（真实 iGEM 内容，不做图片化）。SR 文本见 index.njk h2.sr-only。 */
+/* ---------- future-vision 标题字图（2026-10-06e，21/22.png 紧裁） ----------
+   中文原标题「未来愿景：从 H1N1 到广谱平台」由美工出英文图：Future Vision 泡泡 + 胶囊副题。
+   正文段落/列表仍为真文本（真实 iGEM 内容，不做图片化）。SR 文本见 index.njk h2.sr-only。
+   2026-10-16（用户反馈「元素超过页面高度、要收紧不要加长」）：
+   - 全部纵向尺寸改为 vh 驱动 clamp：视口越矮收得越紧，保证 100vh 屏内不溢出
+     （实测修复前 1440x810 溢出 514px、1024x768 溢出 917px，mandatory 吸附下
+      底部内容「够不着」）；
+   - 标题泡泡从 555px 收到 min(38%, 340px)（2.0 宽高比下 ≈170px 高）；
+   - 颜色统一走本屏主体蓝色系（#1f6ea6 / #2f6f96 / #6b8aa3），去掉棕色系与
+     渐变底；光晕（box-shadow）与 hover 上浮按用户要求移除，回归正常排版。 */
 .fv-title-img {
   display: block;
-  margin: 0 auto 6px;
-    /* % 基准是内容盒（min(60vw,1180px)，1440 视口下仅 864px），370→555 需 64.2%。 */
-  width: min(65%, 555px);
+  margin: 0 auto clamp(2px, 0.7vh, 6px);
+  width: min(38%, 340px);
   height: auto;
 }
 
 .fv-sub-img {
   display: block;
-  margin: 0 auto 18px;
-  
-  width: min(88%, 860px);
+  margin: 0 auto clamp(6px, 1.3vh, 14px);
+  width: min(72%, 640px);
   height: auto;
 }
 
-/* 标题图宽度收到 39%（2.0 宽高比下 ≈185px 高），使整屏内容 ≈714px 居中不顶满。 */
+/* 2026-10-06f：本屏内容加宽到约 60% 页宽，段落/列表间距拉开；
+   2026-10-06h：正文改主题色——与 influenza-burden 屏同口径的主体蓝压暗版
+   （#2f6f96 / 次要 #4f86a8），不用 --color-echo-blue 纯色：米黄底上长段正文
+   对比度不足（≈2.6:1），压暗后 ≈4.9:1 可读。 */
 #future-vision .yeast-screen__content { max-width: min(60vw, 1180px); color: #2f6f96; }
 #future-vision .yeast-screen__content > p { margin-block: 0.8em; line-height: 1.8; }
 #future-vision .yeast-screen__list { margin-block: 1em; }
@@ -2720,8 +2813,271 @@ html.home-scroll-snap #footer.section-footer {
 #future-vision .yeast-screen__list strong { color: #1f6ea6; }
 #future-vision .yeast-screen__placeholder { color: #4f86a8; }
 
+/* 2026-10-15：future-vision 改「四角分布 + 中心核心愿景」平面四象限
+   3×3 网格：四角放四大扩展支点卡片，第 2 行中列放核心愿景；构成以核心愿景为中心的辐射式布局。
+   中屏（≤900px）折成 2 列、核心愿景横贯；窄屏（≤600px）单列堆叠、核心愿景置顶。
+   2026-10-16：间距/内距/字号全部 vh 驱动，矮视口自动收紧（见文末 max-height 块）。 */
+#future-vision .fv-quadrants {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 0.92fr) 1fr;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  justify-items: center;
+  gap: clamp(0.5rem, 1.8vh, 1.1rem);
+  max-width: 1180px;
+  margin: clamp(0.4rem, 1.2vh, 0.9rem) auto 0;
+}
+
+/* 2026-10-16：五张卡片统一扁平样式——同底色、同描边、同圆角，无投影无渐变；
+   核心愿景仅用描边粗细区分，不再用棕色渐变 + 大投影。 */
+#future-vision .fv-card {
+  width: 100%;
+  max-width: min(360px, 100%);
+  padding: clamp(0.55rem, 1.6vh, 0.95rem) clamp(0.75rem, 1.8vw, 1.1rem);
+  background: #fffdf8;
+  border: 1px solid rgba(31, 110, 166, 0.22);
+  border-radius: 0.9rem;
+}
+#future-vision .fv-card--tl { grid-area: 1 / 1; }
+#future-vision .fv-card--tr { grid-area: 1 / 3; }
+#future-vision .fv-card--bl { grid-area: 3 / 1; }
+#future-vision .fv-card--br { grid-area: 3 / 3; }
+
+#future-vision .fv-card__title {
+  margin: 0 0 clamp(0.25rem, 0.8vh, 0.45rem);
+  font-size: clamp(0.88rem, 1.9vh, 1.02rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1f6ea6;
+}
+#future-vision .fv-card__body {
+  margin: 0;
+  font-size: clamp(0.78rem, 1.6vh, 0.9rem);
+  line-height: 1.5;
+  color: #2f6f96;
+}
+#future-vision .fv-card__body small { color: #6b8aa3; font-size: 0.82em; }
+
+#future-vision .fv-core {
+  grid-area: 2 / 2;
+  width: 100%;
+  max-width: 380px;
+  padding: clamp(0.7rem, 1.9vh, 1.1rem) clamp(0.8rem, 2vw, 1.2rem);
+  text-align: center;
+  background: #fffdf8;
+  border: 1.5px solid rgba(31, 110, 166, 0.45);
+  border-radius: 1.1rem;
+}
+#future-vision .fv-core__text {
+  margin: 0;
+  font-size: clamp(0.82rem, 1.6vh, 0.96rem);
+  line-height: 1.55;
+  font-weight: 500;
+  color: #2f6f96;
+}
+
+@media (max-width: 900px) {
+  #future-vision .fv-quadrants {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+    gap: clamp(0.5rem, 1.4vh, 1rem);
+  }
+  #future-vision .fv-card--tl,
+  #future-vision .fv-card--tr,
+  #future-vision .fv-card--bl,
+  #future-vision .fv-card--br { grid-area: auto; }
+  #future-vision .fv-core {
+    grid-area: auto;
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  #future-vision .fv-quadrants { grid-template-columns: 1fr; gap: clamp(0.45rem, 1.3vh, 0.8rem); }
+  #future-vision .fv-core { order: -1; }
+}
+
 @media (max-width: 768px) {
   .fv-title-img { width: min(62%, 300px); }
   .fv-sub-img   { width: 94%; }
   #future-vision .yeast-screen__content { max-width: 100%; }
+}
+
+/* 2026-10-16：矮视口（≤820px 高，含 1366x768 / 1280x800 / 1024x768 笔记本小窗）
+   再收一档字号与行距，确保整屏内容压在 100vh 内——mandatory 吸附下超高屏
+   的底部卡片滚不到、也 snap 不回去。 */
+@media (max-height: 820px) {
+  .fv-title-img { width: min(32%, 280px); }
+  .fv-sub-img { width: min(64%, 520px); }
+  #future-vision .fv-card { padding: clamp(0.5rem, 1.4vh, 0.8rem) clamp(0.7rem, 1.6vw, 1rem); }
+  #future-vision .fv-card__title { font-size: clamp(0.84rem, 1.7vh, 0.98rem); line-height: 1.3; }
+  #future-vision .fv-card__body { font-size: clamp(0.74rem, 1.5vh, 0.86rem); line-height: 1.45; }
+  #future-vision .fv-core { padding: clamp(0.6rem, 1.6vh, 0.95rem) clamp(0.7rem, 1.8vw, 1.1rem); }
+  #future-vision .fv-core__text { font-size: clamp(0.78rem, 1.55vh, 0.9rem); line-height: 1.5; }
+}
+
+/* 矮视口 + 中窄宽（≤1100px，如 1024x768）：三列辐射布局在此宽度下单卡仅 ~200px，
+   正文要折 8 行以上，整屏仍超 100vh（实测 891px）——提前折成 2 列 +
+   核心愿景横贯，与 ≤900px 规则同构。 */
+@media (max-height: 820px) and (max-width: 1100px) {
+  #future-vision .fv-quadrants {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+  }
+  #future-vision .fv-card--tl,
+  #future-vision .fv-card--tr,
+  #future-vision .fv-card--bl,
+  #future-vision .fv-card--br { grid-area: auto; }
+  #future-vision .fv-core {
+    grid-area: auto;
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+}
+
+/* 窄屏单列（≤600px）再收一档：手机竖屏整屏从 1088px 压到 ~900px 内 */
+@media (max-width: 600px) {
+  .fv-title-img { width: min(54%, 230px); }
+  .fv-sub-img { width: 92%; }
+  #future-vision .fv-card { padding: clamp(0.5rem, 1.3vh, 0.75rem) clamp(0.7rem, 3vw, 0.95rem); }
+  #future-vision .fv-card__title { font-size: clamp(0.84rem, 1.7vh, 0.95rem); }
+  #future-vision .fv-card__body { font-size: clamp(0.74rem, 1.45vh, 0.84rem); line-height: 1.42; }
+  #future-vision .fv-core { padding: clamp(0.55rem, 1.4vh, 0.85rem) clamp(0.7rem, 3vw, 1rem); }
+  #future-vision .fv-core__text { font-size: clamp(0.78rem, 1.5vh, 0.88rem); line-height: 1.45; }
+}
+/* ================================================== */
+/* passive-to-active 屏（2026-10-13 新增，位于 human-practices 与 statistics 之间）
+   左插画（EchoYeast 被采样 = 被动检测具象化）＋中缝竖向虚线长线（被动检测链条及其
+   局限，两端渐隐，向下引出 statistics 屏三个现有方法）＋右文案（自下而上渐次淡入）。
+   渐入复用 executive-summary-animation.js 既有 .reveal 观察器；隐藏/过渡样式只在
+   本屏作用域内补齐（全站 .reveal 原本无基础样式，其他屏现状不受影响）。
+   插画浮动离屏暂停由 home-idle-motion.js 的 data-offscreen 统一停表。
+   调整 → 搜「passive-to-active」。 */
+/* ================================================== */
+.pta-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 4vw, 64px);
+  padding: 0 clamp(20px, 7vw, 120px);
+}
+
+.pta-figure {
+  flex: 0 1 clamp(280px, 32vw, 500px);
+  margin: 0;
+}
+
+.pta-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: ptaFloat 6.5s var(--ease-smooth) infinite;
+}
+
+@keyframes ptaFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 中缝竖向长线：虚线 = 被动检测链条；两端渐隐，避免与相邻屏生硬相接 */
+.pta-thread {
+  flex: 0 0 2px;
+  align-self: stretch;
+  border-left: 2px dashed var(--color-echo-blue);
+  opacity: 0.35;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
+}
+
+.pta-copy {
+  flex: 0 1 clamp(300px, 40vw, 620px);
+}
+
+.pta-copy__eyebrow {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-echo-blue);
+  margin-bottom: var(--spacing-md);
+}
+
+.pta-copy__title {
+  font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--color-brown-dark);
+  margin-bottom: var(--spacing-lg);
+}
+
+.pta-copy__body {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.9;
+  color: var(--color-text);
+}
+
+/* 渐入：自下而上（translateY→0）＋淡入，逐条错峰；仅本屏作用域 */
+.pta-copy .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s var(--ease-smooth),
+    transform 0.7s var(--ease-smooth);
+}
+
+.pta-copy .reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.pta-copy .reveal:nth-child(2) { transition-delay: 0.15s; }
+.pta-copy .reveal:nth-child(3) { transition-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+
+  .pta-figure img {
+    animation: none;
+  }
+
+  .pta-copy .reveal,
+  .pta-copy .reveal--visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 移动端：上下堆叠，中缝长线隐藏 */
+@media (max-width: 768px) {
+
+  .pta-stage {
+    flex-direction: column;
+    gap: clamp(16px, 4vh, 32px);
+    padding: 0 clamp(16px, 5vw, 32px);
+  }
+
+  .pta-figure {
+    flex: 0 0 auto;
+    width: min(72vw, 380px);
+  }
+
+  .pta-thread {
+    display: none;
+  }
+
+  .pta-copy {
+    flex: 0 0 auto;
+    max-width: 560px;
+  }
 }

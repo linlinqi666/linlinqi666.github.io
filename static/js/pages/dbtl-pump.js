@@ -133,21 +133,42 @@
       return true;
     }
 
+    var IMG_WAIT = 10000;   // 等待量测图片解码的硬上限（ms）
     /** 等图片完成布局（content-visibility: auto 的图片在视口外没有真实尺寸） */
     function measureWhenReady(callback) {
       var attempts = 0;
-      (function tick() {
-        if (measure()) {
-          callback(true);
-          return;
-        }
-        attempts += 1;
-        if (attempts > 30) {
-          callback(false);
-          return;
-        }
-        requestAnimationFrame(tick);
-      })();
+      var settled = false;
+      function done(ok) {
+        if (settled) return;
+        settled = true;
+        callback(ok);
+      }
+      // 2026-10-16：事件驱动等待 load/error（硬上限 IMG_WAIT），轮询上限放到
+      // ~5s。原实现只轮询 30 帧（约 500ms）就判失败并放弃隐藏态——懒加载下
+      // 慢图会被误判为异常素材，用户看到「无动画直接展示」。
+      var imgs = [diagram, mascot].filter(function (im) {
+        return im && !(im.complete && im.naturalWidth);
+      });
+      function poll() {
+        (function tick() {
+          if (settled) return;
+          if (measure()) { done(true); return; }
+          attempts += 1;
+          if (attempts > 300) { done(false); return; }
+          requestAnimationFrame(tick);
+        })();
+      }
+      if (imgs.length) {
+        var left = imgs.length;
+        var onImg = function () { if (--left <= 0) poll(); };
+        imgs.forEach(function (im) {
+          im.addEventListener('load', onImg, { once: true });
+          im.addEventListener('error', onImg, { once: true });
+        });
+        setTimeout(poll, IMG_WAIT);
+      } else {
+        poll();
+      }
     }
 
     // ==================================================

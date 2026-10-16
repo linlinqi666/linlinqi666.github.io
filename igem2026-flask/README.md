@@ -4,6 +4,63 @@ This folder is the **official iGEM 2026 wiki source** for `gitlab.igem.org/2026/
 It follows the iGEM-provided `wiki-frozen-flask` template: a Flask app is frozen into a
 static site by `flask freeze` and published by GitLab Pages.
 
+## 本目录的定位：GitLab 站的镜像（2026-10-16 明确，勿忘）
+
+**为什么有这个 flask 站。** 仓库根目录的根站（Nunjucks + 静态站）是我们自己的开发站，评委看不到它；
+`igem2026-flask/` 是**对标 GitLab 站的那一份**。所以工作流是单向的：
+
+```
+根站（根目录，开发与设计基准）
+  └─ 复刻 → igem2026-flask/（本地预览、验收；目录结构 = GitLab 仓库结构）
+       └─ 整体复制同步 → GitLab 仓库 gitlab.igem.org/2026/szpu-china
+            └─ CI `flask freeze` → 发布 2026.igem.wiki/szpu-china（评委看到的线上站）
+```
+
+由此推出三条判定口径，改任何文件前先对照：
+
+1. **同名同路径**：这里的目录结构就是 GitLab 仓库结构，除了下面「绝不拷贝」清单，可以整目录复制过去；
+2. **内容以根站为准**：页面文案/结构与根站逐字节对齐（图片一律走 CDN，所以图片路径写法与根站不同，这是唯一的预期差异）；
+3. **验收标准不是「本地能跑」**，而是「复制过去后线上与根站一致」——本地预览只是中间检查点。
+
+### 复制同步：哪些要拷、哪些绝不能拷
+
+| 处理 | 内容 |
+|---|---|
+| ✅ 覆盖过去 | `app.py`、`wiki/**`、`static/**`（除下表与 `static/image/`） |
+| ❌ 绝不覆盖（仓库自带版为准） | `README.md`、`.gitlab-ci.yml`、`dependencies.txt`、`.gitignore`、`LICENSE`、`CLAUDE.md`、`.claude/RESPONSIBLE_AI_USE.md`、`static/bootstrap.min.css`、`static/bootstrap.bundle.min.js`、`static/style.css`（详见文末「操作红线 §4」） |
+| ❌ 本地专属，别拷 | `public/`（freeze 产物）、`__pycache__/`、`*.pyc`、`.playwright-cli/`、`flask_run.log/err`、**整个 `static/image/`**（含 `wait/` 上传暂存；仓库里不放图，[图片只走 CDN](#images-igem-uploads-cdn-only-mandatory)） |
+
+三种同步方式，任选：
+
+```powershell
+# 方式 1（推荐）：脚本安全同步，默认 dry-run 只打印，加 --apply 才写入
+python 对话归档/temporary-tools/sync_flask_to_gitlab.py --target "<GitLab 克隆路径>"
+python 对话归档/temporary-tools/sync_flask_to_gitlab.py --target "<GitLab 克隆路径>" --apply
+
+# 方式 2：直接推已经准备好的完整提交（要求远端没动过）
+cd 对话归档/_worktrees/_igem_sync_tmp; git fetch igem --prune; git push igem HEAD:main
+
+# 方式 3：手抄——只拷上表「✅」里的路径，其余一概不动
+```
+
+同步后校验（应报「内容不同 0」）：
+
+```powershell
+python 对话归档/temporary-tools/reconcile_flask_vs_gitlab.py     # 本目录 ↔ GitLab 推送树逐文件对账
+python 对话归档/temporary-tools/verify_remote_blobs.py          # 推送后核对远端 blob 是否已一致
+```
+
+### 对账现状（2026-10-16，基准 = 推送提交 r13 `4360a02`）
+
+| 结果 | 数量 | 说明 |
+|---|---|---|
+| 已逐字节一致 | 404 | 镜像主体，复制过去是空操作 |
+| 仅换行符差异（CRLF↔LF） | 10 | 8 个 model PDB + `hp-reveal-box.js` + `members.js`，内容完全相同，不必处理 |
+| 本地专属/暂缓 | — | `static/image/**`、`static/lab/**`（CDN 暂存）、`public/`、`wiki/pages/wet-lab/`（旧残留）、暂缓的 `attributions.html`/`contribution.html` |
+| 真覆盖 | **0** | 没有任何一个文件是「本地新、仓库旧」需要覆盖 |
+
+受保护文件本地版与仓库版不同的有 5 个（`.gitignore`、`.gitlab-ci.yml`、`LICENSE`、`README.md`、`dependencies.txt`）——**一律以仓库版为准，不要拷**：其中 `dependencies.txt` 仓库版含 `Frozen-Flask==1.0.2` 等锁定依赖，本地 2 行版覆盖过去会让 CI 构建失败。
+
 ## Structure
 
 ```
@@ -279,4 +336,5 @@ Homepage GIF intro 条目，卡在 CDN 素材未上传）。
 - 图片一律走 iGEM Uploads CDN（`https://static.igem.wiki/teams/6373/wiki/image/...`），`static/` 只允许 JS/CSS。模板用 `{{ media("image/...") }}`，JS 读 `window.MEDIA_BASE`。
 
 ### 7. 搜索索引
-- 改完页面后重建：`python tools/search_index_generator.py`（在 `flask freeze` 之后跑；CI 里 `.gitlab-ci.yml` 已串接）。产物 `static/js/core/search-index.json` 需提交。
+- 改完页面后重建：`python tools/search_index_generator.py`（在 `flask freeze` 之后跑）。产物 `static/js/core/search-index.json` 需提交。
+- `tools/search_index_generator.py` 已随推送包进入 GitLab 仓库（r14），CI 的 `flask freeze` 会调它**自动重建索引**；本地仍要重建并提交，保证仓库里那份也是新的（两边结果一致，已验证确定性）。

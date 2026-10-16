@@ -62,7 +62,13 @@
       // 小节 model-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
       'model-',
       // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）
-      'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution'
+      'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution',
+      // dry-lab Hardware 页正文小节（2026-10-15：卡片 hardware-overview /
+      // hardware-problem / hardware-worth / hardware-origin / hardware-goals / hardware-iterations /
+      // hardware-log / hardware-architecture / hardware-specifications / hardware-bom /
+      // hardware-instrument / hardware-test-plan / hardware-challenges / hardware-future，
+      // 小节 hardware-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
+      'hardware-'
     ]
   };
 

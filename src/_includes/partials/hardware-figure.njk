@@ -1,0 +1,6 @@
+{# 硬件日志插图通用块：调用前 {% set fig = hardware.figures[N] %}。
+   尺寸来自原图（width/height 用于占位防抖），caption 与 alt 同源稿 Figure 编号一一对应。 #}
+<figure class="hardware-figure">
+  <img src="{{ basePath }}{{ fig.src }}" alt="{{ fig.alt }}" width="{{ fig.width }}" height="{{ fig.height }}" loading="lazy" decoding="async">
+  <figcaption>{{ fig.caption }}</figcaption>
+</figure>
