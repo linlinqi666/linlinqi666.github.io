@@ -6,8 +6,10 @@
     { id: 'section-framework', time: '26/07/31', title: '行动研究框架', summary: '以行动研究螺旋循环组织人类实践，把专家反馈转化为可追溯的工程决策。' },
     { id: 'section-stakeholder', time: '26/07/31', title: '利益相关者', summary: '梳理七类关键利益相关者，从多视角校准项目需求与风险边界。' },
     { id: 'section-interviewees', time: '26/07/31', title: '访谈对象清单', summary: '列出全部访谈专家与群体，点击地图图钉查看详细记录。' },
+    { id: 'section-public-survey', time: '2026', title: '公众问卷', summary: '230 份公众问卷：公众是否真的需要空气检测，以及它如何改变我们的设计取舍。' },
     { id: 'section-southchina', time: '26/08/01', title: '华南交流会', img: '../static/image/any-icon/HP/southchina/hp-southchina--exchange-group-photo.jpg', summary: '与华南多支 iGEM 队伍面对面交流，收集来自高校与评审的反馈。' },
     { id: 'section-apic', time: '26/08/02', title: 'APiC 交流会', img: '../static/image/any-icon/HP/apic/hp-apic--01-scene.jpg', summary: '第一届亚太 iGEM 交流会，在南科大与港大两阶段打磨项目。' },
+    { id: 'section-jlu', time: '26/08/04', title: '吉大 Together with iGEM', summary: '与吉林大学 JLU-FBH 合作编写《Together with iGEM》手册，SZPU-China 贡献 6 条甲流科普纠错。' },
     { id: 'section-education', time: '26/08/03', title: '中职学校科普', img: '../static/image/any-icon/HP/hp--outreach-students.jpg', summary: '把合成生物学带进校园，让更多学生理解生物传感器的价值。' },
     { id: 'section-freshman', time: '26/08/03', title: '新生科普分享', img: '../static/image/any-icon/HP/freshman/hp-freshman--01-hall.jpg', summary: '面向 2026 级新生科普合成生物学与甲流空气检测项目。' }
   ];

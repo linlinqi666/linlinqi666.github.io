@@ -1,0 +1,3611 @@
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="home-scroll-snap">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#8B5A2B">
+  <meta name="msapplication-TileColor" content="#8B5A2B">
+  <meta name="color-scheme" content="light">
+
+    <!-- favicon（CDN，flask static 不放图片； -->
+  <link rel="icon" type="image/avif" href="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/teamlogo.avif">
+
+    <!-- 安全区域CSS变量定义 -->
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+    }
+  </style>
+
+  <title>iGEM SZPU-2026 - 首页</title>
+  
+    <!-- 首页开场动画组件样式 -->
+<style>
+/* 内嵌自 static/css/components/index-intro-gif.css（2026-10-10，仅本页使用，原文件已删除） */
+/* 首页 GIF 开场动画（#intro-gif）
+   状态机由 <html> 上的类驱动：
+   无类 = 不播放（无 JS / 降级）；intro-gif-armed = 播放期隐藏导航并锁滚动；
+   intro-gif-running = 显示 GIF 层；intro-gif-finished = 解锁并淡入导航。
+   脚本见 static/js/components/index-intro-gif.js */
+.intro-gif {
+  display: none;
+}
+
+.intro-gif[hidden] {
+  display: none !important;
+}
+
+html.intro-gif-running .intro-gif {
+  position: fixed;
+  inset: 0;
+  /* 高于 #page-progress-bar(100001)、nav(9999)、移动端汉堡菜单(100000) */
+  z-index: 100002;
+  display: block;
+  overflow: hidden;
+  background: var(--bg-sidebar);
+}
+
+html.intro-gif-running .intro-gif.intro-gif--hiding {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-slow) var(--ease-smooth);
+}
+
+.intro-gif__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.intro-gif__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-smooth);
+}
+
+.intro-gif__frame.is-active {
+  opacity: 1;
+}
+
+/* 首帧下载提示：GIF 体积较大，弱网下避免长时间空白 */
+.intro-gif__loading {
+  position: absolute;
+  inset: auto 0 50%;
+  margin: 0;
+  text-align: center;
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+  letter-spacing: 0.08em;
+  animation: introGifPulse 1.4s var(--ease-smooth) infinite;
+}
+
+.intro-gif.is-playing .intro-gif__loading {
+  display: none;
+}
+
+@keyframes introGifPulse {
+
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 跳过按钮：无边框、无背景，直接压在 GIF 上，仅保留暖棕文字 */
+.intro-gif__skip {
+  position: absolute;
+  right: max(var(--spacing-xl), env(safe-area-inset-right, 0px) + var(--spacing-xl));
+  bottom: max(var(--spacing-3xl), env(safe-area-inset-bottom, 0px) + var(--spacing-3xl));
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--color-primary-dark);
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.intro-gif__skip:hover {
+  transform: translateY(-2px);
+}
+
+.intro-gif__skip:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 播放期间锁定页面滚动 */
+html.intro-gif-armed:not(.intro-gif-finished),
+html.intro-gif-armed:not(.intro-gif-finished) body {
+  overflow: hidden;
+}
+
+/* 播放期间隐藏导航栏、汉堡菜单、进度条与移动端菜单 */
+html.intro-gif-armed:not(.intro-gif-finished) nav,
+html.intro-gif-armed:not(.intro-gif-finished) .hamburger-menu,
+html.intro-gif-armed:not(.intro-gif-finished) #page-progress-bar,
+html.intro-gif-armed:not(.intro-gif-finished) .scroll-progress-bar,
+html.intro-gif-armed:not(.intro-gif-finished) .mobile-menu-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 播放结束后导航栏淡入。
+   刻意不设 animation-fill-mode：动画结束即回落到基础态，
+   避免长期覆盖 nav-scroll-behavior.js 的 .nav-hidden 位移。 */
+html.intro-gif-finished nav {
+  animation: introGifNavIn var(--duration-slow) var(--ease-smooth);
+}
+
+@keyframes introGifNavIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+</style>
+
+    <!-- 首页开场动画 arm（内嵌：须同步执行，先于 <body> 渲染； -->
+<script>
+(function () {
+      try {
+        var root = document.documentElement;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        // 仅从站外（或空 referrer 的直接访问）进入时才播放开场动画； 站内跳转（referrer 与本站同源）不重复触发，导航栏与滚动保持原样。
+        var isExternal = true;
+        var ref = document.referrer;
+        if (ref) {
+          try {
+            isExternal = new URL(ref).origin !== location.origin;
+          } catch (e) {
+            isExternal = true;
+          }
+        }
+        if (!isExternal) return;
+
+        root.classList.add('intro-gif-armed');
+
+        // 看门狗：组件脚本始终未启动时强制结束开场（恢复导航与滚动）。 页面加载遮罩（page-loader）先播、GIF 后播：遮罩期间不计时， 等 pageloader:done 或硬上限后再开始 6s 计时，
+        // 避免把 GIF 卡没。
+        var watchdogStarted = false;
+        function startWatchdogOnce() {
+          if (watchdogStarted) return;
+          watchdogStarted = true;
+          setTimeout(function () {
+            if (window.__introGifWaiting) {
+            // 组件在等 GIF：交给组件自己的超时收尾，另设二级硬兜底
+              setTimeout(function () {
+                if (!root.classList.contains('intro-gif-running')) {
+                  root.classList.add('intro-gif-finished');
+                }
+              }, 30000);
+              return;
+            }
+            if (!root.classList.contains('intro-gif-running')) {
+              root.classList.add('intro-gif-finished');
+            }
+          }, 6000);
+        }
+        if (root.classList.contains('page-loader-armed')) {
+          document.addEventListener('pageloader:done', startWatchdogOnce);
+          setTimeout(startWatchdogOnce, 12000);
+        } else {
+          startWatchdogOnce();
+        }
+      } catch (e) { /* 降级：保持导航栏可见 */ }
+    })();
+</script>
+
+
+    <!-- 全站加载遮罩 arm（内嵌：须同步执行，早于 <body> 渲染； -->
+<script>
+/*
+ * page-loader-arm.js — 必须在 <head> 内以同步（非 defer）方式执行，先于 <body> 渲染。 * * 作用：给 <html> 打上 .page-loader-armed —— 首屏即显示加载遮罩并锁定滚动，
+ * * 避免原生内容/半成品布局闪现（FOUC）。 * * 看门狗：即便控制器 page-loader.js 缺失、404 或抛错，也会在 MAX_WAIT 后 * 强制放开页面，
+ * 保证遮罩绝不永久阻塞。 * 降级：JS 禁用时本脚本不执行、不产生 armed 类，页面按原生方式正常显示。
+ */
+(function () {
+  var root = document.documentElement;
+  var MAX_WAIT = 8000;
+  try {
+    root.classList.add('page-loader-armed');
+    setTimeout(function () {
+      root.classList.remove('page-loader-armed');
+      root.classList.add('page-loader-done');
+      setTimeout(function () { root.classList.remove('page-loader-done'); }, 420);
+    }, MAX_WAIT);
+
+        /* 现借助 currentScript 反推站点根路径， 预载的 Image 挂到 window.__pageLoaderFrames 供 page-loader.js 复用。 */
+        /* 内嵌后 document.currentScript.src 为空，不再走 currentScript 反推。 */
+    window.__pageLoaderFrames = [1, 2].map(function (n) {
+      var img = new Image();
+      img.src = 'https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/loader-frame-' + n + '.avif';
+      return img;
+    });
+  } catch (e) { /* 忽略：无论如何都不能阻塞页面 */ }
+})();
+</script>
+
+    <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 移动端 → 组件（见下方 components.css） -->
+  
+  <link rel="stylesheet" href="static/iconfont/iconfont.css">
+  <link rel="stylesheet" href="static/css/navigation/navigation.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/mobile.css">
+    <!-- 全站组件样式合集（2026-10-10：components/ 下 6 个小文件保序合并；等价性自检 384/384 行一致）。
+         必须置于 mobile.css 之后：原 section-fold / media-reveal / page-loader /
+         scroll-progress-bar 的 link 本就在 mobile.css 之后，移动位置会反转层叠关系。 -->
+  <link rel="stylesheet" href="static/css/components.css">
+  
+
+  
+
+    <!-- JavaScript 禁用回退 -->
+  <noscript>
+    <style>
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .typewriter::after { content: none !important; }
+    </style>
+  </noscript>
+
+    <!-- 全站核心脚本（模块化，按依赖顺序加载）。 utils.js 必须最先：它发布 window.iGEMUtils 与 window.MEDIA_BASE。 新增页面请沿用此脚本组织方式，
+     不要改回手工 bundle。 -->
+  <script src="static/js/core/utils.js" defer></script>
+  <script src="static/js/core/mobile-menu.js" defer></script>
+  <script src="static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="static/js/core/page-progress-bar.js" defer></script>
+  <script src="static/js/vendor/flexsearch.bundle.min.js" defer></script>
+  <script src="static/js/core/search.js" defer></script>
+  <script src="static/js/components/section-fold.js" defer></script>
+  <!-- 返回顶部按钮 / 图片到达淡入：此前只有 CSS 被引用、JS 缺引用（组件半成品），
+       2026-10-10 补齐其脚本引用，使功能与样式配套。 -->
+  <script src="static/js/components/back-to-top.js" defer></script>
+  <script src="static/js/components/media-reveal.js" defer></script>
+  
+</head>
+
+<body class="home-page">
+    <!-- 由下方内嵌的 page-loader.js 在首屏关键插画就绪后收尾。 -->
+  <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+    <div class="page-loader__inner">
+      <div class="page-loader__stage">
+        <span class="page-loader__halo" aria-hidden="true"></span>
+        <div class="page-loader__frames" aria-hidden="true">
+          <span class="page-loader__frame page-loader__frame--1"></span>
+          <span class="page-loader__frame page-loader__frame--2"></span>
+        </div>
+      </div>
+      <p class="page-loader__text" aria-hidden="true">Loading</p>
+    </div>
+  </div>
+
+  
+  <header></header>
+
+    <!-- 汉堡菜单按钮（仅移动端显示） -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+    <span></span><span></span><span></span>
+  </button>
+
+  
+
+
+
+
+
+
+
+<!-- 移动端全屏菜单 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
+  <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
+    <ul id="nav-menu">
+      
+    <li>
+      <a href="index.html">
+        <svg class="iconfont icon-home" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></svg>
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-xiangmu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Project</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="description">
+          <svg class="iconfont icon-jianjie" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/> <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/></svg>
+          <span>Description</span>
+        </a>
+        <a href="design">
+          <svg class="iconfont icon-sheji" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/> <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8m-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7"/></svg>
+          <span>Design</span>
+        </a>
+        <a href="engineering">
+          <svg class="iconfont icon-shezhichilun" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/> <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg>
+          <span>Engineering</span>
+        </a>
+        <a href="contribution">
+          <svg class="iconfont icon-gongxian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/></svg>
+          <span>Contribution</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-tuandui" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg>
+        <span>Team</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="team">
+          <svg class="iconfont icon-tuanduichengyuan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>
+          <span>Members</span>
+        </a>
+        <a href="attributions">
+          <svg class="iconfont icon-guishu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+          <span>Attributions</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-cplus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Dry Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="model">
+          <svg class="iconfont icon-wumoxing" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+          <span>Model</span>
+        </a>
+        <a href="hardware">
+          <svg class="iconfont icon-yingjian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/></svg>
+          <span>Hardware</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shiyan-L" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4.5 0a.5.5 0 0 0 0 1H5v5.36L.503 13.717A1.5 1.5 0 0 0 1.783 16h12.434a1.5 1.5 0 0 0 1.28-2.282L11 6.359V1h.5a.5.5 0 0 0 0-1zM10 2H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1.22l.61 1H10a.5.5 0 1 0 0 1h1.442l.611 1H11a.5.5 0 1 0 0 1h1.664l.611 1H12a.5.5 0 1 0 0 1h1.886l.758 1.24a.5.5 0 0 1-.427.76H1.783a.5.5 0 0 1-.427-.76l4.57-7.48A.5.5 0 0 0 6 6.5V1h4z"/></svg>
+        <span>Wet Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="protocol">
+          <svg class="iconfont icon-neirong" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/> <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/></svg>
+          <span>Protocol</span>
+        </a>
+        <a href="results">
+          <svg class="iconfont icon-shiyanjieguo" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/></svg>
+          <span>Results</span>
+        </a>
+        <a href="parts">
+          <svg class="iconfont icon-jiyin" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/></svg>
+          <span>Parts</span>
+        </a>
+        <a href="safety-and-security">
+          <svg class="iconfont icon-anquan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/> <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/></svg>
+          <span>Safety and Security</span>
+        </a>
+        <a href="notebook">
+          <svg class="iconfont icon-rizhi" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/> <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/> <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/></svg>
+          <span>Notebook</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+        <span>Human Practices</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="human-practices">
+          <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+          <span>Human Practices</span>
+        </a>
+        <a href="sustainability">
+          
+          <span>Sustainability</span>
+        </a>
+      </div>
+    </li>
+
+    </ul>
+  </div>
+</div>
+
+<!-- 桌面端导航 -->
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      
+    <li>
+      <a href="index.html">
+        <svg class="iconfont icon-home" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></svg>
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-xiangmu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Project</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="description">
+          <svg class="iconfont icon-jianjie" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/> <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/></svg>
+          <span>Description</span>
+        </a>
+        <a href="design">
+          <svg class="iconfont icon-sheji" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/> <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8m-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7"/></svg>
+          <span>Design</span>
+        </a>
+        <a href="engineering">
+          <svg class="iconfont icon-shezhichilun" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/> <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg>
+          <span>Engineering</span>
+        </a>
+        <a href="contribution">
+          <svg class="iconfont icon-gongxian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/></svg>
+          <span>Contribution</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-tuandui" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg>
+        <span>Team</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="team">
+          <svg class="iconfont icon-tuanduichengyuan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>
+          <span>Members</span>
+        </a>
+        <a href="attributions">
+          <svg class="iconfont icon-guishu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+          <span>Attributions</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-cplus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Dry Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="model">
+          <svg class="iconfont icon-wumoxing" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+          <span>Model</span>
+        </a>
+        <a href="hardware">
+          <svg class="iconfont icon-yingjian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/></svg>
+          <span>Hardware</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shiyan-L" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4.5 0a.5.5 0 0 0 0 1H5v5.36L.503 13.717A1.5 1.5 0 0 0 1.783 16h12.434a1.5 1.5 0 0 0 1.28-2.282L11 6.359V1h.5a.5.5 0 0 0 0-1zM10 2H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1.22l.61 1H10a.5.5 0 1 0 0 1h1.442l.611 1H11a.5.5 0 1 0 0 1h1.664l.611 1H12a.5.5 0 1 0 0 1h1.886l.758 1.24a.5.5 0 0 1-.427.76H1.783a.5.5 0 0 1-.427-.76l4.57-7.48A.5.5 0 0 0 6 6.5V1h4z"/></svg>
+        <span>Wet Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="protocol">
+          <svg class="iconfont icon-neirong" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/> <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/></svg>
+          <span>Protocol</span>
+        </a>
+        <a href="results">
+          <svg class="iconfont icon-shiyanjieguo" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/></svg>
+          <span>Results</span>
+        </a>
+        <a href="parts">
+          <svg class="iconfont icon-jiyin" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/></svg>
+          <span>Parts</span>
+        </a>
+        <a href="safety-and-security">
+          <svg class="iconfont icon-anquan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/> <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/></svg>
+          <span>Safety and Security</span>
+        </a>
+        <a href="notebook">
+          <svg class="iconfont icon-rizhi" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/> <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/> <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/></svg>
+          <span>Notebook</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+        <span>Human Practices</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="human-practices">
+          <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+          <span>Human Practices</span>
+        </a>
+        <a href="sustainability">
+          
+          <span>Sustainability</span>
+        </a>
+      </div>
+    </li>
+
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path=".">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+        <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..."
+          autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <main class="long-page">
+    
+<!-- 模块 0: GIF 开场动画（默认不显示、不下载；由 index-intro-gif.js 激活。 无 JS / prefers-reduced-motion / 脚本加载失败时自动跳过，
+   导航栏照常显示） -->
+    <div class="intro-gif" id="intro-gif">
+      <div class="intro-gif__stage">
+        <img class="intro-gif__frame" alt="" data-gif-src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/boot-animation.webp"
+          data-duration="9200">
+      </div>
+      <p class="intro-gif__loading">Loading…</p>
+      <button type="button" class="intro-gif__skip" id="intro-gif-skip">skip<span
+          aria-hidden="true">→</span></button>
+    </div>
+
+        <!-- 模块 1: Hero 标题页（板块 1：ECHO 品牌构图，由 webp 组件拼装） -->
+    <section id="hero" class="presentation-section yeast-screen yeast-screen--hero" data-title="首页">
+      <h1 class="sr-only">ECHO Yeast — 工程化酿酒酵母 H1N1 流感病毒生物传感器</h1>
+      <div class="echo-stage" aria-label="ECHO = Engineered Cellular Host, Observation of viral signals">
+        <img class="echo-art echo-art--logo"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/01-hero-echo-logo.avif" alt="ECHO">
+        <img class="echo-art echo-art--dash-a" alt="" aria-hidden="true"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-yellow-dash-a.webp">
+        <img class="echo-art echo-art--dash-b" alt="" aria-hidden="true"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-yellow-dash-b.webp">
+        <img class="echo-art echo-art--tagline" alt="ECHO = Engineered Cellular Host, Observation of viral signals"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-blue-curve.avif">
+        <img class="echo-art echo-art--mascot" alt="EchoYeast 酵母吉祥物"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/01-hero-mascot.webp">
+        <img class="echo-art echo-art--wave" alt="" aria-hidden="true"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-wave-1.avif">
+      </div>
+    </section>
+
+        <!-- 页面打开起数字持续跳动，读者停留的每一秒 都在涨——这是本屏"持续抓住视觉"的核心；辅以 12 席位网格（1 格亮蓝 = 每 12 人 1 人）、 2023–2025 三年占总人口比例（表格式右栏）
+       与来源注脚。 ★ 降级铁律：标记里默认写的是「每年 660,000,000 人感染」，无障碍/无 JS 读到的是这版 静态事实；实时计数器由 influenza-burden.js 接管后才换成「since you opened this page」 并持续跳动（同时把跳动数字标记 aria-hidden，
+       旁边提供静态的无障碍句子）。 prefers-reduced-motion / 无 JS / 无 WAAPI → 不接管，保持静态年值。 -->
+    <section id="influenza-burden" class="presentation-section yeast-screen" data-title="甲流负担">
+      <h2 class="sr-only">About 1 in 12 people worldwide is infected by influenza A every year</h2>
+      <div class="art-stage art-stage--influenza-burden">
+                <!-- 自绘背景层（无素材、纯 CSS/SVG）：淡淡的数据网格 + 计数器区域柔光 + 一枚 12 刻度的虚线环（呼应「每 12 人 1 人」）。极缓慢的漂移/呼吸只动 transform，
+           prefers-reduced-motion 下停止；整层在内容之下且不接收点击。 -->
+        <div class="burden-backdrop" aria-hidden="true">
+          <span class="burden-backdrop__grid"></span>
+          <span class="burden-backdrop__glow"></span>
+          <svg class="burden-backdrop__ring" viewBox="0 0 100 100" fill="none" focusable="false">
+            <circle cx="50" cy="50" r="44" stroke="rgba(76,157,211,0.55)" stroke-width="0.8"
+              stroke-dasharray="1.2 5.5" stroke-linecap="round"></circle>
+            <circle cx="50" cy="50" r="34" stroke="rgba(76,157,211,0.3)" stroke-width="0.55"
+              stroke-dasharray="1.2 8" stroke-linecap="round"></circle>
+            <circle cx="50" cy="6.5" r="2.1" transform="rotate(0 50 50)"
+              fill="rgba(76,157,211,0.7)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(30 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(60 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(90 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(120 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(150 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(180 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(210 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(240 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(270 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(300 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle><circle cx="50" cy="6.5" r="2.1" transform="rotate(330 50 50)"
+              fill="rgba(76,157,211,0.38)"></circle>
+          </svg>
+                    <!-- 只做极缓慢的上下浮动（transform-only），离屏随 section 停表。 -->
+          <img class="burden-backdrop__virus"
+            src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-virus.avif" alt="" aria-hidden="true"
+            width="1600" height="1600" decoding="async">
+        </div>
+
+                <!-- 落点取"屏中心"实测出的空档 （左侧计数器正文止于 x≈43%、右侧三年占比表起于 x≈68%），所以虽然它是本屏 z 最高层，实际不遮挡任何文字。进入本屏时淡入并停留，只播一次；
+           纯装饰 aria-hidden；无 JS / prefers-reduced-motion 下即静态停在中心。 -->
+        <img class="burden-hero"
+          src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-burden-patient.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" loading="lazy" decoding="async">
+
+        <p class="burden-eyebrow">Influenza A · every year</p>
+
+        <p class="burden-lead">
+          <span class="burden-lead__num">1 in 12</span>
+          <span class="burden-lead__copy">people worldwide are infected by influenza A every year</span>
+        </p>
+
+                <!-- 进入本屏时 12 只先全部叠在第 1 格位置，再自左向右逐只"发牌"滑出到各自席位； 生病的最后落位并做一次脉冲（沿用原「亮点位」语义）。 无 JS / prefers-reduced-motion 下就是静态的一排 12 只 = 设计稿落位。
+           z-index 内联：第 1 只最上、后面依次压在下面 —— 叠放时才露得出"最左那只"。 -->
+        <ul class="burden-grid" aria-hidden="true">
+          <li class="burden-grid__dot" style="z-index: 12"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 11"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 10"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 9"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 8"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 7"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 6"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 5"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 4"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 3"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot" style="z-index: 2"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-healthy.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li><li class="burden-grid__dot is-lit" style="z-index: 1"><img
+              class="burden-grid__yeast"
+              src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/02-yeast-sick.avif"
+              alt="" width="1600" height="1600" loading="lazy" decoding="async"></li>
+        </ul>
+
+                <!-- 实时感染计数器（无 JS 时读的是「每年 660,000,000 人」这一静态事实） -->
+        <div class="burden-counter">
+          <p class="burden-counter__label" data-burden-label>Every year</p>
+          <p class="burden-counter__value" data-burden-value>660,000,000</p>
+          <p class="burden-counter__unit" data-burden-unit>people catch influenza A</p>
+          <div class="burden-counter__track" aria-hidden="true">
+            <span class="burden-counter__tick"></span>
+          </div>
+          <p class="burden-counter__rate">≈ 21 every second</p>
+        </div>
+        <p class="sr-only">Approximately 21 people are infected with influenza A every second — about
+          660 million each year, based on WHO estimates.</p>
+
+        <p class="burden-years-caption">Share of the world population</p>
+        <ul class="burden-years">
+          <li class="burden-year"><span class="burden-year__label"></span><span class="burden-year__val"></span></li><li class="burden-year"><span class="burden-year__label"></span><span class="burden-year__val"></span></li><li class="burden-year"><span class="burden-year__label"></span><span class="burden-year__val"></span></li>
+        </ul>
+
+        <p class="burden-note">Estimate: WHO ~1 billion seasonal influenza cases each year × influenza A share of
+          positives (66%, WHO South-East Asia Region, 2025) ÷ UN world population for that year; that is also
+          ≈ 21 new infections every second. Sources: WHO Influenza (seasonal) fact sheet, 28 Feb 2025;
+          WHO Seasonal influenza – Global situation, 10 Dec 2025; UN World Population Prospects via World Bank.</p>
+      </div>
+    </section>
+
+        <!-- 模块 2: 人类实践（human-practices） -->
+    <section id="human-practices" class="presentation-section yeast-screen" data-title="人类实践">
+      <h2 class="sr-only">Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026</h2>
+      
+      <div class="art-stage art-stage--human-practices">
+                <!-- <img class="art art--human-practices-wave" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-wave-1.avif" alt="" aria-hidden="true"> -->
+                <!-- 轴标签/图例仍为真文本 -->
+        <img class="art art--human-practices-title" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/03-human-practices-chart-title.avif"
+          alt="Virus detections by subtype reported to FluNet, 21 October 2022 to 21 August 2026">
+                <!-- 全部由真文本渲染替代。 -->
+        <img class="art art--human-practices-chart" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/03-human-practices-chart.avif" alt="流感亚型检测量折线图">
+        <img class="art art--human-practices-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/03-human-practices-mascot-cape.webp" alt="EchoYeast 在右下角探出头">
+                <!-- 图例与横轴标题保留下方 HTML 文本（同款圆体、更清晰）。chart-title.png 内容正确保留。 -->
+        <p class="art art--human-practices-axis art-title-text" lang="en">Week start date</p>
+        <p class="art art--human-practices-legend-subtypes art-legend" lang="en">Influenza subtypes</p>
+        <p class="art art--human-practices-legend-h1n1 art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#acdaf2" aria-hidden="true"></span>A(H1N1)pdm09</p>
+        <p class="art art--human-practices-legend-pos art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#f0a609" aria-hidden="true"></span>Influenza percent positive</p>
+      </div>
+    </section>
+
+        <!-- 模块 3: 结果（statistics） -->
+    <section id="statistics" class="presentation-section yeast-screen" data-title="结果">
+      <h2 class="sr-only">Detection methods: qPCR / ELISA / CGIS</h2>
+      
+      <div class="art-stage art-stage--statistics">
+                <!-- 英文小标题：进入该屏时由 statistics-reveal.js 触发「右先左后」逐词下落； 无 JS 时静态可见（脚本只加类，不做默认隐藏） -->
+        <p class="statistics-caption" lang="en">Contemporary popular methods for detecting H1N1 influenza</p>
+                <!-- <img class="art art--statistics-cloud" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-cloud.webp" alt="" aria-hidden="true"> -->
+        <img class="art art--statistics-hill" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-hill.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-qpcr" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-qpcr.webp" alt="qPCR">
+        <img class="art art--statistics-elisa" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-elisa.webp" alt="ELISA">
+        <img class="art art--statistics-cgis" id="statistics-cgis" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-cgis.webp" alt="CGIS">
+        <img class="art art--statistics-arc" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-dashed-arc.webp" alt="" aria-hidden="true">
+                <!-- z-index 1 压在两圆之下，端头被圆挡住 读作"相连"。揭示顺序：CGIS 弧画出 → ELISA 落位 → 本线擦出 → qPCR 落位 （statistics-reveal.js）
+           。降级红线：无 JS / reduced-motion 静态可见。 -->
+        <img class="art art--statistics-link" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-dashed-arc.webp"
+          alt="" aria-hidden="true" decoding="async">
+        <img class="art art--statistics-bulb" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-bulb.webp" alt="" aria-hidden="true">
+        <img class="art art--statistics-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-mascot-thinking.webp" alt="EchoYeast 思考检测方法">
+        <img class="art art--statistics-sparkle" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-sparkle.webp" alt="" aria-hidden="true">
+                <!-- CGIS 点击提示（箭头 + Click here）：由 statistics-reveal.js 定位到 CGIS 圆正上方， 点击展开后移除；无 JS / 未进入该屏时不显示 -->
+        <div class="statistics-hint" aria-hidden="true">
+          <div class="statistics-hint__inner">
+            <span class="statistics-hint__label">Click here</span>
+            <svg class="statistics-hint__arrow" viewBox="0 0 24 46" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path d="M12 3 C 12 14, 12 22, 12 33" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 7.5"></path>
+              <path d="M4.5 29 L12 41.5 L19.5 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </div>
+                <!-- 揭示完成前不可见（由 statistics-reveal.js 加 js-methods-armed 收起 + is-open 展开）。 无 JS / prefers-reduced-motion：三条静态可见（默认 CSS 不做隐藏，
+           降级红线）。 文案出处：首页逻辑.docx Part 1（qPCR/ELISA 精准但依赖设备实验室人员、 CGIS 现场快检）；经 CDC「Overview of Influenza Testing Methods / RIDT Guidance」 与 MDPI 2025 综述外部确证——docx 中「CGIS 假阳性高」按 CDC 口径修正为 「灵敏度有限（易假阴性）
+           、结果不确定性高」（详见交付文档）。 -->
+        <div class="method-info method-info--qpcr">
+          <p class="method-info__title">qPCR <small>Nucleic acid test</small></p>
+          <p class="method-info__pro">＋ Highest sensitivity &amp; accuracy, quantitative — the reference standard</p>
+          <p class="method-info__con">－ Needs lab equipment &amp; trained staff, ~1–2 h</p>
+        </div>
+        <div class="method-info method-info--elisa">
+          <p class="method-info__title">ELISA <small>Antigen / protein test</small></p>
+          <p class="method-info__pro">＋ High throughput &amp; lower cost, good for batch screening</p>
+          <p class="method-info__con">－ Less sensitive than qPCR, needs a reader &amp; more time</p>
+        </div>
+        <div class="method-info method-info--cgis">
+          <p class="method-info__title">CGIS <small>Colloidal gold strip</small></p>
+          <p class="method-info__pro">＋ On-site result in 10–15 min, portable, no instruments</p>
+          <p class="method-info__con">－ Limited sensitivity &amp; result uncertainty, needs confirmatory testing</p>
+        </div>
+      </div>
+    </section>
+
+        <!-- 模块 4: 安全（safety） -->
+    <section id="safety" class="presentation-section yeast-screen" data-title="安全">
+      <h2 class="sr-only">Influenza A Virus Biosensor Based on Engineered Yeast</h2>
+      
+      <div class="art-stage art-stage--safety">
+                <!-- 上波 = 现有底部云波 shared-cloud-1.webp 垂直翻转（scaleY(-1)），同源同宽必对称；星星复用 shared-sparkle.webp，左上/右上各一颗（第三颗是原有的那颗）
+           。 -->
+        <img class="art art--safety-sky" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/05-safety-sky.webp"
+          alt="" aria-hidden="true" decoding="async">
+        <img class="art art--safety-cloud" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-cloud-1.webp" alt="" aria-hidden="true">
+                <!-- <img class="art art--safety-curve" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-blue-curve.avif" alt="" aria-hidden="true"> -->
+        <img class="art art--safety-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/05-safety-mascot-flying.webp" alt="EchoYeast 披风飞行">
+                <!-- SR 文本见 section 内 h2.sr-only -->
+        <img class="art art--safety-title" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/05-safety-title.avif"
+          alt="Influenza A Virus Biosensor Based on Engineered Yeast">
+        <img class="art art--safety-sparkle" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-sparkle.webp" alt="" aria-hidden="true">
+        <img class="art art--safety-sparkle art--safety-star-a" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-sparkle.webp"
+          alt="" aria-hidden="true" decoding="async">
+        <img class="art art--safety-sparkle art--safety-star-b" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-sparkle.webp"
+          alt="" aria-hidden="true" decoding="async">
+      </div>
+    </section>
+
+        <!-- 模块 5: 背景（public-health） -->
+    <section id="public-health" class="presentation-section yeast-screen" data-title="背景">
+      <h2 class="sr-only">Can We Build a Living Sensor That Directly Responds to Viral Signals?</h2>
+      
+      <div class="art-stage art-stage--public-health">
+                <!-- SR 文本见 section 内 h2.sr-only -->
+        <img class="art art--public-health-title" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/06-public-health-title.avif"
+          alt="Can We Build a Living Sensor That Directly Responds to Viral Signals?">
+        <img class="art art--public-health-petri" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/06-public-health-petri-dish.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-virus" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/06-public-health-virus-cluster.webp" alt="" aria-hidden="true">
+        <img class="art art--public-health-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/06-public-health-mascot-magnifier.webp" alt="EchoYeast 手持放大镜观察病毒">
+      </div>
+    </section>
+
+        <!-- 模块 6: 设计（project-intro） -->
+    <section id="project-intro" class="presentation-section yeast-screen" data-title="设计">
+      <h2 class="sr-only">WHY EHCO Yeast?</h2>
+      
+      <div class="art-stage art-stage--project-intro">
+        <img class="art art--project-intro-cloud" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-cloud-1.webp" alt="" aria-hidden="true">
+                <!-- EHCO 为原设计稿拼写，按原样保留）； SR 文本见 section 内 h2.sr-only -->
+        <img class="art art--project-intro-title" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/07-project-intro-title.avif"
+          alt="WHY EHCO Yeast?">
+                <!-- 文字条：3 排 × 每排 2 条 ｜ 椭圆描边 + 边缘渐隐 + 流动轮播 位置/大小/速度 → static/css/index.css 搜「project-intro 文字条」 每排的 .intro-pills__group 出现两次（第二份 aria-hidden）
+           用于无缝循环，删掉会跳帧 -->
+        <div class="intro-pills">
+          <div class="intro-pills__row">
+            <div class="intro-pills__track">
+              <div class="intro-pills__group">
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Low-cost cultivation</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Native eukaryotic signal transduction network</span></span>
+              </div>
+              <div class="intro-pills__group" aria-hidden="true">
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Low-cost cultivation</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Native eukaryotic signal transduction network</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="intro-pills__row">
+            <div class="intro-pills__track">
+              <div class="intro-pills__group">
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">High biosafety level</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Strong environmental tolerance</span></span>
+              </div>
+              <div class="intro-pills__group" aria-hidden="true">
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">High biosafety level</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Strong environmental tolerance</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="intro-pills__row">
+            <div class="intro-pills__track">
+              <div class="intro-pills__group">
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Well-established genetic engineering toolbox</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Combining eukaryotic expression and environmental adaptability</span></span>
+              </div>
+              <div class="intro-pills__group" aria-hidden="true">
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Well-established genetic engineering toolbox</span></span>
+                <span class="intro-pill"><span class="intro-pill__text" lang="en">Combining eukaryotic expression and environmental adaptability</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <img class="art art--project-intro-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/07-project-intro-mascot-microscope.webp" alt="EchoYeast 在显微镜与书堆前观察">
+        <img class="art art--project-intro-sparkle" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-sparkle.webp" alt="" aria-hidden="true">
+      </div>
+    </section>
+
+        <!-- 模块 7: 构建与测试（dbtl-cycle） -->
+    <section id="dbtl-cycle" class="presentation-section yeast-screen" data-title="构建与测试">
+      <h2 class="sr-only">Research content: Workflow and principle</h2>
+      
+      <div class="art-stage art-stage--dbtl-cycle">
+                <!-- 原 shared-wave-3.webp 为 7.4:1，明显更厚）。素材已抠掉编辑残留白斑并按 alpha 紧裁。 -->
+        <img class="art art--dbtl-cycle-wave" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-wave-5.webp" alt="" aria-hidden="true" decoding="async">
+        
+        <p class="art art--dbtl-cycle-title art-title-text" lang="en">Research content:<br>Workflow and principle</p>
+                <!-- 原理示意图：首次滑入本屏时由 dbtl-pump.js 触发「想法泵出」入场—— 以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大； 无 JS / prefers-reduced-motion 时静态直出（脚本只加类，
+           不做默认隐藏） -->
+        <img class="art art--dbtl-cycle-diagram" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/08-dbtl-cycle-workflow-diagram.webp" alt="工作流程与原理示意图">
+        <img class="art art--dbtl-cycle-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/08-dbtl-cycle-mascot-laptop.webp" alt="EchoYeast 使用笔记本电脑">
+      </div>
+    </section>
+
+        <!-- 模块 8: 未来愿景 -->
+    <section id="future-vision" class="presentation-section yeast-screen yeast-screen--reverse" data-title="未来愿景">
+      <div class="yeast-screen__inner yeast-screen--reverse">
+        <div class="yeast-screen__content">
+                    <!-- 本屏内容加宽至约 60% 页宽、间距拉开（static/css/index.css 搜 fv- 与 #future-vision） -->
+          <h2 class="sr-only">Future Vision: From H1N1 to the Broad Spectrum Platform</h2>
+          <img class="fv-title-img reveal" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/09-future-vision-title.avif"
+            alt="Future Vision" width="1056" height="529" decoding="async">
+          <img class="fv-sub-img reveal" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/09-future-vision-subtitle.avif"
+            alt="From H1N1 to the Broad Spectrum Platform" width="1219" height="88" decoding="async">
+          <p class="reveal">
+            Once the H1N1 proof of concept is complete, the core value of the PAGER-Yeast platform lies in its
+            modularity and replaceability: the membrane nanobody recognition unit can be rapidly iterated against
+            new antigens, while the downstream GPCR signal-rewiring and the dual-mode reporter system stay
+            universal. Combined with a low-cost portable fluorescence reader, the system could move from a
+            laboratory prototype to a field-ready testing tool for primary-care settings.
+          </p>
+          <ul class="yeast-screen__list reveal">
+            <li><strong>Modular recognition unit:</strong> keeping the α-factor secretion anchor and linker
+              scaffold, swapping only the VHH sequence would extend coverage to H5, H7 and other influenza
+              subtypes — and potentially to respiratory pathogens such as SARS-CoV-2 and RSV;</li>
+            <li><strong>Signal optimization:</strong> by tuning the DCZ concentration gradient and induction
+              time, we plan to correlate fluorescence intensity with viral load for semi-quantitative detection
+              that matches portable fluorimeters;</li>
+            <li><strong>Multi-scenario use:</strong> aimed at settings that need fast, low-cost results —
+              primary-care clinic screening, school morning checks, border quarantine ports and at-home
+              self-testing;</li>
+            <li><strong>Open source &amp; standardization:</strong> submitting standardized biological parts
+              (promoters, reporter genes, signaling modules) in an iGEM Registry-compatible form, together with
+              reproducible protocols and plasmid maps.</li>
+          </ul>
+          <p class="yeast-screen__placeholder reveal">[To be added: target subtype list, hardware prototype
+            specifications, product timeline and a preliminary regulatory pathway assessment]</p>
+        </div>
+      </div>
+            <!-- iGEM Check: [x] Future directions only [x] No unsupported claims [x] Placeholder for expansion data -->
+    </section>
+
+        <!-- 团队信息见 Members 子页 -->
+
+        <!-- hover 时整只吉祥物做 180° 转身（纯 transform，不动布局）。 -->
+    <section id="final-cta" class="presentation-section yeast-screen" data-title="Explore">
+      <div class="yeast-screen__inner">
+        <div class="yeast-screen__content">
+          <h2 class="yeast-screen__title reveal">Explore Our Wiki</h2>
+          <div class="mascot-portal-row" role="navigation" aria-label="Sub-page navigation">
+            <a href="design" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-design.webp"
+                alt="Design section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Design</span>
+            </a>
+            <a href="results" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-result.webp"
+                alt="Results section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Results</span>
+            </a>
+            <a href="model" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-model.webp"
+                alt="Dry Lab modelling section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Model</span>
+            </a>
+            <a href="human-practices" class="mascot-portal reveal">
+              <img class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-hp.webp"
+                alt="Human Practices section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+              <span class="mascot-portal__label">Human Practices</span>
+            </a>
+          </div>
+        </div>
+      </div>
+            <!-- iGEM Check: [x] 4 portals to subpages (Design/Results/Dry Lab/Human Practices； 其余子页面仍可从顶部导航与各页内链到达) [x] Accessible nav markup [x] No external broken links -->
+    </section>
+
+    <section id="footer" class="section-footer">
+      <div class="component-container">
+        <div class="footer-wrapper">
+          
+          <div class="footer-top">
+                        <!-- 伙伴栏：结构与 partials/footer.njk 一致，样式见 navigation/navigation.css「伙伴栏」段 -->
+            <div class="footer-partners">
+              <span class="partners-label">Supported by</span>
+              <div class="partners-list">
+                <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+                  <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/igem.avif" alt="iGEM">
+                </a>
+                <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+                  <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao.avif"
+                    alt="School of Food and Drug, SZPU">
+                </a>
+                <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+                  <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/szpu.avif" alt="SZPU">
+                </a>
+              </div>
+            </div>
+                        <!-- Contact Us 区域 -->
+            <div class="footer-contact">
+              <h4>Contact Us:</h4>
+              <div class="contact-icons">
+                <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+                  <span class="iconfont icon-youxiang"></span>
+                </div>
+                <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+                  class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+                  <span class="iconfont icon-bilibili-fill"></span>
+                </a>
+                <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+                  <span class="iconfont icon-weixin"></span>
+                  <div class="wechat-qr-container">
+                    <div class="wechat-qr-arrow"></div>
+                    <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/echoyeast-social.avif"
+                      alt="WeChat QR Code" class="wechat-qr-image">
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+                    <!-- 特色分界线1 -->
+          <div class="footer-divider">
+            <span class="divider-line"></span>
+            <span class="divider-icon">
+              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)"
+                  stroke-width="2" />
+                <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+                <circle cx="20" cy="20" r="4" fill="white" />
+              </svg>
+            </span>
+            <span class="divider-line"></span>
+          </div>
+                    <!-- 导航链接区域 -->
+          <div class="footer-navigation">
+            <div class="footer-content-box">
+              <div class="footer-columns">
+                <div class="footer-column">
+                  <h4>Project</h4>
+                  <ul>
+                    <li><a href="description">Description</a></li>
+                    <li><a href="design">Design</a></li>
+                    <li><a href="engineering">Engineering</a></li>
+
+                    <li><a href="contribution">Contribution</a></li>
+                  </ul>
+                </div>
+                <div class="footer-column">
+                  <h4>Wet Lab</h4>
+                  <ul>
+                    <li><a href="design">Design</a></li>
+                    <li><a href="protocol">Protocol</a></li>
+                    <li><a href="results">Results</a></li>
+                    <li><a href="parts">Parts</a></li>
+                    <li><a href="safety-and-security">Safety</a></li>
+                    <li><a href="notebook">Notebook</a></li>
+                  </ul>
+                </div>
+                <div class="footer-column">
+                  <h4>Dry Lab</h4>
+                  <ul>
+                    <li><a href="model">Model</a></li>
+                    <li><a href="hardware">Hardware</a></li>
+                  </ul>
+                </div>
+                <div class="footer-column">
+                  <h4>Human Practices</h4>
+                  <ul>
+                    <li><a href="human-practices">Integrated HP</a></li>
+
+                    <li><a href="sustainability">Sustainability</a></li>
+                  </ul>
+                </div>
+                <div class="footer-column">
+                  <h4>Team</h4>
+                  <ul>
+                    <li><a href="team">Members</a></li>
+                    <li><a href="attributions">Attributions</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+                    <!-- 特色分界线2 -->
+          <div class="footer-divider divider-simple">
+            <span class="divider-dot"></span>
+            <span class="divider-dot"></span>
+            <span class="divider-dot"></span>
+            <span class="divider-line-short"></span>
+            <span class="divider-text">Synthetic Biology</span>
+            <span class="divider-line-short"></span>
+            <span class="divider-dot"></span>
+            <span class="divider-dot"></span>
+            <span class="divider-dot"></span>
+          </div>
+          <!-- 版权信息区域 -->
+          <div class="footer-bottom-section">
+            <p>&copy; 2026 - Content on this site is licensed under a Attribution 4.0 International license.</p>
+            <p>The repository used to create this website is available at <a
+                href="https://gitlab.igem.org/2026/szpu-china" target="_blank"
+                rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  
+<section id="footer" class="section-footer">
+  <div class="component-container">
+    <div class="footer-wrapper">
+      <!-- 顶部内容：伙伴栏 + Contact Us。
+           伙伴栏（2026-10-04 重设计）：原「白色大卡 + logo 走马灯」改为可扩展芯片栏，
+           新增伙伴只需复制一个 .partner-chip。 -->
+      <div class="footer-top">
+        <div class="footer-partners">
+          <span class="partners-label">Supported by</span>
+          <div class="partners-list">
+            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/igem.avif" alt="iGEM">
+            </a>
+            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao.avif" alt="shiyao">
+            </a>
+            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/szpu.avif" alt="SZPU">
+            </a>
+          </div>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us:</h4>
+          <div class="contact-icons">
+            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+              <svg class="iconfont icon-youxiang" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
+            </div>
+            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+              class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <svg class="iconfont icon-bilibili-fill" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373Z"/></svg>
+            </a>
+            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+              <svg class="iconfont icon-weixin" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M11.176 14.429c-2.665 0-4.826-1.8-4.826-4.018 0-2.22 2.159-4.02 4.824-4.02S16 8.191 16 10.411c0 1.21-.65 2.301-1.666 3.036a.32.32 0 0 0-.12.366l.218.81a.6.6 0 0 1 .029.117.166.166 0 0 1-.162.162.2.2 0 0 1-.092-.03l-1.057-.61a.5.5 0 0 0-.256-.074.5.5 0 0 0-.142.021 5.7 5.7 0 0 1-1.576.22M9.064 9.542a.647.647 0 1 0 .557-1 .645.645 0 0 0-.646.647.6.6 0 0 0 .09.353Zm3.232.001a.646.646 0 1 0 .546-1 .645.645 0 0 0-.644.644.63.63 0 0 0 .098.356"/> <path d="M0 6.826c0 1.455.781 2.765 2.001 3.656a.385.385 0 0 1 .143.439l-.161.6-.1.373a.5.5 0 0 0-.032.14.19.19 0 0 0 .193.193q.06 0 .111-.029l1.268-.733a.6.6 0 0 1 .308-.088q.088 0 .171.025a6.8 6.8 0 0 0 1.625.26 4.5 4.5 0 0 1-.177-1.251c0-2.936 2.785-5.02 5.824-5.02l.15.002C10.587 3.429 8.392 2 5.796 2 2.596 2 0 4.16 0 6.826m4.632-1.555a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0m3.875 0a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0"/></svg>
+              <div class="wechat-qr-container">
+                <div class="wechat-qr-arrow"></div>
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/echoyeast-social.avif"
+                  alt="WeChat QR Code" class="wechat-qr-image">
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 特色分界线1 -->
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+            <circle cx="20" cy="20" r="4" fill="white" />
+          </svg>
+        </span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- 导航链接区域（硬编码，跳过 Home）。
+           栏目顺序与链接名与根站 src/_includes/partials/footer.njk 逐项对齐
+           （2026-09-30 用户决定），href 沿用 flask 的无扩展名相对路由。 -->
+      <div class="footer-navigation">
+        <div class="footer-content-box">
+          <div class="footer-columns">
+            <div class="footer-column">
+              <h4>Project</h4>
+              <ul>
+                <li><a href="description">Description</a></li>
+                <li><a href="design">Design</a></li>
+                <li><a href="engineering">Engineering</a></li>
+                <li><a href="contribution">Contribution</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Wet Lab</h4>
+              <ul>
+                <li><a href="design">Design</a></li>
+                <li><a href="protocol">Protocol</a></li>
+                <li><a href="results">Results</a></li>
+                <li><a href="parts">Parts</a></li>
+                <li><a href="safety-and-security">Safety</a></li>
+                <li><a href="notebook">Notebook</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Dry Lab</h4>
+              <ul>
+                <li><a href="model">Model</a></li>
+                <li><a href="hardware">Hardware</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Human Practices</h4>
+              <ul>
+                <li><a href="human-practices">Integrated HP</a></li>
+                <li><a href="sustainability">Sustainability</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Team</h4>
+              <ul>
+                <li><a href="team">Members</a></li>
+                <li><a href="attributions">Attributions</a></li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 特色分界线2 -->
+      <div class="footer-divider divider-simple">
+        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
+        <span class="divider-line-short"></span>
+        <span class="divider-text">Synthetic Biology</span>
+        <span class="divider-line-short"></span>
+        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
+      </div>
+
+      <!-- 版权信息区域 -->
+      <div class="footer-bottom-section">
+        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+        <p>The repository used to create this website is available at <a
+            href="https://gitlab.igem.org/2026/szpu-china" target="_blank"
+            rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- 全站「返回顶部」悬浮按钮：两张图叠合（外圈为透明底美工图并持续旋转，hover 时整体上下浮动）。
+       2026-10-11 换用美工新图（透明底，取代旧版自带环绕文字+底色的 avif）。 -->
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
+    <span class="back-to-top__ring" aria-hidden="true">
+      
+      <img class="back-to-top__ring-img"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-ring.avif" alt="" width="1280" height="1280"
+        decoding="async">
+    </span>
+    <span class="back-to-top__core" aria-hidden="true">
+      <img class="back-to-top__core-img"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-core.webp" alt="" width="320" height="320"
+        decoding="async">
+    </span>
+  </button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
+
+  
+<script>
+/*
+ * page-loader.js — 全站页级加载遮罩控制器（根站） * * 与 <head> 内同步执行的 page-loader-arm.js 配套： * arm —— 首帧即显示遮罩并锁滚动（防原生内容闪烁）
+ * * 本文件 —— 收集首屏关键插画 → 预加载 → 判定收尾 → 收起遮罩并派发 pageloader:done * * 收尾条件（详见 README 第十五/十六节）： * DOM 就绪 AND 所有已登记关键图结清 AND 已过最小展示时长 * 任一超时（MAX_WAIT / 单图 IMG_TIMEOUT）
+ * 都强制收尾，绝不永久阻塞。 * * 对外接口（IIFE，挂 window.PageLoader）： * window.PageLoader.register(urls) // 登记首屏关键图；
+ * 字符串 | [url] | [[候选1,候选2]] * window.PageLoader.done(cb) // 收尾回调（首页 GIF 交接用） * window.PageLoader.isDone()
+ */
+(function () {
+  'use strict';
+
+  var MIN_SHOW = 600;     // 最小展示时长（防闪烁），ms
+  var MAX_WAIT = 8000;    // 全局强制收尾兜底，ms
+  var IMG_TIMEOUT = 3000; // 单张关键图超时，ms
+  var EXIT_BUFFER = 420;  // 淡出后清理 done 类的延迟，ms
+
+  var root = document.documentElement;
+  var overlay = null;
+  var state = {
+    start: now(),
+    pending: 0,
+    done: false,
+    timer: 0
+  };
+
+  function now() {
+    return (window.performance && window.performance.now)
+      ? window.performance.now()
+      : Date.now();
+  }
+
+  function prefersReducedMotion() {
+    try {
+      if (window.iGEMUtils && window.iGEMUtils.prefersReducedMotion) {
+        return window.iGEMUtils.prefersReducedMotion();
+      }
+      return !!(window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function warn(msg, extra) {
+    if (window.console && console.warn) {
+      console.warn('[PageLoader] ' + msg, extra || '');
+    }
+  }
+
+    /* ---- */
+
+    /* ---- 声明式关键资源：<img data-critical> / [data-critical-bg] ---- */
+  function collectFromDom() {
+    var groups = [];
+    var i;
+    var imgs = document.querySelectorAll('img[data-critical]');
+    for (i = 0; i < imgs.length; i++) {
+      var u = imgs[i].currentSrc || imgs[i].getAttribute('src');
+      if (u) groups.push([u]);
+    }
+    var bgs = document.querySelectorAll('[data-critical-bg]');
+    for (i = 0; i < bgs.length; i++) {
+      var raw = bgs[i].getAttribute('data-critical-bg') || '';
+      if (!raw) continue;
+      var m = raw.match(/url\(["']?([^"')]+)["']?\)/);
+      groups.push([m ? m[1] : raw]);
+    }
+    return groups;
+  }
+
+    /* ---- 预加载：候选回退（首个成功者结清）+ 单图超时 ---- */
+  function loadGroup(candidates) {
+    if (!candidates || !candidates.length) return;
+    state.pending++;
+
+    var idx = 0;
+    var settled = false;
+    var timer = setTimeout(function () {
+      if (settled) return;
+      settled = true;
+      state.pending--;
+      warn('critical image timeout', candidates[0]);
+      evaluate();
+    }, IMG_TIMEOUT);
+
+    function settle() {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      state.pending--;
+      evaluate();
+    }
+
+    function next() {
+      if (settled) return;
+      if (idx >= candidates.length) {
+        warn('critical image failed', candidates.join(' | '));
+        settle();
+        return;
+      }
+      var img = new Image();
+      img.onload = settle;
+      img.onerror = function () { idx++; next(); };
+      img.src = candidates[idx];
+    }
+
+    next();
+  }
+
+    /* ---- 收尾判定（幂等） ---- */
+  function evaluate() {
+    if (state.done) return;
+
+    var elapsed = now() - state.start;
+    if (elapsed >= MAX_WAIT) return finish('timeout');
+
+    var domReady = document.readyState !== 'loading';
+    var minShow = prefersReducedMotion() ? 0 : MIN_SHOW;
+
+    if (domReady && state.pending === 0 && elapsed >= minShow) {
+      return finish('ready');
+    }
+
+    var wait = Math.min(
+      Math.max(minShow - elapsed, 40),
+      Math.max(MAX_WAIT - elapsed, 40)
+    );
+    clearTimeout(state.timer);
+    state.timer = setTimeout(evaluate, wait);
+  }
+
+  function finish(reason) {
+    if (state.done) return;
+    state.done = true;
+    clearTimeout(state.timer);
+
+    root.classList.remove('page-loader-armed');
+    root.classList.add('page-loader-done');
+    if (overlay) overlay.setAttribute('aria-hidden', 'true');
+
+    setTimeout(function () {
+      root.classList.remove('page-loader-done');
+    }, EXIT_BUFFER);
+
+    var detail = { reason: reason };
+    try {
+      document.dispatchEvent(new CustomEvent('pageloader:done', { detail: detail }));
+    } catch (e) {
+      try {
+        var ev = document.createEvent('CustomEvent');
+        ev.initCustomEvent('pageloader:done', false, false, detail);
+        document.dispatchEvent(ev);
+      } catch (e2) { /* 极端环境忽略 */ }
+    }
+  }
+
+  window.PageLoader = {
+        /* * 登记首屏关键图。字符串 | [url] | [[候选1, 候选2]] */
+    register: function (urls) {
+      if (!urls) return;
+      var groups = [];
+      if (typeof urls === 'string') {
+        groups = [[urls]];
+      } else if (Object.prototype.toString.call(urls) === '[object Array]') {
+        if (urls.length && Object.prototype.toString.call(urls[0]) === '[object Array]') {
+          groups = urls;
+        } else {
+          for (var i = 0; i < urls.length; i++) groups.push([urls[i]]);
+        }
+      }
+      for (var g = 0; g < groups.length; g++) loadGroup(groups[g]);
+      evaluate();
+    },
+        /* * 收尾回调（已收尾则同步执行） */
+    done: function (cb) {
+      if (typeof cb !== 'function') return;
+      if (state.done) { try { cb(); } catch (e) {} return; }
+      document.addEventListener('pageloader:done', function () {
+        try { cb(); } catch (e) {}
+      }, { once: true });
+    },
+    isDone: function () { return state.done; },
+    MIN_SHOW: MIN_SHOW,
+    MAX_WAIT: MAX_WAIT
+  };
+
+  function init() {
+    overlay = document.getElementById('page-loader');
+    var groups = collectFromDom();
+    for (var i = 0; i < groups.length; i++) loadGroup(groups[i]);
+    evaluate();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+<script>
+
+/* 内部自带的 readyState 分支此时走 else init() 路径，不重复注册。 */
+document.addEventListener('DOMContentLoaded', function () {
+/*
+ * * 2. 所有 addEventListener 均使用被动事件监听（能力检测后回退）。 * 3. resize 使用 150ms debounce，并在尺寸变化后重新检测滚动容器。
+ * * 4. 缓存 DOM 引用与事件 handler，提供 destroy() 与 beforeunload 自动清理。 * 5. 复用 window.iGEMUtils 中的通用工具函数，
+ * 移除私有实现。
+ */
+(function () {
+  'use strict';
+
+  if (!window.iGEMUtils) {
+    console.error('[ScrollProgress] 缺少依赖：请先加载 static/js/utils.js');
+    return;
+  }
+
+  const Utils = window.iGEMUtils;
+
+    /* * * 模块配置。 * @type {{ DEBUG_MODE: boolean, RESIZE_DEBOUNCE: number }} */
+  const CONFIG = {
+    DEBUG_MODE: false,
+    RESIZE_DEBOUNCE: 150
+  };
+
+    /* * * 模块状态。 * @type {{ * scrollInfo: { element: Window|Element, isWindow: boolean }|null, * isInitialized: boolean, * fillElement: HTMLElement|null, * scrollHandler: function|null, * resizeHandler: function|null * }} */
+  const state = {
+    scrollInfo: null,
+    isInitialized: false,
+    fillElement: null,
+    scrollHandler: null,
+    resizeHandler: null,
+    // 缓存滚动尺寸，避免在每次滚动帧重复读取 scrollHeight/clientHeight（强制同步布局）
+    metrics: { clientHeight: 0, totalHeight: 0 }
+  };
+
+    /* * * 在调试模式下输出日志。 * @param {string} message 日志消息 * @param {any} [data] 附加数据 */
+  function log(message, data) {
+    if (CONFIG.DEBUG_MODE) {
+      console.log('[ScrollProgress]', message, data !== undefined ? data : '');
+    }
+  }
+
+    /* * * 获取被动事件监听选项。 * @returns {boolean|{ passive: true }} */
+  function getPassiveOption() {
+    return Utils.supportsPassiveEvents() ? { passive: true } : false;
+  }
+
+    /* * * 刷新缓存的滚动尺寸（scrollHeight / clientHeight）。 * 仅在初始化、resize、以及资源加载导致布局变化时调用， * 避免把这两个会触发强制同步布局的读取放进每帧滚动热路径。 */
+  function refreshMetrics() {
+    const scrollInfo = state.scrollInfo;
+    if (!scrollInfo) return;
+    state.metrics.clientHeight = Utils.getClientHeight(scrollInfo.element, scrollInfo.isWindow);
+    state.metrics.totalHeight = Utils.getScrollHeight(scrollInfo.element, scrollInfo.isWindow);
+  }
+
+    /* * * 计算当前滚动进度百分比。 * 热路径只读取 scrollTop（不触发强制同步布局），尺寸使用缓存。 * @returns {number} 0-100 之间的整数 */
+  function calculateProgress() {
+    const scrollInfo = state.scrollInfo;
+    if (!scrollInfo) return 0;
+
+    const scrollTop = Utils.getScrollPosition(scrollInfo.element, scrollInfo.isWindow);
+    const maxScroll = Math.max(1, state.metrics.totalHeight - state.metrics.clientHeight);
+    const scrollPercent = (scrollTop / maxScroll) * 100;
+
+    return Math.round(Math.min(100, Math.max(0, scrollPercent)));
+  }
+
+    /* * * 更新进度条填充高度。 * @param {number} progressPercent 0-100 之间的百分比 */
+  function updateFill(progressPercent) {
+    if (state.fillElement) {
+      state.fillElement.style.height = progressPercent + '%';
+    }
+  }
+
+    /* * * 更新滚动进度条。 */
+  function updateScrollProgress() {
+    updateFill(calculateProgress());
+  }
+
+    /* * * resize 完成后重新检测滚动容器并刷新进度。 */
+  function onResize() {
+    state.scrollInfo = Utils.detectScrollContainer();
+    refreshMetrics();
+    updateScrollProgress();
+  }
+
+    /* * * 清理所有事件监听与引用。 */
+  function destroy() {
+    const passiveOption = getPassiveOption();
+
+    if (state.scrollHandler) {
+      state.scrollHandler.cancel();
+    }
+    if (state.scrollHandler && state.scrollInfo && state.scrollInfo.element) {
+      state.scrollInfo.element.removeEventListener('scroll', state.scrollHandler, passiveOption);
+    }
+    if (state.resizeHandler) {
+      window.removeEventListener('resize', state.resizeHandler, passiveOption);
+    }
+
+    state.scrollInfo = null;
+    state.fillElement = null;
+    state.isInitialized = false;
+    state.scrollHandler = null;
+    state.resizeHandler = null;
+  }
+
+    /* * * 初始化模块。 */
+  function init() {
+    if (state.isInitialized) {
+      return;
+    }
+
+    log('初始化中...');
+
+    // 仅当页面已存在 #scroll-progress-bar 时才初始化，避免与新右侧面板冲突
+    const barElement = document.getElementById('scroll-progress-bar');
+    if (!barElement) {
+      log('未找到 #scroll-progress-bar，跳过初始化');
+      return;
+    }
+
+    state.fillElement = document.getElementById('scroll-progress-fill');
+    state.scrollInfo = Utils.detectScrollContainer();
+    state.isInitialized = true;
+    refreshMetrics();
+
+    state.scrollHandler = Utils.rafThrottle(updateScrollProgress);
+    state.resizeHandler = Utils.debounce(onResize, CONFIG.RESIZE_DEBOUNCE);
+
+    const passiveOption = getPassiveOption();
+    state.scrollInfo.element.addEventListener('scroll', state.scrollHandler, passiveOption);
+    window.addEventListener('resize', state.resizeHandler, passiveOption);
+    // 图片/字体加载完成后布局可能变化，刷新缓存尺寸再补一次进度
+    window.addEventListener('load', function () {
+      refreshMetrics();
+      updateScrollProgress();
+    }, passiveOption);
+
+    updateScrollProgress();
+
+    log('初始化完成');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // 页面卸载时自动清理
+  window.addEventListener('beforeunload', destroy);
+
+  // 暴露公共 API
+  window.ScrollProgressBar = {
+    update: updateScrollProgress,
+    destroy: destroy,
+    setDebugMode: function (enabled) {
+      CONFIG.DEBUG_MODE = !!enabled;
+    },
+    getState: function () {
+      return {
+        isInitialized: state.isInitialized,
+        hasBar: !!document.getElementById('scroll-progress-bar'),
+        hasFill: !!state.fillElement,
+        scrollContainer: state.scrollInfo ? (state.scrollInfo.isWindow ? 'window' : state.scrollInfo.element.className || state.scrollInfo.element.tagName) : 'none'
+      };
+    }
+  };
+})();
+}, { once: true });
+
+</script>
+  
+<script>
+/*
+ * * 2) 「图片啪地出现」—— 交给本脚本：尚未解码完成的正文图片先瞬时置为 opacity 0， * 解码完成（load）后淡入；已在缓存/已解码的图片不参与，避免"闪一下"。
+ * * * 边界（改之前先读 README §5.14.2 与第八节约束）： * - 只处理 <main> 内的 <img>：导航、页脚、加载遮罩（page-loader）、返回顶部等 * 已有自己动画体系的组件一律不掺和；
+ * * - data-no-reveal（加在 img 自身或任意祖先上）可让该区域退出； * - prefers-reduced-motion: reduce 时整个脚本不生效，
+ * 图片直接显示； * - 脚本 404 / 被拦截时页面照常（CSS 默认不隐藏任何图片）； * - 数据驱动页（members 等）中途插入的图片由 MutationObserver 兜住，
+ * * window.load 后 + 3s 宽限即停止观察，不在滚动期常驻。
+ */
+(function () {
+  'use strict';
+
+  var CLS = 'media-reveal';
+  var PENDING = CLS + '--pending';
+  var GRACE_MS = 3000;
+
+  function prefersReducedMotion() {
+    var u = window.iGEMUtils;
+    if (u && typeof u.prefersReducedMotion === 'function') return u.prefersReducedMotion();
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function eligible(img) {
+    if (!img || img.tagName !== 'IMG') return false;
+    if (img.hasAttribute('data-no-reveal')) return false;
+    if (img.closest && img.closest('[data-no-reveal]')) return false;
+    if (!img.closest || !img.closest('main')) return false;
+    return true;
+  }
+
+    /* * 把一张「还没解码完」的图片置为待出现，解码完成后淡入 */
+  function arm(img) {
+    if (!eligible(img)) return;
+    if (img.classList.contains(PENDING)) return;
+    // 已解码完成（含缓存命中）的图片直接跳过：闪一下比直接显示更糟
+    if (img.complete && img.naturalWidth > 0) return;
+
+    img.classList.add(CLS, PENDING);
+
+    function done() {
+      img.removeEventListener('load', done);
+      img.removeEventListener('error', done);
+      img.classList.remove(PENDING);
+    }
+    img.addEventListener('load', done);
+
+    img.addEventListener('error', done);
+  }
+
+  function armAll(root) {
+    var scope = root || document;
+    var imgs = scope.querySelectorAll ? scope.querySelectorAll('main img') : [];
+    Array.prototype.forEach.call(imgs, arm);
+  }
+
+  function init() {
+    if (prefersReducedMotion()) return; // 降级：什么都不做，图片全部直接可见
+    armAll(document);
+
+    // 数据驱动页会在 DOMContentLoaded 之后插入图片；只在加载窗口内观察，随后断开
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function (records) {
+        for (var i = 0; i < records.length; i++) {
+          var added = records[i].addedNodes;
+          for (var j = 0; j < added.length; j++) {
+            var node = added[j];
+            if (node.nodeType !== 1) continue;
+            if (node.tagName === 'IMG') arm(node);
+            else if (node.querySelectorAll) armAll(node);
+          }
+        }
+      });
+      observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+
+      var stop = function () { window.setTimeout(function () { observer.disconnect(); }, GRACE_MS); };
+      if (document.readyState === 'complete') stop();
+      else window.addEventListener('load', stop, { once: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+<script>
+/*
+ * back-to-top.js — 全站「返回顶部」按钮行为 * * 与 markup（partials/back-to-top.njk）/ 样式（css/components/back-to-top.css）
+ * 配套： * 1) 滚过一屏（scrollY > 阈值）后给按钮打 .back-to-top--visible，滚回顶部自动隐藏； * 2) 点击平滑滚回顶部；prefers-reduced-motion 下直接跳（不做长动画）
+ * * 3) 键盘可达（<button> + aria-label），隐藏时用 visibility 移出可聚焦序列； * 4) 只用被动滚动监听 + rAF 节流，不阻塞滚动；
+ * 离开页面时解绑。
+ */
+(function () {
+  'use strict';
+
+  var SHOW_AFTER = 240;   // 滚过多少 px 后出现（≈一屏内的起手距离）
+
+  function prefersReducedMotion() {
+    try {
+      if (window.iGEMUtils && window.iGEMUtils.prefersReducedMotion) {
+        return window.iGEMUtils.prefersReducedMotion();
+      }
+      return !!(window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function init() {
+    var btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    var ticking = false;
+
+    function sync() {
+      ticking = false;
+      btn.classList.toggle('back-to-top--visible', window.scrollY > SHOW_AFTER);
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(sync);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    sync();   // 首屏若已带锚点跳转（#xxx）也能正确判定
+
+    btn.addEventListener('click', function () {
+      if (prefersReducedMotion() || typeof window.scrollTo !== 'function') {
+        window.scrollTo(0, 0);
+        return;
+      }
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (e) {
+        window.scrollTo(0, 0);   // 极老浏览器：直接跳
+      }
+      // 收尾把焦点还给文档开头，键盘用户不会停在屏幕外的按钮上
+      var main = document.querySelector('main');
+      if (main) {
+        main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
+    });
+
+    window.addEventListener('pagehide', function () {
+      window.removeEventListener('scroll', onScroll);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+  
+    <!-- 位于 body 尾，行为与 defer 等价） -->
+  
+<script>
+/*
+ * * 动画一旦开始，即便指针移出或失焦，也继续播完 —— 不在移出瞬间回退/停住。 * * 实现要点（与 :hover 彻底解耦）： * - mouseenter / focusin → 加 .is-spinning（跑 static/css/index.css 的 mascot-portal-spin）
+ * * - mouseleave / blur → 一律不撤类 * - animationend → 才清除 .is-spinning，以便下次可重播 * - 幂等：动画进行中不重复触发（先移除再 reflow 再添加，
+ * 确保可重播） * * 降级：无 JS / prefers-reduced-motion 下卡片仍是可用链接，只是没有旋转增强。
+ */
+(function () {
+  'use strict';
+
+  function play(img) {
+    if (!img || img.classList.contains('is-spinning')) return;
+    img.classList.remove('is-spinning');
+        /* 强制 reflow，使"动画进行中再次进入"也能重新从头播放 */
+    void img.offsetWidth;
+    img.classList.add('is-spinning');
+  }
+
+  function bind(card) {
+    var img = card.querySelector('.mascot-portal__img');
+    if (!img) return;
+    card.addEventListener('mouseenter', function () { play(img); });
+    card.addEventListener('focusin', function () { play(img); });
+    img.addEventListener('animationend', function () {
+      img.classList.remove('is-spinning');
+    });
+  }
+
+  function init() {
+    var cards = document.querySelectorAll('.mascot-portal');
+    for (var i = 0; i < cards.length; i++) bind(cards[i]);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+<script>
+/*
+ * * * executive-summary-animation.js * 首页 Executive Summary 滚动驱动动画 + 酵母屏动效 + 交互增强 * * 功能： * - 监听页面滚动，
+ * 根据 #executive-summary 在视口中的位置计算动画进度。 * - section 高度为 300vh，主体 sticky 在 100vh~200vh 区间固定。
+ * * - 将进度写入 CSS 自定义属性 --es-progress，由 CSS 驱动： * · 0.0 ~ 0.5：Gpa1 标签从徽章中心向左移动至最终位置。 * · 0.5 ~ 1.0：人源基因及其黑色背景块从完全透明渐显。
+ * * - 为 8 屏酵母插画应用现有 floatYeast 关键帧动画。 * - Hero 打字机效果、滚动渐入（IntersectionObserver）与 Start Journey 平滑滚动。
+ */
+(function () {
+  'use strict';
+
+  const SECTION_SELECTOR = '#executive-summary';
+
+  const state = {
+    section: null,
+    initialized: false,
+    scrollHandler: null,
+    resizeHandler: null,
+    observer: null,
+    rafId: null,
+    rafPending: false
+  };
+
+  function updateProgress() {
+    if (!state.section) return;
+
+    const rect = state.section.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+
+    // section 为 300vh，固定主体在 50vh~250vh 区间显隐（200vh 动画窗口）， 动画进度：section 顶部离开视口 50vh 时开始，离开 250vh 时结束。
+    const pinStart = viewportHeight / 2;
+    const pinEnd = 2.5 * viewportHeight;
+    const scrollWithinSection = -rect.top;
+
+    let progress = 0;
+    if (pinEnd > pinStart) {
+      progress = (scrollWithinSection - pinStart) / (pinEnd - pinStart);
+    }
+
+    progress = Math.max(0, Math.min(1, progress));
+    state.section.style.setProperty('--es-progress', progress.toFixed(4));
+
+    const inner = state.section.querySelector('.executive-summary__inner');
+    if (inner) {
+      const isVisible = scrollWithinSection >= pinStart && scrollWithinSection <= pinEnd;
+      inner.classList.toggle('executive-summary__inner--visible', isVisible);
+    }
+  }
+
+  // iGEM Layout Strategy: 用 requestAnimationFrame 合并滚动事件，避免每帧都读 DOM。
+  function scheduleUpdate() {
+    if (state.rafPending) return;
+    state.rafPending = true;
+    state.rafId = requestAnimationFrame(function () {
+      state.rafPending = false;
+      state.rafId = null;
+      updateProgress();
+    });
+  }
+
+  function attachListeners() {
+    if (!state.scrollHandler) {
+      state.scrollHandler = scheduleUpdate;
+      state.resizeHandler = updateProgress;
+    }
+    window.addEventListener('scroll', state.scrollHandler, { passive: true });
+    window.addEventListener('resize', state.resizeHandler, { passive: true });
+    scheduleUpdate();
+  }
+
+  function detachListeners() {
+    if (state.scrollHandler) {
+      window.removeEventListener('scroll', state.scrollHandler, { passive: true });
+      window.removeEventListener('resize', state.resizeHandler, { passive: true });
+    }
+    if (state.rafId) {
+      cancelAnimationFrame(state.rafId);
+      state.rafId = null;
+      state.rafPending = false;
+    }
+  }
+
+  function init() {
+    if (state.initialized) return;
+
+    state.section = document.querySelector(SECTION_SELECTOR);
+    if (!state.section) return;
+
+    state.initialized = true;
+
+    // iGEM Layout Strategy: IntersectionObserver 只在 Executive Summary 接近视口时注册滚动监听， 离开视口后立即移除，显著降低长页面其他区域滚动时的主线程占用。
+    if ('IntersectionObserver' in window) {
+      state.observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            attachListeners();
+          } else {
+            detachListeners();
+          }
+        });
+      }, {
+        rootMargin: '100px 0px 100px 0px',
+        threshold: 0
+      });
+      state.observer.observe(state.section);
+    } else {
+      attachListeners();
+    }
+
+    // 初始检查（页面可能在加载时已滚动到该位置）
+    updateProgress();
+  }
+
+  // 自动初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // 页面卸载时清理
+  window.addEventListener('beforeunload', function () {
+    detachListeners();
+    if (state.observer && state.section) {
+      state.observer.unobserve(state.section);
+      state.observer = null;
+    }
+  });
+
+  // 暴露公共 API
+  window.ExecutiveSummaryAnimation = {
+    init: init,
+    trigger: function () {
+      if (state.section) state.section.style.setProperty('--es-progress', '1');
+    },
+    reset: function () {
+      if (state.section) state.section.style.setProperty('--es-progress', '0');
+    },
+    getState: function () {
+      return {
+        initialized: state.initialized,
+        hasSection: !!state.section,
+        progress: state.section
+          ? parseFloat(state.section.style.getPropertyValue('--es-progress') || '0')
+          : 0
+      };
+    }
+  };
+})();
+
+/*
+ * * * 8 屏酵母插画浮动动画 * * 功能： * - 不再随机插入 SVG，而是为 index.html 中已有的 8 张酵母屏幕插画 * 应用现有 floatYeast1~4 关键帧，
+ * 保持画面呼吸感。 * - 复用 index.css 中已定义的 floatYeast 关键帧。
+ */
+(function () {
+  'use strict';
+
+  function initScreenFloats() {
+    const svgs = document.querySelectorAll('.yeast-screen__svg');
+    const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+
+    if (reducedMotion) {
+      svgs.forEach(function (svg) {
+        svg.style.animation = 'none';
+      });
+      return;
+    }
+
+    svgs.forEach(function (svg, index) {
+      const floatIndex = (index % 4) + 1;
+      svg.style.animationName = 'floatYeast' + floatIndex;
+      svg.style.animationDuration = (5 + Math.random() * 3).toFixed(2) + 's';
+      svg.style.animationTimingFunction = 'ease-in-out';
+      svg.style.animationIterationCount = 'infinite';
+    });
+
+    // 性能优化：酵母屏插画为无限浮动动画，离屏时暂停播放可显著减少 后台标签页 / 长页面滚动时的 GPU 与合成开销，入屏立即恢复，视觉无差异。
+    if ('IntersectionObserver' in window) {
+      const floatObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+        });
+      }, { rootMargin: '120px 0px' });
+      svgs.forEach(function (svg) { floatObserver.observe(svg); });
+    }
+  }
+
+  function init() {
+    initScreenFloats();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  window.YeastScreenFloat = {
+    init: init
+  };
+})();
+
+/* * * Hero 打字机、滚动渐入与 Start Journey 平滑滚动 */
+(function () {
+  'use strict';
+
+  function initTypewriter() {
+    const el = document.querySelector('.typewriter');
+    if (!el) return;
+
+    const text = el.getAttribute('data-text') || '';
+    const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+    if (reducedMotion) {
+      el.textContent = text;
+      return;
+    }
+
+    el.textContent = '';
+
+    let i = 0;
+    const speed = 55;
+    function typeChar() {
+      if (i < text.length) {
+        el.textContent += text.charAt(i);
+        i += 1;
+        setTimeout(typeChar, speed);
+      }
+    }
+    typeChar();
+  }
+
+  function initReveal() {
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length === 0) return;
+
+    const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      revealElements.forEach(function (el) {
+        el.classList.add('reveal--visible');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal--visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
+  function initSmoothCTA() {
+    const cta = document.querySelector('.yeast-screen__cta');
+    if (!cta) return;
+
+    cta.addEventListener('click', function (event) {
+      const targetSelector = cta.getAttribute('href');
+      if (!targetSelector || targetSelector.charAt(0) !== '#') return;
+
+      const target = document.querySelector(targetSelector);
+      if (target) {
+        event.preventDefault();
+        const reducedMotion = window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+          ? window.iGEMUtils.prefersReducedMotion()
+          : false;
+        target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+      }
+    });
+  }
+
+  function init() {
+    initTypewriter();
+    initReveal();
+    initSmoothCTA();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+/* iGEM Check: [x] Executive summary animation preserved [x] floatYeast keyframes reused [x] Typewriter + reveal + smooth scroll [x] Reduced motion handled in CSS */
+</script>
+
+  
+<script>
+/*
+ * * * index-intro-gif.js * 首页 GIF 开场动画控制器 * * 行为： * - 首屏占满视口播放 boot animation.GIF（播完整一轮）。 * - 播放期间 <html> 带 intro-gif-armed：滚动被锁定，
+ * 导航栏 / 汉堡菜单 / * 进度条保持隐藏；GIF 播完（或用户跳过）后移除锁定并让导航栏淡入。 * - 无 JS、组件脚本加载失败或 prefers-reduced-motion 时都不播放，
+ * * 导航栏按原逻辑正常显示（降级安全）。 * * 实现要点： * - 时长写在 data-duration 上（GIF 为无限循环，无法监听播放结束事件）， * 提前 SWITCH_LEAD 毫秒切帧，
+ * 避开 GIF 循环回跳的跳帧。 * - 下一张用 new Image() 提前预取进 HTTP 缓存；切帧时才把 src 赋给 * <img>，保证动画从第 1 帧开始播放，且切换瞬间不空档。
+ * * - 每帧有下载超时兜底，绝不让导航栏被永久锁住。 * - 末帧加载/解码失败时不再提前结束整段动画：交由“总时长”兜底， * 继续展示上一帧直到收尾，避免“播一半就消失”（常见于超大 GIF 在 * 浏览器/部署环境下加载失败）
+ */
+(function () {
+  'use strict';
+
+  var ARMED = 'intro-gif-armed';
+  var RUNNING = 'intro-gif-running';
+  var FINISHED = 'intro-gif-finished';
+
+  var SWITCH_LEAD = 200; // 提前切帧，避开 GIF 循环回跳
+  var LOAD_TIMEOUT = 20000; // 单帧下载/解码最长等待，超时跳过该帧
+  var FADE_DURATION = 450; // 与 CSS --duration-slow(0.4s) 对齐的收尾时间
+
+  var root = document.documentElement;
+  var overlay = null;
+  var frames = [];
+  var stepTimer = null;
+  var loadTimer = null;
+  var masterFinishTimer = null; // 总时长兜底：即使末帧失败也不会提前收尾
+  var finished = false;
+
+  function prefersReducedMotion() {
+    return window.iGEMUtils && window.iGEMUtils.prefersReducedMotion
+      ? window.iGEMUtils.prefersReducedMotion()
+      : false;
+  }
+
+  function collectFrames() {
+    var nodes = overlay ? overlay.querySelectorAll('.intro-gif__frame') : [];
+    frames = Array.prototype.slice.call(nodes)
+      .map(function (el) {
+        return {
+          el: el,
+          src: el.getAttribute('data-gif-src') || '',
+          duration: parseInt(el.getAttribute('data-duration'), 10) || 5000,
+          preloaded: false
+        };
+      })
+      .filter(function (frame) {
+        return !!frame.src;
+      });
+  }
+
+  // 预取到 HTTP 缓存：切帧时再赋给 <img>，使 GIF 从头开始播放
+  function preload(frame) {
+    if (!frame || frame.preloaded) return;
+    frame.preloaded = true;
+    var img = new Image();
+    img.decoding = 'async';
+    img.src = frame.src;
+  }
+
+  function activate(frame) {
+    var previous = overlay.querySelector('.intro-gif__frame.is-active');
+    if (previous && previous !== frame.el) {
+      previous.classList.remove('is-active');
+    }
+    frame.el.classList.add('is-active');
+    overlay.classList.add('is-playing');
+  }
+
+  function play(index) {
+    if (finished) return;
+    if (index >= frames.length) {
+      finish();
+      return;
+    }
+
+    var frame = frames[index];
+    var settled = false;
+
+    clearTimeout(stepTimer);
+    clearTimeout(loadTimer);
+
+    function release() {
+      frame.el.removeEventListener('load', onReady);
+      frame.el.removeEventListener('error', onSkip);
+    }
+
+    function onReady() {
+      if (settled || finished) return;
+      settled = true;
+      clearTimeout(loadTimer);
+      release();
+      activate(frame);
+      // 当前帧已开播，再预取下一帧，避免与本帧争抢带宽
+      preload(frames[index + 1]);
+
+      if (!masterFinishTimer) {
+        var total = frames.reduce(function (sum, f) {
+          return sum + f.duration;
+        }, 0);
+        masterFinishTimer = setTimeout(finish, total);
+      }
+      stepTimer = setTimeout(function () {
+        play(index + 1);
+      }, Math.max(0, frame.duration - SWITCH_LEAD));
+    }
+
+    function onSkip() {
+      if (settled || finished) return;
+      settled = true;
+      clearTimeout(loadTimer);
+      release();
+      // 多帧场景的末帧失败仍交由总时长兜底继续展示上一帧。
+      if (index + 1 >= frames.length) {
+        if (!masterFinishTimer) finish();
+        return;
+      }
+      play(index + 1);
+    }
+
+    loadTimer = setTimeout(onSkip, LOAD_TIMEOUT);
+
+    frame.el.addEventListener('load', onReady);
+    frame.el.addEventListener('error', onSkip);
+    frame.el.src = frame.src;
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+
+    window.__introGifWaiting = false;
+
+    clearTimeout(stepTimer);
+    clearTimeout(loadTimer);
+    clearTimeout(masterFinishTimer);
+
+    overlay.classList.add('intro-gif--hiding');
+    root.classList.add(FINISHED);
+
+    setTimeout(function () {
+    // 释放解码帧，避免大体积 GIF 长期占用内存
+      frames.forEach(function (frame) {
+        frame.el.classList.remove('is-active');
+        frame.el.removeAttribute('src');
+      });
+      overlay.hidden = true;
+      root.classList.remove(RUNNING);
+      root.classList.remove(ARMED);
+    }, FADE_DURATION);
+  }
+
+    /*
+   * * * 与全站加载遮罩（page-loader.js）交接：先播页面加载动画，收尾后再播 GIF 开场。 * 遮罩未启用时立即开始；另设硬兜底（HANDOFF_MAX）， * 即使 pageloader:done 事件丢失（脚本缺失/异常）
+   * 也不会永久卡住。
+   */
+  function whenLoaderReady(cb) {
+    var started = false;
+    var HANDOFF_MAX = 10000;
+    function go() {
+      if (started) return;
+      started = true;
+      cb();
+    }
+
+    if (root.classList.contains('page-loader-armed')) {
+      document.addEventListener('pageloader:done', go);
+      setTimeout(go, HANDOFF_MAX);
+      return;
+    }
+    go();
+  }
+
+  function start() {
+    if (finished) return;
+
+    window.__introGifWaiting = false;
+
+    root.classList.add(RUNNING);
+
+    var skip = document.getElementById('intro-gif-skip');
+    if (skip) {
+      skip.addEventListener('click', finish);
+    }
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' || event.key === 'Esc') finish();
+    });
+
+    play(0);
+  }
+
+  function init() {
+    if (prefersReducedMotion()) return;
+
+    overlay = document.getElementById('intro-gif');
+    if (!overlay) return;
+
+    // head 内同步脚本未 armed，或看门狗已判定降级：不播放
+    if (!root.classList.contains(ARMED) || root.classList.contains(FINISHED)) return;
+
+    collectFrames();
+    if (!frames.length) return;
+
+    // 撤除时机：start() / finish()。组件自身仍有 20s 单帧超时兜底。
+    window.__introGifWaiting = true;
+
+    preload(frames[0]);
+
+    whenLoaderReady(start);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  window.IndexIntroGif = {
+    skip: finish,
+    isFinished: function () {
+      return finished;
+    }
+  };
+})();
+</script>
+
+  
+<script>
+/*
+ * * * home-nav.js * 首页（html.home-scroll-snap）专属导航与底部吸附行为。 * * 背景：全站 nav-scroll-behavior.js 的"下滚收起 / 上滚弹出"在首页会与 scroll-snap * 吸附屏冲突——向上滚动浏览内容时会把固定顶栏弹出，
+ * 遮挡画面。 * 首页改为由 hover 呼出，并让底部 footer 脱离吸附以便自由浏览。 * * 行为： * 1. 导航栏默认收起（由 nav-scroll-behavior.js 在 home-page 下 hideNav 初始化）
+ * * 鼠标移入「距顶部 <150px 的触发带」或悬停于导航栏上时呼出； * 移出触发带且不在导航栏上即收起。这样上滚浏览内容时不会弹出遮挡。 * 2. 底部 footer 进入视口后把 scroll-snap-type 切为 none（脱离吸附）
+ * * 允许自由滚动浏览 footer；离开 footer 区域恢复 y mandatory。 * * 依赖：nav-scroll-behavior.js 已在 home-page 下停用方向性收起/弹出（见其 handleScroll）
+ * * 并将 isHomePage 存入 state，避免本脚本与滚动方向逻辑打架。
+ */
+(function () {
+  'use strict';
+
+  var root = document.documentElement;
+  if (!root.classList.contains('home-scroll-snap')) return; // 仅作用于首页
+
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  var nav = document.querySelector('nav');
+  if (!nav) return;
+
+  var REVEAL_ZONE = 150; // 距顶部触发带高度（px）
+
+  // ===== 1. hover 呼出 / 移出收起（桌面端） =====
+  if (!isMobile) {
+    var rafId = null;
+    var lastY = null;
+
+    var lastEvent = null;
+    function applyHover() {
+      rafId = null;
+      if (lastY === null) return;
+      // 鼠标悬停于导航子树（含展开的下拉菜单）时保持显示，避免菜单被收起
+      var overNav = !!(lastEvent && lastEvent.target && lastEvent.target.closest &&
+        lastEvent.target.closest('nav'));
+      if (lastY < REVEAL_ZONE || overNav) {
+        nav.classList.remove('nav-hidden');
+        root.classList.remove('nav-collapsed');
+      } else {
+        nav.classList.add('nav-hidden');
+        root.classList.add('nav-collapsed');
+      }
+    }
+
+    document.addEventListener('mousemove', function (e) {
+      lastY = e.clientY;
+      lastEvent = e;
+      if (!rafId) rafId = requestAnimationFrame(applyHover);
+    });
+    // 指针离开文档（如移到浏览器 chrome / 地址栏）时收起，避免悬停残影
+    document.addEventListener('mouseleave', function () {
+      nav.classList.add('nav-hidden');
+      root.classList.add('nav-collapsed');
+    });
+  }
+
+})();
+</script>
+
+  
+<script>
+/*
+ * * * ============================================ * iGEM SZPU-2026 - 首页离屏动画停表 * ============================================ * * @description * scroll-snap 满屏分屏下，
+ * 相邻屏虽然看不到，其 infinite 合成动画 * （hero 浮动、burden 背景漂移/呼吸、药丸轮播等）仍在合成器里持续跑， * 多屏叠加放大 GPU/合成开销——用户实测「第二屏计数、
+ * 轮播优点屏」滚动卡顿。 * * 行为：IO 观察每个 .presentation-section，完全离开视口（含 12% 缓冲带） * → 打 data-offscreen；
+ * 回到缓冲带内 → 摘除。CSS 侧统一 * `animation-play-state: paused`（见 index.css「首页离屏动画停表」段）， * 回到视口从暂停点继续，
+ * 不跳帧。实测 Chrome 在 * 「相邻屏边界相切」（ratio 恰为 0 且 isIntersecting 仍为 true）状态下， * 进/出该状态都可能不产生 IO 回调——导致快速滚到相邻屏后 attr 残留，
+ * * 滚回来收不到恢复回调，药丸轮播卡在 paused。 * 修复双保险： * ① rootMargin 12% 缓冲带 + 布尔 isIntersecting 判定：相切态视为可见，
+ * * 离/进缓冲带是真正的 intersecting 翻转，IO 100% 可靠触发； * ② 滚动节流兜底自检：已打 attr 的 section 若矩形与视口相交，立即摘除—— * 无论 IO 行为如何，
+ * 可见的 section 绝不会被停在 paused。 * * @降级红线 * 无 IO / 无 JS 时不打标，所有动画照常播放——本脚本只做性能增强，不接管可见性。
+ */
+(function () {
+  'use strict';
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  ready(function () {
+    if (!('IntersectionObserver' in window)) return;
+    var sections = document.querySelectorAll('.presentation-section');
+    if (!sections.length) return;
+
+        /* 12% 缓冲带：相邻屏相切停稳时仍算「可见」（不停表）， 完全离开视口再往外 12% 才算离屏。 */
+    var io = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var e = entries[i];
+        if (e.isIntersecting) {
+          e.target.removeAttribute('data-offscreen');
+        } else {
+          e.target.setAttribute('data-offscreen', '');
+        }
+      }
+    }, { rootMargin: '12% 0px 12% 0px', threshold: 0 });
+
+    for (var i = 0; i < sections.length; i++) {
+      io.observe(sections[i]);
+    }
+
+        /* 兜底自检（滚回卡 paused 的最后一道保险）： 节流扫描已打 attr 的 section，矩形与视口有交集就立即摘除。 */
+    var pending = false;
+    function sweep() {
+      pending = false;
+      var marked = document.querySelectorAll('.presentation-section[data-offscreen]');
+      for (var i = 0; i < marked.length; i++) {
+        var r = marked[i].getBoundingClientRect();
+        if (r.bottom > 0 && r.top < window.innerHeight) {
+          marked[i].removeAttribute('data-offscreen');
+        }
+      }
+    }
+    window.addEventListener('scroll', function () {
+      if (!pending) {
+        pending = true;
+        window.requestAnimationFrame(sweep);
+      }
+    }, { passive: true });
+  });
+})();
+</script>
+
+  
+<script>
+/*
+ * * * ============================================ * iGEM SZPU-2026 - 首页 statistics（检测方法）屏揭示动画 * ============================================ * * @description * 用户首次滑动进入「结果 / 检测方法」屏（#statistics）
+ * 时： * - ELISA、qPCR 两个圆与虚线弧隐藏（缩放并叠到 CGIS 圆身后，不会露边）； * - 屏顶英文小标题逐词「右先左后」下落； * - CGIS 圆上方出现「Click here」箭头提示；
+ * * - 点击（或键盘触发）CGIS 后：一段式连贯揭示——CGIS→ELISA 虚线弧擦出、 * ELISA 随即沿轨道展开落位；最终态 = index.css 现有布局，不做任何改写）
+ * * - 每次页面加载只播一次：展开后滑走再滑回不重播，刷新才重置。 * * @降级红线 * 无 JS / prefers-reduced-motion / 无 IntersectionObserver / 无 Web Animations API * 时脚本不接管可见性，
+ * 页面直接呈现完整静态布局（圆弧与两个圆默认可见）。 * * @几何 * 隐藏态与展开轨迹在运行时用 getBoundingClientRect 量测（桌面与 ≤768px 两套 * 定位数值通用）
+ * 量测在选区进入视口后进行——mobile.css 的全局 * `img { content-visibility: auto }` 会让视口外的图片拿到 0 高度矩形。 * * 依赖：window.iGEMUtils（core/utils.js，
+ * 提供 prefersReducedMotion / debounce）， * 未加载时自动回退到 window.matchMedia。
+ */
+(function () {
+  'use strict';
+
+  var STAGE_CLASS = 'art-stage--statistics';
+  var ARMED = 'js-reveal-armed';
+  var IN_VIEW = 'in-view';
+  var REVEALED = 'revealed';
+  var METHODS_ARMED = 'js-methods-armed';
+  var HIDDEN_OPACITY = 0;
+
+    /* 两段线一笔向上画、两圆随线起飞， * 各环节互相重叠、不空等：弧线擦出 → ELISA 即刻出发；连线紧接弧线尾端继续 * 向上画 → qPCR 在连线到达前出发。顺序仍为 CGIS → ELISA → qPCR。 */
+  var T = {
+    arcDraw: 560,      // CGIS→ELISA 虚线弧擦出
+    elisaDelay: 180,   // ELISA 出发（弧线刚到 ELISA 一侧即启程，不空等）
+    linkDelay: 260,    // ELISA→qPCR 连线紧接弧线尾端继续擦出（首尾相接一笔向上）
+    linkDraw: 560,     // 连线擦出时长（与弧线一致，节奏统一）
+    qpcrDelay: 640,    // qPCR 出发（连线仍在画，衔接不断档）
+    fly: 900,          // 单个圆飞行时长
+    hintDelay: 780,    // 提示出现（等标题落定）
+    wordStagger: 62,   // 标题逐词间隔（右 → 左）
+    wordDrop: 620,     // 单个词下落时长
+    hintFade: 190
+  };
+
+  var BOW_DEG = 22;            // 轨道中段的切向偏角（绕 CGIS 同一旋向，形成"绕轨道"弧线）
+  var HIDDEN_SCALE_FACTOR = 0.86; // 隐藏态相对 CGIS 直径的额外收窄系数（防露边）
+  var HINT_GAP = 10;           // 提示箭头到 CGIS 圆盒顶部的间距（px）
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  function reducedMotion() {
+    if (window.iGEMUtils && typeof window.iGEMUtils.prefersReducedMotion === 'function') {
+      return window.iGEMUtils.prefersReducedMotion();
+    }
+    return typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function debounce(fn, wait) {
+    if (window.iGEMUtils && typeof window.iGEMUtils.debounce === 'function') {
+      return window.iGEMUtils.debounce(fn, wait);
+    }
+    var timer = null;
+    return function () {
+      var args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(null, args); }, wait);
+    };
+  }
+
+  function centerOf(rect) {
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }
+
+  function translateScale(dx, dy, scale) {
+    return 'translate(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px) scale(' + scale.toFixed(4) + ')';
+  }
+
+  ready(function () {
+    var stage = document.querySelector('.' + STAGE_CLASS);
+    if (!stage) return;
+
+    var section = stage.closest('section') || stage;
+    var cgis = stage.querySelector('.art--statistics-cgis');
+    var elisa = stage.querySelector('.art--statistics-elisa');
+    var qpcr = stage.querySelector('.art--statistics-qpcr');
+    var arc = stage.querySelector('.art--statistics-arc');
+    var link = stage.querySelector('.art--statistics-link');   // 2026-10-06f：ELISA→qPCR 连线
+    var hint = stage.querySelector('.statistics-hint');
+    var caption = stage.querySelector('.statistics-caption');
+
+    if (!cgis || !elisa || !qpcr || !arc) return;
+
+    // ---- 降级红线：任何一项能力缺失就不接管可见性 ----
+    if (reducedMotion()
+      || !('IntersectionObserver' in window)
+      || typeof Element.prototype.animate !== 'function') {
+      return;
+    }
+
+    var geo = null;          // { elisa: {...}, qpcr: {...} }
+    var revealed = false;
+    var inView = false;
+    var runningAnims = [];
+    var hintTimer = null;
+    var finishTimer = null;
+
+    // ================================================== 初始：隐藏态 + 无障碍标记 + 标题拆词 ==================================================
+    stage.classList.add(ARMED);
+    cgis.setAttribute('role', 'button');
+    cgis.setAttribute('tabindex', '0');
+    cgis.setAttribute('aria-label', 'CGIS：点击展开 qPCR 与 ELISA 检测方法');
+    cgis.addEventListener('click', onCgisActivate);
+    cgis.addEventListener('keydown', onCgisKeydown);
+
+    // 图片异常（404 等）时放弃隐藏态，避免圆永久不可见
+    [elisa, qpcr].forEach(function (img) {
+      img.addEventListener('error', disarm);
+    });
+
+    // - finish()（三圆展开完毕）才绑定 hover/focus/click —— 展开未完成时 即使移入圆圈也不会有蓝条； - 移出/失焦收回；触屏用点按开/关； - 无 JS / reduced-motion：脚本开头已 return，
+    // 条保持静态可见（降级红线）。 ==================================================
+    var revealedDone = false;
+    var hotspots = [];
+    var METHOD_DEFS = [
+      { circle: qpcr,  barClass: 'method-info--qpcr',  name: 'qPCR' },
+      { circle: elisa, barClass: 'method-info--elisa', name: 'ELISA' },
+      { circle: cgis,  barClass: 'method-info--cgis',  name: 'CGIS' }
+    ];
+
+    function collectHotspots() {
+      METHOD_DEFS.forEach(function (def) {
+        if (!def.circle) return;
+        var bar = stage.querySelector('.' + def.barClass);
+        if (!bar) return;
+        var pair = {
+          circle: def.circle,
+          bar: bar,
+          name: def.name,
+          openedAt: 0,     // 条被打开的时刻（tap 序列里 click 的开/关判断用）
+          open: null,
+          close: null
+        };
+        pair.open = function () {
+          if (!revealedDone) return;   // 展开动画未完成前不允许出现蓝条
+          closeAllBars(bar);
+          bar.classList.add('is-open');
+          // 记录打开时刻：触屏 tap 会先派发 mouseenter（打开）再派发 click， click 里的开/关判断需要知道「是不是刚被同一次交互打开的」
+          pair.openedAt = Date.now();
+        };
+        pair.close = function () {
+          bar.classList.remove('is-open');
+        };
+        hotspots.push(pair);
+      });
+    }
+
+    function closeAllBars(except) {
+      hotspots.forEach(function (p) {
+        if (p.bar !== except) p.bar.classList.remove('is-open');
+      });
+    }
+
+    function armMethodBars() {
+      stage.classList.add(METHODS_ARMED);
+    }
+
+        /* * 展开动画全部结束后（finish 内调用）才允许悬停/点按触发蓝条 */
+    function bindMethodBars() {
+      revealedDone = true;
+      hotspots.forEach(function (p) {
+        p.circle.setAttribute('tabindex', '0');
+        p.circle.setAttribute('role', 'button');
+        p.circle.setAttribute('aria-label', p.name + '：查看该检测方式的优势与劣势');
+        p.circle.classList.add('method-hotspot');
+        p.circle.addEventListener('mouseenter', p.open);
+        p.circle.addEventListener('mouseleave', p.close);
+        p.circle.addEventListener('focus', p.open);
+        p.circle.addEventListener('blur', p.close);
+        // 触屏没有 hover：点按开/关。tap 序列 = mouseenter(开) → click： 若条刚被同一次交互打开（<600ms），click 不再关闭，视为「点开」； 已打开一段时间后再点才是「关闭」。
+        p.circle.addEventListener('click', function () {
+          if (p.bar.classList.contains('is-open')
+            && p.openedAt && Date.now() - p.openedAt < 600) {
+            return;
+          }
+          if (p.bar.classList.contains('is-open')) { p.close(); } else { p.open(); }
+        });
+      });
+    }
+
+    function disarmMethodBars() {
+      stage.classList.remove(METHODS_ARMED);
+      hotspots.forEach(function (p) {
+        p.circle.classList.remove('method-hotspot');
+        p.circle.removeAttribute('tabindex');
+        p.circle.removeAttribute('role');
+        p.circle.removeAttribute('aria-label');
+        p.bar.classList.remove('is-open');
+      });
+    }
+
+    collectHotspots();
+    armMethodBars();
+
+    var captionWords = splitCaption(caption);
+
+    function onCgisKeydown(event) {
+      if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault();
+        onCgisActivate();
+      }
+    }
+
+    function onCgisActivate() {
+      if (revealed) return;
+      revealed = true;
+      reveal();
+    }
+
+    function disarm() {
+      stage.classList.remove(ARMED);
+      disarmMethodBars();
+      if (cgis) {
+        cgis.removeAttribute('role');
+        cgis.removeAttribute('tabindex');
+        cgis.removeAttribute('aria-label');
+      }
+      window.removeEventListener('resize', onResizeDebounced);
+    }
+
+    function splitCaption(el) {
+      if (!el) return [];
+      var text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!text) return [];
+      var words = text.split(' ');
+      var spans = [];
+      el.textContent = '';
+      words.forEach(function (word, i) {
+        if (i) el.appendChild(document.createTextNode(' '));
+        var span = document.createElement('span');
+        span.className = 'statistics-caption__word';
+        span.textContent = word;
+        el.appendChild(span);
+        spans.push(span);
+      });
+      // 拆词后先压住（脚本在此之前已把该屏判为未进入视口，不会出现闪烁）
+      el.classList.add('statistics-caption--armed');
+      return spans;
+    }
+
+    // ================================================== 量测：把每个圆的"最终中心/尺寸"换算成隐藏态位移与缩放 ==================================================
+    function measure() {
+      var cgisRect = cgis.getBoundingClientRect();
+      var elisaRect = elisa.getBoundingClientRect();
+      var qpcrRect = qpcr.getBoundingClientRect();
+      // 宽或高为 0：图片未解码 / content-visibility 跳过布局 → 视为无效
+      if (!cgisRect.width || !cgisRect.height
+        || !elisaRect.width || !elisaRect.height
+        || !qpcrRect.width || !qpcrRect.height) {
+        return false;
+      }
+
+      var c = centerOf(cgisRect);
+      var next = {};
+      [['elisa', elisaRect], ['qpcr', qpcrRect]].forEach(function (pair) {
+        var key = pair[0];
+        var rect = pair[1];
+        var target = centerOf(rect);
+        var dx = c.x - target.x;
+        var dy = c.y - target.y;
+        // 隐藏态缩放：保证两个方向都不超过 CGIS 圆盒，再乘收窄系数（防"大圆露边"）
+        var ratio = Math.min(cgisRect.width / rect.width, cgisRect.height / rect.height);
+        var scale = Math.min(ratio * HIDDEN_SCALE_FACTOR, 0.98);
+
+        // 轨道中段控制点：以 CGIS 为圆心、同旋向偏 BOW_DEG，形成绕轨弧线
+        var theta = (target.x < c.x ? -BOW_DEG : BOW_DEG) * Math.PI / 180;
+        var cos = Math.cos(theta);
+        var sin = Math.sin(theta);
+        var midFactor = 0.46;
+        var mx = (dx * cos - dy * sin) * midFactor;
+        var my = (dx * sin + dy * cos) * midFactor;
+
+        next[key] = {
+          dx: dx,
+          dy: dy,
+          mx: mx,
+          my: my,
+          scale: scale,
+          midScale: scale + (1 - scale) * 0.58
+        };
+      });
+
+      geo = next;
+      return true;
+    }
+
+    function applyHiddenState() {
+      if (!measure()) return false;
+      elisa.style.transform = translateScale(geo.elisa.dx, geo.elisa.dy, geo.elisa.scale);
+      qpcr.style.transform = translateScale(geo.qpcr.dx, geo.qpcr.dy, geo.qpcr.scale);
+      positionHint();
+      return true;
+    }
+
+    function positionHint() {
+      if (!hint) return;
+      var stageRect = stage.getBoundingClientRect();
+      var cgisRect = cgis.getBoundingClientRect();
+      hint.style.left = (cgisRect.left - stageRect.left + cgisRect.width / 2).toFixed(1) + 'px';
+      hint.style.top = (cgisRect.top - stageRect.top - HINT_GAP).toFixed(1) + 'px';
+    }
+
+        /* * * 等图片完成布局（content-visibility: auto 的图片在视口外没有真实尺寸）。 * 视口内逐帧重试，超时则放弃隐藏态。 */
+    function measureWhenReady(callback) {
+      var attempts = 0;
+      (function tick() {
+        if (measure()) {
+          callback(true);
+          return;
+        }
+        attempts += 1;
+        if (attempts > 30) {
+          callback(false);
+          return;
+        }
+        requestAnimationFrame(tick);
+      })();
+    }
+
+    // ================================================== 进入视口：标题下落 + 提示出现 ==================================================
+    var observer = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          observer.disconnect();
+          onEnterView();
+          return;
+        }
+      }
+    }, { threshold: 0.45 });
+    observer.observe(section);
+
+    function onEnterView() {
+      inView = true;
+      measureWhenReady(function (ok) {
+        if (ok) {
+          applyHiddenState();
+        } else {
+        // 量测失败：放弃隐藏态与提示，恢复完整静态布局（标题照常下落）
+          disarm();
+        }
+        stage.classList.add(IN_VIEW);
+        dropCaption();
+        if (ok) {
+          hintTimer = window.setTimeout(showHint, T.hintDelay);
+        }
+      });
+    }
+
+    function dropCaption() {
+      if (!captionWords.length) return;
+      if (caption) caption.classList.remove('statistics-caption--armed');
+      var last = captionWords.length - 1;
+      var anims = captionWords.map(function (word, i) {
+      // 右 → 左：右侧词先落，左侧词后落
+        var delay = (last - i) * T.wordStagger;
+        return word.animate([
+          { transform: 'translateY(-1.15em)', opacity: 0, offset: 0 },
+          { transform: 'translateY(0.14em)', opacity: 1, offset: 0.72 },
+          { transform: 'translateY(0)', opacity: 1, offset: 1 }
+        ], {
+          duration: T.wordDrop,
+          delay: delay,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'backwards'
+        });
+      });
+      Promise.all(anims.map(function (a) {
+        return a.finished.catch(function () {});
+      })).then(function () {
+        anims.forEach(function (a) { a.cancel(); });
+      });
+    }
+
+    function showHint() {
+      if (!hint || revealed) return;
+      positionHint();
+      hint.style.display = 'flex';
+      var inner = hint.querySelector('.statistics-hint__inner');
+      if (!inner) return;
+      var pop = inner.animate([
+        { opacity: 0, transform: 'translateY(8px) scale(0.86)', offset: 0 },
+        { opacity: 1, transform: 'translateY(0) scale(1)', offset: 1 }
+      ], {
+        duration: 460,
+        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        fill: 'forwards'
+      });
+      runningAnims.push(pop);
+    }
+
+    // ================================================== 点击展开：虚线弧 → ELISA → qPCR ==================================================
+    function reveal() {
+      if (!geo) {
+      // 极端情况（进入视口后立刻点击且量测尚未就绪）：直接静态揭晓
+        disarm();
+        return;
+      }
+      stage.classList.add(REVEALED);
+      hideHint();
+      drawArc();
+      flyCircle(elisa, geo.elisa, T.elisaDelay);
+      drawLink();
+      flyCircle(qpcr, geo.qpcr, T.qpcrDelay);
+      finishTimer = window.setTimeout(finish, T.qpcrDelay + T.fly + 90);
+    }
+
+    function hideHint() {
+      if (hintTimer) {
+        clearTimeout(hintTimer);
+        hintTimer = null;
+      }
+      if (!hint) return;
+      var inner = hint.querySelector('.statistics-hint__inner');
+      if (!inner || hint.style.display === 'none' || !hint.style.display) {
+        if (hint.parentNode) hint.parentNode.removeChild(hint);
+        return;
+      }
+      var fade = inner.animate([
+        { opacity: 1, offset: 0 },
+        { opacity: 0, offset: 1 }
+      ], { duration: T.hintFade, easing: 'ease-in', fill: 'forwards' });
+      runningAnims.push(fade);
+      window.setTimeout(function () {
+        if (hint.parentNode) hint.parentNode.removeChild(hint);
+      }, T.hintFade + 40);
+    }
+
+    function drawArc() {
+    // 从 CGIS 一侧（左下角）向 ELISA 一侧（右上）扇形擦除，呈"画出虚线弧"
+      var anim = arc.animate([
+        { clipPath: 'polygon(0% 100%, 0% 100%, 0% 100%)', offset: 0 },
+        { clipPath: 'polygon(0% 100%, 0% -140%, 240% 100%)', offset: 1 }
+      ], {
+        duration: T.arcDraw,
+        easing: 'cubic-bezier(0.3, 0.9, 0.4, 1)',
+        fill: 'forwards'
+      });
+      runningAnims.push(anim);
+    }
+
+    function drawLink() {
+      if (!link) return;
+      var anim = link.animate([
+        { clipPath: 'polygon(0% 100%, 0% 100%, 0% 100%)', offset: 0 },
+        { clipPath: 'polygon(0% 100%, 0% -140%, 300% 100%)', offset: 1 }
+      ], {
+        duration: T.linkDraw,
+        delay: T.linkDelay,
+        easing: 'cubic-bezier(0.3, 0.9, 0.4, 1)',
+        fill: 'forwards'
+      });
+      runningAnims.push(anim);
+    }
+
+    function flyCircle(el, g, delay) {
+      if (!el || !g) return;
+      var anim = el.animate([
+        { transform: translateScale(g.dx, g.dy, g.scale), opacity: HIDDEN_OPACITY, offset: 0 },
+        { transform: translateScale(g.mx, g.my, g.midScale), opacity: 1, offset: 0.55 },
+        { transform: translateScale(0, 0, 1), opacity: 1, offset: 1 }
+      ], {
+        duration: T.fly,
+        delay: delay,
+        // 起步稍缓、末端减速：让"绕轨道"的弧线轨迹看得清，而不是瞬间弹出
+        easing: 'cubic-bezier(0.45, 0.12, 0.28, 1)',
+        // 必须用 both：只用 backwards 时动画结束后效果即失效，元素会回落到 内联隐藏 transform + .js-reveal-armed 的 opacity:0（收尾前）
+        // → 出现 "到位后又消失一下再弹回"的闪动。both 让末帧保持到 finish() 同帧清理。
+        fill: 'both'
+      });
+      runningAnims.push(anim);
+    }
+
+        /* * * 收尾：交回 CSS 布局 —— 去掉隐藏类与内联 transform、取消 WAAPI 动画。 * 上述操作在同一帧内完成，最终态与动画末帧一致，不会闪烁。 */
+    function finish() {
+      stage.classList.remove(ARMED);
+      stage.classList.add(REVEALED + '-done');
+      bindMethodBars();      // 三圆到位：解锁信息条悬停（REQ 2026-10-05）
+      elisa.style.transform = '';
+      qpcr.style.transform = '';
+      runningAnims.forEach(function (a) {
+        try { a.cancel(); } catch (e) { /* 已取消则忽略 */ }
+      });
+      runningAnims = [];
+      cgis.removeAttribute('role');
+      cgis.removeAttribute('tabindex');
+      cgis.removeAttribute('aria-label');
+      window.removeEventListener('resize', onResize);
+      if (hint && hint.parentNode) hint.parentNode.removeChild(hint);
+    }
+
+    // ================================================== 窗口尺寸变化：展开前重新量测（两套断点定位数值不同） ==================================================
+    function onResize() {
+      if (revealed || !inView) return;
+      if (window.innerHeight === 0) return;
+      applyHiddenState();
+    }
+    var onResizeDebounced = debounce(onResize, 180);
+    window.addEventListener('resize', onResizeDebounced);
+  });
+})();
+</script>
+
+  
+<script>
+/*
+ * * * ============================================ * iGEM SZPU-2026 - 首页 dbtl-cycle 屏「想法泵出」入场动画 * ============================================ * * @description * 用户创意：右侧「工作流程与原理示意图」看起来是从左边酵母吉祥物头部 * "泵出的想法"——以头部中心为图片的最小值点（scale ≈ 0.05）
+ * * 沿一条先向上弓起、再飞向右上的弧线移动到现有设计位置，过程中逐渐放大。 * * - 触发：首次滑入本屏（IntersectionObserver），每次页面加载只播一次；
+ * * 滑走再滑回不重播，刷新才重置。 * - 结束态：与 index.css 现有布局逐像素一致（收尾清内联样式交回 CSS）。 * - 降级红线：无 JS / prefers-reduced-motion / 无 IO / 无 WAAPI 时不接管 * 任何可见性，
+ * 页面直接呈现完整静态布局（隐藏类只由本脚本添加）。 * - 几何运行时量测（桌面与 ≤768px 两套定位数值通用）；量测放在进入视口的 * 回调里并校验尺寸——mobile.css 的全局 `img { content-visibility: auto }` * 会让视口外图片拿到 0 高度矩形。
+ * * * 依赖：window.iGEMUtils（core/utils.js）；缺失时回退到 window.matchMedia。
+ */
+(function () {
+  'use strict';
+
+  var STAGE = '.art-stage--dbtl-cycle';
+  var DIAGRAM = '.art--dbtl-cycle-diagram';
+  var MASCOT = '.art--dbtl-cycle-mascot';
+  var ARMED = 'js-pump-armed';
+  var DONE = 'pump-done';
+
+    /* * 参数集中区（交付微调入口） */
+  var T = {
+    fly: 1150        // 单次飞行总时长（ms）
+  };
+  var HEAD = { x: 0.49, y: 0.36 };  // 头部中心在吉祥物图内的比例位置（对照素材量取）
+  var START_SCALE = 0.05;           // 起始最小缩放（头部中心的最小值点）
+  var EMERGE_SCALE = 0.08;          // 在头部浮现完成时的缩放
+  var EMERGE_AT = 0.14;             // 浮现完成的时间点（占全程比例）
+  var MID_AT = 0.45;                // 轨迹中段控制点的时间点
+  var MID_PROGRESS = 0.42;          // 中段控制点沿主轨迹的位置（0=头部，1=终点）
+  var MID_SCALE = 0.32;             // 中段缩放（“逐渐变大”的中间值）
+  var BOW_UP = 0.06;                // 轨迹向上弓起量（占舞台高度比例，泵出感）
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  function reducedMotion() {
+    if (window.iGEMUtils && typeof window.iGEMUtils.prefersReducedMotion === 'function') {
+      return window.iGEMUtils.prefersReducedMotion();
+    }
+    return typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function debounce(fn, wait) {
+    if (window.iGEMUtils && typeof window.iGEMUtils.debounce === 'function') {
+      return window.iGEMUtils.debounce(fn, wait);
+    }
+    var timer = null;
+    return function () {
+      var args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(null, args); }, wait);
+    };
+  }
+
+  function translateScale(dx, dy, scale) {
+    return 'translate(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px) scale(' + scale.toFixed(4) + ')';
+  }
+
+  ready(function () {
+    var stage = document.querySelector(STAGE);
+    if (!stage) return;
+
+    var section = stage.closest('section') || stage;
+    var diagram = stage.querySelector(DIAGRAM);
+    var mascot = stage.querySelector(MASCOT);
+    if (!diagram || !mascot) return;
+
+    // ---- 降级红线：能力不齐就不接管可见性 ----
+    if (reducedMotion()
+      || !('IntersectionObserver' in window)
+      || typeof Element.prototype.animate !== 'function') {
+      return;
+    }
+
+    var geo = null;          // { dx, dy, midX, midY }
+    var done = false;
+    var runningAnims = [];
+
+    // ---- armed：只加类（CSS 负责 opacity:0 / z-index / will-change）----
+    stage.classList.add(ARMED);
+
+    // 吉祥物素材异常时放弃隐藏态，避免示意图永久不可见
+    diagram.addEventListener('error', disarm);
+
+    // ================================================== 量测：头部中心（起点）与示意图中心（终点）都从实时 rect 取 ==================================================
+    function measure() {
+      var d = diagram.getBoundingClientRect();
+      var m = mascot.getBoundingClientRect();
+      // 宽或高为 0：图片未解码 / content-visibility 跳过布局 → 视为无效
+      if (!d.width || !d.height || !m.width || !m.height) return false;
+
+      var headX = m.left + m.width * HEAD.x;
+      var headY = m.top + m.height * HEAD.y;
+      var endX = d.left + d.width / 2;
+      var endY = d.top + d.height / 2;
+      var dx = headX - endX;                    // 隐藏态位移：中心叠到头部
+      var dy = headY - endY;
+      var stageH = stage.getBoundingClientRect().height || 1;
+
+      // 中段控制点：沿主轨迹走到 MID_PROGRESS，再向上弓起 → “先冒头、再飞向右上”
+      var rest = 1 - MID_PROGRESS;
+      geo = {
+        dx: dx,
+        dy: dy,
+        midX: dx * rest,
+        midY: dy * rest - BOW_UP * stageH
+      };
+      return true;
+    }
+
+    function applyHiddenState() {
+      if (!measure()) return false;
+      diagram.style.transform = translateScale(geo.dx, geo.dy, START_SCALE);
+      return true;
+    }
+
+        /* * 等图片完成布局（content-visibility: auto 的图片在视口外没有真实尺寸） */
+    function measureWhenReady(callback) {
+      var attempts = 0;
+      (function tick() {
+        if (measure()) {
+          callback(true);
+          return;
+        }
+        attempts += 1;
+        if (attempts > 30) {
+          callback(false);
+          return;
+        }
+        requestAnimationFrame(tick);
+      })();
+    }
+
+    // ================================================== 进入视口：量测 → 泵出 ==================================================
+    var observer = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          observer.disconnect();
+          onEnterView();
+          return;
+        }
+      }
+    }, { threshold: 0.45 });
+    observer.observe(section);
+
+    function onEnterView() {
+      measureWhenReady(function (ok) {
+        if (!ok) {
+        // 量测失败（素材异常）：放弃隐藏态，恢复完整静态布局
+          disarm();
+          return;
+        }
+        applyHiddenState();
+        pump();
+        window.setTimeout(finish, T.fly + 90);
+      });
+    }
+
+    function pump() {
+      var anim = diagram.animate([
+        { transform: translateScale(geo.dx, geo.dy, START_SCALE), opacity: 0, offset: 0 },
+        // 在头部快速浮现（想法点亮），并微微放大
+        { transform: translateScale(geo.dx, geo.dy, EMERGE_SCALE), opacity: 1, offset: EMERGE_AT },
+        // 中段：沿弧线已离开头部，尺寸明显变大
+        { transform: translateScale(geo.midX, geo.midY, MID_SCALE), opacity: 1, offset: MID_AT },
+        // 终点：现有设计位置
+        { transform: translateScale(0, 0, 1), opacity: 1, offset: 1 }
+      ], {
+        duration: T.fly,
+        // 起步稍缓、末端减速：泵出的“喷发感” + 平稳落位
+        easing: 'cubic-bezier(0.3, 0.7, 0.3, 1)',
+        // 必须用 both：只用 backwards 时动画结束后效果失效， 元素会回落到内联隐藏 transform + armed 的 opacity:0 → 到位后闪没（见 pitfalls A1）
+        fill: 'both'
+      });
+      runningAnims.push(anim);
+    }
+
+        /* * * 收尾：交回 CSS 布局——去隐藏类、清内联 transform、取消 WAAPI 动画。 * 全部在同一帧内完成；末帧 == CSS 默认态，取消不产生跳变。 */
+    function finish() {
+      done = true;
+      stage.classList.remove(ARMED);
+      stage.classList.add(DONE);
+      diagram.style.transform = '';
+      runningAnims.forEach(function (a) {
+        try { a.cancel(); } catch (e) { /* 已取消则忽略 */ }
+      });
+      runningAnims = [];
+      window.removeEventListener('resize', onResizeDebounced);
+    }
+
+    function disarm() {
+      stage.classList.remove(ARMED);
+      window.removeEventListener('resize', onResizeDebounced);
+    }
+
+    // ================================================== 窗口尺寸变化：播放前重新量测（桌面 / ≤768px 两套定位数值） ==================================================
+    function onResize() {
+      if (done) return;
+      if (window.innerHeight === 0) return;
+      applyHiddenState();
+    }
+    var onResizeDebounced = debounce(onResize, 180);
+    window.addEventListener('resize', onResizeDebounced);
+  });
+})();
+</script>
+
+  
+<script>
+/*
+ * 从页面打开那刻起数字持续跳动， * 读者停留的每一秒都在涨。另有一条「秒节拍」轨道：光点每秒扫一趟 = 约 21 人。 * 这两者是本屏"持续抓住视觉"的核心，入场动画只负责第一次亮相。
+ * * * 播放顺序（进入该屏才播，每次加载只播一次）： * eyebrow → 「1 in 12」弹出 → 句子右先左后逐词下落 → 居中大图（生病酵母）淡入并停留 * → 12 只酵母从「叠在最左」自左向右逐只发牌滑出（前 11 只彩色 = 没生病，
+ * * 第 12 只灰的 = 生病，最后落位并脉冲一次）→ 计数器整块升起并开始实时跳动 * → 秒节拍光点启动 → 三年占比表推进 → 注脚淡入。 * * 工程质量约定（与 statistics-reveal.js / dbtl-pump.js 同一套）
+ * * - 降级红线：reduced-motion / 无 IO / 无 WAAPI → 完全不接管，标记里的静态年值 * （660,000,000 people catch influenza A / year）
+ * 保持可见——无 JS 环境读到的 * 必须是这句话，而不是一个停住的 0； * - 隐藏态只由本脚本加类（.js-burden-armed）：默认 CSS 不做隐藏； * - 逐段 WAAPI 一律 fill:'both'（用 backwards 会在动画结束到收尾之间回落到隐藏态，
+ * * 造成"到位后消失一下"的闪没——statistics 屏已踩过）； * - 只动 transform / opacity，布局数值全在 CSS 百分比里； * - 实时计数器：单一 rAF 循环 + 仅在整数变化时写 DOM；
+ * 离屏 / 标签页隐藏时停表， * 恢复后按统一的起始时间戳补算（不累积漂移）； * - 跳动的数字对读屏器 aria-hidden，旁边另有静态的无障碍句子说明速率。此时 * IntersectionObserver 的 isIntersecting 恒为 true（规范把边界相切也算相交）
+ * * 且 ratio 从 >0 变成 0 时 Chromium **不再派发回调**——纯 IO 无法感知离屏， * 计数器会在读者看不到的地方一直空转。因此：IO 只负责入场触发；
+ * * 计数循环内部每隔 ~400ms 用 getBoundingClientRect 自检一次真可见性， * 并用 passive scroll 监听负责"滚回来就复工"。 * * 依赖：window.iGEMUtils（core/utils.js）
+ * 缺失时回退到 window.matchMedia。
+ */
+(function () {
+  'use strict';
+
+  var STAGE = '.art-stage--influenza-burden';
+  var ARMED = 'js-burden-armed';
+  var DONE = 'burden-done';
+  var LIVE = 'burden-counter--live';
+
+    /* * ==== 数据口径（改这里就能改速率；必须与 index.njk 的注脚口径一致）==== */
+  var YEARLY_INFECTIONS = 660000000;                 // 每年甲型流感感染人数（估算）
+  var SECONDS_PER_YEAR = 365.25 * 24 * 60 * 60;
+  var RATE_PER_SECOND = YEARLY_INFECTIONS / SECONDS_PER_YEAR;   // ≈ 20.91 人/秒
+
+    /* * ==== 入场时间轴参数（调参入口，单位 ms）==== */
+  var T = {
+        /* ② 顺序必须清晰 —— 先「上面的字体」（eyebrow → 1 in 12 → 句子）出完， 然后才是叠加图（居中大图 → 12 只酵母发牌）。 */
+    eyebrowAt: 0,
+    eyebrowDur: 500,
+    numAt: 250,
+    numDur: 700,
+    copyAt: 550,          // 句子 8 词，末词 550+7*90=1180 起播、1980 收尾
+    copyStagger: 90,
+    copyDur: 800,
+    heroAt: 2100,         // 文字出完之后，居中大图才淡入（用户指定的先后）
+    heroDur: 1100,
+    seatAt: 2500,         // 12 只酵母最后登场：从「叠在最左」逐只向右拉出
+    seatStagger: 120,
+    seatDur: 750,
+    sickPopDur: 500,      // 生病那只落位后的重点脉冲
+    counterAt: 2900,
+    counterDur: 800,
+    trackAt: 3400,
+    trackDur: 600,
+    yearsAt: 3100,
+    yearStagger: 200,
+    yearDur: 700,
+    noteAt: 4400,
+    noteDur: 600
+  };
+  var TOTAL = T.noteAt + T.noteDur;
+
+  var SEAT_POP = 1.16;          // 生病席位落位后的轻微过冲
+  var RECT_CHECK_MS = 400;      // 计数循环内可见性自检间隔
+  var IMG_WAIT_MAX = 2500;      // 等酵母/大图解码的最长时间（超时照播，不空转）
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  function reducedMotion() {
+    if (window.iGEMUtils && typeof window.iGEMUtils.prefersReducedMotion === 'function') {
+      return window.iGEMUtils.prefersReducedMotion();
+    }
+    return typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function splitWords(el) {
+    var words = (el.textContent || '').trim().split(/\s+/);
+    var spans = [];
+    el.textContent = '';
+    words.forEach(function (w, i) {
+      if (i) el.appendChild(document.createTextNode(' '));
+      var s = document.createElement('span');
+      s.className = 'burden-lead__word';
+      s.textContent = w;
+      el.appendChild(s);
+      spans.push(s);
+    });
+    el.classList.add('burden-lead--armed');
+    return spans;
+  }
+
+  ready(function () {
+    var stage = document.querySelector(STAGE);
+    if (!stage) return;
+
+    var section = stage.closest('section') || stage;
+    var eyebrow = stage.querySelector('.burden-eyebrow');
+    var num = stage.querySelector('.burden-lead__num');
+    var copy = stage.querySelector('.burden-lead__copy');
+    var seats = [].slice.call(stage.querySelectorAll('.burden-grid__dot'));
+    var litSeat = stage.querySelector('.burden-grid__dot.is-lit');
+    var heroImg = stage.querySelector('.burden-hero');
+    var seatImgs = seats.map(function (s) { return s.querySelector('.burden-grid__yeast'); });
+    var counter = stage.querySelector('.burden-counter');
+    var cLabel = stage.querySelector('[data-burden-label]');
+    var cValue = stage.querySelector('[data-burden-value]');
+    var cUnit = stage.querySelector('[data-burden-unit]');
+    var cTrack = stage.querySelector('.burden-counter__track');
+    var cTick = stage.querySelector('.burden-counter__tick');
+    var cRate = stage.querySelector('.burden-counter__rate');
+    var years = [].slice.call(stage.querySelectorAll('.burden-year'));
+    var yearsCaption = stage.querySelector('.burden-years-caption');
+    var note = stage.querySelector('.burden-note');
+
+    if (!num || !copy || !seats.length || !years.length || !note || !cValue) return;
+
+    // ---- 降级红线：能力不齐就不接管可见性（静态年值原样保留）----
+    var canAnimate = !reducedMotion()
+      && ('IntersectionObserver' in window)
+      && typeof Element.prototype.animate === 'function';
+    if (!canAnimate) return;
+
+    var words = splitWords(copy);
+    var running = [];
+    var entered = false;
+    var startedAt = Date.now();   // 「打开页面」的时刻：实时计数从这里起算
+
+    stage.classList.add(ARMED);
+
+    function play(el, frames, opts) {
+      var a = el.animate(frames, {
+        duration: opts.duration,
+        delay: opts.delay || 0,
+        easing: opts.easing || 'cubic-bezier(0.22, 0.9, 0.3, 1)',
+        fill: 'both'          // 铁律：延迟期保首帧 + 结束后保末帧
+      });
+      running.push(a);
+      return a;
+    }
+
+        /* * 等动画素材就绪再开播（酵母两种各一张 + 居中大图；最多等 IMG_WAIT_MAX） */
+    function whenReady(cb) {
+      var imgs = [];
+      if (seatImgs.length) imgs.push(seatImgs[0], seatImgs[seatImgs.length - 1]);
+      if (heroImg) imgs.push(heroImg);
+      var jobs = imgs.filter(Boolean).map(function (im) {
+        if (im.complete && im.naturalWidth) return Promise.resolve();
+        return new Promise(function (res) {
+          im.addEventListener('load', res, { once: true });
+          im.addEventListener('error', res, { once: true });   // 失败也放行，不留空转
+        });
+      });
+      var timeout = new Promise(function (res) { window.setTimeout(res, IMG_WAIT_MAX); });
+      Promise.race([Promise.all(jobs), timeout]).then(cb);
+    }
+
+    // ===== 实时计数器：单 rAF 循环，可见性自检见文件头「离屏判定」 =====
+    var rafId = null;
+    var lastShown = -1;
+    var lastRectCheck = 0;
+
+    function inViewport() {
+      var r = stage.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var vw = window.innerWidth || document.documentElement.clientWidth;
+      // 严格要求有实际交叠（bottom/top 都跨过视口边），边界相切不算
+      return r.bottom > 1 && r.top < vh - 1 && r.right > 0 && r.left < vw;
+    }
+
+    function tickCounter() {
+      rafId = null;
+      if (document.hidden) return;                 // 标签页隐藏：停表，回前台再唤醒
+      var now = performance.now();
+      if (now - lastRectCheck >= RECT_CHECK_MS) {
+        lastRectCheck = now;
+        if (!inViewport()) {
+        // 离屏：停表 + 光点一并暂停（滚回来由 scroll 监听唤醒）
+          if (tickAnim && tickAnim.playState === 'running') tickAnim.pause();
+          return;
+        }
+      }
+      var v = Math.floor(((Date.now() - startedAt) / 1000) * RATE_PER_SECOND);
+      if (v !== lastShown) {
+        lastShown = v;
+        cValue.textContent = v.toLocaleString('en-US');
+      }
+      rafId = requestAnimationFrame(tickCounter);
+    }
+
+    function resumeCounter() {
+      if (rafId === null && !document.hidden) {
+        lastRectCheck = 0;                         // 复工时强制先做一次矩形自检
+        rafId = requestAnimationFrame(tickCounter);
+      }
+      if (tickAnim && tickAnim.playState === 'paused') {
+        tickAnim.play();                           // 秒节拍光点随复工一起恢复
+      }
+    }
+
+    function pauseCounter() {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      if (tickAnim && tickAnim.playState === 'running') {
+        tickAnim.pause();                          // 光点是 infinite WAAPI，rAF 停了它也照跑，须一并暂停
+      }
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { pauseCounter(); } else { resumeCounter(); }
+    });
+
+    // 滚动即尝试复工（真正可不可见由 tick 内的矩形自检把关；rafId 去重，开销可忽略）
+    window.addEventListener('scroll', resumeCounter, { passive: true });
+
+        /* * 切到实时模式：改写文案 + 显示秒节拍（无 JS 时读的是静态年值，见文件头） */
+    function goLive() {
+      if (!counter || counter.classList.contains(LIVE)) return;
+      cLabel.textContent = 'Since you opened this page';
+      cUnit.textContent = 'people have caught influenza A';
+      cValue.setAttribute('aria-hidden', 'true');   // 读屏器读不到每秒变化的数字
+      counter.classList.add(LIVE);
+      lastShown = -1;
+      resumeCounter();
+    }
+
+        /* * 秒节拍光点：每 1s 扫一趟轨道（= 约 21 人），宽度运行时量测 */
+    var tickAnim = null;
+    function startTick() {
+      if (!cTrack || !cTick) return;
+      var w = cTrack.getBoundingClientRect().width;
+      if (!w) return;                                // 量不到就不跑，不留下永久隐藏的轨道
+      if (tickAnim) { try { tickAnim.cancel(); } catch (e) { /* noop */ } }
+      tickAnim = cTick.animate([
+        { transform: 'translateX(0px)' },
+        { transform: 'translateX(' + w.toFixed(1) + 'px)' }
+      ], { duration: 1000, iterations: Infinity, easing: 'linear' });
+    }
+
+    function entrance() {
+      if (eyebrow) {
+        play(eyebrow, [
+          { opacity: 0, transform: 'translateY(-6px)', offset: 0 },
+          { opacity: 1, transform: 'translateY(0)', offset: 1 }
+        ], { duration: T.eyebrowDur, delay: T.eyebrowAt });
+      }
+
+      play(num, [
+        { transform: 'scale(0.86)', opacity: 0, offset: 0 },
+        { transform: 'scale(1.04)', opacity: 1, offset: 0.62 },
+        { transform: 'scale(1)', opacity: 1, offset: 1 }
+      ], { duration: T.numDur, delay: T.numAt, easing: 'cubic-bezier(0.3, 0.7, 0.3, 1)' });
+
+      words.forEach(function (w, i) {
+        var idx = words.length - 1 - i;   // 最右侧的词先落
+        play(w, [
+          { transform: 'translateY(-0.8em)', opacity: 0, offset: 0 },
+          { transform: 'translateY(0.08em)', opacity: 1, offset: 0.72 },
+          { transform: 'translateY(0)', opacity: 1, offset: 1 }
+        ], { duration: T.copyDur, delay: T.copyAt + idx * T.copyStagger, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+      });
+
+      // 居中大图（生病酵母）：淡入后停留，只播一次。
+      if (heroImg) {
+        play(heroImg, [
+          { transform: 'scale(0.94)', opacity: 0, offset: 0 },
+          { transform: 'scale(1.015)', opacity: 1, offset: 0.72 },
+          { transform: 'scale(1)', opacity: 1, offset: 1 }
+        ], { duration: T.heroDur, delay: T.heroAt });
+      }
+
+      // 12 只酵母：先全部叠在第 1 格，再自左向右逐只滑出（发牌）。 每只的起始偏移 = 第 1 席 left − 自己席位 left —— 逐只量测，不写死断点百分比， 也不受 gap 的 clamp 非整数影响（叠放因此能精确重合）
+      // ⚠ 必须先把 12 个 left 全部量完再 play：某只一旦挂上 fill:'both' 的动画， 它的 rect 就带上了 transform，后续量测会被污染。
+      var baseLeft = seats.length ? seats[0].getBoundingClientRect().left : 0;
+      var froms = seats.map(function (s) { return baseLeft - s.getBoundingClientRect().left; });
+      var lastSeatAnim = null;
+      seats.forEach(function (s, i) {
+        var a = play(s, [
+          { transform: 'translateX(' + froms[i].toFixed(1) + 'px) scale(0.9)', opacity: 0, offset: 0 },
+          { transform: 'translateX(0px) scale(1)', opacity: 1, offset: 1 }
+        ], { duration: T.seatDur, delay: T.seatAt + i * T.seatStagger, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+        if (s === litSeat) lastSeatAnim = a;
+      });
+
+      // 生病那只（第 12 席）：等它真的滑到位，再补一次重点脉冲。 所以用上一段动画的 finished 串接；被 finish() 取消时 reject，忽略即可。
+      if (litSeat && lastSeatAnim) {
+        lastSeatAnim.finished.then(function () {
+          play(litSeat, [
+            { transform: 'scale(1)', offset: 0 },
+            { transform: 'scale(' + SEAT_POP + ')', offset: 0.45 },
+            { transform: 'scale(1)', offset: 1 }
+          ], { duration: T.sickPopDur, easing: 'cubic-bezier(0.3, 0.7, 0.3, 1)' });
+        }).catch(function () { /* finish() 取消了动画，忽略 */ });
+      }
+
+      // 计数器整块升起（之后由 goLive 接手持续增长）
+      [[cLabel, 0], [cValue, 60], [cUnit, 110], [cRate, 160]].forEach(function (pair) {
+        if (!pair[0]) return;
+        play(pair[0], [
+          { transform: 'translateY(14px)', opacity: 0, offset: 0 },
+          { transform: 'translateY(0)', opacity: 1, offset: 1 }
+        ], { duration: T.counterDur, delay: T.counterAt + pair[1] });
+      });
+
+      if (cTrack) {
+        play(cTrack, [
+          { opacity: 0, transform: 'scaleX(0.2)', offset: 0 },
+          { opacity: 1, transform: 'scaleX(1)', offset: 1 }
+        ], { duration: T.trackDur, delay: T.trackAt });
+      }
+
+      if (yearsCaption) {
+        play(yearsCaption, [
+          { opacity: 0, offset: 0 },
+          { opacity: 1, offset: 1 }
+        ], { duration: T.yearDur, delay: T.yearsAt });
+      }
+
+      years.forEach(function (y, i) {
+        play(y, [
+          { transform: 'translateY(12px)', opacity: 0, offset: 0 },
+          { transform: 'translateY(0)', opacity: 1, offset: 1 }
+        ], { duration: T.yearDur, delay: T.yearsAt + (i + 1) * T.yearStagger });
+      });
+
+      play(note, [
+        { opacity: 0, offset: 0 },
+        { opacity: 1, offset: 1 }
+      ], { duration: T.noteDur, delay: T.noteAt });
+    }
+
+    function finish() {
+      stage.classList.remove(ARMED);
+      stage.classList.add(DONE);
+      copy.classList.remove('burden-lead--armed');
+      running.forEach(function (a) {
+        try { a.cancel(); } catch (e) { /* noop */ }
+      });
+      running = [];
+    }
+
+    // ---- IO 只负责入场触发（离屏判定见文件头，不交给 IO）----
+    var io = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var e = entries[i];
+        if (e.isIntersecting && e.intersectionRatio >= 0.45 && !entered) {
+          entered = true;
+          io.disconnect();
+          // 先等素材解码（最多 IMG_WAIT_MAX）再开播，避免酵母/大图"先空后闪"
+          whenReady(function () {
+            entrance();
+            window.setTimeout(finish, TOTAL + 120);
+          });
+          return;
+        }
+      }
+    }, { threshold: [0.45] });
+    io.observe(section);
+
+    // 进入该屏（≥45%）后才切实时模式并启动秒节拍，避免读者还没进屏就开始计数
+    var bootIO = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting && entries[i].intersectionRatio >= 0.45) {
+          bootIO.disconnect();
+          goLive();
+          startTick();
+          return;
+        }
+      }
+    }, { threshold: [0.45] });
+    bootIO.observe(section);
+
+    // 轨道宽度随视口变化：重新量测并重启动画（节流）
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(startTick, 200);
+    });
+  });
+})();
+</script>
+
+
+</body>
+</html>

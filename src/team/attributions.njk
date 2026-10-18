@@ -14,1001 +14,259 @@ js:
 
 {% block main %}
 <div class="attributions-container">
-      <!-- 页面标题 -->
-      <section class="page-title-section">
-        <h1 class="page-title">Team Attributions</h1>
-        <p class="page-subtitle">SZPU-2026 Team Contributions, External Support, and Project Timeline</p>
-        <div class="title-decoration">
-          <div class="deco-line"></div>
-          <div class="deco-dot"></div>
-          <div class="deco-line"></div>
-        </div>
-      </section>
+      <h1 class="sr-only">Attributions - iGEM SZPU-2026</h1>
 
       <!-- Jump to 导航 -->
       <section class="jump-to-nav">
         <div class="jump-to-header">
-          <span class="jump-to-label"><span class="iconfont icon-biaoqian"></span> Quick Navigation</span>
+          <span class="jump-to-label">Quick Navigation</span>
         </div>
         <div class="jump-to-buttons">
           <a href="#team-contributions" class="jump-to-btn">
-            <span class="iconfont icon-tuandui"></span>
+            <span class="step-num">01</span>
             <span>Team Members</span>
           </a>
+          <a href="#ai-tools" class="jump-to-btn">
+            <span class="step-num">02</span>
+            <span>AI Tools</span>
+          </a>
           <a href="#external-contributions" class="jump-to-btn">
-            <span class="iconfont icon-cooperation"></span>
+            <span class="step-num">03</span>
             <span>External Support</span>
           </a>
-          <a href="#third-party-tools" class="jump-to-btn">
-            <span class="iconfont icon-biaoqian"></span>
-            <span>Third-Party Tools</span>
-          </a>
           <a href="#timeline" class="jump-to-btn">
-            <span class="iconfont icon-rizhi"></span>
+            <span class="step-num">04</span>
             <span>Project Timeline</span>
           </a>
         </div>
       </section>
 
-      <!-- Team Member Contributions -->
+      <!-- 01 团队成员贡献 -->
       <section id="team-contributions" class="section section-member">
+        <figure class="page-mascot page-mascot--attributions" aria-hidden="true">
+          <img src="../static/image/any-icon/extension/attributions.png" alt="" width="440" height="456"
+            loading="lazy" decoding="async">
+        </figure>
+
         <div class="section-header">
           <div class="section-title-wrapper">
-            <span class="section-title-icon"><span class="iconfont icon-tuandui"></span></span>
             <h2 class="section-title">Team Member Contributions</h2>
           </div>
-          <p class="section-description">Core team members and their specialized roles in the SZPU-2026 project</p>
+          <p class="section-description">Every member of SZPU-2026 and the tasks recorded for them on the attribution
+            form. Hover a task tag to read the official definition of that task.</p>
         </div>
 
         <!-- 角色分类标签 -->
         <div class="role-tabs">
-          <button class="role-tab active" data-role="all">All Members</button>
-          <button class="role-tab" data-role="pi">Primary Investigator</button>
-          <button class="role-tab" data-role="adviser">Advisers</button>
-          <button class="role-tab" data-role="wet">Wet Lab</button>
-          <button class="role-tab" data-role="dry">Dry Lab</button>
-          <button class="role-tab" data-role="hp">Human Practices</button>
-          <button class="role-tab" data-role="design">Design & Wiki</button>
+          {% for group in attribution.memberGroups %}
+          <button class="role-tab{% if loop.first %} active{% endif %}" data-role="{{ group.key }}">{{ group.label }}</button>
+          {% endfor %}
         </div>
 
         <div class="members-grid" id="members-grid">
-          <!-- Yongjun Tang - Primary PI (docx order) -->
-          <div class="member-card" data-role="pi">
+          {% for member in attribution.members %}
+          <div class="member-card" data-role="{{ member.group }}">
             <div class="member-header">
-              <div class="member-avatar avatar-pi">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/tyj_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/tyj_kt.webp" alt="Yongjun Tang" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
+              <div class="member-avatar avatar-{{ member.group }}">
+                {% if member.avatar %}
+                <img loading="lazy" src="../static/image/any-icon/character/webp/{{ member.avatar }}.webp"
+                  alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;" />
+                {% else %}
+                <span class="member-avatar-initial">{{ member.initials }}</span>
+                {% endif %}
               </div>
               <div class="member-info">
-                <h3>Yongjun Tang</h3>
-                <p class="member-role"><span class="role-badge badge-pi">Primary Investigator</span> <span
-                    class="role-badge badge-secondary">Project Oversight</span></p>
+                <h3>{{ member.name }}</h3>
+                <p class="member-role">
+                  <span class="role-badge badge-{{ member.group }}">{{ member.title }}</span>
+                  {% if member.focus %}<span class="member-focus">{{ member.focus }}</span>{% endif %}
+                </p>
               </div>
             </div>
+            {% if member.tasks.length %}
             <div class="tasks-section">
               <span class="tasks-label">Key Tasks</span>
               <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Brainstorming and developing ideas for the project">Conceptualization</span>
-                <span class="task-tag" data-detail="Managing and coordinating the project activities, planning, and execution">Project Administration</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
+                {% for task in member.tasks %}
+                <span class="task-tag" data-detail="{{ attribution.taskDefs[task] }}">{{ task }}</span>
+                {% endfor %}
               </div>
             </div>
+            {% endif %}
+            {% if member.specifics.length %}
             <div class="specific-tasks-section">
               <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Analysis &ndash; He analyzed the literature supporting the project rationale and reviewed the experimental designs for completeness and scientific soundness. (2) Conceptualization &ndash; He provided constructive feedback, contributed valuable input throughout the experimental design cycle, and helped conceptualize and initiate the project. (3) Project Administration &ndash; He rigorously monitored submission milestones and coordinated overall project timeline management and execution across the team. (4) Writing &ndash; He reviewed documents on the Wiki and edited documents related to experimental files.</p>
+              {% if member.hasLabels %}
+              <ul class="specific-list">
+                {% for item in member.specifics %}
+                <li class="specific-item">
+                  <span class="specific-item-label">{{ item.label }}</span>
+                  <span class="specific-item-text">{{ item.text }}</span>
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p class="specific-tasks-content">{{ member.firstSpecific }}</p>
+              {% endif %}
             </div>
+            {% endif %}
           </div>
-
-          <!-- Lijun Zhang - Secondary PI -->
-          <div class="member-card" data-role="pi">
-            <div class="member-header">
-              <div class="member-avatar avatar-pi">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/zlj_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/zlj_kt.webp" alt="Lijun Zhang" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Lijun Zhang</h3>
-                <p class="member-role"><span class="role-badge badge-pi">Secondary PI</span> <span
-                    class="role-badge badge-secondary">Fundraising &amp; Admin</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Managing and coordinating the project activities, planning, and execution">Project Administration</span>
-                <span class="task-tag" data-detail="Raising money, in-kind donations of materials, and/or services for the team's activities">Fundraising</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Project Administration &ndash; She tracked project progress and prompted the team to stay on schedule, while overseeing the soundness of each project activity. (2) Fundraising &ndash; She raised funds for project activities to support their smooth implementation.</p>
-            </div>
-          </div>
-
-          <!-- Jie Xia - Student Leader -->
-          <div class="member-card" data-role="wet">
-            <div class="member-header">
-              <div class="member-avatar avatar-wet">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/xj_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/xj_kt.webp" alt="Jie Xia" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Jie Xia</h3>
-                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
-                    class="role-badge badge-secondary">Student Leader</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Brainstorming and developing ideas for the project">Conceptualization</span>
-                <span class="task-tag" data-detail="Reading peer-reviewed scientific research articles, white papers, regulations/guidelines, and other documents">Background Research</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Annotating (producing metadata), cleaning, and maintaining research data for your team's project and for future use by other iGEM teams or members of the synthetic biology community">Data Curation</span>
-                <span class="task-tag" data-detail="Managing and coordinating the project activities, planning, and execution">Project Administration</span>
-                <span class="task-tag" data-detail="Preparing and/or implementing tools/activities to engage the broader community">Public Engagement</span>
-                <span class="task-tag" data-detail="Designing, building, and/or testing mechanical, electrical, or optical hardware systems">Hardware</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-                <span class="task-tag" data-detail="Performing activities to ensure compliance with the safety guidelines or requirements of iGEM, your institution, and/or government">Safety</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">As a student leader, he coordinated various activities throughout the project. His responsibilities included, but were not limited to, conducting scientific background research for the project, tracking the completion of each experimental module, holding regular meetings to confirm each member's progress, and reviewing iGEM deliverables due by the deadlines.</p>
-            </div>
-          </div>
-
-          <!-- Siqi Peng - Student -->
-          <div class="member-card" data-role="design">
-            <div class="member-header">
-              <div class="member-avatar avatar-design">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/psq_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/psq_kt.webp" alt="Siqi Peng" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Siqi Peng</h3>
-                <p class="member-role"><span class="role-badge badge-design">Art &amp; Design</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Brainstorming and developing ideas for the project">Conceptualization</span>
-                <span class="task-tag" data-detail="Preparation, creation and/or presentation of the work including Wiki design, team logo design, data visualization, user interfaces, videos and other graphics">Visualization</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Conceptualization &ndash; She participated in conceptualizing the project's inspiration. (2) Visualization &ndash; She was responsible for most of the team's art and design work, established the Wiki's visual style and most of its illustrations, and led the finalization of the team logo and mascot.</p>
-            </div>
-          </div>
-
-          <!-- Qi Xu - Student -->
-          <div class="member-card" data-role="design">
-            <div class="member-header">
-              <div class="member-avatar avatar-design">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/xq_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/xq_kt.webp" alt="Qi Xu" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Qi Xu</h3>
-                <p class="member-role"><span class="role-badge badge-design">Web Developer</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Writing code in GitLab to build the team Wiki">Wiki Coding</span>
-                <span class="task-tag" data-detail="Preparation, creation and/or presentation of the work including Wiki design, team logo design, data visualization, user interfaces, videos and other graphics">Visualization</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Wiki Coding &ndash; He was responsible for the development of the team's entire Wiki, including building the Wiki framework, formatting content, and synchronizing and uploading it on GitLab. (2) Visualization &ndash; He participated in the design and implementation of interactive animations on the Wiki, as well as creative components that aligned with the team's concept. (3) Writing &ndash; He conducted basic review and editing of the Wiki text.</p>
-            </div>
-          </div>
-
-          <!-- Aishi Zeng - Student -->
-          <div class="member-card" data-role="wet">
-            <div class="member-header">
-              <div class="member-avatar avatar-wet">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/zas_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/zas_kt.webp" alt="Aishi Zeng" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Aishi Zeng</h3>
-                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Annotating (producing metadata), cleaning, and maintaining research data for your team's project and for future use by other iGEM teams or members of the synthetic biology community">Data Curation</span>
-                <span class="task-tag" data-detail="Maintaining the laboratory notebook, keeping a record of all laboratory activities">Notebook</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-                <span class="task-tag" data-detail="Performing activities to ensure compliance with the safety guidelines or requirements of iGEM, your institution, and/or government">Safety</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">She was responsible for the gated recognition system module of the project. For module design, she searched for, reviewed, and analyzed relevant literature, and participated in a series of tasks in the gated recognition system experiments, including plasmid construction, screening, extraction, and validation of the system's recognition of H1N1 HA-related epitopes. She was also responsible for organizing the related experimental data and ultimately edited the text of the related experimental module on the Wiki.</p>
-            </div>
-          </div>
-
-          <!-- Xiaozhen Su - Student -->
-          <div class="member-card" data-role="wet">
-            <div class="member-header">
-              <div class="member-avatar avatar-wet">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/sxz_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/sxz_kt.webp" alt="Xiaozhen Su" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Xiaozhen Su</h3>
-                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Annotating (producing metadata), cleaning, and maintaining research data for your team's project and for future use by other iGEM teams or members of the synthetic biology community">Data Curation</span>
-                <span class="task-tag" data-detail="Maintaining the laboratory notebook, keeping a record of all laboratory activities">Notebook</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-                <span class="task-tag" data-detail="Performing activities to ensure compliance with the safety guidelines or requirements of iGEM, your institution, and/or government">Safety</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">She was responsible for the experimental section on chassis cell optimization in the team. Following the core logic of "blocking endogenous input and relieving cell cycle arrest," she knocked out two related endogenous genes in yeast, recorded and processed the experimental results, and ultimately organized the related experimental data and edited the related content on the Wiki.</p>
-            </div>
-          </div>
-
-          <!-- Chengxi Luo - Student -->
-          <div class="member-card" data-role="wet">
-            <div class="member-header">
-              <div class="member-avatar avatar-wet">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/lcx_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/lcx_kt.webp" alt="Chengxi Luo" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Chengxi Luo</h3>
-                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Annotating (producing metadata), cleaning, and maintaining research data for your team's project and for future use by other iGEM teams or members of the synthetic biology community">Data Curation</span>
-                <span class="task-tag" data-detail="Maintaining the laboratory notebook, keeping a record of all laboratory activities">Notebook</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-                <span class="task-tag" data-detail="Performing activities to ensure compliance with the safety guidelines or requirements of iGEM, your institution, and/or government">Safety</span>
-                <span class="task-tag" data-detail="Raising money, in-kind donations of materials, and/or services for the team's activities">Fundraising</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">He was mainly responsible for the signal recognition module of the ECHOYeast system. He designed two systems, namely the FUS1-yEGFP system and the FUS1-MEL1 system, and validated the feasibility of both systems. In addition, he was responsible for data processing and logging for the signal recognition module, and ultimately edited the related content on the Wiki. He was also responsible for selecting and coordinating with offline physical stores for team materials, supporting the ordering of team uniforms and photography equipment, as well as related procurement tasks.</p>
-            </div>
-          </div>
-
-          <!-- Yuelin Zheng - Student -->
-          <div class="member-card" data-role="wet">
-            <div class="member-header">
-              <div class="member-avatar avatar-wet">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/zyl_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/zyl_kt.webp" alt="Yuelin Zheng" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Yuelin Zheng</h3>
-                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Annotating (producing metadata), cleaning, and maintaining research data for your team's project and for future use by other iGEM teams or members of the synthetic biology community">Data Curation</span>
-                <span class="task-tag" data-detail="Maintaining the laboratory notebook, keeping a record of all laboratory activities">Notebook</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-                <span class="task-tag" data-detail="Performing activities to ensure compliance with the safety guidelines or requirements of iGEM, your institution, and/or government">Safety</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">She reviewed relevant literature, led the construction of the Gpa1/Gαq chimera, participated in the construction of the gating system, recorded and processed the related experimental data, and edited the corresponding content on the Wiki.</p>
-            </div>
-          </div>
-
-          <!-- Rui Luo - Student -->
-          <div class="member-card" data-role="dry">
-            <div class="member-header">
-              <div class="member-avatar avatar-dry">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/lr_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/lr_kt.webp" alt="Rui Luo" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Rui Luo</h3>
-                <p class="member-role"><span class="role-badge badge-dry">Dry Lab</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Brainstorming and developing ideas for the project">Conceptualization</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Annotating (producing metadata), cleaning, and maintaining research data for your team's project and for future use by other iGEM teams or members of the synthetic biology community">Data Curation</span>
-                <span class="task-tag" data-detail="Preparing and/or implementing tools/activities to engage the broader community">Public Engagement</span>
-                <span class="task-tag" data-detail="Preparation, creation and/or presentation of the work including Wiki design, team logo design, data visualization, user interfaces, videos and other graphics">Visualization</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Conceptualization &ndash; Provided creative ideas for the project promotion video and participated in conceptualizing the project's inspiration. (2) Investigation &ndash; He conducted a multiscale computational investigation of 17 nanobodies against influenza A HA. (3) Data Curation &ndash; He curated the computational data and code for the model. (4) Public Engagement &ndash; He was responsible for scheduling expert interviews for iHP and designing the interview questions. (5) Visualization &ndash; He contributed to the creative development of the Wiki, including creating related figures and developing artistic design concepts. (6) Writing &ndash; He wrote and edited the Model Wiki page.</p>
-            </div>
-          </div>
-
-          <!-- Rouqing Chen - Student -->
-          <div class="member-card" data-role="design">
-            <div class="member-header">
-              <div class="member-avatar avatar-design">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/crq_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/crq_kt.webp" alt="Rouqing Chen" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Rouqing Chen</h3>
-                <p class="member-role"><span class="role-badge badge-design">WIKI &amp; Writing</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">Writing &ndash; She provided translation and translation proofreading for the team, and reviewed Wiki content for grammatical accuracy and logical soundness.</p>
-            </div>
-          </div>
-
-          <!-- Yuquan Luo - Student -->
-          <div class="member-card" data-role="hp">
-            <div class="member-header">
-              <div class="member-avatar avatar-hp">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/lyq_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/lyq_kt.webp" alt="Yuquan Luo" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Yuquan Luo</h3>
-                <p class="member-role"><span class="role-badge badge-hp">HP</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Managing and coordinating the project activities, planning, and execution">Project Administration</span>
-                <span class="task-tag" data-detail="Preparing and/or implementing tools/activities to engage the broader community">Public Engagement</span>
-                <span class="task-tag" data-detail="Designing, building, and/or testing mechanical, electrical, or optical hardware systems">Hardware</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Project Administration &ndash; He assisted the PI by reminding team members of all submission deadlines during group meetings. (2) Public Engagement &ndash; He participated in material preparation and itinerary planning for iHP, and recorded and summarized the takeaways from each Human Practices activity. (3) Hardware &ndash; He was responsible for the hardware component of the team's experiments, proposing the basic blueprint concept for the ECHOYeast device and designing the corresponding components. (4) Writing &ndash; He wrote and edited the Wiki pages for Hardware and iHP.</p>
-            </div>
-          </div>
-
-          <!-- Yifan Gao - Student -->
-          <div class="member-card" data-role="wet">
-            <div class="member-header">
-              <div class="member-avatar avatar-wet">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/gyf_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/gyf_kt.webp" alt="Yifan Gao" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Yifan Gao</h3>
-                <p class="member-role"><span class="role-badge badge-wet">Wet Lab</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Performing the experiments and/or collecting data/evidence">Investigation</span>
-                <span class="task-tag" data-detail="Performing activities to ensure compliance with the safety guidelines or requirements of iGEM, your institution, and/or government">Safety</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">Within the team, she assisted in the construction of the gated recognition system and contributed to part of the experimental data processing and analysis.</p>
-            </div>
-          </div>
-
-          <!-- Ruoxi Li - Student -->
-          <div class="member-card" data-role="design">
-            <div class="member-header">
-              <div class="member-avatar avatar-design">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/lrx_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/lrx_kt.webp" alt="Ruoxi Li" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Ruoxi Li</h3>
-                <p class="member-role"><span class="role-badge badge-design">WIKI &amp; Writing</span> <span
-                    class="role-badge badge-secondary">Student</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">Writing &ndash; She provided translation and translation proofreading for the team, and reviewed Wiki content for grammatical accuracy and logical soundness.</p>
-            </div>
-          </div>
-
-          <!-- Jianhua Zhou - Advisor -->
-          <div class="member-card" data-role="adviser">
-            <div class="member-header">
-              <div class="member-avatar avatar-adviser">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/zjh_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/zjh_kt.webp" alt="Jianhua Zhou" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Jianhua Zhou</h3>
-                <p class="member-role"><span class="role-badge badge-adviser">Advisor</span> <span
-                    class="role-badge badge-secondary">Experimental Guidance</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Analysis &ndash; Provided effective suggestions and guidance on the team's experimental progress, advancing the team's experiments. (2) Writing &ndash; Reviewed the Wiki to ensure the soundness of its content and the rigor and scientific validity of the data.</p>
-            </div>
-          </div>
-
-          <!-- Lizhen Zhu - Advisor -->
-          <div class="member-card" data-role="adviser">
-            <div class="member-header">
-              <div class="member-avatar avatar-adviser">
-                <picture>
-                  <source srcset="../static/image/any-icon/character/webp/zlz_kt.webp" type="image/webp">
-                  <img loading="lazy" src="../static/image/any-icon/character/webp/zlz_kt.webp" alt="Lizhen Zhu" style="width:100%;height:100%;object-fit:cover;" />
-                </picture>
-              </div>
-              <div class="member-info">
-                <h3>Lizhen Zhu</h3>
-                <p class="member-role"><span class="role-badge badge-adviser">Advisor</span> <span
-                    class="role-badge badge-secondary">Experimental Guidance</span></p>
-              </div>
-            </div>
-            <div class="tasks-section">
-              <span class="tasks-label">Key Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="Analyzing data generated by your team, another iGEM team (current or previous), and/or from literature as needed for your project">Analysis</span>
-                <span class="task-tag" data-detail="Writing, reviewing or editing content for the Wiki or other documents to be shared outside the team">Writing</span>
-              </div>
-            </div>
-            <div class="specific-tasks-section">
-              <span class="specific-tasks-label">Specific Contributions</span>
-              <p class="specific-tasks-content">(1) Analysis &ndash; Provided targeted optimization and improvement methods when the team encountered experimental bottlenecks, advancing the team's experimental progress. (2) Writing &ndash; Reviewed the Wiki structure to ensure it met competition requirements.</p>
-            </div>
-          </div>
+          {% endfor %}
         </div>
 
-        <!-- 团队协作说明 -->
-        <div class="team-collaboration-note">
-          <div class="collab-icon">
-            <span class="iconfont icon-hezuogongxiang"></span>
+      </section>
+
+      <!-- 02 AI 工具 -->
+      <section id="ai-tools" class="section section-ai">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <h2 class="section-title">AI Tools</h2>
           </div>
-          <div class="collab-content">
-            <h4>Cross-Team Collaboration</h4>
-            <p>Our team operates through integrated cross-functional collaboration. Wet lab members provide experimental
-              data that informs dry lab modeling, while human practices activities are integrated into the project's
-              design cycle. This interdisciplinary approach ensures that our engineering solutions are grounded in both
-              scientific rigor and real-world applicability.</p>
-          </div>
+          <p class="section-description">Every AI tool the team used, what each was used for, and where it was not
+            allowed to replace our own work</p>
+        </div>
+
+        <div class="ai-grid">
+          {% for tool in attribution.aiTools %}
+          <article class="ai-card">
+            <div class="ai-card-head">
+              <h3 class="ai-name">{{ tool.name }}</h3>
+              <span class="ai-kind">{{ tool.kind }}</span>
+            </div>
+            <div class="tasks-tags">
+              {% for task in tool.tasks %}
+              <span class="task-tag" data-detail="{{ attribution.taskDefs[task] }}">{{ task }}</span>
+              {% endfor %}
+            </div>
+            {% for block in tool.blocks %}
+            <div class="ai-block">
+              {% if block.label %}<span class="ai-block-label">{{ block.label }}</span>{% endif %}
+              <p class="ai-block-text">{{ block.text }}</p>
+            </div>
+            {% endfor %}
+          </article>
+          {% endfor %}
         </div>
       </section>
 
-      <!-- External Contributions -->
+      <!-- 03 外部贡献 -->
       <section id="external-contributions" class="section section-external">
         <div class="section-header">
           <div class="section-title-wrapper">
-            <span class="section-title-icon icon-external"><span class="iconfont icon-cooperation"></span></span>
             <h2 class="section-title">External Contributions</h2>
           </div>
-          <p class="section-description">Organizations and individuals who provided valuable support to our project</p>
+          <p class="section-description">{{ attribution.externalCounts.total }} contributors outside the team — advisers,
+            collaborating schools and teams, public databases and open-source software — whose input or tools shaped
+            how this project was designed, built or explained</p>
         </div>
 
-        <!-- 类型过滤按钮 -->
+        <!-- 关系类型过滤按钮 -->
         <div class="external-type-filter">
-          <button class="type-filter-btn active" data-type="all">All Types</button>
-          <button class="type-filter-btn" data-type="academic">Academic</button>
-          <button class="type-filter-btn" data-type="industry">Industry</button>
-          <button class="type-filter-btn" data-type="community">Community</button>
+          {% for filter in attribution.externalFilters %}
+          <button class="type-filter-btn{% if loop.first %} active{% endif %}" data-rel="{{ filter.key }}">{{ filter.label }}</button>
+          {% endfor %}
         </div>
 
         <div class="external-grid" id="external-grid">
-          <!-- Card 1 -->
-          <div class="external-card" data-type="academic">
+          {% for item in attribution.external %}
+          <article class="external-card" data-rel="{{ item.relationship }}">
             <div class="external-title-area">
-              <h3 class="external-name">[To be added — name / institution]</h3>
+              <h3 class="external-name">{{ item.name }}</h3>
               <div class="external-meta">
-                <span class="meta-label">Institution Type:</span>
-                <span class="meta-value type-academic">Academic</span>
+                <span class="meta-label">Institution:</span>
+                <span class="meta-value">{{ item.institutionType }}</span>
               </div>
               <div class="external-meta">
-                <span class="meta-label">Relationship to the Team:</span>
-                <span class="meta-value">Collaborator</span>
+                <span class="meta-label">Relationship:</span>
+                <span class="meta-value">{{ item.relationship }}</span>
               </div>
             </div>
-
             <div class="ext-compact-block">
               <span class="ext-compact-label">Tasks</span>
               <div class="tasks-tags">
-                <span class="task-tag" data-detail="">[To be added]</span>
+                {% for task in item.tasks %}
+                <span class="task-tag" data-detail="{{ attribution.taskDefs[task] }}">{{ task }}</span>
+                {% endfor %}
               </div>
             </div>
-
             <div class="ext-compact-block">
-              <span class="ext-compact-label">Specific Tasks</span>
-              <p class="ext-compact-text">[To be added — contribution details]</p>
+              <span class="ext-compact-label">Specific Contributions</span>
+              {% for detail in item.details %}
+              <p class="ext-detail"><span class="ext-detail-label">{{ detail.label }}</span>{{ detail.text | safe }}</p>
+              {% endfor %}
             </div>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="external-card" data-type="academic">
-            <div class="external-title-area">
-              <h3 class="external-name">[To be added — name / institution]</h3>
-              <div class="external-meta">
-                <span class="meta-label">Institution Type:</span>
-                <span class="meta-value type-academic">Academic</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Relationship to the Team:</span>
-                <span class="meta-value">Collaborator</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="">[To be added]</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Specific Tasks</span>
-              <p class="ext-compact-text">[To be added — contribution details]</p>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="external-card" data-type="industry">
-            <div class="external-title-area">
-              <h3 class="external-name">[To be added — name / institution]</h3>
-              <div class="external-meta">
-                <span class="meta-label">Institution Type:</span>
-                <span class="meta-value type-industry">Industry</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Relationship to the Team:</span>
-                <span class="meta-value">Collaborator</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="">[To be added]</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Specific Tasks</span>
-              <p class="ext-compact-text">[To be added — contribution details]</p>
-            </div>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="external-card" data-type="industry">
-            <div class="external-title-area">
-              <h3 class="external-name">[To be added — name / institution]</h3>
-              <div class="external-meta">
-                <span class="meta-label">Institution Type:</span>
-                <span class="meta-value type-industry">Industry</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Relationship to the Team:</span>
-                <span class="meta-value">Collaborator</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="">[To be added]</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Specific Tasks</span>
-              <p class="ext-compact-text">[To be added — contribution details]</p>
-            </div>
-          </div>
-
-          <!-- Card 5 -->
-          <div class="external-card" data-type="community">
-            <div class="external-title-area">
-              <h3 class="external-name">[To be added — name / institution]</h3>
-              <div class="external-meta">
-                <span class="meta-label">Institution Type:</span>
-                <span class="meta-value type-community">Community</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Relationship to the Team:</span>
-                <span class="meta-value">Collaborator</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="">[To be added]</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Specific Tasks</span>
-              <p class="ext-compact-text">[To be added — contribution details]</p>
-            </div>
-          </div>
-
-          <!-- Card 6 -->
-          <div class="external-card" data-type="community">
-            <div class="external-title-area">
-              <h3 class="external-name">[To be added — name / institution]</h3>
-              <div class="external-meta">
-                <span class="meta-label">Institution Type:</span>
-                <span class="meta-value type-community">Community</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Relationship to the Team:</span>
-                <span class="meta-value">Collaborator</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Tasks</span>
-              <div class="tasks-tags">
-                <span class="task-tag" data-detail="">[To be added]</span>
-              </div>
-            </div>
-
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Specific Tasks</span>
-              <p class="ext-compact-text">[To be added — contribution details]</p>
-            </div>
-          </div>
+          </article>
+          {% endfor %}
         </div>
 
         <!-- 致谢横幅 -->
         <div class="acknowledgment-banner">
           <div class="ack-content">
-            <span class="iconfont icon-xin"></span>
             <div>
               <h4>Special Acknowledgments</h4>
-              <p>We sincerely thank all individuals and organizations who have contributed their time, expertise, and
-                resources to support our iGEM journey. Your generosity and guidance have been instrumental to our
-                project's success.</p>
+              <p>The contributions above are not only individual advisers. They also include the schools, host
+                institutions and iGEM teams that shared protocols, equipment and results with us; the funding bodies
+                that paid for reagents, sequencing and travel; and the public databases and open-source software
+                without which neither our constructs nor the models on this Wiki could have been built. To every
+                person, team, sponsor and tool on this page: thank you.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Timeline -->
-      <!-- 第三方工具与库：iGEM 合规要求列出非自研代码的来源与许可 -->
-      <section id="third-party-tools" class="section section-external">
-        <div class="section-header">
-          <div class="section-title-wrapper">
-            <span class="section-title-icon"><span class="iconfont icon-biaoqian"></span></span>
-            <h2 class="section-title">Third-Party Tools and Libraries</h2>
-          </div>
-          <p class="section-description">Code and software we did not write ourselves, listed with its source and license</p>
-        </div>
-
-        <div class="external-grid">
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">3Dmol.js</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">BSD-3-Clause</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value"><a href="https://github.com/3dmol/3Dmol.js" target="_blank" rel="noopener noreferrer">github.com/3dmol/3Dmol.js</a></span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">Interactive three-dimensional structure panel on the <a href="../dry-lab/model.html">Model</a> page,
-                bundled at <code>static/js/3dmol/3Dmol-min.js</code> (v2.5.5) with its license file
-                <code>3Dmol-min.js.LICENSE.txt</code>. Copyright (c) 2014, University of Pittsburgh and contributors.
-                The bundle also contains GLmol (MIT or LGPL-3.0, &copy; 2011&ndash;2012 biochem_fan),
-                Three.js (MIT, &copy; 2010&ndash;2012 three.js Authors) and jQuery (MIT, &copy; 2011 John Resig).</p>
-            </div>
-          </div>
-
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">3Dmol.js (reports build)</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">BSD-3-Clause</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value"><a href="https://github.com/3dmol/3Dmol.js" target="_blank" rel="noopener noreferrer">github.com/3dmol/3Dmol.js</a></span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">Second build, v2.0.1, bundled at <code>static/js/3dmol/3Dmol-2.0.1-min.js</code>.
-                The interface-analysis reports exported by our docking software were written against this version;
-                under v2.5.5 their cartoon backbone stops rendering, so the reports keep the version they were built for.</p>
-            </div>
-          </div>
-
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">Chart.js</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">MIT</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value"><a href="https://www.chartjs.org" target="_blank" rel="noopener noreferrer">chartjs.org</a></span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">Burial-depth and per-residue plots inside the solvent-accessible-surface-area reports on the
-                <a href="../dry-lab/model.html">Model</a> page. Bundled at <code>static/js/reports-lib/chart.umd.min.js</code>, v4.4.0.
-                Copyright (c) 2014-2023 Chart.js Contributors.</p>
-            </div>
-          </div>
-
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">Bootstrap</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">MIT</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value"><a href="https://getbootstrap.com" target="_blank" rel="noopener noreferrer">getbootstrap.com</a></span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">Tab strip, badges and table styling of the tabular-data reports on the
-                <a href="../dry-lab/model.html">Model</a> page. Bundled at <code>static/js/reports-lib/bootstrap.min.css</code>
-                and <code>static/js/reports-lib/bootstrap.bundle.min.js</code>, v5.3.2. Copyright (c) 2011-2023 The Bootstrap Authors.</p>
-            </div>
-          </div>
-
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">Bootstrap Icons</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">MIT</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value"><a href="https://icons.getbootstrap.com" target="_blank" rel="noopener noreferrer">icons.getbootstrap.com</a></span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">Icon set used across the wiki.</p>
-            </div>
-          </div>
-
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">PDF.js</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">Apache-2.0</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value"><a href="https://mozilla.github.io/pdf.js" target="_blank" rel="noopener noreferrer">mozilla.github.io/pdf.js</a></span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">In-page PDF reader for the experiment records on the
-                <a href="../wet-lab/notebook.html">Notebook</a> page.</p>
-            </div>
-          </div>
-
-          <div class="external-card">
-            <div class="external-title-area">
-              <h3 class="external-name">Docking and simulation software</h3>
-              <div class="external-meta">
-                <span class="meta-label">License:</span>
-                <span class="meta-value">Academic / free for research use</span>
-              </div>
-              <div class="external-meta">
-                <span class="meta-label">Source:</span>
-                <span class="meta-value">ClusPro, HADDOCK 2.5, GROMACS, gmx_MMPBSA, PyMOL, SPICE, CHARMM-GUI, ColabFold, AlphaFold2, OPM/PPM</span>
-              </div>
-            </div>
-            <div class="ext-compact-block">
-              <span class="ext-compact-label">Used for</span>
-              <p class="ext-compact-text">Structure prediction, docking, interface analysis, molecular dynamics and binding free-energy
-                estimation reported on the <a href="../dry-lab/model.html">Model</a> page. The parameter files and analysis
-                scripts are collected in the project repository linked from that page.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <!-- 05 项目时间线 -->
       <section id="timeline" class="section section-timeline">
         <div class="section-header">
           <div class="section-title-wrapper">
-            <span class="section-title-icon icon-timeline"><span class="iconfont icon-rizhi"></span></span>
             <h2 class="section-title">Project Timeline</h2>
           </div>
-          <p class="section-description">Key milestones and activities throughout our 2026 iGEM season — <span
-              class="timeline-hint">click bars for details</span></p>
+          <p class="section-description">The five phases reported on our attribution form, from first recruitment to the
+            Wiki freeze — <span class="timeline-hint">click a bar for details</span></p>
         </div>
-
-        <!-- 时间线统计卡片：已移除 -->
 
         <div class="timeline-section">
           <div class="timeline-container">
             <div class="timeline" id="timeline-chart">
-              <!-- 时间线头部（月份标签） -->
               <div class="timeline-header">
-                <div class="timeline-task-label">Activity</div>
+                <div class="timeline-task-label">Project phase</div>
                 <div class="timeline-months">
-                  <div class="timeline-month">Feb</div>
-                  <div class="timeline-month">Mar</div>
-                  <div class="timeline-month">Apr</div>
-                  <div class="timeline-month">May</div>
-                  <div class="timeline-month">Jun</div>
-                  <div class="timeline-month">Jul</div>
-                  <div class="timeline-month">Aug</div>
-                  <div class="timeline-month">Sep</div>
-                  <div class="timeline-month">Oct</div>
+                  {% for month in attribution.timelineMonths %}
+                  <div class="timeline-month">
+                    {% if month.year %}<span class="timeline-month-year">{{ month.year }}</span>{% endif %}
+                    <span>{{ month.label }}</span>
+                  </div>
+                  {% endfor %}
                 </div>
               </div>
 
-              <!-- Timeline Row 1: Team Formation -->
+              {% for phase in attribution.phases %}
               <div class="timeline-row">
                 <div class="timeline-task-name">
-                  <span class="timeline-task-icon iconfont icon-tuandui"></span>
-                  <span class="timeline-task-text">Team Formation</span>
+                  <span class="timeline-task-text">{{ phase.label }}</span>
                 </div>
                 <div class="timeline-bar-container">
                   <div class="timeline-grid-lines">
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
+                    {% for i in range(0, 13) %}
+                    <div class="timeline-grid-line" style="left: {{ (loop.index * 100 / 14) | round(3) }}%"></div>
+                    {% endfor %}
                   </div>
-                  <div class="timeline-bar" style="left: 0%; width: 17.56%;" data-start="February 1, 2026"
-                    data-end="March 18, 2026" data-duration="6 weeks" data-worked="6 weeks"
-                    data-description="Team member recruitment, interviews, onboarding, and official team formation. Establishing team roles, communication channels, and initial project culture.">
-                    <span class="timeline-bar-duration">Feb 1 – Mar 18</span>
+                  <div class="timeline-bar tone-{{ phase.tone }}" style="left: {{ phase.left }}%; width: {{ phase.width }}%;"
+                    data-start="{{ phase.startLabel }}" data-end="{{ phase.endLabel }}"
+                    data-duration="{{ phase.calendarLabel }}" data-worked="{{ phase.workedLabel }}"
+                    data-description="{{ phase.description }}">
+                    <span class="timeline-bar-duration">{{ phase.barLabel }}</span>
                   </div>
                 </div>
               </div>
+              {% endfor %}
 
-              <!-- Timeline Row 2: Project Planning -->
-              <div class="timeline-row">
-                <div class="timeline-task-name">
-                  <span class="timeline-task-icon iconfont icon-xiangmu"></span>
-                  <span class="timeline-task-text">Project Planning</span>
-                </div>
-                <div class="timeline-bar-container">
-                  <div class="timeline-grid-lines">
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                    <div class="timeline-grid-line"></div>
-                  </div>
-                  <div class="timeline-bar" style="left: 17.56%; width: 15.77%;" data-start="March 18, 2026"
-                    data-end="May 1, 2026" data-duration="6 weeks" data-worked="6 weeks"
-                    data-description="Brainstorming project ideas, literature review, defining research objectives, advisor consultation, and establishing the project roadmap and design framework.">
-                    <span class="timeline-bar-duration">Mar 18 – May 1</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 提示信息 -->
               <div class="timeline-legend">
                 <div class="legend-item">
                   <span class="legend-bar"></span>
-                  <span class="legend-text">Active Period</span>
+                  <span class="legend-text">Calendar duration of the phase</span>
                 </div>
                 <div class="legend-tip">
-                  <span class="iconfont icon-dianji"></span>
-                  Click any bar to view detailed information
+                  Click any bar to view start, end, calendar duration and actual time worked
                 </div>
               </div>
 
@@ -1016,7 +274,6 @@ js:
               <div class="timeline-tooltip" id="timeline-tooltip">
                 <div class="tooltip-arrow"></div>
                 <div class="timeline-tooltip-header">
-                  <span class="tooltip-title-icon iconfont icon-rizhi"></span>
                   <span class="timeline-tooltip-header-text" id="tooltip-title">Activity Details</span>
                 </div>
 
@@ -1024,24 +281,23 @@ js:
                   <div class="timeline-tooltip-panel panel-current" id="panel-current">
                     <div class="timeline-tooltip-body">
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-qidong"></span> Start</span>
+                        <span class="timeline-tooltip-label">Start</span>
                         <span class="timeline-tooltip-value" id="tooltip-start">—</span>
                       </div>
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-guanbi"></span> End</span>
+                        <span class="timeline-tooltip-label">End</span>
                         <span class="timeline-tooltip-value" id="tooltip-end">—</span>
                       </div>
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-shijian"></span> Duration</span>
+                        <span class="timeline-tooltip-label">Calendar</span>
                         <span class="timeline-tooltip-value" id="tooltip-duration">—</span>
                       </div>
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-gongzuoshi"></span>
-                          Worked</span>
+                        <span class="timeline-tooltip-label">Worked</span>
                         <span class="timeline-tooltip-value" id="tooltip-worked">—</span>
                       </div>
                       <div class="timeline-tooltip-row tooltip-desc-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-neirong"></span> Details</span>
+                        <span class="timeline-tooltip-label">Details</span>
                         <div class="timeline-tooltip-value tooltip-desc" id="tooltip-description">—</div>
                       </div>
                     </div>
@@ -1049,24 +305,23 @@ js:
                   <div class="timeline-tooltip-panel panel-incoming" id="panel-incoming" aria-hidden="true">
                     <div class="timeline-tooltip-body">
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-qidong"></span> Start</span>
+                        <span class="timeline-tooltip-label">Start</span>
                         <span class="timeline-tooltip-value" id="tooltip-start-2">—</span>
                       </div>
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-guanbi"></span> End</span>
+                        <span class="timeline-tooltip-label">End</span>
                         <span class="timeline-tooltip-value" id="tooltip-end-2">—</span>
                       </div>
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-shijian"></span> Duration</span>
+                        <span class="timeline-tooltip-label">Calendar</span>
                         <span class="timeline-tooltip-value" id="tooltip-duration-2">—</span>
                       </div>
                       <div class="timeline-tooltip-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-gongzuoshi"></span>
-                          Worked</span>
+                        <span class="timeline-tooltip-label">Worked</span>
                         <span class="timeline-tooltip-value" id="tooltip-worked-2">—</span>
                       </div>
                       <div class="timeline-tooltip-row tooltip-desc-row">
-                        <span class="timeline-tooltip-label"><span class="iconfont icon-neirong"></span> Details</span>
+                        <span class="timeline-tooltip-label">Details</span>
                         <div class="timeline-tooltip-value tooltip-desc" id="tooltip-description-2">—</div>
                       </div>
                     </div>
@@ -1078,7 +333,37 @@ js:
             </div>
           </div>
         </div>
+
+        <p class="timeline-note"><strong>Calendar duration</strong> is computed from the start and end date of each
+          phase. <strong>Actual time worked</strong> is our own estimate of real effort, reported separately on the
+          attribution form — it is not elapsed calendar time, because the modules ran in parallel and most members were
+          not full-time on any single phase.</p>
+
+        <div class="timeline-table-wrap">
+          <table class="timeline-table">
+            <caption>Phase summary</caption>
+            <thead>
+              <tr>
+                <th scope="col">Phase</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Calendar</th>
+                <th scope="col">Actual time worked</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for phase in attribution.phases %}
+              <tr>
+                <th scope="row">{{ phase.label }}</th>
+                <td>{{ phase.startLabel }}</td>
+                <td>{{ phase.endLabel }}</td>
+                <td>{{ phase.calendarLabel }}</td>
+                <td>{{ phase.workedLabel }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
 {% endblock %}
-

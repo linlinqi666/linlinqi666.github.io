@@ -1,28 +1,48 @@
 /**
- * Model page: interactive docking demo.
+ * Model page: interactive docking card game (semi-flexible only).
  *
- * Both payloads are inlined by the page template:
- *   window.MODEL_GAME_DATA   real ClusPro / HADDOCK output (static/data/dry-lab/model/game-docking.json)
- *   window.MODEL_DOCKING_DATA ranking prose data (static/data/dry-lab/model/model-docking.json)
+ * The payload is inlined by the page template:
+ *   window.MODEL_GAME_DATA   real HADDOCK 2.5 output (static/data/dry-lab/model/game-docking.json)
+ *
+ * The game covers HADDOCK 2.5 semi-flexible refinement of 5 nanobodies against H1N1 HA only.
  *
  * Behaviour the page promises:
- *   - picking one card draws that molecule on its own; adding the second draws the docked complex
- *   - semi-flexible results show the HADDOCK score of the selected cluster
- *   - rigid results show the whole ClusPro score table for the pair; the 3D selector stays labelled
- *     by file because rigid{N}.pdb carries no cluster number
+ *   - picking one card draws that molecule on its own; adding the antigen card draws the docked complex
+ *   - each nanobody card shows the HADDOCK score of its best cluster
+ *   - the cluster selector lists that nanobody's clusters with score, RMSD, structure count and energy terms
+ *   - card faces carry the antibody / antigen artwork from the project's card-game icon set
  */
 (function () {
   'use strict';
 
   var DATA = window.MODEL_GAME_DATA;
-  var RANK = window.MODEL_DOCKING_DATA;
   var root = document.getElementById('model-game');
   if (!DATA || !root) {
     return;
   }
 
+  // CDN 姿态载荷脚本直接写 window.MODEL_POSE_DATA[key]；页面自身不定义该对象时，
+  // 每个载荷脚本都会抛 TypeError，3D 只能退回本地 .pdb.gz 回退（线上无此文件）。
+  window.MODEL_POSE_DATA = window.MODEL_POSE_DATA || {};
+
   var basePath = root.getAttribute('data-base-path') || '';
-  var structBase = basePath + DATA.structureBase;
+
+  // 站点根不能用 data-base-path 的相对值推算：线上同一个页面有两种 URL 形态
+  // （/szpu-chuna/model 与 /szpu-chuna/model/），相对基准在前者下会被当成文件名而丢掉一级，
+  // 3Dmol 曾因此被请求成 https://2026.igem.wiki/static/js/3dmol/... 直接 404。
+  // 改用本脚本自身的绝对地址反推站点根：.../static/js/pages/model-game.js -> 站点根。
+  var SITE_ROOT = (function () {
+    var self = document.currentScript && document.currentScript.src;
+    if (self) {
+      var m = self.match(/^(.*?)static\/js\/pages\/[^/]*$/);
+      if (m) {
+        return m[1];
+      }
+    }
+    return basePath;
+  }());
+
+  var structBase = SITE_ROOT + DATA.structureBase;
   var PALETTE = ['#8B5A2B', '#3F6B7A', '#A8442F', '#4F7A3A'];
 
   var el = {
@@ -39,8 +59,6 @@
     selectLabel: document.getElementById('model-game-select-label'),
     status: document.getElementById('model-game-status'),
     fallback: document.getElementById('model-game-fallback'),
-    modeRigid: document.getElementById('model-game-mode-rigid'),
-    modeFlex: document.getElementById('model-game-mode-flex'),
     rail: document.getElementById('model-game-rail'),
     railToggle: document.getElementById('model-game-rail-toggle'),
     load3d: document.getElementById('model-game-load3d'),
@@ -48,7 +66,7 @@
     flip: document.getElementById('model-game-viewer-toggle')
   };
 
-  var state = { mode: 'rigid', antibody: null, antigen: null, cluster: null, model: null, style: 'cartoon' };
+  var state = { antibody: null, antigen: null, cluster: null, model: null, style: 'cartoon' };
   var viewer = null;
   var molPromise = null;
   var lastPdb = '';
@@ -95,13 +113,21 @@
     return null;
   }
 
+  /** 半柔性只跑过 H1N1，卡牌抗原列表就是数据里的全部抗原。 */
   function allowedAntigens() {
-    if (state.mode === 'flexible') {
-      return DATA.antigens.filter(function (a) {
-        return a.id === DATA.flexAntigen;
-      });
-    }
     return DATA.antigens.slice();
+  }
+
+  /** 卡牌图标：模型页把图标目录作为 data 属性挂在容器上。 */
+  function iconUrl(file) {
+    if (!file) {
+      return '';
+    }
+    if (/^(https?:)?\//.test(file)) {
+      return file;
+    }
+    var base = root.getAttribute('data-icon-base') || '';
+    return base + file;
   }
 
   // ------------------------------------------------------------------ 3D
@@ -123,7 +149,7 @@
     }
     molPromise = new Promise(function (resolve, reject) {
       var s = document.createElement('script');
-      s.src = basePath + 'static/js/3dmol/3Dmol-min.js';
+      s.src = SITE_ROOT + 'static/js/3dmol/3Dmol-min.js';
       s.onload = function () {
         window.$3Dmol ? resolve(window.$3Dmol) : reject(new Error('3Dmol did not initialise'));
       };
@@ -135,7 +161,104 @@
     return molPromise;
   }
 
-  function fetchStructure(rel) {
+  /* 结构载荷：复合物与单分子都压成 pose-*.js 放在 iGEM CDN
+     （§16.5 合规：数据走 static.igem.wiki，仓库内不放结构二进制）。
+     线上取 CDN；本地预览若 CDN 不可达则回退到仓库内 .pdb.gz。 */
+  var POSE_BASE = (window.MEDIA_BASE || 'https://static.igem.wiki/teams/6373/wiki') +
+    '/lab/drylab/model/pose-js-payload/';
+  var poseLoading = {};
+
+  function poseRef(rel) {
+    // complexes/flex/R1aA5_H1N1_c1_m1.pdb.gz -> R1aA5_H1N1_flex -> pose-r1a5-h1n1-flex.js
+    var m = /([A-Za-z0-9]+)_(H1N1)_(c\d+_m\d+)\.pdb\.gz$/i.exec(rel);
+    if (m) {
+      var key = m[1] + '_' + m[2] + '_flex';
+      return { key: key, file: 'pose-' + key.toLowerCase().replace(/_/g, '-') + '.js' };
+    }
+    // nanobodies/R1aB6.pdb.gz -> R1aB6_nanobody
+    m = /(?:^|\/)(?:nanobodies|antibodies)\/([A-Za-z0-9]+)\.pdb\.gz$/i.exec(rel);
+    if (m) {
+      return { key: m[1] + '_nanobody', file: 'pose-nanobody-' + m[1].toLowerCase() + '.js' };
+    }
+    // antigens/native/H1N1_native.pdb.gz -> H1N1_native
+    m = /(?:^|\/)antigens\/(native|processed)\/([A-Za-z0-9]+)_\1\.pdb\.gz$/i.exec(rel);
+    if (m) {
+      var variant = m[1].toLowerCase();
+      return {
+        key: m[2] + '_' + variant,
+        file: 'pose-antigen-' + m[2].toLowerCase() + '-' + variant + '.js'
+      };
+    }
+    return null;
+  }
+
+  function b64Floats(b64) {
+    var bin = window.atob(b64);
+    var u8 = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i += 1) {
+      u8[i] = bin.charCodeAt(i);
+    }
+    return new Float32Array(u8.buffer);
+  }
+
+  function pad(v, n) {
+    var s = String(v);
+    while (s.length < n) {
+      s = ' ' + s;
+    }
+    return s.slice(-n);
+  }
+
+  function pdbFromPayload(p) {
+    var xyz = b64Floats(p.xyz);
+    var atom = p.atom.split('|');
+    var resn = p.resn.split('|');
+    var resi = p.resi.split('|');
+    var elem = p.elem.split('|');
+    var lines = [];
+    for (var i = 0; i < p.n; i += 1) {
+      var name = atom[i] || 'C';
+      // 13-16 列：长度 <=3 时右对齐（与标准 PDB 一致）
+      var nm = name.length >= 4 ? name.slice(0, 4) : (' ' + name);
+      var f = function (v) {
+        return pad(v.toFixed(3), 8);
+      };
+      lines.push(
+        'ATOM  ' + pad(i + 1, 5) + ' ' + pad(nm, 4) + ' ' + pad(resn[i] || 'UNK', 3) + ' ' +
+        (p.chain ? p.chain.charAt(i) || 'A' : 'A') + pad(resi[i] || 1, 4) + '    ' +
+        f(xyz[i * 3]) + f(xyz[i * 3 + 1]) + f(xyz[i * 3 + 2]) +
+        '  1.00  0.00          ' + pad(elem[i] || 'C', 2)
+      );
+    }
+    lines.push('END');
+    return lines.join('\n');
+  }
+
+  function loadPoseScript(ref) {
+    if (window.MODEL_POSE_DATA && window.MODEL_POSE_DATA[ref.key]) {
+      return Promise.resolve(window.MODEL_POSE_DATA[ref.key]);
+    }
+    if (!poseLoading[ref.key]) {
+      poseLoading[ref.key] = new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.src = POSE_BASE + ref.file;
+        s.onload = function () {
+          if (window.MODEL_POSE_DATA && window.MODEL_POSE_DATA[ref.key]) {
+            resolve(window.MODEL_POSE_DATA[ref.key]);
+          } else {
+            reject(new Error('pose payload missing: ' + ref.file));
+          }
+        };
+        s.onerror = function () {
+          reject(new Error('pose payload could not be loaded: ' + ref.file));
+        };
+        document.head.appendChild(s);
+      });
+    }
+    return poseLoading[ref.key];
+  }
+
+  function fetchStructureFallback(rel) {
     return fetch(structBase + rel).then(function (res) {
       if (!res.ok) {
         throw new Error('HTTP ' + res.status);
@@ -147,6 +270,19 @@
         return new Response(res.body.pipeThrough(new DecompressionStream('gzip'))).text();
       }
       return res.text();
+    });
+  }
+
+  function fetchStructure(rel) {
+    var ref = poseRef(rel);
+    if (!ref) {
+      return fetchStructureFallback(rel);
+    }
+    return loadPoseScript(ref).then(pdbFromPayload).catch(function (err) {
+      if (window.console && console.warn) {
+        console.warn('[model-game] CDN pose unavailable, falling back to local:', err.message);
+      }
+      return fetchStructureFallback(rel);
     });
   }
 
@@ -232,38 +368,23 @@
     var ab = state.antibody;
     var ag = state.antigen;
     if (ab && ag) {
-      if (state.mode === 'flexible') {
-        var flex = DATA.flexible[ab];
-        var cluster = null;
-        for (var i = 0; i < flex.clusters.length; i += 1) {
-          if (flex.clusters[i].cluster === state.cluster) {
-            cluster = flex.clusters[i];
-          }
+      var flex = DATA.flexible[ab];
+      var cluster = null;
+      for (var i = 0; i < flex.clusters.length; i += 1) {
+        if (flex.clusters[i].cluster === state.cluster) {
+          cluster = flex.clusters[i];
         }
-        if (!cluster) {
-          return null;
-        }
-        var model = cluster.models.filter(function (m) {
-          return m.model === state.model;
-        })[0] || cluster.models[0];
-        state.model = model.model;
-        return {
-          rel: model.file,
-          label: 'Complex ' + ab + ' ' + TIMES + ' ' + ag + ' — Cluster ' + cluster.cluster + ', Model ' + model.model,
-          split: true
-        };
       }
-      var combo = DATA.rigid[ab + '|' + ag];
-      if (!combo) {
+      if (!cluster) {
         return null;
       }
-      var pick = combo.models.filter(function (m) {
+      var model = cluster.models.filter(function (m) {
         return m.model === state.model;
-      })[0] || combo.models[0];
-      state.model = pick.model;
+      })[0] || cluster.models[0];
+      state.model = model.model;
       return {
-        rel: pick.file,
-        label: 'Complex ' + ab + ' ' + TIMES + ' ' + ag + ' — Model ' + pick.model + ' (ClusPro rigid)',
+        rel: model.file,
+        label: 'Complex ' + ab + ' ' + TIMES + ' ' + ag + ' — Cluster ' + cluster.cluster + ', Model ' + model.model,
         split: true
       };
     }
@@ -273,8 +394,8 @@
     if (ag) {
       var antigen = byId(DATA.antigens, ag);
       return {
-        rel: state.mode === 'flexible' ? antigen.processed : antigen.native,
-        label: ag + ' HA — ' + (state.mode === 'flexible' ? 'complex-processed antigen' : 'untreated antigen'),
+        rel: antigen.processed,
+        label: ag + ' HA — complex-processed antigen',
         split: false
       };
     }
@@ -282,24 +403,38 @@
   }
 
   // ------------------------------------------------------------------ cards
-  function cardNode(kind, item, stats) {
+  function cardNode(kind, item, stats, icon) {
     var b = h('button', 'model-card model-card--' + kind);
     b.type = 'button';
     b.draggable = true;
     b.setAttribute('data-kind', kind);
     b.setAttribute('data-id', item.id);
-    b.appendChild(h('span', 'model-card__name', item.label || item.id));
+    var url = iconUrl(icon);
+    if (url) {
+      var img = document.createElement('img');
+      img.className = 'model-card__icon';
+      img.src = url;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      b.appendChild(img);
+    }
+    var body = h('span', 'model-card__body');
+    body.appendChild(h('span', 'model-card__name', item.label || item.id));
     stats.forEach(function (row) {
       var line = h('span', 'model-card__stat');
       line.appendChild(h('span', 'model-card__stat-k', row[0]));
       line.appendChild(h('span', 'model-card__stat-v', row[1]));
-      b.appendChild(line);
+      body.appendChild(line);
     });
+    b.appendChild(body);
     return b;
   }
 
   function renderCards() {
-    var allowed = allowedAntigens();
+    var icons = DATA.icons || {};
+    var abIcons = icons.antibodies || {};
+    var agIcons = icons.antigens || {};
     if (el.antibodies) {
       el.antibodies.innerHTML = '';
       DATA.antibodies.forEach(function (ab) {
@@ -307,26 +442,15 @@
         var best = flex.clusters.filter(function (c) {
           return c.cluster === flex.bestCluster;
         })[0];
-        var combo = DATA.rigid[ab.id + '|' + DATA.flexAntigen];
         el.antibodies.appendChild(cardNode('antibody', ab, [
-          ['HADDOCK', minus(best.score, 1) + ' (C' + best.cluster + ')'],
-          ['ClusPro', combo && combo.best ? minus(combo.best.score, 1) : EMDASH]
-        ]));
+          ['HADDOCK', minus(best.score, 1) + ' (C' + best.cluster + ')']
+        ], abIcons[ab.id]));
       });
     }
     if (el.antigens) {
       el.antigens.innerHTML = '';
       DATA.antigens.forEach(function (ag) {
-        var ok = allowed.some(function (a) {
-          return a.id === ag.id;
-        });
-        var b = cardNode('antigen', ag, [['Mode', ok ? 'both modes' : 'rigid only']]);
-        if (!ok) {
-          b.disabled = true;
-          b.classList.add('is-disabled');
-          b.setAttribute('aria-disabled', 'true');
-        }
-        el.antigens.appendChild(b);
+        el.antigens.appendChild(cardNode('antigen', ag, [], agIcons[ag.id]));
       });
     }
   }
@@ -337,8 +461,8 @@
       return;
     }
     var options = [];
-    var label = state.mode === 'flexible' ? 'HADDOCK cluster' : 'ClusPro model';
-    if (state.mode === 'flexible' && state.antibody) {
+    var label = 'HADDOCK cluster';
+    if (state.antibody) {
       options = DATA.flexible[state.antibody].clusters.slice().sort(function (a, b) {
         return a.score - b.score;
       }).map(function (c) {
@@ -347,11 +471,6 @@
           text: 'Cluster ' + c.cluster + '  ' + DOT + '  ' + minus(c.score, 3) + '  (' + c.nstruc + ' structures)'
         };
       });
-    } else if (state.mode === 'rigid' && state.antibody && state.antigen) {
-      var combo = DATA.rigid[state.antibody + '|' + state.antigen];
-      options = combo ? combo.models.map(function (m) {
-        return { value: m.model, text: 'Model ' + m.model };
-      }) : [];
     }
     el.selectLabel.textContent = label;
     el.select.innerHTML = '';
@@ -364,7 +483,7 @@
     if (!options.length) {
       return;
     }
-    var want = state.mode === 'flexible' ? state.cluster : state.model;
+    var want = state.cluster;
     var has = options.some(function (o) {
       return String(o.value) === String(want);
     });
@@ -372,15 +491,11 @@
       want = options[0].value;
     }
     el.select.value = String(want);
-    if (state.mode === 'flexible') {
-      state.cluster = Number(want);
-      var c = DATA.flexible[state.antibody].clusters.filter(function (x) {
-        return x.cluster === state.cluster;
-      })[0];
-      state.model = c && c.models.length ? c.models[0].model : null;
-    } else {
-      state.model = Number(want);
-    }
+    state.cluster = Number(want);
+    var c = DATA.flexible[state.antibody].clusters.filter(function (x) {
+      return x.cluster === state.cluster;
+    })[0];
+    state.model = c && c.models.length ? c.models[0].model : null;
   }
 
   // ------------------------------------------------------------------ results
@@ -420,114 +535,75 @@
       return;
     }
 
-    if (state.mode === 'flexible') {
-      var flex = DATA.flexible[ab];
-      var c = flex.clusters.filter(function (x) {
-        return x.cluster === state.cluster;
-      })[0];
-      var better = flex.clusters.filter(function (x) {
-        return x.score < c.score;
-      }).length;
-      el.result.appendChild(h('h4', 'model-game__result-title',
-        'HADDOCK 2.5 ' + DOT + ' ' + ab + ' ' + TIMES + ' ' + ag + ' ' + DOT + ' Cluster ' + c.cluster));
-      el.result.appendChild(metricTable([
-        ['HADDOCK score', minus(c.score, 3) + ' ' + PM + ' ' + minus(c.scoreSd, 3)],
-        ['Cluster RMSD', minus(c.rmsd, 3) + ' ' + PM + ' ' + minus(c.rmsdSd, 3) + ' ' + DEG],
-        ['Structures in cluster', String(c.nstruc)],
-        ['Intermolecular energy', minus(c.einter, 2) + ' kcal/mol'],
-        ['van der Waals + 0.1 electrostatic', minus(c.evdwEelec, 2) + ' kcal/mol'],
-        ['van der Waals', minus(c.evdw, 2) + ' kcal/mol'],
-        ['Electrostatic', minus(c.ediel, 2) + ' kcal/mol'],
-        ['Cluster rank', c.cluster === flex.bestCluster
-          ? 'best cluster for this nanobody'
-          : 'rank ' + (better + 1) + ' of ' + flex.clusters.length]
-      ]));
-      el.result.appendChild(h('p', 'model-game__result-note',
-        'Semi-flexible refinement was run against ' + DATA.flexAntigen + ' HA only. Score, RMSD, structure count and '
-        + 'energy terms are the HADDOCK values for this cluster; the selector above chooses which of the cluster'
-        + ' structures to draw.'));
-      return;
-    }
-
-    var combo = DATA.rigid[ab + '|' + ag];
-    if (!combo) {
-      el.result.appendChild(h('p', 'model-game__result-hint', 'No ClusPro output for this pair.'));
+    var flex = DATA.flexible[ab];
+    var c = flex.clusters.filter(function (x) {
+      return x.cluster === state.cluster;
+    })[0];
+    if (!c) {
+      el.result.appendChild(h('p', 'model-game__result-hint', 'No cluster selected for this nanobody.'));
       return;
     }
     el.result.appendChild(h('h4', 'model-game__result-title',
-      'ClusPro rigid docking ' + DOT + ' ' + ab + ' ' + TIMES + ' ' + ag));
-    if (combo.best) {
-      el.result.appendChild(h('p', 'model-game__result-best',
-        'Best weighted score ' + minus(combo.best.score, 1) + ' (cluster ' + combo.best.cluster
-        + ' of ' + combo.cluspro.length + ' exported clusters)'));
-    }
-    var table = h('table', 'model-game__table model-game__table--scores');
-    var thead = h('thead');
-    var hr = h('tr');
-    ['Cluster', 'Members', 'Center', 'Lowest energy'].forEach(function (t) {
-      hr.appendChild(h('th', null, t));
-    });
-    thead.appendChild(hr);
-    table.appendChild(thead);
-    var tb = h('tbody');
-    combo.cluspro.forEach(function (row) {
-      var tr = h('tr');
-      if (combo.best && row.cluster === combo.best.cluster) {
-        tr.className = 'is-best';
-      }
-      tr.appendChild(h('td', null, String(row.cluster)));
-      tr.appendChild(h('td', null, String(row.members)));
-      tr.appendChild(h('td', null, minus(row.center, 1)));
-      tr.appendChild(h('td', null, minus(row.lowest, 1)));
-      tb.appendChild(tr);
-    });
-    table.appendChild(tb);
-    var wrap = h('div', 'model-game__table-wrap');
-    wrap.appendChild(table);
-    el.result.appendChild(wrap);
+      'HADDOCK 2.5 ' + DOT + ' ' + ab + ' ' + TIMES + ' ' + ag + ' ' + DOT + ' Cluster ' + c.cluster));
+    el.result.appendChild(metricTable([
+      ['HADDOCK score', minus(c.score, 3) + ' ' + PM + ' ' + minus(c.scoreSd, 3)],
+      ['Cluster RMSD', minus(c.rmsd, 3) + ' ' + PM + ' ' + minus(c.rmsdSd, 3) + ' ' + DEG],
+      ['Structures in cluster', String(c.nstruc)],
+      ['Intermolecular energy', minus(c.einter, 2) + ' kcal/mol'],
+      ['van der Waals + 0.1 electrostatic', minus(c.evdwEelec, 2) + ' kcal/mol'],
+      ['van der Waals', minus(c.evdw, 2) + ' kcal/mol'],
+      ['Electrostatic', minus(c.ediel, 2) + ' kcal/mol'],
+      ['Cluster shown', 'Cluster ' + c.cluster + ' representative structure']
+    ]));
     el.result.appendChild(h('p', 'model-game__result-note',
-      'Weighted scores as exported by ClusPro, sorted by lowest energy. The exported model files carry no cluster '
-      + 'number, so the selector above names them Model 1' + EMD + combo.models.length
-      + ' and deliberately does not tie one model to one row of this table.'));
+      'Semi-flexible refinement was run against ' + DATA.flexAntigen + ' HA only. Each nanobody card defaults to the '
+      + 'best cluster of its run; the cluster selector switches to any other cluster of the same run, and score, '
+      + 'RMSD, structure count and energy terms are the HADDOCK values for the selected cluster.'));
   }
 
+  /** 数字面板：与卡牌同一数据源的半柔性结果排名（每个抗体的最佳簇）。 */
   function renderRanking() {
-    if (!el.ranking || !RANK || !RANK.candidates) {
+    if (!el.ranking || !DATA.flexible) {
       return;
     }
-    var rows = RANK.candidates.slice().sort(function (a, b) {
-      return a.cluspro.untreated.specificityIndex - b.cluspro.untreated.specificityIndex;
+    var rows = DATA.antibodies.map(function (ab) {
+      var flex = DATA.flexible[ab.id];
+      var best = flex.clusters.filter(function (c) {
+        return c.cluster === flex.bestCluster;
+      })[0] || flex.clusters[0];
+      return { id: ab.id, best: best, clusters: flex.clusters.length };
+    }).sort(function (a, b) {
+      return a.best.score - b.best.score;
     });
     el.ranking.innerHTML = '';
     el.ranking.appendChild(h('p', 'model-game__panel-title',
-      'Specificity index across the ' + rows.length + ' refined candidates'));
+      'Best HADDOCK cluster per nanobody (' + DATA.flexAntigen + ' HA)'));
     var table = h('table', 'model-game__table');
     var thead = h('thead');
     var hr = h('tr');
-    ['Nanobody', 'H1N1', 'H3N2', 'H5N1', 'Index'].forEach(function (t) {
+    ['Nanobody', 'Cluster', 'HADDOCK score', 'RMSD', 'Structures'].forEach(function (t) {
       hr.appendChild(h('th', null, t));
     });
     thead.appendChild(hr);
     table.appendChild(thead);
     var tb = h('tbody');
-    rows.forEach(function (c) {
-      var u = c.cluspro.untreated;
+    rows.forEach(function (r) {
       var tr = h('tr');
-      if (c.verdict && c.verdict.outcome === 'lead') {
+      if (state.antibody === r.id) {
         tr.className = 'is-best';
       }
-      tr.appendChild(h('td', null, c.id));
-      tr.appendChild(h('td', null, minus(u.H1N1, 1)));
-      tr.appendChild(h('td', null, minus(u.H3N2, 1)));
-      tr.appendChild(h('td', null, minus(u.H5N1, 1)));
-      tr.appendChild(h('td', null, minus(u.specificityIndex, 2)));
+      tr.appendChild(h('td', null, r.id));
+      tr.appendChild(h('td', null, 'C' + r.best.cluster));
+      tr.appendChild(h('td', null, minus(r.best.score, 3)));
+      tr.appendChild(h('td', null, minus(r.best.rmsd, 3) + ' ' + DEG));
+      tr.appendChild(h('td', null, String(r.best.nstruc)));
       tb.appendChild(tr);
     });
     table.appendChild(tb);
     el.ranking.appendChild(table);
     el.ranking.appendChild(h('p', 'model-game__result-note',
-      'ClusPro scores for the untreated antigen; a more negative index means better relative specificity for H1N1. '
-      + 'This ranking is independent of the structure selector.'));
+      'HADDOCK 2.5 semi-flexible scores against ' + DATA.flexAntigen + ' HA; a more negative score is a better '
+      + 'interface. This ranking is independent of the cluster selector.'));
   }
 
   // ------------------------------------------------------------------ 可折叠结果栏
@@ -623,25 +699,6 @@
     sync();
   }
 
-  function setMode(mode) {
-    state.mode = mode;
-    if (el.modeRigid && el.modeFlex) {
-      var flex = mode === 'flexible';
-      el.modeRigid.classList.toggle('is-active', !flex);
-      el.modeRigid.setAttribute('aria-pressed', flex ? 'false' : 'true');
-      el.modeFlex.classList.toggle('is-active', flex);
-      el.modeFlex.setAttribute('aria-pressed', flex ? 'true' : 'false');
-    }
-    if (mode === 'flexible') {
-      state.antigen = DATA.flexAntigen;
-      state.cluster = state.antibody ? DATA.flexible[state.antibody].bestCluster : null;
-    } else if (state.antigen && state.antigen !== DATA.flexAntigen) {
-      state.antigen = DATA.flexAntigen;
-    }
-    renderCards();
-    sync();
-  }
-
   // ------------------------------------------------------------------ wiring
   function onCardEvent(ev) {
     var card = ev.target.closest ? ev.target.closest('.model-card') : null;
@@ -718,16 +775,6 @@
     wireDropZone(el.slotAb, 'antibody');
     wireDropZone(el.slotAg, 'antigen');
 
-    if (el.modeRigid) {
-      el.modeRigid.addEventListener('click', function () {
-        setMode('rigid');
-      });
-    }
-    if (el.modeFlex) {
-      el.modeFlex.addEventListener('click', function () {
-        setMode('flexible');
-      });
-    }
     if (el.railToggle) {
       el.railToggle.addEventListener('click', function () {
         setRail(el.rail.getAttribute('data-rail-state') !== 'open');
@@ -736,15 +783,11 @@
     if (el.select) {
       el.select.addEventListener('change', function () {
         var v = Number(el.select.value);
-        if (state.mode === 'flexible') {
-          state.cluster = v;
-          var c = DATA.flexible[state.antibody].clusters.filter(function (x) {
-            return x.cluster === v;
-          })[0];
-          state.model = c && c.models.length ? c.models[0].model : null;
-        } else {
-          state.model = v;
-        }
+        state.cluster = v;
+        var c = DATA.flexible[state.antibody].clusters.filter(function (x) {
+          return x.cluster === v;
+        })[0];
+        state.model = c && c.models.length ? c.models[0].model : null;
         sync();
       });
     }
@@ -778,8 +821,8 @@
         if (block) {
           block.classList.toggle('is-flipped', !on);
         }
-        var short = on ? 'Numbers' : '3D';
-        var full = on ? 'Show the specificity ranking instead of the 3D view'
+        var short = on ? 'Scores' : '3D';
+        var full = on ? 'Show the HADDOCK score ranking instead of the 3D view'
           : 'Show the 3D structure instead of the ranking';
         el.flip.textContent = short;
         el.flip.title = full;

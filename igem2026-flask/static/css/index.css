@@ -1017,6 +1017,11 @@ body.home-page {
   color: var(--color-text-light);
 }
 
+/* 侧栏高度/滚动的职责划分（2026-10-18 统一）：
+   目录区的高度限制与内部滚动由 navigation.css 的 .description-nav-wrapper 负责
+   （max-height: calc(100vh - 18.75rem) + overflow-y:auto），发酵容器因此常驻可见。
+   本文件不要再给 .description-sidebar 加 max-height/overflow：侧栏一旦自身可滚，
+   长目录页（Model）底部发酵罐与进度条会被顶出视野，只能靠侧栏内部滚动才看得到。 */
 .description-sidebar,
 .log-sidebar,
 .hp-sidebar {
@@ -1026,9 +1031,6 @@ body.home-page {
   position: -webkit-sticky;
   position: sticky;
   top: 120px;
-  max-height: calc(100vh - 160px);
-  overflow: hidden;
-  overflow-y: auto;
 }
 
 .description-sidebar .sidebar-header,
@@ -1038,6 +1040,71 @@ body.home-page {
   padding-bottom: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
   border-bottom: 1px solid rgba(139, 90, 43, 0.1);
+}
+
+/* ================================================== */
+/* 侧栏内部滚动：目录自己滚，发酵容器常驻底部               */
+/* 2026-10-18 全站统一（此前只有 contribution/sustainability */
+/* 两页有页面级规则，长目录页如 Model 底部发酵罐被顶出视野）。*/
+/* 起因：目录展开后总高超过视口（Model 实测 导航 673px +    */
+/* 进度 178px > 可视 880px），侧栏自身 overflow-y:auto 会把   */
+/* 底部发酵罐与进度条一起推到折叠线以下。                   */
+/* 做法：侧栏锁高 + 纵向 flex 且自身不滚；目录区 flex:1 内部  */
+/* 滚动；进度容器 flex:0 常驻底部。                          */
+/* 线上实测（注入同样规则）：导航区 client 556 / scroll 673， */
+/* 进度区 457–635 始终在视口内，滚动 3000px 后依然可见。      */
+/* ================================================== */
+.description-sidebar {
+  display: flex;
+  flex-direction: column;
+  /* 锁高是 flex 生效的前提：没有上界时 flex:1 无可压缩空间 */
+  max-height: calc(100vh - 12rem);
+  overflow: hidden;
+}
+
+/* 装饰层（.yeast-decoration 等）与其他块不参与压缩 */
+.description-sidebar > *:not(.description-nav-wrapper) {
+  flex: 0 0 auto;
+}
+
+.description-sidebar .description-nav-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 0.35rem;
+  scrollbar-width: thin;
+  scrollbar-color: #A9743A rgba(139, 90, 43, 0.08);
+}
+
+/* 主题化滚动条：米黄轨道 + 棕色滑块，可拖动 */
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-track {
+  background: rgba(139, 90, 43, 0.08);
+  border-radius: 999px;
+}
+
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #D4A574 0%, #A9743A 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+}
+
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-thumb:hover,
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-thumb:active {
+  background: #8B5A2B;
+}
+
+/* 发酵容器固定在侧栏底部，不参与目录滚动 */
+.description-sidebar .progress-section {
+  flex: 0 0 auto;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
 }
 
 /* ================================================== */
@@ -1060,6 +1127,19 @@ body.home-page {
     min-width: 100%;
     position: static;
     max-height: none;
+  }
+
+  /* 窄屏侧栏改为常规流：复位桌面端的纵向 flex 与内部滚动，
+     否则目录区会被压成 0 高度（父级无上界，flex:1 无可压缩空间）。 */
+  .description-sidebar {
+    display: block;
+    overflow: visible;
+  }
+
+  .description-sidebar .description-nav-wrapper {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 }
 
@@ -2813,35 +2893,41 @@ html.home-scroll-snap #footer.section-footer {
 #future-vision .yeast-screen__list strong { color: #1f6ea6; }
 #future-vision .yeast-screen__placeholder { color: #4f86a8; }
 
-/* 2026-10-15：future-vision 改「四角分布 + 中心核心愿景」平面四象限
-   3×3 网格：四角放四大扩展支点卡片，第 2 行中列放核心愿景；构成以核心愿景为中心的辐射式布局。
-   中屏（≤900px）折成 2 列、核心愿景横贯；窄屏（≤600px）单列堆叠、核心愿景置顶。
-   2026-10-16：间距/内距/字号全部 vh 驱动，矮视口自动收紧（见文末 max-height 块）。 */
+/* future-vision 五块内容（2026-10-17 同步自根站定版）
+   版式：纵向编排——核心愿景横贯在四块**上方**、居中、粗体、字号明显大于分点；
+        四个分点在其下排成 2×2 等宽等高网格（grid 行用 1fr）。
+   去 chrome：无外框、无盒底、无圆角、无投影，纯文字排版。
+   中屏（≤900px）只收间距；窄屏（≤600px）单列堆叠、核心愿景置顶。 */
 #future-vision .fv-quadrants {
   display: grid;
-  grid-template-columns: 1fr minmax(220px, 0.92fr) 1fr;
-  grid-template-rows: auto auto auto;
-  align-items: center;
-  justify-items: center;
-  gap: clamp(0.5rem, 1.8vh, 1.1rem);
-  max-width: 1180px;
-  margin: clamp(0.4rem, 1.2vh, 0.9rem) auto 0;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    "core core"
+    "tl tr"
+    "ml mr";
+  align-items: stretch;
+  column-gap: clamp(1.5rem, 6vw, 6rem);
+  row-gap: clamp(0.8rem, 3vh, 2rem);
+  max-width: min(86vw, 1240px);
+  margin: clamp(0.9rem, 2.4vh, 1.8rem) auto 0;
+  text-align: left;
 }
 
 /* 2026-10-16：五张卡片统一扁平样式——同底色、同描边、同圆角，无投影无渐变；
    核心愿景仅用描边粗细区分，不再用棕色渐变 + 大投影。 */
 #future-vision .fv-card {
   width: 100%;
-  max-width: min(360px, 100%);
-  padding: clamp(0.55rem, 1.6vh, 0.95rem) clamp(0.75rem, 1.8vw, 1.1rem);
-  background: #fffdf8;
-  border: 1px solid rgba(31, 110, 166, 0.22);
-  border-radius: 0.9rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
 }
-#future-vision .fv-card--tl { grid-area: 1 / 1; }
-#future-vision .fv-card--tr { grid-area: 1 / 3; }
-#future-vision .fv-card--bl { grid-area: 3 / 1; }
-#future-vision .fv-card--br { grid-area: 3 / 3; }
+#future-vision .fv-card--tl { grid-area: tl; }
+#future-vision .fv-card--tr { grid-area: tr; }
+#future-vision .fv-card--ml { grid-area: ml; }
+#future-vision .fv-card--mr { grid-area: mr; }
 
 #future-vision .fv-card__title {
   margin: 0 0 clamp(0.25rem, 0.8vh, 0.45rem);
@@ -2859,38 +2945,45 @@ html.home-scroll-snap #footer.section-footer {
 #future-vision .fv-card__body small { color: #6b8aa3; font-size: 0.82em; }
 
 #future-vision .fv-core {
-  grid-area: 2 / 2;
+  grid-area: core;
+  justify-self: center;
   width: 100%;
-  max-width: 380px;
-  padding: clamp(0.7rem, 1.9vh, 1.1rem) clamp(0.8rem, 2vw, 1.2rem);
+  max-width: min(78%, 860px);
+  padding: 0;
   text-align: center;
-  background: #fffdf8;
-  border: 1.5px solid rgba(31, 110, 166, 0.45);
-  border-radius: 1.1rem;
+  background: none;
+  border: 0;
+  border-radius: 0;
 }
 #future-vision .fv-core__text {
   margin: 0;
-  font-size: clamp(0.82rem, 1.6vh, 0.96rem);
+  font-size: clamp(1rem, 2.2vh, 1.28rem);
   line-height: 1.55;
-  font-weight: 500;
-  color: #2f6f96;
+  font-weight: 700;
+  color: #1f6ea6;
 }
 
 @media (max-width: 900px) {
   #future-vision .fv-quadrants {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: none;
-    gap: clamp(0.5rem, 1.4vh, 1rem);
+    max-width: 100%;
+    column-gap: clamp(1rem, 4vw, 2rem);
+    row-gap: clamp(0.9rem, 3vh, 1.6rem);
   }
-  #future-vision .fv-card--tl,
-  #future-vision .fv-card--tr,
-  #future-vision .fv-card--bl,
-  #future-vision .fv-card--br { grid-area: auto; }
-  #future-vision .fv-core {
-    grid-area: auto;
-    grid-column: 1 / -1;
-    max-width: none;
+  #future-vision .fv-core { max-width: 92%; }
+}
+
+@media (max-width: 600px) {
+  #future-vision .fv-quadrants {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "core"
+      "tl"
+      "tr"
+      "ml"
+      "mr";
+    row-gap: clamp(0.8rem, 2.6vh, 1.4rem);
   }
+  #future-vision .fv-core { max-width: 100%; }
 }
 
 @media (max-width: 600px) {

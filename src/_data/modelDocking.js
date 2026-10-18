@@ -1,10 +1,12 @@
 // Model page data bridge (dry lab)
 // The single data source is static/data/dry-lab/model/model-docking.json — the page body tables and
-// the interactive demo in static/js/pages/model-game.js read the same file, avoiding numeric drift between the two.
+// the card game in static/js/pages/model-game.js read the same file, avoiding numeric drift between the two.
 // We use a "JSON file + this bridge" instead of writing the object directly here because:
 //   1) the client (browser) also needs this data, and the JSON can be inlined into the page (Nunjucks: | dump);
 //   2) when migrating to the official submission project (Flask), the same JSON can be reused with Jinja2's | tojson.
-// Numeric conventions and provenance: see static/expriments/drylab/model/md/10-一手分析.md.
+// Numeric conventions and provenance: md/ and mmgbsa/ sections follow
+// static/expriments/drylab/model/new_model/model5(1).docx (the current authoritative modelling
+// document, per the 2026-10-17 decision to standardise on it).
 //
 // Sorting: the specificity index, mean cross-reactivity binding energy, and HADDOCK score are all "more negative is better," hence ascending order.
 // Display: the docx source uses the U+2212 minus sign (−) and fixed decimal places, so this bridge pre-formats uniformly,
@@ -38,16 +40,9 @@ data.tables = {
       index: num(c.cluspro.untreated.specificityIndex, 2),
       outcome: OUTCOME_LABEL[c.verdict.outcome] || c.verdict.outcome
     })),
-  treated: data.candidates
-    .slice()
-    .sort((a, b) => a.cluspro.treated.specificityIndex - b.cluspro.treated.specificityIndex)
-    .map((c) => ({
-      id: c.id,
-      H1N1: num(c.cluspro.treated.H1N1, 1),
-      H3N2: num(c.cluspro.treated.H3N2, 1),
-      H5N1: num(c.cluspro.treated.H5N1, 1),
-      index: num(c.cluspro.treated.specificityIndex, 2)
-    })),
+  // model5(1).docx tabulates the untreated-antigen (stage 1) and cross-reactivity (stage 3) results only;
+  // the complex-processed antigen run appears as workflow stage 2 without a score table, so no treated
+  // table is rendered on the page.
   cross: data.candidates
     .slice()
     .sort((a, b) => a.crossReactivity.mean - b.crossReactivity.mean)
@@ -80,6 +75,7 @@ data.tableStyle = {
 };
 
 data.display = {
+  executiveSummary: data.executiveSummary.rows,
   interactions: [
     { label: 'Total contacts', value: String(data.interface.interactions.contacts) },
     { label: 'Hydrogen bonds', value: String(data.interface.interactions.hbonds) },
@@ -90,9 +86,44 @@ data.display = {
     nanobody: h.nanobody,
     ha: h.ha,
     type: h.type,
-    distance: num(h.distance, 3)
+    distance: typeof h.distance === 'number' ? num(h.distance, 3) : h.distance
   })),
-  mmgbsa: data.mmgbsa.items.map((i) => ({ term: i.term, value: num(i.value, 2) })),
+  clusterComparison: data.interface.clusterComparison.rows.map((r) => ({
+    metric: r.metric,
+    cluster1: String(r.cluster1),
+    cluster5: String(r.cluster5)
+  })),
+  nanobodyPredictions: data.structurePrediction.rows.map((r) => ({
+    id: r.id,
+    avg: num(r.avg, 2),
+    cdr3: num(r.cdr3, 2),
+    assessment: r.assessment
+  })),
+  positiveControl: data.positiveControl.rows,
+  mdParams: [
+    { param: 'Force field', value: data.md.forcefield },
+    { param: 'Water model', value: data.md.waterModel },
+    { param: 'Temperature', value: data.md.temperature },
+    { param: 'Pressure', value: data.md.pressure },
+    { param: 'Total duration', value: data.md.reportedDuration },
+    { param: 'Performance', value: data.md.performance }
+  ],
+  // Model5 §1.8 reports MM-GBSA for two clusters side by side; keep both columns so the
+  // table can show Cluster 1 and Cluster 5 rather than silently picking one.
+  mmgbsa: data.mmgbsa.items.map((i) => ({
+    term: i.term,
+    cluster1: num(i.cluster1, 2),
+    cluster5: num(i.cluster5, 2)
+  })),
+  mmgbsaTotals: {
+    cluster1: data.mmgbsa.cluster1Total,
+    cluster5: data.mmgbsa.cluster5Total
+  },
+  mmgbsaHotspots: data.mmgbsa.hotspots.map((h) => ({
+    rank: h.rank,
+    residue: h.residue,
+    contribution: num(h.contribution, 3)
+  })),
   md: data.md.items.map((i) => ({ metric: i.metric, value: i.value })),
   antigens: data.antigens.map((a) => ({
     id: a.id,
@@ -102,7 +133,8 @@ data.display = {
     source: a.source,
     resolution: a.resolution,
     chainMap: a.chainMap,
-    structureNote: a.structureNote
+    structureNote: a.structureNote,
+    status: a.status
   })),
   leads: data.candidates.filter((c) => c.verdict.outcome === 'lead').map((c) => ({ id: c.id, zh: c.verdict.zh })),
   rejected: data.candidates.filter((c) => c.verdict.outcome === 'rejected').map((c) => ({ id: c.id, zh: c.verdict.zh })),
@@ -114,7 +146,7 @@ data.display = {
   }))
 };
 
-// Slim payload for client-side inlining: only the fields the interactive demo needs (raw values, formatted by the front end)
+// Slim payload for client-side inlining: only the fields the card game needs (raw values, formatted by the front end)
 data.client = {
   funnel: data.funnel,
   scoring: data.scoring,

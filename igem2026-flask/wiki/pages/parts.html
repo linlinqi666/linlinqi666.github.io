@@ -1,539 +1,611 @@
 {% extends "layout.html" %}
+{% set bodyClass = "parts-page" %}
 {% block title %}Parts{% endblock %}
 {% block styles %}
-<style>
-/* 内嵌自 static/css/parts.css（2026-10-10，仅本页使用，原文件已删除） */
-/**
- * Parts 页面专属样式（Flask 与根站两站保持一致）
- *
- * 设计基准：对齐站内其他内容页的 .content-card 卡片体系（米棕主题、圆角、阴影、标题下划线），
- * 避免本页单独一套观感。由于本页只加载 parts.css（不含 description.css / design.css），
- * 因此这里把所需的主题规则一次性写全。
- *
- * 排版要点（针对「字体换行造成的视觉偏差」）：
- * - 表格使用 table-layout: fixed + 明确列宽，换行位置可预期，行高不会被长词突刺撑开
- * - 中英文字号差距收窄（0.9rem / 0.86rem），行高统一 1.55，避免上下两行松紧不一
- * - 单元格一律 vertical-align: top，取消两端对齐（窄列 justify 会拉出难看的字距）
- * - 序列折叠块与描述共用同一基线节奏，不再额外占一行
- */
-
-/* ==========================================================
-   1. 页面容器与页首
-   ========================================================== */
-.parts-page {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 1.25rem 1.5rem 3rem;
-  overflow-wrap: anywhere;
-}
-
-.parts-hero {
-  margin: 0 0 1.5rem;
-}
-
-.parts-hero h1 {
-  margin: 0;
-  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--desc-color-primary-darker, #4A3728);
-}
-
-.parts-hero__sub {
-  margin: 0.5rem 0 0;
-  font-size: 1rem;
-  line-height: 1.75;
-  color: var(--desc-color-primary-dark, #5D4632);
-}
-
-/* 与贡献页标题分隔线保持同款（短横条） */
-.parts-hero__rule {
-  margin: 0.6rem auto 0;
-  height: 3px;
-  width: 4.5rem;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--desc-color-primary, #8B5A2B) 0%, var(--desc-color-primary-light, #D4A574) 100%);
-}
-
-/* ==========================================================
-   2. 卡片：对齐 .content-card 标准
-   ========================================================== */
-.parts-page .content-card {
-  background: var(--bg-card, #ffffff);
-  border-radius: var(--desc-radius-lg, 0.75rem);
-  border: 1px solid rgba(139, 90, 43, 0.16);
-  box-shadow: 0 2px 12px rgba(93, 58, 26, 0.07);
-  padding: 1.5rem 1.75rem;
-  margin: 0 0 1.5rem;
-}
-
-.parts-page .content-card h2 {
-  margin: 0 0 0.9rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--desc-color-primary-darker, #4A3728);
-}
-
-/* 模块说明段 */
-.parts-page .parts-desc {
-  margin: 0 0 1rem;
-  font-size: 0.95rem;
-  line-height: 1.75;
-  color: var(--desc-color-primary-dark, #5D4632);
-}
-
-/* ==========================================================
-   3. 总览卡
-   ========================================================== */
-/* 计数行：整句双语对照（英文一行、中文一行），不拆成行内碎片 */
-.parts-page .parts-summary .parts-count {
-  margin: 0 0 0.6rem;
-}
-
-.parts-page .parts-summary .parts-count .i18n-en,
-.parts-page .parts-summary .parts-count .i18n-zh {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  font-weight: 700;
-  color: var(--desc-color-primary, #8B5A2B);
-}
-
-.parts-page .parts-summary .parts-note {
-  margin: 0;
-  padding-left: 0.9rem;
-  border-left: 3px solid rgba(139, 90, 43, 0.25);
-  font-size: 0.92rem;
-  line-height: 1.7;
-  color: var(--desc-color-primary-dark, #5D4632);
-}
-
-/* ==========================================================
-   4. 元件表：固定布局，换行可预期
-   ========================================================== */
-.parts-page .parts-table {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  margin: 0;
-}
-
-.parts-page .parts-table th {
-  padding: 0.6rem 0.75rem;
-  background: rgba(139, 90, 43, 0.06);
-  border-bottom: 2px solid var(--desc-color-primary, #8B5A2B);
-  text-align: left;
-  font-weight: 700;
-  color: var(--desc-color-primary-darker, #4A3728);
-  vertical-align: bottom;
-}
-
-.parts-page .parts-table td {
-  padding: 0.7rem 0.75rem;
-  border-bottom: 1px solid rgba(139, 90, 43, 0.14);
-  vertical-align: top;
-}
-
-.parts-page .parts-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.parts-page .parts-table tbody tr:hover {
-  background: rgba(139, 90, 43, 0.035);
-}
-
-/* 列宽：固定后换行位置稳定，行与行之间不会忽宽忽窄 */
-.parts-page .parts-table .col-id {
-  width: 14%;
-}
-
-.parts-page .parts-table .col-name {
-  width: 26%;
-}
-
-/* 末列自动占满剩余宽度 */
-
-/* ==========================================================
-   5. 双语排版：收窄字号差、统一行高
-   ========================================================== */
-.parts-page .i18n-en,
-.parts-page .i18n-zh {
-  display: block;
-  line-height: 1.55;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-.parts-page .i18n-en {
-  font-size: 0.9rem;
-  color: var(--desc-color-primary-darker, #4A3728);
-}
-
-.parts-page .i18n-zh {
-  margin-top: 0.15rem;
-  font-size: 0.86rem;
-  color: var(--desc-color-primary-lightest, #6B5B45);
-}
-
-/* 表头双语紧凑，避免表头过高 */
-.parts-page .parts-table th .i18n-en {
-  font-size: 0.88rem;
-}
-
-.parts-page .parts-table th .i18n-zh {
-  margin-top: 0.1rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  opacity: 0.9;
-}
-
-/* ==========================================================
-   6. 元件 ID 链接（当前为占位，登记后填入编号与 href）
-   ========================================================== */
-.parts-page .part-id {
-  display: inline-block;
-  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: var(--desc-color-primary, #8B5A2B);
-  text-decoration: none;
-  border-bottom: 1px dashed rgba(139, 90, 43, 0.4);
-  word-break: break-all;
-}
-
-.parts-page .part-id:hover {
-  color: var(--desc-color-primary-darker, #4A3728);
-  border-bottom-color: currentColor;
-}
-
-.parts-page .part-id--pending {
-  color: var(--desc-color-primary-lightest, #6B5B45);
-  border-bottom: none;
-  opacity: 0.6;
-  cursor: default;
-  font-family: inherit;
-  font-size: 0.9rem;
-}
-
-/* ==========================================================
-   7. 序列折叠块：与描述共用同一节奏，不额外占视觉行
-   ========================================================== */
-.parts-page .seq-block {
-  margin-top: 0.5rem;
-}
-
-.parts-page .seq-block > summary {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.3rem;
-  cursor: pointer;
-  padding: 0.15rem 0;
-  list-style: none;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--desc-color-primary, #8B5A2B);
-}
-
-.parts-page .seq-block > summary::-webkit-details-marker {
-  display: none;
-}
-
-.parts-page .seq-block > summary::before {
-  content: '▸';
-  font-size: 0.72rem;
-}
-
-.parts-page .seq-block[open] > summary::before {
-  content: '▾';
-}
-
-/* summary 内双语并排，不各占一行 */
-.parts-page .seq-block > summary .i18n-en,
-.parts-page .seq-block > summary .i18n-zh {
-  display: inline;
-  margin-top: 0;
-  font-size: 0.82rem;
-  line-height: 1.4;
-}
-
-.parts-page .seq-block > summary .i18n-zh {
-  font-weight: 400;
-  color: var(--desc-color-primary-lightest, #6B5B45);
-}
-
-.parts-page .seq-block code.seq {
-  display: block;
-  margin-top: 0.4rem;
-  padding: 0.55rem 0.65rem;
-  background: rgba(139, 90, 43, 0.06);
-  border: 1px solid rgba(139, 90, 43, 0.14);
-  border-radius: 0.375rem;
-  font-family: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-  font-size: 0.72rem;
-  line-height: 1.55;
-  color: var(--desc-color-primary-dark, #4A3525);
-  word-break: break-all;
-  white-space: pre-wrap;
-  max-height: 9rem;
-  overflow-y: auto;
-}
-
-/* ==========================================================
-   8. 骨架与试剂列表
-   ========================================================== */
-.parts-page .parts-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.parts-page .parts-list > li {
-  padding: 0.55rem 0;
-  border-bottom: 1px solid rgba(139, 90, 43, 0.12);
-}
-
-.parts-page .parts-list > li:last-child {
-  border-bottom: none;
-}
-
-.parts-page .parts-list .i18n-en {
-  font-size: 0.92rem;
-}
-
-.parts-page .parts-list .i18n-zh {
-  font-size: 0.86rem;
-}
-
-/* ==========================================================
-   9. 窄屏：表格横向滚动，列宽保持不变
-   ========================================================== */
-@media (max-width: 768px) {
-  .parts-page {
-    padding: 1rem 1rem 2rem;
-  }
-
-  .parts-page .content-card {
-    padding: 1.1rem 1rem;
-  }
-
-  .parts-page .parts-table {
-    display: block;
-    overflow-x: auto;
-    white-space: normal;
-  }
-
-  .parts-page .parts-table thead,
-  .parts-page .parts-table tbody,
-  .parts-page .parts-table tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-  }
-
-  .parts-page .parts-table .col-id {
-    width: 22%;
-  }
-
-  .parts-page .parts-table .col-name {
-    width: 34%;
-  }
-
-  .parts-page .parts-table th,
-  .parts-page .parts-table td {
-    padding: 0.55rem 0.5rem;
-  }
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/parts.css') }}">
 {% endblock %}
 {% block page_content %}
-<div class="page-content">
-<section id="wet-lab-parts" class="parts-page">
-      <header class="parts-hero">
-        <h1>Parts</h1>
-        <p class="parts-hero__sub"><span class="i18n-en">This page lists every biological part used in PAGER-Yeast, grouped into three functional modules: signal recognition, signal transduction optimisation, and signal reporter. Each part carries its identifier, name and description, with long sequences available to expand.</span><span class="i18n-zh">本页列出 PAGER-Yeast 项目中使用的全部生物元件，按信号识别、信号转导优化、信号报告三个功能模块归置。每个元件给出编号、名称与描述，长序列可展开查看。</span></p>
-        <div class="parts-hero__rule" aria-hidden="true"></div>
-      </header>
 
-      <div class="content-card parts-summary">
-        <p class="parts-count"><span class="i18n-en">18 parts across 3 functional modules</span><span class="i18n-zh">18 个元件，分布于 3 个功能模块</span></p>
-        <p class="parts-note"><span class="i18n-en">Part identifiers are filled in once registration is complete; each identifier on the left then links to its Registry page.</span><span class="i18n-zh">元件编号将在完成登记后填入，届时每一条目左侧的编号即指向 Registry 页面。</span></p>
+<div class="description-container">
+
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-organisation" class="nav-main-link">How this collection is organised</a>
+              </div>
+            </li>
+            
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#parts-basic" class="nav-main-link">Basic Parts</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                
+                <li class="level3"><a href="#parts-bba-262tzxv3">BBa_262TZXV3</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26hn2w3g">BBa_26HN2W3G</a></li>
+                
+                <li class="level3"><a href="#parts-bba-2658b1za">BBa_2658B1ZA</a></li>
+                
+                <li class="level3"><a href="#parts-bba-262sr0ed">BBa_262SR0ED</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26hubyay">BBa_26HUBYAY</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26eg2lor">BBa_26EG2LOR</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26yeukxx">BBa_26YEUKXX</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26j53mf4">BBa_26J53MF4</a></li>
+                
+              </ul>
+            </li>
+            
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#parts-composite" class="nav-main-link">Composite Parts</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                
+                <li class="level3"><a href="#parts-bba-26ikmsko">BBa_26IKMSKO</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26yvx4qt">BBa_26YVX4QT</a></li>
+                
+                <li class="level3"><a href="#parts-bba-266k1vdv">BBa_266K1VDV</a></li>
+                
+                <li class="level3"><a href="#parts-bba-26d8d1sg">BBa_26D8D1SG</a></li>
+                
+              </ul>
+            </li>
+            
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-vectors" class="nav-main-link">Vectors used</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-references" class="nav-main-link">References</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">Fermentation Progress</div>
+        </div>
+      </aside>
+
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <h1 class="sr-only">Parts</h1>
+
+        <!-- 概览 -->
+        <div id="parts-overview" class="content-card">
+          <figure class="page-mascot page-mascot--parts" aria-hidden="true">
+            <img src="https://static.igem.wiki/teams/6373/wiki/icon/extension/parts.avif" alt="" width="440" height="455"
+              loading="lazy" decoding="async">
+          </figure>
+          <h2>Overview</h2>
+          <p class="parts-lede"><span class="i18n-en">This collection gathers the biological parts PAGER-Yeast contributed to the iGEM Registry. They cover the re-engineered <i>Saccharomyces cerevisiae</i> chassis, the humanised G-protein interface and the reporter that reads the pathway out; below they are listed the way the Registry itself classifies them, as basic parts and composite parts.</span></p>
+
+          <p class="parts-tally">
+            <span class="i18n-en">12 parts — 8 basic, 4 composite.</span>
+          </p>
+
+          <p class="parts-note"><span class="i18n-en">Every part number links to its Registry page, where the full sequence, annotations and any future characterisation data are kept.</span></p>
+        </div>
+
+        <!-- 分组依据：为什么按基础 / 复合分 -->
+        <div id="parts-organisation" class="content-card">
+          <h2>How this collection is organised</h2>
+          <p class="parts-desc"><span class="i18n-en">Every entry below is one Registry part, and the two sections follow the Registry classification rather than the order of the experiments. Basic parts are single functional units — a guide sequence, a homology arm, the EYNLV swap, a promoter — that can be used on their own or recombined freely. Composite parts are assemblies of two or more basic parts, submitted so that a combination which is known to work can be taken as a single piece. Each composite entry lists what it is built from.</span></p>
+          <p class="parts-tail"><span class="i18n-en">Parts for the recognition module itself are not part of this submission and therefore do not appear below.</span></p>
+        </div>
+
+        
+        <div id="parts-basic" class="content-card parts-group" data-group="basic">
+          <h2>Basic Parts</h2>
+          <p class="parts-desc"><span class="i18n-en">The single units this project is built from — 8 parts, each usable on its own or as the building block of one of the composites below.</span></p>
+
+          <ul class="parts-sheet">
+            
+            
+            <li class="part" id="parts-bba-262tzxv3" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-262tzxv3" target="_blank" rel="noopener">BBa_262TZXV3</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Guide RNA · 20 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">FAR1-targeting guide sequence (crRNA_FAR1_KO_up)</span></p>
+                <p class="part__desc"><span class="i18n-en">A 20 bp guide sequence aimed at the FAR1/YJL157C locus of <i>Saccharomyces cerevisiae</i> BY4741. It carries the targeting information for a pML104-based SpCas9 sgRNA cassette, so a FAR1 knockout needs nothing beyond this spacer plus the shared scaffold; the adjacent TGG PAM sits outside the part and is not included here. FAR1 encodes the cell-cycle inhibitor that arrests G1 after pheromone stimulation, which is why removing it keeps the strain dividing through a long fluorescence read-out.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Designed in CRISPOR and picked on predicted on-target scores together with off-target analysis.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26hn2w3g" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26hn2w3g" target="_blank" rel="noopener">BBa_26HN2W3G</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Engineered region · 1142 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">FAR1 homology repair template (4 bp deletion, PAM mutated)</span></p>
+                <p class="part__desc"><span class="i18n-en">The donor that repairs FAR1 once Cas9 has cut it. It carries 4 bp missing (CACT) inside the guide site GCGTCACGATCTCCACTTGG and a PAM changed from TGG to TAG, so the repaired chromosome is no longer recognised by the same guide. The short deletion shifts the reading frame and knocks the gene out; the PAM edit is the safeguard against a second cut. No foreign sequence and no selection marker are introduced, so the chassis stays marker-free apart from later integration steps.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">S. cerevisiae FAR1 locus, modified with a 4 bp deletion and a PAM mutation on top of the CRISPR target GCGTCACGATCTCCACTTGG.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-2658b1za" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-2658b1za" target="_blank" rel="noopener">BBa_2658B1ZA</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Guide RNA · 20 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">SST2-targeting guide sequence (crRNA_SST2_KO)</span></p>
+                <p class="part__desc"><span class="i18n-en">The SST2 counterpart of the FAR1 guide: 20 bp aimed at the SST2 locus of <i>Saccharomyces cerevisiae</i> BY4741 and used the same way in a pML104 sgRNA cassette. SST2 is the principal negative regulator of mating-pheromone signalling, so taking it out is what lifts the ceiling on how strongly the pathway can respond. The CGG PAM next to this target is not part of the part.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Designed computationally with a CRISPR design tool and selected for SpCas9 knockout in the pML104 system.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-262sr0ed" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-262sr0ed" target="_blank" rel="noopener">BBa_262SR0ED</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Engineered region · 989 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">SST2 homology repair template (4 bp deletion, PAM mutated)</span></p>
+                <p class="part__desc"><span class="i18n-en">The donor that repairs SST2 once Cas9 has cut it, mirroring the FAR1 template: 4 bp missing (TCTG) inside the target site TCGCCACGAGTTCTGTCCTG, and the adjacent PAM changed from CGG to CAG so the repaired locus is no longer a valid target. The deletion shifts the reading frame and knocks the gene out; the PAM edit makes a second cut unlikely. Nothing foreign and no selection marker are introduced.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">S. cerevisiae SST2 locus, modified with a 4 bp deletion and a PAM mutation on top of the CRISPR target TCGCCACGAGTTCTGTCCTG.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26hubyay" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26hubyay" target="_blank" rel="noopener">BBa_26HUBYAY</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Homologous region · 500 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">GPA1 upstream homology arm</span></p>
+                <p class="part__desc"><span class="i18n-en">500 bp taken from directly upstream of GPA1/YHR005C. Its only job is to be recognised: <i>Saccharomyces cerevisiae</i> recombines where the sequence matches, so this arm is what delivers the replacement to the right place on chromosome VIII. It pairs with the downstream arm to bracket the region being rewritten.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">The GPA1/YHR005C locus on chromosome VIII of <i>Saccharomyces cerevisiae</i> S288C.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26eg2lor" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26eg2lor" target="_blank" rel="noopener">BBa_26EG2LOR</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Engineered region · 18 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">GPA1 C-terminal Gαq-derived EYNLV sequence with stop codon</span></p>
+                <p class="part__desc"><span class="i18n-en">The 18 bp at the centre of the swap: five Gαq-derived residues, EYNLV, followed by a stop codon. The C-terminus of a Gα protein is what decides which receptor it can work with, so replacing the yeast KIGII with this sequence is the whole point of the humanisation step. The design follows the Gαq chimera reported by Komatsuzaki and colleagues (1997).</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Designed from the C-terminal five-residue Gαq chimera reported by Komatsuzaki et al. (1997); C-terminal sequence of <i>Homo sapiens</i> GNAQ (Gαq).</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26yeukxx" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26yeukxx" target="_blank" rel="noopener">BBa_26YEUKXX</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Homologous region · 500 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">GPA1 downstream homology arm</span></p>
+                <p class="part__desc"><span class="i18n-en">500 bp from the region downstream of GPA1/YHR005C, closing the other side of the target. Together with the upstream arm it defines exactly which stretch of the locus is replaced, so the edited allele carries the humanised C-terminus and nothing else from the original sequence.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">The genomic region downstream of the GPA1/YHR005C locus on chromosome VIII of <i>Saccharomyces cerevisiae</i> S288C.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26j53mf4" data-comp="basic">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26j53mf4" target="_blank" rel="noopener">BBa_26J53MF4</a>
+                
+                <span class="part__badge part__badge--basic">Basic part</span>
+                <span class="part__meta">Promoter · 435 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">FUS1 promoter (435 bp)</span></p>
+                <p class="part__desc"><span class="i18n-en">A 435 bp fragment of the FUS1 upstream region from <i>Saccharomyces cerevisiae</i> S288C. FUS1 is one of the genes the mating pathway switches on, which makes its promoter a convenient readout: whatever activates the cascade upstream ends up written out here as transcription. This part is the promoter only — no reporter, no terminator, no backbone — so it can be paired with whichever output a construct needs.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en"><i>Saccharomyces cerevisiae</i> S288C chromosome III, NCBI RefSeq NC_001135.5, positions 71,368–71,802 on the forward strand.</span></p>
+                  
+                </details>
+              </div>
+            </li>
+            
+          </ul>
+        </div>
+        
+        <div id="parts-composite" class="content-card parts-group" data-group="composite">
+          <h2>Composite Parts</h2>
+          <p class="parts-desc"><span class="i18n-en">The 4 assembled entries. Each one is a combination of parts from the section above or from the wider Registry, and each lists its components.</span></p>
+
+          <ul class="parts-sheet">
+            
+            
+            <li class="part" id="parts-bba-26ikmsko" data-comp="composite">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26ikmsko" target="_blank" rel="noopener">BBa_26IKMSKO</a>
+                
+                <span class="part__badge part__badge--composite">Composite part</span>
+                <span class="part__meta">Engineered region · 388 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">FAR1 sgRNA expression cassette (SNR52p–guide–scaffold–SUP4t)</span></p>
+                <p class="part__desc"><span class="i18n-en">A complete expression cassette that puts the FAR1 guide under RNA polymerase III control in yeast: the SNR52 promoter drives transcription, the 20 bp spacer confers specificity, the SpCas9 scaffold supplies the RNA structure Cas9 binds, and the SUP4 terminator ends the transcript. Together with the matching repair template it turns the target locus into a frameshift after a single Cas9 cut. The cassette is designed for the pML104 CRISPR-Cas9 system used throughout the chassis work.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Assembled from Registry parts plus a computationally designed FAR1 spacer.</span></p>
+                  
+                  <div class="part__construct">
+                    <span class="part__construct-label">Construct</span>
+                    <ol class="part__chain">
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k2926004" target="_blank" rel="noopener">BBa_K2926004</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip part__chip--local" href="#parts-bba-262tzxv3">BBa_262TZXV3</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-267zce19" target="_blank" rel="noopener">BBa_267ZCE19</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k4278714" target="_blank" rel="noopener">BBa_K4278714</a>
+                        
+                      </li>
+                      
+                    </ol>
+                  </div>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26yvx4qt" data-comp="composite">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26yvx4qt" target="_blank" rel="noopener">BBa_26YVX4QT</a>
+                
+                <span class="part__badge part__badge--composite">Composite part</span>
+                <span class="part__meta">Engineered region · 388 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">SST2 sgRNA expression cassette (SNR52p–guide–scaffold–SUP4t)</span></p>
+                <p class="part__desc"><span class="i18n-en">The SST2 twin of the FAR1 sgRNA cassette, built from the same four Registry parts in the same order — SNR52 promoter, SST2 spacer, SpCas9 scaffold, SUP4 terminator — for RNA polymerase III expression in yeast. Paired with the SST2 repair template it gives a frameshift knockout after one Cas9 cut, and because the scaffold is shared with the FAR1 cassette the two targets differ only in their 20 bp spacers.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Assembled from four Registry parts; the SST2 spacer was designed computationally from the <i>Saccharomyces cerevisiae</i> SST2 locus.</span></p>
+                  
+                  <div class="part__construct">
+                    <span class="part__construct-label">Construct</span>
+                    <ol class="part__chain">
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k2926004" target="_blank" rel="noopener">BBa_K2926004</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip part__chip--local" href="#parts-bba-2658b1za">BBa_2658B1ZA</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-267zce19" target="_blank" rel="noopener">BBa_267ZCE19</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k4278714" target="_blank" rel="noopener">BBa_K4278714</a>
+                        
+                      </li>
+                      
+                    </ol>
+                  </div>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-266k1vdv" data-comp="composite">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-266k1vdv" target="_blank" rel="noopener">BBa_266K1VDV</a>
+                
+                <span class="part__badge part__badge--composite">Composite part</span>
+                <span class="part__meta">Engineered region · 2280 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">GPA1 C-terminal humanisation cassette with URA3 selection marker</span></p>
+                <p class="part__desc"><span class="i18n-en">The complete donor cassette for editing GPA1 in a single transformation. Running in order: the upstream homology arm, the humanised EYNLV sequence, the URA3 promoter, the URA3 gene, the URA3 terminator, a short connecting sequence, and the downstream homology arm. In BY4741, which is ura3 auxotrophic, the embedded URA3 cassette is what lets transformants be recovered on uracil-deficient medium, while the flanking arms alone decide where the construct lands.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Assembled from BBa_26HUBYAY, BBa_26EG2LOR, BBa_K3939012, BBa_Y1007, BBa_K2407302, a custom linker and BBa_26YEUKXX.</span></p>
+                  
+                  <div class="part__construct">
+                    <span class="part__construct-label">Construct</span>
+                    <ol class="part__chain">
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip part__chip--local" href="#parts-bba-26hubyay">BBa_26HUBYAY</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip part__chip--local" href="#parts-bba-26eg2lor">BBa_26EG2LOR</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k3939012" target="_blank" rel="noopener">BBa_K3939012</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-y1007" target="_blank" rel="noopener">BBa_Y1007</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k2407302" target="_blank" rel="noopener">BBa_K2407302</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip part__chip--local" href="#parts-bba-26yeukxx">BBa_26YEUKXX</a>
+                        
+                      </li>
+                      
+                    </ol>
+                  </div>
+                  
+                </details>
+              </div>
+            </li>
+            
+            
+            <li class="part" id="parts-bba-26d8d1sg" data-comp="composite">
+              <div class="part__label">
+                
+                <a class="part__id" href="https://registry.igem.org/parts/bba-26d8d1sg" target="_blank" rel="noopener">BBa_26D8D1SG</a>
+                
+                <span class="part__badge part__badge--composite">Composite part</span>
+                <span class="part__meta">Engineered region · 1152 bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name"><span class="i18n-en">FUS1 promoter–yEGFP reporter fragment</span></p>
+                <p class="part__desc"><span class="i18n-en">A composite reporter that pairs the FUS1 promoter with the yEGFP reporter CDS. The promoter answers to the yeast mating-response MAPK cascade, so once the pathway is active it drives yEGFP transcription and translation and the cell fluoresces green. It is the output module used to characterise both the re-engineered chassis and the humanised G-protein interface.</span></p>
+                <details class="part__more">
+                  <summary><span class="i18n-en">Source and composition</span></summary>
+                  <p class="part__source"><span class="i18n-en">Assembled from the truncated FUS1 promoter BBa_26J53MF4 and the yEGFP reporter CDS.</span></p>
+                  
+                  <div class="part__construct">
+                    <span class="part__construct-label">Construct</span>
+                    <ol class="part__chain">
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip part__chip--local" href="#parts-bba-26j53mf4">BBa_26J53MF4</a>
+                        
+                      </li>
+                      
+                      
+                      <li>
+                        
+                        <a class="part__chip" href="https://registry.igem.org/parts/bba-k3221207" target="_blank" rel="noopener">BBa_K3221207</a>
+                        
+                      </li>
+                      
+                    </ol>
+                  </div>
+                  
+                </details>
+              </div>
+            </li>
+            
+          </ul>
+        </div>
+        
+
+        
+
+        <div id="parts-vectors" class="content-card">
+          <h2>Vectors used</h2>
+          <p class="parts-desc"><span class="i18n-en">These are the vectors the parts were handled in. They are not registered as Registry parts and are listed only so the constructs above can be rebuilt.</span></p>
+          <ul class="parts-vectors">
+            
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">pGADT7 (ZB56914)</span></span>
+              <span class="parts-vectors__fn"><span class="i18n-en">Cloning backbone for the PAGER fusion gene.</span></span>
+            </li>
+            
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">pUC57</span></span>
+              <span class="parts-vectors__fn"><span class="i18n-en">Delivery vector for the synthesised gene fragment.</span></span>
+            </li>
+            
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">pRS426</span></span>
+              <span class="parts-vectors__fn"><span class="i18n-en">Yeast episomal vector.</span></span>
+            </li>
+            
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">pML104</span></span>
+              <span class="parts-vectors__fn"><span class="i18n-en">CRISPR-Cas9 yeast knockout plasmid carrying Cas9 and the sgRNA cassette.</span></span>
+            </li>
+            
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">pESC-HIS</span></span>
+              <span class="parts-vectors__fn"><span class="i18n-en">Yeast reporter backbone carrying the FUS1 reporter cassette.</span></span>
+            </li>
+            
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">pRS415</span></span>
+              <span class="parts-vectors__fn"><span class="i18n-en">Yeast centromeric vector.</span></span>
+            </li>
+            
+          </ul>
+        </div>
+
+        <div id="parts-references" class="content-card">
+          <h2>References</h2>
+          <p class="parts-desc"><span class="i18n-en">Sources named in the Registry entries above, plus the one design reference already cited on our Design page.</span></p>
+          <ol class="ref-list parts-refs">
+            
+            <li id="parts-ref-komatsuzaki">Komatsuzaki K, Murayama Y, Giambarella U, Ogata E, Seino S, Nishimoto I. A novel system that reports the G-proteins linked to a given receptor: a study of type 3 somatostatin receptor. FEBS Lett. 1997;406(1-2):165-70. doi:10.1016/s0014-5793(97)00266-4.</li>
+            
+            <li id="parts-ref-refseq">NCBI RefSeq NC_001135.5 — <i>Saccharomyces cerevisiae</i> S288C chromosome III, the source of the FUS1 upstream fragment.</li>
+            
+            <li id="parts-ref-genbank">NCBI GenBank AQK76557.1 — yEGFP coding sequence from cloning vector pPC_040_GFP, the reference the yEGFP CDS entry was checked against.</li>
+            
+            <li id="parts-ref-pml104">pML104 — the yeast CRISPR-Cas9 vector used throughout the chassis work, carrying the Cas9 expression cassette and the sgRNA cassette.</li>
+            
+          </ol>
+        </div>
       </div>
+    </div>
 
-      <section class="content-card parts-group" id="signal-recognition">
-        <h2><span class="i18n-en">Signal Recognition Module</span><span class="i18n-zh">信号识别模块</span></h2>
-        <p class="parts-desc"><span class="i18n-en">Recognises the influenza A HA antigen; built from a signal peptide, an inhibitory domain, a nanobody, a cleavage site and a receptor joined in sequence.</span><span class="i18n-zh">负责识别甲型流感病毒 HA 抗原，由信号肽、抑制域、纳米抗体、酶切位点与受体依次串成。</span></p>
-        <table class="parts-table">
-          <thead>
-            <tr>
-              <th scope="col" class="col-id"><span class="i18n-en">Part ID</span><span class="i18n-zh">元件 ID</span></th>
-              <th scope="col" class="col-name"><span class="i18n-en">Part name</span><span class="i18n-zh">元件名称</span></th>
-              <th scope="col"><span class="i18n-en">Description</span><span class="i18n-zh">元件描述</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">α-factor signal peptide (SP)</span><span class="i18n-zh">α-factor 信号肽（SP）</span></td>
-              <td class="col-fn"><span class="i18n-en">Signal peptide. Guides the fusion protein into the secretory pathway and anchors it on the yeast plasma membrane.</span><span class="i18n-zh">信号肽。引导融合蛋白进入分泌途径并锚定在酵母细胞膜上。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGAGATTTCCTTCTATTTTTACTGCTGTTTTGTTTGCTGCTTCTTCTGCTTTAGCA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">MT1 (muscarinic toxin 1), C-terminally truncated fragment</span><span class="i18n-zh">MT1（毒蕈碱毒素 1）C 端截短片段</span></td>
-              <td class="col-fn"><span class="i18n-en">Inhibitory domain. Self-inhibition switch that binds and blocks hM1Dq when no antigen is present.</span><span class="i18n-zh">抑制域。自抑制开关，无抗原时结合并抑制 hM1Dq。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">TTGACTTGTGTTACTTCTAAATCAATTTTTGGTATTACTACTGAAAATTGTCCTGATGGTCAAAATTTGTGTTTTAAAAAATGGTATTATATAGTTCCTAGATATTCTGATATAACATGGGGTTGTGCAGCTACTTGTCCTAAACCAACTAATGTTAGAGAAACTATTAGATGTTGTGAAACAGAT</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">H1N1 HA nanobody R1a-B6 (stem-binding)</span><span class="i18n-zh">H1N1 HA 纳米抗体 R1a-B6（结合茎部）</span></td>
-              <td class="col-fn"><span class="i18n-en">Nanobody. Binds the influenza A HA stem specifically; the core recognition unit of the whole cascade.</span><span class="i18n-zh">纳米抗体。特异性结合甲型流感病毒 HA 茎部，是整条链路的核心识别单元。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">CAAGTTCAATTAGTTGAATCTGGTGGTGGTTTAGTTCAACCAGGTGGTTCTTTAAGATTATCATGTGCTGCTTCAGGTTCATTTTTCTCTAGATATAGGATGGGTTGGTACAGACAAGCTCCTGGTGAACAAAGAGAATTAGTTGCTTCAATTGCTTATGATGGTTCTACATCATACGCTGATCCTGTTAAAGGTAGATTCACTATTTCTAGAGATAATGCAAATACAGTTCATTTGCAAATGTATTCTTTAAAACCAGATGATACAGCTGTTTATTACTGTAACTTGGACCCACCTGGTATTTTGTATTGGGGTCAAGGTACTCAAGTGACAGTTAGTAGT</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">TEV protease cleavage site (TEVcs)</span><span class="i18n-zh">TEV 蛋白酶切位点（TEVcs）</span></td>
-              <td class="col-fn"><span class="i18n-en">Protease cleavage site. Molecular switch for in-vitro verification, used to mimic antigen unlocking.</span><span class="i18n-zh">蛋白酶切位点。体外功能验证用的分子开关，可模拟抗原解锁。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GAAAATTTGTACTTTCAATCA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">hM1Dq (human M1 DREADD receptor)</span><span class="i18n-zh">hM1Dq（人源 M1 DREADD 受体）</span></td>
-              <td class="col-fn"><span class="i18n-en">Receptor. Receives the upstream signal and couples to the downstream G-protein pathway; activated by DCZ.</span><span class="i18n-zh">受体。接收上游信号并偶联下游 G 蛋白通路，可被 DCZ 激活。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGAATACTAGTGCTCCTCCTGCAGTATCTCCTAATATAACAGTTTTAGCACCAGGCAAGGGTCCATGGCAAGTTGCTTTTATTGGTATTACTACTGGTTTACTTAGCTTAGCTACTGTTACAGGTAATTTGTTAGTTTTAATTAGTTTTAAAGTTAACACTGAACTTAAAACTGTTAATAATTACTTTTTACTAAGTTTAGCTTGTGCTGATTTGATAATTGGTACTTTTTCTATGAACTTATACACAACTTACTTATTAATGGGTCATTGGGCTTTAGGTACTTTAGCTTGTGATCTTTGGTTAGCTTTAGATTGTGTTGCTTCTAATGCATCTGTTATGAATTTGCTATTAATTTCCTTTGATAGATATTTTTCCGTAACTAGGCCTTTAAGTTATAGAGCTAAAAGAACTCCTAGGAGAGCTGCTTTAATGATTGGTTTAGCATGGTTAGTTTCTTTTGTCTTGTGGGCTCCAGCAATTTTATTTTGGCAATATCTGGTTGGTGAAAGAACTGTTTTAGCTGGTCAATGTTATATTCAATTTTTATCACAACCAATAATTACATTTGGAACAGCTATGGCTGGTTTTTATCTTCCTGTTACTGTTATGTGTACTTTATATTGGAGAATATATAGAGAAACAGAAAATAGAGCTAGAGAATTAGCTGCTTTACAAGGTAGTGAAACTCCAGGTAAAGGTGGTGGTAGTTCTTCATCTTCTGAAAGATCTCAACCAGGTGCTGAAGGTTCTCCTGAAACACCACCAGGTAGATGTTGTAGATGTTGTAGAGCTCCAAGATTATTGCAAGCTTACTCATGGAAAGAAGAAGAAGAGGAAGATGAAGGTTCTATGGAATCATTAACATCATCTGAAGGTGAAGAACCAGGTTCTGAAGTTGTTATTAAGATGCCAATGGTTGATCCTGAAGCTCAAGCTCCAACTAAACAACCACCTAGGTCCTCTCCAAACACTGTTAAAAGACCAACTAAAAAAGGTAGAGATAGAGCTGGTAAAGGTCAAAAACCTAGGGGTAAAGAACAATTAGCTAAAAGAAAAACTTTTTCATTAGTTAAAGAAAAGAAAGCTGCTAGAACTTTGAGTGCTATTTTATTAGCTTTTATTCTAACTTGGACACCATATAATATAATGGTTTTAGTTTCTACATTTTGTAAAGATTGTGTTCCTGAAACTCTTTGGGAATTAGGTTACTGGTTATGTTATGTTAATAGTACTATTAATCCAATGTGTTATGCATTGTGTAATAAGGCTTTTAGAGATACTTTTAGATTATTGTTATTATGTAGATGGGATAAAAGAAGATGGAGAAAAATTCCAAAAAGACCTGGTTCTGTTCATAGAACTCCTAGTAGACAATGT</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">HA protein (influenza A hemagglutinin)</span><span class="i18n-zh">HA 蛋白（甲型流感病毒血凝素）</span></td>
-              <td class="col-fn"><span class="i18n-en">Antigen. The detection target of this project, used for antigen stimulation in functional assays.</span><span class="i18n-zh">抗原。本项目的检测目标，用于功能测试中的抗原刺激。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGAAGGCCATCCTGGTGGTGATGCTGTACACCTTCACCACCGCCAACGCCGACACCCTGTGCATCGGCTACCACGCCAACAACAGCACCGACACCGTGGACACCGTGCTGGAGAAGAACGTGACCGTGACCCACAGCGTGAACCTGCTGGAGGACAAGCACAACGGCAAGCTGTGCAAGCTGCGCGGCGTGGCCCCCCTGCACCTGGGCCAGTGCAACATCGCCGGCTGGATCCTGGGCAACCCCGAGTGCGAGAGCCTGAGCACCGCCCGCAGCTGGAGCTACATCGTGGAGACCAGCAACAGCGACAACGGCACCTGCTACCCCGGCGACTTCATCAACTACGAGGAGCTGCGCGAGCAGCTGAGCAGCGTGAGCAGCTTCGAGCGCTTCGAGATCTTCCCCAAGACCAGCAGCTGGCCCAACCACGACAGCGACAACGGCGTGACCGCCGCCTGCAGCCACGCCGGCGCCCGCAGCTTCTACAAGAACCTGATCTGGCTGGTGAAGAAGGGCAAGAGCTACCCCAAGATCAACCAGACCTACATCAACGACAAGGGCAAGGAGGTGCTGGTGCTGTGGGGCATCCACCACCCCCCCACCATCACCGACCAGGAGAGCCTGTACCAGAACGCCGACGCCTACGTGTTCGTGGGCACCAGCCGCTACAGCAAGAAGTTCAAGCCCGAGATCGCCGCCCGCCCCAAGGTGCGCGACCAGGCCGGCCGCATGAACTACTACTGGACCCTGGTGGAGCCCGGCGACAAGATCACCTTCGAGGCCACCGGCAACCTGGTGGCCCCCCGCTACGCCTTCACCATGGAGAAGGAGGCCGGCAGCGGCATCATCATCAGCGACACCCCCGTGCACGACTGCAACGCCACCTGCCAGACCCCCGAGGGCGCCATCAACACCAGCCTGCCCTTCCAGAACGTGCACCCCATCACCATCGGCAAGTGCCCCAAGTACGTGCGCAGCACCAAGCTGCGCCTGGCCACCGGCCTGCGCAACGTGCCCAGCATCCAGAGCCGCGGCCTGTTCGGCGCCATCGCCGGCTTCATCGAGGGCGGCTGGACCGGCATGGTGGACGGCTGGTACGGCTACCACCACCAGAACGACCAGGGCAGCGGCTACGCCGCCGACCTGAAGAGCACCCAGAACGCCATCGACAAGATCACCAACAAGGTGAACAGCGTGATCGAGAAGATGAACACCCAGTTCACCGCCGTGGGCAAGGAGTTCAACCACCTGGAGAAGCGCATCGAGAACCTGAACAAGAAGGTGGACGACGGCTTCCTGGACGTGTGGACCTACAACGCCGAGCTGCTGGTGCTGCTGGAGAACGAGCGCACCCTGGACTACCACGACAGCAACGTGAAGAACCTGTACGAGAAGGTGCGCCACCAGCTGAAGAACAACGCCAAGGAGATCGGCAACGGCTGCTTCGAGTTCTACCACAAGTGCGACAACACCTGCATGGAGAGCGTGAAGAACGGCACCTACGACTACCCCAAGTACAGCGAGGAGGCCAAGCTGAACCGCGAGAAGATCGACGGCGTGAAGCTGGACAGCACCCGCATCTACCAGATCCTGGCCATCTACAGCACCGTGGCCAGCAGCCTGGTGCTGGTGGTGAGCCTGGGCGCCATCAGCTTCTGGATGTGCAGCAACGGCAGCCTGCAGTGCCGCATCTGCATC</code></details></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="content-card parts-group" id="signal-transduction">
-        <h2><span class="i18n-en">Signal Transduction Optimization Module</span><span class="i18n-zh">信号转导优化模块</span></h2>
-        <p class="parts-desc"><span class="i18n-en">Cuts background, releases growth and amplifies the signal; holds the three-gene knockout elements and the Gpa1 humanisation fragment.</span><span class="i18n-zh">负责降低背景、释放生长、放大信号，包含三基因敲除元件与 Gpa1 人源化改造片段。</span></p>
-        <table class="parts-table">
-          <thead>
-            <tr>
-              <th scope="col" class="col-id"><span class="i18n-en">Part ID</span><span class="i18n-zh">元件 ID</span></th>
-              <th scope="col" class="col-name"><span class="i18n-en">Part name</span><span class="i18n-zh">元件名称</span></th>
-              <th scope="col"><span class="i18n-en">Description</span><span class="i18n-zh">元件描述</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">URA3 (with promoter and terminator)</span><span class="i18n-zh">URA3（含启动子与终止子）</span></td>
-              <td class="col-fn"><span class="i18n-en">Selection marker. Uracil selection marker for picking positive integrants on SD-Ura plates.</span><span class="i18n-zh">筛选标记。尿嘧啶营养筛选标记，在 SD-Ura 平板上筛选阳性整合克隆。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">TTCAATTCAATTCATCATTTTTTTTTTATTCTTTTTTTTGATTTCGGTTTCTTTGAAATTTTTTTGATTCGGTAATCTCCGAACAGAAGGAAGAACGAAGGAAGGAGCACAGACTTAGATTGGTATATATACGCATATGTAGTGTTGAAGAAACATGAAATTGCCCAGTATTCTTAACCCAACTGCACAGAACAAAAACCTGCAGGAAACGAAGATAAATCATGTCGAAAGCTACATATAAGGAACGTGCTGCTACTCATCCTAGTCCTGTTGCTGCCAAGCTATTTAATATCATGCACGAAAAGCAAACAAACTTGTGTGCTTCATTGGATGTTCGTACCACCAAGGAATTACTGGAGTTAGTTGAAGCATTAGGTCCCAAAATTTGTTTACTAAAAACACATGTGGATATCTTGACTGATTTTTCCATGGAGGGCACAGTTAAGCCGCTAAAGGCATTATCCGCCAAGTACAATTTTTTACTCTTCGAAGACAGAAAATTTGCTGACATTGGTAATACAGTCAAATTGCAGTACTCTGCGGGTGTATACAGAATAGCAGAATGGGCAGACATTACGAATGCACACGGTGTGGTGGGCCCAGGTATTGTTAGCGGTTTGAAGCAGGCGGCAGAAGAAGTAACAAAGGAACCTAGAGGCCTTTTGATGTTAGCAGAATTGTCATGCAAGGGCTCCCTATCTACTGGAGAATATACTAAGGGTACTGTTGACATTGCGAAGAGCGACAAAGATTTTGTTATCGGCTTTATTGCTCAAAGAGACATGGGTGGAAGAGATGAAGGTTACGATTGGTTGATTATGACACCCGGTGTGGGTTTAGATGACAAGGGAGACGCATTGGGTCAACAGTATAGAACCGTGGATGATGTGGTCTCTACAGGATCTGACATTATTATTGTTGGAAGAGGACTATTTGCAAAGGGAAGGGATGCTAAGGTAGAGGGTGAACGTTACAGAAAAGCAGGCTGGGAAGCATATTTGAGAAGATGCGGCCAGCAAAACTAAAAAACTGTATTATAAGTAAATGCATGTATACTAAACTCACAAATTAGAGCTTCAATTTAATTATATCAGTTATTACCCTATGCGGTGTGAAATACCGCACAGATGCGTAAGGAGAAAATACCGCATCAGGAAATTGTAAACGTTAATATTTTGTTAAAATTCGCGTTAAATTTTTGTTAAATCAGCTCATTTTTTAACCAATAGGCCGAAATCGG</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">500 bp upstream homology arm at the GPA1 edit site</span><span class="i18n-zh">GPA1 改造位点前 500 bp 上游同源臂</span></td>
-              <td class="col-fn"><span class="i18n-en">Homology arm. Upstream arm of the integration fragment, used for site-directed replacement of the Gpa1 C-terminus.</span><span class="i18n-zh">同源臂。同源重组整合片段的上游臂，用于定点替换 Gpa1 C 端。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ACAGGCATTACAGAAACCGAATTTAACATCGGCTCGTCCAAATTCAAGGTTCTCGACGCTGGTGGGCAGCGTTCTGAACGTAAGAAGTGGATTCATTGTTTCGAAGGAATTACAGCAGTTTTATTTGTTTTAGCAATGAGTGAATACGACCAGATGTTGTTTGAGGATGAAAGAGTGAACAGAATGCATGAATCAATAATGCTATTTGACACGTTATTGAACTCTAAGTGGTTCAAAGATACACCGTTTATTTTGTTTTTAAATAAAATTGATTTGTTCGAGGAAAAGGTAAAAAGCATGCCCATAAGAAAGTACTTTCCTGATTACCAGGGACGTGTCGGCGATGCAGAAGCGGGTCTAAAATATTTTGAGAAGATATTTTTGAGCTTGAATAAGACAAACAAACCAATCTACGTGAAACGAACCTGCGCTACCGATACCCAAACTATGAAGTTCGTATTGAGTGCAGTCACCGATCTAATCATCCAGCAAAACCTTAA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">Humanised replacement sequence (EYNLV + stop codon)</span><span class="i18n-zh">人源化替换序列（EYNLV + 终止密码子）</span></td>
-              <td class="col-fn"><span class="i18n-en">Edit site. Replaces the Gpa1 C-terminal KIGII with EYNLV so hM1Dq can couple to the yeast MAPK pathway.</span><span class="i18n-zh">改造位点。把 Gpa1 C 端 KIGII 换成 EYNLV，使 hM1Dq 能与酵母 MAPK 通路偶联。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GAATATAATTTGGTTTGA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">500 bp downstream homology arm at the GPA1 edit site</span><span class="i18n-zh">GPA1 改造位点后 500 bp 下游同源臂</span></td>
-              <td class="col-fn"><span class="i18n-en">Homology arm. Downstream arm of the integration fragment; together with the upstream arm it defines the replaced region.</span><span class="i18n-zh">同源臂。同源重组整合片段的下游臂，与上游臂共同界定替换区间。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">AGGAACTGTATAATTAAAGTAGTGTTTAGATACGTAAATTCTGTTTCCGAAGATGCAAGAAGGAGCAGCAGCACCAGAAAAAATTACTATTTTTCTTCTCCATTAGAGTCTATGATGGAATGCCAAATGAAAAAGCCATTTTGTTCAACAGTTCTTGATCTCGTTAAATCGTTCCGGGTTTTCAATTGAAAAACAAGGGTAATAAAATCGCATGAGAAAAAAAAGGTCCAGACACTTTTTTAGAAGAAAAACTCTTGAAAACAATTGATTCTTCTACGTAAGGACAGGGTATTATCTCGAATTCTTCTCCCTGGTAAATACTCGGGATATATAGAACCTATTTTGCATCCTATTCTCACTTTTCTTTATTGTTGTTAATTTCTGGACATTGTTTCATTAATTGAATGAATGCCCTAAAATATTTCTCAAATCATTTAATAACTACAAAGAAACAAAAAAAAATCAATGTTGAGGTGACAAAGAATCAAGATCTACTAGGC</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">SpCas9 (from pML104)</span><span class="i18n-zh">SpCas9（来自 pML104）</span></td>
-              <td class="col-fn"><span class="i18n-en">Nuclease. CRISPR nuclease guided by the sgRNA to create a double-strand break at the target site.</span><span class="i18n-zh">核酸酶。CRISPR 编辑用核酸酶，由 sgRNA 引导在靶位点产生双链断裂。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGGACAAGAAGTATTCTATCGGACTGGACATCGGGACTAATAGCGTCGGGTGGGCCGTCATCACTGACGAGTACAAGGTGCCCTCTAAGAAGTTCAAGGTGCTCGGGAACACCGACCGGCATTCCATCAAGAAAAATCTGATCGGAGCTCTCCTCTTTGATTCAGGGGAGACCGCTGAAGCAACCCGCCTCAAGCGGACTGCTAGACGGCGGTACACCAGGAGGAAGAACCGGATTTGTTACCTTCAAGAGATATTCTCCAACGAAATGGCAAAGGTCGACGACAGCTTCTTCCATAGGCTGGAAGAATCATTCCTCGTGGAAGAGGATAAGAAGCATGAACGGCATCCCATCTTCGGTAATATCGTCGACGAGGTGGCCTATCACGAGAAATACCCAACCATCTACCATCTTCGCAAAAAGCTGGTGGACTCAACCGACAAGGCAGACCTCCGGCTTATCTACCTGGCCCTGGCCCACATGATTAAGTTCAGAGGCCACTTCCTGATCGAGGGCGACCTCAATCCTGACAATAGCGATGTGGATAAACTGTTCATCCAGCTGGTGCAGACTTACAACCAGCTCTTTGAAGAGAACCCCATCAATGCAAGCGGAGTCGATGCCAAGGCCATTCTGTCAGCCCGGCTGTCAAAGAGCCGCAGACTTGAGAATCTTATCGCTCAGCTGCCGGGTGAAAAGAAAAATGGACTGTTCGGGAACCTGATTGCTCTTTCACTTGGGCTGACTCCCAATTTCAAGTCTAATTTCGACCTGGCAGAGGATGCCAAGCTGCAACTGTCCAAGGACACCTATGATGACGATCTCGACAACCTCCTGGCCCAGATCGGTGACCAATACGCCGACCTTTTCCTTGCTGCTAAGAATCTTTCTGACGCCATCCTGCTGTCTGACATTCTCCGCGTGAACACTGAAATCACCAAGGCCCCTCTTTCAGCTTCAATGATTAAGCGGTATGATGAGCACCACCAGGACCTGACCCTGCTTAAGGCACTCGTCCGGCAGCAGCTTCCGGAGAAGTACAAGGAAATCTTCTTTGACCAGTCAAAGAATGGATACGCCGGCTACATCGACGGAGGTGCCTCCCAAGAGGAATTTTATAAGTTTATCAAACCTATCCTTGAGAAGATGGACGGCACCGAAGAGCTCCTCGTGAAACTGAATCGGGAGGATCTGCTGCGGAAGCAGCGCACTTTCGACAATGGGAGCATTCCCCACCAGATCCATCTTGGGGAGCTTCACGCCATCCTTCGGCGCCAAGAGGACTTCTACCCCTTTCTTAAGGACAACAGGGAGAAGATTGAGAAAATTCTCACTTTCCGCATCCCCTACTACGTGGGACCCCTCGCCAGAGGAAATAGCCGGTTTGCTTGGATGACCAGAAAGTCAGAAGAAACTATCACTCCCTGGAACTTCGAAGAGGTGGTGGACAAGGGAGCCAGCGCTCAGTCATTCATCGAACGGATGACTAACTTCGATAAGAACCTCCCCAATGAGAAGGTCCTGCCGAAACATTCCCTGCTCTACGAGTACTTTACCGTGTACAACGAGCTGACCAAGGTGAAATATGTCACCGAAGGGATGAGGAAGCCCGCATTCCTGTCAGGCGAACAAAAGAAGGCAATTGTGGACCTTCTGTTCAAGACCAATAGAAAGGTGACCGTGAAGCAGCTGAAGGAGGACTATTTCAAGAAAATTGAA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">sgRNA (FAR1)</span><span class="i18n-zh">sgRNA（FAR1）</span></td>
-              <td class="col-fn"><span class="i18n-en">Guide RNA. Guides SpCas9 to cut the FAR1 locus for knockout of that gene.</span><span class="i18n-zh">向导 RNA。引导 SpCas9 切割 FAR1 位点，实现该基因敲除。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GCAGTGAAAGATAAATGATCACCAAGTTTGAAGAAAACAGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">sgRNA (STE2)</span><span class="i18n-zh">sgRNA（STE2）</span></td>
-              <td class="col-fn"><span class="i18n-en">Guide RNA. Guides SpCas9 to cut the STE2 locus for knockout of that gene.</span><span class="i18n-zh">向导 RNA。引导 SpCas9 切割 STE2 位点，实现该基因敲除。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GCAGTGAAAGATAAATGATCTCACCTCTACTGATGAACTGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">sgRNA (Sst2)</span><span class="i18n-zh">sgRNA（Sst2）</span></td>
-              <td class="col-fn"><span class="i18n-en">Guide RNA. Guides SpCas9 to cut the Sst2 locus for knockout of that gene.</span><span class="i18n-zh">向导 RNA。引导 SpCas9 切割 Sst2 位点，实现该基因敲除。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GCAGTGAAAGATAAATGATCACACCGCAGGACAGAACTCGGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAA</code></details></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="content-card parts-group" id="signal-reporter">
-        <h2><span class="i18n-en">Signal Reporter Module</span><span class="i18n-zh">信号报告模块</span></h2>
-        <p class="parts-desc"><span class="i18n-en">Turns pathway activation into a readable signal; holds the promoter plus fluorescent and colourimetric reporters.</span><span class="i18n-zh">把通路激活转成可读出信号，含启动子与荧光、显色两类报告基因。</span></p>
-        <table class="parts-table">
-          <thead>
-            <tr>
-              <th scope="col" class="col-id"><span class="i18n-en">Part ID</span><span class="i18n-zh">元件 ID</span></th>
-              <th scope="col" class="col-name"><span class="i18n-en">Part name</span><span class="i18n-zh">元件名称</span></th>
-              <th scope="col"><span class="i18n-en">Description</span><span class="i18n-zh">元件描述</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">yEGFP (yeast-optimised enhanced GFP)</span><span class="i18n-zh">yEGFP（酵母优化型绿色荧光蛋白）</span></td>
-              <td class="col-fn"><span class="i18n-en">Reporter. Green fluorescent reporter read out quantitatively by flow cytometry.</span><span class="i18n-zh">报告基因。绿色荧光报告基因，用流式细胞术做定量读数。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">GAATTCATGTCTAAAGGTGAAGAATTATTCACTGGTGTTGTCCCAATTTTGGTTGAATTAGATGGTGATGTTAATGGTCACAAATTTTCTGTCTCCGGTGAAGGTGAAGGTGATGCTACTTACGGTAAATTGACCTTAAAATTTATTTGTACTACTGGTAAATTGCCAGTTCCATGGCCAACCTTAGTCACTACTTTCGGTTATGGTGTTCAATGTTTTGCTAGATACCCAGATCATATGAAACAACATGACTTTTTCAAGTCTGCCATGCCAGAAGGTTATGTTCAAGAAAGAACTATTTTTTTCAAAGATGACGGTAACTACAAGACCAGAGCTGAAGTCAAGTTTGAAGGTGATACCTTAGTTAATAGAATCGAATTAAAAGGTATTGATTTTAAAGAAGATGGTAACATTTTAGGTCACAAATTGGAATACAACTATAACTCTCACAATGTTTACATCATGGCTGACAAACAAAAGAATGGTATCAAAGTTAACTTCAAAATTAGACACAACATTGAAGATGGTTCTGTTCAATTAGCTGACCATTATCAACAAAATACTCCAATTGGTGATGGTCCAGTCTTGTTACCAGACAACCATTACTTATCCACTCAATCTGCCTTATCCAAAGATCCAAACGAAAAGAGAGACCACATGGTCTTGTTAGAATTTGTTACTGCTGCTGGTATTACCCATGGTATGGATGAATTGTACAAATAAGGATCC</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">FUS1 promoter</span><span class="i18n-zh">FUS1 启动子</span></td>
-              <td class="col-fn"><span class="i18n-en">Promoter. G-protein-responsive promoter that drives reporter transcription once the pathway is activated.</span><span class="i18n-zh">启动子。G 蛋白响应启动子，通路激活后启动下游报告基因转录。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ACGATGATTCAGTTCGCCTTCTATCCTTTGTTTACGTATTTGTTTATATATATAACTTTATTTTTTTTTATTAATTGGGCTGCAAGACAATTTTGTTGTCAGTGATGCCTCAATCCTTCTTTTGCTTCCATATTTACCATGTGGACCCTTTCAAAACAGAGTTGTATCTCTGCAGGATGCCCTTTTTGACGTATTGAATGGCATAATTGCACTGTCACTTTTCGCGCTGTCTCATTTTGGTGCGATGATGAAACAAACATGAAACGTCTGTAATTTGAAACAAATAACGTAATTCTCGGGATTGGTTTTATTTAAATGACAATGTAAGAGTGGCTTTGTAAGGTATGTGTTGCTCTTAAAATATTTGGATACGACATCCTTTATCTTTTTTCCTTTAAGAGCAGGATATAAGCCATCAAGTTTCTGAAAATCAAA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">MEL1 (alpha-galactosidase)</span><span class="i18n-zh">MEL1（α-半乳糖苷酶）</span></td>
-              <td class="col-fn"><span class="i18n-en">Reporter. Secreted reporter kept as an alternative readout for the output stage.</span><span class="i18n-zh">报告基因。分泌型报告基因，用于报告输出的备选读出方式。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGTTTGCTTTCTACTTTCTCACCGCATGCATCAGTTTGAAGGGCGTTTTTGGGGTGTCTCCGAGTTACAATGGCCTTGGTCTCACTCCACAGATGGGTTGGGACAACTGGAATACGTTTGCCTGCGATGTCAGTGAACAGCTACTTCTAGACACCGCTGATAGAATTTCTGACTTGGGGCTAAAGGATATGGGTTACAAGTATATCATTCTGGATGACTGCTGGTCTAGCGGCAGAGATTCCGACGGTTTCCTCGTTGCAGATGAACAAAAATTTCCCAATGGTATGGGCCATGTTGCAGACCACCTGCATAATAACAGCTTTCTTTTCGGTATGTATTCGTCTGCTGGTGAGTACACCTGTGCTGGATATCCTGGGTCTCTGGGTCGTGAGGAAGAAGATGCACAGTTCTTTGCAAATAACCGCGTTGACTACTTGAAGTACGATAATTGTTACAATAAGGGTCAGTTTGGTACACCGGAAATTTCTTACCACCGTTACAAGGCCATGTCAGATGCTTTGAATAAAACTGGTAGGCCTATATTCTATTCTCTATGTAACTGGGGTCAGGATTTAACATTTTACTGGGGCTCTGGTATCGCCAATTCTTGGAGAATGAGTGGAGATGTTACTGCTGAGTTCACTCGTCCAGATAGCAGATGTCCCTGTGATGGCGATGAATACGATTGCAAGTACGCCGGTTTCCATTGTTCTATTATGAATATTCTTAACAAGGCAGCTCCAATGGGGCAAAATGCAGGTGTTGGTGGTTGGAATGATCTGGACAATCTAGAGGTTGGTGTCGGGAATTTGACTGACGATGAGGAAAAGGCACATTTCTCTATGTGGGCAATGGTAAAGTCTCCACTTATCATTGGTGCCAATGTGAATAACTTAAAGGCATCTTCGTACTCAATCTATAGTCAAGCCTCTGTCATCGCAATTAATCAAGATTCAAATGGTATTCCAGCAACAAGAGTCTGGAGATATTATGTTTCAGACACAGATGAATATGGACAAGGTGAAATTCAAATGTGGAGTGGTCCTCTTGACAATGGTGATCAAGTGGTTGCTTTATTGAATGGAGGAAGCGTATCTAGACCAATGAACACGACCTTGGAAGAGATTTTTTTTGACAGCAATCTGGGTTCAAAGAAACTGACATCGACTTGGGATATCTACGACCTATGGGCCAACAGAGTTGACAACTCGACAGCGTCTGCTATCCTTGGACGGAATAAGACAGCCACCGGTATTCTCTACAATGCTACGGAGCAATCCTACAAAGACGGTTTGTCTAAGAATGATACAAGACTGTTTGGTCAGAAAATTGGTAGTCTTTCTCCAAATGCTATACTTAACACGACTGTTCCAGCTCACGGTATCGCCTTCTATAGGTTGAGACCCTCTTCTTGA</code></details></td>
-            </tr>
-            <tr>
-              <td class="col-id"><!-- ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） -->
-              <a class="part-id part-id--pending" href="#" aria-disabled="true">—</a></td>
-              <td class="col-name"><span class="i18n-en">LACZα (with multiple cloning site)</span><span class="i18n-zh">LACZα（含多克隆位点）</span></td>
-              <td class="col-fn"><span class="i18n-en">Reporter. β-galactosidase α fragment carrying a multiple cloning site; read out by X-Gal staining.</span><span class="i18n-zh">报告基因。β-半乳糖苷酶 α 片段，带多克隆位点，可用 X-Gal 显色判读。</span>
-                <details class="seq-block"><summary><span class="i18n-en">Sequence</span><span class="i18n-zh">序列</span></summary><code class="seq">ATGTTGCATCATCATCATCATCATAGCATGCATATGCTGCAGCTCGAGTCGACGGATCCGAATTCACTGGCCGTCGTTTTACAACGTCGTGACTGGGAAAACCCTGGCGTTACCCAACTTAATCGCCTTGCAGCACATCCCCCTTTCGCCAGCTGGCGTAATAGCGAAGAGGCCCGCACCGATCGCCCTTCCCAACAGTTGCGCAGCCTGAATGGCGAATGGCGCCTGATGCGGTATTTTCTCCTTACGCATCTGTGCGGTATTTCACACCGTATATGGTGCACTCTCAGTACAATCTGCTCTGATGCCGCATAG</code></details></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </section>
-</div>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
 {% endblock %}

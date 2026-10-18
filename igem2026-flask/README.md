@@ -50,6 +50,15 @@ python 对话归档/temporary-tools/reconcile_flask_vs_gitlab.py     # 本目录
 python 对话归档/temporary-tools/verify_remote_blobs.py          # 推送后核对远端 blob 是否已一致
 ```
 
+### 页面口径：以根站为准；根站没有的页面，绝不覆盖线上（2026-10-16 定为红线）
+
+- **判定标准**：根站（仓库根目录的静态站）**有**这个页面 → 它是我们要做的页面，本地版可以推上去；根站**没有**这个页面 → 说明我方不参与该奖项/模块，**不得把本地占位版推上去覆盖线上那一页**。
+- **已确认不参与、仓库里必须保持与线上逐字节一致（用 `git checkout igem/main -- <path>` 还原）的页面**：
+  `wiki/pages/inclusivity.html`、`wiki/pages/measurement.html`、`wiki/pages/entrepreneurship.html`。
+- **绝不删这些文件**：推送树 = 仓库全量状态，缺一个路径等于**删除线上页面**（评委可能正好访问它）。正确做法是让它与 `igem/main` 一致，从而自然退出推送清单。
+- 以后新增页面先问一句「根站有没有」；没有就别把占位版做进推送包，也不要给它们做导航入口。
+- 背景：`inclusivity`（线上 2321 B，官方模板页）、`measurement`（2107 B）、`entrepreneurship`（1411 B）三页，本地曾各有一份占位版（378 / 947 / 853 B）并已进了推送包，2026-10-16 分别在 r16 / r17 还原为线上版（包体 382 → 381 → 379）。
+
 ### 对账现状（2026-10-16，基准 = 推送提交 r13 `4360a02`）
 
 | 结果 | 数量 | 说明 |

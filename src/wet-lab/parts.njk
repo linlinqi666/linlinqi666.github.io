@@ -2,101 +2,217 @@
 permalink: "wet-lab/parts.html"
 title: "Parts - iGEM SZPU-2026"
 lang: "en"
-headExtraPartial: "head-extra/wet-lab-parts.njk"
 basePath: "../"
+bodyClass: "parts-page"
 css:
   - static/css/parts.css
+js:
+  - static/js/components/sidebar-progress.js
 ---
 
 {% extends "layouts/base.njk" %}
 
-{# 版式约定：英文在上为主视觉（.i18n-en），中文在下为辅助（.i18n-zh）。
-   表格三列：元件 ID / 元件名称 / 元件描述。
+{# 版式约定（与 safety / result / model 等标准内容页同一套骨架）：
+   .description-container > .description-sidebar（二级导航 + 发酵进度）+ .description-content（内容卡）。
+   一级标题用 .sr-only 给读屏，可见大标题交给第一张卡的 h2（见 src/wet-lab/safety.njk）。
+   卡片与元件行 id 统一 parts- 前缀，已登记 sidebar-progress.js 的 sectionIdPrefixes。
+
+   语言口径（2026-10-18 第五轮）：与站内标准内容页一致，页面只出英文；pair() 宏因此只输出 en，
+   数据源里的 zh 字段仍然保留，恢复中文显示时改回宏即可。
+
+   美术口径（第四轮）：全站是「米黄底 + 白卡 + 棕色细线」的克制排版，
+   所以本页不做仪表盘式统计卡、带圆圈序号的步骤卡、筛选控件与彩色徽章；
+   统计压成一行发丝线规格行、三组关系压成一行箭头链、元件表改「左编号 / 右说明」两栏清单。
+   元件描述按 iGEM 通行写法补足（是什么 / 来自哪里 / 在本项目里承担什么），参看 CJUH-JLU-China
+   与 Peking 两队的 parts 页：前者给编号+类型+长度的横比表，后者按功能模块分组、每条配一段说明。
    核验类信息不进入页面可见内容，只以 ⚠ 注释标注在源码中。 #}
 
-{% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span><span class="i18n-zh">{{ zh | safe }}</span>{% endmacro %}
+{# 只输出英文；恢复中文显示时改回 <span class="i18n-en">…</span><span class="i18n-zh">…</span> #}
+{% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span>{% endmacro %}
 
 {% block main %}
-<section id="wet-lab-parts" class="parts-page">
-      <header class="parts-hero">
-        <h1>Parts</h1>
-        <p class="parts-hero__sub">{{ pair(parts.overview.intro.en, parts.overview.intro.zh) }}</p>
-        <div class="parts-hero__rule" aria-hidden="true"></div>
-      </header>
+<div class="description-container">
 
-      <div class="content-card parts-summary">
-        <p class="parts-count">{{ pair(parts.overview.totalParts + ' parts across ' + parts.overview.groupCount + ' functional modules', parts.overview.totalParts + ' 个元件，分布于 ' + parts.overview.groupCount + ' 个功能模块') }}</p>
-        <p class="parts-note">{{ pair(parts.overview.note.en, parts.overview.note.zh) }}</p>
-      </div>
+      <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
 
-      {% for g in parts.groups %}
-      <section class="content-card parts-group" id="{{ g.id }}">
-        <h2>{{ pair(g.en, g.zh) }}</h2>
-        <p class="parts-desc">{{ pair(g.desc.en, g.desc.zh) }}</p>
-        <table class="parts-table">
-          <thead>
-            <tr>
-              <th scope="col" class="col-id">{{ pair('Part ID', '元件 ID') }}</th>
-              <th scope="col" class="col-name">{{ pair('Part name', '元件名称') }}</th>
-              <th scope="col">{{ pair('Description', '元件描述') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for p in g.parts %}
-            <tr>
-              <td class="col-id">
-                {% if p.id %}<a class="part-id" href="https://registry.igem.org/parts/{{ p.id | lower }}">{{ p.id }}</a>
-                {% else %}{# ⚠ 核验：元件 ID 待分配（登记后填入编号并替换 href） #}<a class="part-id part-id--pending" href="#" aria-disabled="true">—</a>{% endif %}
-              </td>
-              <td class="col-name">{{ pair(p.en, p.zh) }}</td>
-              <td class="col-fn">{{ pair(p.fn.en, p.fn.zh) }}
-                {% if p.seq %}<details class="seq-block"><summary>{{ pair('Sequence', '序列') }}</summary><code class="seq">{{ p.seq }}</code></details>{% endif %}
-              </td>
-            </tr>
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-organisation" class="nav-main-link">How this collection is organised</a>
+              </div>
+            </li>
+            {% for c in parts.collections %}
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#parts-{{ c.id }}" class="nav-main-link">{{ c.en }}</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                {% for p in c.parts %}
+                <li class="level3"><a href="#parts-{{ p.slug }}">{{ p.id }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
             {% endfor %}
-          </tbody>
-        </table>
-      </section>
-      {% endfor %}
-    </section>
-{% endblock %}
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-vectors" class="nav-main-link">Vectors used</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#parts-references" class="nav-main-link">References</a>
+              </div>
+            </li>
+          </ul>
+        </div>
 
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+        <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">Fermentation Progress</div>
+        </div>
+      </aside>
 
-    // 下拉菜单切换（仅桌面导航）
-    // #mobile-menu 内的下拉由全站 static/js/core/mobile-menu.js 负责；此处若再用全文档
-    // querySelectorAll 会把它一并绑上，同一元素被 toggle 两次互相抵消，导致点不开。
-    const mobileMenuEl = document.getElementById('mobile-menu');
-    const dropdownToggles = Array.prototype.filter.call(
-      document.querySelectorAll('.dropdown-toggle'),
-      function (t) { return !(mobileMenuEl && mobileMenuEl.contains(t)); }
-    );
-    dropdownToggles.forEach(function (toggle) {
-      toggle.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const parentLi = this.closest('.dropdown');
+      <!-- 右侧内容区域 -->
+      <div class="description-content">
+        <h1 class="sr-only">Parts</h1>
 
-        dropdownToggles.forEach(function (t) {
-          const otherLi = t.closest('.dropdown');
-          if (otherLi !== parentLi) {
-            otherLi.classList.remove('dropdown-open');
-          }
-        });
+        <!-- 概览 -->
+        <div id="parts-overview" class="content-card">
+          <figure class="page-mascot page-mascot--parts" aria-hidden="true">
+            <img src="../static/image/any-icon/extension/parts.png" alt="" width="440" height="455"
+              loading="lazy" decoding="async">
+          </figure>
+          <h2>Overview</h2>
+          <p class="parts-lede">{{ pair(parts.overview.intro.en, parts.overview.intro.zh) }}</p>
 
-        parentLi.classList.toggle('dropdown-open');
-      });
-    });
+          <p class="parts-tally">
+            <span class="i18n-en">{{ parts.overview.totalParts }} parts — {{ parts.overview.basicCount }} basic, {{ parts.overview.compositeCount }} composite.</span>
+          </p>
 
-    // 点击页面其他地方关闭下拉菜单
-    document.addEventListener('click', function () {
-      document.querySelectorAll('.dropdown-open').forEach(function (item) {
-        item.classList.remove('dropdown-open');
-      });
-    });
-  
-  });
-</script>
+          <p class="parts-note">{{ pair(parts.overview.note.en, parts.overview.note.zh) }}</p>
+        </div>
+
+        <!-- 分组依据：为什么按基础 / 复合分 -->
+        <div id="parts-organisation" class="content-card">
+          <h2>How this collection is organised</h2>
+          <p class="parts-desc">{{ pair(parts.organisation.en, parts.organisation.zh) }}</p>
+          <p class="parts-tail">{{ pair(parts.organisation.tail.en, parts.organisation.tail.zh) }}</p>
+        </div>
+
+        {% for c in parts.collections %}
+        <div id="parts-{{ c.id }}" class="content-card parts-group" data-group="{{ c.id }}">
+          <h2>{{ c.en }}</h2>
+          <p class="parts-desc">{{ pair(c.desc.en, c.desc.zh) }}</p>
+
+          <ul class="parts-sheet">
+            {% for p in c.parts %}
+            {% set kind = 'composite' if p.uses else 'basic' %}
+            <li class="part" id="parts-{{ p.slug }}" data-comp="{{ kind }}"{% if p.pending %} data-pending="true"{% endif %}>
+              <div class="part__label">
+                {% if p.pending %}{# ⚠ 核验：Registry 仍为 Drafting，发布后再换成链接 #}
+                <span class="part__id part__id--pending">{{ p.id }}<sup class="part-flag">†</sup></span>
+                {% else %}
+                <a class="part__id" href="https://registry.igem.org/parts/{{ p.slug }}" target="_blank" rel="noopener">{{ p.id }}</a>
+                {% endif %}
+                <span class="part__badge part__badge--{{ kind }}">{{ p.composition.en }}</span>
+                <span class="part__meta">{{ p.type.en }} · {{ p.length }} bp</span>
+              </div>
+              <div class="part__body">
+                <p class="part__name">{{ pair(p.en, p.zh) }}</p>
+                <p class="part__desc">{{ pair(p.fn.en, p.fn.zh) }}</p>
+                <details class="part__more">
+                  <summary>{{ pair('Source and composition', '来源与组成') }}</summary>
+                  <p class="part__source">{{ pair(p.source.en, p.source.zh) }}</p>
+                  {% if p.uses %}
+                  <div class="part__construct">
+                    <span class="part__construct-label">Construct</span>
+                    <ol class="part__chain">
+                      {% for u in p.uses %}
+                      {% set uslug = u | lower | replace('bba_', 'bba-') %}
+                      <li>
+                        {% if parts.localAnchors[uslug] %}
+                        <a class="part__chip part__chip--local" href="#{{ parts.localAnchors[uslug] }}">{{ u }}</a>
+                        {% else %}
+                        <a class="part__chip" href="https://registry.igem.org/parts/{{ uslug }}" target="_blank" rel="noopener">{{ u }}</a>
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ol>
+                  </div>
+                  {% endif %}
+                </details>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+
+        {% if parts.overview.hasPending %}{# 只有存在未发布条目时才出现 † 脚注 #}
+        <p class="parts-footnote">
+          <span class="part-flag">†</span> {{ pair(parts.overview.footnote.en, parts.overview.footnote.zh) }}
+        </p>
+        {% endif %}
+
+        <div id="parts-vectors" class="content-card">
+          <h2>Vectors used</h2>
+          <p class="parts-desc">{{ pair(parts.vectors.en, parts.vectors.zh) }}</p>
+          <ul class="parts-vectors">
+            {% for v in parts.vectors.items %}
+            <li>
+              <span class="parts-vectors__name"><span class="i18n-en">{{ v.en }}</span></span>
+              <span class="parts-vectors__fn">{{ pair(v.fn.en, v.fn.zh) }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div id="parts-references" class="content-card">
+          <h2>References</h2>
+          <p class="parts-desc">{{ pair(parts.references.en, parts.references.zh) }}</p>
+          <ol class="ref-list parts-refs">
+            {% for r in parts.references.items %}
+            <li id="parts-ref-{{ r.key }}">{{ r.text | safe }}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </div>
 {% endblock %}

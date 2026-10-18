@@ -1,6 +1,6 @@
 /* Dry-lab model page styles
  *
- * Scope: serves only the "Interactive Demo" block of the dry-lab/model page (nanobody × influenza A HA docking cards).
+ * Scope: serves only the "Card Game" block of the dry-lab/model page (nanobody × influenza A HA docking cards).
  * Convention: new class names always use the model- namespace and do not modify site-wide generic classes, easing later migration to the official submission project;
  *       colors, radii, shadows, and durations all reuse the design tokens from navigation.css; no separate visual language.
  */
@@ -12,7 +12,7 @@
   border-radius: var(--radius-sm);
 }
 
-/* ============ Demo area frame ============ */
+/* ============ Card game area frame ============ */
 
 .model-game {
   margin: 1.5rem 0 0;
@@ -1430,7 +1430,7 @@
   overflow-wrap: anywhere;
 }
 
-/* ============ Demo: cluster / model selector ============ */
+/* ============ Card game: cluster / model selector ============ */
 
 .model-game__selector {
   display: flex;
@@ -1468,7 +1468,7 @@
   cursor: not-allowed;
 }
 
-/* ============ Demo: card faces ============ */
+/* ============ Card game: card faces ============ */
 
 .model-card__stat {
   display: flex;
@@ -1495,7 +1495,28 @@
   cursor: not-allowed;
 }
 
-/* ============ Demo: result and score tables ============ */
+/* 卡面图标：项目卡牌图标集（static/image/dry-lab/model/icons/），
+   图标在上、名称与 HADDOCK 分数在下，与卡牌玩法一致。 */
+.model-card__icon {
+  width: 3.4rem;
+  height: 3.4rem;
+  margin: 0 auto 0.4rem;
+  object-fit: contain;
+}
+
+.model-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.model-card--antigen .model-card__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+/* ============ Card game: result and score tables ============ */
 
 .model-game__panel-title {
   margin: 0 0 var(--spacing-sm);

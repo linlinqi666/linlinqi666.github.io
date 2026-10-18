@@ -1,4 +1,4 @@
----
+﻿---
 permalink: "index.html"
 title: "iGEM SZPU-2026 - Home"
 lang: "zh-CN"
@@ -13,7 +13,7 @@ js:
   - static/js/pages/home-nav.js
   - static/js/pages/home-idle-motion.js
   - static/js/pages/statistics-reveal.js
-  - static/js/pages/dbtl-pump.js
+  - static/js/pages/pager-scroll-story.js
   - static/js/pages/influenza-burden.js
 ---
 
@@ -357,7 +357,7 @@ js:
     <!-- 模块 7: 构建与测试（dbtl-cycle） -->
     <section id="dbtl-cycle" class="presentation-section yeast-screen" data-title="Build and test">
       <h2 class="sr-only">Research content: Workflow and principle</h2>
-      <!-- dbtl-cycle「Research content: Workflow and principle」 ｜ 对照成品图：对话归档/2026-09/2026-09-22-homepage-assembly/mockups/32d8bc036fff9e0d276ad6d75e11d6b9.cf62b5ed87.jpg
+      <!-- dbtl-cycle「Research content: Workflow and principle」
            微调大小与位置 → static/css/index.css 搜「手动微调区」里的 art-stage--dbtl-cycle 段 -->
       <div class="art-stage art-stage--dbtl-cycle">
         <!-- 2026-10-07：波浪条换成美术给的「细」版 shared-wave-5.webp（1080×95，宽高比 11.4:1；
@@ -365,12 +365,67 @@ js:
         <img fetchpriority="low" loading="lazy" class="art art--dbtl-cycle-wave" src="static/image/Animation/index/webp/shared/shared-wave-5.webp" alt="" aria-hidden="true" decoding="async">
         <!-- 2026-10-05：标题原为纯文字图 → 真文本 -->
         <p class="art art--dbtl-cycle-title art-title-text" lang="en">Research content:<br>Workflow and principle</p>
-        <!-- 原理示意图：首次滑入本屏时由 dbtl-pump.js 触发「想法泵出」入场——
-             以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大；
-             无 JS / prefers-reduced-motion 时静态直出（脚本只加类，不做默认隐藏） -->
-        <img fetchpriority="low" loading="lazy" class="art art--dbtl-cycle-diagram" src="static/image/Animation/index/webp/eighth-section/dbtl-cycle-workflow-diagram.webp" alt="Diagram of the workflow and mechanism">
+
+        <!-- 原理说明（左列，吉祥物头顶上方）。措辞按「项目设计为」口径：
+             讲的是设计机制，不是已获得的实验结论。 -->
+        <div class="art art--dbtl-cycle-note" lang="en">
+          <p class="pager-note__lead">How the switch works</p>
+          <p class="pager-note__body">The nanobody (Nb) is built to grip the influenza HA. That
+            pushes the MT1 plug off the receptor, and the freed signal is designed to travel down
+            to the FUS1 reporter.</p>
+        </div>
+
+        <!-- 2026-10-18：原「工作流程与原理」整幅示意图（art--dbtl-cycle-diagram）
+             换成 PAGER 受体的滚动叙事动画，随滚动进度逐帧推进：
+               0.02–0.10 受体自右向左擦入，落定于舞台中部偏右
+               0.09–0.17 MT1 自上方落回，横置于受体顶面两颗 DCZ 小球之间（抑制态）
+               0.15–0.36 若干 HA 抗原自页面各处、多个方向飞到受体周围停泊
+               0.36–0.95 环境抗原原地缓慢浮动；其中一颗 0.30–0.655 结合到 Nb
+               0.66–0.97 MT1 被解除，缓缓上飘右移并淡出
+             三张素材（hM1Dq / MT1 / HA）是同一张 1600×1600 画布上导出的分层图，
+             所以所有图层共用同一个方框与同一套原点坐标，运动只写 transform / opacity /
+             clip-path，几何由 static/js/pages/pager-scroll-story.js 运行时量测。
+             降级红线：隐藏态只由该脚本加 js-pager-story 类；无 JS、prefers-reduced-motion、
+             窄屏（≤768px）与矮视口一律直接呈现静态终态（受体 + HA 结合于 Nb + MT1 横置受体上），
+             此时本屏仍是普通 100vh 吸附屏，不变高、不接管滚动。 -->
+        <!-- data-no-reveal：跳过 media-reveal.js 的「解码完成才淡入」，这七张图层的
+             可见性完全由本屏动画逐帧写内联 opacity 控制，两套机制叠加会互相打架 -->
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__receptor" data-no-reveal
+          src="static/image/Animation/index/lab/hM1Dq.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__mt1" data-no-reveal
+          src="static/image/Animation/index/lab/MT1.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__ha pager__ha--bind" data-ha="bind" data-no-reveal
+          src="static/image/Animation/index/lab/HA.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__ha" data-ha="1" data-no-reveal
+          src="static/image/Animation/index/lab/HA.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__ha" data-ha="2" data-no-reveal
+          src="static/image/Animation/index/lab/HA.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__ha" data-ha="3" data-no-reveal
+          src="static/image/Animation/index/lab/HA.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+        <img fetchpriority="low" loading="lazy" class="pager__layer pager__ha" data-ha="4" data-no-reveal
+          src="static/image/Animation/index/lab/HA.png" alt="" aria-hidden="true"
+          width="1600" height="1600" decoding="async">
+
+        <!-- 动画不是唯一的信息载体：无障碍与无脚本读法都靠这段文字（含科学表述边界） -->
+        <p class="sr-only">How the PAGER receptor is designed to work. The yeast cell membrane is designed to
+          carry an hM1Dq receptor whose extracellular recognition unit is an anti-H1N1 HA nanobody (Nb),
+          while the MT1 inhibitor is designed to keep hM1Dq blocked whenever no antigen is present. When
+          an influenza A (H1N1) HA antigen binds the nanobody, the inhibitor is designed to be displaced
+          from the receptor; with DCZ holding hM1Dq ready, the receptor is designed to hand the signal to
+          the humanised G&alpha; protein (the <i>Saccharomyces cerevisiae</i> Gpa1 C-terminus, last five
+          residues changed from KIGII to EYNLV) and then to the yeast MAPK cascade, where the FUS1 promoter
+          drives the yEGFP or lacZ reporter. All of this is the intended design; no detection performance is
+          claimed here.</p>
+
         <img fetchpriority="low" loading="lazy" class="art art--dbtl-cycle-mascot" src="static/image/Animation/index/webp/eighth-section/dbtl-cycle-mascot-laptop.webp" alt="EchoYeast working on a laptop">
       </div>
+      <!-- iGEM Check: [x] 机制说明有等价文本 [x] 动效非唯一信息载体 [x] 不声称任何已验证检测性能 -->
     </section>
 
     <!-- 模块 8: 未来愿景 -->
@@ -394,14 +449,33 @@ js:
                   "Of the 71 total reported human cases of A(H5) bird flu reported in the United States since February 2024, ..."
                   https://www.cdc.gov/bird-flu/situation-summary/index.html
                文案与 flask 站 home.html 同步（flask 为本轮定稿侧）。 -->
-          <!-- 2026-10-15：未来愿景改为「四角分布 + 中心核心愿景」平面四象限布局（static/css/index.css 搜 fv-quadrants）。
-               四角卡片 = 四大扩展支点；中心 = 核心愿景（抗原无关的平台化设计）。科学事实与 CDC 引用保持原样。 -->
+          <!-- 2026-10-17（用户手绘稿定版）：去掉卡片外框与盒子背景，改为纯文字排版的宽版三列——
+               左列上下两段、中央核心愿景、右列上下两段；出现顺序 1 核心 → 2 左上 → 3 左中 → 4 右中 → 5 右上
+               （顺序由 static/css/index.css 的 transition-delay 实现，DOM 顺序即阅读顺序）。
+               科学事实与 CDC 引用保持原样。 -->
           <div class="fv-quadrants">
+            <div class="fv-core reveal">
+              <p class="fv-core__text">PAGER-Yeast is designed to be antigen-agnostic: swap the recognition
+                unit and the signal readout stays the same. The H1N1 prototype is the first instance of a
+                platform rather than a single-purpose test — the same yeast, the same reporter, one new
+                nanobody at a time.</p>
+            </div>
             <article class="fv-card fv-card--tl reveal">
               <h3 class="fv-card__title">A wide target space</h3>
               <p class="fv-card__body">Influenza A viruses carry 18 hemagglutinin and 11 neuraminidase
                 subtypes (H1–H18, N1–N11) — every combination is a potential target for a swapped recognition
                 unit <small>(CDC, Types of Influenza Viruses, 2025)</small>.</p>
+            </article>
+            <article class="fv-card fv-card--ml reveal">
+              <h3 class="fv-card__title">Modular recognition unit</h3>
+              <p class="fv-card__body">Keeping the α-factor secretion anchor and linker scaffold and swapping
+                only the VHH sequence would extend coverage toward H5, H7 and other subtypes, while the
+                downstream GPCR signal rewiring and the dual-mode reporter stay universal.</p>
+            </article>
+            <article class="fv-card fv-card--mr reveal">
+              <h3 class="fv-card__title">Field-ready readout</h3>
+              <p class="fv-card__body">Paired with a low-cost portable fluorescence reader, the same platform
+                could serve primary-care screening, school morning checks and border quarantine ports.</p>
             </article>
             <article class="fv-card fv-card--tr reveal">
               <h3 class="fv-card__title">Demand that already exists</h3>
@@ -409,23 +483,6 @@ js:
                 71 human cases reported since February 2024 — new subtypes keep crossing over while detection
                 still waits on a laboratory pathway <small>(CDC, A(H5) Bird Flu Current Situation, 2026)</small>.</p>
             </article>
-            <article class="fv-card fv-card--bl reveal">
-              <h3 class="fv-card__title">Modular recognition unit</h3>
-              <p class="fv-card__body">Keeping the α-factor secretion anchor and linker scaffold and swapping
-                only the VHH sequence would extend coverage toward H5, H7 and other subtypes, while the
-                downstream GPCR signal rewiring and the dual-mode reporter stay universal.</p>
-            </article>
-            <article class="fv-card fv-card--br reveal">
-              <h3 class="fv-card__title">Field-ready readout</h3>
-              <p class="fv-card__body">Paired with a low-cost portable fluorescence reader, the same platform
-                could serve primary-care screening, school morning checks and border quarantine ports.</p>
-            </article>
-            <div class="fv-core reveal">
-              <p class="fv-core__text">PAGER-Yeast is designed to be antigen-agnostic: swap the recognition
-                unit and the signal readout stays the same. The H1N1 prototype is the first instance of a
-                platform rather than a single-purpose test — the same yeast, the same reporter, one new
-                nanobody at a time.</p>
-            </div>
           </div>
         </div>
       </div>

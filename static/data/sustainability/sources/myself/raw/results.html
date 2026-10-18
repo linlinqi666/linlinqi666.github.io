@@ -1,0 +1,1531 @@
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#8B5A2B">
+  <meta name="msapplication-TileColor" content="#8B5A2B">
+  <meta name="color-scheme" content="light">
+
+    <!-- favicon（CDN，flask static 不放图片； -->
+  <link rel="icon" type="image/avif" href="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/teamlogo.avif">
+
+    <!-- 安全区域CSS变量定义 -->
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+    }
+  </style>
+
+  <title>Results</title>
+  
+
+    <!-- 全站加载遮罩 arm（内嵌：须同步执行，早于 <body> 渲染； -->
+<script>
+/*
+ * page-loader-arm.js — 必须在 <head> 内以同步（非 defer）方式执行，先于 <body> 渲染。 * * 作用：给 <html> 打上 .page-loader-armed —— 首屏即显示加载遮罩并锁定滚动，
+ * * 避免原生内容/半成品布局闪现（FOUC）。 * * 看门狗：即便控制器 page-loader.js 缺失、404 或抛错，也会在 MAX_WAIT 后 * 强制放开页面，
+ * 保证遮罩绝不永久阻塞。 * 降级：JS 禁用时本脚本不执行、不产生 armed 类，页面按原生方式正常显示。
+ */
+(function () {
+  var root = document.documentElement;
+  var MAX_WAIT = 8000;
+  try {
+    root.classList.add('page-loader-armed');
+    setTimeout(function () {
+      root.classList.remove('page-loader-armed');
+      root.classList.add('page-loader-done');
+      setTimeout(function () { root.classList.remove('page-loader-done'); }, 420);
+    }, MAX_WAIT);
+
+        /* 现借助 currentScript 反推站点根路径， 预载的 Image 挂到 window.__pageLoaderFrames 供 page-loader.js 复用。 */
+        /* 内嵌后 document.currentScript.src 为空，不再走 currentScript 反推。 */
+    window.__pageLoaderFrames = [1, 2].map(function (n) {
+      var img = new Image();
+      img.src = 'https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/loader-frame-' + n + '.avif';
+      return img;
+    });
+  } catch (e) { /* 忽略：无论如何都不能阻塞页面 */ }
+})();
+</script>
+
+    <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 移动端 → 组件（见下方 components.css） -->
+  
+  <link rel="stylesheet" href="static/iconfont/iconfont.css">
+  <link rel="stylesheet" href="static/css/navigation/navigation.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/mobile.css">
+    <!-- 全站组件样式合集（2026-10-10：components/ 下 6 个小文件保序合并；等价性自检 384/384 行一致）。
+         必须置于 mobile.css 之后：原 section-fold / media-reveal / page-loader /
+         scroll-progress-bar 的 link 本就在 mobile.css 之后，移动位置会反转层叠关系。 -->
+  <link rel="stylesheet" href="static/css/components.css">
+  
+<style>
+/* 湿实验组实验结果页面样式（flask 站）
+   作用域：.results-page（results.html 的 .description-container 上带此类） */
+
+/* ==========================================================
+   摘要条：覆盖 index.css 的首页 300vh 规则
+   ----------------------------------------------------------
+   index.css 为首页滚动动画区定义了 .executive-summary{height:300vh;padding-top:100vh}。
+   contribution.css 只在 .contribution-page 作用域下还原，本页没有该类，故在此按
+   内容页口径重写一遍（选择器多一层 .results-page，顺序无关且不会外溢）。
+   ========================================================== */
+.results-page .executive-summary {
+  position: static;
+  height: auto;
+  min-height: 0;
+  width: auto;
+  padding: 0.85rem 1.1rem;
+  margin: 0 0 1.25rem;
+  border-left: 3px solid var(--desc-color-primary, #8B5A2B);
+  border-radius: 0 0.375rem 0.375rem 0;
+  background: linear-gradient(90deg, rgba(139, 90, 43, 0.07) 0%, rgba(139, 90, 43, 0.02) 100%);
+  display: block;
+}
+
+.results-page .executive-summary::before {
+  content: none;
+}
+
+/* ==========================================================
+   文档插图：一图一注，统一宽度
+   ----------------------------------------------------------
+   图序、图片与图注严格对应源报告 Result(1).doc，每图独立一块。
+   统一 width:100% 使各图在正文列内等宽，避免"一张大一张小"。
+   ========================================================== */
+.results-page .result-fig {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.results-page .result-fig__img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  /* mobile.css 的全局 img{content-visibility:auto} 未配 contain-intrinsic-size：
+     离屏图片会被当成 0 高，滚动到时页面高度跳变。本页图多且大，按真实尺寸参与布局。 */
+  content-visibility: visible;
+}
+
+.results-page .result-fig__cap {
+  margin-top: 0.6rem;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+/* 图片占位块：图注先到位、真图后补（Fig. 6 / Fig. 13） */
+.results-page .result-fig__placeholder {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: 12rem;
+  margin: 0 auto;
+  border: 1px dashed #D4A574;
+  border-radius: 4px;
+  object-fit: cover;
+  content-visibility: visible;
+}
+</style>
+<link rel="stylesheet" href="static/css/contribution.css">
+
+
+  
+
+    <!-- JavaScript 禁用回退 -->
+  <noscript>
+    <style>
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .typewriter::after { content: none !important; }
+    </style>
+  </noscript>
+
+    <!-- 全站核心脚本（模块化，按依赖顺序加载）。 utils.js 必须最先：它发布 window.iGEMUtils 与 window.MEDIA_BASE。 新增页面请沿用此脚本组织方式，
+     不要改回手工 bundle。 -->
+  <script src="static/js/core/utils.js" defer></script>
+  <script src="static/js/core/mobile-menu.js" defer></script>
+  <script src="static/js/core/nav-scroll-behavior.js" defer></script>
+  <script src="static/js/core/page-progress-bar.js" defer></script>
+  <script src="static/js/vendor/flexsearch.bundle.min.js" defer></script>
+  <script src="static/js/core/search.js" defer></script>
+  <script src="static/js/components/section-fold.js" defer></script>
+  <!-- 返回顶部按钮 / 图片到达淡入：此前只有 CSS 被引用、JS 缺引用（组件半成品），
+       2026-10-10 补齐其脚本引用，使功能与样式配套。 -->
+  <script src="static/js/components/back-to-top.js" defer></script>
+  <script src="static/js/components/media-reveal.js" defer></script>
+  
+<script src="static/js/components/sidebar-progress.js" defer></script>
+
+</head>
+
+<body class="">
+    <!-- 由下方内嵌的 page-loader.js 在首屏关键插画就绪后收尾。 -->
+  <div class="page-loader" id="page-loader" role="status" aria-label="页面加载中">
+    <div class="page-loader__inner">
+      <div class="page-loader__stage">
+        <span class="page-loader__halo" aria-hidden="true"></span>
+        <div class="page-loader__frames" aria-hidden="true">
+          <span class="page-loader__frame page-loader__frame--1"></span>
+          <span class="page-loader__frame page-loader__frame--2"></span>
+        </div>
+      </div>
+      <p class="page-loader__text" aria-hidden="true">Loading</p>
+    </div>
+  </div>
+
+  
+  <header></header>
+
+    <!-- 汉堡菜单按钮（仅移动端显示） -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="打开导航菜单">
+    <span></span><span></span><span></span>
+  </button>
+
+  
+
+
+
+
+
+
+
+<!-- 移动端全屏菜单 -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay" style="display: none; opacity: 0; visibility: hidden;">
+  <div class="mobile-menu" id="mobile-menu" style="opacity: 0;">
+    <ul id="nav-menu">
+      
+    <li>
+      <a href="index.html">
+        <svg class="iconfont icon-home" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></svg>
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-xiangmu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Project</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="description">
+          <svg class="iconfont icon-jianjie" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/> <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/></svg>
+          <span>Description</span>
+        </a>
+        <a href="design">
+          <svg class="iconfont icon-sheji" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/> <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8m-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7"/></svg>
+          <span>Design</span>
+        </a>
+        <a href="engineering">
+          <svg class="iconfont icon-shezhichilun" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/> <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg>
+          <span>Engineering</span>
+        </a>
+        <a href="contribution">
+          <svg class="iconfont icon-gongxian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/></svg>
+          <span>Contribution</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-tuandui" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg>
+        <span>Team</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="team">
+          <svg class="iconfont icon-tuanduichengyuan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>
+          <span>Members</span>
+        </a>
+        <a href="attributions">
+          <svg class="iconfont icon-guishu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+          <span>Attributions</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-cplus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Dry Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="model">
+          <svg class="iconfont icon-wumoxing" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+          <span>Model</span>
+        </a>
+        <a href="hardware">
+          <svg class="iconfont icon-yingjian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/></svg>
+          <span>Hardware</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shiyan-L" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4.5 0a.5.5 0 0 0 0 1H5v5.36L.503 13.717A1.5 1.5 0 0 0 1.783 16h12.434a1.5 1.5 0 0 0 1.28-2.282L11 6.359V1h.5a.5.5 0 0 0 0-1zM10 2H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1.22l.61 1H10a.5.5 0 1 0 0 1h1.442l.611 1H11a.5.5 0 1 0 0 1h1.664l.611 1H12a.5.5 0 1 0 0 1h1.886l.758 1.24a.5.5 0 0 1-.427.76H1.783a.5.5 0 0 1-.427-.76l4.57-7.48A.5.5 0 0 0 6 6.5V1h4z"/></svg>
+        <span>Wet Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="protocol">
+          <svg class="iconfont icon-neirong" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/> <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/></svg>
+          <span>Protocol</span>
+        </a>
+        <a href="results"class="active" aria-current="page">
+          <svg class="iconfont icon-shiyanjieguo" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/></svg>
+          <span>Results</span>
+        </a>
+        <a href="parts">
+          <svg class="iconfont icon-jiyin" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/></svg>
+          <span>Parts</span>
+        </a>
+        <a href="safety-and-security">
+          <svg class="iconfont icon-anquan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/> <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/></svg>
+          <span>Safety and Security</span>
+        </a>
+        <a href="notebook">
+          <svg class="iconfont icon-rizhi" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/> <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/> <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/></svg>
+          <span>Notebook</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+        <span>Human Practices</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="human-practices">
+          <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+          <span>Human Practices</span>
+        </a>
+        <a href="sustainability">
+          
+          <span>Sustainability</span>
+        </a>
+      </div>
+    </li>
+
+    </ul>
+  </div>
+</div>
+
+<!-- 桌面端导航 -->
+<nav>
+  <div class="container">
+    <div class="logo"></div>
+  </div>
+  <div class="nav-items" id="nav-items">
+    <ul id="nav-menu-desktop">
+      
+    <li>
+      <a href="index.html">
+        <svg class="iconfont icon-home" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></svg>
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-xiangmu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Project</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="description">
+          <svg class="iconfont icon-jianjie" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/> <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/></svg>
+          <span>Description</span>
+        </a>
+        <a href="design">
+          <svg class="iconfont icon-sheji" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/> <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8m-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7"/></svg>
+          <span>Design</span>
+        </a>
+        <a href="engineering">
+          <svg class="iconfont icon-shezhichilun" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/> <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg>
+          <span>Engineering</span>
+        </a>
+        <a href="contribution">
+          <svg class="iconfont icon-gongxian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/></svg>
+          <span>Contribution</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-tuandui" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg>
+        <span>Team</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="team">
+          <svg class="iconfont icon-tuanduichengyuan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>
+          <span>Members</span>
+        </a>
+        <a href="attributions">
+          <svg class="iconfont icon-guishu" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+          <span>Attributions</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-cplus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/></svg>
+        <span>Dry Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="model">
+          <svg class="iconfont icon-wumoxing" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg>
+          <span>Model</span>
+        </a>
+        <a href="hardware">
+          <svg class="iconfont icon-yingjian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/></svg>
+          <span>Hardware</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shiyan-L" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4.5 0a.5.5 0 0 0 0 1H5v5.36L.503 13.717A1.5 1.5 0 0 0 1.783 16h12.434a1.5 1.5 0 0 0 1.28-2.282L11 6.359V1h.5a.5.5 0 0 0 0-1zM10 2H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1.22l.61 1H10a.5.5 0 1 0 0 1h1.442l.611 1H11a.5.5 0 1 0 0 1h1.664l.611 1H12a.5.5 0 1 0 0 1h1.886l.758 1.24a.5.5 0 0 1-.427.76H1.783a.5.5 0 0 1-.427-.76l4.57-7.48A.5.5 0 0 0 6 6.5V1h4z"/></svg>
+        <span>Wet Lab</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="protocol">
+          <svg class="iconfont icon-neirong" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/> <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/></svg>
+          <span>Protocol</span>
+        </a>
+        <a href="results"class="active" aria-current="page">
+          <svg class="iconfont icon-shiyanjieguo" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/></svg>
+          <span>Results</span>
+        </a>
+        <a href="parts">
+          <svg class="iconfont icon-jiyin" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/></svg>
+          <span>Parts</span>
+        </a>
+        <a href="safety-and-security">
+          <svg class="iconfont icon-anquan" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/> <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/></svg>
+          <span>Safety and Security</span>
+        </a>
+        <a href="notebook">
+          <svg class="iconfont icon-rizhi" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/> <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/> <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/></svg>
+          <span>Notebook</span>
+        </a>
+      </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">
+        <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+        <span>Human Practices</span>
+      </a>
+      <div class="dropdown-content">
+        <a href="human-practices">
+          <svg class="iconfont icon-shehuishijian" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/></svg>
+          <span>Human Practices</span>
+        </a>
+        <a href="sustainability">
+          
+          <span>Sustainability</span>
+        </a>
+      </div>
+    </li>
+
+    </ul>
+  </div>
+  <div class="nav-search" id="nav-search" data-base-path=".">
+    <button class="nav-search__toggle" id="nav-search-toggle" aria-label="搜索" aria-expanded="false">
+      <svg class="nav-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+        <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <div class="nav-search__panel" id="nav-search-panel">
+      <div class="nav-search__input-wrap">
+        <svg class="nav-search__input-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M20 20l-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <input type="text" class="nav-search__input" id="nav-search-input" placeholder="Search pages..."
+          autocomplete="off" aria-label="搜索页面">
+        <button class="nav-search__close" id="nav-search-close" aria-label="关闭搜索">×</button>
+      </div>
+      <div class="nav-search__results" id="nav-search-results">
+        <div class="nav-search__empty">Start typing to search pages...</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <main class="">
+    
+
+<div class="description-container results-page">
+
+            <!-- 左侧导航栏 -->
+      <aside class="description-sidebar">
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-overview" class="nav-main-link">Results Overview</a>
+              </div>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-reporter" class="nav-main-link">Reporter</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#results-reporter-1">Vector construction &amp; transformation</a></li>
+                <li class="level3"><a href="#results-reporter-2">Sequencing verification</a></li>
+                <li class="level3"><a href="#results-reporter-3">α-factor gradient imaging</a></li>
+                <li class="level3"><a href="#results-reporter-4">Reporter: growth curves</a></li>
+                <li class="level3"><a href="#results-reporter-5">Time-course fluorescence</a></li>
+                <li class="level3"><a href="#results-reporter-6">Reporter: early signal-to-noise</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-chassis" class="nav-main-link">Chassis</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#results-chassis-1">sgRNA vector construction</a></li>
+                <li class="level3"><a href="#results-chassis-2">Repair templates</a></li>
+                <li class="level3"><a href="#results-chassis-3">Transformation &amp; colony PCR</a></li>
+                <li class="level3"><a href="#results-chassis-4">Sanger sequencing</a></li>
+                <li class="level3"><a href="#results-chassis-5">Knockout: growth curves</a></li>
+                <li class="level3"><a href="#results-chassis-6">Knockout: fluorescence</a></li>
+                <li class="level3"><a href="#results-chassis-7">Knockout: early signal-to-noise</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-gpa1" class="nav-main-link">G-Protein</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#results-gpa1-1">Homologous template</a></li>
+                <li class="level3"><a href="#results-gpa1-2">Transformation &amp; validation</a></li>
+                <li class="level3"><a href="#results-gpa1-3">Sequence confirmation</a></li>
+                <li class="level3"><a href="#results-gpa1-4">Morphology</a></li>
+                <li class="level3"><a href="#results-gpa1-5">Growth of humanized strains</a></li>
+                <li class="level3"><a href="#results-gpa1-6">Fluorescence response</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-signal" class="nav-main-link">PAGER Receptor</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#results-signal-1">Membrane-expression vector</a></li>
+                <li class="level3"><a href="#results-signal-2">Sequencing verification</a></li>
+                <li class="level3"><a href="#results-signal-3">Further characterization</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-discussion" class="nav-main-link">Discussion</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+                <!-- 发酵进度容器 -->
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">发酵进度</div>
+        </div>
+      </aside>
+
+            <!-- 右侧内容区域 -->
+      <div class="description-content">
+
+        <div id="results-overview" class="content-card">
+          <h2>Results Overview</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              This page reports the experimental results of the yeast influenza-A biosensor project. It is organized by the four project modules, following the order of the consolidated results report: reporter system construction, chassis engineering (gene knockout), Gpa1 humanization, and the antigen-gated receptor (signal recognition) module.
+            </p>
+            <p class="content-intro">
+              Results are grouped by the four project modules: reporter system construction (Fig. 1–6), chassis engineering (Fig. 7–13), Gpa1 humanization (Fig. 14–19) and the antigen-gated receptor module (Fig. 20–25); figures and captions follow the consolidated experimental results report.
+            </p>
+          </div>
+        </div>
+<div id="results-reporter" class="content-card">
+          <div class="content-text-frame">
+            <h2>Reporter Output Module: FUS1 Promoter Reporter System</h2>
+            <h3 id="results-reporter-1">Vector construction, transformation and positive-clone screening</h3>
+            <p>
+              To construct the S. cerevisiae fluorescent reporter system, the constructed yEGFP fluorescent expression vector was transformed into competent BY4741 cells using a S. cerevisiae transformation kit and screened on SD-His selective medium. As shown in Fig. 1, the negative-control transformation plate (A) showed no colonies, whereas only a few tiny, translucent single colonies appeared on the positive transformation plate (B), indicating that the yEGFP reporter plasmid had been successfully introduced and marker-positive transformants were obtained. Single positive colonies from Fig. 1B were then picked for colony PCR, and the gel electrophoresis (Fig. 1C) showed a correct band at 1152 bp for sample 2, consistent with the expected size, preliminarily confirming that the yEGFP reporter fragment had been correctly integrated into the yeast genome, with the positive clones requiring further sequencing verification.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/reporter-module/result-fig01-transformation-colony-pcr.avif" alt="Fig. 1." loading="lazy" width="1214" height="371" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 1. Transformation, positive-clone screening and colony PCR identification of the yEGFP fluorescent reporter vector A: negative-control plate with no colonies; B: positive plate showing only a few tiny single colonies; C: colony-PCR gel electrophoresis of positive clones, in which sample 2 shows a correct band at 1152 bp (SD-His selective medium).</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-2">Sequencing verification of the reporter gene</h3>
+            <p>
+              The positive clones obtained above were sent for Sanger sequencing. Sequence alignment showed that the blue-highlighted central main body of the amplicon was completely identical to the P_FUS1+yEGFP reference sequence, with no point mutations or frameshifts introduced. Only minor differences were observed at the two ends, which resulted from the limited read length and reduced base-call quality toward the ends in that sequencing direction, and did not affect the reading frame or the integrity of the reporter coding sequence, confirming the sequence correctness of the constructed reporter system (Fig. 2).
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/reporter-module/result-fig02-sequencing-verification.avif" alt="Fig. 2." loading="lazy" width="1050" height="620" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 2. Sequencing verification of the yEGFP reporter gene The chromatogram matches the blue-highlighted central region of the reference; minor differences at the ends are due to limited read length and do not affect the reading frame.</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-3">Confocal fluorescence imaging under gradient α-factor induction</h3>
+            <p>
+              To verify the single-cell response of the reporter system to the mating pheromone α-factor, the strains were induced with gradient concentrations of α-factor and imaged by confocal laser scanning microscopy (Fig. 3). Panel A is the parental BY4741 strain without the fluorescent plasmid and panel B is the negative-clone control induced with 0 μM; both showed almost no green fluorescence. Panels C–I are positive clones induced with 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM α-factor, respectively. As the α-factor concentration increased, the intracellular yEGFP green fluorescence gradually intensified and became more uniform, indicating that α-factor activates the downstream MAPK cascade via the Ste2 receptor and dose-dependently drives reporter-gene expression.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/reporter-module/result-fig03-confocal-imaging.avif" alt="Fig. 3." loading="lazy" width="851" height="851" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 3. Confocal fluorescence imaging of S. cerevisiae after gradient α-factor induction A: parental BY4741 without the fluorescent plasmid; B: negative clone induced with 0 μM; C–I: positive clones induced with 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM α-factor. Fluorescence intensified with increasing concentration.</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-4">Effect of α-factor on yeast growth (OD<sub>600</sub>)</h3>
+            <p>
+              The effect of gradient α-factor concentrations on yeast growth was examined by monitoring OD<sub>600</sub> growth curves (Fig. 4). The 0 μM control grew fastest and reached the highest final cell density, whereas both the growth rate and the final biomass decreased in a concentration-dependent manner as the α-factor concentration rose, with the high-concentration groups (6–24 μM) most strongly inhibited. These results reflect that α-factor induces G1-phase mating arrest and suppresses proliferation, confirming the biological activity of the pheromone signaling pathway.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/reporter-module/result-fig04-growth-curve.avif" alt="Fig. 4." loading="lazy" width="790" height="666" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 4. Effect of gradient α-factor concentrations on the growth of S. cerevisiae Growth monitored by OD<sub>600</sub>; both growth rate and final density decreased in a concentration-dependent manner with increasing α-factor (0–24 μM).</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-5">Time course of yEGFP fluorescence</h3>
+            <p>
+              The time-dependent change in yEGFP fluorescence under gradient α-factor induction was further measured (Fig. 5). Fig. 5A is the line plot of fluorescence intensity for each concentration over 1–16 h, and Fig. 5B is the bar chart over 1–23 h. At a given time point the relative fluorescence increased monotonically and gradually plateaued as the α-factor concentration rose, showing a clear dose-response relationship; at a given concentration the fluorescence increased with induction time and plateaued after about 10–16 h, indicating that the α-factor-induced fluorescent output depends on both time and concentration. The reporter system quantitatively converts α-factor signaling into a detectable fluorescent readout, providing the reporting platform for subsequent engineering and application of the yeast sensor.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/reporter-module/result-fig05-timecourse-fluorescence.avif" alt="Fig. 5." loading="lazy" width="1426" height="518" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 5. Time course of yEGFP fluorescence under gradient α-factor induction A: line plot of fluorescence for each concentration over 1–16 h; B: bar chart over 1–23 h. Fluorescence showed dual time- and concentration-dependence.</figcaption>
+            </figure>
+
+            <h3 id="results-reporter-6">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
+            <p>
+              Building on the above, to further apply this fluorescent reporter system in constructing an influenza A virus biosensor that outputs a detectable fluorescent signal upon virus recognition, and considering that the time at which the virus appears is unpredictable in real-world detection, the system must yield a readable signal within an uncertain but short time window. We therefore examined how the starting cell density (initial OD<sub>600</sub>) affects the strength of the early post-induction signal (Fig. 6), with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively. The SNR generally rose as the induction time increased from 1 h to 2 h and peaked over a moderate range of starting OD<sub>600</sub>.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/reporter-module/result-fig06-snr-early-induction.avif" alt="Fig. 6." loading="lazy" width="1301" height="457" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 6. Signal-to-noise ratio (SNR) response of the reporter system at different starting OD<sub>600</sub> during early induction A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. Red circles and blue squares denote the 1 h and 2 h data, respectively. The SNR rose with induction time and peaked over a moderate range of starting OD<sub>600</sub>.</figcaption>
+            </figure>
+          </div>
+        </div>
+<div id="results-chassis" class="content-card">
+          <div class="content-text-frame">
+            <h2>Chassis Cell Engineering — Knockout of FAR1 and SST2</h2>
+            <h3 id="results-chassis-1">Construction and verification of the sgRNA knockout vectors</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig07-sgrna-vector-pcr.avif" alt="Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout." loading="lazy" width="1105" height="324" decoding="async">
+              <figcaption class="result-fig__cap">Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout. M: DNA marker; lanes 1–2: pML104-Far1 construct (11258 bp); lanes 3–4: pML104-Sst2 construct (11258 bp).</figcaption>
+            </figure>
+            <p>
+              To construct CRISPR-Cas9 knockout vectors targeting Far1 and Sst2, a universal strategy was applied in which 20 bp guide sequences specific to each gene were introduced into the pML104 vector via primers, and the constructs were verified by plasmid PCR. As shown in Figure 7, agarose gel electrophoresis showed a clear, single band between 10000 bp and 15000 bp for both the pML104-Far1 and pML104-Sst2 constructs, consistent with the expected size of 11258 bp. Lanes 1–2 correspond to the plasmid PCR products of the pML104-Far1 construct, and lanes 3–4 correspond to those of the pML104-Sst2 construct, with no obvious non-specific bands or smearing. These results indicate that the guide sequences targeting Far1 and Sst2 were successfully cloned into pML104, and both knockout vectors were correctly constructed for subsequent yeast transformation and gene knockout experiments.
+            </p>
+
+            <h3 id="results-chassis-2">Amplification of the FAR1 and SST2 repair templates</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig08-repair-template-pcr.avif" alt="Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout." loading="lazy" width="678" height="303" decoding="async">
+              <figcaption class="result-fig__cap">Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout. M: DNA marker; lane 1: Far1 homologous recombination template (1146 bp); lane 2: Sst2 homologous recombination template (993 bp); lane 3: negative control.</figcaption>
+            </figure>
+            <p>
+              To construct repair templates for Far1 and Sst2 knockout, primers were designed to target the knockout sites, and the homology arms flanking each target site were amplified from BY4741 genomic DNA. The repair templates contain a 4 bp deletion relative to the original genomic sequence, which introduces a frameshift mutation after CRISPR-Cas9 cleavage via homologous recombination. As shown in Figure 8, agarose gel electrophoresis revealed a clear, single band between 1000 bp and 1500 bp in lane 1 (expected size, 1146 bp), a clear, single band between 750 bp and 1000 bp in lane 2 (expected size, 993 bp), and no band in the negative control (lane 3).. These results indicate that both the Far1 and Sst2 repair templates were successfully amplified and can be used for subsequent CRISPR-Cas9 co-transformation and gene knockout experiments.
+            </p>
+
+            <h3 id="results-chassis-3">Transformation and colony PCR verification</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig09-transformation-colony-pcr.avif" alt="Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout." loading="lazy" width="1378" height="609" decoding="async">
+              <figcaption class="result-fig__cap">Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout. (A) Transformants of Far1 knockout; (B) Colony PCR screening of Far1 knockout transformants, with positive clones F1–F6, F8, and F9; (C) Transformants of Sst2 knockout based on the Far1-knockout strain; (D) Colony PCR screening of Sst2 knockout transformants, with positive clones S1, S5–S7, and S15. M: DNA marker; BY / BY4741: wild-type control.</figcaption>
+            </figure>
+            <p>
+              To obtain Far1 and Sst2 double-knockout strains, a stepwise knockout strategy was applied. First, the linearized pML104 plasmid and the Far1 repair template were co-transformed into BY4741 competent cells and plated on SD-His+URA selective medium, yielding single colonies (Figure 9A). Colony PCR was then performed for verification: because the Far1 verification primers were designed across the deleted 4-bp site, a 548-bp band was expected when the FAR1 locus remained unknocked out, whereas successful knockout abolished efficient primer binding and prevented amplification of the 548-bp product. Clones F1–F6, F8, and F9 did not produce the 548-bp band and were identified as positive clones (Figure 9B), confirming successful Far1 knockout. Using this Far1-knockout strain as the chassis, the Sst2 knockout vector and repair template were subsequently transformed, yielding transformants (Figure 9C). Colony PCR showed that clones S1, S5–S7, and S15 did not produce the 562-bp band and were identified as positive clones (Figure 9D), confirming successful Sst2 knockout. These results indicate that a Far1 single-knockout strain was successfully constructed, and Far1/Sst2 double-knockout strains were further obtained for subsequent functional validation.
+            </p>
+
+            <h3 id="results-chassis-4">Sanger sequencing confirmation of the knockouts</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig10-sanger-sequencing.avif" alt="Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout." loading="lazy" width="1291" height="400" decoding="async">
+              <figcaption class="result-fig__cap">Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout. (A) Successful Sst2 knockout, showing a 4 bp deletion (TGTC) at the target site; (B) Non-knockout (wild-type) Sst2, shown for comparison; (C) Successful Far1 knockout, showing a 4 bp deletion (CACT) at the target site; (D) Non-knockout (wild-type) Far1, shown for comparison.</figcaption>
+            </figure>
+            <p>
+              To confirm successful knockout of Far1 and Sst2, colony PCR-positive clones were subjected to Sanger sequencing, and the sequencing chromatograms of knockout clones were compared with those of non-knockout (wild-type) clones to identify the exact deletion site and deleted sequence. The successfully knocked-out Sst2 clone showed a 4 bp deletion (TGTC) at the target site (Figure 10A), while the non-knockout clone matched the wild-type sequence (Figure 10B), allowing clear identification of the deletion site. The successfully knocked-out Far1 clone showed a 4 bp deletion (CACT) at the target site (Figure 10C), while the non-knockout clone also matched the wild-type sequence (Figure 10D). These 4 bp deletions are expected to cause frameshift mutations and disrupt gene function. The sequencing results confirmed that Far1 and Sst2 knockout strains were successfully obtained.
+            </p>
+
+            <h3 id="results-chassis-5">Effect of knockout on growth</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig11-growth-curves.avif" alt="Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae." loading="lazy" width="780" height="684" decoding="async">
+              <figcaption class="result-fig__cap">Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae. (A) Growth curves of the Far1 knockout strain (ΔFar1) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis; (B) Growth curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis.</figcaption>
+            </figure>
+            <p>
+              To verify whether Far1 and Sst2 knockout relieves α-factor-induced growth inhibition, growth curves were measured at different α-factor concentrations, with wild-type BY4741 as the control. Wild-type BY4741 showed obvious growth inhibition at 10 μM α-factor, whereas the Far1 knockout strain (ΔFar1) maintained a relatively high growth rate under the same condition (Figure 11A), indicating that Far1 knockout effectively relieved α-factor-induced G1 arrest. After further knocking out Sst2 in the Far1-knockout background, the double-knockout strain (ΔFar1 ΔSst2) showed no obvious growth inhibition at different α-factor concentrations compared with BY4741 (Figure 11B), suggesting that double knockout of Far1 and Sst2 further enhanced the strain's tolerance to α-factor.
+            </p>
+
+            <h3 id="results-chassis-6">Effect of knockout on α-factor-induced fluorescence</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig12-fluorescence-signal.avif" alt="Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal." loading="lazy" width="1036" height="843" decoding="async">
+              <figcaption class="result-fig__cap">Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal. (A) Fluorescence intensity curves of the FAR1 knockout strain (ΔFar1) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM); (B) Fluorescence intensity curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM).</figcaption>
+            </figure>
+            <p>
+              To verify the effect of Far1 and Sst2 knockout on downstream signaling, fluorescence intensity was measured at different α-factor concentrations. The Far1 knockout strain (ΔFar1) showed a slight increase in fluorescence with increasing α-factor concentration, but the overall enhancement was limited (Figure 12A). In contrast, the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) exhibited a more pronounced signal enhancement (Figure 12B): at 1 μM α-factor, its fluorescence was already much higher than that of the yE-GFP control, indicating that the knockout lowered the response threshold and enabled strong signaling at low inducer concentrations; at 10 μM α-factor, the fluorescence of the double-knockout strain continued to rise until 22 h without reaching a peak, whereas the control peaked at around 18 h and then declined, suggesting enhanced response amplitude and impaired negative feedback regulation. These results indicate that double knockout of Far1 and Sst2 enhances the yeast fluorescence response to α-factor, characterized by higher sensitivity at low concentrations and a more sustained response at high concentrations, supporting its potential as a low-concentration signal-amplifying biosensor element.
+            </p>
+
+            <h3 id="results-chassis-7">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/chassis-module/result-fig13-snr-early-induction.avif" alt="Fig. 13." loading="lazy" width="1340" height="566" decoding="async">
+              <figcaption class="result-fig__cap">Fig. 13. SNR assay at different starting OD<sub>600</sub> after Far1 and Sst2 knockout A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. purple circles, red squares and blue triangles denote the 1 h, 1.5 h and 2 h data, respectively, and the dashed line marks the SNR = 3 threshold. The SNR rose with induction time, and at an initial OD<sub>600</sub> of about 0.6–2.1 it was largely ≥ 3, giving an evident signal within 2 h.</figcaption>
+            </figure>
+            <p>
+              After knocking out the Far1 and Sst2 genes to amplify the fluorescent signal, a complete signal-to-noise ratio (SNR) assay at different starting OD was performed again (Fig. 13, with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively). Using the background fluorescence of uninduced and negative-clone cells as the baseline, SNR ≥ 3 was defined as an evident signal. The results showed that the SNR generally reached 3 or above over an initial OD<sub>600</sub> range of about 0.6–2.1, i.e., an evident signal appeared reliably within 2 h. Accordingly, in practical applications the initial OD<sub>600</sub> can be set to about 0.6, which ensures a sensitive response to the virus signal within 2 h and, thanks to the growth and signal-retention capacity at this starting density, provides a continuous detection window of roughly 12 h before a new yeast sensor needs to be replaced, giving the operational basis for the practical detection deployment of the influenza A yeast sensor.
+            </p>
+          </div>
+        </div>
+<div id="results-gpa1" class="content-card">
+          <div class="content-text-frame">
+            <h2>Humanized G-Protein Engineering — Gpa1-G&alpha;q Chimera</h2>
+            <h3 id="results-gpa1-1">Construction of the homologous targeting template</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/gpa1-module/result-fig14-homologous-template-pcr.avif" alt="Figure 14. Construction of homologous template for Gpa1 humanization." loading="lazy" width="455" height="407" decoding="async">
+              <figcaption class="result-fig__cap">Figure 14. Construction of homologous template for Gpa1 humanization. (A) Amplification of GPA1 upstream and downstream homologous arms. Lanes 1–4: upstream homologous arm (experimental); Lane 5: upstream negative control; Lane 6: 2000 bp marker; Lane7: downstream negative control; Lanes 8–11: downstream homologous arm (experimental). (B) Amplification of URA3 marker. Lane 1: 2000 bp marker; Lane 2: negative control; Lanes 3–4: URA3 experimental groups. (C) Overlap-extension fusion PCR for target fragment assembly. Lane 1: 5000 bp marker; Lane 2: negative control; Lanes 3–6: fusion PCR experimental groups.</figcaption>
+            </figure>
+            <p>
+              To realize humanization modification of yeast Gpa1 protein, we first amplified the GPA1 upstream homologous arm, downstream homologous arm and selection marker gene URA3 via PCR. Agarose gel electrophoresis (Figure 14A, 14B) showed that the bands of each amplified product matched the expected theoretical size with few non-specific bands, confirming successful amplification of homologous arms and marker gene. Overlap-extension fusion PCR was then performed to assemble the three fragments into a complete homologous targeting template. The electrophoresis result of fusion PCR products (Figure 12C) exhibited specific bands consistent with the target length, while no amplification band was observed in the negative control group. These results verified the successful construction of the homologous recombination targeting template, providing qualified DNA materials for subsequent gene editing of yeast chassis to achieve Gpa1 humanization.
+            </p>
+
+            <h3 id="results-gpa1-2">Yeast transformation and positive-clone validation</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/gpa1-module/result-fig15-transformation-colony-pcr.avif" alt="Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization." loading="lazy" width="1400" height="722" decoding="async">
+              <figcaption class="result-fig__cap">Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization. (A)Colony growth after transforming Saccharomyces cerevisiae BY4741 with fusion PCR targeting fragment. Plate 1: negative control; Plates 2–5: transformation groups. Uniform single colonies appeared on experimental plates. Plate 2 was discarded due to medium collapse and potential contamination. Single colonies were picked from plates 3–5 for subsequent verification. (B)Agarose gel electrophoresis of colony PCR products. Lane 1: 5000 bp DNA Marker; Lanes 2–24: PCR products from picked colonies. Multiple samples displayed bands at the expected size, which were preliminarily identified as positive clones with Gpa1 humanization.</figcaption>
+            </figure>
+            <p>
+              The assembled homologous targeting fragment for Gpa1 humanization was transformed into competent Saccharomyces cerevisiae BY4741 cells, which were spread onto SD-Ura selective plates. Colony growth (Figure 15A) showed single colonies on experimental plates while no colonies grew on the negative control plate, confirming valid transformation and selection. Single colonies were picked from qualified plates and verified by colony PCR for genomic integration. The electrophoresis result of colony PCR (Figure 15B) indicated that multiple colonies yielded amplicons of expected size. Positive yeast strains with Gpa1 humanization were preliminarily obtained, providing the engineered chassis for subsequent assembly and functional test of the yeast gated biosensor.
+            </p>
+
+            <h3 id="results-gpa1-3">Sequence confirmation of the humanized locus</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/gpa1-module/result-fig16-sequence-alignment.avif" alt="Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization." loading="lazy" width="1400" height="707" decoding="async">
+              <figcaption class="result-fig__cap">Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization. 1: Alignment between sequencing result of Sample 12 and original yeast GPA1 sequence; 2: Alignment between sequencing result of Sample 17 and original yeast GPA1 sequence; 3: Alignment between sequencing result of Sample 12 and expected humanized sequence; 4: Alignment between sequencing result of Sample 17 and expected humanized sequence. The blue highlighted region represents the replaced gene fragment.</figcaption>
+            </figure>
+            <p>
+              To further confirm site-specific genomic integration, candidate clones positive in colony PCR were selected for Sanger sequencing verification. Sequence alignment (Figure 16) showed obvious differences between Sample12, Sample17 and the original yeast GPA1 sequence. When aligned with the expected humanized sequence, both strains perfectly matched in the target replacement region. These results demonstrated successful homologous recombination. The endogenous yeast Gpa1 gene was site-specifically replaced as designed, and the Gpa1-humanized yeast chassis strain was successfully obtained.
+            </p>
+
+            <h3 id="results-gpa1-4">Morphology after humanization</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/gpa1-module/result-fig17-morphology-microscopy.avif" alt="Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains." loading="lazy" width="1400" height="701" decoding="async">
+              <figcaption class="result-fig__cap">Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains. 1–3: Cell morphology of strain 12 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. 4–6: Cell morphology of strain 17 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. Magnification: 100×, scale bar = 20 μm.</figcaption>
+            </figure>
+            <p>
+              To verify the response of the MAPK pathway to α-factor after Gpa1 humanization, positive strains were induced with gradient concentrations of α-factor and observed under a microscope. After treatment with 0, 1 and 10 μM α-factor, no obvious shmoo protrusions were observed. This indicates that after humanization replacement of endogenous Gpa1, the native yeast G-protein-MAPK pathway shows drastically reduced response to the native ligand α-factor. This result confirms that our engineered chassis no longer responds to α-factor, eliminating background interference from the native mating pathway and making it suitable for our gated biosensor built upon heterologous receptors.
+            </p>
+
+            <h3 id="results-gpa1-5">Growth of the humanized strains</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/gpa1-module/result-fig18-growth-curves.avif" alt="Figure 18. Growth curve measurement of Gpa1-humanized yeast strains." loading="lazy" width="582" height="1361" decoding="async">
+              <figcaption class="result-fig__cap">Figure 18. Growth curve measurement of Gpa1-humanized yeast strains. 1: Wild-type BY4741; 2: Gpa1-humanized strain 12; 3: Gpa1-humanized strain 17. For each group, 0 μM, 1 μM and 10 μM α-factor were supplemented. Cell growth was monitored by OD<sub>600</sub> measurement, n=3 biological replicates.</figcaption>
+            </figure>
+            <p>
+              We measured the growth curves of wild-type BY4741 and Gpa1-humanized strains 12 and 17 under treatment with different concentrations of α-factor to evaluate the effects of humanization modification and α-factor stimulation on yeast proliferation. Wild-type BY4741 exhibited obvious growth inhibition under 10 μM α-factor. In contrast, for Gpa1-humanized strain 12 and strain 17, their growth profiles showed no significant difference between 0–10 μM α-factor groups and the untreated control. These results further demonstrate that Gpa1-humanized yeast loses the growth inhibitory response triggered by α-factor. Meanwhile, this gene editing modification does not significantly impair yeast proliferation, and the chassis maintains good growth performance, which is suitable for subsequent transformation of sensor plasmids and functional characterization.
+            </p>
+
+            <h3 id="results-gpa1-6">Effect on the native α-factor fluorescence response</h3>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/gpa1-module/result-fig19-fluorescence-response.avif" alt="Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response." loading="lazy" width="1103" height="1544" decoding="async">
+              <figcaption class="result-fig__cap">Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response. 1–8: Time-course fluorescence intensity curves under gradient α-factor induction at 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM. Blue curve (yEGFP): Wild-type BY4741 with FUS1-yEGFP reporter system. Red curve (GPA1/hGα): Gpa1-humanized chassis with FUS1-yEGFP reporter system.</figcaption>
+            </figure>
+            <p>
+              To quantitatively characterize the inhibitory effect of Gpa1 humanization on the native mating pathway, we transformed the FUS1-yEGFP reporter plasmid into wild-type BY4741 and humanized chassis respectively. Gradient concentrations of α-factor were applied for long-term induction, and fluorescence signals were continuously recorded. In wild-type strains, yEGFP fluorescence increased markedly with rising α-factor concentration, showing obvious dose-dependent activation. In contrast, the Gpa1-humanized strain maintained very low fluorescence across all α-factor concentrations, with almost no dose-dependent signal activation. This quantitative fluorescence result further confirms that the native yeast α-factor-MAPK pathway is substantially blocked after Gpa1 human replacement. The FUS1 promoter cannot be activated by α-factor, greatly reducing basal leakage of the biosensor and providing a low-background chassis for our heterologous receptor gated sensing circuit.
+            </p>
+          </div>
+        </div>
+<div id="results-signal" class="content-card">
+          <div class="content-text-frame">
+            <h2>PAGER Antigen-Gated Fusion Receptor Protein Design</h2>
+            <h3 id="results-signal-1">Construction of the membrane-expression vector and transformation screening</h3>
+            <p>
+              To construct the membrane-targeted expression vector for our yeast sensor recognition protein, the coding sequence of recognition protein was cloned into the yeast membrane-localized expression backbone vector. The constructed plasmid was transformed into Saccharomyces cerevisiae competent cells and spread onto SD-His-Leu selective medium(Figure 20). The negative control plate (A) showed no colony growth, confirming no contamination and validating the selection pressure. Visible single colonies appeared on selective plates B-E. We picked 12 independent colonies and performed colony PCR. Agarose gel electrophoresis (F) displayed distinct target bands at the expected size in lanes 1–10 and lane 12 (601bp), while lane 11 showed no detectable amplification product, with little non-specific amplification in positive samples. These results indicate that the membrane-expression plasmid encoding the sensor recognition protein was successfully transformed into yeast, and multiple positive candidate clones were obtained for subsequent sequencing validation.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/pager-module/result-fig20-transformation-colony-pcr.avif" alt="Figure 20. Yeast transformation and colony PCR verification of the yeast sensor recognition protein membrane-expression vector." loading="lazy" width="830" height="497" decoding="async">
+              <figcaption class="result-fig__cap">Figure 20. Yeast transformation and colony PCR verification of the yeast sensor recognition protein membrane-expression vector. A: Negative control plate for yeast transformation; B–E: SD-His-Leu selective plates with yeast transformants; F: agarose gel electrophoresis of colony PCR products. M: DNA marker; lanes 1–12: PCR products of picked single colonies (601 bp).</figcaption>
+            </figure>
+
+            <h3 id="results-signal-2">Sequencing verification of the surface-expression construct</h3>
+            <p>
+              The surface-expression construct was first assembled and then used as a template for PCR amplification of the target fragment. The amplified products were subjected to Sanger sequencing and aligned against the designed reference sequence. Sample 2 showed 98.61% identity with 0.87% gaps over a 577 bp aligned length; sample 3 achieved 99.29% identity with only 0.35% gaps over 564 bp; and sample 7 exhibited 94.82% identity with 3.67% gaps over 599 bp. Samples 2 and 3 showed high sequence identity to the designed construct, with only minor gaps at the 5' sequencing start region and no critical mutations, insertions, or deletions within the coding sequence of the PAGER receptor fusion protein. In contrast, sample 7 displayed more mismatches and gaps at the 5' terminal region and was therefore excluded from further experiments. These results confirm that clones 2 and 3 contain the correctly assembled surface-expression construct with an intact open reading frame, and they were selected for subsequent heterologous protein expression in Saccharomyces cerevisiae.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/result/pager-module/result-fig21-sequencing-verification.avif" alt="Figure 21. Sanger sequencing verification of the yeast sensor surface-expression construct." loading="lazy" width="831" height="793" decoding="async">
+              <figcaption class="result-fig__cap">Figure 21. Sanger sequencing verification of the yeast sensor surface-expression construct. A: sequence alignment of sample 2; B: sequence alignment of sample 3; C: sequence alignment of sample 7. The right panel shows alignment statistics for each sample, including aligned length, sequence identity, and gap proportion.</figcaption>
+            </figure>
+
+            <h3 id="results-signal-3">Further characterization of the recognition module</h3>
+            <p class="content-intro">
+              The following items are recorded in the consolidated results report without a figure embedded in the source document; captions are kept verbatim and images are pending.
+            </p>
+            <p class="content-intro">
+              图22. 酵母传感器识别蛋白WB结果
+            </p>
+            <p class="content-intro">
+              图23. 酵母传感器识别蛋白自抑可逆性验证。使用 TEV 处理工程化酵母，检测TEV 切 MT1 后，无抗原也能激活信号传感系统（证明自抑机制）
+            </p>
+            <p class="content-intro">
+              图24. 酵母传感器识别蛋白功能验证。1. 载体对照，2. PAGER-Spike + DMSO，3. PAGER-Spike + DCZ，4. PAGER-Spike + H1N1-HA，5. PAGER-Spike + H1N1-HA + DCZ，6. PAGER-Spike + 其他病毒抗原 + DCZ（特异性对照）
+            </p>
+            <p class="content-intro">
+              图25. 酵母传感器剂量响应与动力学。1. H1N1-HA dose-response：固定 DCZ 50 nM，H1N1-HA 0.1–100 nM，计算 EC50，2. DCZ dose-response：固定 H1N1-HA 10 nM，DCZ 1–500 nM，3. 动力学：加 H1N1-HA + DCZ 后，每 30 min 取样测荧光强度。
+            </p>
+          </div>
+        </div>
+<div id="results-discussion" class="content-card">
+          <h2>Discussion</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              The three parts reported above establish the foundational strains of the yeast influenza-A biosensor and characterize them independently.
+            </p>
+            <p class="content-intro">
+              <strong>Chassis.</strong> FAR1 and SST2 were knocked out and confirmed by sequencing (4 bp deletions TGTC for SST2, CACT for FAR1). The double-knockout strain relieves α-factor-induced growth arrest and, more importantly, lowers the response threshold and sustains the fluorescence signal at high α-factor concentrations, indicating amplified and prolonged signaling — a useful low-concentration signal-amplifying element.
+            </p>
+            <p class="content-intro">
+              <strong>Gpa1-humanized chassis.</strong> Site-specific replacement of the endogenous Gpa1 C-terminal residues was confirmed (Samples 12 and 17 matched the designed humanized sequence). After humanization, the native α-factor–MAPK response collapses across morphology, growth and downstream fluorescence, giving a low-background chassis whose FUS1 promoter can no longer be activated by α-factor.
+            </p>
+            <p class="content-intro">
+              <strong>Reporter system.</strong> The FUS1-yEGFP reporter was successfully constructed (1152 bp colony-PCR band; sequencing-confirmed) and shows α-factor-dose- and time-dependent yEGFP expression, while α-factor simultaneously suppresses proliferation in a concentration-dependent manner. It provides a quantitative fluorescent readout platform.
+            </p>
+            <p class="content-intro">
+              Taken together, the output (reporter) and the two interface layers (chassis and Gpa1 humanization) each have measured data. Each part retains its own α-factor concentration scheme (chassis: 0 / 1 / 10 μM; reporter and Gpa1: 8-step gradient), and values are presented within their respective schemes.
+            </p>
+          </div>
+        </div>
+
+                <!-- 待一手数据复核后再补。 -->
+
+      </div>
+    </div>
+
+  </main>
+  
+<section id="footer" class="section-footer">
+  <div class="component-container">
+    <div class="footer-wrapper">
+      <!-- 顶部内容：伙伴栏 + Contact Us。
+           伙伴栏（2026-10-04 重设计）：原「白色大卡 + logo 走马灯」改为可扩展芯片栏，
+           新增伙伴只需复制一个 .partner-chip。 -->
+      <div class="footer-top">
+        <div class="footer-partners">
+          <span class="partners-label">Supported by</span>
+          <div class="partners-list">
+            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/igem.avif" alt="iGEM">
+            </a>
+            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao.avif" alt="shiyao">
+            </a>
+            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/szpu.avif" alt="SZPU">
+            </a>
+          </div>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us:</h4>
+          <div class="contact-icons">
+            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+              <svg class="iconfont icon-youxiang" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
+            </div>
+            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+              class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+              <svg class="iconfont icon-bilibili-fill" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373Z"/></svg>
+            </a>
+            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+              <svg class="iconfont icon-weixin" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M11.176 14.429c-2.665 0-4.826-1.8-4.826-4.018 0-2.22 2.159-4.02 4.824-4.02S16 8.191 16 10.411c0 1.21-.65 2.301-1.666 3.036a.32.32 0 0 0-.12.366l.218.81a.6.6 0 0 1 .029.117.166.166 0 0 1-.162.162.2.2 0 0 1-.092-.03l-1.057-.61a.5.5 0 0 0-.256-.074.5.5 0 0 0-.142.021 5.7 5.7 0 0 1-1.576.22M9.064 9.542a.647.647 0 1 0 .557-1 .645.645 0 0 0-.646.647.6.6 0 0 0 .09.353Zm3.232.001a.646.646 0 1 0 .546-1 .645.645 0 0 0-.644.644.63.63 0 0 0 .098.356"/> <path d="M0 6.826c0 1.455.781 2.765 2.001 3.656a.385.385 0 0 1 .143.439l-.161.6-.1.373a.5.5 0 0 0-.032.14.19.19 0 0 0 .193.193q.06 0 .111-.029l1.268-.733a.6.6 0 0 1 .308-.088q.088 0 .171.025a6.8 6.8 0 0 0 1.625.26 4.5 4.5 0 0 1-.177-1.251c0-2.936 2.785-5.02 5.824-5.02l.15.002C10.587 3.429 8.392 2 5.796 2 2.596 2 0 4.16 0 6.826m4.632-1.555a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0m3.875 0a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0"/></svg>
+              <div class="wechat-qr-container">
+                <div class="wechat-qr-arrow"></div>
+                <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/echoyeast-social.avif"
+                  alt="WeChat QR Code" class="wechat-qr-image">
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 特色分界线1 -->
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
+            <circle cx="20" cy="20" r="4" fill="white" />
+          </svg>
+        </span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- 导航链接区域（硬编码，跳过 Home）。
+           栏目顺序与链接名与根站 src/_includes/partials/footer.njk 逐项对齐
+           （2026-09-30 用户决定），href 沿用 flask 的无扩展名相对路由。 -->
+      <div class="footer-navigation">
+        <div class="footer-content-box">
+          <div class="footer-columns">
+            <div class="footer-column">
+              <h4>Project</h4>
+              <ul>
+                <li><a href="description">Description</a></li>
+                <li><a href="design">Design</a></li>
+                <li><a href="engineering">Engineering</a></li>
+                <li><a href="contribution">Contribution</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Wet Lab</h4>
+              <ul>
+                <li><a href="design">Design</a></li>
+                <li><a href="protocol">Protocol</a></li>
+                <li><a href="results">Results</a></li>
+                <li><a href="parts">Parts</a></li>
+                <li><a href="safety-and-security">Safety</a></li>
+                <li><a href="notebook">Notebook</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Dry Lab</h4>
+              <ul>
+                <li><a href="model">Model</a></li>
+                <li><a href="hardware">Hardware</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Human Practices</h4>
+              <ul>
+                <li><a href="human-practices">Integrated HP</a></li>
+                <li><a href="sustainability">Sustainability</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Team</h4>
+              <ul>
+                <li><a href="team">Members</a></li>
+                <li><a href="attributions">Attributions</a></li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 特色分界线2 -->
+      <div class="footer-divider divider-simple">
+        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
+        <span class="divider-line-short"></span>
+        <span class="divider-text">Synthetic Biology</span>
+        <span class="divider-line-short"></span>
+        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
+      </div>
+
+      <!-- 版权信息区域 -->
+      <div class="footer-bottom-section">
+        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+        <p>The repository used to create this website is available at <a
+            href="https://gitlab.igem.org/2026/szpu-china" target="_blank"
+            rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- 全站「返回顶部」悬浮按钮：两张图叠合（外圈为透明底美工图并持续旋转，hover 时整体上下浮动）。
+       2026-10-11 换用美工新图（透明底，取代旧版自带环绕文字+底色的 avif）。 -->
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">
+    <span class="back-to-top__ring" aria-hidden="true">
+      
+      <img class="back-to-top__ring-img"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-ring.avif" alt="" width="1280" height="1280"
+        decoding="async">
+    </span>
+    <span class="back-to-top__core" aria-hidden="true">
+      <img class="back-to-top__core-img"
+        src="https://static.igem.wiki/teams/6373/wiki/icon/top/back-to-top-core.webp" alt="" width="320" height="320"
+        decoding="async">
+    </span>
+  </button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PageProgressBar !== 'undefined') {
+        new PageProgressBar().startAutoProgress();
+      }
+    });
+  </script>
+
+  
+<script>
+/*
+ * page-loader.js — 全站页级加载遮罩控制器（根站） * * 与 <head> 内同步执行的 page-loader-arm.js 配套： * arm —— 首帧即显示遮罩并锁滚动（防原生内容闪烁）
+ * * 本文件 —— 收集首屏关键插画 → 预加载 → 判定收尾 → 收起遮罩并派发 pageloader:done * * 收尾条件（详见 README 第十五/十六节）： * DOM 就绪 AND 所有已登记关键图结清 AND 已过最小展示时长 * 任一超时（MAX_WAIT / 单图 IMG_TIMEOUT）
+ * 都强制收尾，绝不永久阻塞。 * * 对外接口（IIFE，挂 window.PageLoader）： * window.PageLoader.register(urls) // 登记首屏关键图；
+ * 字符串 | [url] | [[候选1,候选2]] * window.PageLoader.done(cb) // 收尾回调（首页 GIF 交接用） * window.PageLoader.isDone()
+ */
+(function () {
+  'use strict';
+
+  var MIN_SHOW = 600;     // 最小展示时长（防闪烁），ms
+  var MAX_WAIT = 8000;    // 全局强制收尾兜底，ms
+  var IMG_TIMEOUT = 3000; // 单张关键图超时，ms
+  var EXIT_BUFFER = 420;  // 淡出后清理 done 类的延迟，ms
+
+  var root = document.documentElement;
+  var overlay = null;
+  var state = {
+    start: now(),
+    pending: 0,
+    done: false,
+    timer: 0
+  };
+
+  function now() {
+    return (window.performance && window.performance.now)
+      ? window.performance.now()
+      : Date.now();
+  }
+
+  function prefersReducedMotion() {
+    try {
+      if (window.iGEMUtils && window.iGEMUtils.prefersReducedMotion) {
+        return window.iGEMUtils.prefersReducedMotion();
+      }
+      return !!(window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function warn(msg, extra) {
+    if (window.console && console.warn) {
+      console.warn('[PageLoader] ' + msg, extra || '');
+    }
+  }
+
+    /* ---- */
+
+    /* ---- 声明式关键资源：<img data-critical> / [data-critical-bg] ---- */
+  function collectFromDom() {
+    var groups = [];
+    var i;
+    var imgs = document.querySelectorAll('img[data-critical]');
+    for (i = 0; i < imgs.length; i++) {
+      var u = imgs[i].currentSrc || imgs[i].getAttribute('src');
+      if (u) groups.push([u]);
+    }
+    var bgs = document.querySelectorAll('[data-critical-bg]');
+    for (i = 0; i < bgs.length; i++) {
+      var raw = bgs[i].getAttribute('data-critical-bg') || '';
+      if (!raw) continue;
+      var m = raw.match(/url\(["']?([^"')]+)["']?\)/);
+      groups.push([m ? m[1] : raw]);
+    }
+    return groups;
+  }
+
+    /* ---- 预加载：候选回退（首个成功者结清）+ 单图超时 ---- */
+  function loadGroup(candidates) {
+    if (!candidates || !candidates.length) return;
+    state.pending++;
+
+    var idx = 0;
+    var settled = false;
+    var timer = setTimeout(function () {
+      if (settled) return;
+      settled = true;
+      state.pending--;
+      warn('critical image timeout', candidates[0]);
+      evaluate();
+    }, IMG_TIMEOUT);
+
+    function settle() {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      state.pending--;
+      evaluate();
+    }
+
+    function next() {
+      if (settled) return;
+      if (idx >= candidates.length) {
+        warn('critical image failed', candidates.join(' | '));
+        settle();
+        return;
+      }
+      var img = new Image();
+      img.onload = settle;
+      img.onerror = function () { idx++; next(); };
+      img.src = candidates[idx];
+    }
+
+    next();
+  }
+
+    /* ---- 收尾判定（幂等） ---- */
+  function evaluate() {
+    if (state.done) return;
+
+    var elapsed = now() - state.start;
+    if (elapsed >= MAX_WAIT) return finish('timeout');
+
+    var domReady = document.readyState !== 'loading';
+    var minShow = prefersReducedMotion() ? 0 : MIN_SHOW;
+
+    if (domReady && state.pending === 0 && elapsed >= minShow) {
+      return finish('ready');
+    }
+
+    var wait = Math.min(
+      Math.max(minShow - elapsed, 40),
+      Math.max(MAX_WAIT - elapsed, 40)
+    );
+    clearTimeout(state.timer);
+    state.timer = setTimeout(evaluate, wait);
+  }
+
+  function finish(reason) {
+    if (state.done) return;
+    state.done = true;
+    clearTimeout(state.timer);
+
+    root.classList.remove('page-loader-armed');
+    root.classList.add('page-loader-done');
+    if (overlay) overlay.setAttribute('aria-hidden', 'true');
+
+    setTimeout(function () {
+      root.classList.remove('page-loader-done');
+    }, EXIT_BUFFER);
+
+    var detail = { reason: reason };
+    try {
+      document.dispatchEvent(new CustomEvent('pageloader:done', { detail: detail }));
+    } catch (e) {
+      try {
+        var ev = document.createEvent('CustomEvent');
+        ev.initCustomEvent('pageloader:done', false, false, detail);
+        document.dispatchEvent(ev);
+      } catch (e2) { /* 极端环境忽略 */ }
+    }
+  }
+
+  window.PageLoader = {
+        /* * 登记首屏关键图。字符串 | [url] | [[候选1, 候选2]] */
+    register: function (urls) {
+      if (!urls) return;
+      var groups = [];
+      if (typeof urls === 'string') {
+        groups = [[urls]];
+      } else if (Object.prototype.toString.call(urls) === '[object Array]') {
+        if (urls.length && Object.prototype.toString.call(urls[0]) === '[object Array]') {
+          groups = urls;
+        } else {
+          for (var i = 0; i < urls.length; i++) groups.push([urls[i]]);
+        }
+      }
+      for (var g = 0; g < groups.length; g++) loadGroup(groups[g]);
+      evaluate();
+    },
+        /* * 收尾回调（已收尾则同步执行） */
+    done: function (cb) {
+      if (typeof cb !== 'function') return;
+      if (state.done) { try { cb(); } catch (e) {} return; }
+      document.addEventListener('pageloader:done', function () {
+        try { cb(); } catch (e) {}
+      }, { once: true });
+    },
+    isDone: function () { return state.done; },
+    MIN_SHOW: MIN_SHOW,
+    MAX_WAIT: MAX_WAIT
+  };
+
+  function init() {
+    overlay = document.getElementById('page-loader');
+    var groups = collectFromDom();
+    for (var i = 0; i < groups.length; i++) loadGroup(groups[i]);
+    evaluate();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+<script>
+
+/* 内部自带的 readyState 分支此时走 else init() 路径，不重复注册。 */
+document.addEventListener('DOMContentLoaded', function () {
+/*
+ * * 2. 所有 addEventListener 均使用被动事件监听（能力检测后回退）。 * 3. resize 使用 150ms debounce，并在尺寸变化后重新检测滚动容器。
+ * * 4. 缓存 DOM 引用与事件 handler，提供 destroy() 与 beforeunload 自动清理。 * 5. 复用 window.iGEMUtils 中的通用工具函数，
+ * 移除私有实现。
+ */
+(function () {
+  'use strict';
+
+  if (!window.iGEMUtils) {
+    console.error('[ScrollProgress] 缺少依赖：请先加载 static/js/utils.js');
+    return;
+  }
+
+  const Utils = window.iGEMUtils;
+
+    /* * * 模块配置。 * @type {{ DEBUG_MODE: boolean, RESIZE_DEBOUNCE: number }} */
+  const CONFIG = {
+    DEBUG_MODE: false,
+    RESIZE_DEBOUNCE: 150
+  };
+
+    /* * * 模块状态。 * @type {{ * scrollInfo: { element: Window|Element, isWindow: boolean }|null, * isInitialized: boolean, * fillElement: HTMLElement|null, * scrollHandler: function|null, * resizeHandler: function|null * }} */
+  const state = {
+    scrollInfo: null,
+    isInitialized: false,
+    fillElement: null,
+    scrollHandler: null,
+    resizeHandler: null,
+    // 缓存滚动尺寸，避免在每次滚动帧重复读取 scrollHeight/clientHeight（强制同步布局）
+    metrics: { clientHeight: 0, totalHeight: 0 }
+  };
+
+    /* * * 在调试模式下输出日志。 * @param {string} message 日志消息 * @param {any} [data] 附加数据 */
+  function log(message, data) {
+    if (CONFIG.DEBUG_MODE) {
+      console.log('[ScrollProgress]', message, data !== undefined ? data : '');
+    }
+  }
+
+    /* * * 获取被动事件监听选项。 * @returns {boolean|{ passive: true }} */
+  function getPassiveOption() {
+    return Utils.supportsPassiveEvents() ? { passive: true } : false;
+  }
+
+    /* * * 刷新缓存的滚动尺寸（scrollHeight / clientHeight）。 * 仅在初始化、resize、以及资源加载导致布局变化时调用， * 避免把这两个会触发强制同步布局的读取放进每帧滚动热路径。 */
+  function refreshMetrics() {
+    const scrollInfo = state.scrollInfo;
+    if (!scrollInfo) return;
+    state.metrics.clientHeight = Utils.getClientHeight(scrollInfo.element, scrollInfo.isWindow);
+    state.metrics.totalHeight = Utils.getScrollHeight(scrollInfo.element, scrollInfo.isWindow);
+  }
+
+    /* * * 计算当前滚动进度百分比。 * 热路径只读取 scrollTop（不触发强制同步布局），尺寸使用缓存。 * @returns {number} 0-100 之间的整数 */
+  function calculateProgress() {
+    const scrollInfo = state.scrollInfo;
+    if (!scrollInfo) return 0;
+
+    const scrollTop = Utils.getScrollPosition(scrollInfo.element, scrollInfo.isWindow);
+    const maxScroll = Math.max(1, state.metrics.totalHeight - state.metrics.clientHeight);
+    const scrollPercent = (scrollTop / maxScroll) * 100;
+
+    return Math.round(Math.min(100, Math.max(0, scrollPercent)));
+  }
+
+    /* * * 更新进度条填充高度。 * @param {number} progressPercent 0-100 之间的百分比 */
+  function updateFill(progressPercent) {
+    if (state.fillElement) {
+      state.fillElement.style.height = progressPercent + '%';
+    }
+  }
+
+    /* * * 更新滚动进度条。 */
+  function updateScrollProgress() {
+    updateFill(calculateProgress());
+  }
+
+    /* * * resize 完成后重新检测滚动容器并刷新进度。 */
+  function onResize() {
+    state.scrollInfo = Utils.detectScrollContainer();
+    refreshMetrics();
+    updateScrollProgress();
+  }
+
+    /* * * 清理所有事件监听与引用。 */
+  function destroy() {
+    const passiveOption = getPassiveOption();
+
+    if (state.scrollHandler) {
+      state.scrollHandler.cancel();
+    }
+    if (state.scrollHandler && state.scrollInfo && state.scrollInfo.element) {
+      state.scrollInfo.element.removeEventListener('scroll', state.scrollHandler, passiveOption);
+    }
+    if (state.resizeHandler) {
+      window.removeEventListener('resize', state.resizeHandler, passiveOption);
+    }
+
+    state.scrollInfo = null;
+    state.fillElement = null;
+    state.isInitialized = false;
+    state.scrollHandler = null;
+    state.resizeHandler = null;
+  }
+
+    /* * * 初始化模块。 */
+  function init() {
+    if (state.isInitialized) {
+      return;
+    }
+
+    log('初始化中...');
+
+    // 仅当页面已存在 #scroll-progress-bar 时才初始化，避免与新右侧面板冲突
+    const barElement = document.getElementById('scroll-progress-bar');
+    if (!barElement) {
+      log('未找到 #scroll-progress-bar，跳过初始化');
+      return;
+    }
+
+    state.fillElement = document.getElementById('scroll-progress-fill');
+    state.scrollInfo = Utils.detectScrollContainer();
+    state.isInitialized = true;
+    refreshMetrics();
+
+    state.scrollHandler = Utils.rafThrottle(updateScrollProgress);
+    state.resizeHandler = Utils.debounce(onResize, CONFIG.RESIZE_DEBOUNCE);
+
+    const passiveOption = getPassiveOption();
+    state.scrollInfo.element.addEventListener('scroll', state.scrollHandler, passiveOption);
+    window.addEventListener('resize', state.resizeHandler, passiveOption);
+    // 图片/字体加载完成后布局可能变化，刷新缓存尺寸再补一次进度
+    window.addEventListener('load', function () {
+      refreshMetrics();
+      updateScrollProgress();
+    }, passiveOption);
+
+    updateScrollProgress();
+
+    log('初始化完成');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // 页面卸载时自动清理
+  window.addEventListener('beforeunload', destroy);
+
+  // 暴露公共 API
+  window.ScrollProgressBar = {
+    update: updateScrollProgress,
+    destroy: destroy,
+    setDebugMode: function (enabled) {
+      CONFIG.DEBUG_MODE = !!enabled;
+    },
+    getState: function () {
+      return {
+        isInitialized: state.isInitialized,
+        hasBar: !!document.getElementById('scroll-progress-bar'),
+        hasFill: !!state.fillElement,
+        scrollContainer: state.scrollInfo ? (state.scrollInfo.isWindow ? 'window' : state.scrollInfo.element.className || state.scrollInfo.element.tagName) : 'none'
+      };
+    }
+  };
+})();
+}, { once: true });
+
+</script>
+  
+<script>
+/*
+ * * 2) 「图片啪地出现」—— 交给本脚本：尚未解码完成的正文图片先瞬时置为 opacity 0， * 解码完成（load）后淡入；已在缓存/已解码的图片不参与，避免"闪一下"。
+ * * * 边界（改之前先读 README §5.14.2 与第八节约束）： * - 只处理 <main> 内的 <img>：导航、页脚、加载遮罩（page-loader）、返回顶部等 * 已有自己动画体系的组件一律不掺和；
+ * * - data-no-reveal（加在 img 自身或任意祖先上）可让该区域退出； * - prefers-reduced-motion: reduce 时整个脚本不生效，
+ * 图片直接显示； * - 脚本 404 / 被拦截时页面照常（CSS 默认不隐藏任何图片）； * - 数据驱动页（members 等）中途插入的图片由 MutationObserver 兜住，
+ * * window.load 后 + 3s 宽限即停止观察，不在滚动期常驻。
+ */
+(function () {
+  'use strict';
+
+  var CLS = 'media-reveal';
+  var PENDING = CLS + '--pending';
+  var GRACE_MS = 3000;
+
+  function prefersReducedMotion() {
+    var u = window.iGEMUtils;
+    if (u && typeof u.prefersReducedMotion === 'function') return u.prefersReducedMotion();
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function eligible(img) {
+    if (!img || img.tagName !== 'IMG') return false;
+    if (img.hasAttribute('data-no-reveal')) return false;
+    if (img.closest && img.closest('[data-no-reveal]')) return false;
+    if (!img.closest || !img.closest('main')) return false;
+    return true;
+  }
+
+    /* * 把一张「还没解码完」的图片置为待出现，解码完成后淡入 */
+  function arm(img) {
+    if (!eligible(img)) return;
+    if (img.classList.contains(PENDING)) return;
+    // 已解码完成（含缓存命中）的图片直接跳过：闪一下比直接显示更糟
+    if (img.complete && img.naturalWidth > 0) return;
+
+    img.classList.add(CLS, PENDING);
+
+    function done() {
+      img.removeEventListener('load', done);
+      img.removeEventListener('error', done);
+      img.classList.remove(PENDING);
+    }
+    img.addEventListener('load', done);
+
+    img.addEventListener('error', done);
+  }
+
+  function armAll(root) {
+    var scope = root || document;
+    var imgs = scope.querySelectorAll ? scope.querySelectorAll('main img') : [];
+    Array.prototype.forEach.call(imgs, arm);
+  }
+
+  function init() {
+    if (prefersReducedMotion()) return; // 降级：什么都不做，图片全部直接可见
+    armAll(document);
+
+    // 数据驱动页会在 DOMContentLoaded 之后插入图片；只在加载窗口内观察，随后断开
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function (records) {
+        for (var i = 0; i < records.length; i++) {
+          var added = records[i].addedNodes;
+          for (var j = 0; j < added.length; j++) {
+            var node = added[j];
+            if (node.nodeType !== 1) continue;
+            if (node.tagName === 'IMG') arm(node);
+            else if (node.querySelectorAll) armAll(node);
+          }
+        }
+      });
+      observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+
+      var stop = function () { window.setTimeout(function () { observer.disconnect(); }, GRACE_MS); };
+      if (document.readyState === 'complete') stop();
+      else window.addEventListener('load', stop, { once: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+<script>
+/*
+ * back-to-top.js — 全站「返回顶部」按钮行为 * * 与 markup（partials/back-to-top.njk）/ 样式（css/components/back-to-top.css）
+ * 配套： * 1) 滚过一屏（scrollY > 阈值）后给按钮打 .back-to-top--visible，滚回顶部自动隐藏； * 2) 点击平滑滚回顶部；prefers-reduced-motion 下直接跳（不做长动画）
+ * * 3) 键盘可达（<button> + aria-label），隐藏时用 visibility 移出可聚焦序列； * 4) 只用被动滚动监听 + rAF 节流，不阻塞滚动；
+ * 离开页面时解绑。
+ */
+(function () {
+  'use strict';
+
+  var SHOW_AFTER = 240;   // 滚过多少 px 后出现（≈一屏内的起手距离）
+
+  function prefersReducedMotion() {
+    try {
+      if (window.iGEMUtils && window.iGEMUtils.prefersReducedMotion) {
+        return window.iGEMUtils.prefersReducedMotion();
+      }
+      return !!(window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function init() {
+    var btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    var ticking = false;
+
+    function sync() {
+      ticking = false;
+      btn.classList.toggle('back-to-top--visible', window.scrollY > SHOW_AFTER);
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(sync);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    sync();   // 首屏若已带锚点跳转（#xxx）也能正确判定
+
+    btn.addEventListener('click', function () {
+      if (prefersReducedMotion() || typeof window.scrollTo !== 'function') {
+        window.scrollTo(0, 0);
+        return;
+      }
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (e) {
+        window.scrollTo(0, 0);   // 极老浏览器：直接跳
+      }
+      // 收尾把焦点还给文档开头，键盘用户不会停在屏幕外的按钮上
+      var main = document.querySelector('main');
+      if (main) {
+        main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
+    });
+
+    window.addEventListener('pagehide', function () {
+      window.removeEventListener('scroll', onScroll);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+  
+  
+
+</body>
+</html>

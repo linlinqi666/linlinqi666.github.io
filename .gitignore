@@ -82,7 +82,6 @@ ehthumbs.db
 # ======================================
 # SZPU-2026 Wiki 项目专属
 # ======================================
-/docs/
 /dogfood-output/
 *.md
 
@@ -161,6 +160,10 @@ Gemfile.lock
 # 保留项目指导文档（否则会被上方的 *.md 规则忽略）
 !README.md
 
+# 长阅读文档分册目录（2026-10-17 由 README.md 拆出，必须入库）
+!docs/
+!docs/**
+
 # 保留正式治理契约与台账（否则会被上方的 *.md 规则忽略）
 !AGENTS.md
 !DOCUMENT_MAP.md
@@ -202,8 +205,25 @@ static/js/pdfjs/
 # 与 §17.2「只入库被引用且唯一的那一份」一致。见 README 第 17.2 / 17.3 节。
 /static/image/**/源图片/
 
-# 实验方案素材目录：`static/expriments/` 存放各功能模块的方案文档（.md）、原始 docx
-# 与实验影像素材，是**分析材料**而非站点运行资源——全仓库 0 引用，且不经 Eleventy
-# 构建（input 只到 `src/`）。整目录不入库，本地物理保留。
-# 见 README 第 5.14 节（四模块映射）与第 17.2 节（入库边界）。
+# 实验方案素材目录：存放各功能模块的方案文档（.md）、原始 docx 与实验影像素材，
+# 是**分析材料**而非站点运行资源——不经 Eleventy 构建（input 只到 `src/`）。
+# 整目录不入库，本地物理保留。
+#
+# 拼写坑：仓库里的实际目录名是 **expriments（少一个 e）**，下面两条必须并存。
+# 只写正确拼写会让整个目录漏出忽略规则（2026-10-17 复核确认）。
 /static/expriments/
+/static/experiments/
+
+# HADDOCK/ClusPro docking intermediates (once 10 GB in a single dir). Scoped to the material
+# dir on purpose: runtime structures static/data/dry-lab/model/structures/*.pdb must stay tracked.
+/static/expriments/**/*.pdb
+/static/expriments/**/*.seed
+/static/expriments/**/*.contacts
+/static/expriments/**/*.cns
+/static/experiments/**/*.pdb
+/static/experiments/**/*.seed
+/static/experiments/**/*.contacts
+/static/experiments/**/*.cns
+
+# browser profile dumps accidentally saved into material dirs
+edge-profile*/

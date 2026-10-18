@@ -61,14 +61,22 @@
       // model-assumptions / model-data-parameters / model-results / model-validation，
       // 小节 model-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
       'model-',
-      // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）
+      // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）；
+      // 同前缀 parts- 亦用于 Wet Lab › Parts 页（2026-10-18 改到标准内容页骨架：
+      // 卡片 parts-overview / parts-flow / parts-chassis / parts-gpa1 / parts-reporter /
+      // parts-vectors，表格每行一个 parts-<registry slug>）
       'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution',
       // dry-lab Hardware 页正文小节（2026-10-15：卡片 hardware-overview /
       // hardware-problem / hardware-worth / hardware-origin / hardware-goals / hardware-iterations /
       // hardware-log / hardware-architecture / hardware-specifications / hardware-bom /
       // hardware-instrument / hardware-test-plan / hardware-challenges / hardware-future，
       // 小节 hardware-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
-      'hardware-'
+      'hardware-',
+      // Human Practices › Sustainability 页（2026-10-18：卡片 sustainability-overview /
+      // sustainability-sdg3 / sustainability-sdg4 / sustainability-sdg9 / sustainability-sdg17 /
+      // sustainability-summary / sustainability-references，小节 sustainability-<语义>；
+      // 未登记则滚动高亮失效，见 README §5.14.2）
+      'sustainability-'
     ]
   };
 

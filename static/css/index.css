@@ -1017,17 +1017,20 @@ body.home-page {
   color: var(--color-text-light);
 }
 
+/* 侧栏高度/滚动的职责划分（2026-10-18 统一）：
+   目录区的高度限制与内部滚动由 navigation.css 的 .description-nav-wrapper 负责
+   （max-height: calc(100vh - 18.75rem) + overflow-y:auto），发酵容器因此常驻可见。
+   本文件不要再给 .description-sidebar 加 max-height/overflow：侧栏一旦自身可滚，
+   长目录页（Model）底部发酵罐与进度条会被顶出视野，只能靠侧栏内部滚动才看得到。 */
 .description-sidebar,
 .log-sidebar,
 .hp-sidebar {
-  width: 260px;
-  min-width: 260px;
+  /* 宽度由 navigation.css 的 --desc-sidebar-min/max-width 决定（17.5–20rem 内容自适应）。
+     根站只在首页加载本文件，flask 是全站加载，此处若再写死宽度会覆盖导航样式，
+     导致正文栏比根站宽（2026-10-16 同步 index.css 时再次删除）。 */
   position: -webkit-sticky;
   position: sticky;
   top: 120px;
-  max-height: calc(100vh - 160px);
-  overflow: hidden;
-  overflow-y: auto;
 }
 
 .description-sidebar .sidebar-header,
@@ -1037,6 +1040,71 @@ body.home-page {
   padding-bottom: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
   border-bottom: 1px solid rgba(139, 90, 43, 0.1);
+}
+
+/* ================================================== */
+/* 侧栏内部滚动：目录自己滚，发酵容器常驻底部               */
+/* 2026-10-18 全站统一（此前只有 contribution/sustainability */
+/* 两页有页面级规则，长目录页如 Model 底部发酵罐被顶出视野）。*/
+/* 起因：目录展开后总高超过视口（Model 实测 导航 673px +    */
+/* 进度 178px > 可视 880px），侧栏自身 overflow-y:auto 会把   */
+/* 底部发酵罐与进度条一起推到折叠线以下。                   */
+/* 做法：侧栏锁高 + 纵向 flex 且自身不滚；目录区 flex:1 内部  */
+/* 滚动；进度容器 flex:0 常驻底部。                          */
+/* 线上实测（注入同样规则）：导航区 client 556 / scroll 673， */
+/* 进度区 457–635 始终在视口内，滚动 3000px 后依然可见。      */
+/* ================================================== */
+.description-sidebar {
+  display: flex;
+  flex-direction: column;
+  /* 锁高是 flex 生效的前提：没有上界时 flex:1 无可压缩空间 */
+  max-height: calc(100vh - 12rem);
+  overflow: hidden;
+}
+
+/* 装饰层（.yeast-decoration 等）与其他块不参与压缩 */
+.description-sidebar > *:not(.description-nav-wrapper) {
+  flex: 0 0 auto;
+}
+
+.description-sidebar .description-nav-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 0.35rem;
+  scrollbar-width: thin;
+  scrollbar-color: #A9743A rgba(139, 90, 43, 0.08);
+}
+
+/* 主题化滚动条：米黄轨道 + 棕色滑块，可拖动 */
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-track {
+  background: rgba(139, 90, 43, 0.08);
+  border-radius: 999px;
+}
+
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #D4A574 0%, #A9743A 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+}
+
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-thumb:hover,
+.description-sidebar .description-nav-wrapper::-webkit-scrollbar-thumb:active {
+  background: #8B5A2B;
+}
+
+/* 发酵容器固定在侧栏底部，不参与目录滚动 */
+.description-sidebar .progress-section {
+  flex: 0 0 auto;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
 }
 
 /* ================================================== */
@@ -1059,6 +1127,18 @@ body.home-page {
     min-width: 100%;
     position: static;
     max-height: none;
+  }
+
+  /* 窄屏侧栏改为常规流：复位桌面端的纵向 flex 与内部滚动 */
+  .description-sidebar {
+    display: block;
+    overflow: visible;
+  }
+
+  .description-sidebar .description-nav-wrapper {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 }
 
@@ -1893,33 +1973,122 @@ html.home-scroll-snap #footer.section-footer {
 .art-stage--project-intro .art--project-intro-mascot { left: 30%; top: 20.5%; height: 77%; width: auto; z-index: 4; }
 .art-stage--project-intro .art--project-intro-sparkle { left: 42.7%; top: 62.8%; width: 5.4%; }  /* 黄色星芒 */
 
-/* ---------- dbtl-cycle：Research content（流程图） ---------- */
+/* ---------- dbtl-cycle：Research content（PAGER 原理滚动叙事） ---------- */
 /* 2026-10-07：波浪条改用美术「细」版 shared-wave-5.webp（1080×95，宽高比 11.4:1），
    素材已按 alpha 紧裁 → 元素满宽贴底、高度走原比例即可；不再用「画布高分数定位」。
    同时退出浮动动画列表：贴底横条上下浮动会在底缘露出米黄底缝。 */
 .art-stage--dbtl-cycle .art--dbtl-cycle-wave { left: 0; bottom: 0; width: 100%; height: auto; animation: none; }
-.art-stage--dbtl-cycle .art--dbtl-cycle-title { left: 3.7%; top: 7.9%; width: 37.4%; }     /* 标题文字（左上） */
-/* 流程图：原图里它坐在白色圆角卡片上；切片是 RGB 无 alpha 的白底直角矩形，
-   所以圆角与描边必须由 CSS 补，否则会是一块方角白块（见 README §5.17 根因 5） */
-.art-stage--dbtl-cycle .art--dbtl-cycle-diagram {
-  left: 46.7%;
-  top: 13.2%;
-  width: 48.5%;
-  border-radius: 14px;
-  border: 1px solid rgba(120, 160, 200, 0.35);
-  box-shadow: 0 4px 18px rgba(90, 130, 170, 0.10);
-}
-.art-stage--dbtl-cycle .art--dbtl-cycle-mascot { left: 1%; bottom: 0; width: 30%; }        /* 笔记本吉祥物（贴底锚定） */
+.art-stage--dbtl-cycle .art--dbtl-cycle-title { left: 3.7%; top: 7.9%; width: 37.4%; z-index: 7; }  /* 标题（左上）；抬层避免被飞行的 HA 压住 */
+.art-stage--dbtl-cycle .art--dbtl-cycle-mascot { left: 1%; bottom: 0; width: 27%; z-index: 6; }  /* 笔记本吉祥物（贴底锚定）；压在飞行抗原之上＝抗原从它身后经过 */
 
-/* ---------- dbtl-cycle：原理示意图「想法泵出」入场（REQ-20261002-001） ---------- */
-/* 首次滑入本屏：示意图以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大。
-   隐藏态只由 JS 加 js-pump-armed 类——无 JS / prefers-reduced-motion 直接呈现完整静态布局。
-   动画期间示意图升到 z-index 4：DOM 里吉祥物在其后（默认盖住它），
-   不抬层的话小图会藏在头部后面而不是"从头部泵出"。收尾时随类一起还原。 */
-.js-pump-armed .art--dbtl-cycle-diagram {
-  opacity: 0;
-  z-index: 4;
-  will-change: transform, opacity;
+/* 原理说明（左列，吉祥物头顶上方）。措辞按「项目设计为」口径——讲设计机制，
+   不讲已获得的实验结论。 */
+.art-stage--dbtl-cycle .art--dbtl-cycle-note {
+  left: 3.7%;
+  top: 26%;
+  width: 30%;
+  z-index: 6;
+  font-family: 'Arial Rounded MT Bold', 'Baloo 2', 'Segoe UI', var(--font-sans, sans-serif);
+  text-wrap: pretty;
+}
+.pager-note__lead {
+  margin: 0 0 0.55em;
+  font-size: clamp(0.92rem, 1.28vw, 1.32rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #4d9fd8;
+}
+.pager-note__body {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.02vw, 1.06rem);
+  font-weight: 400;
+  line-height: 1.68;
+  color: #5f7182;
+}
+
+/* ---------- dbtl-cycle：PAGER 原理滚动叙事（替换原流程示意图） ----------
+   三张素材（hM1Dq / MT1 / HA）由美术在同一张 1600×1600 画布上分层导出，
+   坐标天然对齐：HA 图层里抗原本体的中心 (694.5, 426)、MT1 图层里抑制药丸的中心
+   (1000, 444) 都落在这套画布坐标上。因此所有图层共用同一个方框（--pager-size）
+   与各自的 transform-origin，运动一律只写 translate/rotate/scale，
+   位移量由 pager-scroll-story.js 运行时量测舞台尺寸后换算。 */
+.art-stage--dbtl-cycle {
+  --pager-size: min(94vh, 80vw);   /* 画布方框边长（可见受体约占其 54% 高、63% 宽） */
+  --pager-cx: 68%;                 /* 方框中心偏右：左列留给标题与原理说明 */
+  --pager-cy: 50%;
+}
+/* 轨道总高必须声明在本屏（不能声明在舞台子元素上：自定义属性只向下继承）。
+   叙事行程 = 该值 - 100vh ≈ 4 屏，比首版 260vh 放慢约 1.5 倍。 */
+#dbtl-cycle { --dbtl-track: 500vh; }
+.pager__layer {
+  position: absolute;
+  left: var(--pager-cx);
+  top: var(--pager-cy);
+  width: var(--pager-size);
+  height: var(--pager-size);
+  margin: calc(var(--pager-size) / -2) 0 0 calc(var(--pager-size) / -2);
+  transform-origin: var(--ox, 50%) var(--oy, 50%);
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+}
+.pager__receptor { --ox: 50%;     --oy: 50%;     z-index: 2; }  /* hM1Dq 本体：以画布中心为基准 */
+.pager__mt1      { --ox: 62.38%;  --oy: 27.88%;  z-index: 4;    /* MT1 本体中心 (1000,444)/1600 */ }
+.pager__ha       { --ox: 43.41%;  --oy: 26.63%;                 /* HA 本体中心 (694.5,426)/1600 */ }
+.pager__ha--bind { z-index: 5; }                                 /* 结合到 Nb 的那一个压在最上 */
+
+/* 静态终态（无 JS / reduced-motion / 窄屏矮屏）：HA 图层的天然位置就是 Nb 结合位
+   （抗原正好坐在 Nb 方框顶上），故无需位移；MT1 需要从素材原生倾角转回横置，
+   并落到受体顶面两颗 DCZ 小球之间的空档（画布 866,825，旋转后收 12%；
+   位移 = (866-1000, 825-444)/1600）。 */
+.pager__mt1 { transform: translate(-8.375%, 23.8125%) rotate(40deg) scale(0.88); }
+.pager__ha { opacity: 0; }        /* 环境中的其余抗原只服务于动画，静态版面不出现 */
+.pager__ha--bind { opacity: 1; }
+
+/* armed 隐藏态只由 JS 加类（pager-scroll-story.js），默认 CSS 不隐藏任何内容 */
+.js-pager-story .pager__receptor { opacity: 0; clip-path: inset(0 0 0 100%); }
+.js-pager-story .pager__mt1,
+.js-pager-story .pager__ha { opacity: 0; }
+/* 只在轨道钉住期间提层：6 个 900×900 的合成层常驻会白占显存 */
+html.pager-story-pinned .pager__layer { will-change: transform, opacity; }
+
+/* 滚动轨道：把本屏拉高成 360vh 的轨道，舞台 sticky 钉在视口顶，滚动进度即动画进度
+   （钉住期间页面位置锁死，视觉不随滚动漂移）。
+   轨道本身由 <html class="pager-story-track"> 开——这个类只由 pager-scroll-story.js 在
+   确认「桌面宽视口 + 允许动效」后添加，所以无 JS / reduced-motion / 窄屏矮屏下本屏仍是
+   普通 100vh 吸附屏，不会让用户在一段 3.6 屏高的静止画面里空滚。 */
+html.pager-story-track #dbtl-cycle {
+  display: block;
+  min-height: var(--dbtl-track, 360vh);
+  scroll-snap-align: none;
+}
+html.pager-story-track #dbtl-cycle .art-stage--dbtl-cycle {
+  position: sticky;
+  inset: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+/* 钉住期间必须关掉整页 mandatory 吸附：相邻两屏之间被撑出 260vh 空档，
+   浏览器会把滚动位置反复拉回吸附点，叙事动画无法在中途停留。
+   放开/恢复由 pager-scroll-story.js 的 IntersectionObserver 判定（轨道顶部进入
+   「视口底往下 35%」即放开，轨道底部完全滚出视口即恢复），不会产生位移跳变。 */
+html.home-scroll-snap.pager-story-pinned { scroll-snap-type: none; }
+
+/* 兜底：用户中途打开「减少动态效果」时把已加高的轨道还原成普通吸附屏 */
+@media (prefers-reduced-motion: reduce) {
+  html.pager-story-track #dbtl-cycle {
+    display: flex;
+    min-height: 100vh;
+    scroll-snap-align: start;
+  }
+  html.pager-story-track #dbtl-cycle .art-stage--dbtl-cycle {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+  }
 }
 
 /* ---------- influenza-burden：甲流负担（数据沉浸屏，REQ-20261003-001） ---------- */
@@ -2615,9 +2784,14 @@ html.home-scroll-snap #footer.section-footer {
      呈"景深"效果而不是"遮挡"效果（用户 2026-10-03 实机反馈）。 */
   .art-stage--project-intro .intro-pills { top: 17%; height: 46%; --intro-pill-h: clamp(12px, 3.4vw, 18px); --intro-fade: 16%; }
 
-  /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → 流程图近满宽居中 → 波浪+笔记本吉祥物贴底 */
+  /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → PAGER 原理图居中偏上 → 波浪+笔记本吉祥物贴底。
+     窄屏不做滚动轨道（snap 本就关闭），直接呈现静态终态；方框按视口收小并居中，
+     避开左下角的笔记本吉祥物。 */
   .art-stage--dbtl-cycle .art--dbtl-cycle-title   { left: 4%;  top: 4%;  width: 58%; }
-  .art-stage--dbtl-cycle .art--dbtl-cycle-diagram { left: 6%;  top: 18%; width: 88%; }
+  /* 说明块：竖屏改满宽横排，夹在标题与原理图之间（桌面那条 30% 窄栏会竖成一条）
+     优先级要比上面的桌面规则高，故用 #dbtl-cycle 前缀 */
+  #dbtl-cycle .art-stage--dbtl-cycle .art--dbtl-cycle-note { left: 4%; top: 11%; width: 88%; }
+  .art-stage--dbtl-cycle { --pager-size: min(40vh, 78vw); --pager-cx: 50%; --pager-cy: 45%; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-wave    { left: 0;   bottom: 0;  width: 100%; height: auto; }
   .art-stage--dbtl-cycle .art--dbtl-cycle-mascot  { left: 0;   top: auto; bottom: 0; width: 42%; }
 
@@ -2787,60 +2961,70 @@ html.home-scroll-snap #footer.section-footer {
    - 标题泡泡从 555px 收到 min(38%, 340px)（2.0 宽高比下 ≈170px 高）；
    - 颜色统一走本屏主体蓝色系（#1f6ea6 / #2f6f96 / #6b8aa3），去掉棕色系与
      渐变底；光晕（box-shadow）与 hover 上浮按用户要求移除，回归正常排版。 */
+/* 2026-10-17b：标题字图与副题胶囊按用户要求放大到原来的 1.5 倍
+   （340→510 / 640→960；矮视口档 280→420 / 520→780 同步放大 1.5 倍）。 */
 .fv-title-img {
   display: block;
   margin: 0 auto clamp(2px, 0.7vh, 6px);
-  width: min(38%, 340px);
+  width: min(57%, 510px);
   height: auto;
 }
 
 .fv-sub-img {
   display: block;
   margin: 0 auto clamp(6px, 1.3vh, 14px);
-  width: min(72%, 640px);
+  width: min(92%, 960px);
   height: auto;
 }
 
-/* 2026-10-06f：本屏内容加宽到约 60% 页宽，段落/列表间距拉开；
+/* 2026-10-06f：本屏内容加宽到页宽约 92%（用户手绘稿要求整体铺开到版心两侧）；
    2026-10-06h：正文改主题色——与 influenza-burden 屏同口径的主体蓝压暗版
    （#2f6f96 / 次要 #4f86a8），不用 --color-echo-blue 纯色：米黄底上长段正文
    对比度不足（≈2.6:1），压暗后 ≈4.9:1 可读。 */
-#future-vision .yeast-screen__content { max-width: min(60vw, 1180px); color: #2f6f96; }
+#future-vision .yeast-screen__inner { width: 94%; max-width: 1560px; }
+#future-vision .yeast-screen__content { max-width: min(92vw, 1500px); color: #2f6f96; }
 #future-vision .yeast-screen__content > p { margin-block: 0.8em; line-height: 1.8; }
 #future-vision .yeast-screen__list { margin-block: 1em; }
 #future-vision .yeast-screen__list li { margin-bottom: 0.5em; line-height: 1.7; }
 #future-vision .yeast-screen__list strong { color: #1f6ea6; }
 #future-vision .yeast-screen__placeholder { color: #4f86a8; }
 
-/* 2026-10-15：future-vision 改「四角分布 + 中心核心愿景」平面四象限
-   3×3 网格：四角放四大扩展支点卡片，第 2 行中列放核心愿景；构成以核心愿景为中心的辐射式布局。
-   中屏（≤900px）折成 2 列、核心愿景横贯；窄屏（≤600px）单列堆叠、核心愿景置顶。
-   2026-10-16：间距/内距/字号全部 vh 驱动，矮视口自动收紧（见文末 max-height 块）。 */
+/* ---------- future-vision 五块内容（2026-10-17b 用户定版） ----------
+   版式：纵向编排——核心愿景单独一列横贯在四块**上方**（不再夹在四块中间），
+        居中、粗体、字号明显大于分点；四个分点在其下排成 2×2 **等宽等高**网格
+        （grid 行用 1fr，两行等高，不再出现一长一短）。
+   去 chrome：无外框、无盒底、无圆角、无投影，纯文字排版。
+   出现顺序：1 核心愿景 → 2 左上 → 3 左下 → 4 右下 → 5 右上（transition-delay 实现），
+        五块整体入场约 8s（用户要求「维持在 8 秒左右，不要太快」）。
+   字号/间距沿用 vh 驱动 clamp：视口越矮收得越紧，整屏压在 100vh 内。 */
 #future-vision .fv-quadrants {
   display: grid;
-  grid-template-columns: 1fr minmax(220px, 0.92fr) 1fr;
-  grid-template-rows: auto auto auto;
-  align-items: center;
-  justify-items: center;
-  gap: clamp(0.5rem, 1.8vh, 1.1rem);
-  max-width: 1180px;
-  margin: clamp(0.4rem, 1.2vh, 0.9rem) auto 0;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    "core core"
+    "tl tr"
+    "ml mr";
+  align-items: stretch;
+  column-gap: clamp(1.5rem, 6vw, 6rem);
+  row-gap: clamp(0.8rem, 3vh, 2rem);
+  max-width: min(86vw, 1240px);
+  margin: clamp(0.9rem, 2.4vh, 1.8rem) auto 0;
+  text-align: left;
 }
 
-/* 2026-10-16：五张卡片统一扁平样式——同底色、同描边、同圆角，无投影无渐变；
-   核心愿景仅用描边粗细区分，不再用棕色渐变 + 大投影。 */
 #future-vision .fv-card {
   width: 100%;
-  max-width: min(360px, 100%);
-  padding: clamp(0.55rem, 1.6vh, 0.95rem) clamp(0.75rem, 1.8vw, 1.1rem);
-  background: #fffdf8;
-  border: 1px solid rgba(31, 110, 166, 0.22);
-  border-radius: 0.9rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
 }
-#future-vision .fv-card--tl { grid-area: 1 / 1; }
-#future-vision .fv-card--tr { grid-area: 1 / 3; }
-#future-vision .fv-card--bl { grid-area: 3 / 1; }
-#future-vision .fv-card--br { grid-area: 3 / 3; }
+#future-vision .fv-card--tl { grid-area: tl; }
+#future-vision .fv-card--tr { grid-area: tr; }
+#future-vision .fv-card--ml { grid-area: ml; }
+#future-vision .fv-card--mr { grid-area: mr; }
 
 #future-vision .fv-card__title {
   margin: 0 0 clamp(0.25rem, 0.8vh, 0.45rem);
@@ -2852,98 +3036,117 @@ html.home-scroll-snap #footer.section-footer {
 #future-vision .fv-card__body {
   margin: 0;
   font-size: clamp(0.78rem, 1.6vh, 0.9rem);
-  line-height: 1.5;
+  line-height: 1.55;
   color: #2f6f96;
 }
 #future-vision .fv-card__body small { color: #6b8aa3; font-size: 0.82em; }
 
+/* 核心愿景：置于四块上方、居中；粗体 + 放大字号，与分点形成层级差 */
 #future-vision .fv-core {
-  grid-area: 2 / 2;
+  grid-area: core;
+  justify-self: center;
   width: 100%;
-  max-width: 380px;
-  padding: clamp(0.7rem, 1.9vh, 1.1rem) clamp(0.8rem, 2vw, 1.2rem);
+  max-width: min(78%, 860px);
+  padding: 0;
   text-align: center;
-  background: #fffdf8;
-  border: 1.5px solid rgba(31, 110, 166, 0.45);
-  border-radius: 1.1rem;
+  background: none;
+  border: 0;
+  border-radius: 0;
 }
 #future-vision .fv-core__text {
   margin: 0;
-  font-size: clamp(0.82rem, 1.6vh, 0.96rem);
+  font-size: clamp(1rem, 2.2vh, 1.28rem);
   line-height: 1.55;
-  font-weight: 500;
-  color: #2f6f96;
+  font-weight: 700;
+  color: #1f6ea6;
+}
+
+/* 入场：自下而上淡入，五块按 1→5 错峰，单块 1.1s、总跨度约 7.8s。
+   2026-10-17c：只在首次进入时播放一次（用户要求）——隐藏态挂在
+   html.fv-reveal-arm 下，该标记由 head 内联脚本按 localStorage 决定是否打上；
+   已播过 / 减少动效 / 无 JS 时没有该标记，五块默认可见（终态），不再等 8s。
+   延迟选择器必须与上面的 .reveal 规则同优先级并放在它之后，
+   否则会被 transition 简写里的 delay:0s 覆盖——实测过，错峰会整体失效。 */
+html.fv-reveal-arm #future-vision .fv-quadrants .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 1.1s var(--ease-smooth),
+    transform 1.1s var(--ease-smooth);
+}
+html.fv-reveal-arm #future-vision .fv-quadrants .reveal.reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+html.fv-reveal-arm #future-vision .fv-quadrants .fv-core    { transition-delay: 0s; }     /* 1 */
+html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--tl { transition-delay: 1.8s; }  /* 2 */
+html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--ml { transition-delay: 3.6s; }  /* 3 */
+html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--mr { transition-delay: 5.4s; }  /* 4 */
+html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--tr { transition-delay: 7.2s; }  /* 5 */
+
+@media (prefers-reduced-motion: reduce) {
+  html.fv-reveal-arm #future-vision .fv-quadrants .reveal,
+  html.fv-reveal-arm #future-vision .fv-quadrants .reveal.reveal--visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0s;
+  }
 }
 
 @media (max-width: 900px) {
   #future-vision .fv-quadrants {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: none;
-    gap: clamp(0.5rem, 1.4vh, 1rem);
+    max-width: 100%;
+    column-gap: clamp(1rem, 4vw, 2rem);
+    row-gap: clamp(0.9rem, 3vh, 1.6rem);
   }
-  #future-vision .fv-card--tl,
-  #future-vision .fv-card--tr,
-  #future-vision .fv-card--bl,
-  #future-vision .fv-card--br { grid-area: auto; }
-  #future-vision .fv-core {
-    grid-area: auto;
-    grid-column: 1 / -1;
-    max-width: none;
-  }
+  #future-vision .fv-core { max-width: 92%; }
 }
 
 @media (max-width: 600px) {
-  #future-vision .fv-quadrants { grid-template-columns: 1fr; gap: clamp(0.45rem, 1.3vh, 0.8rem); }
-  #future-vision .fv-core { order: -1; }
+  #future-vision .fv-quadrants {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "core"
+      "tl"
+      "tr"
+      "ml"
+      "mr";
+    row-gap: clamp(0.8rem, 2.6vh, 1.4rem);
+  }
+  #future-vision .fv-core { max-width: 100%; }
 }
 
 @media (max-width: 768px) {
-  .fv-title-img { width: min(62%, 300px); }
-  .fv-sub-img   { width: 94%; }
+  .fv-title-img { width: min(93%, 450px); }
+  .fv-sub-img   { width: 100%; }
+  #future-vision .yeast-screen__inner { width: 100%; }
   #future-vision .yeast-screen__content { max-width: 100%; }
 }
 
 /* 2026-10-16：矮视口（≤820px 高，含 1366x768 / 1280x800 / 1024x768 笔记本小窗）
-   再收一档字号与行距，确保整屏内容压在 100vh 内——mandatory 吸附下超高屏
-   的底部卡片滚不到、也 snap 不回去。 */
+   再收一档字号、行距与行间距，确保整屏内容压在 100vh 内——mandatory 吸附下
+   超高屏的底部内容滚不到、也 snap 不回去。 */
 @media (max-height: 820px) {
-  .fv-title-img { width: min(32%, 280px); }
-  .fv-sub-img { width: min(64%, 520px); }
-  #future-vision .fv-card { padding: clamp(0.5rem, 1.4vh, 0.8rem) clamp(0.7rem, 1.6vw, 1rem); }
+  .fv-title-img { width: min(48%, 420px); }
+  .fv-sub-img { width: min(84%, 780px); }
+  #future-vision .fv-quadrants { row-gap: clamp(0.7rem, 2.8vh, 1.6rem); }
   #future-vision .fv-card__title { font-size: clamp(0.84rem, 1.7vh, 0.98rem); line-height: 1.3; }
   #future-vision .fv-card__body { font-size: clamp(0.74rem, 1.5vh, 0.86rem); line-height: 1.45; }
-  #future-vision .fv-core { padding: clamp(0.6rem, 1.6vh, 0.95rem) clamp(0.7rem, 1.8vw, 1.1rem); }
-  #future-vision .fv-core__text { font-size: clamp(0.78rem, 1.55vh, 0.9rem); line-height: 1.5; }
+  #future-vision .fv-core__text { font-size: clamp(0.95rem, 2vh, 1.18rem); line-height: 1.5; }
 }
 
-/* 矮视口 + 中窄宽（≤1100px，如 1024x768）：三列辐射布局在此宽度下单卡仅 ~200px，
-   正文要折 8 行以上，整屏仍超 100vh（实测 891px）——提前折成 2 列 +
-   核心愿景横贯，与 ≤900px 规则同构。 */
-@media (max-height: 820px) and (max-width: 1100px) {
-  #future-vision .fv-quadrants {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: none;
-  }
-  #future-vision .fv-card--tl,
-  #future-vision .fv-card--tr,
-  #future-vision .fv-card--bl,
-  #future-vision .fv-card--br { grid-area: auto; }
-  #future-vision .fv-core {
-    grid-area: auto;
-    grid-column: 1 / -1;
-    max-width: none;
-  }
-}
+/* 2026-10-17：取消「矮视口 + ≤1100px 折两列」的兜底——去 chrome 后单块文字高度
+   大幅下降，1024x768 实测三列仍在 768px 内（核心愿景不再被拉成整行一条）。 */
 
-/* 窄屏单列（≤600px）再收一档：手机竖屏整屏从 1088px 压到 ~900px 内 */
+/* 窄屏单列（≤600px）再收一档：标题放大 1.5 倍后，单列整屏高度会多出约 12px，
+   核心愿景字号再降一档（仍保持粗体与层级差），把整屏压回 100vh 内。 */
 @media (max-width: 600px) {
-  .fv-title-img { width: min(54%, 230px); }
-  .fv-sub-img { width: 92%; }
-  #future-vision .fv-card { padding: clamp(0.5rem, 1.3vh, 0.75rem) clamp(0.7rem, 3vw, 0.95rem); }
+  .fv-title-img { width: min(86%, 330px); }
+  .fv-sub-img { width: 100%; }
   #future-vision .fv-card__title { font-size: clamp(0.84rem, 1.7vh, 0.95rem); }
   #future-vision .fv-card__body { font-size: clamp(0.74rem, 1.45vh, 0.84rem); line-height: 1.42; }
-  #future-vision .fv-core { padding: clamp(0.55rem, 1.4vh, 0.85rem) clamp(0.7rem, 3vw, 1rem); }
-  #future-vision .fv-core__text { font-size: clamp(0.78rem, 1.5vh, 0.88rem); line-height: 1.45; }
+  #future-vision .fv-core__text { font-size: clamp(0.88rem, 1.9vh, 1rem); line-height: 1.45; }
 }
 /* ================================================== */
 /* passive-to-active 屏（2026-10-13 新增，位于 human-practices 与 statistics 之间）

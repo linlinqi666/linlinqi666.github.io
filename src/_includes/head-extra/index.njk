@@ -63,7 +63,7 @@
         var DEFER_GUARD_MAX = 60000;
         var deferGuardStart = Date.now();
         function pageScriptsRan() {
-          return !!(document.querySelector('.js-reveal-armed, .js-burden-armed, .js-pump-armed'));
+          return !!(document.querySelector('.js-reveal-armed, .js-burden-armed, .js-pager-story'));
         }
         function deferScriptsPending() {
           if (pageScriptsRan()) return false;
@@ -100,6 +100,49 @@
           startWatchdogOnce();
         }
       } catch (e) { /* 降级：保持导航栏可见 */ }
+    })();
+  </script>
+
+  <!-- 2026-10-17：future-vision 五块入场动画「只播一次」（用户要求：
+       不是每次进页面都重新触发）。
+       规则：首播时在 body 渲染前给 <html> 打 fv-reveal-arm（CSS 据此才隐藏五块），
+       区块首次进入视口即记入 localStorage；此后进页面不再打标记，五块直接是终态，
+       不再等 8 秒。已播过 / prefers-reduced-motion / 无 IntersectionObserver /
+       无 JS 时都不打标记——内容默认可见，不会出现空白或永久隐藏。 -->
+  <script>
+    (function () {
+      var KEY = 'fv-reveal-played-v1';
+      try {
+        var root = document.documentElement;
+        var played = false;
+        try { played = window.localStorage.getItem(KEY) === '1'; } catch (e) { played = false; }
+        if (played) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!('IntersectionObserver' in window)) return;
+
+        root.classList.add('fv-reveal-arm');
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var sec = document.getElementById('future-vision');
+          if (!sec) {
+            root.classList.remove('fv-reveal-arm');
+            return;
+          }
+          var io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+              if (!entries[i].isIntersecting) continue;
+              io.disconnect();
+              // 直接给五块挂 reveal--visible：动画不依赖全站共享 .reveal 观察器的阈值，
+              // 首访即便它未触发也不会把内容永久隐藏。
+              var blocks = sec.querySelectorAll('.fv-quadrants .reveal');
+              for (var j = 0; j < blocks.length; j++) blocks[j].classList.add('reveal--visible');
+              try { window.localStorage.setItem(KEY, '1'); } catch (e) { /* 隐私模式忽略 */ }
+              return;
+            }
+          }, { threshold: 0.2 });
+          io.observe(sec);
+        });
+      } catch (e) { /* 降级：保持可见 */ }
     })();
   </script>
 

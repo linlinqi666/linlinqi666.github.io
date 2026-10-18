@@ -3,40 +3,706 @@ permalink: "wet-lab/protocol.html"
 title: "Protocol - iGEM SZPU-2026"
 lang: "en"
 basePath: "../"
-footerBg: false
 css:
   - static/css/experiments.css
-  - static/css/components/pdf-embed.css
+  - static/css/protocol.css
 js:
   - static/js/components/sidebar-progress.js
 ---
 
-{# This page (reverted 2026-09-30, fine-tuned): restored to a single embedded
-   protocol.pdf — no sidebar, no large hero title; an intro card explains the
-   page purpose and the PDF is wrapped by a content-card (styles live in the
-   .protocol-page scope of pdf-embed.css). Since 2026-10-07 the #toolbar=0 flag
-   is dropped to restore basic reader controls. The split version (6 sections /
-   22 headings) is deprecated; the full PDF is hosted on static.igem.wiki.
-   Changes must stay in sync with Flask wiki/pages/protocol.html. #}
+{# 本页由 build_protocol_page.py 生成。正文逐字取自 static/expriments/protocol(3).pdf，
+   表格在脚本 TABLES 中逐张手写；26 个协议由 section-fold.js 折成收纳条。
+   overview 卡片与侧边导航的 #protocol-pNN 锚点经 hashchange 自动展开对应收纳条。
+   手改本文件会被下次重跑覆盖；改内容请改脚本。 #}
 {% extends "layouts/base.njk" %}
 
 {% block main %}
-<main class="pdf-page protocol-page">
-  <section class="content-card protocol-intro" aria-labelledby="protocol-intro-title">
-    <h2 id="protocol-intro-title">Protocol</h2>
+<div class="description-container">
 
-    <p>
-      The full wet-lab protocols of the PAGER-Yeast project are provided here as a
-      single handbook (PDF, 47 pages), covering the complete experimental pipeline of
-      the project: molecular cloning in E. coli, yeast transformation, CRISPR-Cas9
-      chassis engineering, reporter assays, and sensor validation experiments.
-    </p>
-  </section>
-  <section class="content-card" aria-label="Protocol document">
-    {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/protocol/protocol.pdf" %}
-    {% set pdfLabel = "Protocol (PDF, 47 pages)" %}
-    {% set pdfFallback = "This protocol PDF is not available yet." %}
-    {% include "partials/pdf-embed.njk" %}
-  </section>
-</main>
+      <aside class="description-sidebar">
+        <div class="yeast-decoration">
+          <div class="yeast-cell yeast-cell-1"></div>
+          <div class="yeast-cell yeast-cell-2"></div>
+          <div class="yeast-cell yeast-cell-3"></div>
+          <div class="bubble bubble-1"></div>
+          <div class="bubble bubble-2"></div>
+          <div class="bubble bubble-3"></div>
+        </div>
+
+        <div class="description-nav-wrapper">
+          <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#protocol-overview" class="nav-main-link">Overview</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#protocol-general" class="nav-main-link">General Protocols</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+<li class="level3"><a href="#protocol-p01">01 &middot; <i>E. coli</i> Transformation and Culture Expansion</a></li>
+<li class="level3"><a href="#protocol-p03">03 &middot; Plasmid Extraction from <i>E. coli</i></a></li>
+<li class="level3"><a href="#protocol-p04">04 &middot; Restriction Enzyme Digestion</a></li>
+<li class="level3"><a href="#protocol-p05">05 &middot; Agarose Gel Electrophoresis</a></li>
+<li class="level3"><a href="#protocol-p07">07 &middot; Conventional PCR</a></li>
+<li class="level3"><a href="#protocol-p09">09 &middot; PCR Purification</a></li>
+<li class="level3"><a href="#protocol-p10">10 &middot; Gel Extraction of PCR Products</a></li>
+<li class="level3"><a href="#protocol-p11">11 &middot; Gibson Assembly</a></li>
+<li class="level3"><a href="#protocol-p12">12 &middot; Yeast Transformation</a></li>
+<li class="level3"><a href="#protocol-p13">13 &middot; Colony PCR for <i>Saccharomyces cerevisiae</i></a></li>
+<li class="level3"><a href="#protocol-p14">14 &middot; Yeast Growth Curve Measurement</a></li>
+<li class="level3"><a href="#protocol-p16">16 &middot; Detection of Yeast Fluorescence Signal After Treatment</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#protocol-chassis" class="nav-main-link">Chassis Engineering</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+<li class="level3"><a href="#protocol-p19">19 &middot; CRISPR-Cas9 Transformation for Gene Knockout in Yeast</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#protocol-gpa1" class="nav-main-link">Humanized G-Protein Chimera</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+<li class="level3"><a href="#protocol-p08">08 &middot; Overlap Extension PCR</a></li>
+<li class="level3"><a href="#protocol-p15">15 &middot; Microscopic Observation of Yeast Morphology</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#protocol-pager" class="nav-main-link">PAGER Fusion Receptor</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+<li class="level3"><a href="#protocol-p06">06 &middot; Colony PCR for <i>E. coli</i></a></li>
+<li class="level3"><a href="#protocol-p17">17 &middot; Confocal Imaging of Yeast Fluorescence After Treatment</a></li>
+<li class="level3"><a href="#protocol-p18">18 &middot; SDS-PAGE and Western Blotting</a></li>
+<li class="level3"><a href="#protocol-p20">20 &middot; Functional Validation of the Yeast Sensor</a></li>
+<li class="level3"><a href="#protocol-p21">21 &middot; Sensitivity Testing of the Yeast Sensor</a></li>
+<li class="level3"><a href="#protocol-p22">22 &middot; Specificity Testing of the Yeast Sensor</a></li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#protocol-reporter" class="nav-main-link">Reporter Module</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+<li class="level3"><a href="#protocol-p02">02 &middot; Glycerol Stock Preparation and Cryopreservation</a></li>
+<li class="level3"><a href="#protocol-p23">23 &middot; Plasmid Extraction from Yeast</a></li>
+<li class="level3"><a href="#protocol-p24">24 &middot; Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</a></li>
+<li class="level3"><a href="#protocol-p25">25 &middot; Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</a></li>
+<li class="level3"><a href="#protocol-p26">26 &middot; yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-flask">
+            <div class="flask-body">
+              <div class="flask-neck"></div>
+              <div class="flask-liquid">
+                <div class="liquid-fill"></div>
+                <div class="bubbling">
+                  <div class="ferment-bubble f-bubble-1"></div>
+                  <div class="ferment-bubble f-bubble-2"></div>
+                  <div class="ferment-bubble f-bubble-3"></div>
+                  <div class="ferment-bubble f-bubble-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flask-progress">
+              <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+          </div>
+          <div class="progress-title">Fermentation Progress</div>
+        </div>
+      </aside>
+
+      <div class="description-content">
+        <h1 class="sr-only">Protocol</h1>
+
+        <div id="protocol-overview" class="content-card">
+          <figure class="page-mascot page-mascot--protocol" aria-hidden="true">
+            <img src="../static/image/any-icon/extension/protocol.png" alt="" width="440" height="487"
+              loading="lazy" decoding="async">
+          </figure>
+          <h2>Protocol</h2>
+          <p>The full wet-lab protocols of the PAGER-Yeast project are provided here as a single
+          handbook (PDF, 47 pages), covering the complete experimental pipeline of the project:
+          molecular cloning in <i>E. coli</i>, yeast transformation, CRISPR-Cas9 chassis
+          engineering, reporter assays, and sensor validation experiments.</p>
+          <p>The same 26 protocols are reproduced on this page as text. Every protocol sits in its
+          own drawer and stays collapsed until you pick it: choose a card below, an entry in the
+          sidebar, or a link inside a module section, and the matching protocol opens in place.
+          Each drawer closes with a back link that returns you here.</p>
+          <div class="proto-grid">
+            <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p01" title="Protocol 1 · E. coli Transformation and Culture Expansion"><span class="proto-chip__no">01</span><span class="proto-chip__title"><i>E. coli</i> Transformation and Culture Expansion</span></a><a class="proto-chip" href="#protocol-p02" title="Protocol 2 · Glycerol Stock Preparation and Cryopreservation"><span class="proto-chip__no">02</span><span class="proto-chip__title">Glycerol Stock Preparation and Cryopreservation</span></a><a class="proto-chip" href="#protocol-p03" title="Protocol 3 · Plasmid Extraction from E. coli"><span class="proto-chip__no">03</span><span class="proto-chip__title">Plasmid Extraction from <i>E. coli</i></span></a><a class="proto-chip" href="#protocol-p04" title="Protocol 4 · Restriction Enzyme Digestion"><span class="proto-chip__no">04</span><span class="proto-chip__title">Restriction Enzyme Digestion</span></a><a class="proto-chip" href="#protocol-p05" title="Protocol 5 · Agarose Gel Electrophoresis"><span class="proto-chip__no">05</span><span class="proto-chip__title">Agarose Gel Electrophoresis</span></a><a class="proto-chip" href="#protocol-p06" title="Protocol 6 · Colony PCR for E. coli"><span class="proto-chip__no">06</span><span class="proto-chip__title">Colony PCR for <i>E. coli</i></span></a></div>
+            <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p07" title="Protocol 7 · Conventional PCR"><span class="proto-chip__no">07</span><span class="proto-chip__title">Conventional PCR</span></a><a class="proto-chip" href="#protocol-p08" title="Protocol 8 · Overlap Extension PCR"><span class="proto-chip__no">08</span><span class="proto-chip__title">Overlap Extension PCR</span></a><a class="proto-chip" href="#protocol-p09" title="Protocol 9 · PCR Purification"><span class="proto-chip__no">09</span><span class="proto-chip__title">PCR Purification</span></a><a class="proto-chip" href="#protocol-p10" title="Protocol 10 · Gel Extraction of PCR Products"><span class="proto-chip__no">10</span><span class="proto-chip__title">Gel Extraction of PCR Products</span></a><a class="proto-chip" href="#protocol-p11" title="Protocol 11 · Gibson Assembly"><span class="proto-chip__no">11</span><span class="proto-chip__title">Gibson Assembly</span></a><a class="proto-chip" href="#protocol-p12" title="Protocol 12 · Yeast Transformation"><span class="proto-chip__no">12</span><span class="proto-chip__title">Yeast Transformation</span></a><a class="proto-chip" href="#protocol-p13" title="Protocol 13 · Colony PCR for Saccharomyces cerevisiae"><span class="proto-chip__no">13</span><span class="proto-chip__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></div>
+            <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p14" title="Protocol 14 · Yeast Growth Curve Measurement"><span class="proto-chip__no">14</span><span class="proto-chip__title">Yeast Growth Curve Measurement</span></a><a class="proto-chip" href="#protocol-p15" title="Protocol 15 · Microscopic Observation of Yeast Morphology"><span class="proto-chip__no">15</span><span class="proto-chip__title">Microscopic Observation of Yeast Morphology</span></a><a class="proto-chip" href="#protocol-p16" title="Protocol 16 · Detection of Yeast Fluorescence Signal After Treatment"><span class="proto-chip__no">16</span><span class="proto-chip__title">Detection of Yeast Fluorescence Signal After Treatment</span></a><a class="proto-chip" href="#protocol-p17" title="Protocol 17 · Confocal Imaging of Yeast Fluorescence After Treatment"><span class="proto-chip__no">17</span><span class="proto-chip__title">Confocal Imaging of Yeast Fluorescence After Treatment</span></a><a class="proto-chip" href="#protocol-p18" title="Protocol 18 · SDS-PAGE and Western Blotting"><span class="proto-chip__no">18</span><span class="proto-chip__title">SDS-PAGE and Western Blotting</span></a><a class="proto-chip" href="#protocol-p19" title="Protocol 19 · CRISPR-Cas9 Transformation for Gene Knockout in Yeast"><span class="proto-chip__no">19</span><span class="proto-chip__title">CRISPR-Cas9 Transformation for Gene Knockout in Yeast</span></a><a class="proto-chip" href="#protocol-p20" title="Protocol 20 · Functional Validation of the Yeast Sensor"><span class="proto-chip__no">20</span><span class="proto-chip__title">Functional Validation of the Yeast Sensor</span></a></div>
+            <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p21" title="Protocol 21 · Sensitivity Testing of the Yeast Sensor"><span class="proto-chip__no">21</span><span class="proto-chip__title">Sensitivity Testing of the Yeast Sensor</span></a><a class="proto-chip" href="#protocol-p22" title="Protocol 22 · Specificity Testing of the Yeast Sensor"><span class="proto-chip__no">22</span><span class="proto-chip__title">Specificity Testing of the Yeast Sensor</span></a><a class="proto-chip" href="#protocol-p23" title="Protocol 23 · Plasmid Extraction from Yeast"><span class="proto-chip__no">23</span><span class="proto-chip__title">Plasmid Extraction from Yeast</span></a><a class="proto-chip" href="#protocol-p24" title="Protocol 24 · Verification PCR from Yeast Liquid Culture (Lyticase Lysis)"><span class="proto-chip__no">24</span><span class="proto-chip__title">Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</span></a><a class="proto-chip" href="#protocol-p25" title="Protocol 25 · Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development"><span class="proto-chip__no">25</span><span class="proto-chip__title">Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</span></a><a class="proto-chip" href="#protocol-p26" title="Protocol 26 · yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs"><span class="proto-chip__no">26</span><span class="proto-chip__title">yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</span></a></div>
+          </div>
+          <p class="proto-download">
+            <span class="proto-download__label">Prefer the typeset handbook?</span>
+            <a href="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/protocol/protocol.pdf"
+              target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v12"></path>
+                <path d="m7 11 5 5 5-5"></path>
+                <path d="M4 21h16"></path>
+              </svg>
+              Download the 47-page PDF
+            </a>
+          </p>
+        </div>
+
+        <div id="protocol-general" class="content-card">
+          <h2>General Protocols</h2>
+          <p>Methods that appear in three or more of the four module notebooks, kept here once so every module can share the same copy.</p>
+          <ul class="proto-list">
+            <li><a href="#protocol-p01"><span class="proto-list__no">Protocol 1</span><i>E. coli</i> Transformation and Culture Expansion</a></li>
+            <li><a href="#protocol-p03"><span class="proto-list__no">Protocol 3</span>Plasmid Extraction from <i>E. coli</i></a></li>
+            <li><a href="#protocol-p04"><span class="proto-list__no">Protocol 4</span>Restriction Enzyme Digestion</a></li>
+            <li><a href="#protocol-p05"><span class="proto-list__no">Protocol 5</span>Agarose Gel Electrophoresis</a></li>
+            <li><a href="#protocol-p07"><span class="proto-list__no">Protocol 7</span>Conventional PCR</a></li>
+            <li><a href="#protocol-p09"><span class="proto-list__no">Protocol 9</span>PCR Purification</a></li>
+            <li><a href="#protocol-p10"><span class="proto-list__no">Protocol 10</span>Gel Extraction of PCR Products</a></li>
+            <li><a href="#protocol-p11"><span class="proto-list__no">Protocol 11</span>Gibson Assembly</a></li>
+            <li><a href="#protocol-p12"><span class="proto-list__no">Protocol 12</span>Yeast Transformation</a></li>
+            <li><a href="#protocol-p13"><span class="proto-list__no">Protocol 13</span>Colony PCR for <i>Saccharomyces cerevisiae</i></a></li>
+            <li><a href="#protocol-p14"><span class="proto-list__no">Protocol 14</span>Yeast Growth Curve Measurement</a></li>
+            <li><a href="#protocol-p16"><span class="proto-list__no">Protocol 16</span>Detection of Yeast Fluorescence Signal After Treatment</a></li>
+          </ul>
+        </div>
+
+        <div id="protocol-chassis" class="content-card">
+          <h2>Chassis Engineering</h2>
+          <p>Protocol referenced by the chassis engineering notebook.</p>
+          <ul class="proto-list">
+            <li><a href="#protocol-p19"><span class="proto-list__no">Protocol 19</span>CRISPR-Cas9 Transformation for Gene Knockout in Yeast</a></li>
+          </ul>
+        </div>
+
+        <div id="protocol-gpa1" class="content-card">
+          <h2>Humanized G-Protein Chimera</h2>
+          <p>Protocols referenced by the humanized G-protein chimera notebook.</p>
+          <ul class="proto-list">
+            <li><a href="#protocol-p08"><span class="proto-list__no">Protocol 8</span>Overlap Extension PCR</a></li>
+            <li><a href="#protocol-p15"><span class="proto-list__no">Protocol 15</span>Microscopic Observation of Yeast Morphology</a></li>
+          </ul>
+        </div>
+
+        <div id="protocol-pager" class="content-card">
+          <h2>PAGER Fusion Receptor</h2>
+          <p>Protocols referenced by the PAGER fusion receptor notebook.</p>
+          <ul class="proto-list">
+            <li><a href="#protocol-p06"><span class="proto-list__no">Protocol 6</span>Colony PCR for <i>E. coli</i></a></li>
+            <li><a href="#protocol-p17"><span class="proto-list__no">Protocol 17</span>Confocal Imaging of Yeast Fluorescence After Treatment</a></li>
+            <li><a href="#protocol-p18"><span class="proto-list__no">Protocol 18</span>SDS-PAGE and Western Blotting</a></li>
+            <li><a href="#protocol-p20"><span class="proto-list__no">Protocol 20</span>Functional Validation of the Yeast Sensor</a></li>
+            <li><a href="#protocol-p21"><span class="proto-list__no">Protocol 21</span>Sensitivity Testing of the Yeast Sensor</a></li>
+            <li><a href="#protocol-p22"><span class="proto-list__no">Protocol 22</span>Specificity Testing of the Yeast Sensor</a></li>
+          </ul>
+        </div>
+
+        <div id="protocol-reporter" class="content-card">
+          <h2>Reporter Module</h2>
+          <p>Protocols referenced by the reporter module notebook.</p>
+          <ul class="proto-list">
+            <li><a href="#protocol-p02"><span class="proto-list__no">Protocol 2</span>Glycerol Stock Preparation and Cryopreservation</a></li>
+            <li><a href="#protocol-p23"><span class="proto-list__no">Protocol 23</span>Plasmid Extraction from Yeast</a></li>
+            <li><a href="#protocol-p24"><span class="proto-list__no">Protocol 24</span>Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</a></li>
+            <li><a href="#protocol-p25"><span class="proto-list__no">Protocol 25</span>Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</a></li>
+            <li><a href="#protocol-p26"><span class="proto-list__no">Protocol 26</span>yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</a></li>
+          </ul>
+        </div>
+
+        <div id="protocol-library" class="content-card">
+          <h2>Full Protocol Text</h2>
+          <p>All 26 protocols are reproduced below in handbook order. Each drawer keeps the
+          original materials and steps, tables are set as tables, and notes keep their original
+          wording.</p>
+        <h3 id="protocol-p01">Protocol 1 &middot; <i>E. coli</i> Transformation and Culture Expansion</h3>
+        <p class="proto-page-ref">Handbook pages 1–1</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">pRS426 plasmid, Top10 competent cells, LB liquid medium, LB agar plates, Ampicillin or other antibiotics, Sterile centrifuge tubes and tips</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. The pRS426 plasmid was diluted to 20 ng/μL.</p>
+        <p class="proto-step">2. 2.5 μL (approximately 50 ng) of the diluted plasmid was added to 100 μL of Top10 competent cells.</p>
+        <p class="proto-step">3. The mixture was incubated on ice for 30 min.</p>
+        <p class="proto-step">4. The cells were heat-shocked at 42°C for 90 sec.</p>
+        <p class="proto-step">5. The cells were chilled on ice for 2–3 min.</p>
+        <p class="proto-step">6. 900 μL of antibiotic-free LB medium was added.</p>
+        <p class="proto-step">7. The cells were recovered at 37°C with shaking at 220 rpm for 60 min.</p>
+        <p class="proto-step">8. The culture was plated onto an LB agar plate containing 100 μg/mL ampicillin.</p>
+        <p class="proto-step">9. The plate was incubated inverted at 37°C overnight.</p>
+        <p class="proto-step">10. A single colony was picked and inoculated into 100 mL of LB liquid medium containing 100 μg/mL ampicillin in a conical flask.</p>
+        <p class="proto-step">11. The culture was incubated overnight at 37°C with shaking at 220 rpm.</p>
+        <p class="proto-step">12. A negative control was prepared in parallel by replacing the bacterial culture with sterile water.</p>
+        <p class="proto-note">*Note: This protocol can be adapted to other plasmids and antibiotics by simply replacing the plasmid and antibiotic used.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p02">Protocol 2 &middot; Glycerol Stock Preparation and Cryopreservation</h3>
+        <p class="proto-page-ref">Handbook pages 2–2</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Overnight culture of <i>E. coli</i> or yeast, 50% sterile glycerol, sterile cryogenic tubes, sterile pipette tips</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. An overnight culture was prepared and used for glycerol stock preparation.</p>
+        <p class="proto-step">2. 750 μL of the overnight culture was transferred into a sterile cryogenic tube.</p>
+        <p class="proto-step">3. 750 μL of 50% sterile glycerol was added to the tube.</p>
+        <p class="proto-step">4. The mixture was gently mixed by pipetting up and down or by inverting the tube several times, resulting in a final glycerol concentration of 25%.</p>
+        <p class="proto-step">5. The tube was clearly labeled with the strain name, plasmid information, date, and operator initials.</p>
+        <p class="proto-step">6. The labeled glycerol stock was immediately placed at −80°C for long-term preservation.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p03">Protocol 3 &middot; Plasmid Extraction from <i>E. coli</i></h3>
+        <p class="proto-page-ref">Handbook pages 3–4</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">TIAprep Mini Plasmid Kit (TIANGEN, Cat. DP103, spin-column-based), CP3 spin columns, collection tubes, Solution P1 (RNase A added), Solution P2, Solution P3, Deproteinization buffer PD, Wash buffer PW (supplemented with absolute ethanol), Elution buffer EB, benchtop centrifuge, 1.5 mL sterile centrifuge tubes, overnight liquid culture of Top10 <i>E. coli</i>.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Column equilibration: Place CP3 spin column into a collection tube. Add 500 μL Equilibration buffer BL to CP3. Centrifuge at 12,000 rpm (~13,400×g) for 1 min. Discard waste liquid in collection tube and replace CP3 back into the collection tube. Use equilibrated columns on the same day.</p>
+        <p class="proto-step">2. Transfer 1-5 mL overnight <i>E. coli</i> culture into centrifuge tube. Centrifuge at 12,000 rpm (~13,400×g) for 1 min. Remove supernatant completely. For large volume culture, harvest cell pellets by multiple rounds of centrifugation into one tube.</p>
+        <p class="proto-step">3. Add 250 μL Solution P1 (confirm RNase A has been added) to cell pellet. Fully resuspend bacterial pellet by pipetting or vortexing.</p>
+        <p class="proto-step">4. Add 250 μL Solution P2. Gently invert the tube 6-8 times for thorough lysis. Do not vortex vigorously to avoid shearing genomic DNA. The suspension should turn clear and viscous; lysis time should not exceed 5 min. If the solution remains turbid, reduce the input volume of bacterial culture.</p>
+        <p class="proto-step">5. Add 350 μL Solution P3, immediately invert gently 6-8 times to mix well; white flocculent precipitate will form. Centrifuge at 12,000 rpm (~13,400×g) for 10 min. If tiny white precipitates remain in supernatant, re-centrifuge before transferring supernatant.</p>
+        <p class="proto-step">6. Carefully transfer supernatant from previous step into CP3 spin column (avoid transferring precipitate). Centrifuge at 12,000 rpm (~13,400×g) for 30-60 sec. Discard flow- through and place CP3 back into collection tube.</p>
+        <p class="proto-step">7. Optional step: Add 500 μL Deproteinization buffer PD into CP3. Centrifuge at 12,000 rpm (~13,400×g) for 30-60 sec, discard waste. This step is recommended for endA⁺ strains and can be omitted for endA⁻ strains such as Top10.</p>
+        <p class="proto-step">8. Add 600 μL Wash buffer PW (ensure absolute ethanol has been added) to CP3. Centrifuge at 12,000 rpm (~13,400×g) for 30-60 sec, discard waste liquid.</p>
+        <p class="proto-step">9. Repeat step 8.</p>
+        <p class="proto-step">10. Centrifuge CP3 column in collection tube at 12,000 rpm (~13,400×g) for 2 min to remove residual wash buffer. Open the column lid and incubate at room temperature for several minutes to evaporate residual ethanol.</p>
+        <p class="proto-step">11. Transfer CP3 column into a new sterile 1.5 mL centrifuge tube. Add 50-100 μL Elution buffer EB onto the centre of the silica membrane. Incubate at room temperature for 2 min. Centrifuge at 12,000 rpm (~13,400×g) for 2 min to collect plasmid DNA. For higher recovery, re-load the eluate onto column membrane, incubate 2 min at room temperature and centrifuge again. Store purified plasmid DNA at −20 °C.</p>
+        <p class="proto-note">Note: The kit should be stored at 15-25 °C; RNase A should be stored at 2-8 °C. Purified plasmid DNA is suitable for PCR, restriction digestion and Gibson assembly.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p04">Protocol 4 &middot; Restriction Enzyme Digestion</h3>
+        <p class="proto-page-ref">Handbook pages 5–6</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Purified plasmid or PCR-amplified DNA substrate, restriction endonuclease(s), the corresponding 10× restriction reaction buffer, nuclease-free water, 1.5 mL sterile microcentrifuge tubes, microcentrifuge, thermal block or water bath. Optional: alkaline phosphatase (CIP/SAP), 6× DNA loading dye. Prepare an undigested DNA sample in parallel as a negative control.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Thaw DNA sample, 10× restriction buffer and nuclease-free water on ice. Restriction enzymes should be kept at −20 °C or on ice all the time; add enzymes at last to minimize room- temperature exposure.</p>
+        <p class="proto-step">2. Set up digestion reaction (typical total volume: 50 μL): add nuclease-free water, 10× restriction buffer, DNA substrate (0.5-2 μg), followed by restriction endonuclease(s). The total volume of enzymes should not exceed 5 % of total reaction volume to prevent glycerol- induced star activity. Prepare a negative control tube containing identical DNA without restriction enzyme.</p>
+        <p class="proto-step">3. Gently flick the tube for mixing, then perform short spin-down to collect all liquid at tube bottom.</p>
+        <p class="proto-step">4. Incubate the reaction at enzyme- specific optimal temperature (37 °C for most restriction enzymes) for 1-3 h. For double digestion, use manufacturer-recommended compatible buffer. In case of incompatible buffers, perform sequential digestion with DNA purification between two reactions.</p>
+        <p class="proto-step">5. Optional step: For single- digested linearized vector, add alkaline phosphatase and incubate following manufacturer’s instructions to dephosphorylate vector ends and reduce self-ligation background.</p>
+        <p class="proto-step">6. Terminate restriction digestion: perform heat-inactivation as suggested by enzyme manual, or purify DNA via column or gel extraction. Purification is mandatory if heat-inactivation is not available for the enzyme.</p>
+        <p class="proto-step">7. Analyze digested products alongside undigested control by agarose gel electrophoresis. Purified digested DNA can be used for ligation, Gibson assembly and other downstream molecular experiments. Store digested DNA at −20 °C.Note: Keep restriction enzymes cold during reaction setup. Excess enzyme may trigger glycerol- dependent star activity. Adjust DNA input, enzyme dosage and incubation time according to substrate and manufacturer’s manual.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p05">Protocol 5 &middot; Agarose Gel Electrophoresis</h3>
+        <p class="proto-page-ref">Handbook pages 7–8</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Agarose powder，Electrophoresis buffer: 1× TAE，DNA Marker (molecular weight standard)，6× Loading Buffer，Nucleic acid stain: SYBR Green / Gel Red, etc.，Distilled water or deionized water</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Prepare electrophoresis buffer: Dilute 50× TAE or 10× TBE to 1× working solution and set aside.</p>
+        <p class="proto-step">2. Prepare agarose gel: Weigh an appropriate amount of agarose powder according to the size of the DNA to be separated, add it to a conical flask, and then add an appropriate amount of 1× electrophoresis buffer.</p>
+        <p class="proto-step">3. Heat to dissolve the agarose: Place the conical flask in a microwave oven or on a heating plate and heat until the agarose is completely dissolved. During heating, carefully remove and swirl gently to avoid boiling over.</p>
+        <p class="proto-step">4. Add nucleic acid stain: Use a nucleic acid stain such as SYBR Green or Gel Red, added at 1% by volume.</p>
+        <p class="proto-step">5. Set up the gel casting mold: Place the gel casting mold on a level surface and insert a suitable comb.</p>
+        <p class="proto-step">6. Pour the gel: Slowly pour the agarose solution into the gel casting mold, avoiding air bubbles.</p>
+        <p class="proto-step">7. Allow the gel to solidify: Leave at room temperature for 20–30 minutes until the gel is completely solidified.</p>
+        <p class="proto-step">8. Remove the comb: Carefully pull out the comb vertically to form the sample wells.</p>
+        <p class="proto-step">9. Set up the electrophoresis apparatus: Place the gel into a horizontal electrophoresis tank and add 1× electrophoresis buffer so that the liquid level is about 1–2 mm above the gel.</p>
+        <p class="proto-step">10. Confirm the positive and negative electrodes: Make sure the sample wells are near the negative electrode (black), as DNA migrates toward the positive electrode (red).</p>
+        <p class="proto-step">11. Prepare samples: Mix the DNA samples with 6× Loading Buffer at a ratio of 5:1.</p>
+        <p class="proto-step">12. Load samples: Add DNA Marker to the first well, then load the test DNA samples into the remaining wells in order, and record the loading order.</p>
+        <p class="proto-step">13. Set electrophoresis conditions: Cover the electrophoresis tank, connect the power supply, and set the voltage to generally 90 V for 50 min (which can be adjusted according to actual conditions).</p>
+        <p class="proto-step">14. Stop electrophoresis: When the bromophenol blue indicator has migrated to about 2/3 of the gel, turn off the power supply and stop electrophoresis.</p>
+        <p class="proto-step">15. Observe the results: Place the gel into a gel imaging system and observe the DNA bands under UV or blue light.</p>
+        <p class="proto-step">16. Photograph and record: Save the gel image and compare it with the DNA Marker to analyze DNA fragment size and concentration.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p06">Protocol 6 &middot; Colony PCR for <i>E. coli</i></h3>
+        <p class="proto-page-ref">Handbook pages 9–10</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">LB agar plates (Ampicillin) with transformants, sterile pipette tips, sterile PCR tubes, PCR Mix, forward primer, reverse primer, ddH₂O, pipettor</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Pick a single colony with a sterile pipette tip, suspend it in 10 μL sterile water.</p>
+        <p class="proto-step">2. Spot 2.5 μL of this bacterial suspension onto LB agar plate containing 100 μg/mL ampicillin for colony backup.</p>
+        <p class="proto-step">3. Prepare PCR reaction system in sterile hood (total volume 20μL，the reaction system can be scaled up or down proportionally according to your requirements.For the negative control, replace the template with water.）</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Component</th><th scope="col">Volume</th></tr></thead><tbody><tr><td>2× PCR Mix</td><td>10 μL</td></tr><tr><td>Forward primer</td><td>0.8 μL</td></tr><tr><td>Reverse primer</td><td>0.8 μL</td></tr><tr><td>Template</td><td>1 μL</td></tr><tr><td>ddH₂O</td><td>7.4 μL</td></tr></tbody></table></div>
+        <p class="proto-step">4. Load the PCR tube into thermal cycler and run the following program（The annealing temperature can be adjusted according to the Tm value of your primers）:</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Temperature</th><th scope="col">Time</th><th scope="col">Cycles</th></tr></thead><tbody><tr><td>98℃</td><td>5 min</td><td>1</td></tr><tr><td>98℃</td><td>15 s</td><td>28-30</td></tr><tr><td>58°C (adjust according to primer Tm)</td><td>15 s</td><td>28-30</td></tr><tr><td>72°C</td><td>35 s (adjust according to product length)</td><td>28-30</td></tr><tr><td>72℃</td><td>1 min</td><td>1</td></tr><tr><td>4℃</td><td>∞</td><td>——</td></tr></tbody></table></div>
+        <p class="proto-step">5. After the reaction finishes, perform agarose gel electrophoresis to verify the target fragment.</p>
+        <p class="proto-note">Note: Do not transfer too much colony biomass, excess bacteria may inhibit PCR amplification. The backup plate is incubated at 37 °C overnight for subsequent culture expansion if PCR result is positive</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p07">Protocol 7 &middot; Conventional PCR</h3>
+        <p class="proto-page-ref">Handbook pages 11–12</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">PrimeSTAR Max DNA Polymerase；PCR Master Mix</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. PCR Reaction Setup (50 μL) Take several 0.2 mL centrifuge tubes and add the components in the following order. Mix by pipetting up and down several times, then briefly centrifuge.</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Volume</th><th scope="col">Component</th></tr></thead><tbody><tr><td>25 μL</td><td>2× Mix</td></tr><tr><td>2 μL</td><td>Forward primer</td></tr><tr><td>2 μL</td><td>Reverse primer</td></tr><tr><td>2 μL</td><td>Template</td></tr><tr><td>19 μL</td><td>ddH₂O</td></tr></tbody></table></div>
+        <p class="proto-text">For the negative control, replace the template with water.</p>
+        <p class="proto-note">Note: The 2× Mix can be either a high-fidelity polymerase Mix or a standard Taq polymerase Mix. See the corresponding program below.</p>
+        <p class="proto-step">2. PCR Program General notes: The annealing temperature must not be fixed. It should be adjusted according to the Tm of the primers used (typically set 3–5°C below the primer Tm). The 53°C/55°C shown in the tables below are reference values only. The extension time must not be fixed. It should be calculated based on the length of the target product and the extension rate of the enzyme used. The extension times shown in the tables below are reference values only. The extension temperature is generally 72°C. If the template has a high AT content or contains high-copy repeat sequences, 65°C may be used to improve amplification specificity.</p>
+        <p class="proto-subhead">2.1 High-Fidelity Polymerase (e.g., PrimeSTAR Max)</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Temperature</th><th scope="col">Time</th><th scope="col">Cycles</th></tr></thead><tbody><tr><td>98℃</td><td>1 min</td><td>1</td></tr><tr><td>98℃</td><td>10 s</td><td>28-30</td></tr><tr><td>55°C (adjust according to primer Tm)</td><td>10 s</td><td>28-30</td></tr><tr><td>72°C (65°C may be used in special cases; see notes above)</td><td>Adjust according to product length</td><td>28-30</td></tr><tr><td>72℃</td><td>5 min</td><td>1</td></tr><tr><td>16℃</td><td>∞</td><td>——</td></tr></tbody></table></div><p class="proto-subhead">2.2 Standard Taq Polymerase</p><div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Temperature</th><th scope="col">Time</th><th scope="col">Cycles</th></tr></thead><tbody><tr><td>94℃</td><td>3 min</td><td>1</td></tr><tr><td>94℃</td><td>30 s</td><td>30-35</td></tr><tr><td>55°C (adjust according to primer Tm)</td><td>30 s</td><td>30-35</td></tr><tr><td>72℃</td><td>Adjust according to product length</td><td>30-35</td></tr><tr><td>72℃</td><td>5 min</td><td>1</td></tr><tr><td>16℃</td><td>∞</td><td>——</td></tr></tbody></table></div>
+        <p class="proto-note">Note: The extension rate of standard Taq polymerase is generally about 1 kb/min. For the extension rate of high-fidelity polymerases, please refer to the manufacturer's instructions.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p08">Protocol 8 &middot; Overlap Extension PCR</h3>
+        <p class="proto-page-ref">Handbook pages 13–15</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">PrimeSTAR® Max high-fidelity hot-start PCR premix, individual DNA fragments with homologous overlapping termini, outer forward and reverse primers (10 μM), sterile ddH₂O, PCR thin-wall tubes, thermal cycler, micropipettes and sterile pipette tips; DNA molecular weight marker, 6× DNA loading dye. Note: Store reagents at −20 °C, avoid repeated freeze- thaw cycles. Reaction mixtures can be prepared at room temperature with this premix.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Primer and template preparation: Each DNA fragment to be assembled carries pre-designed 18-25 bp homologous overlapping sequences at termini. Outer primers bind to the two ends of the final full- length assembled fragment. Tm values of all primers should be kept as consistent as possible.</p>
+        <p class="proto-step">2. Round one: Fragment fusion reaction (no primers added). Mix DNA fragments with homologous overlapping termini at an appropriate molar ratio.Round-one fusion reaction system (50 μL)</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Component</th><th scope="col">Volume</th></tr></thead><tbody><tr><td>DNA fragments with homologous overlapping termini</td><td>Mixed at appropriate molar ratio</td></tr><tr><td>PrimeSTAR® Max premix</td><td>25 μL</td></tr><tr><td>Sterile ddH₂O</td><td>Adjust to 50 μL</td></tr></tbody></table></div><p class="proto-subhead">Round-one fusion thermal profile</p><div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Step</th><th scope="col">Temperature</th><th scope="col">Time</th><th scope="col">Cycle number</th></tr></thead><tbody><tr><td>Initial denaturation</td><td>98 °C</td><td>5 min</td><td>1</td></tr><tr><td>Denaturation</td><td>98 °C</td><td>5-10 sec</td><td>10</td></tr><tr><td>Annealing</td><td>55 °C (adjust according to overlapping-region Tm)</td><td>5-15 sec</td><td>10</td></tr><tr><td>Extension</td><td>72 °C</td><td>5 sec/kb</td><td>10</td></tr><tr><td>Final extension</td><td>72 °C</td><td>5 min</td><td>1</td></tr><tr><td>Hold</td><td>4 °C</td><td>∞</td><td>1</td></tr></tbody></table></div>
+        <p class="proto-text">No primers are added in this step. Fragments anneal and bridge via terminal homologous overlapping sequences, and polymerase extends to generate a small amount of full- length assembled template.</p>
+        <p class="proto-step">3. Round two: Full- length fragment amplification. Add outer forward and reverse primers to round-one fusion products to amplify the full- length fused fragment. Round-two full- length amplification system (50 μL)</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Component</th><th scope="col">Volume</th></tr></thead><tbody><tr><td>Fusion product from round-one</td><td>1.0 μL</td></tr><tr><td>Outer forward primer (10 μM)</td><td>1.0 μL</td></tr><tr><td>Outer reverse primer (10 μM)</td><td>1.0 μL</td></tr><tr><td>PrimeSTAR® Max premix</td><td>25 μL</td></tr><tr><td>Sterile ddH₂O</td><td>Adjust to 50 μL</td></tr></tbody></table></div>
+        <p class="proto-text">Round-two full- length amplification thermal profile</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Step</th><th scope="col">Temperature</th><th scope="col">Time</th><th scope="col">Cycle number</th></tr></thead><tbody><tr><td>Initial denaturation</td><td>98 °C</td><td>5 min</td><td>1</td></tr><tr><td>Denaturation</td><td>98 °C</td><td>5-10 sec</td><td>25</td></tr><tr><td>Annealing</td><td>55 °C (adjust according to overlapping-region Tm)</td><td>5-15 sec</td><td>25</td></tr><tr><td>Extension</td><td>72 °C</td><td>5 sec/kb</td><td>25</td></tr><tr><td>Final extension</td><td>72 °C</td><td>5 min</td><td>1</td></tr><tr><td>Hold</td><td>4 °C</td><td>∞</td><td>1</td></tr></tbody></table></div>
+        <p class="proto-step">4. Product detection: Amplified products are blunt-ended DNA. Detect target full- length bands by agarose gel electrophoresis with TAE running buffer. Store PCR products at −20 °C.Note: Avoid repeated freeze- thaw of reagents. A 1:1 molar ratio is recommended for input fragments. Adjust annealing temperature according to Tm of overlapping- regions or outer primers.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p09">Protocol 9 &middot; PCR Purification</h3>
+        <p class="proto-page-ref">Handbook pages 16–16</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">HyperMB Spin Column PCR Product Purification Kit</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Transfer the PCR reaction mixture or enzymatic reaction mixture into a clean 1.5 mL centrifuge tube, add five times the volume of Buffer B, and mix thoroughly.</p>
+        <p class="proto-step">2. Transfer the entire mixture into the adsorption column and let stand at room temperature for 2 min. Centrifuge at 12,000 rpm for 30 s. Discard the liquid in the collection tube and place the adsorption column back into the same collection tube.</p>
+        <p class="proto-step">3. Add 500 μL of Wash Solution Ⅱto the adsorption column and centrifuge at 12,000 rpm for 30 s. Discard the liquid in the collection tube and place the adsorption column back into the same collection tube. (Before using Wash Solution Ⅱfor the first time, please check whether the correct amount of anhydrous ethanol has been added.)</p>
+        <p class="proto-step">4. Repeat step 3 once.</p>
+        <p class="proto-step">5. Place the empty adsorption column and collection tube into the centrifuge and centrifuge at 12,000 rpm for 1 min. Place the adsorption column into a new centrifuge tube and let it stand for 3–5 min to completely remove residual ethanol. (This step must not be omitted; otherwise, the residual ethanol will seriously affect the yield and subsequent experiments.)</p>
+        <p class="proto-step">6. Add 30–50 μL of deionized water preheated to 60°C to the center of the adsorption membrane, let stand at room temperature for 1–2 min, and centrifuge at 12,000 rpm for 2 min to elute the DNA. Store the resulting DNA solution at -20°C. (Optional: Repeat this step once using the eluted DNA solution to improve the recovery yield.)</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p10">Protocol 10 &middot; Gel Extraction of PCR Products</h3>
+        <p class="proto-page-ref">Handbook pages 17–17</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Hipure Gel Pure DNA Mini Kit (Gel Extraction Kit)</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Use a clean surgical blade to excise the agarose gel block containing the target DNA fragment, place it into a 1.5 mL centrifuge tube, and weigh it.</p>
+        <p class="proto-step">2. According to the weight and concentration of the gel block, add Buffer B2 at a ratio of 300–600 μL per 100 mg of agarose (for gel concentration ≤1%, add 300 μL of Buffer B2 per 100 mg of gel).</p>
+        <p class="proto-step">3. Place the centrifuge tube in a 50°C water bath for 5–10 min, mixing occasionally, until the gel block is completely dissolved.</p>
+        <p class="proto-step">4. Transfer the entire dissolved solution into the adsorption column and centrifuge at 8000 × g for 30 s. Discard the liquid in the collection tube and place the adsorption column back into the same collection tube. (If the solution volume exceeds 750 μL, it can be loaded onto the column in multiple batches.)</p>
+        <p class="proto-step">5. Add 300 μL of Buffer B2 to the adsorption column and centrifuge at 9000 × g for 30 s. Discard the liquid in the collection tube and place the adsorption column back into the same collection tube.</p>
+        <p class="proto-step">6. Add 500 μL of Wash Solution to the adsorption column and centrifuge at 9000 × g for 30 s. Discard the liquid in the collection tube and place the adsorption column back into the same collection tube.</p>
+        <p class="proto-step">7. Repeat step 6 once.</p>
+        <p class="proto-step">8. Place the empty adsorption column and collection tube into the centrifuge and centrifuge at 9000 × g for 1 min 30 s.</p>
+        <p class="proto-step">9. After centrifugation, discard the adsorption column, place the collection tube into a new 1.5 mL centrifuge tube, add 15–40 μL of ddH₂O (preheated to 60°C) to the center of the adsorption column membrane, let stand at room temperature for 2 min, and centrifuge at 9000 × g for 2 min.</p>
+        <p class="proto-step">10. Measure the concentration of the obtained DNA using a Nanodrop. Store the resulting DNA solution at -20°C or use it for subsequent experiments.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p11">Protocol 11 &middot; Gibson Assembly</h3>
+        <p class="proto-page-ref">Handbook pages 18–18</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Linearized vector, purified insert DNA fragment, 2 × CE Mix V3, ddH₂O, Nanodrop spectrophotometer, sterile PCR tubes, pipettor, sterile pipette tips</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Determine the concentration of linearized vector and insert fragment using spectrophotometry. Ensure DNA samples are purified with no obvious non‑specific bands or smear.</p>
+        <p class="proto-step">2. Calculate the required DNA mass and volume. For single‑fragment assembly, the optimal molar ratio of vector:insert = 1:2.</p>
+        <p class="proto-step">3. Prepare reaction mixtures on ice (total volume 10 μL):</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Component</th><th scope="col">Recombination reaction</th><th scope="col">Negative control 1</th><th scope="col">Negative control 2</th></tr></thead><tbody><tr><td>Linearized vector</td><td>x μL</td><td>x μL</td><td>0 μL</td></tr><tr><td>Insert fragment</td><td>y μL</td><td>0 μL</td><td>y μL</td></tr><tr><td>2× CE Mix V3</td><td>5 μL</td><td>0 μL</td><td>0 μL</td></tr><tr><td>ddH₂O</td><td>5-x-y μL</td><td>10-x μL</td><td>10-y μL</td></tr></tbody></table></div>
+        <p class="proto-step">4. Gently mix by pipetting; do not vortex. Briefly spin down to collect all liquid at the bottom of the PCR tube.</p>
+        <p class="proto-step">5. Incubate the reaction mixture at 50 °C for 15 min. Immediately transfer the tube onto ice after incubation.</p>
+        <p class="proto-step">6. The assembled product can be used directly for transformation, or stored at −20 °C for up to one week.</p>
+        <p class="proto-note">Note: The volumes of vector and insert can be adjusted according to measured DNA concentration. The molar ratio of vector to insert can be optimized. Do not vortex the reaction mix, vigorous shaking may inactivate the assembly enzyme.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p12">Protocol 12 &middot; Yeast Transformation</h3>
+        <p class="proto-page-ref">Handbook pages 19–20</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Competent Cell Preparation and Transformation Kit for <i>Saccharomyces cerevisiae</i></p>
+        <p class="proto-subhead">1、Yeast Competent Cell Preparation</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-substep">a. Strain activation: Streak the <i>Saccharomyces cerevisiae</i> glycerol stock stored at -80°C onto a YPD agar plate and incubate inverted at 30°C for 2–4 days to activate the strain.</p>
+        <p class="proto-substep">b. Inoculation: Use an inoculation loop or a sterile pipette tip to pick a fresh single yeast colony and inoculate it into 10 mL of YPD liquid medium.</p>
+        <p class="proto-substep">c. Cultivation: Incubate at 30°C with shaking at 220 rpm overnight.</p>
+        <p class="proto-substep">d. Subculturing: Transfer the overnight culture into 50 mL of YPD liquid medium to give an initial OD₆₀₀ of 0.2–0.3. Incubate at 30°C with shaking at 250–300 rpm for 2–3 hours until the OD₆₀₀ reaches 0.4–0.6.</p>
+        <p class="proto-note">Note: Every 10 mL of culture can be used to prepare 4 tubes of 100 μL competent cells. The following procedure is based on 10 mL of culture. The amount of competent cells prepared can be adjusted according to actual needs.</p>
+        <p class="proto-substep">e. Preparation of competent cells:</p>
+        <p class="proto-text">①When the OD₆₀₀ of the freshly cultured yeast suspension reaches 0.4–0.6, centrifuge at 3000 × g for 3 min at room temperature. Discard the supernatant and retain the cell pellet. ②Resuspend the collected cell pellet thoroughly with 7 mL of Buffer A, then centrifuge at 3000 × g for 3 min at room temperature. Discard the supernatant and retain the cell pellet. ③Resuspend the cell pellet with 400 μL of Buffer B and incubate at room temperature for 10 min. After the 10-min incubation, the yeast competent cells are ready. They can then be aliquoted into 1.5 mL sterile centrifuge tubes at 100 μL per tube and used for yeast transformation.</p>
+        <p class="proto-note">Note: The prepared competent cells are best used immediately. They can also be stored at 4°C for 1 week, but their efficiency will gradually decrease. Alternatively, glycerol can be added to a final concentration of 15% and mixed well, followed by freezing at -80°C; they remain effective for at least 3 months.</p>
+        <p class="proto-subhead">2、Yeast Transformation</p>
+        <p class="proto-substep">a. Mix 0.1–1 μg of plasmid DNA with 10 μL of heat-denatured Carrier DNA by pipetting, then add the mixture to 100 μL of competent cells and mix gently by flicking the tube with your fingers.</p>
+        <p class="proto-substep">b. Add 600 μL of Buffer C, mix by inverting the tube up and down, and incubate in a 30°C water bath for 45 min.</p>
+        <p class="proto-substep">c. After the previous step, add 70 μL of DMSO, mix gently by inverting the tube up and down, and incubate in a 42°C water bath for 15 min, then immediately place on ice for 3–5 min.</p>
+        <p class="proto-substep">d. Centrifuge at 12,000–14,000 × g for 10 s at room temperature. Discard the supernatant and resuspend the cells with 100 μL of Buffer A.</p>
+        <p class="proto-substep">e. Spread the entire resuspended culture onto the appropriate selective medium plate and incubate inverted at 30°C for 2–3 days until single colonies appear.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p13">Protocol 13 &middot; Colony PCR for <i>Saccharomyces cerevisiae</i></h3>
+        <p class="proto-page-ref">Handbook pages 21–22</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Sample: single colony of yeast (BY4741) carrying the target gene; Reagents: sterile nuclease-free water, 20 mM NaOH lysis solution, 2× PCR Master Mix, 10 μM forward/reverse verification primers, agarose, nucleic acid dye, DNA Marker; Consumables: sterile nuclease-free PCR/EP tubes, sterile pipette tips, centrifuge tubes, corresponding selective plates; Equipment: thermal cycler, high-speed centrifuge, vortex mixer, agarose gel electrophoresis system, gel imaging system, clean bench, precision pipettes.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Pick and suspend the colony: under a clean bench, pick a plump, isolated, contaminant-free single colony and suspend it thoroughly in 10 μL of sterile nuclease-free water (transformation-verification method) or 10 μL of 20 mM NaOH lysis solution (target-fragment method) in a sterile PCR tube, pipetting until no visible cell clumps remain.</p>
+        <p class="proto-step">2. Replica-plating for archival (verification method): accurately spot 2.5 μL of the suspension onto a fresh SD-His selective plate, label it and incubate inverted to archive the strain; keep the remaining suspension as the lysis template.</p>
+        <p class="proto-step">3. Thermal-cycle lysis: place the tube in a thermal cycler and run 5 cycles of 98°C for 3 min followed by 4°C for 2 min; the alternating high-low temperature (combined with the alkaline system) fully disrupts the cell wall and releases the nucleic-acid template.</p>
+        <p class="proto-step">4. Clarify and collect template: briefly spin, vortex thoroughly, then re-centrifuge to pellet cell debris; take the supernatant as the PCR template (for the verification method use it directly in the 10 μL system; for the NaOH method take 5 μL without disturbing the bottom pellet).</p>
+        <p class="proto-step">5. Assemble the PCR mix (keep on ice): verification system (10 μL total) = 4.6 μL supernatant + 5.0 μL 2× Master Mix + 0.2 μL each of the 10 μM forward/reverse primers (primers may be pre-mixed and added as 0.4 μL at once); NaOH system (50 μL total) = 5 μL supernatant + 25 μL 2× Master Mix + 1 μL each of the 10 μM forward/reverse primers + 18 μL nuclease-free water. Mix gently, spin briefly, and avoid wall residue or uneven concentration.</p>
+        <p class="proto-step">6. Run PCR: initial denaturation 94°C for 3 min; cycling (35 cycles for verification, 28 for the NaOH method) 94°C for 30 s, annealing for 30 s at a primer-specific temperature, extension at 72°C at 1 kb/min; final extension 72°C for 5 min; hold at 16°C.</p>
+        <p class="proto-step">7. Agarose gel electrophoresis: prepare an agarose gel of a concentration suited to the expected fragment size, load the PCR product together with a DNA Marker, run at constant voltage until the bands separate clearly, then image and record the gel.</p>
+        <p class="proto-step">8. Readout and archiving: a clear specific band of the expected size, free of non-specific bands or smearing, is scored positive (successful transformation / target fragment present); no band or a mismatched size is negative and should be discarded. Tally the positive count and transformation rate and archive the imaging data.</p>
+        <p class="proto-note">*Note: The heat-lysis method rapidly verifies successful yeast transformation, while the NaOH-lysis method rapidly disrupts cells and amplifies the target gene fragment from the genome. Choose either according to the experimental aim, and fine-tune the annealing temperature by primer Tm and the extension time by fragment length. The PCR program can be adjusted according to the characteristics of the specific enzyme used.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p14">Protocol 14 &middot; Yeast Growth Curve Measurement</h3>
+        <p class="proto-page-ref">Handbook pages 23–24</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Samples: BY4741 carrying the fluorescent plasmid (glycerol stock or single colony); Medium: SD-His liquid medium (used to culture the fluorescent-plasmid BY4741); Inducer: α-factor (prepared in advance at an appropriate concentration, e.g. a 100× working solution according to the volume to be added, so that the final concentration reaches the 24–0.375 μM gradient after addition; solutions must be sterile, and membrane filtration may be applied after preparation if needed); Others: sterile culture tubes (5 mL culture system), sterile centrifuge tubes, sterile EP tubes, sterile pipette tips. Equipment: thermostatic shaker, clean bench, spectrophotometer (OD600), pipettes.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Strain preparation and pre-culture: in a clean bench, take the glycerol stock or a single colony of the fluorescent-plasmid BY4741 and inoculate it into a culture tube containing 5 mL of sterile SD-His liquid medium, then grow at 30°C, 220 rpm with shaking to a certain concentration (exponential phase).</p>
+        <p class="proto-step">2. Dilute to the starting concentration: measure OD600 of the pre-culture with a spectrophotometer, dilute with fresh sterile SD-His medium to a starting OD600 of about 0.2–0.3, aliquot 5 mL into each sterile culture tube; set up parallel tubes for each α-factor concentration and a 0 μM negative control.</p>
+        <p class="proto-step">3. Prepare α-factor working solutions: according to the volume to be added, prepare α-factor at an appropriate concentration (e.g. 100×) so that, after addition to the system, it is diluted to the final-concentration gradient of 24, 12, 6, 3, 1.5, 0.75 and 0.375 μM; prepare a sterile water tube as the 0 μM negative control (added at the same volume); solutions must be sterile, and membrane filtration may be applied after preparation if needed.</p>
+        <p class="proto-step">4. Induction: when the OD600 of the tubes reaches about 0.4–0.6 during shaking, add the corresponding α-factor working solution to each tube to give final concentrations along the 24–0.375 μM gradient; add an equal volume of sterile water to the negative-control tube; keep parallel tubes for each concentration.</p>
+        <p class="proto-step">5. Sampling and OD600 measurement: starting from the induction time (defined as 0 h), withdraw 100 μL from each tube every 1 h and measure OD600 with a spectrophotometer (using sterile SD-His medium as the blank); record the growth curve from induction until the groups show an obvious difference, about 10 h.</p>
+        <p class="proto-step">6. Data processing and comparison: plot OD600-time growth curves and compare the growth inhibition of BY4741 under the α-factor gradient (24–0.375 μM) (dose-response growth inhibition such as a longer lag phase and reduced maximum growth rate/plateau); use GraphPad/Excel for means, SD and between-group differences.</p>
+        <p class="proto-note">*Note: Avoid contamination and evaporation during culture and sampling and keep the sampling/addition volume consistent across tubes; store α-factor at -20°C, solutions must be sterile, and membrane filtration may be applied after preparation if needed; the fluorescent-plasmid BY4741 can be replaced with other engineered strains and their corresponding media for the experiment.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p15">Protocol 15 &middot; Microscopic Observation of Yeast Morphology</h3>
+        <p class="proto-page-ref">Handbook pages 25–25</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Yeast culture, blank medium, glass slides, cover slips, micropipettes and sterile pipette tips, light microscope, lens paper, cedar oil.Note: Handle cover slips gently to avoid scratches. Cedar oil must be completely wiped off after oil lens observation.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Sample dilution: Take yeast culture and dilute with blank medium to an appropriate OD value.</p>
+        <p class="proto-step">2. Sample preparation: Pipette an appropriate volume of diluted cell suspension onto the center of a glass slide.</p>
+        <p class="proto-step">3. Slide mounting: Carefully place the cover slip to avoid air bubbles.</p>
+        <p class="proto-step">4. Microscopic observation: Locate the target field of view under low-power objective lens, then switch to the 100× oil immersion objective. Add cedar oil and observe yeast cell morphology, budding status and cell aggregation.</p>
+        <p class="proto-step">5. Documentation: Capture micrographs and record morphological characteristics of yeast cells.</p>
+        <p class="proto-step">6. Post- observation handling: Remove cedar oil from the objective lens with lens paper. Clean glass slides and cover slips. Turn off the light source and reset the objective turret.</p>
+        <p class="proto-note">Note: Prevent air bubbles when applying cover slips. Residual cedar oil will damage the objective lens, so thorough cleaning after use is required.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p16">Protocol 16 &middot; Detection of Yeast Fluorescence Signal After Treatment</h3>
+        <p class="proto-page-ref">Handbook pages 26–27</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Sample: BY4741 yeast glycerol stock with confirmed transformation; Medium: SD-His liquid selective medium; Inducer: α-factor (pre-diluted to 100× gradient working solutions kept sterile, and membrane filtration may be applied after preparation if needed); Others: sterile centrifuge tubes, sterile EP tubes, sterile pipette tips, black 96-well fluorescence microplate. Equipment: thermostatic shaker, multi-mode microplate reader (green fluorescence), clean bench, pipettes, incubator, UV spectrophotometer.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Strain activation: in a clean bench, inoculate 10 μL of the verified BY4741 glycerol stock into 5 mL of sterile SD-His liquid medium in a culture tube, and incubate at 30°C, 220 rpm for 48 h to activate the strain.</p>
+        <p class="proto-step">2. Calibrate and dilute the culture: measure OD600 with a UV spectrophotometer, dilute with fresh sterile SD-His medium to a stable OD600 of 0.2–0.3, then continue shaking at 30°C, 220 rpm while monitoring OD600; induce immediately once the culture reaches OD600 = 0.4–0.6 (exponential phase, the optimal induction window).</p>
+        <p class="proto-step">3. Prepare 100× α-factor working solutions (sterile solutions required; membrane filtration may be applied after preparation if needed): for each final concentration, prepare a 100× working solution at 2400, 1200, 600, 300, 150, 75 and 37.5 μM respectively, and prepare a sterile-medium tube as the 0 μM (negative) counterpart.</p>
+        <p class="proto-step">4. Load the 96-well plate (100 μL per well): add 99 μL of the exponential-phase culture to each well, then 1 μL of the corresponding 100× α-factor working solution, and mix by pipetting—the final concentrations become the 24, 12, 6, 3, 1.5, 0.75, 0.375 and 0 μM gradient. For the negative control add 99 μL of culture + 1 μL of sterile medium in place of the inducer; for the blank add pure SD-His medium only. Label all groups.</p>
+        <p class="proto-step">5. One-plate loading and induction timing: after thorough mixing, load all groups into the black 96-well fluorescence microplate in one go, then place the plate in a 30°C incubator for static culture and start timing; no shaking is used from here on.</p>
+        <p class="proto-step">6. Time-course fluorescence detection: starting 1 h after induction, read fluorescence on the microplate reader once every hour for a total of 16 h, giving 16 time points (1 h to 16 h). Reader settings for yEGFP green fluorescence: excitation 485 nm, emission 528 nm (fine-tune per instrument).</p>
+        <p class="proto-step">7. Reading protocol: each hour briefly remove the plate for a fast read, then return it immediately to the 30°C incubator to minimize room-temperature exposure; include 3 technical replicates for every group to ensure accuracy and comparability.</p>
+        <p class="proto-step">8. Data processing and analysis: subtract the medium background and yeast autofluorescence with the negative control to obtain corrected specific fluorescence; plot the time-course curves of fluorescence at each α-factor concentration, compare the maximum induced fluorescence, and analyze the dose-response relationship (use GraphPad/Excel for means, SD and between-group differences).</p>
+        <p class="proto-note">*Note: Store α-factor at -20°C; solutions must be kept sterile, and membrane filtration may be applied after preparation if needed; the black 96-well plate reduces well-to-well crosstalk and background, and one-time plating with scheduled reads avoids the contamination and growth disturbance caused by repeated sampling.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p17">Protocol 17 &middot; Confocal Imaging of Yeast Fluorescence After Treatment</h3>
+        <p class="proto-page-ref">Handbook pages 28–29</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Yeast cell cultures, 4% paraformaldehyde, sorbitol, BSA, HA protein, fluorescent‑labelled antibody, lyticase, sterile centrifuge tubes, pipette tips, confocal laser scanning microscope, glass slides, coverslips</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Harvest yeast cell cultures. Centrifuge at 3000×g for 5 min at 4 ℃and discard the supernatant. Resuspend pellets with 1 M sorbitol, repeat centrifugation at 12000×g for 1 min, wash twice.</p>
+        <p class="proto-step">2. Add 200 μL 4% paraformaldehyde for cell fixation, incubate statically for 20 min at room temperature. Centrifuge at 800×g for 5 min at 4 ℃and remove supernatant. Resuspend pellets in 200 μL sorbitol, centrifuge at 800×g for 5 min at 4 ℃, repeat this washing step twice.</p>
+        <p class="proto-step">3. Add 200 μL sorbitol together with 20 μL 100 mg/mL lyticase. Incubate at 30 ℃ for 1 h. Centrifuge at 800×g for 5 min and discard supernatant. Resuspend in 200 μL sorbitol, centrifuge at 800×g for 5 min at 4 ℃, wash twice.</p>
+        <p class="proto-step">4. Add 500 μL blocking buffer（5%BSA）for 1 h blocking. Gently invert the tube periodically during incubation. Centrifuge at 800×g for 5 min and discard supernatant. Resuspend with 500 μL sorbitol, centrifuge at 800×g for 5 min at 4 ℃, repeat washing twice.</p>
+        <p class="proto-step">5. Add 100 μL 5 mg/mL HA protein for resuspension. Incubate at room temperature for 1 h, invert gently from time to time. Centrifuge at 800×g for 5 min and remove supernatant. Resuspend in 100 μL sorbitol, stand at room temperature for 2 min, then centrifuge at 800×g for 5 min at 4 ℃. Repeat this incubation‑wash cycle 3 times.</p>
+        <p class="proto-step">6. Add 100 μL fluorescent‑labelled antibody for resuspension. Incubate at room temperature for 1 h under dark conditions. Perform washing as described above, repeat washing step 5 times.</p>
+        <p class="proto-step">7. Drop 5–10 μL of cell suspension onto the center of a clean glass slide.Carefully place a coverslip on top of the droplet, slowly lower one side first to avoid air bubbles.Keep the prepared slide in dark conditions until confocal observation.</p>
+        <p class="proto-step">8. Confocal observation: Place the sealed slide on the microscope stage. Locate yeast cells and acquire images using a 20× objective lens. For GFP fluorescence, use an excitation wavelength of 488 nm.Capture images of multiple random visual fields for each sample.</p>
+        <p class="proto-note">Note:</p>
+        <p class="proto-step">1. All centrifugation parameters and incubation time can be adjusted according to yeast growth status.</p>
+        <p class="proto-step">2. All antibody‑incubation steps must be performed in the dark to prevent fluorescence quenching.</p>
+        <p class="proto-step">3. Avoid air bubbles during coverslip mounting, as bubbles will interfere with imaging.</p>
+        <p class="proto-step">4. You can scale‑up or scale‑down the reaction system proportionally according to experimental requirements.</p>
+        <p class="proto-step">5. The type and dilution ratio of fluorescent‑labelled antibody can be modified according to experimental requirements.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p18">Protocol 18 &middot; SDS-PAGE and Western Blotting</h3>
+        <p class="proto-page-ref">Handbook pages 30–33</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text"><i>Saccharomyces cerevisiae</i> BY4741 (with PAGER vector / empty‑vector control), Leu‑deficient medium, YPD medium, liquid nitrogen, RIPA lysis buffer, BCA protein assay kit (Solarbio), 30% Acr‑Bis, 4× separating gel buffer (pH 8.8), 4× stacking gel buffer (pH 6.8), 10% APS (freshly prepared), TEMED, ddH₂O, SDS‑PAGE loading buffer, 0.45 μm PVDF membrane, methanol, running buffer, transfer buffer, TBST, BSA, Ponceau‑S staining，ECL chemiluminescence reagent, TEV Cleavage Site polyclonal Antibody, muscarinic Acetylcholine Receptor 1 Rabbit Polyclonal Antibody, GAPDH Monoclonal antibody, HRP‑Goat Anti‑Mouse Recombinant Secondary Antibody (H+L), HRP‑Goat Anti‑Rabbit Recombinant Secondary Antibody (H+L), mini‑gel electrophoresis system, wet‑transfer apparatus, refrigerated centrifuge, ice bath</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Yeast protein extraction and protein concentration determination 1.1 Culture <i>Saccharomyces cerevisiae</i> BY4741. Use Leu‑deficient medium for strains carrying the PAGER vector and YPD medium for empty‑vector control, grow to OD₆₀₀ = 1.0. 1.2 Collect cell pellets from 10 mL culture by centrifugation at 5000 rpm for 5 min at 4 °C. 1.3 Disrupt cells by liquid‑nitrogen grinding. Add 400 μL RIPA lysis buffer. Centrifuge at 12000 rpm for 5 min at 4 °C, collect the supernatant containing total protein. 1.4 Determine protein concentration using the Solarbio BCA protein assay kit.</p>
+        <p class="proto-step">2. Gel preparation: 10% separating gel and 5% stacking gel (for one 1.0 mm mini‑gel)</p>
+        <p class="proto-subhead">10% Separating Gel (5 mL)</p>
+        <p class="proto-note">Note: APS and TEMED must be added last. Polymerization starts immediately after addition; mix rapidly and pour gel without delay. 10% Separating Gel (5 mL)</p>
+        <div class="proto-table-scroll"><table class="proto-table"><caption>10% Separating Gel (5 mL)</caption><thead><tr><th scope="col">Component</th><th scope="col">Volume</th></tr></thead><tbody><tr><td>ddH₂O</td><td>2.03 mL</td></tr><tr><td>30% Acr‑Bis</td><td>1.67 mL</td></tr><tr><td>4× separating gel buffer (pH 8.8)</td><td>1.25 mL</td></tr><tr><td>10% APS (freshly prepared)</td><td>50 μL</td></tr><tr><td>TEMED</td><td>3 μL</td></tr></tbody></table></div><div class="proto-table-scroll"><table class="proto-table"><caption>5% Stacking Gel (2 mL)</caption><thead><tr><th scope="col">Component</th><th scope="col">Volume</th></tr></thead><tbody><tr><td>ddH₂O</td><td>1.15 mL</td></tr><tr><td>30% Acr‑Bis</td><td>0.33 mL</td></tr><tr><td>4× stacking gel buffer (pH 6.8)</td><td>0.5 mL</td></tr><tr><td>10% APS (freshly prepared)</td><td>20 μL</td></tr><tr><td>TEMED</td><td>2 μL</td></tr></tbody></table></div>
+        <p class="proto-text">2.1 Prepare separating gel (add APS and TEMED last). Pour into the gel cassette, leaving about 1 cm space below the comb teeth. 2.2 Overlay the gel surface gently with ddH₂O or anhydrous ethanol. Allow 20‑30 min at room temperature for full gelation (a sharp boundary appears between gel and overlay liquid). 2.3 Discard the overlay liquid and blot residual liquid with filter paper. 2.4 Pour stacking gel and insert the comb immediately, avoid trapped air bubbles. Allow to polymerize for 20‑30 min at room temperature.</p>
+        <p class="proto-step">3. Protein denaturation Add SDS‑PAGE loading buffer to protein samples. For membrane proteins, high‑temperature boiling may cause protein aggregation and band shifting / loss. Incubate samples at 37 °C for 10 min for denaturation.</p>
+        <p class="proto-step">4. SDS‑PAGE electrophoresis Load 15 μg total protein per well (loading range: 10‑40 μg is acceptable). Stacking‑gel phase: constant voltage 80 V, 20‑30 min, until bromophenol dye forms a sharp thin line. Separating‑gel phase: constant voltage 120 V, 60‑90 min, until bromophenol front migrates to the bottom edge of gel.</p>
+        <p class="proto-step">5. Wet‑transfer 5.1 Membrane activation: Activate 0.45 μm PVDF membrane in methanol for 30 s, then equilibrate in transfer buffer. 5.2 Assemble the transfer sandwich in order (negative pole →positive pole): black sponge →filter paper →gel →PVDF membrane →filter paper →sponge →white plate. Roll with a glass rod to completely eliminate trapped air bubbles between each layer. 5.3 Perform wet transfer at constant current 280 mA for 90 min in an ice bath to prevent overheating of transfer buffer. 5.4 Verify transfer efficiency by Ponceau‑S staining; confirm complete transfer of bands near 75 kDa onto PVDF membrane. Wash away Ponceau‑S dye with TBST afterwards.</p>
+        <p class="proto-step">6. Blocking and antibody incubation All antibodies are diluted with 5% BSA solution.</p>
+        <div class="proto-table-scroll"><table class="proto-table"><thead><tr><th scope="col">Antibody</th><th scope="col">Dilution ratio</th></tr></thead><tbody><tr><td>TEV Cleavage Site polyclonal Antibody</td><td>1:1000</td></tr><tr><td>muscarinic Acetylcholine Receptor 1 Rabbit Polyclonal Antibody</td><td>1:2000</td></tr><tr><td>GAPDH Monoclonal antibody</td><td>1:50000</td></tr><tr><td>HRP‑Goat Anti‑Mouse Recombinant Secondary Antibody (H+L)</td><td>1:10000</td></tr><tr><td>HRP‑Goat Anti‑Rabbit Recombinant Secondary Antibody (H+L)</td><td>1:10000</td></tr></tbody></table></div>
+        <p class="proto-text">6.1 Blocking: Incubate membrane in 5% BSA (prepared with TBST) for 2 h at room temperature, or overnight at 4 °C. 6.2 Wash membrane with TBST, 3 × (5‑10 min). 6.3 Primary‑antibody incubation: incubate for 2 h at room temperature or overnight at 4 °C. 6.4 Wash membrane with TBST, 3 × (5‑10 min). 6.5 Secondary‑antibody incubation: incubate with corresponding HRP‑conjugated secondary antibody for 1 h at room temperature. 6.6 Wash membrane with TBST, 4‑5 × (5‑10 min). Detect signal using ECL chemiluminescent substrate.</p>
+        <p class="proto-note">Note: Do not boil membrane‑protein samples; high temperature causes aggregation. Maintain ice‑bath cooling during wet transfer. APS solution must be freshly prepared before use. Antibody dilution ratios can be adjusted according to practical signal‑to‑noise performance.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p19">Protocol 19 &middot; CRISPR-Cas9 Transformation for Gene Knockout in Yeast</h3>
+        <p class="proto-page-ref">Handbook pages 34–36</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Competent Cell Preparation and Transformation Kit for <i>Saccharomyces cerevisiae</i>, PrimeSTAR Max DNA Polymerase；PCR Master Mix, HyperMB Spin Column PCR Product Purification Kit, Hipure Gel Pure DNA Mini Kit (Gel Extraction Kit)</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Preparation of Linearized pML104 and Repair Template</p>
+        <p class="proto-substep">a. Linearize the pML104 backbone by inverse PCR using primers containing the target gene-specific guide sequence (approximately 20 bp homology arms at both ends of the linearized backbone).</p>
+        <p class="proto-substep">b. Amplify the repair template from BY4741 <i>Saccharomyces cerevisiae</i> genomic DNA using primers flanking the sgRNA cleavage site, with a 4 bp deletion introduced within the target region. The repair template consists of approximately 500 bp of homology upstream and 500 bp downstream of the cleavage site (~1000 bp total).</p>
+        <p class="proto-substep">c. Purify the linearized plasmid and the repair template separately by gel extraction or PCR cleanup. Measure the DNA concentration using a Nanodrop.</p>
+        <p class="proto-step">2. Yeast Competent Cell Preparation</p>
+        <p class="proto-substep">a. Strain activation: Streak the <i>Saccharomyces cerevisiae</i> glycerol stock stored at -80°C onto a YPD agar plate and incubate inverted at 30°C for 2–4 days to activate the strain.</p>
+        <p class="proto-substep">b. Inoculation: Use an inoculation loop or a sterile pipette tip to pick a fresh single yeast colony and inoculate it into 10 mL of YPD liquid medium.</p>
+        <p class="proto-substep">c. Cultivation: Incubate at 30°C with shaking at 220 rpm overnight.</p>
+        <p class="proto-substep">d. Subculturing: Transfer the overnight culture into 50 mL of YPD liquid medium to give an initial OD₆₀₀ of 0.2–0.3. Incubate at 30°C with shaking at 250–300 rpm for 2–3 hours until the OD₆₀₀ reaches 0.4–0.6.</p>
+        <p class="proto-note">Note: Every 10 mL of culture can be used to prepare 4 tubes of 100 μL competent cells. The following procedure is based on 10 mL of culture. The amount of competent cells prepared can be adjusted according to actual needs.</p>
+        <p class="proto-substep">e. Preparation of competent cells: ①When the OD₆₀₀ of the freshly cultured yeast suspension reaches 0.4–0.6, centrifuge at 3000 × g for 3 min at room temperature. Discard the supernatant and retain the cell pellet. ②Resuspend the collected cell pellet thoroughly with 7 mL of Buffer A, then centrifuge at 3000 × g for 3 min at room temperature. Discard the supernatant and retain the cell pellet. ③Resuspend the cell pellet with 400 μL of Buffer B and incubate at room temperature for 10 min. After the 10-min incubation, the yeast competent cells are ready. They can then be aliquoted into 1.5 mL sterile centrifuge tubes at 100 μL per tube and used for yeast transformation.</p>
+        <p class="proto-note">Note: The prepared competent cells are best used immediately. They can also be stored at 4°C for 1 week, but their efficiency will gradually decrease. Alternatively, glycerol can be added to a final concentration of 15% and mixed well, followed by freezing at -80°C; they remain effective for at least 3 months.</p>
+        <p class="proto-step">3. CRISPR-Cas9 Co-transformation</p>
+        <p class="proto-substep">a. Mix the linearized pML104 plasmid and the repair template with 10 μL of heat-denatured Carrier DNA by pipetting, then add the mixture to 100 μL of competent cells and mix gently by flicking the tube with your fingers.</p>
+        <p class="proto-substep">b. Add 600 μL of Buffer C, mix by inverting the tube up and down, and incubate in a 30°C water bath for 45 min.</p>
+        <p class="proto-substep">c. After the previous step, add 70 μL of DMSO, mix gently by inverting the tube up and down, and incubate in a 42°C water bath for 15 min, then immediately place on ice for 3–5 min.</p>
+        <p class="proto-substep">d. Centrifuge at 12,000–14,000 × g for 10 s at room temperature. Discard the supernatant and resuspend the cells with 100 μL of Buffer A.</p>
+        <p class="proto-substep">e. Spread the entire resuspended culture onto the appropriate selective medium plate and incubate inverted at 30°C for 2–3 days until single colonies appear.</p>
+        <p class="proto-step">4. Validation of Gene Knockout</p>
+        <p class="proto-substep">a. Pick single colonies and perform colony PCR to amplify the target locus.</p>
+        <p class="proto-substep">b. Analyze the PCR products by agarose gel electrophoresis. Successful knockout colonies will show a band smaller than the wild-type band due to the 4 bp deletion.</p>
+        <p class="proto-substep">c. If necessary, confirm the knockout by Sanger sequencing of the PCR product.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p20">Protocol 20 &middot; Functional Validation of the Yeast Sensor</h3>
+        <p class="proto-page-ref">Handbook pages 37–37</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Yeast strains (defective mutant strains, BY4741), corresponding selective liquid medium, lyticase (10 mg/mL), TEV protease, DCZ solution, sterile centrifuge tubes, pipette tips, microplate, microplate reader, metal‑bath incubator, shaking incubator, Nanodrop spectrophotometer</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Dilute overnight yeast cultures with corresponding selective medium to an OD₆₀₀ of 0.2. Prepare 3 tubes for defective mutant strains and 3 tubes for BY4741. Incubate at 30 ℃with shaking at 200 rpm until OD₆₀₀ reaches 0.4‑0.6. The defective mutant strains take approximately 3.5 h, while BY4741 takes approximately 2.5 h.</p>
+        <p class="proto-step">2. Reserve 6 mL of cell suspension for each tube. Add 150 μL of 10 mg/mL lyticase, then incubate at 30 ℃with shaking at 100 rpm for 16 h.</p>
+        <p class="proto-step">3. Transfer 1.3 mL treated cell suspension into each tube, add 65 μL TEV protease （1U/μL）, and perform digestion in a metal bath at 30 ℃for 2 h.</p>
+        <p class="proto-step">4. Add DCZ solution to reach final concentrations of 1 μM, 10 μM and 100 μM respectively. Set up 3 technical replicates for each concentration. Tap gently to mix thoroughly, incubate at 30 ℃for 2‑6 h. Measure signals by microplate reader every 1 h until fluorescence shows no obvious change.</p>
+        <p class="proto-step">5. Record final fluorescence signals using the microplate reader.</p>
+        <p class="proto-step">6. Negative control groups were prepared in parallel under identical conditions.</p>
+        <p class="proto-note">Note: Incubation time can be adjusted based on yeast growth status. DCZ concentration and incubation duration can be modified according to experimental requirements. The reaction system can be scaled‑up or scaled‑down proportionally as needed.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p21">Protocol 21 &middot; Sensitivity Testing of the Yeast Sensor</h3>
+        <p class="proto-page-ref">Handbook pages 38–39</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">BY4741, Engineered BY4741, H1N1 HA protein, DCZ, SD- HIS liquid selective medium, Sterile PBS</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Yeast pre-culture Inoculate engineered yeast in SD-HIS liquid medium, shake at 30 °C, 220 rpm until mid-logarithmic phase (OD600=0.4-0.6). Adjust yeast suspension to identical cell density for all samples.</p>
+        <p class="proto-step">2. Prepare H1N1-HA serial dilution Dilute H1N1-HA stock protein with sterile PBS. Add yeast, protein solution and medium into 96-well plate, achieve final HA concentrations from 0.1 nM-100 nM; set zero-HA PBS control. Final volume per well is 200 μL.</p>
+        <p class="proto-step">3. Antigen-nanobody binding incubation Seal plate with breathable sealing film, incubate statically at 30 °C for sufficient time to allow HA-nanobody binding.</p>
+        <p class="proto-step">4. Pathway activation by DCZ Add DCZ to identical final concentration across all wells. Incubate plate at 30 °C for fixed induction time to trigger MAPK-FUS1-yEGFP cascade. Before measurement, shake plate for 1 min inside reader to resuspend settled yeast cells to avoid sedimentation bias.</p>
+        <p class="proto-step">5. Microplate-reader acquisition Record yEGFP fluorescence RFU (Ex 485 nm/Em 528 nm, bottom-read) and OD600 absorbance for every well.</p>
+        <p class="proto-step">6. Data analysis</p>
+        <p class="proto-substep">a. Subtract medium blank value from raw RFU and raw OD 600.</p>
+        <p class="proto-substep">b. Compute normalized fluorescence =Net RFU/Net OD600, correcting for differences in cell density per well.</p>
+        <p class="proto-substep">c. Subtract normalized autofluorescence signal from untransformed chassis yeast, get net normalized signal.</p>
+        <p class="proto-substep">d. Plot dose-response curve: X-axis = final H1N1-HA concentration (nM, log scale); Y-axis = net normalized fluorescence.</p>
+        <p class="proto-substep">e. Calculate Limit of Detection (LOD): minimal H1N1-HA concentration where signal ≥zero-HA background + 3 × standard deviation of zero- HA control.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p22">Protocol 22 &middot; Specificity Testing of the Yeast Sensor</h3>
+        <p class="proto-page-ref">Handbook pages 40–40</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">BY4741, Engineered BY4741, H1N1 HA protein, DCZ, SD- HIS liquid selective medium, Sterile PBS, H3N2 HA, RSV-F protein, SARS- CoV- 2 Spike protein, BSA</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Yeast pre-culture.Inoculate engineered yeast in SD-HIS liquid medium, shake at 30 °C, 220 rpm until mid-logarithmic phase (OD600=0.4-0.6). Adjust yeast suspension to identical cell density for all samples.</p>
+        <p class="proto-step">2. Prepare each protein working solution with sterile PBS. Dispense yeast suspension and corresponding protein solutions into 96-well plate. Each well final volume 200 μL.</p>
+        <p class="proto-step">3. Seal plate, incubate statically at 30 °C for antigen- nanobody binding.</p>
+        <p class="proto-step">4. Add DCZ to uniform final concentration for all wells. Fixed- time incubation at 30 °C for signal activation. Shake plate 1 min before measurement for cell resuspension.</p>
+        <p class="proto-step">5. Read RFU(yEGFP) and OD 600 via microplate- reader.</p>
+        <p class="proto-step">6. Data analysis</p>
+        <p class="proto-substep">a. Subtract medium blank for raw RFU and OD 600. Compute normalized fluorescence = Net RFU / Net OD 600.</p>
+        <p class="proto-substep">b. Subtract chassis-yeast normalized autofluorescence to obtain net normalized signal.</p>
+        <p class="proto-substep">c. Set H1N1-HA group net normalized signal as 100 % relative response, calculate relative-response percentage for every other protein group.</p>
+        <p class="proto-substep">d. Compare each group signal with zero- antigen background control; document cross-reactivity if partial signal occurs in other HA sub types.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p23">Protocol 23 &middot; Plasmid Extraction from Yeast</h3>
+        <p class="proto-page-ref">Handbook pages 41–42</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Log‑phase yeast culture containing plasmid, UNIQ‑10 DNA extraction kit (Solution I, Solution II, Solution III, Buffer DW1, Wash Solution, Elution Buffer), RNase A, Snailase, Snailase Reaction Buffer, β‑mercaptoethanol, absolute ethanol, water‑bath device, centrifuge, 2 mL centrifuge tubes, adsorption columns, pipette tips</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Add 210 μL RNase A into 15 mL Solution I, mix thoroughly by inversion and store at 4°C.</p>
+        <p class="proto-step">2. Add 4‑fold volume of absolute ethanol into Wash Solution and mix well before use.</p>
+        <p class="proto-step">3. Dissolve Snailase powder with Snailase Reaction Buffer for subsequent experiments.</p>
+        <p class="proto-step">4. Adjust water‑bath to 37°C. Check Solution II and Solution III; redissolve precipitates at 37°C if observed, then cool to room temperature.</p>
+        <p class="proto-step">5. Transfer 4 mL log‑phase yeast culture into centrifuge tube, centrifuge at 8000 rpm for 2 min, discard all supernatant medium.</p>
+        <p class="proto-step">6. Add 1200 μL Snailase Reaction Buffer to cell pellet, add 2.4 μL β‑mercaptoethanol and 100 μL reconstituted Snailase.</p>
+        <p class="proto-step">7. Incubate the suspension in 37°C water‑bath for 3 h, invert gently every 30 min.</p>
+        <p class="proto-step">8. Centrifuge at 5000 rpm for 10 min, carefully discard supernatant and collect protoplast pellet.</p>
+        <p class="proto-step">9. Resuspend protoplast pellet completely with 550 μL Solution I.</p>
+        <p class="proto-step">10. Add 550 μL Solution II, mix gently by inverting 5‑8 times, incubate at room temperature for no more than 3 min.</p>
+        <p class="proto-step">11. Add 700 μL Solution III, mix immediately by gentle inversion.</p>
+        <p class="proto-step">12. Centrifuge at 12000 rpm for 10 min at room temperature, carefully transfer supernatant into adsorption column.</p>
+        <p class="proto-step">13. Centrifuge at 8000 rpm for 1 min, discard flow‑through liquid.</p>
+        <p class="proto-step">14. Add 500 μL Buffer DW1 into column, centrifuge at 8000 rpm for 1 min, discard waste liquid.</p>
+        <p class="proto-step">15. Add 700 μL Wash Solution into column, centrifuge at 8000 rpm for 1 min, discard waste liquid. Repeat this wash step once.</p>
+        <p class="proto-step">16. Centrifuge empty adsorption column at 12000 rpm for 2 min to remove residual ethanol completely.</p>
+        <p class="proto-step">17. Place column into new clean 1.5 mL centrifuge tube, add 50‑100 μL Elution Buffer onto column membrane.</p>
+        <p class="proto-step">18. Stand at room temperature for 2 min, centrifuge at 12000 rpm for 1 min to elute plasmid DNA.</p>
+        <p class="proto-note">Note: For large‑size plasmids (~10 kb), lysis duration with Solution II must be strictly controlled within 3 min to prevent plasmid fragmentation.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p24">Protocol 24 &middot; Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</h3>
+        <p class="proto-page-ref">Handbook pages 43–44</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Engineered yeast (BY4741) liquid culture, Sorbitol buffer, Lyticase (100 mg/mL), Sterile nuclease-free water, 2× PCR Master Mix, Forward / reverse verification primers (10 μM), Agarose, Nucleic acid dye, DNA Marker, 1.5 mL centrifuge tubes, Sterile pipette tips, Thermal cycler, High-speed centrifuge, Vortex mixer, Agarose gel electrophoresis system, Gel imaging system</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Harvest cells: Transfer 1 mL of yeast liquid culture into a 1.5 mL centrifuge tube. Centrifuge at 12,000 rpm for 1 min and discard the supernatant.</p>
+        <p class="proto-step">2. Wash the pellet: Add 500 μL sorbitol buffer, vortex to resuspend, centrifuge at 12,000 rpm for 1 min, and discard the supernatant.</p>
+        <p class="proto-step">3. Cell-wall digestion: Add 200 μL sorbitol buffer and 20 μL lyticase (100 mg/mL) to the cell pellet, mix gently, and incubate at 37 °C for 1 h to digest the cell wall.</p>
+        <p class="proto-step">4. Centrifuge the digestion mixture at 3,000 × g for 5 min and carefully remove the supernatant.</p>
+        <p class="proto-step">5. Template release: Add 50 μL sterile nuclease-free water, vortex to mix, and incubate at 100 °C for 10 min to lyse the membranes and release the genomic template.</p>
+        <p class="proto-step">6. Verification PCR: Use 4.6 μL of the crude lysate as template and set up a 10 μL reaction following the yeast colony verification PCR described in Protocol 13 (Colony PCR for <i>Saccharomyces cerevisiae</i>). Verification system (10 μL total) = 4.6 μL template + 5.0 μL 2× Master Mix + 0.2 μL each of the 10 μM forward/reverse primers. Cycling program: initial denaturation 94 °C for 3 min; 35 cycles of 94 °C for 30 s, annealing for 30 s at a primer-specific temperature, extension at 72 °C at 1 kb/min; final extension 72 °C for 5 min; hold at 16 °C.</p>
+        <p class="proto-step">7. Verify the amplified products by agarose gel electrophoresis; a specific band of the expected size indicates a positive clone.</p>
+        <p class="proto-note">Note: Extend the lyticase incubation if lysis is incomplete. Adjust the annealing temperature by primer Tm and the extension time by fragment length. Store the remaining lysate at −20 °C for repeat PCR.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p25">Protocol 25 &middot; Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</h3>
+        <p class="proto-page-ref">Handbook pages 45–46</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">X-α-gal Blue-White Color Development</p>
+        <p class="proto-text">BY4741 yeast glycerol stock with verified successful transformation; SD-His liquid selection medium, SD-His solid plates containing X-α-gal and sterile X-α-gal solution; α-factor (gradient working solutions, stored at -20°C); sterile centrifuge tubes, EP tubes, pipette tips and culture dishes; thermostat shaker, UV spectrophotometer (OD600), clean bench, incubator and micropipettes.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Activation: aseptically inoculate 10 μL of the verified BY4741 glycerol stock into 5 mL sterile SD-His liquid medium; culture on a shaker at 30°C, 220 rpm for 48 h to fully activate the strain.</p>
+        <p class="proto-step">2. Normalization &amp; pre-culture: measure OD600, dilute with fresh sterile SD-His to a 5 mL system at OD600 0.2–0.3; continue at 30°C, 220 rpm until OD600 reaches 0.4–0.6 (log phase, optimal induction state), then stop shaking and proceed immediately.</p>
+        <p class="proto-step">3. Plate colony induction: spot 2.5 μL of the OD600 0.4–0.6 culture per group onto the corresponding zones of X-α-gal SD-His solid plates and label the groups; incubate at 30°C until clear single colonies develop.</p>
+        <p class="proto-step">4. Inducer dosing on plates: once colonies appear, precisely add 2.5 μL of the corresponding gradient α-factor working solution above each colony group; add equal-volume sterile water for the negative group and keep a blank plate for the blank group.</p>
+        <p class="proto-step">5. Liquid induction: aliquot the same OD600 0.4–0.6 culture into each group to form X-α-gal SD-His liquid reaction systems; add the corresponding α-factor concentrations, add equal-volume sterile water for the negative group, and use X-α-gal SD-His liquid without cells/inducer for the blank group; incubate at 30°C.</p>
+        <p class="proto-step">6. Time-course recording: from induction, observe and photograph the blue/white color intensity and range of plate colonies and liquid systems every 1 h for a total of 8 h (8 time points, 1–8 h), keeping plate and liquid time points aligned.</p>
+        <p class="proto-step">7. Data analysis: compile the 8-time-point photos and color grades; score each sample on a unified scale (colorless / light blue / medium blue / deep blue); subtract blank-medium and negative background to obtain specific induced color; plot color intensity vs time for the plate and liquid systems, compare induction efficiency, color-onset time and maximum intensity across concentrations, and analyze the dose-response relationship of MEL1 expression.</p>
+        <p class="proto-note">Note: store α-factor at -20°C; store X-α-gal at -20°C protected from light; prepare X-α-gal medium freshly; the culture temperature is held at 30°C and the observation/photography conditions are kept consistent; 3 biological replicates per group.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        <h3 id="protocol-p26">Protocol 26 &middot; yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</h3>
+        <p class="proto-page-ref">Handbook pages 47–47</p>
+        <h4 class="proto-label">Materials</h4>
+        <p class="proto-text">Starting ODs</p>
+        <p class="proto-text">yEGFP fluorescent yeast glycerol stock or single colonies; SD-His liquid selective medium; α-factor stock solutions (final concentrations 12 μM, 1.2 μM and 0 μM); sterile black 96-well microplates with lids; microplate reader capable of OD600 and fluorescence measurement; sterile pipette tips and a multichannel pipette.</p>
+        <h4 class="proto-label">Steps</h4>
+        <p class="proto-step">1. Pre-culture: inoculate the yEGFP fluorescent yeast from a glycerol stock or a picked single colony into 5 mL SD-His liquid medium and grow it to a certain density.</p>
+        <p class="proto-step">2. Normalization and pre-culture to target OD: dilute the culture with fresh sterile SD-His to a starting OD600 of 0.1–0.2, then continue culturing for a period until the OD600 reaches a set value (e.g. about 0.4).</p>
+        <p class="proto-step">3. Plating and induction setup: add the culture to a sterile black 96-well microplate with lid, 99 μL per well; induce with α-factor at final concentrations of 12 μM, 1.2 μM and 0 μM, and set up three replicates for each group.</p>
+        <p class="proto-step">4. Sampling and starting-OD recording: starting from the moment the culture is added to the 96-well plate, perform one induction every 1 h (including 0 h); before each induction, take 3 samples and measure OD600 to record the starting OD of that induction round.</p>
+        <p class="proto-step">5. Fluorescence reading: measure the fluorescence value of each group at 1 h and 2 h after each induction.</p>
+        <p class="proto-step">6. Data summarization: summarize the signal-to-noise ratio (S/N) and plot its relationship with the induction starting OD and the induction time.</p>
+        <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
+        </div>
+      </div>
+</div>
+<script>
+/* 侧边导航点击被 sidebar-progress.js 接管（preventDefault + replaceState，不触发
+   hashchange），收纳条收不到展开信号；这里对指向 #protocol-* 的链接统一补一次展开。 */
+(function () {
+  function openTarget(hash) {
+    var id = (hash || '').replace(/^#/, '');
+    if (!id) return;
+    var el = document.getElementById(id);
+    var fold = el && el.closest ? el.closest('details.section-fold') : null;
+    if (fold && !fold.open) {
+      fold.open = true;
+      if (window.SidebarProgress && window.SidebarProgress.recalculate) {
+        window.SidebarProgress.recalculate();
+      }
+    }
+  }
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest ? event.target.closest('a[href^="#protocol-"]') : null;
+    if (!link) return;
+    window.setTimeout(function () { openTarget(link.getAttribute('href')); }, 0);
+  }, false);
+  window.addEventListener('hashchange', function () { openTarget(window.location.hash); });
+  openTarget(window.location.hash);
+})();
+</script>
 {% endblock %}

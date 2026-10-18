@@ -36,56 +36,6 @@ html {
   color: var(--desc-color-primary-darker, #4A3728);
 }
 
-.sustainability-page .sustainability-head__sub {
-  margin: 0 0 1rem;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--desc-color-primary-dark, #5D4632);
-}
-
-.sustainability-page .sustainability-head .official-lead {
-  margin-top: 1.25rem;
-}
-
-.sustainability-page .sustainability-head__rule {
-  margin-top: 0.6rem;
-  height: 3px;
-  width: 4.5rem;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--desc-color-primary, #8B5A2B) 0%, var(--desc-color-primary-light, #D4A574) 100%);
-}
-
-/* 官方 Lead：SDG 17 藏青作为引导色 */
-.official-lead {
-  margin: 1rem 0 0;
-  padding: 0.85rem 1.1rem;
-  border-left: 3px solid #19486A;
-  border-radius: 0 0.375rem 0.375rem 0;
-  background: linear-gradient(90deg, rgba(25, 72, 106, 0.08) 0%, rgba(25, 72, 106, 0.02) 100%);
-}
-
-.official-lead__tag {
-  display: inline-block;
-  padding: 0.05rem 0.5rem;
-  border-radius: 999px;
-  background: #19486A;
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  vertical-align: 0.15em;
-}
-
-.official-lead p {
-  display: inline;
-  margin: 0 0 0 0.6rem;
-  font-size: 0.92rem;
-  font-style: italic;
-  line-height: 1.7;
-  color: #2C4A63;
-}
-
 /* ==========================================================
    2. SDG 官方色：卡片顶边 + 徽章
    （色值来源：United Nations SDG 官方色板，https://sdgs.un.org/goals）
@@ -98,7 +48,23 @@ html {
 .sustainability-page .content-card[data-sdg="4"]       { border-top: 4px solid #C5192D; }
 .sustainability-page .content-card[data-sdg="17"]      { border-top: 4px solid #19486A; }
 .sustainability-page .content-card[data-sdg="summary"] { border-top: 4px solid #64748B; }
-.sustainability-page .content-card[data-sdg="refs"]    { border-top: 4px solid #A9743A; }
+
+/* SDG 卡片背景颜色复合：仅四张在用的 SDG 目标卡（3 / 4 / 9 / 17），
+   顶部覆一层该 SDG 官方色的极淡渐隐色晕，向下 320px 内淡出到卡底白；
+   其余卡（Overview / Summary / References）保持白底，不做颜色复合。
+   特异性（.content-card[data-sdg]）高于下方 .content-card 基础规则的 background 简写。 */
+.sustainability-page .content-card[data-sdg="3"] {
+  background-image: linear-gradient(180deg, rgba(76, 159, 56, 0.09) 0%, rgba(76, 159, 56, 0) 320px);
+}
+.sustainability-page .content-card[data-sdg="4"] {
+  background-image: linear-gradient(180deg, rgba(197, 25, 45, 0.08) 0%, rgba(197, 25, 45, 0) 320px);
+}
+.sustainability-page .content-card[data-sdg="9"] {
+  background-image: linear-gradient(180deg, rgba(253, 105, 37, 0.09) 0%, rgba(253, 105, 37, 0) 320px);
+}
+.sustainability-page .content-card[data-sdg="17"] {
+  background-image: linear-gradient(180deg, rgba(25, 72, 106, 0.08) 0%, rgba(25, 72, 106, 0) 320px);
+}
 
 .sdg-chip {
   display: inline-block;

@@ -28,40 +28,7 @@ html {
 }
 
 /* ==========================================================
-   2. 页首标题区（本页唯一 h1）
-   ========================================================== */
-.contribution-hero {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 0.25rem;
-}
-
-.contribution-hero h1 {
-  margin: 0;
-  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--desc-color-primary-darker, #4A3728);
-}
-
-.contribution-hero__sub {
-  margin: 0.35rem 0 0;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--desc-color-primary-dark, #5D4632);
-  text-indent: 0;
-}
-
-.contribution-hero__rule {
-  margin-top: 0.6rem;
-  height: 3px;
-  width: 4.5rem;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--desc-color-primary, #8B5A2B) 0%, var(--desc-color-primary-light, #D4A574) 100%);
-}
-
-/* ==========================================================
-   3. 内容卡片
+   2. 内容卡片
    ========================================================== */
 .contribution-page .content-card {
   background: var(--bg-card, #ffffff);
@@ -274,6 +241,39 @@ html {
 
 .contribution-page .link-list a .i18n-zh {
   font-size: 0.8rem;
+}
+
+/* 正文内的普通项目符号列表（与字段表区分：无标签列） */
+.contribution-page .plain-list {
+  margin: 0.2rem 0 0.9rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.contribution-page .plain-list > li {
+  margin: 0 0 0.35rem;
+}
+
+.contribution-page .plain-list > li::before {
+  content: none;
+}
+
+/* 大节末尾的跳转链接：与正文段落拉开距离，作为该节的收口 */
+.contribution-page .link-list--section-end {
+  margin: 1.1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(139, 90, 43, 0.22);
+}
+
+.contribution-page .link-list--section-end > li {
+  padding: 0;
+}
+
+.contribution-page .link-list--section-end a {
+  font-weight: 600;
 }
 
 /* 正文链接：常态带下划线，读者一眼能认出是可点的链接 */
@@ -567,9 +567,5 @@ html {
   .contribution-page .data-table th,
   .contribution-page .data-table td {
     padding: 0.4rem;
-  }
-
-  .contribution-hero {
-    padding: 1.25rem 1rem 0.25rem;
   }
 }

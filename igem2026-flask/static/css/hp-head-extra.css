@@ -68,7 +68,14 @@
     .hp-flat-intro { grid-template-columns: 1fr auto; gap: .5rem .8rem; }
     .hp-flat-intro-title { grid-column: 1 / -1; grid-row: 2; }
   }
-/* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
+  /* 手机档（≤480px）容器满宽：三层内边距叠加后内容宽度只剩视口的 65% */
+  @media (max-width: 480px) {
+    .description-container { width: 100%; padding-inline: 12px; }
+  }
+  
+
+
+  /* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
   .hz-map * { box-sizing: border-box; margin: 0; padding: 0; }
 
   /* 该页面包含全屏地图与角色模态框；确保全局固定导航始终位于页面内容之上。 */
@@ -425,9 +432,15 @@
   }
   .hz-back-to-map:hover { background: rgba(139,115,85,.18); color: #5f5347; }
   .hz-back-to-map:focus-visible { outline: 2px solid rgba(139,115,85,.55); outline-offset: 2px; }
-  /* 单图：限宽不限高，避免超宽截图被拉成整卡宽 */
-  .hz-detail-card__gallery--single { grid-template-columns: minmax(0, 1fr); }
-  .hz-detail-card__gallery--single figure { max-width: 780px; }
+  /* 单图：宽度对齐多图画廊的单列（220–340px），并保证不宽于正文列 */
+  .hz-detail-card__gallery--single { grid-template-columns: minmax(220px, 340px); }
+  /* 专家卡响应式：1340px 以下正文列会被压到 300px 上下（实测 1100px 时仅 199px），
+     头像列固定 220px 会把正文与下方画廊一起挤扁；此区间改为上下堆叠，正文占满整卡宽。
+     放在 680px 规则之前，保证 ≤680px 仍沿用原有的头像 260px 上限。 */
+  @media (max-width: 1340px) {
+    .hz-detail-card { grid-template-columns: 1fr; }
+    .hz-detail-card__photo { max-width: 220px; }
+  }
   @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
 
   /* ===== 活动照片墙：统一比例铺满网格 =====
@@ -518,4 +531,64 @@
       animation: none !important; 
       will-change: auto !important;
     }
+  }
+
+  /* ===== 图片检视浮层（照片墙 / 会议画廊，点击放大、组内左右切换） ===== */
+  .hp-photo-item img,
+  .hz-detail-card__gallery img { cursor: zoom-in; }
+  .hp-photo-item img:focus-visible,
+  .hz-detail-card__gallery img:focus-visible { outline: 3px solid rgba(139,115,85,.55); outline-offset: 3px; }
+
+  .hp-image-viewer { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; animation: hpViewerIn .2s ease both; }
+  .hp-image-viewer[hidden] { display: none; }
+  .hp-image-viewer__backdrop { position: absolute; inset: 0; background: rgba(52,41,30,.93); }
+  .hp-image-viewer__frame { position: relative; margin: 0; display: grid; gap: .8rem; justify-items: center; max-width: min(1180px, 92vw); }
+  .hp-image-viewer__img { max-width: 100%; max-height: 76vh; width: auto; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 26px 62px rgba(26,18,10,.55); }
+  .hp-image-viewer__caption { max-width: 760px; color: #f4ecdb; font-size: .85rem; line-height: 1.65; text-align: center; }
+  .hp-image-viewer__count { position: absolute; top: 1.15rem; left: 50%; transform: translateX(-50%); margin: 0; color: #f4ecdb; font-size: .78rem; letter-spacing: .1em; }
+  .hp-image-viewer__close,
+  .hp-image-viewer__nav { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid rgba(244,236,219,.55); border-radius: 50%; background: rgba(52,41,30,.55); color: #f4ecdb; font-size: 1.4rem; line-height: 1; cursor: pointer; transition: background-color .2s ease, transform .2s ease; }
+  .hp-image-viewer__close:hover,
+  .hp-image-viewer__nav:hover,
+  .hp-image-viewer__close:focus-visible,
+  .hp-image-viewer__nav:focus-visible { background: #8b7355; transform: scale(1.06); }
+  .hp-image-viewer__close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.1rem; }
+  .hp-image-viewer__nav { position: absolute; top: 50%; transform: translateY(-50%); }
+  .hp-image-viewer__nav:hover { transform: translateY(-50%) scale(1.06); }
+  .hp-image-viewer__nav--prev { left: 1.25rem; }
+  .hp-image-viewer__nav--next { right: 1.25rem; }
+  .hp-image-viewer__nav[hidden] { display: none; }
+  body.hp-viewer-open { overflow: hidden; }
+  @media (max-width: 680px) {
+    .hp-image-viewer__img { max-height: 62vh; }
+    .hp-image-viewer__nav { top: auto; bottom: 3.4rem; transform: none; }
+    .hp-image-viewer__nav:hover { transform: scale(1.06); }
+    .hp-image-viewer__nav--prev { left: 18%; }
+    .hp-image-viewer__nav--next { right: 18%; }
+    .hp-image-viewer__close { top: 1rem; right: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-image-viewer { animation: none; }
+    .hp-image-viewer__close,
+    .hp-image-viewer__nav { transition: none; }
+    .hp-image-viewer__close:hover,
+    .hp-image-viewer__nav:hover,
+    .hp-image-viewer__close:focus-visible,
+    .hp-image-viewer__nav:focus-visible { transform: none; }
+    .hp-image-viewer__nav:hover { transform: translateY(-50%); }
+  }
+  @keyframes hpViewerIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ===== 窄屏内容宽度收敛 =====
+     手机档容器满宽后，三层内边距仍会把正文挤窄（360px 视口下专家卡一度只剩 233px）。
+     这两条必须放在本块末尾：.hz-details-card.hz-details（0,2,0）定义在上面的 .content-card（0,1,0）之后，
+     只有同块且更晚出现才能稳定覆盖。 */
+  @media (max-width: 700px) {
+    .content-card,
+    .hz-details-card.hz-details { padding: 24px 18px; }
+  }
+  @media (max-width: 480px) {
+    .content-card,
+    .hz-details-card.hz-details { padding: 20px 14px; }
+    .hz-detail-card { padding: 1.15rem 1rem; }
   }

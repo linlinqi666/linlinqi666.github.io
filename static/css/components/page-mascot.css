@@ -1,0 +1,168 @@
+/* page-mascot.css — 内容页正文顶沿吉祥物装饰
+ *
+ * 用法：把 figure 写在第一个内容卡（.content-card，Attributions 为 .section）
+ * 内部的最前面：
+ *   <div class="content-card">
+ *     <figure class="page-mascot page-mascot--<页面名>" aria-hidden="true">
+ *       <img src="…/static/image/any-icon/extension/<页面名>.png" alt=""
+ *            width="440" height="…" loading="lazy" decoding="async">
+ *     </figure>
+ *     …
+ *   </div>
+ * Members 页是三栏交互布局，没有正文容器，不使用该装饰。
+ *
+ * 定位：装饰以内容卡为定位父元素。position: absolute 的 top: 0 落在卡片的
+ * padding box 顶边，也就是卡片边框内侧，因此卡片自身的 margin、外层容器有没有
+ * hero / slide / 内边距，都不影响装饰与卡片顶沿的贴合关系。
+ * translateY(-88%) 把装饰上移自身高度的 88%：上面 88% 悬在卡片外，
+ * 下面 12% 压在卡片顶沿上；z-index 高于卡片内容，装饰完整可见。
+ */
+
+:root {
+  --page-mascot-height: clamp(132px, 12.5vw, 200px);
+  /* 装饰顶边与导航底边之间的最小间隙 */
+  --page-mascot-gap: 1.5rem;
+  /* 卡片上方需要预留的留白：露出部分（88%）+ 间隙 */
+  --page-mascot-reserve: calc(var(--page-mascot-height) * 0.88 + var(--page-mascot-gap));
+}
+
+.content-card:has(> .page-mascot),
+.section:has(> .page-mascot) {
+  position: relative;
+}
+
+.page-mascot {
+  position: absolute;
+  top: 0;
+  right: clamp(0.75rem, 3vw, 3rem);
+  height: var(--page-mascot-height);
+  margin: 0;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transform: translateY(-88%);
+}
+
+.page-mascot img {
+  display: block;
+  height: 100%;
+  width: auto;
+  filter: drop-shadow(0 8px 14px rgba(93, 58, 26, 0.14));
+}
+
+/* 装饰有 88% 悬在卡片上方，容器要预留这段高度（导航是 6.25rem 的 fixed 条）。
+   Parts / Attributions 的卡片上方本来就有 hero / 标题区，不需要额外留白。 */
+.description-container:has(.page-mascot) {
+  padding-top: var(--page-mascot-reserve);
+}
+
+/* 横向铺开的图（如 Description 的放大镜场景）压低高度，避免宽度过大；
+   留白按同一高度换算，露出比例保持不变 */
+.page-mascot--description {
+  --page-mascot-height: clamp(110px, 10vw, 170px);
+  top: 3px;
+  right: 1.5rem;
+}
+
+.description-container:has(.page-mascot--description) {
+  padding-top: calc(clamp(110px, 10vw, 170px) * 0.88 + var(--page-mascot-gap));
+}
+
+/* 各页人工校准：top 是逐页调过的垂直落点；right 按每张插画的构图左右错落，
+   避免整站装饰全挤在同一条右缘上。没列出的页面（model）沿用通用默认值。 */
+.page-mascot--design {
+  top: 52px;
+  right: 2.5rem;
+}
+
+.page-mascot--engineering {
+  top: 3px;
+  right: 3.5rem;
+}
+
+.page-mascot--contribution {
+  top: 92px;
+  right: 3rem;
+}
+
+.page-mascot--attributions {
+  top: -18px;
+  right: 3rem;
+}
+
+.page-mascot--hardware {
+  top: -22px;
+  right: 4.5rem;
+}
+
+.page-mascot--protocol {
+  top: -24px;
+  right: 4rem;
+}
+
+.page-mascot--results {
+  top: 54px;
+  right: 2rem;
+}
+
+.page-mascot--parts {
+  top: 31px;
+  right: 2.5rem;
+}
+
+.page-mascot--safety {
+  top: 44px;
+  right: 1.5rem;
+}
+
+.page-mascot--notebook {
+  top: 32px;
+  right: 3rem;
+}
+
+.page-mascot--human-practices {
+  top: 79px;
+  right: 2rem;
+}
+
+.page-mascot--sustainability {
+  top: 70px;
+  right: 3rem;
+}
+
+/* Parts：hero 文本占满整行，留出右侧位置给装饰 */
+.parts-page:has(.page-mascot) .parts-hero {
+  padding-right: clamp(96px, 15vw, 220px);
+}
+
+/* 窄屏：侧边栏改为上下堆叠后卡片上方没有可用留白，带侧栏的页面收起装饰 */
+@media (max-width: 1024px) {
+  .description-container:has(.page-mascot) {
+    padding-top: 0;
+  }
+
+  .description-container .page-mascot {
+    display: none;
+  }
+}
+
+/* 无侧栏页面：缩小装饰，留白随变量自动收窄 */
+@media (max-width: 900px) {
+  :root {
+    --page-mascot-height: 96px;
+    --page-mascot-gap: 1rem;
+  }
+
+  .page-mascot {
+    right: 0.5rem;
+  }
+
+  .page-mascot--description {
+    --page-mascot-height: 80px;
+  }
+
+  .parts-page:has(.page-mascot) .parts-hero {
+    padding-right: 96px;
+  }
+}

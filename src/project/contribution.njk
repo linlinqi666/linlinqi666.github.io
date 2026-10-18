@@ -12,18 +12,14 @@ js:
 
 {% extends "layouts/base.njk" %}
 
-{# 页面内容全部来自 src/_data/contribution.js（中英双语源），此处只负责渲染结构。
-   版式约定：英文在上为主视觉（.i18n-en），中文在下为辅助（.i18n-zh）。
+{# 页面内容全部来自 src/_data/contribution.js（英文单语源），此处只负责渲染结构。
+   版式约定：正文套 .i18n-en 以复用 contribution.css 的既有排版；数据未给 zh 时不输出中文行。
    表格样式全部交给 contribution.css，模板内不再写内联样式。 #}
 
-{% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span><span class="i18n-zh">{{ zh | safe }}</span>{% endmacro %}
+{% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span>{% if zh %}<span class="i18n-zh">{{ zh | safe }}</span>{% endif %}{% endmacro %}
 
 {% block main %}
-<header class="contribution-hero">
-  <h1>Contribution</h1>
-  <p class="contribution-hero__sub">{{ pair('Reusable parts, protocols and records that the PAGER-Yeast project is handing to the next iGEM team', 'PAGER-Yeast 项目交给下一支 iGEM 队伍的可复用部件、协议与记录') }}</p>
-  <div class="contribution-hero__rule" aria-hidden="true"></div>
-</header>
+<h1 class="sr-only">Contribution</h1>
 
 <div class="description-container">
 
@@ -93,7 +89,14 @@ js:
       <div class="description-content">
         {% for card in contribution.cards %}
         <div id="{{ card.id }}" class="content-card">
-          <h2>{{ pair(card.title.en, card.title.zh) }}</h2>
+          {% if loop.first %}
+          <figure class="page-mascot page-mascot--contribution" aria-hidden="true">
+            <img src="../static/image/any-icon/extension/contribution.png" alt="" width="440" height="453"
+              loading="lazy" decoding="async">
+          </figure>
+          {% endif %}
+          {# 大节标题 h2，小目录标题 h3，与「四个大目录再分小目录」的层级一致 #}
+          <h{{ 2 if card.section else 3 }}>{{ pair(card.title.en, card.title.zh) }}</h{{ 2 if card.section else 3 }}>
           <div class="content-body">
             {% if card.summary %}
             <p class="executive-summary">{{ pair(card.summary.en, card.summary.zh) | safe }}</p>
@@ -102,6 +105,13 @@ js:
             {% for block in card.blocks %}
               {% if block.type == 'p' %}
             <p{% if block.cls %} class="{{ block.cls }}"{% endif %}>{{ pair(block.text.en, block.text.zh) }}</p>
+
+              {% elif block.type == 'bullets' %}
+            <ul class="plain-list">
+              {% for it in block.items %}
+              <li>{{ pair(it.en, it.zh) }}</li>
+              {% endfor %}
+            </ul>
 
               {% elif block.type == 'ul' %}
             <ul class="field-list">
@@ -118,7 +128,7 @@ js:
             </ul>
 
               {% elif block.type == 'links' %}
-            <ul class="link-list">
+            <ul class="link-list{% if block.cls %} {{ block.cls }}{% endif %}">
               {% for a in block.items %}
               <li><a href="{{ a.href }}">{{ pair(a.en, a.zh) }}</a></li>
               {% endfor %}

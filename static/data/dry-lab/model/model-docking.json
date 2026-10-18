@@ -1,10 +1,10 @@
 {
   "meta": {
     "title": "Nanobody–Influenza A HA Docking Screening Data",
-    "sourceOfTruth": "static/expriments/drylab/model/model(1).docx",
+    "sourceOfTruth": "static/expriments/drylab/model/new_model/model5(1).docx",
     "corpus": "static/expriments/drylab/model/md/10-一手分析.md",
-    "date": "2026-09-27",
-    "note": "This file is the single data source for the Model page's body tables and interactive demo. Values are transcribed entry by entry from modeling document §5.3 / §5.4 / §6, without secondary conversion.",
+    "date": "2026-10-18",
+    "note": "This file is the single data source for the Model page's body tables and card game. Values are transcribed entry by entry from the authoritative modelling document (new_model/model5(1).docx) and cross-checked against the raw ClusPro/HADDOCK outputs behind the card game, without secondary conversion.",
     "kind": "computational-prediction",
     "kindNote": "All are computational predictions from molecular docking and simulation; modeling document §9 explicitly states 'no experimental validation.' The page must not present them as verified conclusions.",
     "structureBase": "static/data/dry-lab/model/",
@@ -21,7 +21,7 @@
   "scoring": {
     "cluspro": {
       "label": "ClusPro rigid docking",
-      "formula": "E = 0.40Erep − 0.40Eatt + 600Eelec + 1.00EDARS",
+      "formula": "E = 0.40E_rep − 0.40E_att + 600E_elec + 1.00E_DAR",
       "unit": "kcal/mol (the document does not state the unit; only values are given)",
       "note": "The Top 10 conformations are retained for each 'candidate × antigen' combination."
     },
@@ -66,6 +66,7 @@
         364,
         381,
         382,
+        383,
         384,
         385,
         388,
@@ -77,7 +78,8 @@
       ],
       "structureNote": "This entry is a co-crystal complex of HA with a single-domain antibody; per modeling document §5.1, the file has been trimmed to 'HA chains only.' The co-crystallized binder is not R1aB6 selected by this project.",
       "role": "target",
-      "roleLabel": "Target subtype"
+      "roleLabel": "Target subtype",
+      "status": "Direct download + complex processing"
     },
     {
       "id": "H3N2",
@@ -107,6 +109,7 @@
         364,
         381,
         382,
+        383,
         384,
         385,
         388,
@@ -118,7 +121,8 @@
       ],
       "structureNote": "Same as 9VH4, trimmed to HA chains only; the co-crystallized binder is not R1aB6 of this project.",
       "role": "control",
-      "roleLabel": "Control subtype"
+      "roleLabel": "Control subtype",
+      "status": "Direct download + complex processing"
     },
     {
       "id": "H5N1",
@@ -143,7 +147,50 @@
       "activeResiduesHA2": [],
       "structureNote": "This entry deposited only the HA1 chain (residues 13–321), so residue 332 and all HA2 active residues listed in the document are absent from this structure; the page accordingly converges when labeling H5.",
       "role": "control",
-      "roleLabel": "Control subtype"
+      "roleLabel": "Control subtype",
+      "status": "Direct download + complex processing"
+    },
+    {
+      "id": "SARS-CoV-2",
+      "name": "SARS-CoV-2",
+      "strain": "—",
+      "pdbId": "7A98",
+      "resolution": "5.40 Å",
+      "source": "RCSB",
+      "structure": null,
+      "chainMap": "Complex extraction (cross-reactivity panel)",
+      "structureNote": "Unrelated-virus control for the cross-reactivity assessment: extracted from an antibody–antigen complex per modeling document §1.2. Used only to score off-target binding risk; not a detection target.",
+      "role": "cross",
+      "roleLabel": "Cross-reactivity control",
+      "status": "Complex extraction (cross-reactivity)"
+    },
+    {
+      "id": "HIV-1",
+      "name": "HIV-1",
+      "strain": "—",
+      "pdbId": "4TVP",
+      "resolution": "3.10 Å",
+      "source": "RCSB",
+      "structure": null,
+      "chainMap": "Complex extraction (cross-reactivity panel)",
+      "structureNote": "Unrelated-virus control for the cross-reactivity assessment: extracted from an antibody–antigen complex per modeling document §1.2. Used only to score off-target binding risk; not a detection target.",
+      "role": "cross",
+      "roleLabel": "Cross-reactivity control",
+      "status": "Complex extraction (cross-reactivity)"
+    },
+    {
+      "id": "RSV F",
+      "name": "RSV F",
+      "strain": "—",
+      "pdbId": "5K6C",
+      "resolution": "3.58 Å",
+      "source": "RCSB",
+      "structure": null,
+      "chainMap": "Complex extraction (cross-reactivity panel)",
+      "structureNote": "Unrelated-virus control for the cross-reactivity assessment: extracted from an antibody–antigen complex per modeling document §1.2. Used only to score off-target binding risk; not a detection target.",
+      "role": "cross",
+      "roleLabel": "Cross-reactivity control",
+      "status": "Complex extraction (cross-reactivity)"
     }
   ],
   "candidates": [
@@ -155,8 +202,8 @@
       "verdict": {
         "outcome": "lead",
         "rank": 1,
-        "zh": "Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA binding free energy −3.74 kcal/mol. The document therefore selects it as the recognition element.",
-        "en": "Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔG = −3.74 kcal/mol."
+        "zh": "Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA ΔTOTAL −14.67 ± 1.31 kcal/mol (Cluster 1). The document therefore selects it as the recognition element.",
+        "en": "Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔTOTAL = −14.67 ± 1.31 kcal/mol (Cluster 1)."
       },
       "cluspro": {
         "untreated": {
@@ -269,7 +316,7 @@
       "haddock": {
         "score": -84.6,
         "clusterSize": 26,
-        "bsa": 2634.4
+        "bsa": 2630.4
       },
       "structure": {
         "complex": null,
@@ -306,13 +353,13 @@
         "HIV1": -936.6,
         "RSVF": -894.7,
         "mean": -890.6,
-        "risk": "Higher",
+        "risk": "High",
         "riskLevel": 4
       },
       "haddock": {
         "score": -71.1,
         "clusterSize": 16,
-        "bsa": 2538.9
+        "bsa": 2619.9
       },
       "structure": {
         "complex": null,
@@ -399,164 +446,403 @@
       "saltBridges": 3,
       "hydrophobic": 39
     },
+    "clusterComparison": {
+      "caption": "Model5 §1.6, Cluster 1 vs Cluster 5 of the R1aB6 × H1N1 HA HADDOCK refinement (SPICE interaction-type counts).",
+      "rows": [
+        {
+          "metric": "Total contacts",
+          "cluster1": 61,
+          "cluster5": 44
+        },
+        {
+          "metric": "Hydrogen bonds",
+          "cluster1": 19,
+          "cluster5": 24
+        },
+        {
+          "metric": "Salt bridges",
+          "cluster1": 3,
+          "cluster5": 7
+        },
+        {
+          "metric": "Hydrophobic interactions",
+          "cluster1": 39,
+          "cluster5": 13
+        }
+      ]
+    },
     "hotspots": [
       {
-        "nanobody": "ARGB:31",
-        "ha": "ASNA:27",
-        "type": "Hydrogen bond",
-        "distance": 2.086
+        "nanobody": "ARG-B:31",
+        "ha": "GLU-A:51",
+        "type": "Hydrogen bond + salt bridge",
+        "distance": "2.866 / 3.169"
       },
       {
-        "nanobody": "ARGB:31",
-        "ha": "SERA:29",
+        "nanobody": "ARG-B:31",
+        "ha": "SER-A:53",
         "type": "Hydrogen bond",
-        "distance": 2.18
+        "distance": "3.438"
       },
       {
-        "nanobody": "ARGB:31",
-        "ha": "THRA:44",
+        "nanobody": "ARG-B:31",
+        "ha": "SER-A:304",
         "type": "Hydrogen bond",
-        "distance": 3.097
+        "distance": "2.986"
       },
       {
-        "nanobody": "ARGB:31",
-        "ha": "GLNA:51",
+        "nanobody": "ARG-B:33",
+        "ha": "ASN-A:27",
         "type": "Hydrogen bond",
-        "distance": 2.086
+        "distance": "3.286"
       },
       {
-        "nanobody": "ASPB:55",
-        "ha": "THRA:30",
+        "nanobody": "TYR-B:54",
+        "ha": "ASP-A:31",
         "type": "Hydrogen bond",
-        "distance": 2.725
-      },
-      {
-        "nanobody": "THRB:54",
-        "ha": "ASPA:31",
-        "type": "Salt bridge",
-        "distance": 3.48
+        "distance": "2.993"
       }
     ],
-    "hotspotNote": "ARGB:31 participates in 4 hydrogen bonds; it is the hotspot residue proposed by the document and is written as a target for the subsequent R31A mutant study.",
+    "hotspotNote": "ARG-B:31 recurs in three of the five shortest-distance contacts (GLU-A:51, SER-A:53, SER-A:304) and is the hotspot residue carried into the R31A mutant proposal; TYR-B:54 completes the polar pair with ASP-A:31.",
     "structureGap": {
       "resolved": false,
       "zh": "The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex.",
       "en": "The project's own R1aB6–H1N1 docked complex is not published: the HADDOCK export files contain no antibody chain (of 113 complex files, all hold only the HA receptor or a duplicated receptor, never the nanobody). The 3D panel shows the selected candidate's predicted nanobody structure (from structure prediction, single chain) or the antigen source structure (RCSB 9VH4 etc.); both are single components, no binding pose is shown, and neither is our docking complex."
     }
   },
+  "executiveSummary": {
+    "caption": "Model5 Executive Summary: key conclusions at a glance (all values are computational predictions).",
+    "rows": [
+      {
+        "item": "Optimal nanobody",
+        "conclusion": "R1aB6"
+      },
+      {
+        "item": "ClusPro specificity index",
+        "conclusion": "−93.25 (1 / 17)"
+      },
+      {
+        "item": "Best HADDOCK cluster",
+        "conclusion": "Cluster 5, score −93.2, RMSD 0.7 Å"
+      },
+      {
+        "item": "100 ns MD",
+        "conclusion": "Full-segment RMSD 0.4974 nm, interface residue RMSF < 0.25 nm"
+      },
+      {
+        "item": "MM-GBSA ΔG_bind",
+        "conclusion": "−14.67 kcal/mol (Cluster 1) / −14.39 kcal/mol (Cluster 5)"
+      },
+      {
+        "item": "Key hotspot",
+        "conclusion": "ARG-B:31 (−5.46 kcal/mol)"
+      },
+      {
+        "item": "Positive control",
+        "conclusion": "i-RMSD = 2.113 Å"
+      },
+      {
+        "item": "Path A best gating peptide",
+        "conclusion": "MT1 (hM1Dq × MT1 Cluster 1, score −83.3)"
+      },
+      {
+        "item": "Path A coupling interface",
+        "conclusion": "hM1Dq ICL2/ICL3/H8 ↔ Gpa1 α5 C-terminus (single-chain Cluster 1, score −149.4)"
+      },
+      {
+        "item": "Path A membrane MD ΔTOTAL",
+        "conclusion": "−40.37 ± 1.27 kcal/mol"
+      },
+      {
+        "item": "Path B best gating peptide",
+        "conclusion": "MT1_5 (Ste2p × MT1_5 Cluster 1, score −99.2)"
+      },
+      {
+        "item": "Path B membrane MD ΔTOTAL",
+        "conclusion": "−31.43 ± 3.46 kcal/mol"
+      }
+    ]
+  },
+  "structurePrediction": {
+    "caption": "Model5 §1.3: structure prediction for the 17 candidate nanobodies with a locally deployed ColabFold 1.6.2 (AlphaFold2-based).",
+    "namingNote": "The source document writes these IDs with an infix X (R1aXA5, R2bXD9, ...); this page uses the X-less form uniformly, pending lab verification of the naming convention (open item MQ-1).",
+    "flexibleRule": "Nanobodies with CDR3 pLDDT < 65 were set as flexible in HADDOCK.",
+    "rows": [
+      {
+        "id": "R1aA5",
+        "avg": 88.32,
+        "cdr3": 52.24,
+        "assessment": "CDR3 low"
+      },
+      {
+        "id": "R1aB6",
+        "avg": 92.99,
+        "cdr3": 85.74,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R1aE5",
+        "avg": 93.19,
+        "cdr3": 79.53,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R1aE6",
+        "avg": 90.64,
+        "cdr3": 61.07,
+        "assessment": "CDR3 moderately low"
+      },
+      {
+        "id": "R1aF4",
+        "avg": 93.35,
+        "cdr3": 87.46,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R1aF5",
+        "avg": 93.12,
+        "cdr3": 88.51,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R1aG5",
+        "avg": 92.59,
+        "cdr3": 87.38,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R1aG6",
+        "avg": 93.34,
+        "cdr3": 88.81,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R2aB9",
+        "avg": 88.73,
+        "cdr3": 55.9,
+        "assessment": "CDR3 low"
+      },
+      {
+        "id": "R2aE8",
+        "avg": 92.11,
+        "cdr3": 81.58,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R2aF9",
+        "avg": 93.68,
+        "cdr3": 83.5,
+        "assessment": "Excellent"
+      },
+      {
+        "id": "R2aG8",
+        "avg": 88.04,
+        "cdr3": 61.63,
+        "assessment": "CDR3 moderately low"
+      },
+      {
+        "id": "R2aG9",
+        "avg": 94.88,
+        "cdr3": 92.69,
+        "assessment": "Outstanding"
+      },
+      {
+        "id": "R2aH9",
+        "avg": 95.25,
+        "cdr3": 93.15,
+        "assessment": "Outstanding"
+      },
+      {
+        "id": "R2bD8",
+        "avg": 93.64,
+        "cdr3": 90.94,
+        "assessment": "Outstanding"
+      },
+      {
+        "id": "R2bD9",
+        "avg": 90.82,
+        "cdr3": 58.56,
+        "assessment": "CDR3 low"
+      },
+      {
+        "id": "R2bE8",
+        "avg": 92.48,
+        "cdr3": 84.77,
+        "assessment": "Excellent"
+      }
+    ]
+  },
+  "positiveControl": {
+    "caption": "Model5 §1.9: positive-control re-docking of the experimentally resolved 9VH4 complex through the same pipeline.",
+    "rows": [
+      {
+        "metric": "HADDOCK score",
+        "value": "−111.5 ± 0.9"
+      },
+      {
+        "metric": "Cluster size",
+        "value": "199 (99% convergence)"
+      },
+      {
+        "metric": "BSA",
+        "value": "1827.5 Å²"
+      },
+      {
+        "metric": "Receptor superposition RMSD",
+        "value": "0.349 Å"
+      },
+      {
+        "metric": "Antibody chain CA i-RMSD",
+        "value": "2.113 Å"
+      }
+    ]
+  },
   "md": {
     "engine": "GROMACS",
-    "forcefield": "Amber99sbildn",
+    "forcefield": "Amber99SB-ILDN",
     "waterModel": "TIP3P",
-    "seed": "gen_seed = 1",
-    "reportedDuration": "10 ns (per the document body; see caveats)",
+    "temperature": "300 K",
+    "pressure": "1 bar",
+    "reportedDuration": "100 ns",
+    "performance": "64.810 ns/day",
     "items": [
       {
-        "metric": "RMSD",
-        "value": "0.45 nm (document records as stable)"
+        "metric": "RMSD, full-segment average",
+        "value": "0.4974 nm"
       },
       {
-        "metric": "RMSF (interface)",
-        "value": "< 0.17 nm"
+        "metric": "RMSD, 90-100 ns",
+        "value": "0.4574 nm"
       },
       {
-        "metric": "Rg",
-        "value": "3.87 nm (stable)"
+        "metric": "Rg (90-100 ns)",
+        "value": "3.7154 nm"
       },
       {
-        "metric": "Hydrogen bonds",
-        "value": "462.1 ± 9.6"
+        "metric": "Hydrogen bonds, full-segment",
+        "value": "463.04 ± 10.08"
+      },
+      {
+        "metric": "ARG-B:31 RMSF",
+        "value": "0.1744 nm"
       }
     ],
-    "caveat": "In source document Figure 5, the RMSD horizontal axis only reaches about 8 ns and the curve peak is about 0.70 nm, inconsistent with the body text '10 ns / 0.45 nm stable'; the page body follows the document's stated values, and the discrepancy is recorded in the page source comments (numbered MQ-6)."
+    "note": "The radius of gyration (Rg) stabilized at 3.72 nm (90-100 ns mean), indicating a compact and stable complex without significant expansion or collapse during the 100 ns simulation."
   },
   "mmgbsa": {
     "engine": "gmx_MMPBSA 1.5.0.3",
+    "forcefield": "Amber14SB",
     "unit": "kcal/mol",
     "items": [
       {
         "term": "ΔVDWAALS",
-        "value": -59.41
+        "cluster1": -54.65,
+        "cluster5": -89.36
       },
       {
         "term": "ΔEEL",
-        "value": 5.22
+        "cluster1": -100.53,
+        "cluster5": -238.46
       },
       {
         "term": "ΔEGB",
-        "value": 57.69
+        "cluster1": 147.79,
+        "cluster5": 325.37
       },
       {
         "term": "ΔESURF",
-        "value": -7.23
+        "cluster1": -7.28,
+        "cluster5": -11.94
       },
       {
         "term": "ΔTOTAL",
-        "value": -3.74
+        "cluster1": -14.67,
+        "cluster5": -14.39
       }
     ],
-    "note": "Document §9 states: MM-GBSA is based on only 10 frames, with large statistical error."
+    "cluster1Total": "-14.67 ± 1.31",
+    "cluster5Total": "-14.39",
+    "hotspots": [
+      {
+        "rank": 1,
+        "residue": "ARG-B:31 (hotspot)",
+        "contribution": -5.46
+      },
+      {
+        "rank": 2,
+        "residue": "PRO-B:101",
+        "contribution": -2.949
+      },
+      {
+        "rank": 3,
+        "residue": "TYR-B:54",
+        "contribution": -2.158
+      },
+      {
+        "rank": 4,
+        "residue": "GLY-B:102",
+        "contribution": -1.091
+      },
+      {
+        "rank": 5,
+        "residue": "TYR-B:32",
+        "contribution": -0.779
+      }
+    ],
+    "note": "Model5 §1.8, single-trajectory protocol of gmx_MMPBSA 1.5.0.3 with the Amber14SB force field. ΔTOTAL for Cluster 1 carries a reported SEM of ± 1.31 kcal/mol."
   },
   "pipeline": [
     {
       "stage": 1,
       "question": "Which antibody binds H1N1 best?",
       "method": "ClusPro rigid docking (untreated antigen)",
-      "output": "Specificity-index ranking"
+      "output": "Specificity index ranking"
     },
     {
       "stage": 2,
-      "question": "Does the processed antigen affect binding?",
-      "method": "ClusPro rigid docking (post-complex-processing antigen)",
-      "output": "Cross-validate the binding mode"
+      "question": "Does antigen processing affect the binding mode?",
+      "method": "ClusPro rigid docking (complex-processed antigen)",
+      "output": "Cross-validation"
     },
     {
       "stage": 3,
-      "question": "Does it cross-react with unrelated viruses?",
-      "method": "ClusPro rigid docking (SARS / HIV1 / RSVF)",
-      "output": "Cross-reactivity risk"
+      "question": "What is the cross-reactivity risk?",
+      "method": "ClusPro docking against SARS-CoV-2/HIV-1/RSV F",
+      "output": "Average binding energy, risk level"
     },
     {
       "stage": 4,
-      "question": "Is the binding mode stable?",
+      "question": "Can the binding mode be refined?",
       "method": "HADDOCK 2.5 semi-flexible refinement",
-      "output": "HADDOCK score、BSA"
+      "output": "HADDOCK score, cluster, BSA"
     },
     {
       "stage": 5,
-      "question": "Which residues drive binding?",
+      "question": "Which residues drive the interface?",
       "method": "PyMOL + SPICE",
-      "output": "Interface residues, interaction types"
+      "output": "Contacts, hydrogen bonds, salt bridges, hydrophobic interactions"
     },
     {
       "stage": 6,
-      "question": "Is the complex stable in water?",
-      "method": "GROMACS MD + MM-GBSA",
-      "output": "RMSD、RMSF、Rg、ΔG_bind"
+      "question": "Is the complex stable under physiological conditions?",
+      "method": "GROMACS 100 ns MD",
+      "output": "RMSD, RMSF, Rg, hydrogen bonds"
     },
     {
       "stage": 7,
-      "question": "What should be validated experimentally?",
-      "method": "Integrated analysis",
-      "output": "Hotspot residue (ARGB:31)"
+      "question": "What are the binding free energy and hotspots?",
+      "method": "gmx_MMPBSA + per-residue decomposition",
+      "output": "ΔG_bind, hotspot residues"
     }
-  ],
-  "limitations": [
-    "In ClusPro the receptor is treated as rigid, which may miss induced-fit effects.",
-    "Docking uses implicit solvent and ignores explicit water bridges.",
-    "In HADDOCK the interface is semi-flexible, allowing side-chain rearrangement while the backbone stays fixed.",
-    "10 ns of MD may fail to capture slow conformational changes.",
-    "MM-GBSA is based on only 10 frames, with large statistical error.",
-    "The entire text has no experimental validation (document §9 states this)."
   ],
   "reproducibility": [
     {
-      "item": "Software version",
-      "value": "ClusPro、HADDOCK 2.5、GROMACS 2026.3、PyMOL、SPICE、gmx_MMPBSA 1.5.0.3"
+      "item": "Web server",
+      "value": "ClusPro, HADDOCK 2.5 (web + local), GROMACS 2025.2, PyMOL, SPICE, gmx_MMPBSA 1.5.0.3, CHARMM-GUI"
     },
     {
       "item": "Force field",
-      "value": "Amber99sbildn"
+      "value": "Amber99SB-ILDN (HA × nanobody) / CHARMM36m (membrane system)"
     },
     {
       "item": "Water model",
@@ -564,25 +850,46 @@
     },
     {
       "item": "Random seed",
-      "value": "gen_seed = 1"
+      "value": "gen_seed = -1"
+    },
+    {
+      "item": "MD duration",
+      "value": "100 ns"
     },
     {
       "item": "Parameter files",
-      "value": "The document says 'uploaded to GitHub (mdp_files/),' but the repository link is still to be filled in the document."
+      "value": "mdp_files/"
+    },
+    {
+      "item": "Code repository",
+      "value": "EchoYeast-Modeling on GitHub",
+      "url": "https://github.com/vincenzorui0805-glitch/EchoYeast-Modeling"
     }
   ],
   "designDecisions": [
     {
       "prediction": "R1aB6 has the highest H1N1 specificity",
-      "decision": "Selected as the recognition element"
+      "decision": "Selected as the recognition element of EchoYeast"
     },
     {
-      "prediction": "ARGB:31 is a hotspot residue",
-      "decision": "Proposed the R31A mutant as a target for subsequent studies"
+      "prediction": "ARG-B:31 is a hotspot residue (-5.46 kcal/mol)",
+      "decision": "Propose the R31A mutant as a target for subsequent experiments"
     },
     {
-      "prediction": "R2bD9 and R2bE8 have higher cross-reactivity risk",
-      "decision": "Lowered priority"
+      "prediction": "R2bD9 and R2bE8 have relatively high cross-reactivity risk",
+      "decision": "Deprioritize"
+    },
+    {
+      "prediction": "The extracellular orthosteric site of hM1Dq is occupied by MT1",
+      "decision": "Basis for Path A gating design"
+    },
+    {
+      "prediction": "The intracellular ICL2/ICL3/H8 of hM1Dq is bound by the Gα α5 C-terminus",
+      "decision": "Coupling interface validation"
+    },
+    {
+      "prediction": "The orthosteric site of Ste2p is occupied by MT1_5",
+      "decision": "Basis for Path B gating design"
     }
   ],
   "openItems": [
@@ -592,11 +899,7 @@
     },
     {
       "id": "MQ-5",
-      "zh": "In the document, the GitHub links for the code repository, parameter files, and input/output structures are all 'to be filled'; the page states the actual status."
-    },
-    {
-      "id": "MQ-6",
-      "zh": "MD duration and RMSD: body text 10 ns / 0.45 nm; source-figure trajectory about 8 ns, peak about 0.70 nm."
+      "zh": "Model5 gives the code repository link (github.com/vincenzorui0805glitch/EchoYeast-Modeling); the page cites it as recorded in the document."
     },
     {
       "id": "MQ-7",
@@ -1072,5 +1375,31 @@
         "R2bD9": "nanobody-r2bd9.webp"
       }
     }
-  }
+  },
+  "limitationRows": [
+    {
+      "limitation": "All results are computational predictions",
+      "description": "Not validated by wet-lab experiments; the ARG-B:31 hotspot and R31A mutant await SPR/ELISA validation"
+    },
+    {
+      "limitation": "Single-chain simplification of hM1Dq + Gpaα",
+      "description": "Does not include Gβγ and may overestimate the conformational stability of Gα"
+    },
+    {
+      "limitation": "Membrane lipid approximation",
+      "description": "Approximation of the BY4741 plasma membrane composition; real yeast membranes exhibit microdomain heterogeneity"
+    },
+    {
+      "limitation": "Scoring function limitations",
+      "description": "ClusPro/HADDOCK scoring functions are not absolute binding free energies and cannot be directly compared across different targets"
+    },
+    {
+      "limitation": "Implicit solvent/membrane environment ignored",
+      "description": "Docking was performed in vacuum/implicit solvent, without considering the membrane, water, ions, or glycosylation"
+    },
+    {
+      "limitation": "Insufficient sampling",
+      "description": "100 ns may be insufficient to capture slow conformational changes; MM-GBSA SEM 1.27-3.46 kcal/mol"
+    }
+  ]
 }

@@ -3,7 +3,7 @@
 {% block page_content %}
 <!-- hp-map-script-marker -->
 <script src="{{ url_for('static', filename='js/components/hp-map.js') }}" defer></script>
-    
+
 <div class="description-container">
       <!-- 左侧章节导航：与全站内容页一致的竖版导航 -->
       <aside class="description-sidebar">
@@ -37,6 +37,7 @@
               <ul class="level2">
                 <li class="level3"><a href="#section-southchina">South China Meetup</a></li>
                 <li class="level3"><a href="#section-apic">APiC Conference</a></li>
+                <li class="level3"><a href="#section-jlu">JLU × Together with iGEM</a></li>
               </ul>
             </li>
             <li class="level1 has-submenu">
@@ -82,6 +83,10 @@
 
         <div class="detail-slide" data-hp-article="section-overview">
 <section id="section-overview" class="content-card hp-overview-map-card">
+  <figure class="page-mascot page-mascot--human-practices" aria-hidden="true">
+    <img src="https://static.igem.wiki/teams/6373/wiki/icon/extension/human-practices.avif" alt="" width="440" height="481"
+      loading="lazy" decoding="async">
+  </figure>
           <div class="hp-section-header">
             <span class="hp-section-number">01</span>
             <h2 class="hp-section-title">Overview</h2>
@@ -128,7 +133,7 @@
   <div class="hp-section-header">
     <span class="hp-section-number">03</span>
     <h2 class="hp-section-title">Stakeholders: Who Shapes This Project</h2>
-    <p class="hp-section-subtitle">Stakeholders · Seven key groups</p>
+    <p class="hp-section-subtitle">Stakeholders · Eight key groups</p>
   </div>
   <div class="hz-map-layout">
     <div class="hz-expert-index" id="hzExpertIndex" role="navigation" aria-label="Expert index"></div>
@@ -313,6 +318,9 @@
 
       <h3 class="hp-subheading">Academic community and peer exchange</h3>
       <p>These are the South China iGEM meetup, the Asia-Pacific iGEM Community Conference (APiC), and the online yeast workshop co-organized with several universities. In these peer exchanges we present the project, discuss difficulties and learn from others' experience, continuously recalibrating our direction.</p>
+
+      <h3 class="hp-subheading">The public and end users</h3>
+      <p>These are the 230 people who answered our online questionnaire. They are not experts, but they are the ones who would have to live with the device: they told us how much they would pay, how fast they expect a result, whether they would read a colour change or reach for a lamp, and which places worry them most. Their answers are set out in the public survey section that follows.</p>
     </div>
   </div>
 </div>
@@ -519,6 +527,8 @@
 
     <article class="hz-detail-card" id="hz-detail-luo-juan" data-module-id="HP-INTERVIEW-LUOJUAN" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
 
+      <img class="hz-detail-card__photo" src="https://static.igem.wiki/teams/6373/wiki/team/hp/hp-expert-luojuan.avif" alt="Juan Luo" loading="lazy">
+
       <div>
 
         <p class="hz-detail-card__eyebrow">Healthcare frontline · Hangzhou, Zhejiang</p>
@@ -527,9 +537,9 @@
 
         <p class="hz-detail-card__meta">ICU frontline nurse, Grade III Class A hospital, Hangzhou</p>
 
-        <p class="hz-detail-card__copy">Working in an intensive care unit, she performs high-frequency procedures such as ventilator management and sputum suction for intubated or tracheostomized patients, giving her a frontline view of hospital air management, protective procedures and nosocomial infection control.</p>
+        <p class="hz-detail-card__copy">Working in an intensive care unit, she carries out high-frequency bedside nursing operations — ventilator management and sputum suction for intubated or tracheostomized patients — giving her a frontline view of hospital air management, protective procedures and nosocomial infection control.</p>
 
-        <p class="hz-detail-card__copy">Existing air disinfection in hospitals cannot fully inactivate aerosolized virus; high-risk procedures such as sputum suction require graded protection. The hardest part of prevention and control is visitors who are infectious without knowing it. If entrances and wards could display airborne virus readings in real time and grade them as low / medium / high risk, it would ease families' concerns; miniaturizing the device and integrating it into a ventilator's exhalation valve would enable per-patient monitoring.</p>
+        <p class="hz-detail-card__copy">Existing air disinfection in hospitals cannot fully inactivate aerosolized virus; high-risk nursing operations such as sputum suction require graded protection. The hardest part of prevention and control is visitors who are infectious without knowing it. If entrances and wards could display airborne virus readings in real time and grade them as low / medium / high risk, it would ease families' concerns; miniaturizing the device and integrating it into a ventilator's exhalation valve would enable per-patient monitoring.</p>
 
         <p class="hz-detail-card__copy">Hospitals rank equipment quality first and operation must not be cumbersome; hospitals also carry drug-resistant organisms such as Acinetobacter baumannii and Klebsiella pneumoniae, so swapping the nanobody could extend the yeast sensor to multiple pathogens. Public hospitals, however, must procure equipment through open tender, and using it for diagnosis would require formal certification.</p>
 
@@ -1094,10 +1104,73 @@
   </section>
         </div>
 
+        <!-- ===== 新增：公众问卷 230 份 ===== -->
+        <div class="detail-slide" data-hp-article="section-public-survey">
+<div id="section-public-survey" class="content-card hp-education-card" data-module-id="HP-SURVEY-PUBLIC" data-fact-status="secondary-source-only" data-verification-status="needs-primary-source-review">
+  <div class="hp-section-header">
+    <span class="hp-section-number">05</span>
+    <h2 class="hp-section-title">Public Survey: What 230 People Think About Airborne Virus Detection</h2>
+    <p class="hp-section-subtitle">Public survey · 230 valid responses · From public demand to design decisions</p>
+  </div>
+  <div class="hp-reveal-content">
+    <div class="hp-activity-overview">
+      <p>Expert interviews told us what professionals think; they could not tell us whether ordinary people would want such a device at all. Early in the project we therefore ran an online public survey, so that the question “is this worth building?” could be answered with evidence rather than assumption. It returned 230 valid responses, and several of its results changed our design priorities.</p>
+    </div>
+    <div class="hp-interview-context">
+      <h3 class="hp-subheading">Why we ran it, and how</h3>
+      <p>Four questions drove the survey: whether the public knows how influenza A spreads and how serious they consider it; how strongly they want an “is the air safe” function; how they would want a household device to work, be priced and be used; and what form they expect such a tool to take. The questionnaire was distributed online through WeChat and QQ in 2026. Every item was mandatory; responses completed in under 60 seconds were excluded; and open-ended answers were coded independently by two team members so that theme extraction stayed consistent.</p>
+
+      <h3 class="hp-subheading">Who answered</h3>
+      <p>The sample is young: 78.7% (181) were 18–30, 11.74% (27) were under 18, 6.96% (16) were 31–50, 2.61% (6) were 51–65, and nobody over 65 responded. That skew reflects the channel — an online questionnaire reaches younger people first. What matters more is that 57.39% (132) reported having children under 5 or elderly over 65 at home: for more than half of the respondents, airborne virus detection is not an abstract public-health topic but something that touches their own family.</p>
+
+      <h3 class="hp-subheading">Awareness is not the barrier</h3>
+      <p>91.3% (210) correctly identified air — droplets and aerosols — as the main transmission route of influenza A, and 95.2% consider its harm worth attention (47.39% “very serious, requires high attention”, 47.83% “relatively serious, but usually self-healing”). We had expected to spend a great deal of effort explaining airborne transmission; the data removed that worry. The concept is already understood. What is missing is a tool that can answer “is this air safe?”</p>
+
+      <h3 class="hp-subheading">What they want from a device</h3>
+      <p>Demand is high and specific. 96.5% consider an air-detection function useful (59.13% “very useful, can prevent in advance”; 37.39% “somewhat useful, depends”), and 95.65% would want to try a household device as simple as a pregnancy test. On speed, 93.9% want a result within half an hour (56.09% “the faster the better, ideally within 5 minutes”; 37.83% “within half an hour is acceptable”). On reading the result, 68.26% (157) prefer seeing the solution change colour with the naked eye, while only 19.13% (44) would accept using a UV flashlight to look for green fluorescence. On price, 82.6% would only pay within 30 yuan. On where it should be used, the most chosen scenarios were school and classroom (83.04%) and the respondent's own home (79.13%). And 88.26% said that after a positive result they would wear masks and remind family members. Asked what a future virus test should be as convenient as, respondents picked “like a thermometer, stick it on and read the result” and “like a smartwatch, detecting and reminding automatically” equally (59.13% each), followed by “like an air purifier, monitoring while it runs” (56.52%) and “like a test strip, drop liquid on and watch the colour” (48.26%); this was a multiple-answer question, so the shares add up to more than 100%.</p>
+
+      <h3 class="hp-subheading">Three people behind the numbers</h3>
+      <p>Reading age together with household composition gave three recurring profiles. <strong>The anxious parent</strong>, 30–40 with children under 5 at home, worries most about school and classroom (83.04%) and their own home (79.13%), wants a result that is clear at a glance, and would pay 10–30 yuan (42.17%). <strong>The commuting office worker</strong>, 18–30, cares about airports and train stations (58.26%) and the office (56.96%), prefers automatic monitoring that pushes results to a phone (59.13%), and is willing to accept one extra operating step in exchange for accuracy (92.6%). <strong>The child caring for elderly parents</strong>, 31–50 with elderly over 65 at home, concentrates on hospitals and clinics (59.57%) and nursing homes (49.57%), values reliability over speed, and accepts 30–50 yuan (14.35%). Their preferences differ, but the core demand is the same: early warning, simple operation, dependable results.</p>
+
+      <h3 class="hp-subheading">From findings to design</h3>
+      <p>The survey was not carried out for the record; it changed priorities. We had been inclined to develop the fluorescent reporter first, because it is easier to quantify in the laboratory, but 68.26% of respondents want a colour change readable without any equipment, so the colorimetric (LacZ) output became the main readout while fluorescence is kept for quantification. The 93.9% expectation set our 30-minute detection target. The 82.6% price ceiling confirmed the low-cost route built on yeast cultivation. And the 83.04% / 79.13% scenario data put schools and homes first for deployment.</p>
+      <table class="hz-detail-card__table">
+        <caption>From awareness to action</caption>
+        <thead><tr><th scope="col">Step</th><th scope="col">Share</th><th scope="col">Source item</th></tr></thead>
+        <tbody>
+          <tr><td>Consider air detection useful</td><td>96.5%</td><td>Q3</td></tr>
+          <tr><td>Would try a household device</td><td>95.65%</td><td>Q4</td></tr>
+          <tr><td>Willing to pay within 30 yuan</td><td>82.6%</td><td>Q9</td></tr>
+          <tr><td>Would act after a positive result</td><td>88.26%</td><td>Q11</td></tr>
+        </tbody>
+      </table>
+      <table class="hz-detail-card__table">
+        <caption>Survey expectations mapped onto Echo Yeast</caption>
+        <thead><tr><th scope="col">Survey finding</th><th scope="col">Data</th><th scope="col">Our design response</th></tr></thead>
+        <tbody>
+          <tr><td>Result visible to the naked eye</td><td>68.26%</td><td>LacZ colorimetric reporter as the main readout, no extra equipment needed</td></tr>
+          <tr><td>Result within half an hour</td><td>93.9%</td><td>30-minute detection target</td></tr>
+          <tr><td>Price within 30 yuan</td><td>82.6%</td><td>Low-cost yeast cultivation, low cost per test</td></tr>
+          <tr><td>Schools and homes are the core scenarios</td><td>83.04% / 79.13%</td><td>Active-inhalation version for public places, household self-test kit for personal use</td></tr>
+          <tr><td>Simple operation</td><td>92.6% accept one extra step</td><td>Optimize the sampling method and provide clear instructions</td></tr>
+          <tr><td>Prefer automatic monitoring</td><td>59.13%</td><td>Active-inhalation version samples automatically</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="hp-subheading">What they wrote in their own words</h3>
+      <p>One open question asked for suggestions on the project. The answers came back as a short, consistent vocabulary: hope, virus, convenient, application, operation, accuracy, yeast, place, influenza A, need, use, device, able to, as much as possible, problem, a bit, none. “Hope” is the most frequent word, which reads as positive expectation; “convenient”, “operation” and “accuracy” mark the three things people actually judge such a tool by; “application”, “place” and “device” show that they think about where it would physically be used.</p>
+
+      <h3 class="hp-subheading">What it changed, and what it cannot tell us</h3>
+      <p>The survey moved us from technology-driven to demand-driven. We stopped asking only whether the device can be built and started asking whether anyone would use it, and the answers were written into the design documents and discussed repeatedly within the team. Two limits need stating: 78.7% of respondents are 18–30, so older age groups are barely represented, and an online channel favours active users, so an offline round would be needed to confirm these figures. The percentages above describe what 230 self-selected respondents told us; they are not a market forecast and not a measurement of device performance.</p>
+    </div>
+  </div>
+</div>
+        </div>
+
         <div class="detail-slide" data-hp-article="section-southchina">
 <div id="section-southchina" class="content-card hp-education-card">
           <div class="hp-section-header">
-            <span class="hp-section-number">05</span>
+            <span class="hp-section-number">06</span>
             <h2 class="hp-section-title">HP Expedition: This Time We Came to the South China Meetup!</h2>
             <p class="hp-section-subtitle">HP Expedition series · Record of the South China outreach event</p>
           </div>
@@ -1132,7 +1205,7 @@
         <div class="detail-slide" data-hp-article="section-apic" data-hp-title="APiC exchange meeting">
 <div id="section-apic" class="content-card hp-education-card">
   <div class="hp-section-header">
-    <span class="hp-section-number">06</span>
+    <span class="hp-section-number">07</span>
     <h2 class="hp-section-title">Academic Exchange (II): APiC Asia-Pacific iGEM Team Conference</h2>
     <p class="hp-section-subtitle">The first Asia-Pacific iGEM team conference</p>
   </div>
@@ -1152,14 +1225,75 @@
       <h3 class="hp-subheading">SUSTech stage: mock review and project mutual visits</h3>
       <p>At SUSTech, we first attended several expert lectures covering frontier advances in synthetic biology, project validation methods and standardized practice. Then iGEM competition staff introduced the competition process and judging criteria online, giving us a clearer understanding of this year's rules and scoring priorities. The mock review was the highlight of the exchange. We went through the complete formal defense process, reviewing item by item from problem definition and technical route to validation design. The reviewers advised us to focus further on application scenarios, supplement data evidence and pay attention to compliant expression. We recorded these suggestions one by one and marked them as a list for the next round of improvement. In the project exchange session, we introduced the origins, core mechanism and expected application of the influenza A air-detection project, and also learned about other teams' technical routes and validation ideas. We also studied the design and content organization of each team's poster — from layout and figures to the story line — and gained a good deal of presentation experience.</p>
 
-      <h3 class="hp-subheading">Interactive activities: making the project “playable, tangible and open to feedback”</h3>
-      <p>We applied to the conference for on-site interactive activities and were given a dedicated space to set up two sessions. The first was question cards designed around the target prizes: other teams could look at our questions according to their own target prize and write down their answers, while we explained on site the design idea behind each card and the judging criteria of concern, collecting cross-team feedback at the same time. The second turned the project design concept into a “Plane War”-style mini-game, in which participants advanced through levels following the story guide and learned about our project in a relaxed atmosphere. Player feedback will also be used to optimize the story pacing and level design. In addition, during exchanges on experimental experience, we swapped many practical tips with other teams on experimental design, quality control and data handling.</p>
+      <h3 class="hp-subheading">Interactive activities: the Prism Program we designed</h3>
+      <p>We applied to the conference for on-site interactive activities and were given a dedicated space to set up two sessions. Ahead of the meeting we circulated a short collaboration proposal, the iGEM Project Prism Program: Special Award Track Deconstruction and Growth Plan, inviting other teams to stop looking only at their own work and take the competition's special award system itself as the thing to study. Each team chose two cards from a set of fifteen award cards — Best Measurement, Best Model, the four part awards, Best Education, Best Entrepreneurship, Best Hardware, Inclusivity, Best Integrated Human Practices, Best Alternative Platform, Safety and Security, Best Software, and Best Sustainable Development Impact — and each card carried ten questions on its back. Six steps followed: pick the two cards that match where your project actually stands; read all ten questions; check the official criteria of that award against past winning wikis and judges' comments; work through every question against your own evidence, whether experimental data, Human Practices records, modeling results or wiki content; distil it into a short oral report on what the award asks for, what has been done and what is still missing; then present and discuss it on site. The proposal and the step-by-step note were written in Chinese and English so visiting teams could follow them without translation.</p>
+
+      <h3 class="hp-subheading">Two formats on site: the track sprint and Yeast Defender</h3>
+      <p>The card work ran as a sprint: teams looked at the questions that matched their own target prize, wrote or spoke their answers, and we stood by to explain what each card was designed to test and which judging criteria lay behind it, collecting cross-team feedback as we went. Alongside it ran a “Plane War”-style mini-game, Yeast Defender, which turned the project design into a playable story: participants advanced through levels following the story guide and picked up the project in a relaxed way. Player feedback from that session will feed back into the story pacing and level design. Away from the two sessions, we also swapped plenty of practical tips with other teams on experimental design, quality control and data handling.</p>
+
+      <h3 class="hp-subheading">What the card answers brought back</h3>
+      <p>The answers written down or spoken at the card table were collected afterwards in one bilingual record, organised by award track. Five tracks came back filled in.</p>
+      <table class="hz-detail-card__table">
+        <caption>Questions discussed at the card table and the answers teams gave</caption>
+        <thead><tr><th scope="col">Award track</th><th scope="col">Question discussed</th><th scope="col">Answer recorded</th></tr></thead>
+        <tbody>
+          <tr><td>Best Integrated Human Practices</td><td>What do you most want to validate at your next conversation with stakeholders?</td><td>Teams spoke about pinning down actual market needs and concrete problems, and about finding out which application fields and product routes their work could really enter.</td></tr>
+          <tr><td>Best New Composite Part (question raised by USTC)</td><td>If another team says your composite part is only several parts stacked together, how do you answer?</td><td>One recorded answer: coupling an oscillator with a binary counter gave time-sequenced expression and a widened time-domain behaviour rather than a plain cascade, and functional modelling was offered as the evidence.</td></tr>
+          <tr><td>Best Sustainable Development Impact</td><td>If your project solves one concrete problem but leaves no lasting effect in a wider time and space, has it really achieved sustainable impact?</td><td>The answer recorded: the problem addressed and the solution offered both have to be sustainable for the impact to count.</td></tr>
+          <tr><td>Best Education</td><td>If your audience cannot follow the message, which part of the educational design most likely failed?</td><td>Two failure modes came up — presentation, meaning content too dense to follow, which can be rebuilt around plainer examples; and conception, illustrated by being asked why a hydrogen-producing organism needed engineering at all. The discussion closed with how to widen reach and what education should put at its centre.</td></tr>
+          <tr><td>Best Alternative Platform (questions raised by HKLeague2026)</td><td>Would your platform still be worth building next to a more mature, better-performing conventional technology, and is it only another way of doing the same thing?</td><td>The answers framed the value as replacing chemical precipitation with bioremediation: metal-binding proteins carried by <i>Escherichia coli</i>, sealed inside hydrogel beads for containment, with captured metals recovered and reused, avoiding the chemical load that ends up in the water.</td></tr>
+        </tbody>
+      </table>
+      <p>Doing this was instructive in a way that simply attending talks is not. Preparing the cards forced us to read the judging criteria of fifteen awards line by line instead of guessing what they reward, and the sprint answers showed us how differently other teams read the same criteria. It also made our own gaps concrete: several of the questions turned on evidence we do not yet have, which is exactly the kind of thing we would rather hear at a conference than at a defence.</p>
 
       <h3 class="hp-subheading">HKU stage: lectures and a discussion session with past participants</h3>
       <p>At the University of Hong Kong, we continued to attend expert lectures and joined a discussion session with past iGEM participants. Everyone exchanged views on what they gained from the competition, teamwork, and the difficulties encountered in advancing projects and how they were solved. The sharing by past participants gave us a more concrete understanding of iGEM's rhythm and priorities. The HKU stage also included a poster display and free-exchange session, where we had in-depth discussions with other teams on project design, validation plans and presentation approaches.</p>
 
       <h3 class="hp-subheading">Takeaways and next steps</h3>
-      <p>APiC was our first time taking part in an Asia-Pacific-level iGEM team conference, and it was also the very first edition. Through the two stages at SUSTech and HKU, we not only learned from frontier lectures and review experience, but also helped more teams learn about our project through the interactive activities we designed ourselves. Next, we will optimize the validation plan and interaction design according to the reviewers' suggestions and what we gained from the exchange, refine the project materials, and continue to stay in contact and cooperate with the other teams.</p>
+      <p>APiC was our first time taking part in an Asia-Pacific-level iGEM team conference, and it was also the very first edition. Through the two stages at SUSTech and HKU, we not only learned from frontier lectures and review experience, but also helped more teams learn about our project through the interactive activities we designed ourselves, and ran a card-based exercise that turned the special award criteria into something several teams could work through together. Next, we will optimize the validation plan and interaction design according to the reviewers' suggestions and what we gained from the exchange, refine the project materials, and continue to stay in contact and cooperate with the other teams. The card set and the process note stay available to any team that wants to run the same exercise.</p>
+    </div>
+  </div>
+</div>
+        </div>
+
+        <div class="detail-slide" data-hp-article="section-jlu" data-hp-title="Together with iGEM (JLU-FBH)">
+<div id="section-jlu" class="content-card hp-education-card" data-module-id="HP-COLLAB-JLU" data-fact-status="source-confirmed" data-verification-status="source-confirmed">
+  <style>
+    .hp-jlu-list { margin: .4rem 0 1.1rem; padding-left: 1.25rem; display: grid; gap: .6rem; line-height: 1.7; }
+    .hp-jlu-list li { color: #4a3f33; }
+    .hp-jlu-list li strong { color: #5c4d3c; }
+    .hp-pdf-block { margin-top: 1.3rem; }
+    .hp-pdf-frame { width: 100%; height: 82vh; min-height: 620px; border: 1px solid rgba(139,115,85,.3); border-radius: 14px; background: #fff; }
+    .hp-pdf-note { margin-top: .6rem; font-size: .92rem; color: #7d6d5a; }
+    @media (max-width: 700px) { .hp-pdf-frame { height: 70vh; min-height: 460px; } }
+  </style>
+  <div class="hp-section-header">
+    <span class="hp-section-number">08</span>
+    <h2 class="hp-section-title">Academic Exchange (III): Together with iGEM — A Handbook Co-edited with Jilin University</h2>
+    <p class="hp-section-subtitle">JLU-FBH (Jilin University) · Co-edited with 17 iGEM teams worldwide</p>
+  </div>
+  <div class="hp-reveal-content">
+    <div class="hp-activity-overview">
+      <p>JLU-FBH (Jilin University) launched <em>Together with iGEM</em>, inviting each participating iGEM team to pick a common misconception about synthetic biology and explain clearly why it is misleading. The handbook brings together contributions from 17 iGEM teams worldwide, collected, organized and laid out by JLU-FBH. SZPU-China joined as a contributing team, and our six entries all focus on influenza A — the exact disease our Echo Yeast biosensor is built to detect.</p>
+    </div>
+    <div class="hp-interview-context">
+      <h3 class="hp-subheading">What SZPU-China contributed</h3>
+      <p>We wrote six short entries correcting widespread misunderstandings about influenza A and its detection:</p>
+      <ul class="hp-jlu-list">
+        <li><strong>“Influenza A is basically the same as a common cold, and it will pass without much concern.”</strong> — Influenza A is an acute respiratory infection with a more abrupt onset, stronger systemic symptoms, higher transmissibility, and risk of severe complications, especially in high-risk populations.</li>
+        <li><strong>“Influenza spreads only when an infected person coughs or sneezes.”</strong> — It also spreads through droplets, contact, and potentially aerosols; in crowded indoor spaces such as subways, hospitals and classrooms, infection risk may exist even without obvious coughing.</li>
+        <li><strong>“Antigen tests are always enough, and PCR testing is unnecessary.”</strong> — Antigen tests are useful for rapid screening, but nucleic-acid testing is more sensitive and specific, especially in early infection, low viral-load cases, and pediatric diagnosis.</li>
+        <li><strong>“Children with flu do not necessarily need testing; observation is enough.”</strong> — Because children may deteriorate more quickly and symptoms can overlap with other respiratory infections, nucleic-acid testing helps confirm diagnosis early and supports proper treatment and isolation.</li>
+        <li><strong>“Only hospital testing matters; environmental monitoring is unnecessary.”</strong> — Clinical testing confirms infection after exposure, while environmental surveillance can provide early warning before outbreaks spread; the two approaches are complementary.</li>
+        <li><strong>“Any genetically engineered yeast used in public spaces is inherently dangerous.”</strong> — Engineered yeast is not a pathogen or “artificial virus”; with proper containment, biosafety review and inactivation measures, it can be used safely in enclosed devices for sensing applications.</li>
+      </ul>
+      <h3 class="hp-subheading">Why this matters for our project</h3>
+      <p>The last point connects directly to Echo Yeast: a yeast-based, BSL-1 biosensor intended for enclosed environmental monitoring of airborne influenza A. Working with JLU-FBH on this handbook let us turn the science behind our project into plain-language public communication, and reinforced our design choice of an enclosed, contained device rather than any open release. The full handbook is embedded below.</p>
+    </div>
+    <div class="hp-pdf-block">
+      <h3 class="hp-subheading">The handbook (full PDF)</h3>
+      <iframe class="hp-pdf-frame" src="https://static.igem.wiki/teams/6373/wiki/team/hp/pdf/together-with-igem-english.pdf" title="Together with iGEM handbook, co-edited by JLU-FBH and 17 iGEM teams including SZPU-China" loading="lazy"></iframe>
+      <p class="hp-pdf-note"><a href="https://static.igem.wiki/teams/6373/wiki/team/hp/pdf/together-with-igem-english.pdf" target="_blank" rel="noopener">Open / download the full PDF (English)</a></p>
     </div>
   </div>
 </div>
@@ -1168,7 +1302,7 @@
         <div class="detail-slide" data-hp-article="section-education">
 <div id="section-education" class="content-card hp-education-card hp-section-offset-2">
           <div class="hp-section-header">
-            <span class="hp-section-number">07</span>
+            <span class="hp-section-number">09</span>
             <h2 class="hp-section-title">Science Communication and Project Exchange for Secondary Students: Bringing Synthetic Biology to Future Explorers</h2>
             <p class="hp-section-subtitle">Shenzhen First Vocational Technical School · Outreach with students majoring in pharmaceutical-related fields</p>
           </div>
@@ -1226,7 +1360,7 @@
         <div class="detail-slide" data-hp-article="section-freshman" data-hp-title="Science outreach for first-year students">
 <div id="section-freshman" class="content-card hp-education-card">
   <div class="hp-section-header">
-    <span class="hp-section-number">08</span>
+    <span class="hp-section-number">10</span>
     <h2 class="hp-section-title">Outreach for Freshmen: Explaining Synthetic Biology to Future Explorers</h2>
     <p class="hp-section-subtitle">2026 pharmacy and pharmaceutical engineering technology undergraduates</p>
   </div>
@@ -1253,7 +1387,7 @@
         <div class="detail-slide" data-hp-article="section-references" data-hp-title="References">
 <div id="section-references" class="content-card hp-education-card">
   <div class="hp-section-header">
-    <span class="hp-section-number">09</span>
+    <span class="hp-section-number">11</span>
     <h2 class="hp-section-title">References</h2>
     <p class="hp-section-subtitle">Sources cited across this Human Practices page</p>
   </div>
@@ -1272,14 +1406,13 @@
 </div>
         </div>
 
-
-  
 {% endblock %}
 {% block styles %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated-human-practices.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/hp-head-extra.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated-human-practices.css') }}?v=20261018a">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/hp-head-extra.css') }}?v=20261018a">
 {% endblock %}
 {% block scripts %}
+  <script src="{{ url_for('static', filename='js/components/hp-image-viewer.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/hp-reveal-box.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>
 {% endblock %}

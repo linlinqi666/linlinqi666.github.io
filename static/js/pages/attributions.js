@@ -547,7 +547,7 @@
       const navLinks = document.querySelectorAll('.jump-to-btn');
       if (navLinks.length === 0) return;
 
-      const sectionIds = ['team-contributions', 'external-contributions', 'timeline'];
+      const sectionIds = ['team-contributions', 'ai-tools', 'external-contributions', 'timeline'];
       /** @type {Array<{id: string, element: HTMLElement, top: number, bottom: number, links: HTMLElement[]}>} */
       const sections = [];
 
@@ -662,7 +662,7 @@
       if (state.isInitialized) return;
 
       CardFilter.init('.role-tab', '#members-grid .member-card', 'data-role');
-      CardFilter.init('.type-filter-btn', '#external-grid .external-card', 'data-type');
+      CardFilter.init('.type-filter-btn', '#external-grid .external-card', 'data-rel');
       TaskTagTooltip.init();
       TimelineInteraction.init();
       ScrollSpy.init();

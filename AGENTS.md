@@ -14,9 +14,10 @@
 
 | 职责 | 实际路径 | 更新触发条件 |
 |---|---|---|
-| 项目协作契约 | `AGENTS.md` | 工程边界、归档规则、构建/文档流程变化 |
-| 文档地图 | `DOCUMENT_MAP.md`（本文件） | 创建/替换/移动文档或目录 |
-| 全局产品/技术/UI/设计系统指导 | `README.md` | 设计令牌、目录结构、约束规则、进度变化 |
+| 项目协作契约 + 文档地图 | `AGENTS.md`（本文件，原 `DOCUMENT_MAP.md` 已并入） | 工程边界、归档规则、构建/文档流程变化 |
+| 全局索引与红线 | `README.md` | 设计令牌、目录结构、约束规则、进度变化 |
+| 长阅读文档分册 | `docs/`（`architecture/`、`design-system/`、`workflow/`、`governance/`、`cases/`） | 单份 Markdown 超过 300 行即分册 |
+| 归档分类字典 / 编码红线 | `.codebuddy/rules/archive-and-encoding-redline.mdc` | 归档目录、保护清单、中文路径创建方式变化 |
 | 根站工程规则 | `.codebuddy/rules/root-static-site.mdc` | 根站技术栈/构建/资源约束变化 |
 | Flask 工程规则 | `.codebuddy/rules/igem2026-flask.mdc` | Flask 工程路由/模板/合规/构建变化 |
 | 生物内容规则 | `.codebuddy/rules/PAGER-yeast.mdc` | 实验内容/科学表述边界变化 |
@@ -63,7 +64,7 @@
 > 本仓库硬性约定，优先级高于"先放着、以后整理"。
 
 - 任何由对话/AI 过程产生的**非正式文件**（截图、导出中间文件、研究报告、工具日志、临时调试脚本、测试页、误生成文件夹、验证图等），必须在生成当次**立即**归入仓库根目录的 **`对话归档/`** 对应子目录，严禁散落在仓库根目录或任何业务目录（`dry-lab/`、`wet-lab/`、`human-practices/`、`project/`、`team/`、`static/`、`src/`、`igem2026-flask/` 等）。
-- 归档分类以 `README.md` 第十一节为准；当前 `对话归档/` 实际子目录：`analysis/`、`backups/`、`generated-assets/`、`logs/`、`misc/`、`plans/`、`research-reports/`、`screenshots/`、`temporary-tools/`、`tests/`、`tools-debug/`。新增产物类型时先建子目录再放入，不要直接丢在 `对话归档/` 根。
+- 归档分类以 `.codebuddy/rules/archive-and-encoding-redline.mdc` 与 `对话归档/README.md` 为准；当前 `对话归档/` 顶层为：`2026-09/`、`2026-10/`、`_temp/`、`_worktrees/`、`analysis/`、`backups/`、`generated-assets/`、`logs/`、`misc/`、`plans/`、`research/`、`screenshots/`、`temporary-tools/`、`verification/` 与 npm 依赖文件。新增产物类型时先并入既有分类（顶层不新增目录），不要直接丢在 `对话归档/` 根。
 - `对话归档/` 已在 `.gitignore` 排除，**不入库**，仅本地保留。
 - 正式工程化脚本只放 `tools/`（根站）或 `igem2026-flask/tools/`；不要把临时调试脚本混入正式脚本目录。
 - 提交前务必 `git status` 复查，确认无 stray 文件混入正式目录。
