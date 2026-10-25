@@ -18,7 +18,7 @@ git diff --cached --stat                       # ③ 暂存区只含本次任务
 
 1. **逐条过目 `git status`**：出现不认识的 `??` / ` M`，先判定归属——对话/工具产物（截图、临时脚本、日志、测试页）→ 当场移入 `对话归档/`（第十一节）；本次任务文件 → 明确纳入或明确忽略，不留"以后再说"。
 2. **只暂存本次文件**：一律 `git add <具体路径>`；**禁止 `git add .` / `git add -A`**（会把截图、逐帧导出、大图一起扫进提交）。
-3. **构建与验证**：根站按 §10.1 分步执行 `npx eleventy` + 搜索索引 + `tools/check-static-assets.js` + `tools/check-performance-budget.js`；flask 执行 `python -m compileall app.py site_nav.py` + `flask freeze`；受影响页面**必须经本地 HTTP 服务**打开确认（`file://` 不算验证）。
+3. **构建与验证**：根站按 §10.1 分步执行 `npx eleventy` + 搜索索引 + `tools/check-static-assets.js` + `tools/check-performance-budget.js`；flask 执行 `python -m compileall app.py` + `flask freeze`；受影响页面**必须经本地 HTTP 服务**打开确认（`file://` 不算验证）。
 
 ### 17.2 入库边界
 

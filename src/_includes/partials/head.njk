@@ -5,20 +5,26 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="{{ basePath | default('') }}static/iconfont">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/iconfont/iconfont.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/base.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/navigation/navigation.css">
-{% if page.filePathStem == '/index' %}<link rel="stylesheet" href="{{ basePath | default('') }}static/css/index.css">
-{% endif %}{% for c in (css or []) %}<link rel="stylesheet" href="{{ basePath | default('') }}{{ c }}">
+{# 全部静态资源挂 ?v={{ assetV }}：版本号由 .eleventy.js 按 static/css、static/js 最新
+   mtime 自动计算。没有它就一定出现「新 HTML + 旧 CSS」的错配（实测过两次）。 #}
+<link rel="stylesheet" href="{{ basePath | default('') }}static/iconfont/iconfont.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/base.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/navigation/navigation.css?v={{ assetV }}">
+{% if page.filePathStem == '/index' %}<link rel="stylesheet" href="{{ basePath | default('') }}static/css/index.css?v={{ assetV }}">
+{% endif %}{% for c in (css or []) %}<link rel="stylesheet" href="{{ basePath | default('') }}{{ c }}?v={{ assetV }}">
 {% endfor %}
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/mobile.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/page-loader.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/back-to-top.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/section-fold.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/media-reveal.css">
-<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/mobile.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/page-loader.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/back-to-top.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/section-fold.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/image-pipeline.css?v={{ assetV }}">
+<link rel="stylesheet" href="{{ basePath | default('') }}static/css/components/page-mascot.css?v={{ assetV }}">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="{{ basePath | default('') }}static/js/components/page-loader-arm.js"></script>
+<script src="{{ basePath | default('') }}static/js/components/page-loader-arm.js?v={{ assetV }}"></script>
 {% if headExtraPartial %}{% include headExtraPartial %}{% endif %}

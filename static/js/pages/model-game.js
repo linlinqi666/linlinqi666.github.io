@@ -344,6 +344,8 @@
             }
           }
           viewer = mol.createViewer(el.viewer, { backgroundColor: '#FFFCF2' });
+          // 展示区激活：虚线框改实线（高度由 CSS flex 接管，不在此设）
+          el.viewer.classList.add('is-ready');
           viewer.addModel(pdb, 'pdb');
           lastPdb = pdb;
           lastSplit = split;
@@ -775,6 +777,22 @@
     wireDropZone(el.slotAb, 'antibody');
     wireDropZone(el.slotAg, 'antigen');
 
+    // 3Dmol 画布不随容器尺寸自动重排：展示区高度由 CSS flex 接管后，
+    // 窗口缩放、断点切换、结果栏开合都会改变容器高度，需手动同步画布。
+    if (el.viewer && typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(function () {
+        if (viewer) {
+          try {
+            viewer.resize();
+            viewer.render();
+          } catch (err) {
+            /* 画布尚未就绪或已销毁时忽略 */
+          }
+        }
+      });
+      ro.observe(el.viewer);
+    }
+
     if (el.railToggle) {
       el.railToggle.addEventListener('click', function () {
         setRail(el.rail.getAttribute('data-rail-state') !== 'open');
@@ -865,6 +883,7 @@
           }
         }
         lastPdb = '';
+        el.viewer.classList.remove('is-ready');
         var empty = el.viewer.querySelector('.model-game__viewer-empty');
         if (!empty) {
           var slot = document.createElement('div');

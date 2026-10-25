@@ -35,7 +35,7 @@
 /* iGEM Layout Strategy: Split-layout with a full-bleed member photo behind the content layer. The ribbon navigation floats on the left and the text story floats on the right, both kept readable by soft edge masks. */
 
 /* The global header is empty on the Members page and only pushes the redesign app away from the viewport top; hide it so the rail can span the full viewport height and align with the top edge.
-   2026-10-14：header 已改为 .site-top-spacer 占位 div（见 layout.html），隐藏规则同步覆盖两者。 */
+   header 为 .site-top-spacer 占位 div（见 layout.html），隐藏规则同步覆盖两者。 */
 body>header,
 body>.site-top-spacer {
   display: none;
@@ -71,7 +71,7 @@ body>.site-top-spacer {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-    /* 照片渲染框边缘（相对本层，百分比）。由 members.js 在成员切换时按实际渲染框写入； .bg-mask 的四条羽化渐变据此工作。缺省值退化为"照片满铺、不羽化"。 */
+    /* 照片渲染框边缘（相对本层，百分比）。由页面内联脚本在成员切换时按实际渲染框写入； .bg-mask 的四条羽化渐变据此工作。缺省值退化为"照片满铺、不羽化"。 */
   --photo-left: 0%;
   --photo-right: 100%;
   --photo-top: 0%;
@@ -182,7 +182,7 @@ body>.site-top-spacer {
 }
 
 .strip-title {
-  font-size: 20px;
+  font-size: 1.42rem;
   font-weight: 700;
   color: var(--primary-blue);
   margin: 0;
@@ -246,7 +246,7 @@ body>.site-top-spacer {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #374151;
   text-transform: uppercase;
@@ -293,7 +293,7 @@ body>.site-top-spacer {
 }
 
 .group-count {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 500;
   color: #6B7280;
   background: rgba(255, 255, 255, 0.7);
@@ -409,7 +409,7 @@ body>.site-top-spacer {
 
 .strip-name {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   color: #374151;
   white-space: nowrap;
   overflow: hidden;
@@ -481,7 +481,7 @@ body>.site-top-spacer {
 }
 
 .detail-name {
-  font-size: 28px;
+  font-size: 1.9rem;
   font-weight: 700;
   color: var(--primary-blue);
   margin: 0 0 6px;
@@ -489,7 +489,7 @@ body>.site-top-spacer {
 }
 
 .detail-role {
-  font-size: 14px;
+  font-size: 1rem;
   color: #4B5563;
   margin: 0 0 18px;
 }
@@ -503,7 +503,7 @@ body>.site-top-spacer {
 
 .detail-tag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   padding: 5px 12px;
   border-radius: 999px;
@@ -557,7 +557,7 @@ body>.site-top-spacer {
 .detail-bio {
   margin-top: 18px;
   color: #374151;
-  font-size: 15px;
+  font-size: 1.12rem;
   line-height: 1.75;
 }
 
@@ -580,7 +580,7 @@ body>.site-top-spacer {
   z-index: 10;
   color: var(--color-text, #333);
   font-size: 15px;
-  text-align: right;
+  text-align: left;
   pointer-events: none;
   overflow: hidden;
 }
@@ -593,7 +593,7 @@ body>.site-top-spacer {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: flex-start;
   scrollbar-width: none;
   pointer-events: auto;
@@ -624,7 +624,7 @@ body>.site-top-spacer {
 }
 
 /*
- * Scrollable wrapper keeps short content vertically centered while allowing long bios to start at the top and scroll naturally. Content is right-aligned so it stays inside the opaque region of the rail gradient. 背景已去掉，
+ * Scrollable wrapper keeps short content vertically centered while allowing long bios to start at the top and scroll naturally. Content is left-aligned so the name, tags and bio share one readable baseline inside the opaque region of the rail gradient. 背景已去掉，
  * 仅保留内边距与文字层级，避免卡片框视觉上越过内容左缘。
  */
 .rail-scroll {
@@ -633,7 +633,7 @@ body>.site-top-spacer {
   margin-bottom: auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   box-sizing: border-box;
   padding: clamp(20px, 4vw, 30px);
     /* 去掉卡片背景框：用户反馈不要背景框，文字直接落在 rail 自身的渐变上， 避免左侧阴影/背景视觉上越过内容左缘。 */
@@ -722,21 +722,21 @@ body>.site-top-spacer {
   color: var(--primary-blue);
   margin: 0 0 8px;
   line-height: 1.25;
-  text-align: right;
+  text-align: left;
 }
 
 .rail-role {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--color-text-light, #666);
   margin: 0 0 14px;
-  text-align: right;
+  text-align: left;
 }
 
 .rail-tags {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 8px;
   margin-bottom: 14px;
   width: 100%;
@@ -744,7 +744,7 @@ body>.site-top-spacer {
 
 .rail-tag {
   display: inline-block;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 999px;
@@ -752,15 +752,24 @@ body>.site-top-spacer {
   color: var(--primary-blue);
 }
 
-/* 标签组与简介之间以细分隔线拉开层级 */
+/* 标签组与简介之间以细分隔线拉开层级；简介块 hover 时浮出淡边框，不填充底色 */
 .rail-bio {
+  box-sizing: border-box;
+  width: calc(100% + 24px);
   font-size: 15px;
   line-height: 1.8;
   color: var(--color-text, #333);
-  margin: 16px 0 0;
-  padding-top: 16px;
-  border-top: 1px solid rgba(43, 108, 176, 0.16);
-  text-align: right;
+  margin: 16px -12px 0;
+  padding: 16px 12px 12px;
+  border: 1px solid transparent;
+  border-top-color: rgba(43, 108, 176, 0.16);
+  border-radius: 10px;
+  text-align: left;
+  transition: border-color 0.3s ease;
+}
+
+.rail-bio:hover {
+  border-color: rgba(43, 108, 176, 0.22);
 }
 
 /* Keep the footer visually above the full-bleed photo layer. */
@@ -849,7 +858,7 @@ body>.site-top-spacer {
     transition: max-height var(--transition), opacity var(--transition);
   }
 
-    /* 展开上限由 JS 实测 scrollHeight 写入 --strip-groups-max； 不再使用固定 1200px，避免成员增多后列表末尾被裁掉、点不到。 */
+    /* 不再使用固定 1200px，避免成员增多后列表末尾被裁掉、点不到。 */
   .members-strip.is-expanded .strip-groups {
     max-height: var(--strip-groups-max, 2400px);
     opacity: 1;
@@ -914,7 +923,7 @@ body>.site-top-spacer {
   }
 
   .detail-bio {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.7;
   }
 }

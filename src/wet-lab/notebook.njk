@@ -6,20 +6,48 @@ basePath: "../"
 css:
   - static/css/log.css
   - static/css/components/pdf-embed.css
+  - static/css/flask-sync/notebook.css
 js:
   - static/js/components/sidebar-progress.js
 ---
-
-{# 2026-10-11 重做：改用与 protocol 页相同的 PDF 框架（partials/pdf-embed.njk + 浏览器原生阅读器），
-   不再使用 pdf.js 阅读器与 log-pdf.js / log-pdf-data.js；侧边栏为普通章节导航，
-   四个模块各占一张内容卡（id 前缀 notebook-，已登记 sectionIdPrefixes）。
-   改动需与 Flask 站 wiki/pages/notebook.html 同步。
-   每个 PDF 容器下方放置「Protocol 站内导航（页面级，跳到 protocol.html）」与
-   「PDF 中识别出的网址（以文件内网页名呈现，不直接暴露 URL）」。
-   四份 PDF 均托管于 static.igem.wiki（lab/wetlab/notebook/），本地不保留副本。 #}
+{# 四个模块各占一张内容卡（id 前缀 notebook-，已登记 sectionIdPrefixes），
+   PDF 走 partials/pdf-embed.njk + 浏览器原生阅读器，托管于 static.igem.wiki
+   （lab/wetlab/notebook/），本地不保留副本。
+   卡片底部按该份记录实际引用的协议编号列出深链，落到 protocol.html#protocol-pNN，
+   由 protocol 页的 hash 脚本展开对应收纳条。
+   改动需与 Flask 站 wiki/pages/notebook.html 同步。 #}
 {% extends "layouts/base.njk" %}
 
 {% block main %}
+{# 本页使用与 protocol 页相同的 PDF 框架（.pdf-embed + <object> 直连 static.igem.wiki），
+   不再使用 pdf.js 阅读器与 log-pdf.js；侧边栏为普通章节导航，四个模块各占一张内容卡。
+   每张卡底部按该份记录实际引用的协议编号列出深链，落到 protocol 页对应收纳条。
+   改动需与根站 src/wet-lab/notebook.njk 同步。 #}
+{% set protocolTitles = {
+  "01": "<i>E. coli</i> Transformation and Culture Expansion",
+  "02": "Glycerol Stock Preparation and Cryopreservation",
+  "03": "Plasmid Extraction from <i>E. coli</i>",
+  "04": "Restriction Enzyme Digestion",
+  "05": "Agarose Gel Electrophoresis",
+  "06": "Colony PCR for <i>E. coli</i>",
+  "07": "Conventional PCR",
+  "08": "Overlap Extension PCR",
+  "09": "PCR Purification",
+  "10": "Gel Extraction of PCR Products",
+  "11": "Gibson Assembly",
+  "12": "Yeast Transformation",
+  "13": "Colony PCR for <i>Saccharomyces cerevisiae</i>",
+  "14": "Yeast Growth Curve Measurement",
+  "15": "Microscopic Observation of Yeast Morphology",
+  "16": "Detection of Yeast Fluorescence Signal After Treatment",
+  "17": "Confocal Imaging of Yeast Fluorescence After Treatment",
+  "18": "SDS-PAGE and Western Blotting",
+  "19": "CRISPR-Cas9 Transformation for Gene Knockout in Yeast",
+  "20": "Functional Validation of the Yeast Sensor",
+  "23": "Plasmid Extraction from Yeast",
+  "24": "Verification PCR from Yeast Liquid Culture (Lyticase Lysis)",
+  "25": "Dynamic Detection of &alpha;-factor Gradient-Induced <i>MEL1</i> Expression via X-&alpha;-gal Blue-White Color Development"
+} %}
 <div class="description-container notebook-page">
   <aside class="description-sidebar">
     <div class="yeast-decoration">
@@ -55,53 +83,101 @@ js:
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
+            <a href="#notebook-ste2" class="nav-main-link"><i>STE2</i> Gating Engineering</a>
+          </div>
+        </li>
+        <li class="level1">
+          <div class="nav-link-wrapper">
             <a href="#notebook-reporter" class="nav-main-link">Reporter Module</a>
           </div>
         </li>
       </ul>
     </div>
+
+    {# 发酵进度容器：与 result/safety/protocol 等内容页同一组件，sidebar-progress.js 驱动 #}
+    <div class="progress-section">
+      <div class="progress-flask">
+        <div class="flask-body">
+          <div class="flask-neck"></div>
+          <div class="flask-liquid">
+            <div class="liquid-fill"></div>
+            <div class="bubbling">
+              <div class="ferment-bubble f-bubble-1"></div>
+              <div class="ferment-bubble f-bubble-2"></div>
+              <div class="ferment-bubble f-bubble-3"></div>
+              <div class="ferment-bubble f-bubble-4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flask-progress">
+          <span class="progress-percentage" id="progress-percentage">0%</span>
+        </div>
+      </div>
+      <div class="progress-title">Fermentation Progress</div>
+    </div>
   </aside>
 
   <div class="description-content">
     <div id="notebook-overview" class="content-card">
-      <figure class="page-mascot page-mascot--notebook" aria-hidden="true">
-        <img src="../static/image/any-icon/extension/notebook.png" alt="" width="440" height="482"
-          loading="lazy" decoding="async">
-      </figure>
+          <figure class="page-mascot page-mascot--notebook" aria-hidden="true">
+            <img src="{{ basePath | default('') }}static/image/any-icon/extension/notebook.png" alt="" width="440" height="482"
+              loading="lazy" decoding="async">
+          </figure>
       <h2>Notebook</h2>
       <p class="content-intro">
-        These notebooks serve as the main entry for our wet-lab documentation of the yeast-based biosensor targeting airborne influenza A virus (IAV). Our PAGER (Protein-fragment Assisted GPCR Expression Reporter) antigen-gated receptor system is built in four independent functional modules. Below you can access experimental records for chassis engineering, humanized G-protein chimera construction, PAGER fusion-receptor assembly, and reporter-module validation respectively. Each record links to the Protocol page, and to external resources cited inside the document.
+        These notebooks serve as the main entry for our wet-lab documentation of the yeast-based biosensor targeting airborne influenza A virus (IAV). Our PAGER (Protein-fragment Assisted GPCR Expression Reporter) antigen-gated receptor system is built in four independent functional modules. Below you can access experimental records for chassis engineering, humanized G-protein chimera construction, PAGER fusion-receptor assembly, and reporter-module validation respectively. Under each record, the protocols cited in that document are listed by number as they appear in the Protocol page, and each number opens that protocol directly.
       </p>
     </div>
 
     <div id="notebook-chassis" class="content-card">
       <h2>Chassis Engineering</h2>
       <p class="content-intro">
-        This notebook records wet-lab procedures for chassis optimization of our yeast biosensor. We performed CRISPR-Cas9-mediated knockout of endogenous FAR1 and SST2 in <i>Saccharomyces cerevisiae</i> BY4741, aiming to eliminate cell-cycle arrest and G-protein-signaling negative feedback, so as to improve signal sensitivity for our downstream PAGER antigen-gated receptor system.
+        This notebook records wet-lab procedures for chassis optimization of our yeast biosensor. We performed CRISPR-Cas9-mediated knockout of endogenous <i>FAR1</i> and <i>SST2</i> in <i>Saccharomyces cerevisiae</i> BY4741, aiming to eliminate cell-cycle arrest and G-protein-signaling negative feedback, so as to improve signal sensitivity for our downstream PAGER antigen-gated receptor system.
       </p>
-      {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-chassis-far1-sst2-knockout.pdf" %}
-      {% set pdfLabel = "Notebook - Construction of the FAR1/SST2 Knockout Yeast Strain" %}
-      {% set pdfFallback = "This notebook PDF is not available yet." %}
-      {% include "partials/pdf-embed.njk" %}
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="{{ basePath | default('') }}static/image/lab/wetlab/notebook/notebook-chassis-far1-sst2-knockout.pdf"
+                aria-label="Notebook - Construction of the FAR1 SST2 Knockout Yeast Strain">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
+      {% set citedProtocols = ["01", "03", "05", "07", "08", "09", "10", "11", "12", "13", "14", "16", "19"] %}
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Chassis Engineering →</a>
-        <span class="notebook-resources__label">Resources in document:</span>
-        <a href="https://www.yeastgenome.org/" target="_blank" rel="noopener">SGD</a>
-        <a href="https://www.benchling.com" target="_blank" rel="noopener">Benchling</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="{{ basePath | default('') }}wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          {% for id in citedProtocols %}
+          <li><a href="{{ basePath | default('') }}wet-lab/protocol.html#protocol-p{{ id }}"><span class="notebook-protocols__no">{{ id }}</span><span class="notebook-protocols__title">{{ protocolTitles[id] | safe }}</span></a></li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
 
     <div id="notebook-gpa1" class="content-card">
       <h2>Humanized G-Protein Chimera</h2>
       <p class="content-intro">
-        This notebook records the humanization engineering of GPA1 in <i>Saccharomyces cerevisiae</i> — replacing the native C-terminal KIGII motif with the human Gαq EYNLV sequence to retune G-protein coupling for the PAGER receptor.
+        This notebook records the humanization engineering of <i>GPA1</i> in <i>Saccharomyces cerevisiae</i> — replacing the native C-terminal KIGII motif with the human Gαq EYNLV sequence to retune G-protein coupling for the PAGER receptor.
       </p>
-      {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-gpa1-humanization.pdf" %}
-      {% set pdfLabel = "Notebook - Humanization Engineering of GPA1 in Saccharomyces cerevisiae" %}
-      {% set pdfFallback = "This notebook PDF is not available yet." %}
-      {% include "partials/pdf-embed.njk" %}
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="{{ basePath | default('') }}static/image/lab/wetlab/notebook/notebook-gpa1-humanization.pdf"
+                aria-label="Notebook - Humanization Engineering of GPA1 in Saccharomyces cerevisiae">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
+      {% set citedProtocols = ["01", "02", "03", "04", "05", "07", "08", "10", "11", "12", "13", "14", "15", "16"] %}
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Humanized G-Protein Chimera →</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="{{ basePath | default('') }}wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          {% for id in citedProtocols %}
+          <li><a href="{{ basePath | default('') }}wet-lab/protocol.html#protocol-p{{ id }}"><span class="notebook-protocols__no">{{ id }}</span><span class="notebook-protocols__title">{{ protocolTitles[id] | safe }}</span></a></li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
 
@@ -110,12 +186,50 @@ js:
       <p class="content-intro">
         This notebook records the construction of the PAGER antigen-gated system for Influenza A virus detection — assembly of the membrane-anchored scFv–Gα–Gγ fusion receptor, yeast transformation, expression validation, and HA-antigen-induced activation detection.
       </p>
-      {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-pager-antigen-gated.pdf" %}
-      {% set pdfLabel = "Notebook - Construction of the PAGER Antigen-Gated System for Influenza A Virus Detection" %}
-      {% set pdfFallback = "This notebook PDF is not available yet." %}
-      {% include "partials/pdf-embed.njk" %}
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="{{ basePath | default('') }}static/image/lab/wetlab/notebook/notebook-pager-antigen-gated.pdf"
+                aria-label="Notebook - Construction of the PAGER Antigen-Gated System for Influenza A Virus Detection">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
+      {% set citedProtocols = ["01", "03", "04", "05", "06", "07", "11", "12", "13", "16", "17", "18", "23"] %}
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: PAGER Fusion Receptor →</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="{{ basePath | default('') }}wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          {% for id in citedProtocols %}
+          <li><a href="{{ basePath | default('') }}wet-lab/protocol.html#protocol-p{{ id }}"><span class="notebook-protocols__no">{{ id }}</span><span class="notebook-protocols__title">{{ protocolTitles[id] | safe }}</span></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div id="notebook-ste2" class="content-card">
+      <h2><i>STE2</i> Gating Engineering</h2>
+      <p class="content-intro">
+        This notebook records the <i>STE2</i> gating engineering track, in which the native &alpha;-factor receptor was redesigned into an antigen-gated surface receptor: the gating construct (signal peptide&ndash;antagonist&ndash;anti-H1N1_HA nanobody&ndash;ALFA tag&ndash;TEVcs) and its sequence synthesis, amplification of the <i>STE2</i> upstream and downstream homology arms, sgRNA and repair-template assembly, isolation of the gating-engineered strains, the <i>STE2</i>&ndash;yEGFP fusion used for membrane-localisation checks, protein-expression detection, and the functional validation runs.
+      </p>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-ste2.pdf"
+                aria-label="Notebook - STE2 Gating Engineering">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
+      {% set citedProtocols = ["01", "03", "04", "05", "07", "08", "09", "10", "11", "12", "13", "14", "18", "20"] %}
+      <div class="notebook-resources">
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="{{ basePath | default('') }}wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          {% for id in citedProtocols %}
+          <li><a href="{{ basePath | default('') }}wet-lab/protocol.html#protocol-p{{ id }}"><span class="notebook-protocols__no">{{ id }}</span><span class="notebook-protocols__title">{{ protocolTitles[id] | safe }}</span></a></li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
 
@@ -124,12 +238,24 @@ js:
       <p class="content-intro">
         This notebook records the construction and validation of our reporting system — the output module that converts PAGER receptor activation into a measurable luminescence/colorimetric signal for influenza A virus detection.
       </p>
-      {% set pdfUrl = "https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-reporter-module.pdf" %}
-      {% set pdfLabel = "Notebook - Construction of the Reporting System" %}
-      {% set pdfFallback = "This notebook PDF is not available yet." %}
-      {% include "partials/pdf-embed.njk" %}
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="{{ basePath | default('') }}static/image/lab/wetlab/notebook/notebook-reporter-module-fix.pdf"
+                aria-label="Notebook - Construction of the Reporting System">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
+      {% set citedProtocols = ["01", "03", "04", "05", "07", "09", "10", "11", "12", "13", "14", "16", "17", "23", "24", "25"] %}
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Reporter Module →</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="{{ basePath | default('') }}wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          {% for id in citedProtocols %}
+          <li><a href="{{ basePath | default('') }}wet-lab/protocol.html#protocol-p{{ id }}"><span class="notebook-protocols__no">{{ id }}</span><span class="notebook-protocols__title">{{ protocolTitles[id] | safe }}</span></a></li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   </div>

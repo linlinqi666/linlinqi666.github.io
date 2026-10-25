@@ -9,22 +9,29 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/hardware.css">
-<link rel="stylesheet" href="../static/css/components/pdf-embed.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/hardware.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/pdf-embed.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/flask-sync/hardware.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -59,47 +66,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -108,52 +115,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -186,10 +201,6 @@
   <div class="ppb-track">
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
-</div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
 </div>
 
   <main class="">
@@ -249,18 +260,10 @@
             <li class="level3"><a href="#hardware-electronics">Electronics</a></li>
           </ul>
         </li>
-        <li class="level1 has-submenu">
+        <li class="level1">
           <div class="nav-link-wrapper">
             <a href="#hardware-log" class="nav-main-link">Hardware Log</a>
-            <div class="toggle-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </div>
           </div>
-          <ul class="level2">
-            <li class="level3"><a href="#hardware-milestones">Ten Milestones</a></li>
-          </ul>
         </li>
         <li class="level1 has-submenu">
           <div class="nav-link-wrapper">
@@ -275,6 +278,7 @@
             <li class="level3"><a href="#hardware-optics">Optical Path</a></li>
             <li class="level3"><a href="#hardware-thermal">Temperature Control</a></li>
             <li class="level3"><a href="#hardware-power">Power</a></li>
+            <li class="level3"><a href="#hardware-wiring">Wiring Overview</a></li>
           </ul>
         </li>
         <li class="level1">
@@ -282,18 +286,10 @@
             <a href="#hardware-specifications" class="nav-main-link">Current Specifications</a>
           </div>
         </li>
-        <li class="level1 has-submenu">
+        <li class="level1">
           <div class="nav-link-wrapper">
             <a href="#hardware-bom" class="nav-main-link">Bill of Materials</a>
-            <div class="toggle-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </div>
           </div>
-          <ul class="level2">
-            <li class="level3"><a href="#hardware-itemised">Itemised List</a></li>
-          </ul>
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
@@ -355,28 +351,16 @@
       </figure>
       <h2>Overview</h2>
       <p class="hardware-lede">The Echo Yeast temperature-controlled incubation and optical readout module.</p>
-      <p>This page documents the device we designed and built for the PAGER-Yeast biosensor: a temperature-controlled incubation and optical readout module that keeps the engineered yeast at 30 °C, excites the green fluorescent protein they express at 485 nm, and reads the 528 nm emission back as an electrical signal.</p>
       <p>The sampling cup is also the culture cup and the detection cell.</p>
       <p>Influenza arrives every year, and the way we watch for it is arranged almost entirely around people: someone develops a fever or a cough, a swab is taken, the sample goes to a laboratory, and a result comes back later. There is nothing wrong with that chain — it simply starts a little too late. By the time the result exists, the virus may already have made its way through classrooms, wards and waiting halls.</p>
-      <p>This module is our answer to the half of that chain that never reaches a laboratory in time. It is designed to sit next to a wet-cyclone sampler, hold the yeast that does the sensing, and turn their fluorescence into a reading that does not have to travel.</p>
-      <ul>
-        <li><strong>Why the device exists</strong> — <a href="#hardware-problem">Problem Statement</a> and <a href="#hardware-worth">What the Hardware Is Worth</a>.</li>
-        <li><strong>What it is made of</strong> — <a href="#hardware-architecture">Optical &amp; Electronic Architecture</a>, <a href="#hardware-specifications">Current Specifications</a> and <a href="#hardware-bom">Bill of Materials</a>.</li>
-        <li><strong>How it was built and how it changed</strong> — <a href="#hardware-iterations">Design Iterations</a> and the date-by-date <a href="#hardware-log">Hardware Log</a> with 27 figures.</li>
-        <li><strong>How far it will be taken</strong> — <a href="#hardware-instrument">The Complete Instrument</a> and <a href="#hardware-test-plan">Test Plan</a>.</li>
-      </ul>
-      <!-- ⚠ 状态（源稿 2026-10-14，不进页面正文）：printed parts 已装配并做过尺寸核对；
-           电路仍在接线与调试；CNC 试制件已委托加工；首次整机联测尚未进行。
-           按项目规则（README 第八节 20/21：页面只呈现已得结果，进度状态不渲染），
-           发布口径由实验组决定；如后续需要"当前进展"表述，改写成已完成事实后再上屏。 -->
     </div>
 
     <div id="hardware-problem" class="content-card">
       <h2>Problem Statement</h2>
 
       <h3 id="hardware-problem-symptoms">Waiting for someone to run a fever</h3>
-      <p>Influenza A virus (IAV) is a persistent global public-health threat. WHO estimates that seasonal influenza causes around 1 billion infections, 3–5 million cases of severe illness and 290,000–650,000 respiratory deaths each year, with children, older adults and immunocompromised people carrying the heaviest burden <a class="hardware-cite" href="#hardware-reference-1">[1]</a>. The surface haemagglutinin (HA) protein continually escapes existing population immunity through antigenic drift and shift, so vaccine strains always lag behind circulating strains: the virus keeps changing, while our window on it opens only once symptoms appear.</p>
-      <p>Starting from symptoms decides what such a chain can and cannot record. A throat swab can only be taken from someone already feverish or coughing; before that point, the particles they exhale are already in the air of the same room. This is not speculation: air-sampling studies have recovered influenza A virus RNA from indoor air in a health centre and a day-care centre, at total concentrations of 5.8×10³–3.7×10⁴ genome copies per cubic metre, with about 64% of the viral load carried on fine particles below 2.5 µm that can stay suspended for hours <a class="hardware-cite" href="#hardware-reference-2">[2]</a>. Patient-centred surveillance therefore carries a built-in delay — it records what has happened, and does not announce what is about to.</p>
+      <p>Influenza A virus (IAV) is a persistent global public-health threat. WHO estimates that seasonal influenza causes around 1 billion infections, 3–5 million cases of severe illness and 290,000–650,000 respiratory deaths each year, with children, older adults and immunocompromised people carrying the heaviest burden <a class="cite-ref" href="#hardware-reference-1">[1]</a>. The surface haemagglutinin (HA) protein continually escapes existing population immunity through antigenic drift and shift, so vaccine strains always lag behind circulating strains: the virus keeps changing, while our window on it opens only once symptoms appear.</p>
+      <p>A chain that starts from symptoms can record only so much. A throat swab can only be taken from someone already feverish or coughing; before that point, the particles they exhale are already in the air of the same room. Patient-centred surveillance therefore carries a built-in delay — it records what has happened, and does not announce what is about to happen.</p>
 
       <h3 id="hardware-problem-air">The half that travels through the air</h3>
       <p>Bringing air into the picture is what closes that gap. The most direct gain is pre-symptomatic warning: detecting virus in indoor air before large numbers of clinical cases appear gives control measures a head start — ventilation, disinfection and crowd management can be scheduled before infections happen rather than after.</p>
@@ -384,10 +368,10 @@
 
       <h3 id="hardware-problem-dilution">Diluted almost to the point of disappearing</h3>
       <p>Finding virus in air is not primarily a question of whether it can be recognised, but of whether enough sample can be obtained. Viral particles occur at very low concentration in ambient air, and a sampler can process only a limited volume of it; multiply the two and what reaches the liquid is a very small amount indeed.</p>
-      <p>The accepted paradigm is a two-step workflow: a bioaerosol sampler collects airborne particles on site, and the sample is then sent back to a central laboratory for qRT-PCR. It is sensitive and dependable, but it splits sampling from detection across two places and two moments, with transport and laboratory turnaround in between, so what comes back is usually retrospective data rather than a field result <a class="hardware-cite" href="#hardware-reference-3">[3]</a>. Sampling itself also loses material: the collection efficiency of cyclone samplers varies widely with design and falls at high flow rates as the collection liquid evaporates and already-captured particles are re-aerosolised <a class="hardware-cite" href="#hardware-reference-4">[4]</a>. No mature low-cost option exists for on-site airborne IAV detection — that gap is what we set out to fill.</p>
+      <p>The accepted paradigm is a two-step workflow: a bioaerosol sampler collects airborne particles on site, and the sample is then sent back to a central laboratory for qRT-PCR. It is sensitive and dependable, but it splits sampling from detection across two places and two moments, with transport and laboratory turnaround in between, so what comes back is usually retrospective data rather than a field result <a class="cite-ref" href="#hardware-reference-2">[2]</a>. No mature low-cost option exists for on-site airborne IAV detection — that gap is what we set out to fill.</p>
 
       <h3 id="hardware-problem-signal">Choosing what emits the signal</h3>
-      <p>The next question is what should emit the signal. The familiar answer is a chemical reagent: a chromogenic substrate, an antibody, an enzyme label. These are mature and reproducible, but under conditions that here hold at the same time — airborne IAV, on site, low cost, continuous — each of them is constrained in its own way.</p>
+      <p>The next question is what should emit the signal. The familiar answer is a chemical reagent: a chromogenic substrate, an antibody, an enzyme label. These are mature and reproducible, but where the conditions of this project hold at once — airborne IAV, on site, low cost, continuous — each of them is constrained in its own way.</p>
       <div class="hardware-table-scroll">
         <table class="hardware-table">
           <caption>Table 1. Established detection routes and what limits each one for on-site monitoring of airborne influenza A virus.</caption>
@@ -434,17 +418,17 @@
       <p>Set against those four constraints, each method is either not sensitive enough, or tied to a laboratory, or dependent on a cold chain and batch-to-batch comparison. That led us to change how the signal is generated: instead of an added colour reaction or an antibody, we let a living cell report what it has sensed.</p>
 
       <h3 id="hardware-problem-amplification">Handing the amplification to the cell</h3>
-      <p>The most substantive advantage of using yeast is that recognition and amplification can happen inside one cell. The recognition element is a genetically encoded protein: the anti-HA nanobody is carried on a plasmid and copied along with the cell, so every yeast cell produces its own reagent and no antibody cold chain or batch comparison is needed <a class="hardware-cite" href="#hardware-reference-5">[5]</a>.</p>
-      <p>The cell also amplifies the signal. One receptor activated by one antigen is turned, through the GPCR–MAPK cascade, into transcription of a large amount of fluorescent protein from the FUS1 promoter — a classic strongly pheromone-inducible promoter <a class="hardware-cite" href="#hardware-reference-11">[11]</a> — a level of biological amplification a colour reaction cannot provide. Yeast is a natural match for this route as well: it already possesses a G-protein-coupled receptor → Gα → MAPK pathway, which is precisely the interface an engineered GPCR needs, something a bacterial chassis cannot offer <a class="hardware-cite" href="#hardware-reference-6">[6]</a>.</p>
-      <p>The output end is simpler for the same reason: yEGFP is a fluorescent protein the yeast synthesises itself, so no chromogenic substrate has to be added to the sampling liquid and there is no substrate to be diluted or degraded <a class="hardware-cite" href="#hardware-reference-12">[12]</a>. The chassis is also a reassuring one — BY4741 is a non-pathogenic biosafety-level-1 yeast, and its auxotrophic markers add a further containment barrier, since the engineered strain cannot proliferate stably in a natural environment. There is a further consequence: retargeting means replacing only the nanobody domain, while the heating and optical hardware stays exactly as it is.</p>
+      <p>The most substantive advantage of using yeast is that recognition and amplification can happen inside one cell. The recognition element is a genetically encoded protein: the anti-HA nanobody is carried on a plasmid and copied along with the cell, so every yeast cell produces its own reagent and no antibody cold chain or batch comparison is needed <a class="cite-ref" href="#hardware-reference-4">[4]</a>.</p>
+      <p>The cell also amplifies the signal. One receptor activated by one antigen is turned, through the GPCR–MAPK cascade, into transcription of a large amount of fluorescent protein from the <i>FUS1</i> promoter — a level of biological amplification a colour reaction cannot provide. Yeast is a natural match for this route as well: it already possesses a G-protein-coupled receptor → Gα → MAPK pathway, which is precisely the interface an engineered GPCR needs, something a bacterial chassis cannot offer <a class="cite-ref" href="#hardware-reference-5">[5]</a>.</p>
+      <p>The output end is simpler for the same reason: <i>yEGFP</i> is a fluorescent protein the yeast synthesises itself, so no chromogenic substrate has to be added to the sampling liquid and there is no substrate to be diluted or degraded <a class="cite-ref" href="#hardware-reference-11">[11]</a>. The chassis is also a reassuring one — BY4741 is a non-pathogenic biosafety-level-1 yeast, and its auxotrophic markers add a further containment barrier, since the engineered strain cannot proliferate stably in a natural environment. There is a further consequence: retargeting means replacing only the nanobody domain, while the heating and optical hardware stays exactly as it is.</p>
 
       <h3 id="hardware-problem-genome">The few changes written into the genome</h3>
       <p>Wild-type yeast, however, neither recognises the HA of human influenza virus nor accepts an engineered GPCR. To turn antigen binding into gene expression, three changes at the genetic level are needed.</p>
-      <p>The first releases the pathway's own brake: knocking out FAR1 and SST2 removes the G1 cell-cycle arrest and the negative regulation imposed by the mating pheromone pathway, so that the signal can be sustained and stable <a class="hardware-cite" href="#hardware-reference-6">[6]</a>.</p>
-      <p>The second gives the yeast a new interface: building a Gpa1–Gαq chimeric G protein by replacing the five C-terminal residues of yeast Gpa1 (KIGII) with the human Gαq sequence EYNLV, so that the yeast G protein can be recognised and activated by a human-derived receptor and the heterologous receptor is coupled into the yeast MAPK pathway <a class="hardware-cite" href="#hardware-reference-8">[8]</a>.</p>
-      <p>The third installs a switch with very low background: assembling the PAGER fusion receptor (MT1 auto-inhibitory peptide – anti-HA nanobody – TEV site – ALFA tag – hM1Dq) translates "HA bound" into "inhibition relieved", so that the receptor stays closed when no antigen is present and opens only when there is <a class="hardware-cite" href="#hardware-reference-7">[7]</a>.</p>
+      <p>The first releases the pathway's own brake: knocking out <i>FAR1</i> and <i>SST2</i> removes the G1 cell-cycle arrest and the negative regulation imposed by the mating pheromone pathway, so that the signal can be sustained and stable <a class="cite-ref" href="#hardware-reference-5">[5]</a>.</p>
+      <p>The second gives the yeast a new interface: building a Gpa1–Gαq chimeric G protein by replacing the five C-terminal residues of yeast Gpa1 (KIGII) with the human Gαq sequence EYNLV, so that the yeast G protein can be recognised and activated by a human-derived receptor and the heterologous receptor is coupled into the yeast MAPK pathway <a class="cite-ref" href="#hardware-reference-7">[7]</a>.</p>
+      <p>The third installs a switch with very low background: assembling the PAGER fusion receptor (MT1 auto-inhibitory peptide – anti-HA nanobody – TEV site – ALFA tag – hM1Dq) translates "HA bound" into "inhibition relieved", so that the receptor stays closed when no antigen is present and opens only when there is <a class="cite-ref" href="#hardware-reference-6">[6]</a>.</p>
       <p>None of this can be done with a chemical reagent. An antibody or a chromogenic substrate reports only the instantaneous event of binding or not binding; it cannot convert that event into ongoing gene expression inside a cell, nor be copied and amplified as the cell divides. We are not merely swapping one recognition molecule for another — we hand both recognition and amplification to the same living cell.</p>
-      <p>We should be explicit about one point: the only small molecule that must be added is the agonist DCZ, which goes into the medium with the yeast before sampling and supplies the activating ligand for the GPCR. Recognition itself is entirely genetically encoded and requires no antibody or enzyme-labelled reagent. The hM1Dq receptor used here comes from the DREADD family <a class="hardware-cite" href="#hardware-reference-9">[9]</a>, and DCZ is a later, high-affinity agonist that acts at low doses <a class="hardware-cite" href="#hardware-reference-10">[10]</a>.</p>
+      <p>We should be explicit about one point: the only small molecule that must be added is the agonist DCZ, which goes into the medium with the yeast before sampling and supplies the activating ligand for the GPCR. Recognition itself is entirely genetically encoded and requires no antibody or enzyme-labelled reagent.</p>
     </div>
 
     <div id="hardware-worth" class="content-card">
@@ -527,13 +511,13 @@
         <li>The device draws in air, and the cyclone spins airborne particles — including any influenza A virus present — into the liquid in the cup.</li>
         <li>That liquid is our engineered yeast culture, and the yeast cells carry the PAGER fusion receptor on their surface, whose nanobody domain recognises the HA protein on the influenza A virion.</li>
         <li>When HA binds the nanobody, steric hindrance displaces the auto-inhibitory peptide MT1 from the hM1Dq receptor, relieving the receptor's self-inhibition.</li>
-        <li>In the presence of the agonist DCZ, which is already in the cup with the yeast before sampling starts, the de-repressed receptor activates the yeast MAPK pathway through the Gpa1–Gαq chimeric G protein, and the FUS1 promoter is switched on.</li>
-        <li>FUS1 drives transcription of yEGFP, and the yeast begins to synthesise green fluorescent protein.</li>
+        <li>In the presence of the agonist DCZ, which is already in the cup with the yeast before sampling starts, the de-repressed receptor activates the yeast MAPK pathway through the Gpa1–Gαq chimeric G protein, and the <i>FUS1</i> promoter is switched on.</li>
+        <li><i>FUS1</i> drives transcription of <i>yEGFP</i>, and the yeast begins to synthesise green fluorescent protein.</li>
         <li>We shine 485 nm excitation light into the sampling cup, exciting the fluorescent protein that has already been expressed.</li>
-        <li>The fluorescent protein emits at 528 nm, collected by a receiver placed at 90° in space to the excitation path.</li>
+        <li>The fluorescent protein emits at 528 nm, collected by a receiver placed at 90° to the excitation path.</li>
         <li>The receiver converts the optical signal into an electrical signal, and from that signal we judge whether influenza A virus is present in this air sample.</li>
       </ol>
-      <p>The 90° angle is not arbitrary. The excitation beam is strong and the fluorescence is weak, and their centre wavelengths differ by only about 43 nm. If the receiver sat on the same axis as the emitter, scattered excitation light would simply swamp the fluorescence. Turning it 90° takes the main excitation beam out of the receiver's direction, and two narrow-band filters then separate that 43 nm properly.</p>
+      <p>The 90° angle is not arbitrary. The excitation beam is strong and the fluorescence is weak, and their centre wavelengths differ by only about 43 nm. If the receiver sat on the same axis as the emitter, scattered excitation light would simply swamp the fluorescence. Turning it 90° takes the main excitation beam out of the receiver's direction, and two narrow-band filters then separate the two wavelengths, only 43 nm apart.</p>
       <p>One more point is worth stating. DCZ sits in the same liquid as the yeast from before sampling begins, so the switch of this system is in practice thrown by HA alone: without HA the receptor stays self-inhibited and the pathway is closed, and only when HA is present is that inhibition relieved. DCZ effectively presets the switch to a state in which it can be opened, and the discriminating signal comes from the antigen itself.</p>
 
       <h3 id="hardware-blocks">The three blocks in the hardware</h3>
@@ -544,7 +528,7 @@
       <h2>Design Goals and Constraints</h2>
       <ul>
         <li>Temperature: yeast protein expression and signalling are temperature sensitive, and drift directly changes the amplitude of the fluorescence signal. Control accuracy is therefore specified as ±0.5 °C with a set point of 30 °C.</li>
-        <li>Optics: yEGFP is a codon-optimised green fluorescent protein reporter for yeast, conventionally excited with blue light (about 485 nm) and read out in the green channel (about 528 nm) <a class="hardware-cite" href="#hardware-reference-12">[12]</a>, only ~43 nm apart. Narrow-band filters (30 nm FWHM, OD3) are required to separate excitation from emission, and the excitation and collection axes are placed at 90° to suppress direct excitation breakthrough geometrically.</li>
+        <li>Optics: <i>yEGFP</i> excites at about 485 nm and emits at about 528 nm, only ~43 nm apart <a class="cite-ref" href="#hardware-reference-11">[11]</a>. Narrow-band filters (30 nm FWHM, OD3) are required to separate excitation from emission, and the excitation and collection axes are placed at 90° to suppress direct excitation breakthrough geometrically.</li>
         <li>Sample volume: ≥ 1.5 mL at the cuvette stage; at the collection-cup stage the cup is pre-filled with 20 mL of medium containing the yeast, which brings the liquid level just above the junction between the cone and the cylinder.</li>
         <li>Light sealing: we measure microampere-level photocurrent from a photodiode, and ambient light is the dominant noise source. Light sealing is therefore a structural requirement rather than an accessory.</li>
         <li>Serviceability: optical components and the vessel must come apart, be replaceable and be cleanable — this is exactly why the emitter and receiver are plug-in parts.</li>
@@ -566,7 +550,8 @@
 
       <h3 id="hardware-plugs">Detachable plugs: emitter, receiver and heater</h3>
       <p>The emitter and receiver ends were drawn on 4 October (Figs. 17–18), and Emitter_Plug, Receiver_Plug and Heater_Plug were completed on 9 October (Figs. 21–26).</p>
-      <p>These three plugs are not ad-hoc parts for a single test but purpose-designed structures for the project: the emitter holds the 485 nm LED, the focusing lens and the excitation filter; the receiver holds the emission filter, the focusing lens and the BPW34 photodiode; the heater plug routes the heating-film leads and the PT100 into the block while keeping light out and assembly simple.</p>
+      <p>These three plugs were made to test the electronics. The emitter carries the 485 nm LED, the focusing lens and the excitation filter; the receiver carries the emission filter, the focusing lens and the BPW34 photodiode; the heater plug brings the heating-film leads and the PT100 into the block while keeping light out and assembly simple.</p>
+      <p>With the plugs fitted, the excitation current, the transimpedance output and the temperature loop can each be measured on an assembly that behaves like the instrument. They are test structures: the formal parts for the complete instrument are to be designed from what they show.</p>
       <p>For the test stage we replaced the in-house collection cup with a standard cuvette and redesigned the heated block around it. A cuvette is a standard part with consistent dimensions and flat optical faces, which lets us validate temperature control and the optical path before the custom parts are finalised. The plug-to-block interface is identical across revisions, so switching back to our own collection cup requires no redesign of the plugs.</p>
 
       <h3 id="hardware-printing">3D printing and assembly checks</h3>
@@ -574,309 +559,19 @@
 
       <h3 id="hardware-electronics">Electronics</h3>
       <p>The first circuit was designed on 4 October (Fig. 19); soldering began on 5 October with the aim of finishing the wiring around the 10th and running the first test (Fig. 20); the wiring was rearranged on 11 October to keep every component within its safe operating range (Fig. 27).</p>
-      <p>The circuit is organised by function: power (24 V input stepped down by an LM2596), temperature control (PT100 + MAX31865 + IRF520 + heating film), LED drive (constant-current board + 485 nm LED), signal (BPW34 + OPA350 transimpedance amplifier + ADS1115) and indication.</p>
+      <p>The circuit is organised by function: power (24 V input stepped down by an LM2596 to 5 V logic, and then by an AMS1117-3.3 to the 3.3 V analogue rail), temperature control (PT100 + MAX31865 + IRF520 + heating film), excitation (a microcontroller pin driving the 485 nm LED through a 200 Ω current-limiting resistor), signal (BPW34 + OPA350 transimpedance amplifier + ADS1115) and indication.</p>
+      <p>The excitation channel was first supplied by a constant-current board (CN5711 / LDOA6). In measurement its output held at 14.7 mA whatever position the on-board trimmer was turned to, so the current limit was not adjustable at all. The signal-to-noise ratio of a fluorescence measurement rises with excitation intensity, and a current that can be neither raised nor lowered removes exactly the adjustment this stage needs. The board also sources about 1.5 A continuously, while a single microcontroller pin should carry under 40 mA, and the two sat side by side on the perfboard. On 19 October the drive was replaced by a current-limiting resistor and the board was removed from the schematic.</p>
     </div>
 
     <div id="hardware-log" class="content-card">
       <h2>Hardware Log</h2>
-      <p>This section records, date by date, how the hardware moved from drawings to physical parts. Starting from the first time we opened AutoCAD on 14 September, we kept a photograph and a written note every time a design changed, every time something was printed and every time parts were assembled. That was not only for the record: how two parts fit together only becomes clear once you hold them, and the photograph plus that day's note are the only things that let you reconstruct the reasoning a few days later.</p>
-      <p>The ten milestones below form the skeleton of that work; the day-by-day entries and figures follow.</p>
-
-      <h3 id="hardware-milestones">Ten milestones</h3>
-      <div class="hardware-table-scroll">
-        <table class="hardware-table">
-          <caption>Table 3. Milestones of the build from the first AutoCAD drawing to the rewired circuit.</caption>
-          <thead>
-            <tr>
-              <th scope="col">Date</th><th scope="col">Milestone</th><th scope="col">Output</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <tr>
-              <th scope="row">14 September</th>
-              <td>First collection cup in AutoCAD (with supporting skirt)</td>
-              <td>Drawing1.dwg</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">21 September</th>
-              <td>First 3D model in SolidWorks (skirt removed, cone shortened, bottom cone radius increased)</td>
-              <td>Collection_Cup.SLDPRT</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">22 September</th>
-              <td>Second collection-cup version (optical windows added on the conical face)</td>
-              <td>Collection_Cup_2.SLDPRT</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">25 September</th>
-              <td>Heated block modelled (vessel cavity + optical channels)</td>
-              <td>—</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">30 September</th>
-              <td>First 3D print of the cup (poor print quality)</td>
-              <td>—</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">2 October</th>
-              <td>First complete print of the hardware module and dimensional check by assembly</td>
-              <td>—</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">4 October</th>
-              <td>Optical channel widened to 8 mm; filters, lenses, LED and photodiode made detachable; EH2.0 finalised and printed; emitter and receiver drawn; first circuit design completed</td>
-              <td>EH 2.0 10.3.SLDPRT, Emitter_End 10.3.SLDPRT, Receiver_End 10.4.SLDPRT</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">5 October</th>
-              <td>Soldering started, beginning with the power section</td>
-              <td>—</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">9 October</th>
-              <td>Three plug-in parts finalised</td>
-              <td>Emitter_Plug, Receiver_Plug, Heater_Plug</td>
-            </tr>
-            
-            <tr>
-              <th scope="row">11 October</th>
-              <td>Circuit rewired, power and signal runs separated</td>
-              <td>—</td>
-            </tr>
-            
-          </tbody>
-        </table>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="../static/image/lab/drylab/hardware/pdf/hardware-log.pdf#page=1"
+                aria-label="Hardware log — day-by-day build record (source document in Chinese)">
+          <p class="pdf-embed__fallback">The hardware log document is not available here yet.</p>
+        </object>
       </div>
-      <p>One pattern repeats throughout the log: design, print, assemble, find a problem, redesign. The 8 mm optical channel, the interface that stays identical between the plugs and the block, and the decision to make the filters and lenses detachable were none of them thought up in one go — each was worked out by going round that loop. This was also the first time the team turned 3D models into physical parts, and the first time optics, temperature control and electronics shared the same bench.</p>
-
-      <h3 id="hardware-log-0914">14 September — First collection cup drawn in AutoCAD</h3>
-      <p>This is where the hardware work started. The first collection cup was drawn in AutoCAD: long overall (about 136 mm) with a skirt at the base acting as a support, so that the cup could stand on its own while being placed, carried and aligned during assembly. This version only addressed one question — whether the shape could hold liquid; optics and heating were not yet considered. Output file: Drawing1.dwg.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image1.jpg" alt="Figure 1. First collection-cup design drawn in AutoCAD, with a supporting skirt at the base" width="664" height="915" loading="lazy" decoding="async">
-  <figcaption>Figure 1. First collection-cup design drawn in AutoCAD, with a supporting skirt at the base</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-0921">21 September — First 3D model in SolidWorks</h3>
-      <p>Moving the 2D drawing into SolidWorks was the first time we saw the part in real volume and proportion. The supporting skirt was removed, the conical section shortened and the bottom cone radius increased, giving a smoother overall shape closer to the streamline form that cyclone collection requires. Output file: Collection_Cup.SLDPRT.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image2.jpg" alt="Figure 2. The first 3D collection-cup model, built in SolidWorks" width="1100" height="652" loading="lazy" decoding="async">
-  <figcaption>Figure 2. The first 3D collection-cup model, built in SolidWorks</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image3.jpg" alt="Figure 3. Profile sketch of the first collection-cup version" width="380" height="895" loading="lazy" decoding="async">
-  <figcaption>Figure 3. Profile sketch of the first collection-cup version</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-0922">22 September — Second collection-cup version</h3>
-      <p>The first version was reviewed again for practicality and reliability, and optical windows were added on the conical face. The reason came from the actual working conditions: the cyclone collects only a small volume, so the liquid level sits low. Windows on the cylindrical section would have been above the liquid and the optical path would have been empty; moved down onto the cone, they stay submerged even with a small volume. In the current filling scheme the cup is pre-filled with 20 mL of medium containing the yeast, which brings the level just above the cone-to-cylinder junction, so windows on the cone keep a margin of immersion. Output file: Collection_Cup_2.SLDPRT.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image4.jpg" alt="Figure 4. Dimensioned drawing of the second collection-cup version, with optical windows added on the conical face" width="639" height="805" loading="lazy" decoding="async">
-  <figcaption>Figure 4. Dimensioned drawing of the second collection-cup version, with optical windows added on the conical face</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image5.jpg" alt="Figure 5. 3D model of the second collection-cup version" width="1100" height="652" loading="lazy" decoding="async">
-  <figcaption>Figure 5. 3D model of the second collection-cup version</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image6.jpg" alt="Figure 6. Sketch of the second version, showing the position of the optical windows" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 6. Sketch of the second version, showing the position of the optical windows</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-0925">25 September — Heated block modelled</h3>
-      <p>A cavity sized to the actual cup was reserved in the heated block, together with optical channels so that excitation light and fluorescence can pass in and out through the block. This was the first time the vessel and the optical path were designed inside a single part.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image7.jpg" alt="Figure 7. 3D model of the heated block, with the vessel cavity and optical channels reserved" width="1100" height="652" loading="lazy" decoding="async">
-  <figcaption>Figure 7. 3D model of the heated block, with the vessel cavity and optical channels reserved</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image8.jpg" alt="Figure 8. 2D layout drawing of the heated block" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 8. 2D layout drawing of the heated block</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-0930">30 September — First print of the collection cup</h3>
-      <p>The cup was sent to the printer for the first time and came out poorly because of print settings and our inexperience: stringing on the surface and poorly defined detail. The failure taught us that print orientation and support placement have to be planned at the design stage, and that long slender cones string particularly badly. We recorded the problem and adjusted the orientation and print parameters in the following versions.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image9.jpg" alt="Figure 9. The first 3D-printed collection cup; print quality was poor" width="1100" height="824" loading="lazy" decoding="async">
-  <figcaption>Figure 9. The first 3D-printed collection cup; print quality was poor</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image10.jpg" alt="Figure 10. The first printed cup, held for scale" width="824" height="1100" loading="lazy" decoding="async">
-  <figcaption>Figure 10. The first printed cup, held for scale</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-1002">2 October — First complete print and assembly</h3>
-      <p>The entire hardware module was printed for the first time (the supports were still inside the optical channel) and the cup was assembled with the heated block to confirm the dimensions. This was the first time our 3D models became physical parts, and the assembly fitted: the cup-to-cavity clearance and the alignment between the optical channels and the windows were both within expectation.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image11.jpg" alt="Figure 11. The first complete printed hardware module, with supports still inside the optical channel" width="1100" height="824" loading="lazy" decoding="async">
-  <figcaption>Figure 11. The first complete printed hardware module, with supports still inside the optical channel</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image12.jpg" alt="Figure 12. Assembly check of the collection cup and the heated block" width="1100" height="824" loading="lazy" decoding="async">
-  <figcaption>Figure 12. Assembly check of the collection cup and the heated block</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-1004">4 October — Optical channel revised, EH2.0 finalised, emitter and receiver designed</h3>
-      <p>The busiest day of the build. Following the actual hardware requirements we revised the optical channel, widening the bore to 8 mm and turning the filters, lenses, LED and photodiode into detachable parts. The original channel was too narrow for the components and left no room for filters; 8 mm accommodates Ø10 mm filters and lens assemblies while still leaving alignment margin. EH2.0 was finalised and printed the same day, the emitter and receiver ends were drawn, and the first version of the circuit was completed. Output files: EH 2.0 10.3.SLDPRT, Emitter_End 10.3.SLDPRT, Receiver_End 10.4.SLDPRT.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image13.jpg" alt="Figure 13. The revised EH2.0 heated block, with the optical channel widened to 8 mm" width="1100" height="652" loading="lazy" decoding="async">
-  <figcaption>Figure 13. The revised EH2.0 heated block, with the optical channel widened to 8 mm</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image14.jpg" alt="Figure 14. 2D layout of EH2.0, showing the optical channels and the plug interfaces" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 14. 2D layout of EH2.0, showing the optical channels and the plug interfaces</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image15.jpg" alt="Figure 15. The printed EH2.0 block" width="1100" height="824" loading="lazy" decoding="async">
-  <figcaption>Figure 15. The printed EH2.0 block</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image16.jpg" alt="Figure 16. Re-checking the fit between EH2.0 and the collection cup" width="1100" height="824" loading="lazy" decoding="async">
-  <figcaption>Figure 16. Re-checking the fit between EH2.0 and the collection cup</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image17.jpg" alt="Figure 17. Internal layout sketch of the emitter end" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 17. Internal layout sketch of the emitter end</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image18.jpg" alt="Figure 18. Internal layout sketch of the receiver end" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 18. Internal layout sketch of the receiver end</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image19.jpg" alt="Figure 19. First version of the circuit design" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 19. First version of the circuit design</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-1005">5 October — Soldering started</h3>
-      <p>Soldering began, with the aim of finishing the wiring around the 10th and running the first test. We started from the power section — 24 V input, LM2596 step-down, indicator LEDs — confirming the supply before adding the temperature-control and optical-signal sections on top of it.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image20.jpg" alt="Figure 20. The driver and indicator circuit during soldering" width="1100" height="824" loading="lazy" decoding="async">
-  <figcaption>Figure 20. The driver and indicator circuit during soldering</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-1009">9 October — Test-ready parts designed</h3>
-      <p>Emitter_Plug, Receiver_Plug and Heater_Plug were completed. They are not ad-hoc parts for a single test but purpose-designed structures: the emitter holds the 485 nm LED, the focusing lens and the excitation filter; the receiver holds the emission filter, the focusing lens and the BPW34 photodiode; the heater plug routes the heating-film leads and the PT100 into the block while keeping light out and assembly simple. Output files: Emitter_Plug, Receiver_Plug, Heater_Plug.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image21.jpg" alt="Figure 21. 3D model of Emitter_Plug" width="998" height="719" loading="lazy" decoding="async">
-  <figcaption>Figure 21. 3D model of Emitter_Plug</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image22.jpg" alt="Figure 22. Dimensioned drawing of Emitter_Plug" width="1100" height="647" loading="lazy" decoding="async">
-  <figcaption>Figure 22. Dimensioned drawing of Emitter_Plug</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image23.jpg" alt="Figure 23. 3D model of Heater_Plug" width="1100" height="650" loading="lazy" decoding="async">
-  <figcaption>Figure 23. 3D model of Heater_Plug</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image24.jpg" alt="Figure 24. Dimensioned drawing of Heater_Plug" width="1100" height="649" loading="lazy" decoding="async">
-  <figcaption>Figure 24. Dimensioned drawing of Heater_Plug</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image25.jpg" alt="Figure 25. 3D model of Receiver_Plug" width="1100" height="653" loading="lazy" decoding="async">
-  <figcaption>Figure 25. 3D model of Receiver_Plug</figcaption>
-</figure>
-
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image26.jpg" alt="Figure 26. Dimensioned drawing of Receiver_Plug" width="1100" height="652" loading="lazy" decoding="async">
-  <figcaption>Figure 26. Dimensioned drawing of Receiver_Plug</figcaption>
-</figure>
-
-
-      <h3 id="hardware-log-1011">11 October — Circuit rewired</h3>
-      <p>The wiring was rearranged, separating power runs from signal runs for component safety and signal quality, and preparation for the first integrated test continued. As of 14 October, wiring and debugging are still ongoing.</p>
-      
-      
-<figure class="hardware-figure">
-  <img src="../static/image/hardware/image27.jpg" alt="Figure 27. The circuit after rewiring" width="1100" height="777" loading="lazy" decoding="async">
-  <figcaption>Figure 27. The circuit after rewiring</figcaption>
-</figure>
-
-      <p>As of 14 October the circuit is still being wired and debugged, and CNC-machined test parts have been commissioned. Figures 1–27 are the original screenshots and photographs from the log.</p>
     </div>
     <div id="hardware-architecture" class="content-card">
       <h2>Optical and Electronic Architecture</h2>
@@ -888,7 +583,19 @@
       <p class="hardware-chain">PT100 (3-wire) → MAX31865 (16-bit, SPI) → PID loop on the microcontroller → IRF520 (PWM) → PI heating film, with a KSD9700 (60 °C) in series with the heater as hardware-level protection.</p>
 
       <h3 id="hardware-power">Power</h3>
-      <p class="hardware-chain">24 V adapter → LM2596 → 12 V (heating film, fan) and 5 V (logic). Power and signal wiring are routed separately so that switching noise does not couple into the microampere-level photocurrent.</p>
+      <p class="hardware-chain">24 V adapter → LM2596 → 12 V (heating film, fan) and 5 V (logic); the 5 V then passes through an AMS1117-3.3 to give a 3.3 V rail dedicated to the op-amp of the transimpedance stage. Power and signal wiring are routed separately so that switching noise does not couple into the microampere-level photocurrent.</p>
+
+      <h3 id="hardware-wiring">Electrical wiring overview</h3>
+      <p>Figure 31 shows the electrical connections between the four functional blocks. The supply divides at the adapter: one branch passes through the KSD9700 into the IRF520 and feeds the two heating films in series; the other passes through the LM2596 and the AMS1117 to give 5 V and 3.3 V. The microcontroller sets the heating duty cycle on D9, reads the MAX31865 over D10–D13, drives the excitation LED from D8 through the current-limiting resistor, and talks to the ADS1115 over A4/A5. The optical section sits along the lower part of the figure: the excitation LED and the BPW34 face each other across the optical path, the anode of the BPW34 is grounded and its cathode enters the inverting input of the OPA350, and the amplified voltage goes to A0 of the ADS1115.</p>
+      
+      
+<figure class="hardware-figure">
+  <img src="../static/image/lab/drylab/hardware/image31.jpeg" alt="Figure 31. Overall electrical wiring diagram" width="1688" height="1131" loading="lazy" decoding="async">
+  <figcaption>Figure 31. Overall electrical wiring diagram</figcaption>
+</figure>
+
+      <p>The diagram applies single-point grounding to the optical section: its analogue ground is run as a separate rail and joined to the main ground at one point only. The photodiode delivers microamperes, which makes the input of the transimpedance amplifier a high-impedance node, and any share of ground that also carries a larger current adds its voltage drop directly to the measurement. The ground of the optical section — pins 3 and 4 of the op-amp, the ground end of the decoupling capacitor, the anode of the BPW34 and the GND of the ADS1115 — is therefore joined into a local star beside the op-amp first, and a single wire runs from that point back to the main ground, which no heating-film or LED current passes through. That wire may be long, because it carries only the few microamperes of bias current the op-amp draws; what must not be shared is a ground segment, where the drop produced by a 1 A heating current across a few milliohms becomes a measurement error.</p>
+      <p>One qualification on the drawing: it follows the 12 V adapter used on the current bench. The complete instrument takes a 24 V input (Section 9), where the LM2596 first steps it down to 12 V for the heating loop; every other connection stays as drawn.</p>
     </div>
 
     <div id="hardware-specifications" class="content-card">
@@ -965,13 +672,13 @@
             
             <tr>
               <th scope="row">Power</th>
-              <td>DC 24 V / 2 A, stepped down internally to 12 V / 5 V</td>
+              <td>DC 24 V / 2 A, stepped down internally to 12 V / 5 V / 3.3 V</td>
             </tr>
             
           </tbody>
         </table>
       </div>
-      <p>The table above lists only the key figures. The complete module-level specification — structural, thermal, optical, signal-acquisition, power, safety and biosafety parameters, together with the corresponding test methods, inspection rules and packaging and storage requirements — is collected in a separate specification document, attached after this section.</p>
+      <p>The table above lists only the key figures. The complete module-level specification — structural, thermal, optical, signal-acquisition, power, safety and biosafety parameters, together with the corresponding test methods, inspection rules and packaging and storage requirements — is collected in a separate specification document. The values in it are the targets of the current revision, not the measured performance of a finished instrument; where a value has been measured on the bench, it is recorded in the hardware log, with its date.</p>
       
       
       
@@ -979,7 +686,7 @@
 
 <div class="pdf-embed">
   <object class="pdf-embed__object" type="application/pdf"
-          data="../static/pdf/hardware/hardware-product-technical-requirements.pdf#page=1"
+          data="../static/image/lab/drylab/hardware/pdf/hardware-product-technical-requirements-fix.pdf#page=1"
           aria-label="Technical requirements — temperature-controlled optical readout module (current revision)">
     <p class="pdf-embed__fallback">The module technical requirements document is not available here yet.</p>
   </object>
@@ -1015,7 +722,7 @@
             <tr>
               <th scope="row">Optics</th>
               <td>7</td>
-              <td>485 nm LED, constant-current driver, BPW34, Ø10 mm narrow-band filters (485 / 528 nm), OPA350, focusing lenses, black heat-shrink tubing</td>
+              <td>485 nm LED, 200 Ω current-limiting resistor, BPW34, Ø10 mm narrow-band filters (485 / 528 nm), OPA350, focusing lenses, black heat-shrink tubing</td>
             </tr>
             
             <tr>
@@ -1040,174 +747,7 @@
         </table>
       </div>
 
-      <h3 id="hardware-itemised">Itemised list</h3>
-      <p>The table below is the same list as the attached spreadsheet, reproduced here so that it can be read without leaving the page: name, specification, quantity, unit price, subtotal and purpose for every item. <strong>TBD</strong> marks the six newly ordered items whose amounts paid are not settled yet.</p>
-      <div class="hardware-table-scroll">
-        <table class="hardware-table hardware-table--bom">
-          <caption>Table 6. Itemised purchase list, 14 October 2026. Unit prices are the amounts actually paid, in CNY.</caption>
-          <thead>
-            <tr>
-              <th scope="col">No.</th><th scope="col">Category</th><th scope="col">Item</th><th scope="col">Specification / model</th><th scope="col">Qty</th><th scope="col">Unit price</th><th scope="col">Subtotal</th><th scope="col">Purpose</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <tr>
-              <td>1</td><td>Structural parts &amp; printing consumables</td><td>3D printing filament (PLA)</td><td>PLA Basic, white 1000 g + black 1000 g (without spool)</td><td>1 spool each</td><td>77.38</td><td>77.38</td><td>FDM printing of the collection cup, the heater-block body and the three plug-in modules</td>
-            </tr>
-            
-            <tr>
-              <td>2</td><td>Temperature control</td><td>Heat-resistant thermal silicone pad</td><td>200 × 400 × 0.3 mm, 6 W/(m·K)</td><td>1 sheet</td><td>25</td><td>25</td><td>Thermal interface between the heating film and the heater block; cut to size</td>
-            </tr>
-            
-            <tr>
-              <td>3</td><td>Temperature control</td><td>PI heating film</td><td>60 × 70 mm, 12 V / 25 W</td><td>2 pcs</td><td>24.64</td><td>24.64</td><td>Bonded to the underside of the heater block as the heating element</td>
-            </tr>
-            
-            <tr>
-              <td>4</td><td>Temperature control</td><td>MAX31865 module + PT100</td><td>MAX31865 converter module + PT100 platinum RTD (3-wire)</td><td>1 set</td><td>33.5</td><td>33.5</td><td>Temperature acquisition: PT100 resistance converted to a digital temperature by a 16-bit ADC</td>
-            </tr>
-            
-            <tr>
-              <td>5</td><td>Temperature control</td><td>KSD9700 thermal cut-off</td><td>60 °C, 250 V / 10 A, metal case, normally closed</td><td>1 pc</td><td>6.12</td><td>6.12</td><td>Hardware-level over-temperature protection; in series with the heater so it physically cuts the circuit</td>
-            </tr>
-            
-            <tr>
-              <td>6</td><td>Temperature control</td><td>MOSFET driver module</td><td>IRF520</td><td>1 pc</td><td>3.29</td><td>3.29</td><td>Takes the PWM signal and drives the heating film to implement PID power control</td>
-            </tr>
-            
-            <tr>
-              <td>7</td><td>Temperature control</td><td>Cooling fan</td><td>40 × 40 × 10 mm, 12 V, quiet</td><td>1 pc</td><td>10</td><td>10</td><td>Mounted on the heat sink to keep the electronics underneath and the block from overheating</td>
-            </tr>
-            
-            <tr>
-              <td>8</td><td>Temperature control</td><td>Heat sink</td><td>Aluminium, 70 × 36 × 100 mm</td><td>1 pc</td><td>23</td><td>23</td><td>Dissipates heat downwards and protects the circuit underneath</td>
-            </tr>
-            
-            <tr>
-              <td>9</td><td>Optics</td><td>LED light source</td><td>485 nm high-brightness LED</td><td>3 pcs</td><td>17.34</td><td>17.34</td><td>Excitation light source; spares kept for wavelength margin</td>
-            </tr>
-            
-            <tr>
-              <td>10</td><td>Optics</td><td>LED constant-current driver</td><td>Adjustable constant-current driver board, 350 / 500 mA</td><td>1 pc</td><td>36.38</td><td>36.38</td><td>Provides a stable current for the 485 nm LED and reduces intensity drift</td>
-            </tr>
-            
-            <tr>
-              <td>11</td><td>Optics</td><td>Photodiode</td><td>BPW34, through-hole package</td><td>4 pcs</td><td>8.1</td><td>8.1</td><td>Detects the 528 nm fluorescence at the receiver end; spares kept</td>
-            </tr>
-            
-            <tr>
-              <td>12</td><td>Optics</td><td>Narrow-band filters</td><td>Ø10 mm, 30 nm bandwidth, OD3; 485 nm × 2 + 528 nm × 2</td><td>4 pcs</td><td>154</td><td>154</td><td>One at each end separates the excitation light from the fluorescence spectrum</td>
-            </tr>
-            
-            <tr>
-              <td>13</td><td>Optics</td><td>Op-amp</td><td>OPA350UA (SOIC-8)</td><td>2 pcs</td><td>18.8</td><td>18.8</td><td>Forms the transimpedance amplifier with the photodiode and outputs a measurable voltage</td>
-            </tr>
-            
-            <tr>
-              <td>14</td><td>Optics</td><td>Light shield (black heat-shrink tubing)</td><td>12 mm bore, 10× thick wall</td><td>1 pack</td><td>8</td><td>8</td><td>Wraps the emitter and receiver plugs to exclude ambient light</td>
-            </tr>
-            
-            <tr>
-              <td>15</td><td>Optics</td><td>Focusing lenses for emitter and receiver</td><td>Matched to the 485 nm emitter and the 528 nm receiver (newly ordered)</td><td>2 sets</td><td>TBD</td><td>TBD</td><td>Focus the LED output onto the centre of the vessel and the fluorescence onto the photodiode active area</td>
-            </tr>
-            
-            <tr>
-              <td>16</td><td>Electronics &amp; signal</td><td>Microcontroller</td><td>Arduino Nano V4 (board + USB cable)</td><td>1 pc</td><td>62.84</td><td>62.84</td><td>Timing control, ADC readout and the PID temperature algorithm</td>
-            </tr>
-            
-            <tr>
-              <td>17</td><td>Electronics &amp; signal</td><td>ADS1115 high-precision ADC</td><td>ADS1115 module, 16-bit, 4-channel differential, I²C (newly ordered)</td><td>1 pc</td><td>TBD</td><td>TBD</td><td>Reads the amplified photodiode voltage with high precision</td>
-            </tr>
-            
-            <tr>
-              <td>18</td><td>Electronics &amp; signal</td><td>SOT89 adapter board</td><td>SOT89 to DIP through-hole adapter (newly ordered)</td><td>TBD</td><td>TBD</td><td>TBD</td><td>Lets SOT89 SMD parts be soldered through-hole</td>
-            </tr>
-            
-            <tr>
-              <td>19</td><td>Electronics &amp; signal</td><td>SOT223 adapter board</td><td>SOT223 to DIP through-hole adapter (newly ordered)</td><td>TBD</td><td>TBD</td><td>TBD</td><td>Lets SOT223 SMD parts be soldered through-hole</td>
-            </tr>
-            
-            <tr>
-              <td>20</td><td>Power &amp; wiring</td><td>Power adapter</td><td>24 V / 2 A (48 W), with mains lead</td><td>1 pc</td><td>12.87</td><td>12.87</td><td>Supplies the instrument; 24 V bus</td>
-            </tr>
-            
-            <tr>
-              <td>21</td><td>Power &amp; wiring</td><td>LM2596 buck module</td><td>LM2596S DC-DC adjustable step-down</td><td>1 pc</td><td>4.49</td><td>4.49</td><td>Steps 24 V down to 12 V (heating film, fan) and 5 V (logic)</td>
-            </tr>
-            
-            <tr>
-              <td>22</td><td>Power &amp; wiring</td><td>Breadboard / protoboard</td><td>Single-sided, rosin-coated green, 12 × 18 cm</td><td>2 pcs</td><td>10.87</td><td>10.87</td><td>Prototyping during debugging, then soldered permanently</td>
-            </tr>
-            
-            <tr>
-              <td>23</td><td>Power &amp; wiring</td><td>Jumper wires</td><td>21 cm, male–male / male–female / female–female, 120 pcs total</td><td>1 set</td><td>9.87</td><td>9.87</td><td>Temporary connections between boards and modules</td>
-            </tr>
-            
-            <tr>
-              <td>24</td><td>Power &amp; wiring</td><td>Electrolytic capacitors</td><td>16 V / 100 µF, 5 × 11 mm</td><td>2 pcs</td><td>6.74</td><td>6.74</td><td>Supply filtering; suppresses switching noise</td>
-            </tr>
-            
-            <tr>
-              <td>25</td><td>Power &amp; wiring</td><td>Resistor kit</td><td>1/4 W metal film, 25 common values, 500 pcs total</td><td>1 set</td><td>7.9</td><td>7.9</td><td>Current limiting, voltage division and transimpedance feedback</td>
-            </tr>
-            
-            <tr>
-              <td>26</td><td>Power &amp; wiring</td><td>Indicator LEDs</td><td>5 mm red / green / yellow, 60 pcs total</td><td>1 set</td><td>3.46</td><td>3.46</td><td>Power and run-status indication</td>
-            </tr>
-            
-            <tr>
-              <td>27</td><td>Power &amp; wiring</td><td>Terminal blocks</td><td>KF301-2P × 10 + 3P × 10, 5.08 mm</td><td>1 pack each</td><td>7.17</td><td>7.17</td><td>Power input and load wiring</td>
-            </tr>
-            
-            <tr>
-              <td>28</td><td>Power &amp; wiring</td><td>30 AWG silicone wire</td><td>Extra-flexible silicone wire for wiring inside the plugs and for signals (newly ordered)</td><td>TBD</td><td>TBD</td><td>TBD</td><td>Fine wiring inside the plugs keeps them compact and flexible</td>
-            </tr>
-            
-            <tr>
-              <td>29</td><td>Tools &amp; consumables</td><td>Thermal silicone adhesive</td><td>Kafuter K-5204K, fast-curing, white</td><td>1 tube</td><td>13.2</td><td>13.2</td><td>Fixes the heating film, PT100 and heat sink; also seals against light</td>
-            </tr>
-            
-            <tr>
-              <td>30</td><td>Tools &amp; consumables</td><td>Heat-resistant double-sided tape</td><td>PI polyimide tape, 0.1 mm thick, 3 mm × 10 m</td><td>1 roll</td><td>10.7</td><td>10.7</td><td>Holds the heating film onto the heater-block surface</td>
-            </tr>
-            
-            <tr>
-              <td>31</td><td>Tools &amp; consumables</td><td>Silicone wire</td><td>22 AWG red + black, rated ≥ 105 °C</td><td>1 roll each</td><td>13.05</td><td>13.05</td><td>Power wiring for the heater and supply circuits</td>
-            </tr>
-            
-            <tr>
-              <td>32</td><td>Tools &amp; consumables</td><td>Desoldering wick</td><td>For desoldering and rework (newly ordered)</td><td>1 roll</td><td>TBD</td><td>TBD</td><td>Rework and clearing of mis-soldered joints</td>
-            </tr>
-            
-            <tr>
-              <td>33</td><td>Tools &amp; consumables</td><td>Multimeter</td><td>UNI-T UT33A, auto-ranging</td><td>1 pc</td><td>73</td><td>73</td><td>Voltage, current, continuity and resistance measurement</td>
-            </tr>
-            
-            <tr>
-              <td>34</td><td>Tools &amp; consumables</td><td>Soldering station (936)</td><td>60 W adjustable constant temperature, standard model</td><td>1 set</td><td>66</td><td>66</td><td>Soldering the circuits and plug-in modules</td>
-            </tr>
-            
-            <tr>
-              <td>35</td><td>Tools &amp; consumables</td><td>Hot-melt glue gun</td><td>40 W, with glue sticks</td><td>1 pc</td><td>15.35</td><td>15.35</td><td>Securing components and sealing light leaks</td>
-            </tr>
-            
-            <tr>
-              <td>36</td><td>Tools &amp; consumables</td><td>Solder wire</td><td>Lead-free, 63% tin, 0.8 mm, rosin core</td><td>1 roll</td><td>27.65</td><td>27.65</td><td>Soldering consumable</td>
-            </tr>
-            
-          </tbody>
-          <tfoot>
-            <tr class="hardware-table__total">
-              <td colspan="2"></td>
-              <td colspan="3">Total, items already ordered (CNY)</td>
-              <td>790.71</td>
-              <td colspan="2">Newly ordered items will be added once prices are known</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <p>The complete itemised purchase list — name, specification, quantity, unit price, purpose and purchase link for every item, together with category totals — is provided as a separate spreadsheet, attached after this section.</p>
+      <p>The table above summarises the main components of this hardware by functional category. The complete itemised purchase list — name, specification, purpose and purchase link for every item, together with a count by category — is provided as a separate spreadsheet. In that spreadsheet, the six rows shaded pale yellow are the items newly ordered for this revision — the focusing lenses, the ADS1115, the two SOT adapter boards, the 30 AWG silicone wire and the desoldering wick; the remaining rows are parts bought earlier or already in stock.</p>
       
       
       
@@ -1215,8 +755,8 @@
 
 <div class="pdf-embed">
   <object class="pdf-embed__object" type="application/pdf"
-          data="../static/pdf/hardware/hardware-final-purchase-list.pdf#page=1"
-          aria-label="Echo Yeast hardware module — final purchase list (2026-10-14)">
+          data="../static/image/lab/drylab/hardware/pdf/hardware-final-purchase-list-fix.pdf#page=1"
+          aria-label="EchoYeast hardware module — final purchase list (2026-10-19)">
     <p class="pdf-embed__fallback">The purchase list is not available here yet.</p>
   </object>
 </div>
@@ -1227,9 +767,11 @@
       <h2>The Complete Instrument and the Overall Plan</h2>
       <p>Beyond the modules, we also have a full set of technical requirements for the instrument as a whole: a wet-wall cyclone bioaerosol sampling and optical detection instrument that integrates cyclone sampling, a COC collection cell, temperature control, optical detection, data display and host software in a single machine. This is not a superseded earlier concept — it is our picture of the final product, and it is the basis on which the current modules were designed: their interfaces, dimensions and specifications were all set to meet the requirements of the complete instrument.</p>
       <p>The overall plan does include a display and host software. An instrument sitting in a classroom or a hospital ward has to show temperature and fluorescence readings without a computer attached to it, and it has to be able to export continuous data for trend analysis. Our order of work is to build the core functions first — temperature control, optics and the signal chain — and to make those three stable, repeatable and reproducible before layering display and host software on top. The current hardware revision covers the core functions, with the module interfaces already reserved for that later expansion.</p>
+      <p>The workflow behind this plan, and the first draft of its schedule, came from an interview recorded on our Human Practices page. Rongkang Deng, an engineer in medical device hardware development at a Shenzhen biotechnology company, went through the equipment concept with us and set out a sequence we have followed since: write the product technical requirements first, so that sampling time, pump flow, liquid volume, the working temperature range and the false-positive and false-negative criteria are quantified before any part is chosen; then fix the technical route and check the enrichment step in a simple test rig; then separate the low-level controller from the host computer and define the communication protocol before either is built; then build a prototype and iterate between performance and cost. He also told us plainly at the start that a complete instrument in two or three months was not realistic, and that what should be delivered at the competition stage is the requirements document, the appearance drawing, the working-principle block diagram, the module-level schematics and a partial core-function demonstrator that does not have to run end to end. The module-level prototype described on this page, with the complete-instrument specification written beside it, is the result of following that advice.</p>
+      <p>The requirement figures themselves also carry input from the other interviews on that page. Kai Fu, a clinician at Sun Yat-sen University, argued that single-person breath testing should be the primary mode with an enrichment device supporting it, and that shortening response time and controlling hardware cost were where our next effort should go. Juan Luo, an ICU nurse at a Grade-III hospital in Hangzhou, set a condition on the device workflow rather than on its optics: it must not be cumbersome to operate and must not add to the nursing workload. Manqing Deng, a paediatric clinician at a Grade-III hospital in Shenzhen, asked for the biological components to be replaceable modules, so that one instrument could later be extended to other pathogens. These sit behind the sample-volume and serviceability goals in Section 3 and several of the criteria in the test plan in Section 10.</p>
       <div class="hardware-table-scroll">
         <table class="hardware-table">
-          <caption>Table 7. Key figures of the complete instrument as specified.</caption>
+          <caption>Table 6. Key figures of the complete instrument as specified.</caption>
           <tbody>
             
             <tr>
@@ -1281,7 +823,7 @@
         </table>
       </div>
       <p>Several decisions from the complete instrument have already been carried directly into the current modules: the cyclone liquid-sampling route, the 90° orthogonal arrangement of the COC optical windows, the PI film + PT100 + MAX31865 combination for temperature control, the 485 / 528 nm filter pair, the BPW34 + OPA350 + ADS1115 detection chain, and the KSD9700 hardware over-temperature protection.</p>
-      <p>The table above is only a summary of the key figures of the complete instrument. The full equipment specification is a separate document with eight parts — scope, normative references, terms and definitions, technical requirements, test methods, inspection rules, marking and packaging, and notes — together with eight parameter tables.</p>
+      <p>The table above is only a summary of the key figures of the complete instrument. The full equipment specification is a separate document with eight parts — scope, normative references, terms and definitions, technical requirements, test methods, inspection rules, marking and packaging, and notes — together with eight parameter tables and one test-method table.</p>
       
       
       
@@ -1289,7 +831,7 @@
 
 <div class="pdf-embed">
   <object class="pdf-embed__object" type="application/pdf"
-          data="../static/pdf/hardware/hardware-complete-instrument-technical-requirements.pdf#page=1"
+          data="../static/image/lab/drylab/hardware/pdf/hardware-complete-instrument-technical-requirements-fix.pdf#page=1"
           aria-label="Equipment technical requirements for the complete wet-wall cyclone bioaerosol sampling and optical detection instrument">
     <p class="pdf-embed__fallback">The complete-instrument specification is not available here yet.</p>
   </object>
@@ -1302,7 +844,7 @@
       <p>CNC-machined test parts have been commissioned to replace the printed parts and to verify the parallelism and surface quality of the optical windows; the printed parts continue to be used for assembly and plug-interface checks.</p>
       <div class="hardware-table-scroll">
         <table class="hardware-table">
-          <caption>Table 8. Tests the module has to pass, with the method and the criterion for each one.</caption>
+          <caption>Table 7. Tests the module has to pass, with the method and the criterion for each one.</caption>
           <thead>
             <tr>
               <th scope="col">Test</th><th scope="col">Method and criterion</th>
@@ -1369,6 +911,8 @@
         <li>Co-culture cuts both ways: putting the yeast directly into the sampling liquid overlaps sampling time with expression time, but it also brings foaming, evaporation, contamination and a moving liquid surface into the optical path. Each of these has to be quantified during testing.</li>
         <li>Enrichment is the bottleneck: conversations with experts made clear that target virus concentrations in air are extremely low, and that enrichment efficiency, more than detection sensitivity, limits the whole system. This is why we kept the cyclone sampling and liquid-enrichment route.</li>
         <li>Validate before integrating: running temperature control and optics with a standard cuvette first keeps the uncertainty of a custom vessel out of optical debugging.</li>
+        <li>A constant-current source is not the same as an adjustable one: the board was sold as a constant-current driver, yet in measurement its limit was fixed and the trimmer had no effect, turning a parameter that should be adjustable into a constant. When choosing such a part, "can it be set to the target value" belongs on the acceptance list, not only "does it light the LED".</li>
+        <li>The ground of a high-impedance node runs on its own: the photodiode delivers microamperes, and a shared ground segment carrying a larger current puts its voltage drop straight into the measurement. Joining the optical ground into a single star and returning it to the main ground at one point is the standard practice for this kind of circuit.</li>
       </ul>
     </div>
 
@@ -1380,7 +924,9 @@
         <li>Replace the PLA parts with the CNC parts once they arrive, and re-check window parallelism, surface quality and light-tightness.</li>
         <li>Complete the first integrated test to establish detection limit, repeatability and response time.</li>
         <li>Once the core functions are validated, add the data display and host software in line with the overall plan, and complete the full instrument specification.</li>
+        <li>Complete the soldering and optical alignment of the receiver, measure the dark current and the change in output under illumination, and establish the signal-to-noise ratio of the whole optical chain; until then the emitter and the receiver described in the hardware log remain two parts that are not yet connected.</li>
       </ul>
+      <p>The hardware work is not yet finished. What this page describes is a working prototype of the module: temperature control, the excitation path and the signal chain have been built and measured, while the receiver, the CNC parts and the integrated sampling front end are still in progress. We will continue developing the hardware along the plan set out in Section 9.</p>
     </div>
 
     <div id="hardware-references" class="content-card">
@@ -1390,27 +936,26 @@
         
         <li id="hardware-reference-1">World Health Organization. Global Influenza Strategy 2019–2030. Geneva: WHO, 2019.</li>
         
-        <li id="hardware-reference-2">Yang W, Elankumaran S, Marr LC. Concentrations and size distributions of airborne influenza A viruses measured indoors at a health centre, a day-care centre and on aeroplanes. Journal of the Royal Society Interface, 2011, 8(61): 1176–1184.</li>
         
-        <li id="hardware-reference-3">Ladhani L, Pardon G, Meeuws H, et al. Sampling and detection of airborne influenza virus towards point-of-care applications. PLOS ONE, 2017, 12(3): e0174314.</li>
+        <li id="hardware-reference-2">Ladhani L, Pardon G, Meeuws H, et al. Sampling and detection of airborne influenza virus towards point-of-care applications. PLOS ONE, 2017, 12(3): e0174314.</li>
         
-        <li id="hardware-reference-4">Ma X, Fang Z, Li F, Hu K. Determination of performance-parameter design and impact factors of sampling efficiency for bioaerosol cyclones. Biotechnology &amp; Biotechnological Equipment, 2020.</li>
+        <li id="hardware-reference-3">Ma X, Fang Z, Li F, Hu K. Determination of performance-parameter design and impact factors of sampling efficiency for bioaerosol cyclones. Biotechnology &amp; Biotechnological Equipment, 2020.</li>
         
-        <li id="hardware-reference-5">Martin-Yken H. Yeast-based biosensors: current applications and new developments. Biosensors, 2020, 10(5): 51.</li>
+        <li id="hardware-reference-4">Martin-Yken H. Yeast-based biosensors: current applications and new developments. Biosensors, 2020, 10(5): 51.</li>
         
-        <li id="hardware-reference-6">Bean BDM, Mulvihill CJ, Garge RK, et al. Functional expression of opioid receptors and other human GPCRs in yeast engineered to produce human sterols. Nature Communications, 2022, 13: 2882.</li>
+        <li id="hardware-reference-5">Bean BDM, Mulvihill CJ, Garge RK, et al. Functional expression of opioid receptors and other human GPCRs in yeast engineered to produce human sterols. Nature Communications, 2022, 13: 2882.</li>
         
-        <li id="hardware-reference-7">Kalogriopoulos NA, Tei R, Yan Y, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature, 2025, 637(8044): 230–239.</li>
+        <li id="hardware-reference-6">Kalogriopoulos NA, Tei R, Yan Y, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature, 2025, 637(8044): 230–239.</li>
         
-        <li id="hardware-reference-8">Erlenbach I, Kostenis E, Schmidt C, et al. Functional expression of M1, M3 and M5 muscarinic acetylcholine receptors in yeast. Journal of Neurochemistry, 2001, 77(5): 1327–1337.</li>
+        <li id="hardware-reference-7">Erlenbach I, Kostenis E, Schmidt C, et al. Functional expression of M1, M3 and M5 muscarinic acetylcholine receptors in yeast. Journal of Neurochemistry, 2001, 77(5): 1327–1337.</li>
         
-        <li id="hardware-reference-9">Armbruster BN, Li X, Pausch MH, Herlitze S, Roth BL. Evolving the lock to fit the key to create a family of G protein-coupled receptors potently activated by an inert ligand. PNAS, 2007, 104(12): 5163–5168.</li>
+        <li id="hardware-reference-8">Armbruster BN, Li X, Pausch MH, Herlitze S, Roth BL. Evolving the lock to fit the key to create a family of G protein-coupled receptors potently activated by an inert ligand. PNAS, 2007, 104(12): 5163–5168.</li>
         
-        <li id="hardware-reference-10">Nagai Y, Miyakawa N, Takuwa H, et al. Deschloroclozapine, a potent and selective chemogenetic actuator enables rapid neuronal and behavioral modulations in mice and monkeys. Nature Neuroscience, 2020.</li>
+        <li id="hardware-reference-9">Nagai Y, Miyakawa N, Takuwa H, et al. Deschloroclozapine, a potent and selective chemogenetic actuator enables rapid neuronal and behavioral modulations in mice and monkeys. Nature Neuroscience, 2020.</li>
         
-        <li id="hardware-reference-11">Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Molecular and Cellular Biology, 1987, 7(7): 2316–2328.</li>
+        <li id="hardware-reference-10">Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Molecular and Cellular Biology, 1987, 7(7): 2316–2328.</li>
         
-        <li id="hardware-reference-12">Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (yEGFP): a reporter of gene expression in Candida albicans. Microbiology, 1997, 143(2): 303–311.</li>
+        <li id="hardware-reference-11">Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in <i>Candida albicans</i>. Microbiology, 1997, 143(2): 303–311.</li>
         
       </ol>
     </div>
@@ -1418,122 +963,130 @@
 </div>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -1556,21 +1109,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   

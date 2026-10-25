@@ -1,6 +1,8 @@
 /**
- * Hardware 页表格数据（2026-10-15 建立，仿 modelDocking.js 的「内容即数据」做法）。
- * 数值、单位与措辞逐字取自 static/expriments/drylab/hardware/ 下四份源文件，
+ * Hardware 页表格数据（2026-10-15 建立，2026-10-21 随 01–04 四份新版源文件同步更新）。
+ * 数值、单位与措辞逐字取自 static/expriments/drylab/hardware/ 下四份源文件
+ * （01_Wiki page content / 02_Module technical requirements / 03_Purchase list /
+ * 04_Complete instrument technical requirements，01 标注 2026-10-21、02 标注 19 October 2026），
  * 不在此处改写事实；模板只负责渲染。
  * 页面：src/dry-lab/hardware.njk
  */
@@ -33,9 +35,9 @@ module.exports = {
     ]
   },
 
-  // 表 3：十个里程碑
+  // 表 3：十二个里程碑
   milestones: {
-    caption: 'Table 3. Milestones of the build from the first AutoCAD drawing to the rewired circuit.',
+    caption: 'Table 3. Milestones of the build from the first AutoCAD drawing to the first self-test and the revised schematic.',
     head: ['Date', 'Milestone', 'Output'],
     rows: [
       ['14 September', 'First collection cup in AutoCAD (with supporting skirt)', 'Drawing1.dwg'],
@@ -47,7 +49,9 @@ module.exports = {
       ['4 October', 'Optical channel widened to 8 mm; filters, lenses, LED and photodiode made detachable; EH2.0 finalised and printed; emitter and receiver drawn; first circuit design completed', 'EH 2.0 10.3.SLDPRT, Emitter_End 10.3.SLDPRT, Receiver_End 10.4.SLDPRT'],
       ['5 October', 'Soldering started, beginning with the power section', '—'],
       ['9 October', 'Three plug-in parts finalised', 'Emitter_Plug, Receiver_Plug, Heater_Plug'],
-      ['11 October', 'Circuit rewired, power and signal runs separated', '—']
+      ['11 October', 'Circuit rewired, power and signal runs separated', '—'],
+      ['18 October', 'First soldering batch completed and self-test run; after clearing an I²C solder bridge the ADS1115 answered at 0x48; the microcontroller was then found destroyed', 'EchoYeast_6_selftest.ino'],
+      ['19 October', 'Microcontroller replaced; constant-current board dropped in favour of a 200 Ω resistor driving the 485 nm LED directly, lit at 8.5 mA; transimpedance receiver and grounding settled', 'EchoYeast_6_selftest_v2.ino, EchoYeast_8_led_test.ino']
     ]
   },
 
@@ -68,7 +72,7 @@ module.exports = {
       ['Heating', 'PI film 60 × 70 mm, 12 V / 25 W × 2; IRF520 PWM drive'],
       ['Over-temperature', 'KSD9700 (60 °C, 10 A) in series plus a 45 °C software threshold'],
       ['Vessel', 'Test stage: standard 10 mm path-length cuvette; project stage: in-house collection cup'],
-      ['Power', 'DC 24 V / 2 A, stepped down internally to 12 V / 5 V']
+      ['Power', 'DC 24 V / 2 A, stepped down internally to 12 V / 5 V / 3.3 V']
     ]
   },
 
@@ -79,65 +83,16 @@ module.exports = {
     rows: [
       ['Structure and printing', '1', 'PLA filament (white / black)'],
       ['Temperature control', '7', 'PI heating film, PT100 + MAX31865, KSD9700, IRF520, thermal pad, 40 mm fan, aluminium heat sink'],
-      ['Optics', '7', '485 nm LED, constant-current driver, BPW34, Ø10 mm narrow-band filters (485 / 528 nm), OPA350, focusing lenses, black heat-shrink tubing'],
+      ['Optics', '7', '485 nm LED, 200 Ω current-limiting resistor, BPW34, Ø10 mm narrow-band filters (485 / 528 nm), OPA350, focusing lenses, black heat-shrink tubing'],
       ['Electronics and signal', '4', 'Arduino Nano, ADS1115, SOT89 / SOT223 adapter boards'],
       ['Power and wiring', '9', '24 V adapter, LM2596, perfboard, jumpers, electrolytic capacitors, resistor kit, indicator LEDs, KF301 terminals, 30 AWG silicone wire'],
       ['Tools and consumables', '8', 'Thermal adhesive, PI thermal tape, 22 AWG silicone wire, desoldering wick, multimeter, 936 soldering station, hot glue gun, solder']
     ]
   },
 
-  // 表 6：逐项采购清单（含合计行）
-  bom: {
-    caption: 'Table 6. Itemised purchase list, 14 October 2026. Unit prices are the amounts actually paid, in CNY.',
-    head: ['No.', 'Category', 'Item', 'Specification / model', 'Qty', 'Unit price', 'Subtotal', 'Purpose'],
-    rows: [
-      ['1', 'Structural parts & printing consumables', '3D printing filament (PLA)', 'PLA Basic, white 1000 g + black 1000 g (without spool)', '1 spool each', '77.38', '77.38', 'FDM printing of the collection cup, the heater-block body and the three plug-in modules'],
-      ['2', 'Temperature control', 'Heat-resistant thermal silicone pad', '200 × 400 × 0.3 mm, 6 W/(m·K)', '1 sheet', '25', '25', 'Thermal interface between the heating film and the heater block; cut to size'],
-      ['3', 'Temperature control', 'PI heating film', '60 × 70 mm, 12 V / 25 W', '2 pcs', '24.64', '24.64', 'Bonded to the underside of the heater block as the heating element'],
-      ['4', 'Temperature control', 'MAX31865 module + PT100', 'MAX31865 converter module + PT100 platinum RTD (3-wire)', '1 set', '33.5', '33.5', 'Temperature acquisition: PT100 resistance converted to a digital temperature by a 16-bit ADC'],
-      ['5', 'Temperature control', 'KSD9700 thermal cut-off', '60 °C, 250 V / 10 A, metal case, normally closed', '1 pc', '6.12', '6.12', 'Hardware-level over-temperature protection; in series with the heater so it physically cuts the circuit'],
-      ['6', 'Temperature control', 'MOSFET driver module', 'IRF520', '1 pc', '3.29', '3.29', 'Takes the PWM signal and drives the heating film to implement PID power control'],
-      ['7', 'Temperature control', 'Cooling fan', '40 × 40 × 10 mm, 12 V, quiet', '1 pc', '10', '10', 'Mounted on the heat sink to keep the electronics underneath and the block from overheating'],
-      ['8', 'Temperature control', 'Heat sink', 'Aluminium, 70 × 36 × 100 mm', '1 pc', '23', '23', 'Dissipates heat downwards and protects the circuit underneath'],
-      ['9', 'Optics', 'LED light source', '485 nm high-brightness LED', '3 pcs', '17.34', '17.34', 'Excitation light source; spares kept for wavelength margin'],
-      ['10', 'Optics', 'LED constant-current driver', 'Adjustable constant-current driver board, 350 / 500 mA', '1 pc', '36.38', '36.38', 'Provides a stable current for the 485 nm LED and reduces intensity drift'],
-      ['11', 'Optics', 'Photodiode', 'BPW34, through-hole package', '4 pcs', '8.1', '8.1', 'Detects the 528 nm fluorescence at the receiver end; spares kept'],
-      ['12', 'Optics', 'Narrow-band filters', 'Ø10 mm, 30 nm bandwidth, OD3; 485 nm × 2 + 528 nm × 2', '4 pcs', '154', '154', 'One at each end separates the excitation light from the fluorescence spectrum'],
-      ['13', 'Optics', 'Op-amp', 'OPA350UA (SOIC-8)', '2 pcs', '18.8', '18.8', 'Forms the transimpedance amplifier with the photodiode and outputs a measurable voltage'],
-      ['14', 'Optics', 'Light shield (black heat-shrink tubing)', '12 mm bore, 10× thick wall', '1 pack', '8', '8', 'Wraps the emitter and receiver plugs to exclude ambient light'],
-      ['15', 'Optics', 'Focusing lenses for emitter and receiver', 'Matched to the 485 nm emitter and the 528 nm receiver (newly ordered)', '2 sets', 'TBD', 'TBD', 'Focus the LED output onto the centre of the vessel and the fluorescence onto the photodiode active area'],
-      ['16', 'Electronics & signal', 'Microcontroller', 'Arduino Nano V4 (board + USB cable)', '1 pc', '62.84', '62.84', 'Timing control, ADC readout and the PID temperature algorithm'],
-      ['17', 'Electronics & signal', 'ADS1115 high-precision ADC', 'ADS1115 module, 16-bit, 4-channel differential, I²C (newly ordered)', '1 pc', 'TBD', 'TBD', 'Reads the amplified photodiode voltage with high precision'],
-      ['18', 'Electronics & signal', 'SOT89 adapter board', 'SOT89 to DIP through-hole adapter (newly ordered)', 'TBD', 'TBD', 'TBD', 'Lets SOT89 SMD parts be soldered through-hole'],
-      ['19', 'Electronics & signal', 'SOT223 adapter board', 'SOT223 to DIP through-hole adapter (newly ordered)', 'TBD', 'TBD', 'TBD', 'Lets SOT223 SMD parts be soldered through-hole'],
-      ['20', 'Power & wiring', 'Power adapter', '24 V / 2 A (48 W), with mains lead', '1 pc', '12.87', '12.87', 'Supplies the instrument; 24 V bus'],
-      ['21', 'Power & wiring', 'LM2596 buck module', 'LM2596S DC-DC adjustable step-down', '1 pc', '4.49', '4.49', 'Steps 24 V down to 12 V (heating film, fan) and 5 V (logic)'],
-      ['22', 'Power & wiring', 'Breadboard / protoboard', 'Single-sided, rosin-coated green, 12 × 18 cm', '2 pcs', '10.87', '10.87', 'Prototyping during debugging, then soldered permanently'],
-      ['23', 'Power & wiring', 'Jumper wires', '21 cm, male–male / male–female / female–female, 120 pcs total', '1 set', '9.87', '9.87', 'Temporary connections between boards and modules'],
-      ['24', 'Power & wiring', 'Electrolytic capacitors', '16 V / 100 µF, 5 × 11 mm', '2 pcs', '6.74', '6.74', 'Supply filtering; suppresses switching noise'],
-      ['25', 'Power & wiring', 'Resistor kit', '1/4 W metal film, 25 common values, 500 pcs total', '1 set', '7.9', '7.9', 'Current limiting, voltage division and transimpedance feedback'],
-      ['26', 'Power & wiring', 'Indicator LEDs', '5 mm red / green / yellow, 60 pcs total', '1 set', '3.46', '3.46', 'Power and run-status indication'],
-      ['27', 'Power & wiring', 'Terminal blocks', 'KF301-2P × 10 + 3P × 10, 5.08 mm', '1 pack each', '7.17', '7.17', 'Power input and load wiring'],
-      ['28', 'Power & wiring', '30 AWG silicone wire', 'Extra-flexible silicone wire for wiring inside the plugs and for signals (newly ordered)', 'TBD', 'TBD', 'TBD', 'Fine wiring inside the plugs keeps them compact and flexible'],
-      ['29', 'Tools & consumables', 'Thermal silicone adhesive', 'Kafuter K-5204K, fast-curing, white', '1 tube', '13.2', '13.2', 'Fixes the heating film, PT100 and heat sink; also seals against light'],
-      ['30', 'Tools & consumables', 'Heat-resistant double-sided tape', 'PI polyimide tape, 0.1 mm thick, 3 mm × 10 m', '1 roll', '10.7', '10.7', 'Holds the heating film onto the heater-block surface'],
-      ['31', 'Tools & consumables', 'Silicone wire', '22 AWG red + black, rated ≥ 105 °C', '1 roll each', '13.05', '13.05', 'Power wiring for the heater and supply circuits'],
-      ['32', 'Tools & consumables', 'Desoldering wick', 'For desoldering and rework (newly ordered)', '1 roll', 'TBD', 'TBD', 'Rework and clearing of mis-soldered joints'],
-      ['33', 'Tools & consumables', 'Multimeter', 'UNI-T UT33A, auto-ranging', '1 pc', '73', '73', 'Voltage, current, continuity and resistance measurement'],
-      ['34', 'Tools & consumables', 'Soldering station (936)', '60 W adjustable constant temperature, standard model', '1 set', '66', '66', 'Soldering the circuits and plug-in modules'],
-      ['35', 'Tools & consumables', 'Hot-melt glue gun', '40 W, with glue sticks', '1 pc', '15.35', '15.35', 'Securing components and sealing light leaks'],
-      ['36', 'Tools & consumables', 'Solder wire', 'Lead-free, 63% tin, 0.8 mm, rosin core', '1 roll', '27.65', '27.65', 'Soldering consumable']
-    ],
-    total: {
-      label: 'Total, items already ordered (CNY)',
-      amount: '790.71',
-      note: 'Newly ordered items will be added once prices are known'
-    }
-  },
-
   // 表 7：整机关键指标
   instrument: {
-    caption: 'Table 7. Key figures of the complete instrument as specified.',
+    caption: 'Table 6. Key figures of the complete instrument as specified.',
     rows: [
       ['Format', 'Wet-wall cyclone bioaerosol sampling + liquid collection + yeast whole-cell detection + optical readout, integrated in one unit'],
       ['Sampling flow', '100–300 L/min (adjustable)'],
@@ -153,7 +108,7 @@ module.exports = {
 
   // 表 8：测试计划
   testPlan: {
-    caption: 'Table 8. Tests the module has to pass, with the method and the criterion for each one.',
+    caption: 'Table 7. Tests the module has to pass, with the method and the criterion for each one.',
     head: ['Test', 'Method and criterion'],
     rows: [
       ['Fit and assembly', 'Insert / remove each plug 20 times and reassemble the vessel 5 times; check for play and reading drift (drift ≤ 5%)'],
@@ -166,38 +121,7 @@ module.exports = {
       ['Repeatability', 'Measure the same positive sample ≥ 5 times; RSD ≤ 5% (target, to be confirmed by data)'],
       ['Co-culture compatibility', 'Aerate and stir the medium in the cup for 30 min; observe foaming, evaporation and yeast viability, and record readout stability']
     ]
-  }
-,
-  // 图 1–27：硬件日志的原始截图与照片（顺序与源稿 Figure 编号一致）
-  figures: [
-    { src: "static/image/hardware/image1.jpg", alt: "Figure 1. First collection-cup design drawn in AutoCAD, with a supporting skirt at the base", caption: "Figure 1. First collection-cup design drawn in AutoCAD, with a supporting skirt at the base", width: 664, height: 915 },
-    { src: "static/image/hardware/image2.jpg", alt: "Figure 2. The first 3D collection-cup model, built in SolidWorks", caption: "Figure 2. The first 3D collection-cup model, built in SolidWorks", width: 1100, height: 652 },
-    { src: "static/image/hardware/image3.jpg", alt: "Figure 3. Profile sketch of the first collection-cup version", caption: "Figure 3. Profile sketch of the first collection-cup version", width: 380, height: 895 },
-    { src: "static/image/hardware/image4.jpg", alt: "Figure 4. Dimensioned drawing of the second collection-cup version, with optical windows added on the conical face", caption: "Figure 4. Dimensioned drawing of the second collection-cup version, with optical windows added on the conical face", width: 639, height: 805 },
-    { src: "static/image/hardware/image5.jpg", alt: "Figure 5. 3D model of the second collection-cup version", caption: "Figure 5. 3D model of the second collection-cup version", width: 1100, height: 652 },
-    { src: "static/image/hardware/image6.jpg", alt: "Figure 6. Sketch of the second version, showing the position of the optical windows", caption: "Figure 6. Sketch of the second version, showing the position of the optical windows", width: 1100, height: 653 },
-    { src: "static/image/hardware/image7.jpg", alt: "Figure 7. 3D model of the heated block, with the vessel cavity and optical channels reserved", caption: "Figure 7. 3D model of the heated block, with the vessel cavity and optical channels reserved", width: 1100, height: 652 },
-    { src: "static/image/hardware/image8.jpg", alt: "Figure 8. 2D layout drawing of the heated block", caption: "Figure 8. 2D layout drawing of the heated block", width: 1100, height: 653 },
-    { src: "static/image/hardware/image9.jpg", alt: "Figure 9. The first 3D-printed collection cup; print quality was poor", caption: "Figure 9. The first 3D-printed collection cup; print quality was poor", width: 1100, height: 824 },
-    { src: "static/image/hardware/image10.jpg", alt: "Figure 10. The first printed cup, held for scale", caption: "Figure 10. The first printed cup, held for scale", width: 824, height: 1100 },
-    { src: "static/image/hardware/image11.jpg", alt: "Figure 11. The first complete printed hardware module, with supports still inside the optical channel", caption: "Figure 11. The first complete printed hardware module, with supports still inside the optical channel", width: 1100, height: 824 },
-    { src: "static/image/hardware/image12.jpg", alt: "Figure 12. Assembly check of the collection cup and the heated block", caption: "Figure 12. Assembly check of the collection cup and the heated block", width: 1100, height: 824 },
-    { src: "static/image/hardware/image13.jpg", alt: "Figure 13. The revised EH2.0 heated block, with the optical channel widened to 8 mm", caption: "Figure 13. The revised EH2.0 heated block, with the optical channel widened to 8 mm", width: 1100, height: 652 },
-    { src: "static/image/hardware/image14.jpg", alt: "Figure 14. 2D layout of EH2.0, showing the optical channels and the plug interfaces", caption: "Figure 14. 2D layout of EH2.0, showing the optical channels and the plug interfaces", width: 1100, height: 653 },
-    { src: "static/image/hardware/image15.jpg", alt: "Figure 15. The printed EH2.0 block", caption: "Figure 15. The printed EH2.0 block", width: 1100, height: 824 },
-    { src: "static/image/hardware/image16.jpg", alt: "Figure 16. Re-checking the fit between EH2.0 and the collection cup", caption: "Figure 16. Re-checking the fit between EH2.0 and the collection cup", width: 1100, height: 824 },
-    { src: "static/image/hardware/image17.jpg", alt: "Figure 17. Internal layout sketch of the emitter end", caption: "Figure 17. Internal layout sketch of the emitter end", width: 1100, height: 653 },
-    { src: "static/image/hardware/image18.jpg", alt: "Figure 18. Internal layout sketch of the receiver end", caption: "Figure 18. Internal layout sketch of the receiver end", width: 1100, height: 653 },
-    { src: "static/image/hardware/image19.jpg", alt: "Figure 19. First version of the circuit design", caption: "Figure 19. First version of the circuit design", width: 1100, height: 653 },
-    { src: "static/image/hardware/image20.jpg", alt: "Figure 20. The driver and indicator circuit during soldering", caption: "Figure 20. The driver and indicator circuit during soldering", width: 1100, height: 824 },
-    { src: "static/image/hardware/image21.jpg", alt: "Figure 21. 3D model of Emitter_Plug", caption: "Figure 21. 3D model of Emitter_Plug", width: 998, height: 719 },
-    { src: "static/image/hardware/image22.jpg", alt: "Figure 22. Dimensioned drawing of Emitter_Plug", caption: "Figure 22. Dimensioned drawing of Emitter_Plug", width: 1100, height: 647 },
-    { src: "static/image/hardware/image23.jpg", alt: "Figure 23. 3D model of Heater_Plug", caption: "Figure 23. 3D model of Heater_Plug", width: 1100, height: 650 },
-    { src: "static/image/hardware/image24.jpg", alt: "Figure 24. Dimensioned drawing of Heater_Plug", caption: "Figure 24. Dimensioned drawing of Heater_Plug", width: 1100, height: 649 },
-    { src: "static/image/hardware/image25.jpg", alt: "Figure 25. 3D model of Receiver_Plug", caption: "Figure 25. 3D model of Receiver_Plug", width: 1100, height: 653 },
-    { src: "static/image/hardware/image26.jpg", alt: "Figure 26. Dimensioned drawing of Receiver_Plug", caption: "Figure 26. Dimensioned drawing of Receiver_Plug", width: 1100, height: 652 },
-    { src: "static/image/hardware/image27.jpg", alt: "Figure 27. The circuit after rewiring", caption: "Figure 27. The circuit after rewiring", width: 1100, height: 777 },
-  ],
+  },
 
   // 参考文献（2026-10-15 改版新增）：逐条取自 Hardware Wiki page content 2026.10.14 (1).pdf
   // 末节。编号与正文中的 [n] 引用一一对应。
@@ -260,7 +184,7 @@ module.exports = {
     },
     {
       num: 12,
-      text: "Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (yEGFP): a reporter of gene expression in Candida albicans. Microbiology, 1997, 143(2): 303–311.",
+      text: "Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in Candida albicans. Microbiology, 1997, 143(2): 303–311.",
       link: "https://doi.org/10.1099/00221287-143-2-303"
     }
   ]

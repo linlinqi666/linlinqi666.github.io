@@ -36,48 +36,6 @@ html {
   color: var(--desc-color-primary-darker, #4A3728);
 }
 
-.sustainability-page .sustainability-head__sub {
-  margin: 0 0 1rem;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--desc-color-primary-dark, #5D4632);
-}
-
-.sustainability-page .sustainability-head .official-lead {
-  margin-top: 1.25rem;
-}
-
-/* 官方 Lead：SDG 17 藏青作为引导色 */
-.official-lead {
-  margin: 1rem 0 0;
-  padding: 0.85rem 1.1rem;
-  border-left: 3px solid #19486A;
-  border-radius: 0 0.375rem 0.375rem 0;
-  background: linear-gradient(90deg, rgba(25, 72, 106, 0.08) 0%, rgba(25, 72, 106, 0.02) 100%);
-}
-
-.official-lead__tag {
-  display: inline-block;
-  padding: 0.05rem 0.5rem;
-  border-radius: 999px;
-  background: #19486A;
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  vertical-align: 0.15em;
-}
-
-.official-lead p {
-  display: inline;
-  margin: 0 0 0 0.6rem;
-  font-size: 0.92rem;
-  font-style: italic;
-  line-height: 1.7;
-  color: #2C4A63;
-}
-
 /* ==========================================================
    2. SDG 官方色：卡片顶边 + 徽章
    （色值来源：United Nations SDG 官方色板，https://sdgs.un.org/goals）
@@ -90,7 +48,6 @@ html {
 .sustainability-page .content-card[data-sdg="4"]       { border-top: 4px solid #C5192D; }
 .sustainability-page .content-card[data-sdg="17"]      { border-top: 4px solid #19486A; }
 .sustainability-page .content-card[data-sdg="summary"] { border-top: 4px solid #64748B; }
-.sustainability-page .content-card[data-sdg="refs"]    { border-top: 4px solid #A9743A; }
 
 /* SDG 卡片背景颜色复合：仅四张在用的 SDG 目标卡（3 / 4 / 9 / 17），
    顶部覆一层该 SDG 官方色的极淡渐隐色晕，向下 320px 内淡出到卡底白；
@@ -148,7 +105,7 @@ html {
   margin: 0 0 1rem;
   padding-bottom: 0.4rem;
   border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
-  font-size: 1.4rem;
+  font-size: var(--desc-font-size-3xl);
   font-weight: 700;
   line-height: 1.4;
   color: var(--desc-color-primary-darker, #4A3728);
@@ -160,7 +117,7 @@ html {
   border-left: 3px solid var(--desc-color-primary, #8B5A2B);
   border-radius: 0 0.25rem 0.25rem 0;
   background: rgba(139, 90, 43, 0.04);
-  font-size: 1.05rem;
+  font-size: var(--desc-font-size-2xl);
   font-weight: 600;
   line-height: 1.5;
   color: var(--desc-color-primary-darker, #4A3728);
@@ -169,7 +126,7 @@ html {
 .sustainability-page .content-card p {
   margin: 0 0 0.75rem;
   color: var(--desc-color-primary-darker, #4A3728);
-  font-size: 0.95rem;
+  font-size: var(--desc-font-size-lg);
   line-height: 1.8;
   text-indent: 0;
   text-align: justify;
@@ -248,7 +205,7 @@ html {
 
 .sdg-figure figcaption {
   margin-top: 0.5rem;
-  font-size: 0.82rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--desc-color-primary-lightest, #6B5B45);
   text-align: center;
@@ -272,7 +229,7 @@ html {
 }
 
 .sustainability-page .content-card ol.ref-list > li {
-  font-size: 0.88rem;
+  font-size: var(--desc-font-size-sm-md);
   line-height: 1.7;
   color: var(--desc-color-primary-darker, #4A3728);
   margin-bottom: 0.5rem;
@@ -344,7 +301,7 @@ html {
 }
 
 .sustainability-page .progress-percentage {
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--desc-color-primary, #8B5A2B);
 }
@@ -363,7 +320,69 @@ html {
 }
 
 /* ==========================================================
-   7. 窄屏适配
+   7. SDG 官方目标卡片：展开任一收纳栏后从卡面上缘折出
+   素材为联合国官方目标图标（文件名与格式保持原样）：
+   static/image/sustainability/sdg/E_SDG_Icons-03/04/09/17.jpg
+   ========================================================== */
+.sustainability-page .content-card[data-sdg="3"],
+.sustainability-page .content-card[data-sdg="4"],
+.sustainability-page .content-card[data-sdg="9"],
+.sustainability-page .content-card[data-sdg="17"],
+.sustainability-page .content-card[data-sdg="summary"] {
+  position: relative;
+  --sdg-goal-size: clamp(104px, 11vw, 148px);
+}
+
+/* 卡槽：贴着卡片右上角，超出部分裁掉，卡片因此像是从卡面后方抽出来 */
+.sustainability-page .sdg-goal-slot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(var(--sdg-goal-size) + 20px);
+  height: calc(var(--sdg-goal-size) + 20px);
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+  border-top-right-radius: 0.75rem;
+}
+
+.sustainability-page .sdg-goal-card {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: var(--sdg-goal-size);
+  height: auto;
+  display: block;
+  background: transparent;
+  border-radius: 0.35rem;
+  /* drop-shadow 跟随透明通道，色轮的圆环不会带出方形阴影 */
+  filter: drop-shadow(0 10px 14px rgba(74, 55, 40, 0.18)) drop-shadow(0 2px 4px rgba(74, 55, 40, 0.1));
+  transform: translate3d(0, -132%, 0) rotate(-7deg) scale(0.94);
+  transform-origin: 72% 0%;
+  opacity: 0;
+  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.28s ease;
+}
+
+/* 卡片展开时给标题与首段让出右上角，避免压字 */
+.sustainability-page .content-card[data-sdg] h2,
+.sustainability-page .content-card[data-sdg] .content-body > p:first-of-type {
+  transition: padding-right 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sustainability-page .content-card.is-goal-revealed h2,
+.sustainability-page .content-card.is-goal-revealed .content-body > p:first-of-type {
+  padding-right: calc(var(--sdg-goal-size) + 26px);
+}
+
+.sustainability-page .content-card.is-goal-revealed .sdg-goal-card {
+  transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+/* ==========================================================
+   8. 窄屏适配
    ========================================================== */
 @media (max-width: 1023px) {
   .sustainability-page .description-sidebar {
@@ -385,7 +404,7 @@ html {
   }
 
   .sustainability-page .content-card h2 {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
   }
 
   .sdg-figure {
@@ -398,5 +417,239 @@ html {
 
   .sustainability-page .sustainability-head {
     margin-bottom: 1rem;
+  }
+
+  .sustainability-page .content-card[data-sdg="3"],
+  .sustainability-page .content-card[data-sdg="4"],
+  .sustainability-page .content-card[data-sdg="9"],
+  .sustainability-page .content-card[data-sdg="17"],
+  .sustainability-page .content-card[data-sdg="summary"] {
+    --sdg-goal-size: 84px;
+  }
+
+  /* 窄屏让卡片只占标题区：标题撑够卡片高度，首段保持全宽从卡片下方开始，
+     避免整段让位后行宽过窄、两端对齐出现大字距 */
+  .sustainability-page .content-card.is-goal-revealed h2 {
+    padding-right: calc(var(--sdg-goal-size) + 12px);
+    min-height: calc(var(--sdg-goal-size) + 18px);
+  }
+
+  .sustainability-page .content-card.is-goal-revealed .content-body > p:first-of-type {
+    padding-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sustainability-page .sdg-goal-card,
+  .sustainability-page .content-card[data-sdg] h2,
+  .sustainability-page .content-card[data-sdg] .content-body > p:first-of-type {
+    transition: none;
+  }
+}
+
+/* target 行插在首段之前后，紧跟其后的正文段也要在官方卡片折出时让位 */
+.sustainability-page .content-card.is-goal-revealed .content-body > p.sdg-target-line + p {
+  padding-right: calc(var(--sdg-goal-size) + 26px);
+  transition: padding-right 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+  .sustainability-page .content-card.is-goal-revealed .content-body > p.sdg-target-line + p {
+    padding-right: 0;
+  }
+}
+
+/* ==========================================================
+   9. 17 目标网格地图（CDN 官方 SDG 图标铺满瓦片 + 命中态 + 自适应列宽）
+      网格是「地图」而非装饰：17 枚官方 SDG 图标铺满正方形瓦片，命中目标
+      保留满色并可点，其余目标去色压暗、不可点，刻意留出十三格暗色。
+   ========================================================== */
+.sustainability-page .sdg-map-lead {
+  margin: 0 0 1.1rem;
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-size: var(--desc-font-size-lg);
+  line-height: 1.8;
+}
+
+.sustainability-page .sdg-grid {
+  list-style: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+  display: grid;
+  /* 17 枚瓦片按 5-6-6 三行排布：12 列栅格下每枚占 2 列，
+     首行 5 枚从第 2 列起排（左右各留一格）实现居中，后两行各 6 枚铺满。 */
+  grid-template-columns: repeat(12, 1fr);
+  /* 不拉伸：否则网格行高会覆盖 aspect-ratio，瓦片被压成矩形 */
+  align-items: start;
+  gap: 0.5rem;
+}
+
+/* 其余 12 枚自动落位：每枚占 2 列，第二、三行各 6 枚 */
+.sustainability-page .sdg-grid > li {
+  grid-column: span 2;
+}
+
+/* 首行 5 枚：锁定第 1 行，列位跳到 2/4/6/8/10，左右各留一格空白 */
+.sustainability-page .sdg-grid > li:nth-child(-n+5) {
+  grid-row: 1;
+}
+
+.sustainability-page .sdg-grid > li:nth-child(1) {
+  grid-column: 2 / span 2;
+}
+
+.sustainability-page .sdg-grid > li:nth-child(2) {
+  grid-column: 4 / span 2;
+}
+
+.sustainability-page .sdg-grid > li:nth-child(3) {
+  grid-column: 6 / span 2;
+}
+
+.sustainability-page .sdg-grid > li:nth-child(4) {
+  grid-column: 8 / span 2;
+}
+
+.sustainability-page .sdg-grid > li:nth-child(5) {
+  grid-column: 10 / span 2;
+}
+
+.sustainability-page .sdg-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  /* 图标自带官方底色；保留官方色仅作图片加载失败时的兜底 */
+  background: var(--tile-color);
+}
+
+/* 全局 .content-card ul>li 会给列表项加左内边距与圆点伪元素，网格瓦片必须清掉 */
+.sustainability-page .sdg-grid > li {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  line-height: 1.25;
+}
+
+.sustainability-page .sdg-grid > li::before {
+  content: none;
+}
+
+.sustainability-page .sdg-tile__link,
+.sustainability-page .sdg-tile__static {
+  position: absolute;
+  inset: 0;
+  display: block;
+  text-decoration: none;
+}
+
+.sustainability-page .sdg-tile__icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 未命中：同一枚图标去色压暗，读作「没点亮」，但仍能认出是哪个目标 */
+.sustainability-page .sdg-tile:not(.sdg-tile--hit) .sdg-tile__icon {
+  filter: grayscale(1) opacity(0.42);
+}
+
+.sustainability-page .sdg-tile--hit {
+  box-shadow: 0 2px 10px rgba(74, 55, 40, 0.14);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sustainability-page .sdg-tile--hit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(74, 55, 40, 0.24);
+}
+
+.sustainability-page .sdg-tile--hit .sdg-tile__link:focus-visible {
+  outline: 2px solid #4A3728;
+  outline-offset: -3px;
+}
+
+/* 命中瓦片右上角的箭头：加一枚半透明徽底，压在图标文字上也看得清 */
+.sustainability-page .sdg-tile__arrow {
+  position: absolute;
+  right: 0.28rem;
+  top: 0.28rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.32);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.sustainability-page .sdg-tile__arrow::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: translate(-50%, -60%) rotate(-45deg);
+}
+
+.sustainability-page .sdg-map-legend {
+  margin: 0 0 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+.sustainability-page .sdg-map-legend__swatch {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: #4C9F38;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.sustainability-page .sdg-target-line {
+  margin: 0 0 0.85rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.4rem;
+  background: rgba(139, 90, 43, 0.06);
+  border: 1px solid rgba(139, 90, 43, 0.16);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--desc-color-primary, #8B5A2B);
+}
+
+.sustainability-page .sdg-target-line strong {
+  color: var(--desc-color-primary-darker, #4A3728);
+}
+
+/* 窄屏：放弃固定 5-6-6，回到自适应列宽（瓦片最小 4.75rem），仍是正方形 */
+@media (max-width: 599px) {
+  .sustainability-page .sdg-grid {
+    grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));
+  }
+
+  .sustainability-page .sdg-grid > li,
+  .sustainability-page .sdg-grid > li:nth-child(-n+5) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sustainability-page .sdg-tile--hit,
+  .sustainability-page .sdg-tile--hit:hover {
+    transition: none;
+    transform: none;
   }
 }

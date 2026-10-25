@@ -22,7 +22,8 @@ const PAGES = [
   'team/attributions.html',
   'dry-lab/model.html',
   'dry-lab/hardware.html',
-  'wet-lab/design.html',
+  // 2026-10-19：删掉 'wet-lab/design.html'。design 页实际在 project/design.html（上方已列），
+  // 这条是早期路径变更留下的死项，每次构建都会打一行"页面不存在，跳过"。
   'wet-lab/protocol.html',
   'wet-lab/result.html',
   'wet-lab/parts.html',

@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "eleventy",
-    "build:all": "eleventy && node static/js/core/search-index-generator.js",
+    "build:all": "node tools/check-image-contract.mjs && eleventy && node static/js/core/search-index-generator.js",
+    "check:images": "node tools/check-image-contract.mjs",
     "serve": "eleventy --serve",
     "test:smoke": "node tools/smoke-test.js"
   }

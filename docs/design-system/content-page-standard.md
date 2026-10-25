@@ -69,6 +69,15 @@
 
 > 2026-10-15 补充：上面「已回退」的 `project/contribution`、`project/description`、`project/engineering`、`project/design` 四页曾按 §5.14.4 试过整卡折叠，第二轮（同日）按用户口径改为「阈值 20 000 px + 仅 h3 小分类折叠」后，这四页展开高度均 < 20 000 px，已全部**回退为不折叠**（侧栏 level1/level3 跳转与高亮沿用既有体系，无需改动）。
 
+**project `description` 页重新纳入（2026-10-20 按队伍提供的《EchoYeast Description.docx》整体重写）**：正文由原中文占位稿（项目背景 / PAGER 策略 / 生物元件库 / 实验设计 / 创新点 / 4 条占位参考文献）整体换成源稿英文全文——Abstract + 15 个编号章节 + Conclusion + 20 条参考文献 + 15.1 的 7×3 证据表，并按本规范重建锚点与两级导航：
+
+- **18 张内容卡**（`description-abstract` / `description-why-influenza` / … / `description-references`），**31 个 h3 小节**（id 前缀 `description-`，已重新登记 `sectionIdPrefixes`，撤销 2026-09-27 的撤除）；侧栏 level1 = 18、level3 = 31。
+- **折叠**：31 个 h3 全部由 `section-fold.js` 折成收纳条、默认全折叠；概览卡 Abstract 无 h3 保持常显。实测 1440 宽全展开 19 938 px、全折叠 9 881 px（源稿 20 条文献与 18 张卡使展开高度贴近 20 000 px 阈值，收纳后大幅缩短）。源稿第 10 与第 15.2 节的编号子项（Stage 1/2、四项下一步）用 `h4` 承载，不进收纳条。
+- **三类排版处理**（不改内容）：① 拉丁学名 `Saccharomyces cerevisiae` / `S. cerevisiae` 斜体（9 处），菌株号 `BY4741`、`S288C` 保持正体；② 源稿行内角标 1–20 改为可跳转的 `.cite-ref`，共 42 个，参考文献条目只渲染文字、不输出外链（同 Safety / Hardware 2026-10-16 口径）；③ iGEM 归属标记 `Team Design / Results / Model / Hardware / Human Practices / Safety and Security` 渲染为 `.team-ref` 徽标并指向站内对应页面（共 54 处），非页面来源（`FUS1–yEGFP Experimental Report`、`NCBI NC_001135.5`）用 `.team-ref--source` 变体。源稿两段纯文本箭头块（第 4 节架构链、第 6.1 节受体架构）改为 `.signal-chain` 纵向链与既有 `.map-diagram` 横向结构域。
+- **新增样式**（`static/css/navigation/navigation.css` description 组件段内）：`.description-subtitle` / `.description-list` / `.cite-ref` / `.description-refs` / `.team-ref` / `.signal-chain` / `.chain-inline`。
+- **两处源稿截断**已在 `src/project/description.njk` 以 HTML 注释标注待队伍补全（`signal amplification` 句末无标点；`infecte` → 页面按最小笔误修正作 `infected`）。
+- **验证**：`check-content-pages.js` 全绿（折叠 31 = h3[id] 31、level3 无死链、id 唯一）；`e2e-content-pages.js` 已加入本页用例（target `description-r1a-b6`）并通过；单页验证脚本见 `对话归档/2026-10/2026-10-20-description-rebuild/`（结构/引用/表格逐条比对、1440 与 480 零横向溢出、console 与请求零错误、6 张截图）。**flask 官方站尚未同步**（按工作流先根站、视觉通过后再迁）。
+
 > 该页的素材、运行资源、打分数据与待核项**不在这里展开**，统一见 **`static/expriments/drylab/model/00-文件归属.md`**（该文件同时取代了同目录 `plan.md`）。
 
 **dry-lab `hardware` 页重建（2026-10-15，`REQ-20261015-001`）**：硬件页按 `static/expriments/drylab/hardware/` 下四份源文件（正文 docx、模块技术需求 docx、整机技术需求 docx、采购清单 xlsx）整体重写，14 张内容卡、8 张表、27 张插图（`static/image/hardware/image1~27.jpg`，docx 内嵌图原字节导出，不转码），三份附件以 `<object>` 内嵌在源稿留位处（第七节末 = 模块需求、第八节末 = 采购清单、第九节末 = 整机需求）。表格与图数据抽到 `src/_data/hardware.js`，插图统一走 `src/_includes/partials/hardware-figure.njk`；`sectionIdPrefixes` 已重新登记 `hardware-`。**收纳形态**：概览卡常显，其余 6 张含小节的卡走 h3 收纳条（共 28 个小节：Problem / Origin / Iterations / Log 各若干、Architecture 3、BOM 1），无 h3 的 7 张卡（Worth / Goals / Specifications / Instrument / Test plan / Challenges / Future）按用户口径保持展开——页面由 44 165 px 压到 13 619 px；`e2e-content-pages.js` 以 `hardware-cup` 为目标纳入本页。源稿里的中文文件名（收集杯/收集杯2/激发端/检测端）已英化为 `Collection_Cup.SLDPRT`、`Collection_Cup_2.SLDPRT`、`Emitter_End 10.3.SLDPRT`、`Receiver_End 10.4.SLDPRT`。PDF 与图片当前指向根站本地 `static/pdf/hardware/`、`static/image/hardware/`，同步 flask 站时改为 `static.igem.wiki/teams/6373/wiki/lab/drylab/hardware/`。
@@ -158,6 +167,8 @@
 - `team/attributions.html`（7 444 px，自定义双面板 + 成员网格，无 `.content-card` 结构，折叠粒度需先定）；
 - 其余页面（`notebook` 4 878 / `parts` 4 550 / `education` 4 313 / `software` 4 302 / `protocol` 2 267 / `members` 1 887 / `description` 7 882 / `design` 8 540 / `contribution` 16 560）均低于 20 000 px 判据，保持展开不折叠。
 
+> 2026-10-20 更新：上表与清单是 2026-10-15 的快照，其中 `project/description`（当时 7 882 px）已失效——该页按《EchoYeast Description.docx》整体重写为 18 张卡 + 31 个 h3，实测全展开 **19 938 px**、全折叠 **9 881 px**，已按本节口径改为「h3 小节收纳 + 概览卡常显」，详见 §5.14.2 的同名小节。其余页面数值未变。
+
 **验证（可复跑）**：结构层 `node 对话归档/temporary-tools/check-content-pages.js`（9 页，`折叠 === h3[id]` 必须相等、level3 无死链、id 唯一）；几何层 `$env:CHROME_PATH='…'; node 对话归档/temporary-tools/e2e-content-pages.js`（默认全折叠 / 滚动高亮 / 锚点跳转自动展开）。改造前/后逐卡文本比对脚本见 `对话归档/2026-10/2026-10-15-hardware-page/temporary-tools/verify_site_folding_text.py`。
 
 ### 5.14.5 Safety 页重建与 Hardware 页改版（2026-10-15，`REQ-20261015-004`）
@@ -167,7 +178,7 @@
 - 6 张内容卡：Overview / LS Risk Matrix / Laboratory Safety Environment / Personal Safety / Project Safety / References；
 - 4 张表：L 分级、S 分级、风险值换算、**15 步逐项评估表（10 列）**；表格与图数据抽到 `src/_data/safety.js`；
 - 5 张插图 `static/image/safety/safety-fig1~5.jpg`，由 PDF 第 9–13 页导出（原图 1725×2300，统一缩到 1100 px 宽后转 JPEG）；Figure 1 的打码说明按源稿保留为图注附注；
-- 17 条参考文献，正文 `[n]` 角标可点击跳转（与 Hardware 页同一套 `.safety-cite` / `.safety-references` 写法）；
+- 17 条参考文献，正文 `[n]` 角标可点击跳转（角标类名已于 2026-10-21 由 `.safety-cite` 统一并入 `.cite-ref`，列表类名仍为 `.safety-references`）；
 - 折叠：两个 h3 小节（`safety-grading` / `safety-matrix`）带 id，由 `section-fold.js` 折成收纳条并默认折叠，与 result / model 同写法；页面展开 13 363 px，低于 20 000 px 判据，卡片本身不折叠。
 
 **Hardware 页第二版改版**：按 `static/expriments/drylab/hardware/Hardware Wiki page content (English) 2026.10.14 (1).pdf` 更新正文——补入 `[1]–[12]` 文献引用，新增三处论述（气溶胶实测浓度与粒径 `[2]`、旋风采样在高流速下的收集损失 `[4]`、DREADD 家族与 DCZ 高亲和力激动剂 `[9][10]`），改写 Design Goals 的 Optics 条目，并新增文末 References 一节（12 条）。27 张图题注、8 张表与三份附件在新版中均未变，故图片与附件沿用不动。改版后页面 13 812 px。
@@ -175,6 +186,17 @@
 **2026-10-16 追改（同日反馈）**：
 
 - **References 不再渲染外链**：按 iGEM 要求，Safety / Hardware 两页文末参考文献只保留条目文字，`link` 字段（DOI / 官网地址）仍留在 `src/_data/*.js` 里作溯源存档，页面不输出 `<a>`。正文中的 `[n]` 角标（页内锚点跳转）保留。
+
+**2026-10-21 引用统一（并入全站文本规范）**：
+
+- **角标类名收敛为 `.cite-ref`**：`static/css/navigation/navigation.css` 里的 `.cite-ref` 提为全站公共类（`font-size:0.72em; vertical-align:super`），`.safety-cite` / `.hardware-cite` 两套同义写法删除，Safety / Hardware 页的角标同步改用 `.cite-ref`。
+- **新增通用列表规则**：`ol.ref-list > li` 统一加 `scroll-margin-top:130px` 与 `:target` 高亮（`rgba(139,90,43,.08)`），design / model / parts / human-practices 四页的文末列表共用。
+- **Design 页**：22 处裸 `<sup>n</sup>` 改为可跳转角标；原「背景段 1–5 + 方案段 1–7」两段各自从 1 开始的列表合并为全页连续编号（背景 1–5、方案 6–12），条目加 `id="design-reference-N"`。
+- **Model 页**：25 条参考文献条目加 `id="model-reference-N"`，并在正文明确提到该工具/力场的句子处补 20 个角标；ChimeraX / V-rescale / Parrinello-Rahman / PME / van der Rest 5 条正文无对应陈述，不硬挂角标。
+- **Human Practices 页**：8 条纯文本 `<p>[n]` 改为 `<ol class="ref-list">` + `<li id="hp-reference-N">`，正文补 3 个角标（WHO / Lewin / AlphaFold 3），其余 5 条无正文对应；排版沿用 `.hp-interview-context p` 的段落样式（新增 `.hp-interview-context ol.ref-list > li` 规则）。
+- **Parts 页**：`src/_data/parts.js` 的 `references.items` 由 `{ key, text }` 改为 `{ num, text, link }`（对齐 safety / hardware），条目加 `id="parts-reference-N"`，正文补 4 个角标。
+- **错链修复**：Safety 页原 `[4]`（纳米抗体识别域）误指向 `#safety-reference-6`、两处 `[1]` 误指向 `#safety-reference-2`、6 处角标缺 `href`；Hardware 页 3 处角标 `href` 为损坏字节（`\x000\x00`）。已按显示号对齐目标号。
+- 细则与模板见 `docs/design-system/text-standards.md`。
 - **收纳条背景铺满修复（全站组件级）**：全局 `.content-card h3` 自带背景条，h3 在 summary 里改为 `inline-block` 后背景条缩到文字宽度。修复方式是把条状样式（背景 / 左边框 / 内边距）从 h3 上移到 `summary`，并在 `section-fold.css` 里把 summary 内的 h3 清成纯文字——result / safety / model / hardware / engineering 所有使用收纳条的页面同时受益，实测 summary 宽度与卡片内容宽一致（1440 宽下无截断）。
 
 ### 5.14.6 正文顶沿吉祥物装饰（2026-10-17）

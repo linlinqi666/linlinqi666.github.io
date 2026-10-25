@@ -18,7 +18,13 @@ const fs = require('fs');
 const dataPath = path.join(__dirname, '..', '..', 'static', 'data', 'dry-lab', 'model', 'model-docking.json');
 const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-const OUTCOME_LABEL = { lead: 'Selected', rejected: 'Rejected' };
+// Screening priority of each candidate, e.g. "High (Rank 1)"
+function priorityLabel(verdict) {
+  if (!verdict.priority) {
+    return '—';
+  }
+  return `${verdict.priority} (Rank ${verdict.rank})`;
+}
 
 // Display format matching the docx: negative numbers use U+2212, decimals kept as in the original table
 function num(value, digits) {
@@ -38,7 +44,7 @@ data.tables = {
       H3N2: num(c.cluspro.untreated.H3N2, 1),
       H5N1: num(c.cluspro.untreated.H5N1, 1),
       index: num(c.cluspro.untreated.specificityIndex, 2),
-      outcome: OUTCOME_LABEL[c.verdict.outcome] || c.verdict.outcome
+      priority: priorityLabel(c.verdict)
     })),
   // model5(1).docx tabulates the untreated-antigen (stage 1) and cross-reactivity (stage 3) results only;
   // the complex-processed antigen run appears as workflow stage 2 without a score table, so no treated

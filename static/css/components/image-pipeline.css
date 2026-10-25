@@ -1,0 +1,32 @@
+/* 图片分级调度 · 呈现层（配套 static/js/components/image-pipeline.js）
+ *
+ * 本文件只有两条职责，且都不涉及「隐藏」：
+ *
+ * 1) 占位底色：只对**主动声明** data-placeholder 的图生效（一般为不透明照片/图框）。
+ *    透明底的插画**不要**声明——底色会从透明像素里透出来，比空着更难看。
+ *    占位只是给「解码未完成」的那一格一个中性底，不闪烁、不淡入。
+ *
+ * 2) 残留守卫：历史上 .media-reveal--pending 会把未解码的图设成 opacity:0，
+ *    是「某张图永久透明」的直接原因。脚本侧已不再添加该类，这里再兜一层，
+ *    保证即使旧缓存里还留着这个类、或旧脚本仍在跑，也不会把图藏起来。
+ *
+ * 为什么不做淡入：淡入必须从 opacity 0 起步，而「从 0 起步再等某个条件解开」
+ * 正是本周三次加载故障的共同结构。宁可硬切出现，也不要可隐藏的状态。
+ */
+
+/* 1) 占位底色（仅 opt-in） */
+main img[data-placeholder] {
+  background-color: var(--img-placeholder-bg, #eef3f7);
+}
+
+/* 2) 残留守卫：任何情况下都不把图藏起来 */
+.media-reveal--pending {
+  opacity: 1;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main img[data-placeholder] {
+    background-color: transparent;
+  }
+}

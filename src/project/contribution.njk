@@ -6,10 +6,10 @@ basePath: "../"
 mainClass: "contribution-page"
 css:
   - static/css/contribution.css
+  - static/css/components/pdf-embed.css
 js:
   - static/js/components/sidebar-progress.js
 ---
-
 {% extends "layouts/base.njk" %}
 
 {# 页面内容全部来自 src/_data/contribution.js（英文单语源），此处只负责渲染结构。
@@ -19,8 +19,7 @@ js:
 {% macro pair(en, zh) %}<span class="i18n-en">{{ en | safe }}</span>{% if zh %}<span class="i18n-zh">{{ zh | safe }}</span>{% endif %}{% endmacro %}
 
 {% block main %}
-<h1 class="sr-only">Contribution</h1>
-
+    
 <div class="description-container">
 
       <!-- 左侧导航栏 -->
@@ -36,29 +35,108 @@ js:
 
         <div class="description-nav-wrapper">
           <ul class="description-nav">
-            {% for item in contribution.nav %}
+            
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#{{ item.id }}" class="nav-main-link">{{ pair(item.en, item.zh) }}</a>
+                <a href="#contribution-wetlab" class="nav-main-link"><span class="i18n-en">Wet-Lab Contributions</span></a>
               </div>
-              {% if item.children %}
+              
               <ul class="level2">
-                {% for child in item.children %}
-                <li class="{{ 'level2-has-sub' if child.children else 'level3' }}">
-                  <a href="#{{ child.id }}">{{ pair(child.en, child.zh) }}</a>
-                  {% if child.children %}
-                  <ul class="level3">
-                    {% for sub in child.children %}
-                    <li><a href="#{{ sub.id }}">{{ pair(sub.en, sub.zh) }}</a></li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
+                <li class="level2-flat">
+                  <a href="#wetlab-reporter-parts"><span class="i18n-en">Pheromone-responsive reporter parts</span></a>
                 </li>
-                {% endfor %}
+
+                <li class="level2-flat">
+                  <a href="#wetlab-far1-sst2"><span class="i18n-en"><i>FAR1</i>/<i>SST2</i> editing components</span></a>
+                </li>
+
+                <li class="level2-flat">
+                  <a href="#wetlab-gpa1-module"><span class="i18n-en">Gpa1 C-terminal engineering module</span></a>
+                </li>
+
+                <li class="level2-flat">
+                  <a href="#wetlab-records"><span class="i18n-en">Construction and troubleshooting records</span></a>
+                </li>
+
+                
+                <li class="level2-has-sub">
+                  <a href="#wetlab-validation"><span class="i18n-en">From Engineering to Validation</span></a>
+                  
+                  <ul class="level3">
+                    
+                    <li><a href="#wetlab-genediting"><span class="i18n-en">Translating Gene Editing into Verifiable Phenotypes</span></a></li>
+                    
+                    <li><a href="#wetlab-construction"><span class="i18n-en">Refining Construction Methods</span></a></li>
+                    
+                    <li><a href="#wetlab-connecting"><span class="i18n-en">Connecting Modifications to Behavior</span></a></li>
+                    
+                  </ul>
+                  
+                </li>
+                
+                <li class="level2-has-sub">
+                  <a href="#wetlab-resources"><span class="i18n-en">Reusable Design Resources</span></a>
+                  
+                  <ul class="level3">
+                    
+                    <li><a href="#wetlab-strategy"><span class="i18n-en">A Genetic Engineering Strategy for Yeast</span></a></li>
+                    
+                    <li><a href="#wetlab-starting"><span class="i18n-en">A Starting Point for Cross-Species Coupling</span></a></li>
+                    
+                  </ul>
+                  
+                </li>
+                
               </ul>
-              {% endif %}
+              
             </li>
-            {% endfor %}
+            
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#contribution-model" class="nav-main-link"><span class="i18n-en">Model</span></a>
+              </div>
+              
+              <ul class="level2">
+                
+                <li class="level3">
+                  <a href="#model-screening"><span class="i18n-en">Seventeen candidates, one lead</span></a>
+                  
+                </li>
+                
+                <li class="level3">
+                  <a href="#model-gating"><span class="i18n-en">Both gating interfaces</span></a>
+                  
+                </li>
+                
+                <li class="level3">
+                  <a href="#model-hotspot"><span class="i18n-en">One hotspot, one hypothesis</span></a>
+                  
+                </li>
+                
+                <li class="level3">
+                  <a href="#model-reproducibility"><span class="i18n-en">The pipeline as files</span></a>
+                  
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#contribution-hp" class="nav-main-link"><span class="i18n-en">Human Practices</span></a>
+              </div>
+              
+              <ul class="level2">
+                
+                <li class="level3"><a href="#hp-apic"><span class="i18n-en">APiC question cards</span></a></li>
+                <li class="level3"><a href="#hp-yeast-workshop"><span class="i18n-en">The workshop record</span></a></li>
+                <li class="level3"><a href="#hp-sharing-lessons"><span class="i18n-en">Sharing knowledge</span></a></li>
+                
+              </ul>
+              
+            </li>
+            
           </ul>
         </div>
 
@@ -87,80 +165,334 @@ js:
 
       <!-- 右侧内容区域 -->
       <div class="description-content">
-        {% for card in contribution.cards %}
-        <div id="{{ card.id }}" class="content-card">
-          {% if loop.first %}
+        
+        <div id="contribution-wetlab" class="content-card">
+          
           <figure class="page-mascot page-mascot--contribution" aria-hidden="true">
-            <img src="../static/image/any-icon/extension/contribution.png" alt="" width="440" height="453"
+            <img src="{{ basePath | default('') }}static/image/any-icon/extension/contribution.png" alt="" width="440" height="453"
               loading="lazy" decoding="async">
           </figure>
-          {% endif %}
-          {# 大节标题 h2，小目录标题 h3，与「四个大目录再分小目录」的层级一致 #}
-          <h{{ 2 if card.section else 3 }}>{{ pair(card.title.en, card.title.zh) }}</h{{ 2 if card.section else 3 }}>
+          
+          
+          <h2><span class="i18n-en">Wet-Lab Contributions: Reusable Parts for <span class="keep-together">Yeast Engineering</span></span></h2>
           <div class="content-body">
-            {% if card.summary %}
-            <p class="executive-summary">{{ pair(card.summary.en, card.summary.zh) | safe }}</p>
-            {% endif %}
+            <p><span class="i18n-en">Our wet-lab contribution is a set of documented genetic components and characterization results that future teams can use when engineering yeast signaling systems. The parts cover pheromone-responsive reporting, <i>FAR1</i>/<i>SST2</i> editing and <i>GPA1</i> C-terminal modification. Their sequences and intended roles are indexed on our Parts page, while construction and experimental evidence are documented on our Engineering and Results pages. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a> · <a href="{{ basePath | default('') }}project/engineering.html">Engineering</a> · <a href="{{ basePath | default('') }}wet-lab/result.html">Results</a></span></span></p>
 
-            {% for block in card.blocks %}
-              {% if block.type == 'p' %}
-            <p{% if block.cls %} class="{{ block.cls }}"{% endif %}>{{ pair(block.text.en, block.text.zh) }}</p>
+            
 
-              {% elif block.type == 'bullets' %}
-            <ul class="plain-list">
-              {% for it in block.items %}
-              <li>{{ pair(it.en, it.zh) }}</li>
-              {% endfor %}
+            
+              
+            
+            <h3 id="wetlab-reporter-parts" data-no-fold><span class="i18n-en">1. Pheromone-responsive reporter parts</span></h3>
+
+            <p><span class="i18n-en"><strong>Featured parts:</strong> BBa_26J53MF4 — <i>FUS1</i> promoter · BBa_26D8D1SG — <i>FUS1</i>–<i>yEGFP</i> reporter fragment</span></p>
+
+            <figure class="contrib-figure">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/project/fig1-pesc-his-fus1-yegfp-map.avif" alt="Annotated plasmid map of pESC-HIS-P_FUS1-yEGFP with the FUS1 promoter, the yEGFP reporter gene, the CYC1 terminator and the vector backbone elements labelled." width="1188" height="1150" loading="lazy" decoding="async">
+              <figcaption>
+                <span class="contrib-figure__caption">Figure 1. Plasmid map of pESC-HIS-P_FUS1-yEGFP.</span>
+                <span class="contrib-figure__desc">The 7,181-bp plasmid contains the <i>FUS1</i> promoter, the <i>yEGFP</i> reporter gene, and a downstream <i>CYC1</i> terminator, together with the annotated backbone elements. The map shows the plasmid context of the <i>FUS1</i> promoter and <i>FUS1</i>–<i>yEGFP</i> reporter fragment contributed by our team, rather than the boundaries of either individual Registry part. Map generated using SnapGene.</span>
+              </figcaption>
+            </figure>
+
+            <p><span class="i18n-en">We provide a defined 435-bp <i>FUS1</i> promoter fragment and a 1,152-bp composite fragment combining this promoter with the <i>yEGFP</i> coding sequence. The promoter is recorded separately from the reporter, allowing future teams to reuse the regulatory element or the assembled fluorescence readout according to their own designs. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a></span></span></p>
+
+            <p><span class="i18n-en">We characterized the reporter in BY4741 using α-factor induction, fluorescence imaging, time-course measurements and growth assays. These experiments provide a reference for evaluating downstream yeast pheromone-pathway output and comparing engineered chassis strains. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/result.html">Results</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Value for future teams:</strong> a characterized reporter starting point for yeast signaling studies. The composite is a reporter fragment, not a complete standalone expression system; a suitable vector and transcriptional termination context must be supplied. Its α-factor characterization does not establish HA detection. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a> · <a href="{{ basePath | default('') }}project/design.html">Design</a></span></span></p>
+
+            <h3 id="wetlab-far1-sst2" data-no-fold><span class="i18n-en">2. <i>FAR1</i>/<i>SST2</i> editing components</span></h3>
+
+            <p><span class="i18n-en"><strong>Featured composite parts:</strong> BBa_26IKMSKO — <i>FAR1</i> sgRNA expression cassette · BBa_26YVX4QT — <i>SST2</i> sgRNA expression cassette</span></p>
+
+            <p><span class="i18n-en"><strong>Matching repair templates:</strong> BBa_26HN2W3G — <i>FAR1</i> repair template · BBa_262SR0ED — <i>SST2</i> repair template</span></p>
+
+            <figure class="contrib-figure">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/project/fig2-pml104-vector-map.avif" alt="Annotated map of the pML104 vector used for yeast editing, showing URA3, the SNR52 promoter, the SUP4 terminator and other labelled vector features." width="1058" height="1142" loading="lazy" decoding="async">
+              <figcaption>
+                <span class="contrib-figure__caption">Figure 2. Map of the pML104 vector used in the yeast-editing workflow.</span>
+                <span class="contrib-figure__desc">The 11,258-bp map displays annotated vector features, including <i>URA3</i>, the <i>SNR52</i> promoter, and the <i>SUP4</i> terminator. The <i>FAR1</i>- and <i>SST2</i>-targeting sequences are not explicitly identified in this view; therefore, this figure presents the vector context rather than a target-specific sgRNA part map. Map generated using SnapGene.</span>
+              </figcaption>
+            </figure>
+
+            <p><span class="i18n-en">We provide target-specific sgRNA expression cassettes and matching repair templates for <i>FAR1</i> and <i>SST2</i> editing in BY4741. Each cassette combines a yeast RNA polymerase III promoter, a target-specific spacer, the SpCas9 sgRNA scaffold and a terminator. The repair templates are designed to introduce frameshift-producing four-base-pair deletions. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a></span></span></p>
+
+            <p><span class="i18n-en">Following an unsuccessful initial construction round, we revised guide assembly and repair-template design. Colony screening and Sanger sequencing subsequently identified the intended <i>FAR1</i> and <i>SST2</i> edits, and growth and fluorescence measurements characterized the resulting chassis under α-factor induction. <span class="contrib-refs"><a href="{{ basePath | default('') }}project/engineering.html">Engineering</a> · <a href="{{ basePath | default('') }}wet-lab/result.html">Results</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Value for future teams:</strong> matched targeting and repair components, together with a documented editing workflow and genotype-to-phenotype evaluation. These components require Cas9 and the appropriate donor and host context; the sgRNA cassette alone is not a complete knockout system. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a> · <a href="{{ basePath | default('') }}project/engineering.html">Engineering</a></span></span></p>
+
+            <h3 id="wetlab-gpa1-module" data-no-fold><span class="i18n-en">3. A Gpa1 C-terminal engineering module</span></h3>
+
+            <p><span class="i18n-en"><strong>Featured basic part:</strong> BBa_26EG2LOR — Gαq-derived EYNLV sequence with stop codon</span></p>
+
+            <p><span class="i18n-en"><strong>Associated composite:</strong> BBa_266K1VDV — <i>GPA1</i> C-terminal humanization cassette</span></p>
+
+            <figure class="contrib-figure">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/project/fig4-gpa1-humanization-map.avif" alt="Partial annotated map of the GPA1 C-terminal humanization construct, showing the humanization sequence and the adjacent URA3-associated annotations." width="1704" height="296" loading="lazy" decoding="async">
+              <figcaption>
+                <span class="contrib-figure__caption">Figure 4. Partial annotated map of the <i>GPA1</i> C-terminal humanization construct.</span>
+                <span class="contrib-figure__desc">The view shows the region labeled as the humanization sequence and the adjacent <i>URA3</i>-associated annotations. It provides local construct context but does not delineate the complete donor boundaries or both homology arms. Map generated using SnapGene.</span>
+              </figcaption>
+            </figure>
+
+            <p><span class="i18n-en">BBa_26EG2LOR is an 18-bp module encoding the Gαq-derived C-terminal sequence EYNLV followed by a stop codon. We used this sequence in a <i>GPA1</i>-editing design intended to replace the native Gpa1 C-terminal pentapeptide KIGII. It is a replacement segment, not a complete G-protein coding sequence. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a></span></span></p>
+
+            <p><span class="i18n-en">After revising the donor-construction strategy to overlap-extension fusion PCR, we obtained strains 12 and 17 with the expected target-region sequence. The humanized chassis was further characterized through α-factor-induced morphology, growth and <i>FUS1</i>–<i>yEGFP</i> fluorescence measurements, which showed attenuated native pheromone responses. <span class="contrib-refs"><a href="{{ basePath | default('') }}project/engineering.html">Engineering</a> · <a href="{{ basePath | default('') }}wet-lab/result.html">Results</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Value for future teams:</strong> a defined replacement module and a documented starting point for studying yeast G-protein interfaces. The evidence supports the edited-chassis phenotype; it does not independently establish hM1Dq coupling or attribute every observed change solely to the 18-bp replacement. <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/result.html">Results</a></span></span></p>
+
+            <h3 id="wetlab-records" data-no-fold><span class="i18n-en">Reusable construction and troubleshooting records</span></h3>
+
+            <p><span class="i18n-en">Alongside these parts, we document unsuccessful construction attempts and the design changes that followed, including revised sgRNA assembly, repair-template redesign and the switch from a multi-round donor-construction route to overlap-extension fusion PCR. These records give future teams practical alternatives to evaluate rather than only presenting the final successful constructs. <span class="contrib-refs"><a href="{{ basePath | default('') }}project/engineering.html">Engineering</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Explore the resources:</strong> <span class="contrib-refs"><a href="{{ basePath | default('') }}wet-lab/parts.html">Parts</a> · <a href="{{ basePath | default('') }}project/engineering.html">Engineering</a> · <a href="{{ basePath | default('') }}wet-lab/result.html">Results</a></span></span></p>
+
+            <h3 id="wetlab-validation" data-no-fold><span class="i18n-en">From Successful Engineering to Functional Validation</span></h3>
+
+              
+            
+              
+            <p><span class="i18n-en">Our experimental work addresses two specific questions: how can the native signaling regulation of yeast be reliably modified, and how can we determine whether precise engineering of the G-protein interface changes cellular signaling behavior?</span></p>
+
+              
+            
+              
+            <h4 id="wetlab-genediting" class="content-subh4"><span class="i18n-en">Translating Gene Editing into Verifiable Phenotypes</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">Obtaining the target strain was not the endpoint of our work. During the editing of <i>FAR1</i> and <i>SST2</i>, our initial construction attempt failed to yield the desired strains, prompting us to revise our construction strategy. We ultimately confirmed the intended genetic modifications by sequencing. The resulting strains carried a 4-bp deletion in each target gene, providing clear sequence-level evidence for subsequent validation.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">More importantly, we combined genotype verification with growth and fluorescence characterization under α-factor induction. Comparing the wild-type, single-knockout, and double-knockout strains allowed us to determine whether the effects of gene deletion extended beyond the DNA level to cellular growth and reporter output. Our results showed that the double knockout altered the growth response to stimulation and produced higher reporter fluorescence under the tested conditions. These findings support the functional characterization of the engineered chassis beyond successful strain construction alone.</span></p>
+
+              
+            
+              
+            <h4 id="wetlab-construction" class="content-subh4"><span class="i18n-en">Refining Construction Methods to Ensure Sequence Accuracy</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">Unlike the double-knockout strategy, <i>GPA1</i> engineering required precise replacement of five amino acids at the C-terminus of the protein. Our initial strategy, which combined Gibson Assembly with multiple rounds of PCR, resulted in sequence errors in the donor fragment. We subsequently adopted overlap-extension fusion PCR to reorganize the homology arms and selection cassette. This revised strategy yielded strains 12 and 17, whose target sequences were confirmed by sequencing. The modification replaced the native C-terminal pentapeptide KIGII with EYNLV, corresponding to the human Gαq C-terminal sequence.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">The value of this work lies not only in obtaining the correctly modified strains, but also in documenting why the construction strategy was changed, how the alternative approach addressed the initial problem, and how the final sequence was verified. These details provide a practical reference for researchers undertaking precise genomic modifications in yeast, offering more transferable information than a positive PCR result alone.</span></p>
+
+              
+            
+              
+            <h4 id="wetlab-connecting" class="content-subh4"><span class="i18n-en">Connecting Sequence Modifications to Cellular Behavior</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">Both engineering strategies required us to address a question beyond successful construction: did the modified cells exhibit the expected functional changes? For the double-knockout strategy, growth curves and fluorescence output were used to examine the relationship between signaling responses and cellular state. For <i>GPA1</i> humanization, we further investigated growth and morphological changes under α-factor induction.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">The current results indicate that <i>GPA1</i>-humanized yeast exhibits altered phenotypes associated with native pheromone stimulation. However, these changes do not by themselves demonstrate that a heterologous GPCR has successfully coupled to the downstream yeast signaling pathway. In addition, the descriptions of fluorescence responses in different sections of our Wiki are inconsistent. The direction and magnitude of this response must therefore be determined by re-examining the original data before a definitive conclusion can be drawn. Distinguishing confirmed findings from observations that remain unresolved is an important part of the experimental knowledge we make available to future researchers.</span></p>
+
+              
+            
+              
+            
+            <h3 id="wetlab-resources" data-no-fold><span class="i18n-en">Reusable Design Resources for Yeast Signaling Chassis Engineering</span></h3>
+
+              
+            
+              
+            <p><span class="i18n-en">We organized two core aspects of our yeast chassis engineering—native signaling regulation and G-protein input-interface reprogramming—into biological parts that can be independently accessed, adapted, combined, and further validated. These resources provide concrete sequence references and starting points for future yeast signaling engineering projects.</span></p>
+
+              
+            
+              
+            <h4 id="wetlab-strategy" class="content-subh4"><span class="i18n-en">A Directly Accessible Genetic Engineering Strategy for Yeast</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">We submitted the <i>FAR1</i> and <i>SST2</i> sgRNA expression cassettes (BBa_26IKMSKO and BBa_26YVX4QT, respectively), together with their corresponding repair templates (BBa_26HN2W3G and BBa_262SR0ED), to the iGEM Registry. Each repair template incorporates a 4-bp deletion and a PAM-site modification designed to disrupt the target gene and reduce the likelihood of repeated recognition by the same sgRNA following editing.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">These parts provide sequence-level design references for researchers seeking to modify cell-cycle responses or negative regulation of G-protein signaling in yeast. By consulting the published sequences and construct information, users can assess their suitability after checking the target locus, PAM sequence, and homology regions in their own strain, rather than designing the entire editing system from scratch.</span></p>
+
+              
+            
+              
+            <h4 id="wetlab-starting" class="content-subh4"><span class="i18n-en">A Sequence-Level Starting Point for Cross-Species Receptor Coupling</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">We submitted the <i>GPA1</i> C-terminal humanization cassette with a <i>URA3</i> selection marker (BBa_266K1VDV), as well as a basic part encoding the Gαq-derived pentapeptide EYNLV followed by a stop codon (BBa_26EG2LOR). The composite cassette contains upstream and downstream homology arms, the target replacement sequence, and the <i>URA3</i> selection module, providing a defined construct for targeted modification of the yeast <i>GPA1</i> locus.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">The target sequences in strains 12 and 17 were verified, providing experimental evidence that the intended sequence replacement was achieved. For teams seeking to connect heterologous GPCRs to yeast signaling networks, this construct offers a concrete starting point for further design and comparison. Nevertheless, successful sequence replacement does not establish effective coupling of the human receptor to the yeast signaling pathway; downstream signal transmission must be validated independently.</span></p>
+
+              
+            
+              
+            <ul class="link-list link-list--section-end">
+              
+              <li><a href="{{ basePath | default('') }}wet-lab/protocol.html"><span class="i18n-en">More details on the Protocol page.</span></a></li>
+              
+              <li><a href="{{ basePath | default('') }}wet-lab/parts.html"><span class="i18n-en">More details on the Parts page.</span></a></li>
+              
             </ul>
 
-              {% elif block.type == 'ul' %}
-            <ul class="field-list">
-              {% for it in block.items %}
-              <li><span class="field-label">{{ pair(it.label.en, it.label.zh) }}</span><span class="field-value">{{ pair(it.text.en, it.text.zh) }}</span></li>
-              {% endfor %}
-            </ul>
-
-              {% elif block.type == 'fields' %}
-            <ul class="field-list">
-              {% for f in block.items %}
-              <li><span class="field-label">{{ pair(f.label.en, f.label.zh) }}</span><span class="field-value">{{ pair(f.value.en, f.value.zh) }}</span></li>
-              {% endfor %}
-            </ul>
-
-              {% elif block.type == 'links' %}
-            <ul class="link-list{% if block.cls %} {{ block.cls }}{% endif %}">
-              {% for a in block.items %}
-              <li><a href="{{ a.href }}">{{ pair(a.en, a.zh) }}</a></li>
-              {% endfor %}
-            </ul>
-
-              {% elif block.type == 'table' %}
-            <h3>{{ pair(block.heading.en, block.heading.zh) }}</h3>
-            <div class="table-scroll">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    {% for h in block.head %}
-                    <th scope="col">{{ pair(h.en, h.zh) }}</th>
-                    {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in block.rows %}
-                  <tr>
-                    {% for cell in row %}
-                    <td>{% if cell.en %}{{ pair(cell.en, cell.zh) }}{% else %}<span class="i18n-zh">{{ cell.zh | safe }}</span>{% endif %}</td>
-                    {% endfor %}
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-              {% endif %}
-            {% endfor %}
+              
+            
           </div>
         </div>
-        {% endfor %}
+        
+        <div id="contribution-model" class="content-card">
+          
+          
+          <h2><span class="i18n-en">Model</span></h2>
+          <div class="content-body">
+            
+
+            
+              
+            <p><span class="i18n-en">Computational from end to end, which makes it the part another team can run without a lab. Three outputs: a docking pipeline that narrows a candidate panel, an atomic-level account of how the gating peptides sit on their receptors, and the files that reproduce both.</span></p>
+
+              
+            
+              
+            
+            <h3 id="model-screening" data-no-fold><span class="i18n-en">Seventeen candidates, one lead</span></h3>
+
+              
+            
+              
+            <p><span class="i18n-en">Screening a nanobody panel costs reagent and weeks. We replaced the first pass with two docking stages, a rigid ClusPro sweep over the whole panel and HADDOCK 2.5 semi-flexible refinement on what survived, and added a specificity index so that H1N1-selective binders separate from cross-reactive ones instead of everything ranking by docking score. Seventeen candidates became one lead, R1aB6, with no binding assay run.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">A team with a panel and no structures can repeat this on predicted models and order a shortlist instead of a library. The specificity index is the part worth taking, because without it the ranking collapses back into "best score wins", which is how cross-reactive binders get ordered. No binding assay has confirmed the ranking.</span></p>
+
+              
+            
+              
+            
+            <h3 id="model-gating" data-no-fold><span class="i18n-en">Both gating interfaces</span></h3>
+
+              
+            
+              
+            <p><span class="i18n-en">An inhibitory-peptide gate only works if blocking the outside leaves the inside intact. We tested that on both systems: hM1Dq with the MT1 peptide and Ste2 with MT1_5, each membrane-aligned before docking, refined in HADDOCK, then run through CHARMM-GUI membrane building, 100 ns GROMACS dynamics, SPICE interface analysis and gmx_MMPBSA. Both come out the same way, with the peptide in the orthosteric site and the intracellular G-protein interface left free.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">That is a check on an assumption, not a demonstration of gating in cells, and it is written as the former. The workflow is the reusable part: it transfers to any receptor and peptide pair, including ones with no experimental structure.</span></p>
+
+              
+            
+              
+            
+            <h3 id="model-hotspot" data-no-fold><span class="i18n-en">One hotspot, one hypothesis</span></h3>
+
+              
+            
+              
+            <p><span class="i18n-en">One number did most of the work here. Per-residue decomposition of the R1aB6–HA complex puts ARG-B:31 at −5.46 kcal/mol, well clear of its neighbours, which turns into a single experiment: make R31A and measure it by SPR or ELISA.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">That is what a model is good for, choosing the next experiment rather than illustrating the last one. A team with a docked complex and no assay capacity can run the same decomposition and come out with one residue to mutate, which is far cheaper than scanning an interface. The mutation is designed and the measurement is planned; neither has been run.</span></p>
+
+              
+            
+              
+            
+            <h3 id="model-reproducibility" data-no-fold><span class="i18n-en">The pipeline as files</span></h3>
+
+              
+            
+              
+            <p><span class="i18n-en">A pipeline published without its inputs is a figure, not a tool. HADDOCK and ClusPro inputs, parameter files and analysis scripts are kept with the work, and the 9VH4 complex is re-docked through the same pipeline as a positive control so the numbers have something to sit against.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">The docking results also became an interactive card game, which is the form we use when the audience is not a modelling audience. Both are on the Model page; the game runs there rather than as a download.</span></p>
+
+              
+            
+              
+            <ul class="link-list link-list--section-end">
+              
+              <li><a href="{{ basePath | default('') }}dry-lab/model.html"><span class="i18n-en">More details on the Model page.</span></a></li>
+              
+            </ul>
+
+              
+            
+          </div>
+        </div>
+        
+        <div id="contribution-hp" class="content-card">
+
+          <h2><span class="i18n-en">Human Practices Contributions</span></h2>
+          <div class="content-body">
+
+            <p><span class="i18n-en"><em>Preface to Influenza A in the Air.</em> After our social practice, we recognised that many important questions about influenza A virus in the air — how it is transmitted, how long it can persist in air and on surfaces, how environmental conditions affect it, and what different detection signals can actually establish — draw on several fields and are dispersed across the literature. We therefore read the relevant studies and organised what we learned into this <i>Influenza A in the Air</i> contribution, bringing together the evidence, key data, study conditions and references needed to examine these questions. The document does not present new experimental findings; it structures existing research into a continuous, accessible and traceable resource that can help readers develop an overall understanding of airborne transmission, environmental persistence, detection and control of influenza A. In this way, it provides a reference for learning, discussion and project development, reduces duplicated searching, and makes the material available for further use, checking and improvement within the iGEM community.</span></p>
+
+<div class="pdf-embed">
+  <object class="pdf-embed__object" type="application/pdf"
+          data="https://static.igem.wiki/teams/6373/wiki/lab/project/influenza-a-in-the-air.pdf#page=1"
+          aria-label="Influenza A in the Air — a knowledge base on airborne transmission, detection and control, compiled as a contribution to the iGEM community">
+    <p class="pdf-embed__fallback">The Influenza A in the Air document is not available here yet.</p>
+  </object>
+</div>
+
+            <h3 id="hp-apic" data-no-fold><span class="i18n-en">The discussion format: APiC question cards</span></h3>
+
+            <p><span class="i18n-en">Our Human Practices work produced a second, less obvious contribution: a format for peer discussion. At the APiC project exchange we replaced the usual sequence of project presentations with structured question cards built around iGEM award tracks. Each card directed discussion through five dimensions — value positioning, design rationale, analysis of previous projects, critical self-evaluation, and future optimisation — so that teams spent their time examining why a design was appropriate rather than describing what it aimed to do.</span></p>
+
+            <p><span class="i18n-en">The format proved reusable because it does not depend on shared subject matter. Teams working on different biological questions can use the same cards, because the questions are about reasoning rather than about pathogens. The cards and the process are documented so that future organisers can adapt them to other award tracks, exchange events and review sessions.</span></p>
+
+            <ul class="link-list">
+
+              <li><a href="{{ basePath | default('') }}human-practices/integrated human-practices.html#section-apic"><span class="i18n-en">Related resource: Human Practices — APiC Conference</span></a></li>
+
+            </ul>
+
+            <h3 id="hp-yeast-workshop" data-no-fold><span class="i18n-en">The workshop record: making experimental experience shareable</span></h3>
+
+            <p><span class="i18n-en">The third contribution came out of an online yeast workshop that brought together CAU-China, NEFU-China, SZPU-China, Keystone, NKU and SHSID. The discussion covered transformation efficiency, gene knockout, selection stability, reporter leakage, membrane-protein expression and localisation, product formats and biosafety. Much of what made it useful was not the methods themselves but the troubleshooting attached to them: which failure modes were recognised, which controls distinguished them, and what remained unresolved.</span></p>
+
+            <p><span class="i18n-en">Two lessons from that discussion are recorded in the workshop write-up. The first is a methodological caution: a mutation at a target site does not by itself establish that Cas9 cleavage caused it, so controls and independent genotype verification are needed before a knockout is claimed. The second is that methods shared by other teams should be preserved with their attribution — CAU-China's combination of fluorescently tagged receptors, FM4-64 membrane staining and confocal microscopy, and the alginate microsphere and freeze-dried colour-card formats discussed by Keystone and NKU, are recorded as theirs. None of the methods discussed originated with us; the value of the record lies in the exchange itself and in keeping each method attached to the team that described it.</span></p>
+
+            <ul class="link-list">
+
+              <li><a href="{{ basePath | default('') }}human-practices/integrated human-practices.html#expert-yeast-online"><span class="i18n-en">Related resource: Human Practices — Online Yeast Workshop</span></a></li>
+
+            </ul>
+
+            <h3 id="hp-sharing-lessons" data-no-fold><span class="i18n-en">What we learned about sharing knowledge</span></h3>
+
+            <p><span class="i18n-en">Three things became clear across these activities. Structured questions produce better exchanges than presentations, because they force specificity. Documented troubleshooting is more valuable than documented success, because most teams fail in similar ways. And a contribution is strongest when it preserves attribution, because that is what allows the next team to build on it rather than repeat it.</span></p>
+
+          </div>
+        </div>
+        
       </div>
     </div>
+
+  
 {% endblock %}

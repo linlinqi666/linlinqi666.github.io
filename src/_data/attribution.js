@@ -127,7 +127,7 @@ const members = [
     focus: 'Signal recognition module',
     tasks: ['Analysis', 'Investigation', 'Data Curation', 'Notebook', 'Writing', 'Safety', 'Fundraising'],
     specifics: [
-      { text: 'He was mainly responsible for the signal recognition module of the ECHOYeast system. He designed two systems, namely the FUS1-yEGFP system and the FUS1-MEL1 system, and validated the feasibility of both systems. In addition, he was responsible for data processing and logging for the signal recognition module, and ultimately edited the related content on the Wiki. He was also responsible for selecting and coordinating with offline physical stores for team materials, supporting the ordering of team uniforms and photography equipment, as well as related procurement tasks.' }
+      { text: 'He was mainly responsible for the signal recognition module of the ECHOYeast system. He designed two systems, namely the <i>FUS1</i>-<i>yEGFP</i> system and the <i>FUS1</i>-<i>MEL1</i> system, and validated the feasibility of both systems. In addition, he was responsible for data processing and logging for the signal recognition module, and ultimately edited the related content on the Wiki. He was also responsible for selecting and coordinating with offline physical stores for team materials, supporting the ordering of team uniforms and photography equipment, as well as related procurement tasks.' }
     ]
   },
   {
@@ -135,10 +135,10 @@ const members = [
     avatar: 'zyl_kt',
     title: 'Student',
     group: 'student',
-    focus: 'Gpa1/Gαq chimera',
+    focus: 'GPA1/Gαq chimera',
     tasks: ['Analysis', 'Investigation', 'Data Curation', 'Notebook', 'Writing', 'Safety'],
     specifics: [
-      { text: 'She reviewed relevant literature, led the construction of the Gpa1/Gαq chimera, participated in the construction of the gating system, recorded and processed the related experimental data, and edited the corresponding content on the Wiki.' }
+      { text: 'She reviewed relevant literature, led the construction of the GPA1/Gαq chimera, participated in the construction of the gating system, recorded and processed the related experimental data, and edited the corresponding content on the Wiki.' }
     ]
   },
   {
@@ -399,7 +399,7 @@ const external = [
     relationship: 'External Advisor',
     tasks: ['Conceptualization', 'Background Research'],
     details: [
-      { label: 'Conceptualization', text: 'He advised mild heating with an HA tag, the native Ste2 receptor, and genome integration of reporters.' },
+      { label: 'Conceptualization', text: 'He advised mild heating with an HA tag, the native <i>STE2</i> receptor, and genome integration of reporters.' },
       { label: 'Background Research', text: 'He shared literature on membrane-protein handling and on reporter leakage.' }
     ]
   },
@@ -409,7 +409,7 @@ const external = [
     relationship: 'External Advisor',
     tasks: ['Conceptualization', 'Background Research'],
     details: [
-      { label: 'Conceptualization', text: 'He recommended liquid-nitrogen grinding, a tighter promoter against FUS1 background, and parallel sgRNA targets.' },
+      { label: 'Conceptualization', text: 'He recommended liquid-nitrogen grinding, a tighter promoter against <i>FUS1</i> background, and parallel sgRNA targets.' },
       { label: 'Background Research', text: 'He encouraged us to submit parts that already show a trend.' }
     ]
   },
@@ -482,6 +482,33 @@ const external = [
       { label: 'Fundraising', text: 'The School of Food and Drug provided our laboratory space and experimental supplies, and helped us prepare funding applications and coordinate the budget.' },
       { label: 'Public Engagement', text: 'The School of Food and Drug supported several of our on-campus activities.' },
       { label: 'Project Administration', text: 'The School of Food and Drug handled administrative arrangements for lab access and scheduling.' }
+    ]
+  },
+  {
+    name: 'SolidWorks (Dassault Systèmes)',
+    institutionType: 'Industry',
+    relationship: 'Sponsor',
+    tasks: ['Other'],
+    details: [
+      { label: 'Other', text: 'SolidWorks provided the three-dimensional modelling used to design the device enclosure and the internal mounting of the optical module and the thermal block.' }
+    ]
+  },
+  {
+    name: 'AutoCAD (Autodesk)',
+    institutionType: 'Industry',
+    relationship: 'Sponsor',
+    tasks: ['Other'],
+    details: [
+      { label: 'Other', text: 'AutoCAD provided the two-dimensional drafting used to produce the dimensioned part and assembly drawings of the device.' }
+    ]
+  },
+  {
+    name: 'Figma (Figma, Inc.)',
+    institutionType: 'Industry',
+    relationship: 'Sponsor',
+    tasks: ['Other'],
+    details: [
+      { label: 'Other', text: 'Figma provided the page layout and graphic design used to present the project, and was used to edit the SVG figures prepared for it.' }
     ]
   },
   {
@@ -609,7 +636,7 @@ const external = [
     relationship: 'Contractor',
     tasks: ['Other'],
     details: [
-      { label: 'Other', text: 'Semi-flexible refinement of the hM1Dq–MT1, hM1Dq–Gpa1, Ste2p–MT1_5 and Ste2p–Gpa1 complexes. The web server handled the individual runs; the local deployment with CNS 1.3 handled batch docking and redocking validation.' }
+      { label: 'Other', text: 'Semi-flexible refinement of the hM1Dq–MT1, hM1Dq–GPA1, STE2P–MT1_5 and STE2P–GPA1 complexes. The web server handled the individual runs; the local deployment with CNS 1.3 handled batch docking and redocking validation.' }
     ]
   },
   {
@@ -618,7 +645,7 @@ const external = [
     relationship: 'Contractor',
     tasks: ['Other'],
     details: [
-      { label: 'Other', text: 'Built the membrane systems for hM1Dq + MT1, hM1Dq + Gpaα and Ste2p + MT1_5, including lipids, water and ions.' }
+      { label: 'Other', text: 'Built the membrane systems for hM1Dq + MT1, hM1Dq + GPAα and STE2P + MT1_5, including lipids, water and ions.' }
     ]
   },
   {
@@ -801,7 +828,7 @@ const phases = [
     calendarWeeks: 40,
     workedWeeks: 29,
     tone: 'c',
-    description: 'From the first to the last day the team worked at the bench, covering chassis engineering, receptor construction, the Gpa1 chimera and the reporter module.'
+    description: 'From the first to the last day the team worked at the bench, covering chassis engineering, receptor construction, the GPA1 chimera and the reporter module.'
   },
   {
     id: 'dry',

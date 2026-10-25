@@ -9,21 +9,27 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/attributions.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/attributions.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -58,47 +64,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -107,52 +113,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -185,10 +199,6 @@
   <div class="ppb-track">
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
-</div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
 </div>
 
   <main class="attributions-main">
@@ -257,7 +267,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-pi">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/tyj_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/14-tyj-avatar.webp"
                   alt="Yongjun Tang" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -321,7 +331,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-pi">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/zlj_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/13-zlj-avatar.webp"
                   alt="Lijun Zhang" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -371,7 +381,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-leader">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/xj_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/01-xj-avatar.webp"
                   alt="Jie Xia" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -423,7 +433,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/psq_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/10-psq-avatar.webp"
                   alt="Siqi Peng" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -473,7 +483,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/xq_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/07-xq-avatar.webp"
                   alt="Qi Xu" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -530,7 +540,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/zas_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/05-zas-avatar.webp"
                   alt="Aishi Zeng" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -576,7 +586,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/sxz_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/04-sxz-avatar.webp"
                   alt="Xiaozhen Su" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -622,7 +632,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/lcx_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/03-lcx-avatar.webp"
                   alt="Chengxi Luo" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -660,7 +670,7 @@
             <div class="specific-tasks-section">
               <span class="specific-tasks-label">Specific Contributions</span>
               
-              <p class="specific-tasks-content">He was mainly responsible for the signal recognition module of the ECHOYeast system. He designed two systems, namely the FUS1-yEGFP system and the FUS1-MEL1 system, and validated the feasibility of both systems. In addition, he was responsible for data processing and logging for the signal recognition module, and ultimately edited the related content on the Wiki. He was also responsible for selecting and coordinating with offline physical stores for team materials, supporting the ordering of team uniforms and photography equipment, as well as related procurement tasks.</p>
+              <p class="specific-tasks-content">He was mainly responsible for the signal recognition module of the ECHOYeast system. He designed two systems, namely the <i>FUS1</i>-<i>yEGFP</i> system and the <i>FUS1</i>-<i>MEL1</i> system, and validated the feasibility of both systems. In addition, he was responsible for data processing and logging for the signal recognition module, and ultimately edited the related content on the Wiki. He was also responsible for selecting and coordinating with offline physical stores for team materials, supporting the ordering of team uniforms and photography equipment, as well as related procurement tasks.</p>
               
             </div>
             
@@ -670,7 +680,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/zyl_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/06-zyl-avatar.webp"
                   alt="Yuelin Zheng" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -716,7 +726,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/lr_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/09-lr-avatar.webp"
                   alt="Rui Luo" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -794,7 +804,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/crq_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/16-crq-avatar.webp"
                   alt="Rouqing Chen" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -837,7 +847,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/lyq_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/08-lyq-avatar.webp"
                   alt="Yuquan Luo" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -901,7 +911,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/gyf_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/02-gyf-avatar.webp"
                   alt="Yifan Gao" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -941,7 +951,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-student">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/lrx_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/15-lrx-avatar.webp"
                   alt="Ruoxi Li" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -984,7 +994,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-advisor">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/zjh_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/12-zjh-avatar.webp"
                   alt="Jianhua Zhou" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -1034,7 +1044,7 @@
             <div class="member-header">
               <div class="member-avatar avatar-advisor">
                 
-                <img loading="lazy" src="../static/image/any-icon/character/webp/zlz_kt.webp"
+                <img loading="lazy" src="https://static.igem.wiki/teams/6373/wiki/team/11-zlz-avatar.webp"
                   alt="Lizhen Zhu" style="width:100%;height:100%;object-fit:cover;" />
                 
               </div>
@@ -1080,25 +1090,6 @@
             
           </div>
           
-          <div class="member-card" data-role="advisor">
-            <div class="member-header">
-              <div class="member-avatar avatar-advisor">
-                
-                <span class="member-avatar-initial">ZG</span>
-                
-              </div>
-              <div class="member-info">
-                <h3>Zhen Gao</h3>
-                <p class="member-role">
-                  <span class="role-badge badge-advisor">Advisor</span>
-                  
-                </p>
-              </div>
-            </div>
-            
-            
-          </div>
-          
         </div>
 
       </section>
@@ -1109,8 +1100,9 @@
           <div class="section-title-wrapper">
             <h2 class="section-title">AI Tools</h2>
           </div>
-          <p class="section-description">Every AI tool the team used, what each was used for, and where it was not
-            allowed to replace our own work</p>
+          <p class="section-description">AI usage declaration: every AI tool the team used, what each was used for,
+            and how team members reviewed and edited every output before it entered the Wiki or any other shared
+            material. AI tools were never allowed to replace our own experimental work, data analysis or judgement.</p>
         </div>
 
         <div class="ai-grid">
@@ -1335,7 +1327,7 @@
           <div class="section-title-wrapper">
             <h2 class="section-title">External Contributions</h2>
           </div>
-          <p class="section-description">38 contributors outside the team — advisers,
+          <p class="section-description">42 contributors outside the team — advisers,
             collaborating schools and teams, public databases and open-source software — whose input or tools shaped
             how this project was designed, built or explained</p>
         </div>
@@ -1552,7 +1544,7 @@
             <div class="ext-compact-block">
               <span class="ext-compact-label">Specific Contributions</span>
               
-              <p class="ext-detail"><span class="ext-detail-label">Conceptualization</span>He recommended liquid-nitrogen grinding, a tighter promoter against FUS1 background, and parallel sgRNA targets.</p>
+              <p class="ext-detail"><span class="ext-detail-label">Conceptualization</span>He recommended liquid-nitrogen grinding, a tighter promoter against <i>FUS1</i> background, and parallel sgRNA targets.</p>
               
               <p class="ext-detail"><span class="ext-detail-label">Background Research</span>He encouraged us to submit parts that already show a trend.</p>
               
@@ -1787,6 +1779,90 @@
             </div>
           </article>
           
+          <article class="external-card" data-rel="Sponsor">
+            <div class="external-title-area">
+              <h3 class="external-name">SolidWorks (Dassault Systèmes)</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution:</span>
+                <span class="meta-value">Industry</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship:</span>
+                <span class="meta-value">Sponsor</span>
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                
+                <span class="task-tag" data-detail="Contribution that does not fall into the standard task categories">Other</span>
+                
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Contributions</span>
+              
+              <p class="ext-detail"><span class="ext-detail-label">Other</span>SolidWorks provided the three-dimensional modelling used to design the device enclosure and the internal mounting of the optical module and the thermal block.</p>
+              
+            </div>
+          </article>
+          
+          <article class="external-card" data-rel="Sponsor">
+            <div class="external-title-area">
+              <h3 class="external-name">AutoCAD (Autodesk)</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution:</span>
+                <span class="meta-value">Industry</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship:</span>
+                <span class="meta-value">Sponsor</span>
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                
+                <span class="task-tag" data-detail="Contribution that does not fall into the standard task categories">Other</span>
+                
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Contributions</span>
+              
+              <p class="ext-detail"><span class="ext-detail-label">Other</span>AutoCAD provided the two-dimensional drafting used to produce the dimensioned part and assembly drawings of the device.</p>
+              
+            </div>
+          </article>
+          
+          <article class="external-card" data-rel="Sponsor">
+            <div class="external-title-area">
+              <h3 class="external-name">Figma (Figma, Inc.)</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution:</span>
+                <span class="meta-value">Industry</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship:</span>
+                <span class="meta-value">Sponsor</span>
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                
+                <span class="task-tag" data-detail="Contribution that does not fall into the standard task categories">Other</span>
+                
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Contributions</span>
+              
+              <p class="ext-detail"><span class="ext-detail-label">Other</span>Figma provided the page layout and graphic design used to present the project, and was used to edit the SVG figures prepared for it.</p>
+              
+            </div>
+          </article>
+          
           <article class="external-card" data-rel="Collaborator">
             <div class="external-title-area">
               <h3 class="external-name">CAU-China</h3>
@@ -1991,6 +2067,34 @@
             </div>
           </article>
           
+          <article class="external-card" data-rel="Other">
+            <div class="external-title-area">
+              <h3 class="external-name">JLCEDA</h3>
+              <div class="external-meta">
+                <span class="meta-label">Institution:</span>
+                <span class="meta-value">Industry</span>
+              </div>
+              <div class="external-meta">
+                <span class="meta-label">Relationship:</span>
+                <span class="meta-value">Other</span>
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Tasks</span>
+              <div class="tasks-tags">
+                
+                <span class="task-tag" data-detail="Contribution that does not fall into the standard task categories">Other</span>
+                
+              </div>
+            </div>
+            <div class="ext-compact-block">
+              <span class="ext-compact-label">Specific Contributions</span>
+              
+              <p class="ext-detail"><span class="ext-detail-label">Other</span>JLCEDA was the schematic capture environment in which we drew and revised the circuit diagrams of the hardware module, including the power, temperature-control and optical channels.</p>
+              
+            </div>
+          </article>
+          
           <article class="external-card" data-rel="Contractor">
             <div class="external-title-area">
               <h3 class="external-name">SGD</h3>
@@ -2182,7 +2286,7 @@
             <div class="ext-compact-block">
               <span class="ext-compact-label">Specific Contributions</span>
               
-              <p class="ext-detail"><span class="ext-detail-label">Other</span>Semi-flexible refinement of the hM1Dq–MT1, hM1Dq–Gpa1, Ste2p–MT1_5 and Ste2p–Gpa1 complexes. The web server handled the individual runs; the local deployment with CNS 1.3 handled batch docking and redocking validation.</p>
+              <p class="ext-detail"><span class="ext-detail-label">Other</span>Semi-flexible refinement of the hM1Dq–MT1, hM1Dq–Gpa1, Ste2–MT1_5 and Ste2–Gpa1 complexes. The web server handled the individual runs; the local deployment with CNS 1.3 handled batch docking and redocking validation.</p>
               
             </div>
           </article>
@@ -2210,7 +2314,7 @@
             <div class="ext-compact-block">
               <span class="ext-compact-label">Specific Contributions</span>
               
-              <p class="ext-detail"><span class="ext-detail-label">Other</span>Built the membrane systems for hM1Dq + MT1, hM1Dq + Gpaα and Ste2p + MT1_5, including lipids, water and ions.</p>
+              <p class="ext-detail"><span class="ext-detail-label">Other</span>Built the membrane systems for hM1Dq + MT1, hM1Dq + Gpa1 and Ste2 + MT1_5, including lipids, water and ions.</p>
               
             </div>
           </article>
@@ -2957,124 +3061,840 @@
         </div>
       </section>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+/**
+ * iGEM SZPU-2026 - Attributions Page Interactions
+ *
+ * 负责团队贡献页面的卡片筛选、时间线交互和滚动导航。
+ */
+(function () {
+  'use strict';
+
+  /** @type {Window & { iGEMUtils?: object }} */
+  const win = window;
+  const raf = win.iGEMUtils && win.iGEMUtils.safeRequestAnimationFrame
+    ? win.iGEMUtils.safeRequestAnimationFrame
+    : function (callback) { return setTimeout(callback, 16); };
+
+  const CONFIG = {
+    fadeInDuration: 400,
+    fadeInClass: 'fade-in',
+    activeClass: 'active',
+    visibleClass: 'visible',
+    displayBlock: 'block',
+    displayNone: 'none',
+    tooltipMargin: 16,
+    tooltipMinWidth: 280,
+    scrollSpyOffset: 120,
+    slideAnimationDuration: 340
+  };
+
+  const state = {
+    isInitialized: false,
+    timeline: {
+      isAnimating: false,
+      activePanelKey: 'panel1',
+      lastBarIndex: -1,
+      panels: null,
+      slider: null
+    }
+  };
+
+  const PageUtils = {
+    /**
+     * 为元素添加淡入动画。
+     * @param {HTMLElement} element
+     */
+    applyFadeIn: function (element) {
+      if (!element) return;
+      element.classList.add(CONFIG.fadeInClass);
+      setTimeout(function () {
+        element.classList.remove(CONFIG.fadeInClass);
+      }, CONFIG.fadeInDuration);
+    },
+
+    /**
+     * 安全获取元素文本内容。
+     * @param {HTMLElement} element
+     * @returns {string}
+     */
+    safeGetText: function (element) {
+      return element && element.textContent ? element.textContent.trim() : '';
+    }
+  };
+
+  /**
+   * 卡片筛选系统。
+   */
+  const CardFilter = {
+    /**
+     * 初始化卡片筛选系统。
+     * @param {string} buttonSelector - 筛选按钮选择器
+     * @param {string} cardSelector - 卡片选择器
+     * @param {string} dataAttr - 用于匹配的数据属性名
+     */
+    init: function (buttonSelector, cardSelector, dataAttr) {
+      const filterButtons = Array.from(document.querySelectorAll(buttonSelector));
+      const cards = Array.from(document.querySelectorAll(cardSelector));
+
+      if (filterButtons.length === 0 || cards.length === 0) return;
+
+      function setActiveButton(activeBtn) {
+        filterButtons.forEach(function (btn) {
+          btn.classList.toggle(CONFIG.activeClass, btn === activeBtn);
+        });
+      }
+
+      function applyFilter(value) {
+        cards.forEach(function (card) {
+          const cardValue = card.getAttribute(dataAttr);
+          const shouldShow = value === 'all' || cardValue === value;
+
+          if (shouldShow) {
+            card.style.display = CONFIG.displayBlock;
+            PageUtils.applyFadeIn(card);
+          } else {
+            card.style.display = CONFIG.displayNone;
+          }
+        });
+      }
+
+      filterButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const filterValue = this.getAttribute(dataAttr);
+          setActiveButton(this);
+          applyFilter(filterValue);
+        });
+      });
+    }
+  };
+
+  /**
+   * 获取时间线 bar 对应的任务标签。
+   * @param {HTMLElement} bar
+   * @returns {string}
+   */
+  function getTaskLabel(bar) {
+    const row = bar.closest('.timeline-row');
+    if (row) {
+      const labelEl = row.querySelector('.timeline-task-name, .timeline-task-text');
+      if (labelEl) return PageUtils.safeGetText(labelEl);
+    }
+    return 'Project Activity';
+  }
+
+  /**
+   * 向指定面板写入 bar 的数据内容。
+   * @param {object} panel
+   * @param {HTMLElement} bar
+   */
+  function writePanelContent(panel, bar) {
+    if (panel.start) panel.start.textContent = bar.getAttribute('data-start') || '\u2014';
+    if (panel.end) panel.end.textContent = bar.getAttribute('data-end') || '\u2014';
+    if (panel.duration) panel.duration.textContent = bar.getAttribute('data-duration') || '\u2014';
+    if (panel.worked) panel.worked.textContent = bar.getAttribute('data-worked') || '\u2014';
+    if (panel.description) {
+      panel.description.textContent = bar.getAttribute('data-description') || 'No details available.';
+    }
+  }
+
+  /**
+   * 获取 bar 在集合中的索引。
+   * @param {HTMLElement} bar
+   * @param {NodeList} timelineBars
+   * @returns {number}
+   */
+  function getBarIndex(bar, timelineBars) {
+    return Array.from(timelineBars).indexOf(bar);
+  }
+
+  /**
+   * 清除所有时间线活动状态。
+   * @param {NodeList} timelineBars
+   * @param {HTMLElement} tooltip
+   * @param {HTMLElement} slider
+   */
+  function clearAllActive(timelineBars, tooltip, slider) {
+    timelineBars.forEach(function (b) { b.classList.remove(CONFIG.activeClass); });
+    if (tooltip) tooltip.classList.remove(CONFIG.visibleClass);
+    if (slider) slider.style.removeProperty('height');
+  }
+
+  /**
+   * 测量并设置 slider 高度。
+   * @param {HTMLElement} panelRoot
+   * @param {HTMLElement} slider
+   */
+  function setSliderHeight(panelRoot, slider) {
+    if (!slider || !panelRoot) return;
+    const height = panelRoot.getBoundingClientRect().height;
+    if (height > 0) slider.style.height = height + 'px';
+  }
+
+  /**
+   * 首次展开时间线详情面板（无滑动动画）。
+   * @param {object} currentPanel
+   * @param {object} incomingPanel
+   * @param {HTMLElement} bar
+   * @param {HTMLElement} tooltip
+   * @param {HTMLElement} slider
+   */
+  function firstPanelReveal(currentPanel, incomingPanel, bar, tooltip, slider) {
+    writePanelContent(currentPanel, bar);
+
+    currentPanel.root.classList.remove('panel-incoming');
+    currentPanel.root.classList.add('panel-current');
+    currentPanel.root.style.visibility = 'visible';
+    currentPanel.root.style.opacity = '1';
+    currentPanel.root.style.transform = 'translateX(0)';
+
+    incomingPanel.root.classList.remove('panel-current');
+    incomingPanel.root.classList.add('panel-incoming');
+    incomingPanel.root.style.visibility = 'hidden';
+    incomingPanel.root.style.transform = 'translateX(100%)';
+
+    tooltip.classList.add(CONFIG.visibleClass);
+    setSliderHeight(currentPanel.root, slider);
+  }
+
+  /**
+   * 执行双面板横向滑动切换动画。
+   * @param {object} currentPanel
+   * @param {object} incomingPanel
+   * @param {'forward'|'backward'} direction
+   * @param {HTMLElement} slider
+   */
+  function animatePanelSwitch(currentPanel, incomingPanel, direction, slider) {
+    state.timeline.isAnimating = true;
+
+    currentPanel.root.classList.remove(
+      'panel-slide-in-right', 'panel-slide-in-left',
+      'panel-slide-out-left', 'panel-slide-out-right'
+    );
+    incomingPanel.root.classList.remove(
+      'panel-incoming', 'panel-current',
+      'panel-slide-in-right', 'panel-slide-in-left',
+      'panel-slide-out-left', 'panel-slide-out-right'
+    );
+
+    const incomingStartX = direction === 'forward' ? '100%' : '-100%';
+    const outgoingTargetX = direction === 'forward' ? '-100%' : '100%';
+
+    incomingPanel.root.style.transform = 'translateX(' + incomingStartX + ')';
+    incomingPanel.root.style.opacity = '0';
+    incomingPanel.root.style.visibility = 'visible';
+
+    // 强制回流，确保 transform 起始状态生效
+    void incomingPanel.root.offsetWidth;
+
+    currentPanel.root.classList.remove('panel-current');
+    currentPanel.root.style.transform = 'translateX(' + outgoingTargetX + ')';
+    currentPanel.root.style.opacity = '0';
+
+    incomingPanel.root.style.transform = 'translateX(0)';
+    incomingPanel.root.style.opacity = '1';
+
+    setTimeout(function () {
+      currentPanel.root.style.visibility = 'hidden';
+      currentPanel.root.style.transform = 'translateX(100%)';
+      currentPanel.root.classList.add('panel-incoming');
+
+      incomingPanel.root.classList.add('panel-current');
+
+      currentPanel.root.style.removeProperty('transform');
+      currentPanel.root.style.removeProperty('opacity');
+      currentPanel.root.style.removeProperty('visibility');
+      incomingPanel.root.style.removeProperty('transform');
+      incomingPanel.root.style.removeProperty('opacity');
+      incomingPanel.root.style.removeProperty('visibility');
+
+      state.timeline.activePanelKey = (state.timeline.activePanelKey === 'panel1') ? 'panel2' : 'panel1';
+      state.timeline.isAnimating = false;
+    }, CONFIG.slideAnimationDuration);
+  }
+
+  /**
+   * 切换时间线详情面板内容。
+   * @param {HTMLElement} bar
+   * @param {NodeList} timelineBars
+   * @param {HTMLElement} tooltip
+   * @param {HTMLElement} tooltipTitle
+   * @param {object} panels
+   * @param {HTMLElement} slider
+   */
+  function switchContent(bar, timelineBars, tooltip, tooltipTitle, panels, slider) {
+    if (state.timeline.isAnimating) return;
+
+    const currentIdx = getBarIndex(bar, timelineBars);
+    const direction = (state.timeline.lastBarIndex === -1 || currentIdx > state.timeline.lastBarIndex)
+      ? 'forward'
+      : 'backward';
+    state.timeline.lastBarIndex = currentIdx;
+
+    if (tooltipTitle) {
+      tooltipTitle.style.opacity = '0';
+      setTimeout(function () {
+        if (tooltipTitle) {
+          tooltipTitle.textContent = getTaskLabel(bar);
+          tooltipTitle.style.opacity = '1';
+        }
+      }, 140);
+    }
+
+    const currentKey = state.timeline.activePanelKey;
+    const incomingKey = (currentKey === 'panel1') ? 'panel2' : 'panel1';
+    const currentPanel = panels[currentKey];
+    const incomingPanel = panels[incomingKey];
+
+    writePanelContent(incomingPanel, bar);
+
+    // 临时让 incoming 可见（但透明）以测量其实际高度
+    incomingPanel.root.classList.remove('panel-incoming');
+    incomingPanel.root.style.visibility = 'visible';
+    incomingPanel.root.style.opacity = '0';
+    incomingPanel.root.style.transform = direction === 'forward' ? 'translateX(100%)' : 'translateX(-100%)';
+
+    setSliderHeight(incomingPanel.root, slider);
+
+    if (!tooltip.classList.contains(CONFIG.visibleClass)) {
+      firstPanelReveal(currentPanel, incomingPanel, bar, tooltip, slider);
+      return;
+    }
+
+    animatePanelSwitch(currentPanel, incomingPanel, direction, slider);
+  }
+
+  /**
+   * 时间线交互（双面板横向滑动）。
+   */
+  const TimelineInteraction = {
+    /**
+     * 初始化时间线交互系统。
+     */
+    init: function () {
+      const timelineBars = document.querySelectorAll('.timeline-bar');
+      const tooltip = document.getElementById('timeline-tooltip');
+      const timelineChart = document.getElementById('timeline-chart');
+
+      if (timelineBars.length === 0 || !tooltip || !timelineChart) return;
+
+      state.timeline.panels = {
+        panel1: {
+          root: document.getElementById('panel-current'),
+          start: document.getElementById('tooltip-start'),
+          end: document.getElementById('tooltip-end'),
+          duration: document.getElementById('tooltip-duration'),
+          worked: document.getElementById('tooltip-worked'),
+          description: document.getElementById('tooltip-description')
+        },
+        panel2: {
+          root: document.getElementById('panel-incoming'),
+          start: document.getElementById('tooltip-start-2'),
+          end: document.getElementById('tooltip-end-2'),
+          duration: document.getElementById('tooltip-duration-2'),
+          worked: document.getElementById('tooltip-worked-2'),
+          description: document.getElementById('tooltip-description-2')
+        }
+      };
+
+      state.timeline.slider = document.querySelector('.timeline-tooltip-slider');
+      const tooltipTitle = document.getElementById('tooltip-title');
+      const panels = state.timeline.panels;
+      const slider = state.timeline.slider;
+
+      timelineBars.forEach(function (bar) {
+        bar.addEventListener('click', function (e) {
+          e.stopPropagation();
+
+          if (this.classList.contains(CONFIG.activeClass)) {
+            clearAllActive(timelineBars, tooltip, slider);
+            state.timeline.lastBarIndex = -1;
+            return;
+          }
+
+          timelineBars.forEach(function (b) { b.classList.remove(CONFIG.activeClass); });
+          this.classList.add(CONFIG.activeClass);
+
+          switchContent(this, timelineBars, tooltip, tooltipTitle, panels, slider);
+        });
+      });
+
+      document.addEventListener('click', function () {
+        clearAllActive(timelineBars, tooltip, slider);
+        state.timeline.lastBarIndex = -1;
+      });
+    }
+  };
+
+  /**
+   * Task Tag Tooltip（Hover 详情提示）。
+   */
+  const TaskTagTooltip = {
+    tooltipEl: null,
+    hideDelay: 120,
+    showDelay: 80,
+    hideTimer: null,
+    showTimer: null,
+    observer: null,
+
+    /**
+     * 初始化 task-tag tooltip 系统。
+     */
+    init: function () {
+      const self = this;
+
+      const tip = document.createElement('div');
+      tip.className = 'task-tooltip';
+      tip.setAttribute('role', 'tooltip');
+      tip.setAttribute('id', 'task-tag-tooltip');
+      tip.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(tip);
+      self.tooltipEl = tip;
+
+      function prepareTags() {
+        const tags = document.querySelectorAll('.task-tag[data-detail]');
+        tags.forEach(function (tag) {
+          const detail = tag.getAttribute('data-detail');
+          if (!detail || detail.trim() === '') return;
+          if (!tag.hasAttribute('tabindex')) {
+            tag.setAttribute('tabindex', '0');
+          }
+          tag.setAttribute('aria-describedby', 'task-tag-tooltip');
+        });
+      }
+
+      prepareTags();
+
+      if (typeof MutationObserver !== 'undefined') {
+        self.observer = new MutationObserver(prepareTags);
+        self.observer.observe(document.body, { childList: true, subtree: true });
+      }
+
+      document.addEventListener('mouseover', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        const detail = tag.getAttribute('data-detail');
+        if (!detail || detail.trim() === '') return;
+
+        if (self.hideTimer) { clearTimeout(self.hideTimer); self.hideTimer = null; }
+        if (self.showTimer) { clearTimeout(self.showTimer); }
+
+        self.showTimer = setTimeout(function () {
+          self.show(tag, detail.trim());
+        }, self.showDelay);
+      });
+
+      document.addEventListener('mouseout', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        if (self.showTimer) { clearTimeout(self.showTimer); self.showTimer = null; }
+        self.hideTimer = setTimeout(function () { self.hide(); }, self.hideDelay);
+      });
+
+      document.addEventListener('focusin', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        const detail = tag.getAttribute('data-detail');
+        if (!detail || detail.trim() === '') return;
+
+        if (self.showTimer) { clearTimeout(self.showTimer); }
+        if (self.hideTimer) { clearTimeout(self.hideTimer); self.hideTimer = null; }
+        self.show(tag, detail.trim());
+      });
+
+      document.addEventListener('focusout', function (e) {
+        const tag = e.target.closest('.task-tag');
+        if (!tag) return;
+        if (self.showTimer) { clearTimeout(self.showTimer); self.showTimer = null; }
+        self.hide();
+      });
+
+      tip.addEventListener('mouseenter', function () {
+        if (self.hideTimer) { clearTimeout(self.hideTimer); self.hideTimer = null; }
+      });
+      tip.addEventListener('mouseleave', function () {
+        self.hideTimer = setTimeout(function () { self.hide(); }, self.hideDelay);
+      });
+
+      window.addEventListener('scroll', function () {
+        if (tip.classList.contains('is-visible')) {
+          self.hide(true);
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', function () { self.hide(true); });
+    },
+
+    /**
+     * 显示 tooltip，根据视口空间智能决定上下位置。
+     * @param {HTMLElement} anchor
+     * @param {string} text
+     */
+    show: function (anchor, text) {
+      const tip = this.tooltipEl;
+      if (!tip) return;
+
+      tip.textContent = text;
+      tip.style.left = '-9999px';
+      tip.style.top = '-9999px';
+      tip.setAttribute('data-placement', '');
+      tip.setAttribute('data-edge', '');
+
+      const tipRect = tip.getBoundingClientRect();
+      const anchorRect = anchor.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const gap = 8;
+      const margin = 10;
+
+      const spaceAbove = anchorRect.top;
+      const spaceBelow = vh - anchorRect.bottom;
+      const placement = (spaceAbove >= tipRect.height + gap + margin) ? 'top' : 'bottom';
+
+      let left = anchorRect.left + anchorRect.width / 2 - tipRect.width / 2;
+      left = Math.max(margin, Math.min(left, vw - tipRect.width - margin));
+
+      let top;
+      if (placement === 'top') {
+        top = anchorRect.top - tipRect.height - gap;
+      } else {
+        top = anchorRect.bottom + gap;
+      }
+
+      tip.setAttribute('data-placement', placement);
+
+      const arrowCenter = anchorRect.left + anchorRect.width / 2;
+      if (arrowCenter - left < 18) {
+        tip.setAttribute('data-edge', 'left');
+      } else if ((left + tipRect.width) - arrowCenter < 18) {
+        tip.setAttribute('data-edge', 'right');
+      }
+
+      tip.style.left = Math.round(left) + 'px';
+      tip.style.top = Math.round(top) + 'px';
+      tip.setAttribute('aria-hidden', 'false');
+
+      raf(function () {
+        tip.classList.add('is-visible');
+      });
+    },
+
+    /**
+     * 隐藏 tooltip。
+     * @param {boolean} immediate
+     */
+    hide: function (immediate) {
+      const tip = this.tooltipEl;
+      if (!tip) return;
+      tip.setAttribute('aria-hidden', 'true');
+      if (immediate) {
+        tip.style.transition = 'none';
+        tip.classList.remove('is-visible');
+        raf(function () {
+          tip.style.transition = '';
+        });
+      } else {
+        tip.classList.remove('is-visible');
+      }
+    }
+  };
+
+  /**
+   * 滚动导航高亮 (Scroll Spy)。
+   */
+  const ScrollSpy = {
+    /**
+     * 初始化滚动导航高亮。
+     */
+    init: function () {
+      const navLinks = document.querySelectorAll('.jump-to-btn');
+      if (navLinks.length === 0) return;
+
+      const sectionIds = ['team-contributions', 'ai-tools', 'external-contributions', 'timeline'];
+      /** @type {Array<{id: string, element: HTMLElement, top: number, bottom: number, links: HTMLElement[]}>} */
+      const sections = [];
+
+      const rafThrottle = win.iGEMUtils && typeof win.iGEMUtils.rafThrottle === 'function'
+        ? win.iGEMUtils.rafThrottle
+        : localRafThrottle;
+
+      function buildSections() {
+        sections.length = 0;
+        sectionIds.forEach(function (id) {
+          const element = document.getElementById(id);
+          if (!element) return;
+          sections.push({ id: id, element: element, top: 0, bottom: 0, links: [] });
+        });
+
+        navLinks.forEach(function (link) {
+          const href = link.getAttribute('href') || '';
+          sections.forEach(function (section) {
+            if (href.indexOf(section.id) !== -1) {
+              section.links.push(link);
+            }
+          });
+        });
+        updateOffsets();
+      }
+
+      function updateOffsets() {
+        sections.forEach(function (section) {
+          section.top = section.element.offsetTop;
+          section.bottom = section.top + section.element.offsetHeight;
+        });
+      }
+
+      function setActiveNav(activeId) {
+        navLinks.forEach(function (link) {
+          link.classList.remove(CONFIG.activeClass);
+        });
+        for (let i = 0; i < sections.length; i++) {
+          if (sections[i].id === activeId) {
+            sections[i].links.forEach(function (link) {
+              link.classList.add(CONFIG.activeClass);
+            });
+            break;
+          }
+        }
+      }
+
+      function updateActiveSection() {
+        const scrollY = window.scrollY + CONFIG.scrollSpyOffset;
+        let currentActive = null;
+
+        sections.forEach(function (section) {
+          if (scrollY >= section.top && scrollY < section.bottom) {
+            currentActive = section.id;
+          }
+        });
+
+        if (currentActive) {
+          setActiveNav(currentActive);
+        }
+      }
+
+      const handleScroll = rafThrottle(updateActiveSection);
+      const handleResize = win.iGEMUtils && typeof win.iGEMUtils.debounce === 'function'
+        ? win.iGEMUtils.debounce(function () {
+          updateOffsets();
+          updateActiveSection();
+        }, 100)
+        : function () {
+          updateOffsets();
+          updateActiveSection();
+        };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      window.addEventListener('resize', handleResize);
+
+      buildSections();
+      updateActiveSection();
+    }
+  };
+
+  /**
+   * 本地 rAF 节流兜底实现。
+   * 若浏览器不支持 requestAnimationFrame，则回退到 setTimeout(fn, 16)。
+   * @param {Function} fn
+   * @returns {Function}
+   */
+  function localRafThrottle(fn) {
+    let ticking = false;
+    let rafId = null;
+    return function () {
+      if (ticking) return;
+      ticking = true;
+      const context = this;
+      const args = arguments;
+      rafId = raf(function () {
+        ticking = false;
+        rafId = null;
+        fn.apply(context, args);
+      });
+    };
+  }
+
+  /**
+   * 公开 API。
+   */
+  window.AttributionsPage = {
+    /**
+     * 初始化所有交互模块。
+     */
+    init: function () {
+      if (state.isInitialized) return;
+
+      CardFilter.init('.role-tab', '#members-grid .member-card', 'data-role');
+      CardFilter.init('.type-filter-btn', '#external-grid .external-card', 'data-rel');
+      TaskTagTooltip.init();
+      TimelineInteraction.init();
+      ScrollSpy.init();
+
+      state.isInitialized = true;
+    },
+
+    /**
+     * 获取当前状态（用于调试）。
+     * @returns {object}
+     */
+    getState: function () {
+      return {
+        isInitialized: state.isInitialized,
+        timelineActivePanel: state.timeline.activePanelKey,
+        config: Object.assign({}, CONFIG)
+      };
+    },
+
+    /**
+     * 手动触发卡片筛选。
+     * @param {string} selector - 按钮选择器
+     * @param {string} filterValue - 筛选值
+     */
+    filterCards: function (selector, filterValue) {
+      const btn = document.querySelector(selector + '[data-role="' + filterValue + '"]') ||
+        document.querySelector(selector + '[data-type="' + filterValue + '"]');
+      if (btn) btn.click();
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      window.AttributionsPage.init();
+    });
+  } else {
+    window.AttributionsPage.init();
+  }
+})();
+});
+</script>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -3097,21 +3917,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/pages/attributions.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/pages/attributions.js?v=1792945710" defer></script>
   
 
   

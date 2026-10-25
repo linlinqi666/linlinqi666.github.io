@@ -5,20 +5,26 @@ lang: "en"
 basePath: "../"
 css:
   - static/css/engineering.css
+  - static/css/contribution.css
+  - static/css/flask-sync/engineering.css
 js:
   - static/js/components/sidebar-progress.js
 ---
-
 {# 工程循环页：Design → Build → Test → Learn，按模块分组，Cycle 在模块内连续编号。
-   chassis（2 个循环）、Gpa1（2 个）、PAGER（3 个）、reporter（4 个）四个模块的正文与图注
+   chassis（2 个循环）、GPA1（2 个）、PAGER（4 个）、reporter（4 个）四个模块的正文与图注
    分别取自各自模块的工程文档；PAGER 模块文档为
-   「信号识别模块/engineering-PAGER门控2-前2.5个循环.docx」，图片按文档内 Figure 1–10 顺序取用。
-   PAGER Cycle 3 在源文档中只写到 Build（文档名即标「前 2.5 个循环」），故无 Test / Learn 小节。
+   「信号识别模块/engineering-PAGER门控2-4个循环-10.21.docx」，图片按文档内 Figure 1–18 顺序取用。
    侧边栏高亮依赖 engineering- 前缀（已登记 sectionIdPrefixes）；
    改动需与 Flask 站 wiki/pages/engineering.html 同步。 #}
 {% extends "layouts/base.njk" %}
 
 {% block main %}
+{# 工程循环页：Design → Build → Test → Learn，按模块分组，Cycle 在模块内连续编号。
+   四个模块的正文与图注分别取自各模块工程文档：chassis（2 个循环）、<i>GPA1</i>（2 个）、
+   PAGER（4 个）、reporter（4 个）；PAGER 图号随文档为 Figure 1–18。
+   收纳形态：概览卡常显，其余卡按 Design/Build/Test/Learn 逐节折叠
+   （section-fold 对卡片内带 id 的 h3 生成收纳条）。
+   图片走 static.igem.wiki（lab/wetlab/eg/...）。 #}
 <div class="description-container engineering-page">
 
   <!-- 左侧导航栏 -->
@@ -80,6 +86,7 @@ js:
             <li class="level3"><a href="#engineering-pager-cycle1">Cycle 1: Full-length receptor</a></li>
             <li class="level3"><a href="#engineering-pager-cycle2">Cycle 2: Pre-sequence and ICL3 removed</a></li>
             <li class="level3"><a href="#engineering-pager-cycle3">Cycle 3: ICL3 only, signal peptide kept</a></li>
+            <li class="level3"><a href="#engineering-pager-cycle4">Cycle 4: Native Ste2 gating</a></li>
           </ul>
         </li>
         <li class="level1 has-submenu">
@@ -92,13 +99,35 @@ js:
             </div>
           </div>
           <ul class="level2">
-            <li class="level3"><a href="#engineering-reporter-cycle1">Cycle 1: yEGFP reporter</a></li>
-            <li class="level3"><a href="#engineering-reporter-cycle2">Cycle 2: lacZα blue-white</a></li>
-            <li class="level3"><a href="#engineering-reporter-cycle3">Cycle 3: MEL1 blue-white</a></li>
+            <li class="level3"><a href="#engineering-reporter-cycle1">Cycle 1: <i>yEGFP</i> reporter</a></li>
+            <li class="level3"><a href="#engineering-reporter-cycle2">Cycle 2: <i>lacZα</i> blue-white</a></li>
+            <li class="level3"><a href="#engineering-reporter-cycle3">Cycle 3: <i>MEL1</i> blue-white</a></li>
             <li class="level3"><a href="#engineering-reporter-cycle4">Cycle 4: PRE1/2 library</a></li>
           </ul>
         </li>
       </ul>
+    </div>
+
+    <!-- 发酵进度容器 -->
+    <div class="progress-section">
+      <div class="progress-flask">
+        <div class="flask-body">
+          <div class="flask-neck"></div>
+          <div class="flask-liquid">
+            <div class="liquid-fill"></div>
+            <div class="bubbling">
+              <div class="ferment-bubble f-bubble-1"></div>
+              <div class="ferment-bubble f-bubble-2"></div>
+              <div class="ferment-bubble f-bubble-3"></div>
+              <div class="ferment-bubble f-bubble-4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flask-progress">
+          <span class="progress-percentage" id="progress-percentage">0%</span>
+        </div>
+      </div>
+      <div class="progress-title">Fermentation Progress</div>
     </div>
   </aside>
 
@@ -106,259 +135,278 @@ js:
   <div class="description-content">
 
     <div id="engineering-overview" class="content-card">
-      <figure class="page-mascot page-mascot--engineering" aria-hidden="true">
-        <img src="../static/image/any-icon/extension/engineering.png" alt="" width="440" height="365"
-          loading="lazy" decoding="async">
-      </figure>
+          <figure class="page-mascot page-mascot--engineering" aria-hidden="true">
+            <img src="{{ basePath | default('') }}static/image/any-icon/extension/engineering.png" alt="" width="440" height="365"
+              loading="lazy" decoding="async">
+          </figure>
       <h2>Engineering Success</h2>
       <p>
-        Engineering success is documented by following the engineering design cycle — Design → Build → Test → Learn — in a technical aspect of the project, and by stating how each round of results reshapes the next design. The PAGER-Yeast biosensor is built from four independent functional modules: chassis cell engineering (FAR1/SST2 knockout), Gpa1 humanization, the PAGER antigen-gated fusion receptor, and the FUS1 promoter reporter system. Each module is engineered through its own cycle(s); cycles are numbered within their module.
+        Engineering success is documented by following the engineering design cycle — Design → Build → Test → Learn — in a technical aspect of the project, and by stating how each round of results reshapes the next design. The PAGER-Yeast biosensor is built from four independent functional modules: chassis cell engineering (<i>FAR1</i>/<i>SST2</i> knockout), <i>GPA1</i> humanization, the PAGER antigen-gated fusion receptor, and the <i>FUS1</i> promoter reporter system. Each module is engineered through its own cycle(s); cycles are numbered within their module.
       </p>
       <p>
-        Two complete DBTL cycles have been completed for the chassis module, taking the CRISPR-Cas9 knockout of FAR1 and SST2 from a failed first attempt to a plasmid-free ΔFAR1 ΔSST2 strain; two cycles have been completed for the humanized G-protein module, taking the GPA1-G&alpha;q chimera from a Gibson-assembly route that accumulated PCR mutations to an overlap-extension fusion PCR route that yielded correctly genotyped strains 12 and 17; four cycles have been completed for the reporter module, covering the validated yEGFP fluorescent reporter and three follow-up colorimetric designs (lacZ&alpha;, MEL1, and PRE1/2 promoter mutagenesis); and three cycles have been documented for the PAGER fusion receptor, which moved from a full-length construct that failed to express, to a truncated version that expressed but mislocalised, to a third version that isolates the ICL3 loop while keeping the native signal peptide.
+        Two complete DBTL cycles have been completed for the chassis module, taking the CRISPR-Cas9 knockout of <i>FAR1</i> and <i>SST2</i> from a failed first attempt to a plasmid-free Δ<i>FAR1</i> Δ<i>SST2</i> strain; two cycles have been completed for the humanized G-protein module, taking the Gpa1-Gαq chimera from a Gibson-assembly route that accumulated PCR mutations to an overlap-extension fusion PCR route that yielded correctly genotyped strains 12 and 17; four cycles have been completed for the reporter module, covering the validated <i>yEGFP</i> fluorescent reporter and three follow-up colorimetric designs (<i>lacZα</i>, <i>MEL1</i>, and PRE1/2 promoter mutagenesis); and four cycles have been completed for the PAGER fusion receptor, which moved from a full-length construct that failed to express, to truncated hM1Dq variants that expressed only weakly and mislocalised to intracellular puncta, and finally to a native Ste2-based gating construct that expressed correctly and transmitted the α-factor signal in a dose-dependent manner while the gating logic still needs optimisation.
       </p>
     </div>
 
     <div id="engineering-chassis" class="content-card">
-      <h2>Chassis Cell Engineering — FAR1/SST2 Gene Knockout</h2>
-        <p>
-          Wild-type <i>Saccharomyces cerevisiae</i> BY4741 possesses a native mating pheromone response MAPK pathway. Two endogenous factors interfere with our synthetic human-origin GPCR (hM1Dq) signal transmission. FAR1 mediates cell-cycle G1 arrest upon pheromone stimulation, preventing continuous proliferation and long-term monitoring. SST2 acts as a negative regulator of G-protein signaling, dampening the signal amplitude of the GPCR–MAPK cascade. To re-wire the native pathway for our synthetic sensor, we performed targeted gene editing to remove growth arrest and enhance signal sensitivity, creating a chassis better suited for downstream human GPCR coupling.
-        </p>
-        <p>
-          Two cycles were required: Cycle 1 tested two parallel assembly routes and failed on both; Cycle 2 redesigned the guide sequences, pre-assembled the sgRNA by inverse PCR, extended the repair-template homology arms, and produced the double-knockout chassis.
-        </p>
+      <h2>Chassis Cell Engineering — <i>FAR1</i>/<i>SST2</i> Gene Knockout</h2>
+      <p>
+        Wild-type <i>Saccharomyces cerevisiae</i> BY4741 possesses a native mating pheromone response MAPK pathway. Two endogenous factors interfere with our synthetic human-origin GPCR (hM1Dq) signal transmission. <i>FAR1</i> mediates cell-cycle G1 arrest upon pheromone stimulation, preventing continuous proliferation and long-term monitoring. <i>SST2</i> acts as a negative regulator of G-protein signaling, dampening the signal amplitude of the GPCR–MAPK cascade. To re-wire the native pathway for our synthetic sensor, we performed targeted gene editing to remove growth arrest and enhance signal sensitivity, creating a chassis better suited for downstream human GPCR coupling.
+      </p>
+      <p>
+        Two cycles were required: Cycle 1 tested two parallel assembly routes and failed on both; Cycle 2 redesigned the guide sequences, pre-assembled the sgRNA by inverse PCR, extended the repair-template homology arms, and produced the double-knockout chassis.
+      </p>
     </div>
 
     <div id="engineering-chassis-cycle1" class="content-card">
       <h2>Cycle 1: Three-part Co-transformation and In Vitro One-step Cloning (Version 1)</h2>
 
-    <h3 id="engineering-chassis-cycle1-design">Design</h3>
-        <p>
-          Two parallel routes were designed to construct a CRISPR-Cas9 knockout system targeting FAR1/SST2. Route A: linearized pML104 was assembled with the guide fragment in vitro via one-step cloning, and the circular plasmid was then transformed into yeast. Route B: linearized pML104, the guide fragment, and an approximately 600 bp repair template were co-transformed into yeast in a three-part manner, relying on endogenous homologous recombination in yeast to complete sgRNA assembly and gene knockout. Guide sequence were designed using Benchling and ranked by specificity and efficiency scores (Table 1 and Table 2). The final candidates were not simply the top-scoring sequences; target position within the coding sequence was also considered to ensure efficient disruption of gene function.
-        </p>
-        <div class="eng-table-wrap">
-          <table class="eng-table">
-            <thead>
-              <tr>
-                <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th><th>Efficiency score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>284</td><td>ACCAAGTTTGAAGAAAACAG</td><td>CGG</td><td>49.66</td><td>69.68</td></tr>
-              <tr><td>241</td><td>ATAGGCTTGGAAAGATTCAG</td><td>TGG</td><td>49.96</td><td>68.40</td></tr>
-              <tr><td>51</td><td>AAAATACACACTCCACCAAG</td><td>TGG</td><td>99.72</td><td>62.38</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="eng-fig__cap">Table 1. Designed guide sequence candidates for FAR1 knockout (Cycle 1).</p>
-        <div class="eng-table-wrap">
-          <table class="eng-table">
-            <thead>
-              <tr>
-                <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th><th>Efficiency score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>363</td><td>ACACCGCAGGACAGAACTCG</td><td>TGG</td><td>50</td><td>73.06</td></tr>
-              <tr><td>355</td><td>TCGCCACGAGTTCTGTCCTG</td><td>CGG</td><td>50</td><td>72.73</td></tr>
-              <tr><td>350</td><td>TAAGCTACTACATACACCGC</td><td>AGG</td><td>49.95</td><td>71.93</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="eng-fig__cap">Table 2. Designed guide sequence candidates for SST2 knockout (Cycle 1).</p>
+      <h3 id="engineering-chassis-cycle1-design">Design</h3>
+      <p>
+        Two parallel routes were designed to construct a CRISPR-Cas9 knockout system targeting <i>FAR1</i>/<i>SST2</i>. Route A: linearized pML104 was assembled with the guide fragment in vitro via one-step cloning, and the circular plasmid was then transformed into yeast. Route B: linearized pML104, the guide fragment, and an approximately 600 bp repair template were co-transformed into yeast in a three-part manner, relying on endogenous homologous recombination in yeast to complete sgRNA assembly and gene knockout. Guide sequence were designed using Benchling and ranked by specificity and efficiency scores (Table 1 and Table 2). The final candidates were not simply the top-scoring sequences; target position within the coding sequence was also considered to ensure efficient disruption of gene function.
+      </p>
+      <div class="eng-table-wrap">
+        <table class="eng-table">
+          <thead>
+            <tr>
+              <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th><th>Efficiency score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>284</td><td>ACCAAGTTTGAAGAAAACAG</td><td>CGG</td><td>49.66</td><td>69.68</td></tr>
+            <tr><td>241</td><td>ATAGGCTTGGAAAGATTCAG</td><td>TGG</td><td>49.96</td><td>68.40</td></tr>
+            <tr><td>51</td><td>AAAATACACACTCCACCAAG</td><td>TGG</td><td>99.72</td><td>62.38</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="eng-fig__cap">Table 1. Designed guide sequence candidates for <i>FAR1</i> knockout (Cycle 1).</p>
+      <div class="eng-table-wrap">
+        <table class="eng-table">
+          <thead>
+            <tr>
+              <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th><th>Efficiency score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>363</td><td>ACACCGCAGGACAGAACTCG</td><td>TGG</td><td>50</td><td>73.06</td></tr>
+            <tr><td>355</td><td>TCGCCACGAGTTCTGTCCTG</td><td>CGG</td><td>50</td><td>72.73</td></tr>
+            <tr><td>350</td><td>TAAGCTACTACATACACCGC</td><td>AGG</td><td>49.95</td><td>71.93</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="eng-fig__cap">Table 2. Designed guide sequence candidates for <i>SST2</i> knockout (Cycle 1).</p>
 
-    <h3 id="engineering-chassis-cycle1-build">Build</h3>
-        <p>
-          Following sgRNA design, the guide fragment was assembled into linearized pML104 via one-step cloning, followed by transformation into TOP10 and plating on LB-Amp plates (not shown). In parallel, linearized pML104, the guide fragment, and an approximately 600 bp repair template were co-transformed into BY4741 and plated on SD-His plates (Figure 1).
-        </p>
+      <h3 id="engineering-chassis-cycle1-build">Build</h3>
+      <p>
+        The CRISPR-Cas9 components targeting <i>FAR1</i> were assembled via a three-part co-transformation strategy. The linearized pML104 vector, the guide fragment containing the sgRNA sequence, and the ~600 bp repair template (containing the upstream and downstream homology arms flanking the target site) were directly co-transformed into competent <i>S. cerevisiae</i> BY4741 cells, relying on endogenous yeast homologous recombination for in vivo plasmid assembly. Transformants were plated on SD-His-Ura selective medium. As shown in Figure 1, the negative control plate exhibited no colony growth (Figure 1A), while numerous single colonies appeared on the experimental plate (Figure 1B), indicating successful transformation.
+      </p>
+      <p>
+        To screen for successful gene knockout, ten colonies were randomly picked and subjected to colony PCR using junction-spanning primers (Figure 2). All ten clones yielded the expected target band (Figure 2, lanes 1–10), suggesting the presence of the target locus. The candidate clones were further verified by Sanger sequencing to confirm the exact sequence at the <i>FAR1</i> locus (Figure 3). However, the sequencing chromatogram revealed that the target 4 bp sequence (highlighted in yellow) was still intact, confirming that the intended genomic deletion had not occurred in this cycle. These results indicated that while the transformation and PCR screening were successful, the in vivo assembly or homologous recombination efficiency was insufficient to achieve the <i>FAR1</i> knockout.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/lab/wetlab/eg/chassis/eng-chassis-fig01-fix.png" alt="Figure 1. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into Saccharomyces cerevisiae BY4741." loading="lazy" width="1263" height="639" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 1. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into <i>Saccharomyces cerevisiae</i> BY4741. (A) Negative control; (B) Transformants obtained after co-transformation with the linearized vector, linearized insert, and repair templates. Both were plated on SD-His-Ura selective medium.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/lab/wetlab/eg/chassis/eng-chassis-fig02-fix.png" alt="Figure 2. Colony PCR screening of transformants obtained by co-transformation of the linearized vector, linearized insert, and repair templates." loading="lazy" width="1177" height="586" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 2. Colony PCR screening of transformants obtained by co-transformation of the linearized vector, linearized insert, and repair templates. M: DNA marker; lanes 1–10: co-transformants; BY / BY4741: wild-type control.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig03.png" alt="Figure 3. Sanger sequencing verification of FAR1 knockout." loading="lazy" width="1269" height="231" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 3. Sanger sequencing verification of <i>FAR1</i> knockout.</figcaption>
+      </figure>
 
-    <h3 id="engineering-chassis-cycle1-test">Test</h3>
-        <p>
-          <strong>Route A:</strong> No E. coli transformants were obtained, with no colonies on the LB-Amp plates, and thus no circular plasmid could be recovered for yeast transformation or subsequent validation experiments.
-        </p>
-        <p>
-          <strong>Route B:</strong> Colonies grew on the SD-His plates, but no knockout-positive clones were detected by colony PCR (Figure 2). Sanger sequencing of candidate clones showed that the target 4 bp sequence highlighted in yellow was still present, and the target site remained wild-type, confirming that no knockout had occurred (Figure 3).
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig01.png" alt="Figure 1. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into Saccharomyces cerevisiae BY4741." loading="lazy" width="825" height="417" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 1. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into <i>Saccharomyces cerevisiae</i> BY4741. (A) Negative control; (B) Transformants obtained after co-transformation with the linearized vector, linearized insert, and repair templates. Both were plated on SD-His-Ura selective medium.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig02.png" alt="Figure 2. Colony PCR screening of transformants obtained by co-transformation of the linearized vector, linearized insert, and repair templates." loading="lazy" width="755" height="419" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 2. Colony PCR screening of transformants obtained by co-transformation of the linearized vector, linearized insert, and repair templates. M: DNA marker; lanes 1–10: co-transformants; BY / BY4741: wild-type control.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig03.png" alt="Figure 3. Sanger sequencing verification of FAR1 knockout." loading="lazy" width="1269" height="231" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 3. Sanger sequencing verification of FAR1 knockout.</figcaption>
-        </figure>
+      <h3 id="engineering-chassis-cycle1-test">Test</h3>
+      <p>
+        Transformants that grew on the selective plates were subjected to colony PCR to verify the presence of the knockout cassette. As shown in Figure 2, all ten randomly picked clones yielded the target-sized PCR products (lanes 1–10), which initially suggested successful integration.
+      </p>
+      <p>
+        However, subsequent Sanger sequencing was performed to validate the exact genomic sequence of the <i>FAR1</i> locus (Figure 3). The sequencing chromatogram revealed that the target 4 bp sequence (highlighted in yellow) remained intact and matched the wild-type sequence perfectly. This definitive molecular evidence confirmed that no successful <i>FAR1</i> gene knockout had occurred in these candidates.
+      </p>
+      <p>
+        Because no true knockout clones were obtained, functional assays (e.g., growth curves or fluorescence tests) could not be performed in this cycle. The discrepancy between the positive colony PCR results and the failed Sanger sequencing indicated that the in vivo assembly of the sgRNA or the homologous recombination efficiency was too low.
+      </p>
 
-    <h3 id="engineering-chassis-cycle1-learn">Learn</h3>
-        <p>
-          Route A failed because the 20 bp homology arms were too short, resulting in extremely low one-step cloning efficiency and zero E. coli transformants. Route B failed because the efficiency of three-part co-transformation in yeast was inherently low; the repair template homology arms (~300 bp each) were also insufficient for efficient knock-in. In the next round, inverse PCR will be used to pre-assemble the sgRNA in vitro, and the homology arms of the repair template will be extended to approximately 500 bp on each side of the knockout site.
-        </p>
+      <h3 id="engineering-chassis-cycle1-learn">Learn</h3>
+      <p>
+        Although the three-part co-transformation successfully delivered the CRISPR components into yeast, the subsequent Test phase revealed a critical flaw. The failure to achieve the intended knockout can be attributed to two main factors. First, the efficiency of in vivo plasmid assembly relying on the yeast's endogenous homologous recombination is inherently low, meaning the intact sgRNA expression cassette was likely not reassembled correctly in most cells. Second, the repair template homology arms (~300 bp each) were insufficient to drive efficient homologous recombination at the double-strand break site. To overcome these bottlenecks in the next cycle, we will abandon the in vivo assembly strategy and adopt inverse PCR to pre-assemble the sgRNA in vitro. Furthermore, the homology arms of the repair template will be extended to approximately 500 bp on each side of the knockout site to significantly improve the knock-in efficiency.
+      </p>
     </div>
 
     <div id="engineering-chassis-cycle2" class="content-card">
       <h2>Cycle 2: Guide Sequence Redesign, Inverse PCR Assembly, and Extended Homology Arms</h2>
 
-    <h3 id="engineering-chassis-cycle2-design">Design</h3>
-        <p>
-          Based on Cycle 1, two modifications were made. (1) Guide sequence redesign and assembly: guide sequence were redesigned using CRISPOR to improve editing efficiency (Table 3 and Table 4), and the guide sequence was directly introduced into the linearized backbone by inverse PCR using the empty pML104 plasmid as template, instead of one-step cloning (Route A) or three-part co-transformation into yeast (Route B). The resulting linear product contained both the vector backbone and the guide sequence, eliminating the need for in vitro ligation or in vivo gap repair. (2) Repair template: the homology arms were extended to approximately 500 bp upstream and downstream of the knockout site. The repair template was assembled by fusion PCR, in which a 4 bp deletion was introduced via the internal primers. This deletion causes a frameshift mutation and simultaneously disrupts the PAM recognition sequence, preventing re-cleavage of the edited locus by Cas9.
-        </p>
-        <div class="eng-table-wrap">
-          <table class="eng-table">
-            <thead>
-              <tr>
-                <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th>
-                <th>Doench '16</th><th>Moreno-Mateos</th><th>Doench-RuleSet3</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>46</td><td>GCGTCACGATCTCCACTTGG</td><td>TGG</td><td>100</td><td>57</td><td>63</td><td>74</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="eng-fig__cap">Table 3. Designed guide sequence for FAR1 knockout (Cycle 2).</p>
-        <div class="eng-table-wrap">
-          <table class="eng-table">
-            <thead>
-              <tr>
-                <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th>
-                <th>Doench '16</th><th>Moreno-Mateos</th><th>Doench-RuleSet3</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>349</td><td>TCGCCACGAGTTCTGTCCTG</td><td>CGG</td><td>100</td><td>68</td><td>88</td><td>88</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="eng-fig__cap">Table 4. Designed guide sequence for SST2 knockout (Cycle 2).</p>
+      <h3 id="engineering-chassis-cycle2-design">Design</h3>
+      <p>
+        Based on Cycle 1, two modifications were made. (1) Guide sequence redesign and assembly: guide sequence were redesigned using CRISPOR to improve editing efficiency (Table 3 and Table 4), and the guide sequence was directly introduced into the linearized backbone by inverse PCR using the empty pML104 plasmid as template, instead of one-step cloning (Route A) or three-part co-transformation into yeast (Route B). The resulting linear product contained both the vector backbone and the guide sequence, eliminating the need for in vitro ligation or in vivo gap repair. (2) Repair template: the homology arms were extended to approximately 500 bp upstream and downstream of the knockout site. The repair template was assembled by fusion PCR, in which a 4 bp deletion was introduced via the internal primers. This deletion causes a frameshift mutation and simultaneously disrupts the PAM recognition sequence, preventing re-cleavage of the edited locus by Cas9.
+      </p>
+      <div class="eng-table-wrap">
+        <table class="eng-table">
+          <thead>
+            <tr>
+              <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th>
+              <th>Doench '16</th><th>Moreno-Mateos</th><th>Doench-RuleSet3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>46</td><td>GCGTCACGATCTCCACTTGG</td><td>TGG</td><td>100</td><td>57</td><td>63</td><td>74</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="eng-fig__cap">Table 3. Designed guide sequence for <i>FAR1</i> knockout (Cycle 2).</p>
+      <div class="eng-table-wrap">
+        <table class="eng-table">
+          <thead>
+            <tr>
+              <th>Position</th><th>Guide Sequence</th><th>PAM</th><th>Specificity score</th>
+              <th>Doench '16</th><th>Moreno-Mateos</th><th>Doench-RuleSet3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>349</td><td>TCGCCACGAGTTCTGTCCTG</td><td>CGG</td><td>100</td><td>68</td><td>88</td><td>88</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="eng-fig__cap">Table 4. Designed guide sequence for <i>SST2</i> knockout (Cycle 2).</p>
 
-    <h3 id="engineering-chassis-cycle2-build">Build</h3>
-        <p>
-          Using the empty pML104 plasmid as template, inverse PCR was performed with primers containing the guide sequence, and the linearized pML104-sgRNA was gel-purified (Figure 4). The upstream and downstream homology arms of FAR1/SST2 were amplified separately, and the repair templates were assembled by fusion PCR and gel-purified (Figure 5). Stepwise knockout: linearized pML104-sgRNA-FAR1 and the FAR1 repair template were co-transformed into BY4741; after colony PCR screening, ΔFAR1 BY4741 was obtained by 5-FOA counter-selection. Using ΔFAR1 as the chassis, linearized pML104-sgRNA-SST2 and the SST2 repair template were then co-transformed; after colony PCR screening, ΔFAR1 ΔSST2 BY4741 was obtained by 5-FOA counter-selection (Figure 6 and Figure 7).
-        </p>
+      <h3 id="engineering-chassis-cycle2-build">Build</h3>
+      <p>
+        Based on the optimized strategy, we pre-assembled the sgRNA in vitro using inverse PCR. The empty pML104 plasmid was used as the template, and primers containing the specific guide sequences were used to amplify the linearized pML104-sgRNA backbone. Agarose gel electrophoresis confirmed the successful linearization of both the <i>FAR1</i> and <i>SST2</i> targeting vectors at the expected size of 11258 bp (Figure 4).
+      </p>
+      <p>
+        In parallel, the repair templates were constructed using fusion PCR. The upstream homology arm, the <i>URA3</i> selection marker, and the downstream homology arm were assembled, extending the homology arms to ~500 bp on each side. The resulting <i>FAR1</i> repair template (1146 bp) and <i>SST2</i> repair template (993 bp) were verified by gel electrophoresis (Figure 5).
+      </p>
+      <p>
+        The knockout process was performed in a stepwise manner. First, the linearized pML104-sgRNA-<i>FAR1</i> and the <i>FAR1</i> repair template were co-transformed into BY4741 competent cells. Transformants grew successfully on SD-His-Ura selective plates (Figure 6A). Following colony PCR screening (Figure 8A), positive clones (F1–F6, F8, F9) were selected, and the pML104 plasmid was removed via 5-FOA counter-selection to obtain the Δ<i>FAR1</i> chassis.
+      </p>
+      <p>
+        Using this Δ<i>FAR1</i> strain as the base, the linearized pML104-sgRNA-<i>SST2</i> and the <i>SST2</i> repair template were then co-transformed. Transformants were obtained (Figure 7), and colony PCR screening successfully identified the Δ<i>FAR1</i> Δ<i>SST2</i> double-knockout clones (S1, S5–S7, S15) (Figure 8B). Final verification by Sanger sequencing confirmed the exact 4 bp deletions at both target loci (TGTC in <i>SST2</i> and CACT in <i>FAR1</i>), both of which introduced frameshift mutations to disrupt gene function (Figure 9).           These results confirmed the successful construction of the plasmid-free Δ<i>FAR1</i> Δ<i>SST2</i> double-knockout strain.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig04.png" alt="Figure 4. Agarose gel electrophoresis of inverse PCR linearization of the pML104-sgRNA constructs." loading="lazy" width="1057" height="436" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 4. Agarose gel electrophoresis of inverse PCR linearization of the pML104-sgRNA-<i>FAR1</i> and pML104-sgRNA-<i>SST2</i> constructs. M: DNA marker; lanes 1–4: linearized pML104-sgRNA-<i>FAR1</i> products (11258 bp); lanes 5–8: linearized pML104-sgRNA-<i>SST2</i> products (11258 bp); lane 9: pML104 empty plasmid (circular, non-linearized).</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig05.png" alt="Figure 5. PCR amplification of repair templates for FAR1 and SST2 genes after fusion PCR assembly." loading="lazy" width="767" height="607" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 5. PCR amplification of repair templates for <i>FAR1</i> and <i>SST2</i> genes after fusion PCR assembly. M: DNA marker; lanes 1–3: repair template for the <i>FAR1</i> gene (1146 bp); lanes 4–6: repair template for the <i>SST2</i> gene (993 bp).</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig06.png" alt="Figure 6. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into Saccharomyces cerevisiae BY4741." loading="lazy" width="828" height="390" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 6. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into <i>Saccharomyces cerevisiae</i> BY4741. (A) Co-transformation group; (B) Negative control.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig07.png" alt="Figure 7. Co-transformation of the linearized pML104-sgRNA-SST2 plasmid and the SST2 repair template into the ΔFAR1 BY4741 chassis." loading="lazy" width="822" height="375" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 7. Co-transformation of the linearized pML104-sgRNA-<i>SST2</i> plasmid and the <i>SST2</i> repair template into the Δ<i>FAR1</i> BY4741 chassis. (A) 20 μL of transformation mixture plated; (B) 80 μL of transformation mixture plated. Both were plated on SD-His-Ura selective medium.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/lab/wetlab/eg/chassis/eng-chassis-fig08-fix.png" alt="Figure 8. Colony PCR screening of FAR1 and SST2 knockout transformants." loading="lazy" width="925" height="447" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 8. Colony PCR screening of <i>FAR1</i> and <i>SST2</i> knockout transformants. (A) Colony PCR screening of <i>FAR1</i> knockout transformants. M: DNA marker; F1–F9: <i>FAR1</i> knockout transformants; F10: negative control; BY: wild-type BY4741 control. (B) Colony PCR screening of <i>SST2</i> knockout transformants. M: DNA marker; lanes S1–S15: <i>SST2</i> knockout transformants; BY4741: wild-type control. Successful knockout prevents primer binding, resulting in no amplified band. Positive clones were S1, S5–S7, and S15.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig09.png" alt="Figure 9. Sanger sequencing verification of FAR1 and SST2 knockout." loading="lazy" width="1254" height="390" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 9. Sanger sequencing verification of <i>FAR1</i> and <i>SST2</i> knockout. (A) Sequencing chromatogram of a successfully knocked-out <i>SST2</i> clone, showing a 4 bp deletion (TGTC); (B) Non-knockout (wild-type) <i>SST2</i>, shown for comparison; (C) Sequencing chromatogram of a successfully knocked-out <i>FAR1</i> clone, showing a 4 bp deletion (CACT); (D) Non-knockout (wild-type) <i>FAR1</i>, shown for comparison.</figcaption>
+      </figure>
 
-    <h3 id="engineering-chassis-cycle2-test">Test</h3>
-        <p>
-          Colony PCR screening yielded ΔFAR1-positive clones F1–F6, F8, and F9, and ΔSST2-positive clones S1, S5–S7, and S15 (Figure 8). Sanger sequencing confirmed a 4 bp deletion (TCTG) in SST2 and a 4 bp deletion (CACT) in FAR1, both causing frameshift mutations; non-knockout clones were consistent with the wild type (Figure 9). Fluorescence intensity measurements further confirmed the successful knockout of FAR1 and SST2. Under 1 μM α-factor induction, both the FAR1 single knockout and the FAR1/SST2 double knockout showed higher fluorescence intensity than the wild type. For the FAR1 knockout, the difference increased over time and became significant at 6 h (P=0.0240) and 8 h (P=0.0011). For the FAR1/SST2 double knockout strain, the fluorescence intensity was significantly higher than that of the wild type at all time points, with P=0.0099 at 2 h and P&lt;0.0001 at 4, 6, and 8 h. These results suggest that FAR1 and SST2 may negatively regulate the α-factor signaling pathway or the downstream fluorescence expression, and the double knockout had a stronger effect than the single knockout (Figure 10).
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig04.png" alt="Figure 4. Agarose gel electrophoresis of inverse PCR linearization of the pML104-sgRNA constructs." loading="lazy" width="1057" height="436" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 4. Agarose gel electrophoresis of inverse PCR linearization of the pML104-sgRNA-FAR1 and pML104-sgRNA-SST2 constructs. M: DNA marker; lanes 1–4: linearized pML104-sgRNA-FAR1 products (11258 bp); lanes 5–8: linearized pML104-sgRNA-SST2 products (11258 bp); lane 9: pML104 empty plasmid (circular, non-linearized).</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig05.png" alt="Figure 5. PCR amplification of repair templates for FAR1 and SST2 genes after fusion PCR assembly." loading="lazy" width="767" height="607" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 5. PCR amplification of repair templates for FAR1 and SST2 genes after fusion PCR assembly. M: DNA marker; lanes 1–3: repair template for the FAR1 gene (1142 bp); lanes 4–6: repair template for the SST2 gene (989 bp).</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig06.png" alt="Figure 6. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into Saccharomyces cerevisiae BY4741." loading="lazy" width="828" height="390" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 6. Co-transformation of the linearized pML104 vector, guide fragment, and repair template into <i>Saccharomyces cerevisiae</i> BY4741. (A) Co-transformation group; (B) Negative control.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig07.png" alt="Figure 7. Co-transformation of the linearized pML104-sgRNA-SST2 plasmid and the SST2 repair template into the ΔFAR1 BY4741 chassis." loading="lazy" width="822" height="375" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 7. Co-transformation of the linearized pML104-sgRNA-SST2 plasmid and the SST2 repair template into the ΔFAR1 BY4741 chassis. (A) 20 μL of transformation mixture plated; (B) 80 μL of transformation mixture plated. Both were plated on SD-His-Ura selective medium.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig08.png" alt="Figure 8. Colony PCR screening of FAR1 and SST2 knockout transformants." loading="lazy" width="1269" height="690" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 8. Colony PCR screening of FAR1 and SST2 knockout transformants. (A) Colony PCR screening of FAR1 knockout transformants. M: DNA marker; F1–F9: FAR1 knockout transformants; F10: negative control; BY: wild-type BY4741 control. (B) Colony PCR screening of SST2 knockout transformants. M: DNA marker; lanes S1–S15: SST2 knockout transformants; BY4741: wild-type control. Successful knockout prevents primer binding, resulting in no amplified band. Positive clones were S1, S5–S7, and S15.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig09.png" alt="Figure 9. Sanger sequencing verification of FAR1 and SST2 knockout." loading="lazy" width="1254" height="390" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 9. Sanger sequencing verification of FAR1 and SST2 knockout. (A) Sequencing chromatogram of a successfully knocked-out SST2 clone, showing a 4 bp deletion (TCTG); (B) Non-knockout (wild-type) SST2, shown for comparison; (C) Sequencing chromatogram of a successfully knocked-out FAR1 clone, showing a 4 bp deletion (CACT); (D) Non-knockout (wild-type) FAR1, shown for comparison.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/chassis/eng-chassis-fig10.png" alt="Figure 10. Fluorescence intensity measurements of knockout strains and wild-type BY4741 after α-factor induction." loading="lazy" width="1125" height="1119" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 10. Fluorescence intensity measurements of knockout strains and wild-type BY4741 after α-factor induction. (A) Fluorescence intensity of the FAR1 knockout strain (ΔFAR1) and wild-type BY4741 at different time points (2, 4, 6, and 8 h) with α-factor induction at final concentrations of 0 μM and 1 μM. (B) Fluorescence intensity of the FAR1 and SST2 double knockout strain (ΔFAR1 ΔSST2) and wild-type BY4741 at different time points (2, 4, 6, and 8 h) with α-factor induction at final concentrations of 0 μM and 1 μM. Data are presented as mean ± SD. P values are indicated.</figcaption>
-        </figure>
+      <h3 id="engineering-chassis-cycle2-test">Test</h3>
+      <p>
+        Fluorescence intensity measurements further confirmed the successful knockout of <i>FAR1</i> and <i>SST2</i>. Under 1 μM α-factor induction, both the <i>FAR1</i> single-knockout and the <i>FAR1</i>/<i>SST2</i> double-knockout strains exhibited higher fluorescence intensities than the wild-type BY4741. For the <i>FAR1</i> knockout, the signal difference increased over time, becoming statistically significant at 6 h (P = 0.0240) and 8 h (P = 0.0011) (Figure 10A). More strikingly, the <i>FAR1</i>/<i>SST2</i> double-knockout strain showed significantly higher fluorescence than the wild type at all measured time points, with a highly significant difference observed from 4 h to 8 h (P &lt; 0.0001) (Figure 10B). These results indicate that <i>FAR1</i> and <i>SST2</i> negatively regulate the α-factor signaling pathway, and that the double knockout exerts a stronger signal-amplifying effect than the single knockout, providing an optimized chassis with a significantly enhanced signal-to-noise ratio for subsequent biosensor construction.
+      </p>
 
-    <h3 id="engineering-chassis-cycle2-learn">Learn</h3>
-        <p>
-          Inverse PCR assembly of sgRNA and 500 bp homology arms reliably supported CRISPR-Cas9 knockout in yeast. Stepwise knockout combined with 5-FOA counter-selection yielded the plasmid-free ΔFAR1 ΔSST2 strain, which showed enhanced α-factor-induced fluorescence and can serve as the chassis for subsequent sensor construction.
-        </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/chassis/eng-chassis-fig10.png" alt="Figure 10. Fluorescence intensity measurements of knockout strains and wild-type BY4741 after α-factor induction." loading="lazy" width="1125" height="1119" decoding="async">
+        <figcaption class="eng-fig__cap">Figure 10. Fluorescence intensity measurements of knockout strains and wild-type BY4741 after α-factor induction. (A) Fluorescence intensity of the <i>FAR1</i> knockout strain (Δ<i>FAR1</i>) and wild-type BY4741 at different time points (2, 4, 6, and 8 h) with α-factor induction at final concentrations of 0 μM and 1 μM. (B) Fluorescence intensity of the <i>FAR1</i> and <i>SST2</i> double knockout strain (Δ<i>FAR1</i> Δ<i>SST2</i>) and wild-type BY4741 at different time points (2, 4, 6, and 8 h) with α-factor induction at final concentrations of 0 μM and 1 μM. Data are presented as mean ± SD. P values are indicated.</figcaption>
+      </figure>
+
+      <h3 id="engineering-chassis-cycle2-learn">Learn</h3>
+      <p>
+        This cycle successfully resolved the bottlenecks encountered in Cycle 1 by implementing two key modifications. The use of inverse PCR for in vitro sgRNA assembly, combined with the extension of homology arms to ~500 bp on each side, dramatically improved the knockout efficiency, yielding the correct Δ<i>FAR1</i> Δ<i>SST2</i> double-knockout strain confirmed by Sanger sequencing.
+      </p>
+      <p>
+        Functionally, the double-knockout chassis outperformed the wild-type strain under α-factor induction. Knocking out <i>FAR1</i> relieved the cell-cycle arrest, while deleting <i>SST2</i> removed the negative feedback regulation of the G-protein cascade. Together, these modifications significantly amplified the downstream fluorescence signal. This confirmed that <i>FAR1</i> and <i>SST2</i> act as negative regulators of the mating pathway, and validated our engineered chassis as a highly sensitive platform with an improved signal-to-noise ratio, providing a solid foundation for subsequent biosensor development.
+      </p>
     </div>
 
     <div id="engineering-gpa1" class="content-card">
       <h2>Humanized G-Protein Chimera</h2>
-        <p class="content-intro">
-          Wild-type yeast Gpa1 terminates with the C-terminal pentapeptide KIGII, which couples the receptor to the downstream MAPK cascade. Replacing those five residues with the human G&alpha;q C-terminus (EYNLV) yields a Gpa1-G&alpha;q chimera that is no longer driven by the native mating pheromone &alpha;-factor, while the rest of the signaling chain stays intact. Two engineering cycles were required: Cycle 1 built the donor with Gibson assembly plus repeated PCR and failed on sequence integrity; Cycle 2 rebuilt it with overlap-extension fusion PCR and delivered strains whose downstream signal output is decoupled from the native pathway.
-        </p>
+      <p class="content-intro">
+        Wild-type yeast Gpa1 terminates with the C-terminal pentapeptide KIGII, which couples the receptor to the downstream MAPK cascade. Replacing those five residues with the human Gαq C-terminus (EYNLV) yields a Gpa1-Gαq chimera that is no longer driven by the native mating pheromone α-factor, while the rest of the signalling chain stays intact. Two engineering cycles were required: Cycle 1 built the donor with Gibson assembly plus repeated PCR and failed on sequence integrity; Cycle 2 rebuilt it with overlap-extension fusion PCR and delivered strains whose downstream signal output is decoupled from the native pathway.
+      </p>
     </div>
 
     <div id="engineering-gpa1-cycle1" class="content-card">
       <h2>Cycle 1: Gibson Assembly with Repeated PCR</h2>
 
-    <h3 id="engineering-gpa1-cycle1-design">Design</h3>
-        <p>
-          This round aimed to humanize the five C-terminal amino acids of yeast GPA1. The wild-type C-terminal sequence KIGII was replaced with the human G&alpha;q C-terminal sequence EYNLV, followed by a TGA stop codon, and Ura3 was used as the auxotrophic selection marker. The construction strategy combined Gibson Assembly with multiple rounds of PCR. Upstream and downstream homology arms carrying overlapping sequences were synthesized, two-step Gibson Assembly was performed on the pRS426 backbone, and the complete linear donor fragment was amplified by PCR and introduced into BY4741 to achieve site-specific homologous recombination. SnapGene was used to design primers for vector linearization, fragment assembly, and yeast genotype verification.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig01.png" alt="Fig. 1. Workflow for plasmid construction via one-step seamless cloning." loading="lazy" width="3347" height="1490" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 1. Workflow for plasmid construction via one-step seamless cloning.</figcaption>
-        </figure>
+      <h3 id="engineering-gpa1-cycle1-design">Design</h3>
+      <p>
+        This round aimed to humanize the five C-terminal amino acids of yeast Gpa1. The wild-type C-terminal sequence KIGII was replaced with the human Gαq C-terminal sequence EYNLV, followed by a TGA stop codon, and <i>URA3</i> was used as the auxotrophic selection marker. The construction strategy combined Gibson Assembly with multiple rounds of PCR. Upstream and downstream homology arms carrying overlapping sequences were synthesized, two-step Gibson Assembly was performed on the pRS426 backbone, and the complete linear donor fragment was amplified by PCR and introduced into BY4741 to achieve site-specific homologous recombination. SnapGene was used to design primers for vector linearization, fragment assembly, and yeast genotype verification.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig01.png" alt="Fig. 1. Workflow for plasmid construction via one-step seamless cloning." loading="lazy" width="3347" height="1490" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 1. Workflow for plasmid construction via one-step seamless cloning.</figcaption>
+      </figure>
 
-    <h3 id="engineering-gpa1-cycle1-build">Build</h3>
-        <p>
-          The original pRS426 plasmid was extracted from <i>E. coli</i> Top10, and plasmid quality was verified via double restriction digestion. The pRS426 vector was then linearized in the first round of PCR, and the linearized vector pRS426_L was recovered by gel extraction. This linear vector was assembled with the chemically synthesized upstream homology arm fragment using Gibson assembly and transformed into competent <i>E. coli</i> Top10 cells. Since circular recombinant plasmids were not obtained after transformation, the raw Gibson assembly mixture was directly used as the PCR template for the second round of vector linearization to generate pRS426_L2. The second round of Gibson assembly was performed between pRS426_L2 and the chemically synthesized downstream homology arm fragment. The assembly mixture was used as the template for PCR amplification of the full-length donor fragment. Agarose gel electrophoresis of the amplified product is shown in Fig. 2. The purified linearized donor fragment was subjected to Sanger sequencing, and the sequence alignment result is shown in Fig. 3.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig02.png" alt="Fig. 2. Electrophoretogram of the recombinant fragment fusion PCR (the target band is 2289 bp)." loading="lazy" width="411" height="504" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 2. Electrophoretogram of the recombinant fragment fusion PCR (the target band is 2289 bp). 1: 12000 bp marker; 2&ndash;3: blank control; 3: experimental group.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig03.png" alt="Fig. 3. Comparison of sequencing results." loading="lazy" width="1267" height="334" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 3. Comparison of sequencing results.</figcaption>
-        </figure>
+      <h3 id="engineering-gpa1-cycle1-build">Build</h3>
+      <p>
+        The original pRS426 plasmid was extracted from <i>E. coli</i> Top10, and plasmid quality was verified via double restriction digestion. The pRS426 vector was then linearized in the first round of PCR, and the linearized vector pRS426_L was recovered by gel extraction. This linear vector was assembled with the chemically synthesized upstream homology arm fragment using Gibson assembly and transformed into competent <i>E. coli</i> Top10 cells. Since circular recombinant plasmids were not obtained after transformation, the raw Gibson assembly mixture was directly used as the PCR template for the second round of vector linearization to generate pRS426_L2. The second round of Gibson assembly was performed between pRS426_L2 and the chemically synthesized downstream homology arm fragment. The assembly mixture was used as the template for PCR amplification of the full-length donor fragment. Agarose gel electrophoresis of the amplified product is shown in Fig. 2. The purified linearized donor fragment was subjected to Sanger sequencing, and the sequence alignment result is shown in Fig. 3.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig02.png" alt="Fig. 2. Electrophoretogram of the recombinant fragment fusion PCR (the target band is 2289 bp)." loading="lazy" width="413" height="483" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 2. Electrophoretogram of the recombinant fragment fusion PCR (the target band is 2289 bp). 1: 12000 bp marker; 2–3: blank control; 3: experimental group.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig03.png" alt="Fig. 3. Comparison of sequencing results." loading="lazy" width="1267" height="334" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 3. Comparison of sequencing results.</figcaption>
+      </figure>
 
-    <h3 id="engineering-gpa1-cycle1-test">Test</h3>
-        <p>
-          Agarose gel electrophoresis showed that the PCR-amplified donor fragment was of the expected size (approximately 2289 bp). However, Sanger sequencing revealed substantial problems. Multiple rounds of in vitro PCR caused the accumulation of numerous base mutations, and the sequencing primers provided insufficient coverage of the long fragment, leaving part of the donor sequence unverified. As a result, no donor fragment with a sequence fully matching the designed construct was obtained.
-        </p>
+      <h3 id="engineering-gpa1-cycle1-test">Test</h3>
+      <p>
+        Agarose gel electrophoresis showed that the PCR-amplified donor fragment was of the expected size (approximately 2289 bp). However, Sanger sequencing revealed substantial problems. Multiple rounds of in vitro PCR caused the accumulation of numerous base mutations, and the sequencing primers provided insufficient coverage of the long fragment, leaving part of the donor sequence unverified. As a result, no donor fragment with a sequence fully matching the designed construct was obtained.
+      </p>
 
-    <h3 id="engineering-gpa1-cycle1-learn">Learn</h3>
-        <p>
-          The strategy combining Gibson Assembly with successive rounds of PCR failed in this cycle. Repeated in vitro PCR amplification led to the accumulation of base mutations, compromising the sequence accuracy of the donor fragment for genome editing. This experiment provided an important lesson: when constructing donor fragments with long homology arms, the total number of PCR cycles should be kept as low as possible to minimize mutation accumulation. For Cycle 2, the multi-round PCR scheme based on Gibson Assembly was abandoned. Instead, an overlap extension fusion PCR strategy was adopted. The full-length donor was divided into three independent fragments (upstream homology arm, Ura3, and downstream homology arm) with homologous overlapping sequences between them, and the full-length donor was directly spliced by fusion PCR, reducing the risk of mutation accumulation. The complete set of fusion PCR primers was redesigned.
-        </p>
+      <h3 id="engineering-gpa1-cycle1-learn">Learn</h3>
+      <p>
+        The strategy combining Gibson Assembly with successive rounds of PCR failed in this cycle. Repeated in vitro PCR amplification led to the accumulation of base mutations, compromising the sequence accuracy of the donor fragment for genome editing. This experiment provided an important lesson: when constructing donor fragments with long homology arms, the total number of PCR cycles should be kept as low as possible to minimize mutation accumulation. For Cycle 2, the multi-round PCR scheme based on Gibson Assembly was abandoned. Instead, an overlap extension fusion PCR strategy was adopted. The full-length donor was divided into three independent fragments (upstream homology arm, <i>URA3</i>, and downstream homology arm) with homologous overlapping sequences between them, and the full-length donor was directly spliced by fusion PCR, reducing the risk of mutation accumulation. The complete set of fusion PCR primers was redesigned.
+      </p>
     </div>
 
     <div id="engineering-gpa1-cycle2" class="content-card">
       <h2>Cycle 2: Overlap-Extension Fusion PCR</h2>
 
-    <h3 id="engineering-gpa1-cycle2-design">Design</h3>
-        <p>
-          Following the failure of Cycle 1, the donor construction strategy was redesigned using overlap extension fusion PCR. The humanization editing donor was divided into three independent fragments: the upstream homology arm, the URA3 expression cassette, and the downstream homology arm. Homologous overlapping sequences of 20&ndash;25 bp were introduced at the fragment ends to enable seamless fusion. The outer primers were anchored outside the genomic homology regions to amplify the final full-length donor, and the original genomic homology arm sequences were retained to ensure recombination efficiency in BY4741. The linear donor fragment with the correct sequence was transformed into BY4741, and SD-Ura dropout plates were used for primary screening. Junction PCR combined with sequencing was used to verify site-specific integration at the GPA1 locus. After genotype confirmation, phenotypic characterization was performed, including growth curve measurement, cell morphology observation under &alpha;-factor induction, and detection of downstream reporter gene fluorescence output.
-        </p>
+      <h3 id="engineering-gpa1-cycle2-design">Design</h3>
+      <p>
+        Following the failure of Cycle 1, the donor construction strategy was redesigned using overlap extension fusion PCR. The humanization editing donor was divided into three independent fragments: the upstream homology arm, the <i>URA3</i> expression cassette, and the downstream homology arm. Homologous overlapping sequences of 20–25 bp were introduced at the fragment ends to enable seamless fusion. The outer primers were anchored outside the genomic homology regions to amplify the final full-length donor, and the original genomic homology arm sequences were retained to ensure recombination efficiency in BY4741. The linear donor fragment with the correct sequence was transformed into BY4741, and SD-Ura dropout plates were used for primary screening. Junction PCR combined with sequencing was used to verify site-specific integration at the <i>GPA1</i> locus. After genotype confirmation, phenotypic characterization was performed, including growth curve measurement, cell morphology observation under α-factor induction, and detection of downstream reporter gene fluorescence output.
+      </p>
 
-    <h3 id="engineering-gpa1-cycle2-build">Build</h3>
-        <p>
-          Three separate fragments, namely the upstream homology arm, URA3 expression cassette and downstream homology arm, were individually amplified by PCR and purified. Overlap-extension fusion PCR was then carried out. First, the three fragments were assembled via a primerless bridging reaction relying on homologous sequences between fragments. Outer primers were subsequently added to amplify the complete full-length humanized donor fragment, and the target full-length band was recovered by gel extraction. Agarose gel electrophoresis of fusion PCR products is shown in Fig. 4. The purified linear donor from fusion PCR was transformed into competent BY4741 yeast cells, which were spread onto SD-Ura selective plates and incubated at 30 &deg;C. Single colonies were picked and screened by multiple rounds of colony PCR using cross-junction validation primers. Agarose gel electrophoresis of colony PCR products is shown in Fig. 5. Candidate positive strains were sent for sequencing verification, and the sequence alignment of the GPA1 locus from positive strains is shown in Fig. 6. Finally, humanized strains 12 and 17 with fully correct genotypes were obtained. The yEGFP reporter plasmid was introduced into both engineered strains. A complete set of phenotypic assays was then performed, including growth curve measurement, microscopic observation of cell morphology under gradient &alpha;-factor induction, and time-course detection of reporter fluorescence intensity.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig04.png" alt="Fig. 4. Electrophoretogram of the recombinant template constructed by fusion PCR (the target band is 2280 bp)." loading="lazy" width="235" height="213" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 4. Electrophoretogram of the recombinant template constructed by fusion PCR (the target band is 2280 bp). 1: 5000 bp marker; 2: blank; 3&ndash;6: experimental group.</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig05.png" alt="Fig. 5. Colony PCR electrophoretogram (the target band is 849 bp)." loading="lazy" width="1246" height="490" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 5. Colony PCR electrophoretogram (the target band is 849 bp). 1: 5000 bp marker; 2&ndash;18: corresponding to the picked colonies, respectively (1, 3, 5, 6, 8, 10, 11, 12, 13, 14, 17, 18, 20, 21, 22, 23, 24).</figcaption>
-        </figure>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig06.png" alt="Fig. 6. Comparison diagrams of sequencing results (key humanized sites)." loading="lazy" width="1107" height="559" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 6. Comparison diagrams of sequencing results (key humanized sites). 1: alignment of sample 12 with the original sequence; 2: alignment of sample 17 with the original sequence; 3: alignment of sample 12 with the expected sequence; 4: alignment of sample 17 with the expected sequence.</figcaption>
-        </figure>
+      <h3 id="engineering-gpa1-cycle2-build">Build</h3>
+      <p>
+        Three separate fragments, namely the upstream homology arm, <i>URA3</i> expression cassette and downstream homology arm, were individually amplified by PCR and purified. Overlap-extension fusion PCR was then carried out. First, the three fragments were assembled via a primerless bridging reaction relying on homologous sequences between fragments. Outer primers were subsequently added to amplify the complete full-length humanized donor fragment, and the target full-length band was recovered by gel extraction. Agarose gel electrophoresis of fusion PCR products is shown in Fig. 4. The purified linear donor from fusion PCR was transformed into competent BY4741 yeast cells, which were spread onto SD-Ura selective plates and incubated at 30 °C. Single colonies were picked and screened by multiple rounds of colony PCR using cross-junction validation primers. Agarose gel electrophoresis of colony PCR products is shown in Fig. 5. Candidate positive strains were sent for sequencing verification, and the sequence alignment of the <i>GPA1</i> locus from positive strains is shown in Fig. 6. Finally, humanized strains 12 and 17 with fully correct genotypes were obtained. The <i>yEGFP</i> reporter plasmid was introduced into both engineered strains. A complete set of phenotypic assays was then performed, including growth curve measurement, microscopic observation of cell morphology under gradient α-factor induction, and time-course detection of reporter fluorescence intensity.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig04.png" alt="Fig. 4. Electrophoretogram of the recombinant template constructed by fusion PCR (the target band is 2280 bp)." loading="lazy" width="235" height="213" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 4. Electrophoretogram of the recombinant template constructed by fusion PCR (the target band is 2280 bp). 1: 5000 bp marker; 2: blank; 3–6: experimental group.</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig05.png" alt="Fig. 5. Colony PCR electrophoretogram (the target band is 849 bp)." loading="lazy" width="1246" height="490" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 5. Colony PCR electrophoretogram (the target band is 849 bp). 1: 5000 bp marker; 2–18: corresponding to the picked colonies, respectively (1, 3, 5, 6, 8, 10, 11, 12, 13, 14, 17, 18, 20, 21, 22, 23, 24).</figcaption>
+      </figure>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig06.png" alt="Fig. 6. Comparison diagrams of sequencing results (key humanized sites)." loading="lazy" width="1107" height="559" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 6. Comparison diagrams of sequencing results (key humanized sites). 1: alignment of sample 12 with the original sequence; 2: alignment of sample 17 with the original sequence; 3: alignment of sample 12 with the expected sequence; 4: alignment of sample 17 with the expected sequence.</figcaption>
+      </figure>
 
-    <h3 id="engineering-gpa1-cycle2-test">Test</h3>
-        <p>
-          The fusion PCR product showed a single bright band at the expected size of the full-length donor, and the recovered fragment had good concentration and purity. After yeast transformation, colonies appeared on SD-Ura plates. Preliminary colony PCR using the full-length outer primers showed low amplification efficiency; however, after switching to junction-spanning specific primers, the target fragment was successfully amplified from candidate colonies with high specificity. Sequencing alignment confirmed that strains 12 and 17 contained the correct C-terminal humanization at the GPA1 locus. Growth curve analysis showed that under high-concentration &alpha;-factor induction, the growth of wild-type BY4741 was significantly inhibited, whereas the humanized strains 12 and 17 were not significantly affected, consistent with the expected effect of the GPA1-G&alpha;q chimera. Microscopic observation showed that after high-concentration &alpha;-factor treatment, the wild type produced shmoo mating protrusions, whereas the engineered strains showed no obvious mating protrusions and maintained normal morphology. The fluorescence reporter assay (Fig. 7) revealed that the activation output of the G-protein signaling pathway was modulated in the engineered strains. The modified strains exhibited a higher peak fluorescence response and a delayed time-to-peak, reflecting the unique signal response kinetics of the humanized G&alpha; subunit compared with the native yeast GPA1.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/gpa1/gpa1-eng-fig07.png" alt="Fig. 7. Time-course changes in fluorescence intensity of GPA1-Gαq humanized strains under different concentrations and the significance of differences among concentrations." loading="lazy" width="2237" height="982" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 7. Time-course changes in fluorescence intensity of GPA1-G&alpha;q humanized strains under different concentrations and the significance of differences among concentrations.</figcaption>
-        </figure>
+      <h3 id="engineering-gpa1-cycle2-test">Test</h3>
+      <p>
+        The fusion PCR product showed a single bright band at the expected size of the full-length donor, and the recovered fragment had good concentration and purity. After yeast transformation, colonies appeared on SD-Ura plates. Preliminary colony PCR using the full-length outer primers showed low amplification efficiency; however, after switching to junction-spanning specific primers, the target fragment was successfully amplified from candidate colonies with high specificity. Sequencing alignment confirmed that strains 12 and 17 contained the correct C-terminal humanization at the <i>GPA1</i> locus. Growth curve analysis showed that under high-concentration α-factor induction, the growth of wild-type BY4741 was significantly inhibited, whereas the humanized strains 12 and 17 were not significantly affected, consistent with the expected effect of the Gpa1-Gαq chimera. Microscopic observation showed that after high-concentration α-factor treatment, the wild type produced shmoo mating protrusions, whereas the engineered strains showed no obvious mating protrusions and maintained normal morphology. The fluorescence reporter assay (Fig. 7) revealed that the activation output of the G-protein signaling pathway was modulated in the engineered strains. The modified strains exhibited a higher peak fluorescence response and a delayed time-to-peak, reflecting the unique signal response kinetics of the humanized Gα subunit compared with the native yeast Gpa1.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/gpa1/gpa1-eng-fig07.png" alt="Fig. 7. Time-course changes in fluorescence intensity of Gpa1-Gαq humanized strains under different concentrations and the significance of differences among concentrations." loading="lazy" width="2237" height="982" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 7. Time-course changes in fluorescence intensity of Gpa1-Gαq humanized strains under different concentrations and the significance of differences among concentrations.</figcaption>
+      </figure>
 
-    <h3 id="engineering-gpa1-cycle2-learn">Learn</h3>
-        <p>
-          The fusion PCR strategy substantially reduced the number of in vitro PCR cycles, successfully circumventing the mutation accumulation problem caused by multiple rounds of amplification, and yielded GPA1-G&alpha;q humanized yeast strains with completely correct genotypes. Phenotypic experiments demonstrated that the humanization engineering involving replacement of the five C-terminal amino acids did not disrupt normal yeast cell growth; at the same time, it altered the downstream signal output kinetics of the G protein, achieving the expected engineering effect. This round fully completed the Design&ndash;Build&ndash;Test&ndash;Learn engineering cycle, accomplishing the construction and functional characterization of the GPA1-G&alpha;q chimeric strain, which can be used for subsequent downstream signal-related experiments.
-        </p>
+      <h3 id="engineering-gpa1-cycle2-learn">Learn</h3>
+      <p>
+        The fusion PCR strategy substantially reduced the number of in vitro PCR cycles, successfully circumventing the mutation accumulation problem caused by multiple rounds of amplification, and yielded Gpa1-Gαq humanized yeast strains with completely correct genotypes. Phenotypic experiments demonstrated that the humanization engineering involving replacement of the five C-terminal amino acids did not disrupt normal yeast cell growth; at the same time, it altered the downstream signal output kinetics of the G protein, achieving the expected engineering effect. This round fully completed the Design–Build–Test–Learn engineering cycle, accomplishing the construction and functional characterization of the Gpa1-Gαq chimeric strain, which can be used for subsequent downstream signal-related experiments.
+      </p>
     </div>
 
     <div id="engineering-pager" class="content-card">
@@ -367,7 +415,7 @@ js:
           The PAGER module was designed to translate HA recognition into a fluorescent output via the yeast mating pathway. Cycles 1 and 2 focused on assembling the full-length and truncated PAGER constructs. While sequencing verified the correct DNA sequences, both constructs failed to yield detectable target protein or functional fluorescence. However, a control experiment with an α-factor pre-sequence&ndash;Ste2 fusion successfully produced a signal, proving the pre-sequence and downstream reporter system function properly. This taught us that the bottleneck is likely the structural misfolding or membrane trafficking of the complex human hM1Dq receptor.
         </p>
         <p>
-          Three cycles are documented below: Cycle 1 built the full-length receptor, Cycle 2 removed the α-factor pre-sequence and the ICL3 loop, and Cycle 3 removed the ICL3 loop alone while keeping the native signal peptide. Cycle 3 is still running and is documented up to Build.
+          Four cycles are documented below: Cycle 1 built the full-length receptor, Cycle 2 removed the α-factor pre-sequence and the ICL3 loop, Cycle 3 removed the ICL3 loop alone while keeping the native signal peptide, and Cycle 4 abandoned the heterologous hM1Dq scaffold and relocated the gating module onto the native Ste2 receptor.
         </p>
     </div>
 
@@ -389,7 +437,7 @@ js:
           To ensure proper folding and functionality, the coding sequence was codon-optimized. The full-length fusion gene was assembled into the yeast episomal expression plasmid pGADT7-ZB56914 (Figure 1B), driven by a yeast endogenous promoter for cell-surface expression in <i>Saccharomyces cerevisiae</i> BY4741. The linker sequence between the nanobody and the GPCR was specifically designed based on published literature to include the TEVcs and ALFA tag, optimizing fusion-protein folding and epitope exposure. The construct was assembled using one-step seamless cloning.
         </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig01.png" alt="Figure 1. Schematic representation of the structural composition of the engineered PAGER receptor." loading="lazy" width="837" height="282" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig01.png" alt="Figure 1. Schematic representation of the structural composition of the engineered PAGER receptor." loading="lazy" width="837" height="282" decoding="async">
           <figcaption class="eng-fig__cap">Figure 1. Schematic representation of the structural composition of the engineered PAGER receptor.</figcaption>
         </figure>
 
@@ -398,11 +446,11 @@ js:
           The full coding sequence of the PAGER gating system, fused with vector homology arms and codon-optimized for <i>Saccharomyces cerevisiae</i>, was synthesized by a commercial vendor. The sequence was assembled into the linearized pGADT7-ZB56914 backbone using Gibson Assembly to generate the circular expression vector. The assembled plasmid was transformed into competent <i>E. coli</i> TOP10 cells for amplification, and plasmids were extracted and verified by PCR. The validated plasmid was subsequently transformed into <i>S. cerevisiae</i> BY4741. After optimizing the thermal lysis conditions for colony PCR, sixteen yeast colonies were picked and screened; all clones except colony 6 yielded the expected 472 bp amplicon (Figure 2). The positive clones were then subjected to Sanger sequencing, and sequence alignment confirmed that the randomly selected transformants carried the correct target sequence (Figure 3). These results collectively demonstrate that the PAGER expression vector was successfully constructed and correctly integrated into the BY4741 yeast strain.
         </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig02.png" alt="Figure 2. Yeast transformation screening and colony PCR verification of the PAGER expression vector." loading="lazy" width="581" height="551" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig02.png" alt="Figure 2. Yeast transformation screening and colony PCR verification of the PAGER expression vector." loading="lazy" width="581" height="551" decoding="async">
           <figcaption class="eng-fig__cap">Figure 2. Yeast transformation screening and colony PCR verification of the PAGER expression vector. (A, B) Yeast transformants grown on SD-His-Leu selective plates. (C) Colony PCR screening of randomly picked yeast colonies. M: DNA marker; lanes 1&ndash;16: PCR products from individual colonies. The expected target band size is 472 bp.</figcaption>
         </figure>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig03.png" alt="Figure 3. Sequence verification of yeast transformants carrying the PAGER expression construct." loading="lazy" width="1165" height="338" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig03.png" alt="Figure 3. Sequence verification of yeast transformants carrying the PAGER expression construct." loading="lazy" width="1165" height="338" decoding="async">
           <figcaption class="eng-fig__cap">Figure 3. Sequence verification of yeast transformants carrying the PAGER expression construct. (A) Pairwise sequence alignment between randomly selected clones and the designed target sequence. (B) Agarose gel electrophoresis of the PCR products used for sequencing. M: DNA marker; lanes 1&ndash;8: PCR products amplified from individual yeast transformants. The expected target band size is 1051 bp.</figcaption>
         </figure>
 
@@ -411,11 +459,11 @@ js:
           To evaluate whether the successfully assembled PAGER receptor could be expressed and function as designed, we performed protein-level and functional assays. Total proteins were extracted from the engineered PAGER<sub>Gq</sub> strains and wild-type BY4741, followed by Western blot analysis. As shown in Figure 4, the GAPDH loading control (~36 kDa) exhibited consistent and uniform bands across all samples, confirming equal protein loading. However, when probed with an anti-hM1 receptor antibody, no specific band corresponding to the expected full-length PAGER fusion protein (~74 kDa) was detected in the engineered strains (lanes 1&ndash;2). As expected, no signal was observed in the wild-type control (lanes 3&ndash;4). This result indicated that the PAGER receptor was not successfully expressed at the expected molecular weight. To further test the signaling output, we conducted a time-course plate reader assay using yeast cells pre-treated with lyticase to improve permeability. The engineered strains were stimulated with TEV protease (to artificially relieve auto-inhibition) or HA protein (the target antigen), combined with a gradient of the agonist DCZ (25, 50, and 100 nM). As shown in Figure 5, no significant increase in fluorescence intensity was observed in any experimental group compared with the negative controls (no-TEV or no-DCZ groups) over a 5-hour monitoring period. Although the DNA sequence of the PAGER construct was verified to be correct, the target fusion protein was not detected at the expected size, and no functional fluorescence output could be triggered by either TEV cleavage or HA antigen recognition. This failure at the protein level suggested that the bottleneck likely lay in protein expression, folding, or membrane trafficking within the yeast chassis, which directly informed our subsequent Design modifications.
         </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig04.png" alt="Figure 4. Western blot analysis of hM1 receptor expression in engineered yeast." loading="lazy" width="834" height="208" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig04.png" alt="Figure 4. Western blot analysis of hM1 receptor expression in engineered yeast." loading="lazy" width="834" height="208" decoding="async">
           <figcaption class="eng-fig__cap">Figure 4. Western blot analysis of hM1 receptor expression in engineered yeast. Total protein was extracted from PAGER<sub>Gq</sub> strains (lanes 1&ndash;2) and wild-type BY4741 (lanes 3&ndash;4). GAPDH was used as the loading control. The expected size of the hM1 receptor is ~74 kDa. M: protein molecular weight marker.</figcaption>
         </figure>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig05.png" alt="Figure 5. Time-course fluorescence assay of the PAGER sensor under TEV/HA and DCZ induction." loading="lazy" width="833" height="741" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig05.png" alt="Figure 5. Time-course fluorescence assay of the PAGER sensor under TEV/HA and DCZ induction." loading="lazy" width="833" height="741" decoding="async">
           <figcaption class="eng-fig__cap">Figure 5. Time-course fluorescence assay of the PAGER sensor under TEV/HA and DCZ induction. Yeast samples were pre-treated with lyticase (20 °C, 100 rpm, overnight) to improve permeability before the addition of the stimuli and DCZ. (A) TEV protease-treated groups with varying DCZ concentrations (25, 50, 100 nM), a no-TEV control, and a no-DCZ control. (B) HA protein-treated groups with the same DCZ gradient and corresponding controls.</figcaption>
         </figure>
 
@@ -433,14 +481,14 @@ js:
           Based on the protein expression failure in Cycle 1, we hypothesized that the human-derived hM1Dq receptor domains interfered with yeast protein processing. To address this, we designed a truncated version of the PAGER receptor by deleting two problematic domains, guided by previous literature:
         </p>
         <ul>
-          <li><strong>α-Factor pre-sequence:</strong> although the α-factor pre-sequence was originally used to direct the fusion protein into the yeast secretory pathway, studies on human β2-adrenergic receptors have shown that fusing only the pre-sequence often results in receptor retention in the endoplasmic reticulum (ER), rather than localization to the plasma membrane (Cui et al., 2022). We suspected that the pre-sequence might cause misfolding or steric hindrance for our large PAGER complex. Therefore, the α-factor pre-sequence was deleted to simplify the N-terminal structure and explore alternative targeting.</li>
-          <li><strong>Intracellular loop 3 (ICL3):</strong> the large ICL3 loop of human GPCRs is critical for mammalian G-protein coupling but may cause severe structural strain or serve as a target for yeast proteases. Erlenbach et al. (2001) demonstrated that deleting the central portion of the ICL3 loop dramatically increased M1 muscarinic receptor expression levels in yeast (from &lt;5 to 53&ndash;214 fmol/mg) and enabled efficient coupling to the Gpa1-Gαq chimera. Inspired by this, we deleted the ICL3 sequence to minimize structural complexity and improve overall protein stability.</li>
+          <li><strong>α-Factor pre-sequence:</strong> Although the α-factor pre-sequence was originally used to direct the fusion protein into the yeast secretory pathway, studies on human β2-adrenergic receptors have shown that fusing only the pre-sequence often results in receptor retention in the endoplasmic reticulum (ER), rather than localization to the plasma membrane (Cui et al., 2022). We suspected that the pre-sequence might cause misfolding or steric hindrance for our large PAGER complex. Therefore, the α-factor pre-sequence was deleted to simplify the N-terminal structure and explore alternative targeting.</li>
+          <li><strong>Intracellular loop 3 (ICL3):</strong> The large ICL3 loop of human GPCRs is critical for mammalian G-protein coupling but may cause severe structural strain or serve as a target for yeast proteases. Erlenbach et al. (2001) demonstrated that deleting the central portion of the ICL3 loop dramatically increased M1 muscarinic receptor expression levels in yeast (from &lt;5 to 53&ndash;214 fmol/mg) and enabled efficient coupling to the Gpa1-Gαq chimera. Inspired by this, we deleted the ICL3 sequence to minimize structural complexity and improve overall protein stability.</li>
         </ul>
         <p>
           To physically construct this truncated receptor, we designed two pairs of primers to separately amplify the two fragments of the receptor backbone flanking the domains to be deleted. Homologous overlap sequences were introduced at the ends of these amplicons during PCR. Subsequently, the truncated receptor insert and the linearized yeast expression backbone were assembled using one-step Gibson assembly to generate the final expression construct.
         </p>
         <p>
-          In addition, we further introduced yEGFP fluorescent protein fragment into the truncated PAGER receptor plasmid backbone. This fluorescent fusion tag enables direct visualization to verify whether the truncated receptor is successfully expressed inside yeast cells and to assess its plasma-membrane display status via confocal laser scanning microscopy, providing subcellular localization evidence complementary to Western blot and functional fluorescence readouts.
+          Furthermore, expert <a href="{{ basePath | default('') }}human-practices/integrated human-practices.html#expert-qiu-xinyuan">Xinyuan Qiu</a> highlighted a physical consideration: the accessibility of external stimuli (HA/TEV) to the receptor due to the thick yeast cell wall. To ensure efficient contact, we referred to the “Patrol Yeast” system (Su et al., 2022) and incorporated a Zymolyase pretreatment step to partially degrade the cell wall prior to functional assays. In addition, we further introduced <i>yEGFP</i> fluorescent protein fragment into the truncated PAGER receptor plasmid backbone. This fluorescent fusion tag enables direct visualization to verify whether the truncated receptor is successfully expressed inside yeast cells and to assess its plasma-membrane display status via confocal laser scanning microscopy, providing subcellular localization evidence complementary to Western blot and functional fluorescence readouts.
         </p>
 
     <h3 id="engineering-pager-cycle2-build">Build</h3>
@@ -451,31 +499,38 @@ js:
           To screen for positive clones, twelve yeast colonies were randomly picked and subjected to colony PCR using junction-spanning primers. As shown in Figure 6C, 11 out of the 12 colonies yielded the expected 601 bp target band, indicating a high transformation and assembly efficiency. The plasmids from the PCR-positive colonies were then extracted and verified by Sanger sequencing. Sequence alignment confirmed that the selected clone (Sample 3) matched the designed truncated construct with 99.29% identity and no damaging mutations (Figure 7). These results confirm the successful construction of the truncated PAGER expression strain, which was subsequently used for functional assays.
         </p>
         <p>
-          Based on the verified truncated PAGER receptor plasmid backbone described above, we inserted yEGFP sequence into the receptor coding sequence by homologous overlap PCR. The modified insert was assembled with linearized yeast expression backbone through Gibson assembly. The assembly product was transformed into <i>S. cerevisiae</i> BY4741 competent cells, and positive clones were screened on SD-His-Leu selective plates. Correct insertion of the fluorescent fragment was further confirmed by colony PCR and Sanger sequencing before subsequent microscopic detection.
+          Based on the verified truncated PAGER receptor plasmid backbone described above, we inserted <i>yEGFP</i> sequence into the receptor coding sequence by homologous overlap PCR. The modified insert was assembled with linearized yeast expression backbone through Gibson assembly. The assembly product was transformed into <i>S. cerevisiae</i> BY4741 competent cells, and positive clones were screened on SD-His-Leu selective plates. Correct insertion of the fluorescent fragment was further confirmed by colony PCR and Sanger sequencing before subsequent microscopic detection.
         </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig06.png" alt="Figure 6. Yeast transformation and colony PCR verification of the truncated PAGER expression construct." loading="lazy" width="1000" height="519" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig06.png" alt="Figure 6. Yeast transformation and colony PCR verification of the truncated PAGER expression construct." loading="lazy" width="1000" height="519" decoding="async">
           <figcaption class="eng-fig__cap">Figure 6. Yeast transformation and colony PCR verification of the truncated PAGER expression construct. (A) Negative control plate. (B) Transformants grown on SD-His-Leu selective plates. (C) Colony PCR screening of 12 randomly picked yeast colonies. M: DNA marker; lanes 1&ndash;12: PCR products from individual colonies. The expected target band size is 601 bp.</figcaption>
         </figure>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig07.png" alt="Figure 7. Sanger sequencing verification of the truncated PAGER expression construct." loading="lazy" width="1335" height="634" decoding="async">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig07.png" alt="Figure 7. Sanger sequencing verification of the truncated PAGER expression construct." loading="lazy" width="1335" height="634" decoding="async">
           <figcaption class="eng-fig__cap">Figure 7. Sanger sequencing verification of the truncated PAGER expression construct. Sequence alignment of sample 3 against the designed reference sequence.</figcaption>
         </figure>
 
     <h3 id="engineering-pager-cycle2-test">Test</h3>
         <p>
-          To evaluate whether the correctly assembled truncated PAGER receptor could restore functional signaling output, a time-course plate-reader fluorescence assay was performed. The engineered strains were treated with either TEV protease (to artificially remove the MT1 auto-inhibitor) or HA protein (the target antigen), combined with a gradient of the agonist DCZ (1, 10, and 100 μM). As shown in Figure 8A and 8B, no significant increase in fluorescence intensity was observed in any experimental group compared with the negative controls (no-TEV, no-HA, or no-DCZ groups) over a 5.5-hour monitoring period. Notably, in a parallel control experiment, we constructed a yeast strain expressing a fusion protein consisting of the α-factor pre-sequence, the PAGER gating system, and the native yeast Ste2 receptor. This control strain exhibited a visible fluorescence signal upon induction, confirming that the α-factor pre-sequence can function properly in our yeast chassis and that the downstream reporter system is functional.
-        </p>
-        <p>
-          Confocal laser scanning microscopy was performed to characterize protein expression and subcellular localization of truncated PAGER constructs. As shown in Figure 9, yeast cells transformed with the original Cycle 2 truncated construct without the fluorescent fragment (Figure 9A) exhibited no obvious specific fluorescent signal. By contrast, yeast strains carrying the truncated PAGER plasmid with the inserted fluorescent fragment (Figure 9B and Figure 9C) displayed detectable intracellular fluorescence signal, confirming that our truncated PAGER construct was indeed expressed at the protein level, but the overall expression yield was low. Nevertheless, the fluorescent signal was diffusely distributed within the cell instead of concentrating at the plasma membrane, indicating a defect in membrane trafficking or correct membrane insertion of the receptor fusion protein.
+          Western blot analysis was performed to evaluate the expression of the modified PAGER construct using an anti-ALFA Tag antibody (Figure 8). The GAPDH loading control (~36 kDa) showed uniform bands across all samples, confirming equal protein loading. Notably, at the expected molecular weight of ~62 kDa, a faint but specific target-sized band was detected in the engineered PAGER<sub>Gq</sub> strains (lanes 1&ndash;2), whereas no corresponding band was observed in the wild-type BY4741 control (lanes 3&ndash;4). The faint band in the engineered strains indicates that our Cycle 2 truncated construct was successfully translated and expressed, marking a notable improvement over Cycle 1. However, the extremely weak signal intensity suggests that the overall protein expression yield remains very low. This low abundance is likely the primary reason why the subsequent fluorescence functional assays failed to produce a detectable signal, as an insufficient amount of functional receptor would be present to trigger a robust downstream response.
         </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig08.png" alt="Figure 8. Time-course fluorescence measurement of the engineered yeast biosensor after DCZ treatment." loading="lazy" width="797" height="717" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 8. Time-course fluorescence measurement of the engineered yeast biosensor after DCZ treatment. (A) Fluorescence intensity of the engineered yeast strain incubated with TEV protease and a gradient of DCZ (1, 10, and 100 μM), along with TEV-only and DCZ-only controls. (B) Fluorescence intensity of the engineered yeast strain incubated with HA protein and a gradient of DCZ (1, 10, and 100 μM), along with HA-only and DCZ-only controls. Fluorescence was recorded at 1, 2.5, 3.5, 4.5, and 5.5 h after treatment. No significant increase in fluorescence signal was observed in any experimental group compared with the negative controls.</figcaption>
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/lab/wetlab/eg/pager/eng-pager-fig08-fix.png" alt="Figure 8. Western blot analysis of ALFA Tag expression in engineered yeast." loading="lazy" width="1025" height="364" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 8. Western blot analysis of ALFA Tag expression in engineered yeast. Total protein was extracted from PAGER<sub>Gq</sub> engineering BY4741 strains (lanes 1&ndash;2) and wild-type BY4741 strains (lanes 3&ndash;4). GAPDH was used as the loading control. The expected size of the hM1 receptor is ~62 kDa. M: protein molecular weight marker.</figcaption>
         </figure>
+        <p>
+          To evaluate whether the correctly assembled truncated PAGER receptor could restore functional signaling output, a time-course plate-reader fluorescence assay was performed. The engineered strains were treated with either TEV protease (to artificially remove the MT1 auto-inhibitor) or HA protein (the target antigen), combined with a gradient of the agonist DCZ (1, 10, and 100 μM). As shown in Figure 9A and 9B, no significant increase in fluorescence intensity was observed in any experimental group compared with the negative controls (no-TEV, no-HA, or no-DCZ groups) over a 5.5-hour monitoring period. Notably, in a parallel control experiment, we constructed a yeast strain expressing a fusion protein consisting of the α-factor pre-sequence, the PAGER gating system, and the native yeast Ste2 receptor. This control strain exhibited a visible fluorescence signal upon induction, confirming that the α-factor pre-sequence can function properly in our yeast chassis and that the downstream reporter system is functional.
+        </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig09.png" alt="Figure 9. Confocal microscopy analysis of protein expression and subcellular localization of the Cycle 2 truncated PAGER construct." loading="lazy" width="1269" height="409" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 9. Confocal microscopy analysis of protein expression and subcellular localization of the Cycle 2 truncated PAGER construct. (A) Yeast cells harboring the truncated PAGER construct without a fluorescent tag (negative control). (B, C) Representative confocal images of yeast strains expressing the fluorescently tagged truncated PAGER construct. Intracellular punctate fluorescence signals were observed, indicating that the receptor was expressed but failed to localize properly to the plasma membrane. Scale bars: 20 μm.</figcaption>
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/lab/wetlab/eg/pager/eng-pager-fig09-fix.png" alt="Figure 9. Time-course fluorescence measurement of the engineered yeast biosensor after DCZ treatment." loading="lazy" width="797" height="717" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 9. Time-course fluorescence measurement of the engineered yeast biosensor after DCZ treatment. (A) Fluorescence intensity of the engineered yeast strain incubated with TEV protease and a gradient of DCZ (1, 10, and 100 μM), along with TEV-only and DCZ-only controls. (B) Fluorescence intensity of the engineered yeast strain incubated with HA protein and a gradient of DCZ (1, 10, and 100 μM), along with HA-only and DCZ-only controls. Fluorescence was recorded at 1, 2.5, 3.5, 4.5, and 5.5 h after treatment. No significant increase in fluorescence signal was observed in any experimental group compared with the negative controls.</figcaption>
+        </figure>
+        <p>
+          Confocal laser-scanning microscopy was performed to characterize protein expression and subcellular localization of truncated PAGER constructs. As shown in Figure 10, yeast cells transformed with the original Cycle 2 truncated construct without fluorescent fragment (Figure 10A) exhibited no obvious specific fluorescent signal. By contrast, yeast strains carrying the truncated PAGER plasmid with inserted fluorescent fragment (Figure 10B and Figure 10C) displayed detectable intracellular fluorescence signal, confirming that our truncated PAGER construct was indeed expressed at the protein level, but the overall expression yield was low. Nevertheless, the fluorescent signal was diffusely distributed within the cell instead of concentrating at the plasma membrane, indicating a defect in membrane trafficking or correct membrane insertion of the receptor fusion protein.
+        </p>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/lab/wetlab/eg/pager/eng-pager-fig10-fix.png" alt="Figure 10. Confocal microscopy analysis of protein expression and subcellular localization of the Cycle 2 truncated PAGER construct." loading="lazy" width="1269" height="409" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 10. Confocal microscopy analysis of protein expression and subcellular localization of the Cycle 2 truncated PAGER construct. (A) Yeast cells harboring the truncated PAGER construct without a fluorescent tag (negative control). (B, C) Representative confocal images of yeast strains expressing the fluorescently tagged truncated PAGER construct. Intracellular punctate fluorescence signals were observed, indicating that the receptor was expressed but failed to localize properly to the plasma membrane. Scale bars: 20 μm.</figcaption>
         </figure>
 
     <h3 id="engineering-pager-cycle2-learn">Learn</h3>
@@ -488,177 +543,245 @@ js:
     </div>
 
     <div id="engineering-pager-cycle3" class="content-card">
-      <h2>Cycle 3: Delete the hM1Dq ICL3 Intracellular Loop, Retain the Original Signal Peptide</h2>
+      <h2>Cycle 3: Selective Deletion of the hM1Dq ICL3 Loop with Native Signal Peptide Retention</h2>
 
     <h3 id="engineering-pager-cycle3-design">Design</h3>
         <p>
-          Results from Cycle 2 demonstrated that simultaneous deletion of both the native hM1D signal peptide and the ICL3 intracellular loop failed to restore PAGER protein expression and biosensor function. It remained unclear whether the observed failure stemmed from loss of the signal peptide, deletion of ICL3, or the combined effect of both modifications. To dissect the individual contribution of each domain, Version 5 was designed on the genetic background of Cycle 1. In this iteration, only the large intracellular ICL3 loop of the human hM1Dq receptor was removed, while the endogenous native signal peptide derived from hM1Dq was fully preserved. This experimental setup isolates the phenotypic impact of ICL3 truncation alone, separating its effect from signal-peptide removal. Specific primer pairs with homologous overlap sequences were synthesized for linearization of the plasmid backbone.
+          Results from Cycle 2 demonstrated that simultaneous deletion of both the native hM1D signal peptide and the ICL3 intracellular loop failed to restore PAGER protein expression and biosensor function. It remained unclear whether the observed failure stemmed from loss of the signal peptide, deletion of ICL3, or the combined effect of both modifications. To dissect the individual contribution of each domain, Cycle 3 was designed on the genetic background of Cycle 1. In this iteration, only the large intracellular ICL3 loop of the human hM1Dq receptor was removed, while the endogenous native signal peptide derived from hM1Dq was fully preserved. This experimental setup isolates the phenotypic impact of ICL3 truncation alone, separating its effect from signal-peptide removal. Specific primer pairs with homologous overlap sequences were synthesized for linearization of the plasmid backbone.
         </p>
 
     <h3 id="engineering-pager-cycle3-build">Build</h3>
         <p>
-          Based on the full-length PAGER plasmid backbone from Cycle 1, site-specific linear PCR was performed to directly truncate the coding sequence encoding the human-derived hM1Dq ICL3 intracellular loop. The linearized DNA product was directly transformed into competent <i>Saccharomyces cerevisiae</i> BY4741 cells. Transformants were plated on SD-His-Leu selective medium, and a no-DNA negative control was included to confirm selection efficiency (Figure 10A&ndash;C). Eight colonies were randomly picked from experimental plates B and C and subjected to colony PCR using junction-spanning primers. As shown in Figure 10D, only lane 5 yielded the expected 368 bp target amplicon. This single colony producing the correct-size PCR band was reserved as the candidate positive clone for subsequent downstream assays.
+          Based on the full-length PAGER plasmid backbone from Cycle 1, site-specific linear PCR was performed to directly truncate the coding sequence encoding the human-derived hM1Dq ICL3 intracellular loop. The linearized DNA product was directly transformed into competent <i>Saccharomyces cerevisiae</i> BY4741 cells. Transformants were plated on SD-His-Leu selective medium, and a no-DNA negative control was included to confirm selection efficiency (Figure 11A&ndash;C). Eight colonies were randomly picked from experimental plates B and C and subjected to colony PCR using junction-spanning primers. As shown in Figure 11D, only lane 5 yielded the expected 368 bp target amplicon. This single colony producing the correct-size PCR band was reserved as the candidate positive clone for subsequent downstream assays. Plasmid DNA was extracted from the single positive colony (lane 5) identified by colony PCR and subjected to Sanger sequencing. Sequence alignment against the designed Cycle 3 reference sequence confirmed successful deletion of the hM1Dq ICL3 intracellular loop, with no harmful mutations observed in the target region (Figure 12). These sequencing results verified that the Cycle 3 PAGER construct was correctly generated.
         </p>
         <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/pager/eng-pager-fig10.png" alt="Figure 10. Yeast transformation and colony PCR verification of the Version 5 PAGER construct." loading="lazy" width="1269" height="1148" decoding="async">
-          <figcaption class="eng-fig__cap">Figure 10. Yeast transformation and colony PCR verification of the Version 5 PAGER construct. (A) Negative-control transformation plate without linearized DNA. (B, C) Experimental SD-His-Leu plates with Version 5 transformants. (D) Colony PCR screening of eight randomly picked yeast colonies. M: DNA marker; lanes 1&ndash;8: PCR products from individual colonies. The expected target band size is 368 bp. Only the sample loaded in lane 5 generated a PCR product of the correct target size.</figcaption>
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig11.png" alt="Figure 11. Yeast transformation and colony PCR verification of the Cycle 3 PAGER construct." loading="lazy" width="1269" height="1148" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 11. Yeast transformation and colony PCR verification of the Cycle 3 PAGER construct. (A) Negative-control transformation plate without linearized DNA. (B, C) Experimental SD-His-Leu plates with Cycle 3 transformants. (D) Colony PCR screening of eight randomly picked yeast colonies. M: DNA marker; lanes 1&ndash;8: PCR products from individual colonies. The expected target band size is 368 bp.</figcaption>
         </figure>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig12.png" alt="Figure 12. Sanger sequencing verification of the Version 5 PAGER construct (Cycle 3)." loading="lazy" width="1269" height="597" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 12. Sanger-sequencing verification of the Version 5 PAGER construct (Cycle 3). Sequence alignment of the positive clone against the designed sample reference sequence, confirming precise deletion of the hM1Dq ICL3 intracellular loop and absence of deleterious mutations within the sequenced region.</figcaption>
+        </figure>
+
+    <h3 id="engineering-pager-cycle3-test">Test</h3>
+        <p>
+          Western blot analysis was performed to evaluate the expression of the Cycle 3 PAGER variant using an anti-ALFA Tag antibody (Figure 13). The wild-type BY4741 (lanes 1&ndash;2) and the engineered PAGER<sub>Gq</sub> strains (lanes 3&ndash;4) were analyzed alongside a protein marker. The GAPDH loading control (~36 kDa) showed consistent bands across all samples, confirming equal protein loading. At the expected molecular weight of ~64 kDa, a faint but specific target-sized band was detected in the engineered strains (lanes 3&ndash;4), whereas no corresponding band was observed in the wild-type BY4741 controls (lanes 1&ndash;2). Meanwhile, the faint band in the engineered strains indicates that the Cycle 3 construct was successfully expressed, but the overall yield remained extremely low. This low abundance is consistent with the lack of functional fluorescence in our time-course assays, suggesting that insufficient protein was available to trigger a robust downstream response.
+        </p>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig13.png" alt="Figure 13. Western blot analysis of ALFA Tag expression in engineered yeast." loading="lazy" width="803" height="285" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 13. Western blot analysis of ALFA Tag expression in engineered yeast. Total protein was extracted from wild-type BY4741 strains (lanes 1&ndash;2) and PAGER<sub>Gq</sub> engineering strains (lanes 3&ndash;4). GAPDH was used as the loading control. The expected size of the hM1 receptor is ~64 kDa. M: protein molecular weight marker.</figcaption>
+        </figure>
+        <p>
+          To characterize the functional response and auto-inhibition reversibility of our yeast PAGER sensors, we performed time-course fluorescence detection for both PAGER-TEV and PAGER-HA systems. We set up gradient DCZ concentrations (1 μM, 10 μM, 100 μM) alongside control groups without DCZ or without the corresponding trigger (TEV protease and HA antigen). As shown in Figure 14, the fluorescence intensity of all treatment groups gradually decreased over the incubation time. No obvious concentration-dependent fluorescence activation was observed in either PAGER-TEV or PAGER-HA groups. Fluorescence profiles of the groups treated with both DCZ and the triggers (TEV or HA) were indistinguishable from those of their respective negative controls. These results indicated that the current PAGER sensor design failed to produce expected HA and TEV-triggered reporter activation upon DCZ stimulation, and we did not capture reversible auto-inhibition switching behaviour in this assay.
+        </p>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig14.png" alt="Figure 14. Time-course fluorescence assay for auto-inhibition reversibility verification of PAGER yeast sensors." loading="lazy" width="969" height="766" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 14. Time-course fluorescence assay for auto-inhibition reversibility verification of PAGER yeast sensors. (A) PAGER-TEV sensor with gradient DCZ and control groups; (B) PAGER-HA sensor with gradient DCZ and control groups.</figcaption>
+        </figure>
+
+    <h3 id="engineering-pager-cycle3-learn">Learn</h3>
+        <p>
+          In Cycle 3, we constructed a PAGER variant with only the ICL3 loop deleted while retaining the native signal peptide. Sequencing confirmed the correct assembly of the plasmid, and Western blot verified that this variant could be successfully expressed in yeast. However, subsequent time-course functional assays did not yield any distinguishable reporter activation upon ligand stimulation. Together, these results indicate that simply truncating the intracellular loop is insufficient to rescue downstream signaling. Given the persistent structural incompatibilities of the heterologous human GPCR in the yeast chassis, we decided to shift our engineering strategy. In the next cycle, we will abandon the hM1Dq scaffold and instead construct a gating system based on the native yeast Ste2 receptor, which offers a more compatible platform for membrane expression and signal transduction.
+        </p>
+    </div>
+
+    <div id="engineering-pager-cycle4" class="content-card">
+      <h2>Cycle 4: Engineering the Native Ste2 Receptor for Functional Gating</h2>
+
+    <h3 id="engineering-pager-cycle4-design">Design</h3>
+        <p>
+          Based on the data accumulated from previous human GPCR iterations, we conducted a comprehensive reevaluation of our chassis strategy. Following multiple consultation sessions, Prof. <a href="{{ basePath | default('') }}human-practices/integrated human-practices.html#expert-luo-zhouqing">Zhouqing Luo</a> (Xiamen University) and <a href="{{ basePath | default('') }}human-practices/integrated human-practices.html#expert-qiu-xinyuan">Xinyuan Qiu</a> recommended a strategic shift. Rather than relying on a heterologous receptor, we should leverage the robust native machinery of yeast by directly fusing our gating module to the native Ste2 receptor. The new construct was designed with an architecture comprising an α-factor pre-sequence, an auto-inhibitory peptide (CRGPQLKPGQPMY), an anti-HA nanobody, a TEVcs, a flexible linker, and the native Ste2 receptor. By utilizing the yeast's own receptor scaffold, we aimed to harness its native signal transduction capability while retaining our modular antigen-gating logic.
+        </p>
+
+    <h3 id="engineering-pager-cycle4-build">Build</h3>
+        <p>
+          We evaluated two different assembly strategies for constructing the Ste2-gated system. The first involved co-transforming the repair template with either the pRS426 backbone or two un-circularized pML104 fragments containing the sgRNA. The second strategy relied on a one-step cloning product combined with the repair template. Transformants successfully grew on SD-His-Ura selective plates across all three transformation groups (Figure 15A). We then randomly picked colonies from the plates for colony PCR screening. As shown in Figure 15B, target bands were successfully amplified in specific clones (lanes 3, 12, and 19), while the negative control remained blank. Further Sanger sequencing of a representative positive clone (Sample 12) confirmed a high sequence identity of 96.90% over a 1064 bp aligned region (Figure 16). Except for minor sequencing artifacts at the 5&prime; start region, the core coding sequence matched perfectly with no critical mutations, confirming the successful assembly and genomic integration of the Ste2-gated fusion construct.
+        </p>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig15.png" alt="Figure 15. Yeast transformation and colony PCR verification of the engineered Ste2 gating construct." loading="lazy" width="1269" height="793" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 15. Yeast transformation and colony PCR verification of the engineered Ste2 gating construct. (A) Transformation plates on SD-His-Ura selective medium. Plate 1: pRS426 backbone + repair template; Plate 2: pML104 two fragments + repair template; Plate 3: One-step cloning product + repair template. (B) Colony PCR screening of transformants from the three plates. M1 and M2: DNA markers (2000 bp). Lane 2: Negative control. Lanes 3&ndash;13: Colonies randomly picked from Plate 1. Lanes 14&ndash;23: All colonies picked from Plate 2. Lanes 24&ndash;31: All colonies picked from Plate 3.</figcaption>
+        </figure>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig16.png" alt="Figure 16. Sanger sequencing verification of the Ste2-gated fusion construct." loading="lazy" width="1901" height="1040" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 16. Sanger sequencing verification of the Ste2-gated fusion construct.</figcaption>
+        </figure>
+
+    <h3 id="engineering-pager-cycle4-test">Test</h3>
+        <p>
+          Western blot verification of target fusion protein expression in the engineered strain. Total protein lysates were prepared from the engineered BY4741 strain expressing the target fusion protein and from wild-type BY4741. Immunoblotting was performed using an anti-ALFA antibody (recognizing the ALFA tag on the fusion protein) as the primary antibody, followed by the corresponding secondary antibody. A specific target band was detected in the engineered strain lane at the expected molecular weight of 67.3 kDa, whereas no corresponding band was observed in the wild-type BY4741 control lane, consistent with the expected result and confirming successful expression of the target fusion protein in the engineered strain. GAPDH was used as the loading control; the GAPDH bands of the two samples were consistent with each other, although the development quality of this blot was suboptimal&mdash;the GAPDH bands were not aligned on the same horizontal line (running crooked) and the background contained numerous non-specific bands, presumably a systemic issue caused by electrophoresis conditions or insufficient washing. Given the high specificity of the target band in the engineered strain and the absence of background signal in the wild-type control, the above conclusion regarding protein expression remains valid.
+        </p>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig17.png" alt="Figure 17. Western blot analysis of ALFA Tag expression in engineered yeast." loading="lazy" width="2063" height="598" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 17. Western blot analysis of ALFA Tag expression in engineered yeast. Total protein was extracted from wild-type BY4741 (lanes 1&ndash;3) and engineered BY4741 strains (lanes 4&ndash;8). GAPDH was used as the loading control. The expected size of the hM1 receptor is ~67.3 kDa. M: protein molecular weight marker.</figcaption>
+        </figure>
+        <p>
+          As shown in Figure 18A, in the presence of TEV protease, the fluorescence intensity exhibited a clear dose-dependent response to α-factor, with the 20 μM group yielding the highest signal and peaking around 4&ndash;6 hours post-induction. However, an unexpected phenomenon was observed. At every tested α-factor concentration, the addition of TEV protease resulted in a significantly lower fluorescence intensity compared with the corresponding groups without TEV treatment. A similar trend was observed in Figure 18B for the HA-treated groups. Although the HA-treated strains also showed a dose-dependent response to α-factor, their fluorescence signals were significantly attenuated compared with the groups without HA treatment. These results demonstrate that the Ste2-gated fusion protein was successfully expressed and could transmit the α-factor signal in a dose-dependent manner. However, both TEV cleavage and HA antigen binding led to a significant attenuation of the downstream fluorescence output, rather than the expected activation. This suggests that while the native Ste2 scaffold is a viable platform for expressing our gating module, the current auto-inhibitory peptide or linker design may introduce structural instability upon cleavage or antigen binding, which requires further optimization.
+        </p>
+        <figure class="eng-fig">
+          <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/pager/eng-pager-fig18.png" alt="Figure 18. Functional validation of the engineered Ste2-gated yeast biosensor." loading="lazy" width="913" height="350" decoding="async">
+          <figcaption class="eng-fig__cap">Figure 18. Functional validation of the engineered Ste2-gated yeast biosensor. Fluorescence intensity of the engineered BY4741 strain treated with varying concentrations of α-factor (1, 10, and 20 μM). (A) Strains treated with TEV protease. (B) Strains treated with HA protein. Data are presented as mean &plusmn; SD.</figcaption>
+        </figure>
+
+    <h3 id="engineering-pager-cycle4-learn">Learn</h3>
+        <p>
+          This cycle yielded a crucial proof-of-concept alongside an unexpected phenomenon. We successfully demonstrated that the native Ste2 receptor can tolerate the N-terminal fusion of a complex gating module and produce a strong, dose-dependent fluorescence signal, validating the native scaffold as a viable alternative. However, the decreased signals observed after TEV cleavage or HA binding indicate that the gating logic requires further optimization. We propose two main hypotheses for this attenuation. First, our initially designed auto-inhibitory peptide may not have effectively locked the Ste2 receptor in the OFF state, meaning external perturbations merely introduced structural instability rather than relieving a true inhibition. Second, the exogenous stimuli themselves (TEV protease or HA protein) might interfere with the native Ste2 machinery, possibly by disrupting receptor conformation or triggering rapid internalization. As emphasized by Prof. <a href="{{ basePath | default('') }}human-practices/integrated human-practices.html#expert-wu-hui">Hui Wu</a> (Dalian University of Technology), relying solely on final fluorescence output can be misleading, and verifying MAPK phosphorylation (p-ERK) will be necessary to confirm true pathway activation. To address the failure of the current inhibitory peptide, we utilized molecular docking simulations to computationally screen a library of potential auto-inhibitory peptides targeting Ste2. This in silico approach yielded a novel candidate with significantly higher binding affinity (FHLLQLKPGQPMY), which will be designed and tested in our future iterations. By combining this computational peptide screening with linker optimization and molecular-level verification, we aim to achieve a strict, stable, and antigen-dependent ON/OFF switch in the next engineering cycle.
+        </p>
     </div>
 
     <div id="engineering-reporter" class="content-card">
-      <h2>Reporter Output Module: FUS1 Promoter Reporter System</h2>
-        <p>
-          Cycle 1 established a quantifiable yEGFP fluorescent reporter and was largely successful. To obtain a more intuitive visual readout, Cycles 2–4 explored blue-white colorimetric systems, but each failed for distinct reasons: lacZα could not function alone in yeast (Cycle 2), the MEL1 system exhibited constitutive background leak (Cycle 3), and promoter mutagenesis of PRE1/PRE2 did not abolish the leak (Cycle 4).
-        </p>
+      <h2>Reporter Output Module: <i>FUS1</i> Promoter Reporter System</h2>
+      <p>
+        Cycle 1 established a quantifiable <i>yEGFP</i> fluorescent reporter and was largely successful. To obtain a more intuitive visual readout, Cycles 2–4 explored blue-white colorimetric systems, but each failed for distinct reasons: <i>lacZα</i> could not function alone in yeast (Cycle 2), the <i>MEL1</i> system exhibited constitutive background leak (Cycle 3), and promoter mutagenesis of PRE1/PRE2 did not abolish the leak (Cycle 4).
+      </p>
     </div>
 
     <div id="engineering-reporter-cycle1" class="content-card">
-      <h2>Cycle 1: yEGFP Fluorescent Reporter</h2>
+      <h2>Cycle 1: <i>yEGFP</i> Fluorescent Reporter</h2>
 
-    <h3 id="engineering-reporter-cycle1-design">Design</h3>
-        <p>
-          Use quantifiable green fluorescence as the readout. A reporter was designed in which the mating-pathway-responsive FUS1 promoter drives the yeast-enhanced green fluorescent protein (yEGFP), with the reporter cassette cloned into the pESC-His backbone carrying a His3 auxotrophic marker matched to the BY4741 chassis.
-        </p>
+      <h3 id="engineering-reporter-cycle1-design">Design</h3>
+      <p>
+        Use quantifiable green fluorescence as the readout. A reporter was designed in which the mating-pathway-responsive <i>FUS1</i> promoter drives the yeast-enhanced green fluorescent protein (<i>yEGFP</i>), with the reporter cassette cloned into the pESC-His backbone carrying a <i>HIS3</i> auxotrophic marker matched to the BY4741 chassis.
+      </p>
 
-    <h3 id="engineering-reporter-cycle1-build">Build</h3>
-        <p>
-          The yEGFP fragment was synthesized and ligated into pESC-His by double restriction digestion. The FUS1 promoter was PCR-amplified from the BY4741 genome and assembled upstream of yEGFP by one-step Gibson assembly. The recombinant plasmid was then transformed into BY4741.
-        </p>
-        <p>
-          Transformation screening and clone verification are shown in Fig. 1. The negative-control plate (A) showed no colony growth, while the positive plate (B) yielded only a few tiny single colonies, indicating a valid transformation with rare positive clones that required further enrichment and verification. Colony-PCR of the positive clones (Fig. 1C) showed a correct band at 1152 bp for sample No. 2, consistent with the expected size of the FUS1+yEGFP reporter cassette, confirming correct plasmid construction.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig01.png" alt="Fig. 1. Transformation screening and colony-PCR verification of the yEGFP fluorescent reporter plasmid." loading="lazy" width="1214" height="371" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 1. Transformation screening and colony-PCR verification of the yEGFP fluorescent reporter plasmid. A: negative-control plate, no colony growth; B: positive plate with a few tiny single colonies; C: colony-PCR, sample No. 2 showing a correct band at 1152 bp.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle1-build">Build</h3>
+      <p>
+        The <i>yEGFP</i> fragment was synthesized and ligated into pESC-His by double restriction digestion. The <i>FUS1</i> promoter was PCR-amplified from the BY4741 genome and assembled upstream of <i>yEGFP</i> by one-step Gibson assembly. The recombinant plasmid was then transformed into BY4741.
+      </p>
+      <p>
+        Transformation screening and clone verification are shown in Fig. 1. The negative-control plate (A) showed no colony growth, while the positive plate (B) yielded only a few tiny single colonies, indicating a valid transformation with rare positive clones that required further enrichment and verification. Colony-PCR of the positive clones (Fig. 1C) showed a correct band at 1152 bp for sample No. 2, consistent with the expected size of the <i>FUS1</i>+<i>yEGFP</i> reporter cassette, confirming correct plasmid construction.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig01.png" alt="Fig. 1. Transformation screening and colony-PCR verification of the yEGFP fluorescent reporter plasmid." loading="lazy" width="1214" height="371" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 1. Transformation screening and colony-PCR verification of the <i>yEGFP</i> fluorescent reporter plasmid. A: negative-control plate, no colony growth; B: positive plate with a few tiny single colonies; C: colony-PCR, sample No. 2 showing a correct band at 1152 bp.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle1-test">Test</h3>
-        <p>
-          Colony PCR and Sanger sequencing confirmed correct plasmid construction, and functionality was validated by assaying fluorescence under α-factor induction. For functional verification, positive strains were induced with a gradient of α-factor and the fluorescence change was monitored, as shown in Fig. 2. The fluorescence kinetic line chart from 1 to 16 h (Fig. 2A) showed a gradual rise of fluorescence over induction time, and the bar chart from 1 to 23 h (Fig. 2B) further revealed clear signal differences among induction concentrations, confirming that the FUS1-driven yEGFP reporter is effectively inducible by α-factor.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig02.png" alt="Fig. 2. Fluorescent response of the yEGFP reporter under α-factor gradient induction." loading="lazy" width="1426" height="518" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 2. Fluorescent response of the yEGFP reporter under α-factor gradient induction. A: fluorescence line chart under a gradient α-factor induction over 1-16 h; B: fluorescence bar chart under a gradient α-factor induction over 1-23 h.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle1-test">Test</h3>
+      <p>
+        Colony PCR and Sanger sequencing confirmed correct plasmid construction, and functionality was validated by assaying fluorescence under α-factor induction. For functional verification, positive strains were induced with a gradient of α-factor and the fluorescence change was monitored, as shown in Fig. 2. The fluorescence kinetic line chart from 1 to 16 h (Fig. 2A) showed a gradual rise of fluorescence over induction time, and the bar chart from 1 to 23 h (Fig. 2B) further revealed clear signal differences among induction concentrations, confirming that the <i>FUS1</i>-driven <i>yEGFP</i> reporter is effectively inducible by α-factor.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig02.png" alt="Fig. 2. Fluorescent response of the yEGFP reporter under α-factor gradient induction." loading="lazy" width="1426" height="518" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 2. Fluorescent response of the <i>yEGFP</i> reporter under α-factor gradient induction. A: fluorescence line chart under a gradient α-factor induction over 1-16 h; B: fluorescence bar chart under a gradient α-factor induction over 1-23 h.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle1-learn">Learn</h3>
-        <p>
-          This cycle was largely successful: the FUS1-driven yEGFP produced inducible fluorescence, confirming the FUS1-promoter-plus-reporter architecture is viable and providing a quantitative fluorescent baseline for later cycles and for the validated reporter data reported in the results.
-        </p>
+      <h3 id="engineering-reporter-cycle1-learn">Learn</h3>
+      <p>
+        This cycle was largely successful: the <i>FUS1</i>-driven <i>yEGFP</i> produced inducible fluorescence, confirming the <i>FUS1</i>-promoter-plus-reporter architecture is viable and providing a quantitative fluorescent baseline for later cycles and for the validated reporter data reported in the results.
+      </p>
     </div>
 
     <div id="engineering-reporter-cycle2" class="content-card">
-      <h2>Cycle 2: lacZα Blue-White System</h2>
+      <h2>Cycle 2: <i>lacZα</i> Blue-White System</h2>
 
-    <h3 id="engineering-reporter-cycle2-design">Design</h3>
-        <p>
-          To enable naked-eye observation and make the result more visual, the readout was switched to a blue-white colorimetric system, with the lacZα fragment retrieved from the pRS415 plasmid as the reporter.
-        </p>
+      <h3 id="engineering-reporter-cycle2-design">Design</h3>
+      <p>
+        To enable naked-eye observation and make the result more visual, the readout was switched to a blue-white colorimetric system, with the <i>lacZα</i> fragment retrieved from the pRS415 plasmid as the reporter.
+      </p>
 
-    <h3 id="engineering-reporter-cycle2-build">Build</h3>
-        <p>
-          The lacZα fragment, the FUS1 promoter and the linearized pESC-His were co-transformed into BY4741, relying on the yeast's own homologous recombination to assemble the recombinant plasmid in vivo in one step.
-        </p>
-        <p>
-          Construction and transformation verification of the lacZα reporter cassette are shown in Fig. 3. The negative-control plate (A) showed no colony growth, and the positive plate (B) yielded colonies. Colony-PCR (Fig. 3C) showed that, except for samples No. 3, 8 and 9, the remaining samples all produced a correct band at 1014 bp, matching the expected size of the lacZα reporter cassette and indicating that the in vivo yeast-recombination assembly was correctly integrated in most clones.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig03.png" alt="Fig. 3. Transformation and colony-PCR verification of the lacZα blue-white reporter system." loading="lazy" width="1052" height="284" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 3. Transformation and colony-PCR verification of the lacZα blue-white reporter system. A: negative-control plate, no colony growth; B: positive plate; C: colony-PCR, all samples except No. 3, 8 and 9 showing a correct band at 1014 bp.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle2-build">Build</h3>
+      <p>
+        The <i>lacZα</i> fragment, the <i>FUS1</i> promoter and the linearized pESC-His were co-transformed into BY4741, relying on the yeast's own homologous recombination to assemble the recombinant plasmid in vivo in one step.
+      </p>
+      <p>
+        Construction and transformation verification of the <i>lacZα</i> reporter cassette are shown in Fig. 3. The negative-control plate (A) showed no colony growth, and the positive plate (B) yielded colonies. Colony-PCR (Fig. 3C) showed that, except for samples No. 3, 8 and 9, the remaining samples all produced a correct band at 1014 bp, matching the expected size of the <i>lacZα</i> reporter cassette and indicating that the in vivo yeast-recombination assembly was correctly integrated in most clones.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig03.png" alt="Fig. 3. Transformation and colony-PCR verification of the lacZα blue-white reporter system." loading="lazy" width="1052" height="284" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 3. Transformation and colony-PCR verification of the <i>lacZα</i> blue-white reporter system. A: negative-control plate, no colony growth; B: positive plate; C: colony-PCR, all samples except No. 3, 8 and 9 showing a correct band at 1014 bp.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle2-test">Test</h3>
-        <p>
-          During verification, the short lacZα fragment was found to be non-functional on its own in yeast: it did not yield active β-galactosidase, so no blue-white colonies formed on substrate-containing plates.
-        </p>
-        <p>
-          Clones confirmed by colony-PCR were induced with α-factor and assayed on X-gal substrate, as shown in Fig. 4. The induced colonies failed to turn the X-gal substrate and no blue-white pattern formed, showing that even the confirmed clones could not produce functional β-galactosidase, so blue-white color development was not established in this system.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig04.png" alt="Fig. 4. Blue-white color development in functional verification of the lacZα system." loading="lazy" width="4096" height="3072" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 4. Blue-white color development in functional verification of the lacZα system. Colonies confirmed by colony-PCR, after α-factor induction, still failed to turn the X-gal substrate and formed no blue-white pattern.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle2-test">Test</h3>
+      <p>
+        During verification, the short <i>lacZα</i> fragment was found to be non-functional on its own in yeast: it did not yield active β-galactosidase, so no blue-white colonies formed on substrate-containing plates.
+      </p>
+      <p>
+        Clones confirmed by colony-PCR were induced with α-factor and assayed on X-gal substrate, as shown in Fig. 4. The induced colonies failed to turn the X-gal substrate and no blue-white pattern formed, showing that even the confirmed clones could not produce functional β-galactosidase, so blue-white color development was not established in this system.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig04.png" alt="Fig. 4. Blue-white color development in functional verification of the lacZα system." loading="lazy" width="4000" height="3000" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 4. Blue-white color development in functional verification of the <i>lacZα</i> system. Colonies confirmed by colony-PCR, after α-factor induction, still failed to turn the X-gal substrate and formed no blue-white pattern.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle2-learn">Learn</h3>
-        <p>
-          The root cause lay in the initial design: lacZα only works through alpha-complementation with the omega fragment encoded by the host lacZ, which BY4741 lacks, so the lacZα-based colorimetric strategy is infeasible in this chassis. A complete lacZ gene, or a host strain expressing lacZω, would be required for a functional blue-white screen.
-        </p>
+      <h3 id="engineering-reporter-cycle2-learn">Learn</h3>
+      <p>
+        The root cause lay in the initial design: <i>lacZα</i> only works through alpha-complementation with the omega fragment encoded by the host <i>lacZ</i>, which BY4741 lacks, so the <i>lacZα</i>-based colorimetric strategy is infeasible in this chassis. A complete <i>lacZ</i> gene, or a host strain expressing <i>lacZ</i>ω, would be required for a functional blue-white screen.
+      </p>
     </div>
 
     <div id="engineering-reporter-cycle3" class="content-card">
-      <h2>Cycle 3: MEL1 Secreted Blue-White System</h2>
+      <h2>Cycle 3: <i>MEL1</i> Secreted Blue-White System</h2>
 
-    <h3 id="engineering-reporter-cycle3-design">Design</h3>
-        <p>
-          The blue-white strategy was retained, but the reporter was replaced with MEL1, a secreted α-galactosidase from <i>S. cerevisiae</i>. Because MEL1 is secreted, hydrolysis of X-α-Gal produces a blue product extracellularly, enabling colorimetric readout in both solid and liquid media. This dual-format capability was expected to provide a more convenient and visually intuitive output than the fluorescent reporter.
-        </p>
+      <h3 id="engineering-reporter-cycle3-design">Design</h3>
+      <p>
+        The blue-white strategy was retained, but the reporter was replaced with <i>MEL1</i>, a secreted α-galactosidase from <i>S. cerevisiae</i>. Because <i>MEL1</i> is secreted, hydrolysis of X-α-Gal produces a blue product extracellularly, enabling colorimetric readout in both solid and liquid media. This dual-format capability was expected to provide a more convenient and visually intuitive output than the fluorescent reporter.
+      </p>
 
-    <h3 id="engineering-reporter-cycle3-build">Build</h3>
-        <p>
-          The MEL1 gene with homology arms was PCR-amplified from AH109; the previously built fluorescent reporter plasmid was linearized, and the two fragments were co-transformed into BY4741, assembling the recombinant plasmid by yeast homologous recombination. PCR and sequencing confirmed a successful build.
-        </p>
-        <p>
-          Construction and transformation verification of the MEL1 secreted reporter plasmid are shown in Fig. 5. The negative-control plate (A) showed no colony growth, and the positive plate (B) yielded white colonies. Colony-PCR (Fig. 5C) showed that, except for sample No. 11, the remaining samples all produced a correct band at 1635 bp, matching the expected size of the MEL1 reporter cassette and indicating successful integration of the linearized vector and the MEL1 fragment by yeast homologous recombination.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig05.png" alt="Fig. 5. Transformation and colony-PCR verification of the MEL1 blue-white reporter system." loading="lazy" width="998" height="284" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 5. Transformation and colony-PCR verification of the MEL1 blue-white reporter system. A: negative-control plate, no colony growth; B: positive plate (white colonies); C: colony-PCR, all samples except No. 11 showing a correct band at 1635 bp.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle3-build">Build</h3>
+      <p>
+        The <i>MEL1</i> gene with homology arms was PCR-amplified from AH109; the previously built fluorescent reporter plasmid was linearized, and the two fragments were co-transformed into BY4741, assembling the recombinant plasmid by yeast homologous recombination. PCR and sequencing confirmed a successful build.
+      </p>
+      <p>
+        Construction and transformation verification of the <i>MEL1</i> secreted reporter plasmid are shown in Fig. 5. The negative-control plate (A) showed no colony growth, and the positive plate (B) yielded white colonies. Colony-PCR (Fig. 5C) showed that, except for sample No. 11, the remaining samples all produced a correct band at 1635 bp, matching the expected size of the <i>MEL1</i> reporter cassette and indicating successful integration of the linearized vector and the <i>MEL1</i> fragment by yeast homologous recombination.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig05.png" alt="Fig. 5. Transformation and colony-PCR verification of the MEL1 blue-white reporter system." loading="lazy" width="998" height="284" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 5. Transformation and colony-PCR verification of the <i>MEL1</i> blue-white reporter system. A: negative-control plate, no colony growth; B: positive plate (white colonies); C: colony-PCR, all samples except No. 11 showing a correct band at 1635 bp.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle3-test">Test</h3>
-        <p>
-          Functional verification revealed a leak in the system: cells turned blue even without α-factor induction, in both X-α-Gal plates and X-α-Gal-containing liquid medium.
-        </p>
-        <p>
-          Functional verification of the MEL1 system is shown in Fig. 6. Successfully transformed strains were induced with a gradient of α-factor with X-α-Gal added to the liquid medium (Fig. 6A); from left to right the groups were induced at 12, 6, 3 and 1.5 μM, and the degree of blueing of the liquid medium showed no clear relationship with induction concentration. The fifth column, the negative group without α-factor, still turned blue, indicating a leak in the system, while the sixth column was a blank with no cells added. When the cell suspension was spotted onto X-α-Gal-containing plates (Fig. 6B), the cells turned blue even without α-factor induction, further confirming colorimetric leak under the un-induced condition.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig06.png" alt="Fig. 6. Signal leak observed in functional verification of the MEL1 system." loading="lazy" width="885" height="284" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 6. Signal leak observed in functional verification of the MEL1 system. A: liquid-medium color development; from left to right the 12, 6, 3 and 1.5 μM α-factor groups (blueing not clearly related to concentration), the 5th column the negative without α-factor (still blue, indicating leak), the 6th column a blank without cells; B: cells spotted onto X-α-Gal plates turned blue entirely without α-factor induction.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle3-test">Test</h3>
+      <p>
+        Functional verification revealed a leak in the system: cells turned blue even without α-factor induction, in both X-α-Gal plates and X-α-Gal-containing liquid medium.
+      </p>
+      <p>
+        Functional verification of the <i>MEL1</i> system is shown in Fig. 6. Successfully transformed strains were induced with a gradient of α-factor with X-α-Gal added to the liquid medium (Fig. 6A); from left to right the groups were induced at 12, 6, 3 and 1.5 μM, and the degree of blueing of the liquid medium showed no clear relationship with induction concentration. The fifth column, the negative group without α-factor, still turned blue, indicating a leak in the system, while the sixth column was a blank with no cells added. When the cell suspension was spotted onto X-α-Gal-containing plates (Fig. 6B), the cells turned blue even without α-factor induction, further confirming colorimetric leak under the un-induced condition.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig06.png" alt="Fig. 6. Signal leak observed in functional verification of the MEL1 system." loading="lazy" width="885" height="284" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 6. Signal leak observed in functional verification of the <i>MEL1</i> system. A: liquid-medium color development; from left to right the 12, 6, 3 and 1.5 μM α-factor groups (blueing not clearly related to concentration), the 5th column the negative without α-factor (still blue, indicating leak), the 6th column a blank without cells; B: cells spotted onto X-α-Gal plates turned blue entirely without α-factor induction.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle3-learn">Learn</h3>
-        <p>
-          This was judged as signal leak, hypothesized to originate from constitutive (basal) transcription of the FUS1 promoter; the basal activity of the FUS1 promoter must be reduced to eliminate the false-positive signal in the absence of inducer.
-        </p>
+      <h3 id="engineering-reporter-cycle3-learn">Learn</h3>
+      <p>
+        This was judged as signal leak, hypothesized to originate from constitutive (basal) transcription of the <i>FUS1</i> promoter; the basal activity of the <i>FUS1</i> promoter must be reduced to eliminate the false-positive signal in the absence of inducer.
+      </p>
     </div>
 
     <div id="engineering-reporter-cycle4" class="content-card">
-      <h2>Cycle 4: FUS1 Promoter PRE1/2 Mutagenesis Library</h2>
+      <h2>Cycle 4: <i>FUS1</i> Promoter PRE1/2 Mutagenesis Library</h2>
 
-    <h3 id="engineering-reporter-cycle4-design">Design</h3>
-        <p>
-          PRE1 and PRE2 are pheromone response elements (PREs) in the FUS1 promoter that mediate Ste12-dependent activation. Because we suspected that the leak originated from the FUS1 promoter itself, degenerate primers were designed to construct a random-mutagenesis library targeting the PRE1 and PRE2 elements (PRE1-only, PRE2-only, and combined PRE1/PRE2 mutations), aiming to screen for a promoter variant with low basal activity but strong inducibility.
-        </p>
+      <h3 id="engineering-reporter-cycle4-design">Design</h3>
+      <p>
+        PRE1 and PRE2 are pheromone response elements (PREs) in the <i>FUS1</i> promoter that mediate Ste12-dependent activation. Because we suspected that the leak originated from the <i>FUS1</i> promoter itself, degenerate primers were designed to construct a random-mutagenesis library targeting the PRE1 and PRE2 elements (PRE1-only, PRE2-only, and combined PRE1/PRE2 mutations), aiming to screen for a promoter variant with low basal activity but strong inducibility.
+      </p>
 
-    <h3 id="engineering-reporter-cycle4-build">Build</h3>
-        <p>
-          The mutated FUS1 promoter + MEL1 fragment and the linearized pESC-His were co-transformed into BY4741, assembling recombinant plasmids by yeast homologous recombination to generate the promoter-mutagenesis library.
-        </p>
-        <p>
-          Construction and transformation screening of the promoter-mutagenesis library are shown in Fig. 7. Transformed cells carrying PRE1/2 mutations of the FUS1 promoter were spread onto X-α-Gal-containing plates; blue-white colonies appeared, indicating successful transformation and reporter expression, thus providing a colorimetric screening platform for isolating low-basal, inducible clones.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig07.png" alt="Fig. 7. Transformation screening of the FUS1 promoter mutant library on X-α-Gal plates (blue-white)." loading="lazy" width="1279" height="1706" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 7. Transformation screening of the FUS1 promoter mutant library on X-α-Gal plates (blue-white). Mutant transformed cells spread onto X-α-Gal-containing plates showed blue-white colonies, indicating successful transformation.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle4-build">Build</h3>
+      <p>
+        The mutated <i>FUS1</i> promoter + <i>MEL1</i> fragment and the linearized pESC-His were co-transformed into BY4741, assembling recombinant plasmids by yeast homologous recombination to generate the promoter-mutagenesis library.
+      </p>
+      <p>
+        Construction and transformation screening of the promoter-mutagenesis library are shown in Fig. 7. Transformed cells carrying PRE1/2 mutations of the <i>FUS1</i> promoter were spread onto X-α-Gal-containing plates; blue-white colonies appeared, indicating successful transformation and reporter expression, thus providing a colorimetric screening platform for isolating low-basal, inducible clones.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig07.png" alt="Fig. 7. Transformation screening of the FUS1 promoter mutant library on X-α-Gal plates (blue-white)." loading="lazy" width="1279" height="1706" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 7. Transformation screening of the <i>FUS1</i> promoter mutant library on X-α-Gal plates (blue-white). Mutant transformed cells spread onto X-α-Gal-containing plates showed blue-white colonies, indicating successful transformation.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle4-test">Test</h3>
-        <p>
-          During screening, the mutant library was still leaky, and no ideal non-leaky, inducible strain could be isolated.
-        </p>
-        <p>
-          Further re-screening of the mutant library is shown in Fig. 8. White colonies were picked and re-streaked onto X-α-Gal plates. Some clones remained white even after α-factor induction, indicating loss of inducibility, while others turned blue without induction, indicating that the leak persisted. No clone with the desired low-basal, highly inducible phenotype was obtained.
-        </p>
-        <figure class="eng-fig">
-          <img class="eng-fig__img" src="../static/image/engineering/reporter/eng-reporter-fig08.png" alt="Fig. 8. Leak verification during re-screening of the mutant library." loading="lazy" width="1279" height="1706" decoding="async">
-          <figcaption class="eng-fig__cap">Fig. 8. Leak verification during re-screening of the mutant library. Picked white colonies, re-streaked onto another X-α-Gal-containing plate, remained white and did not turn blue even after α-factor induction, indicating the mutant library was still leaky.</figcaption>
-        </figure>
+      <h3 id="engineering-reporter-cycle4-test">Test</h3>
+      <p>
+        During screening, the mutant library was still leaky, and no ideal non-leaky, inducible strain could be isolated.
+      </p>
+      <p>
+        Further re-screening of the mutant library is shown in Fig. 8. White colonies were picked and re-streaked onto X-α-Gal plates. Some clones remained white even after α-factor induction, indicating loss of inducibility, while others turned blue without induction, indicating that the leak persisted. No clone with the desired low-basal, highly inducible phenotype was obtained.
+      </p>
+      <figure class="eng-fig">
+        <img class="eng-fig__img" src="{{ basePath | default('') }}static/image/engineering/reporter/eng-reporter-fig08.png" alt="Fig. 8. Leak verification during re-screening of the mutant library." loading="lazy" width="1279" height="1706" decoding="async">
+        <figcaption class="eng-fig__cap">Fig. 8. Leak verification during re-screening of the mutant library. Picked white colonies, re-streaked onto another X-α-Gal-containing plate, remained white and did not turn blue even after α-factor induction, indicating the mutant library was still leaky.</figcaption>
+      </figure>
 
-    <h3 id="engineering-reporter-cycle4-learn">Learn</h3>
-        <p>
-          Under this configuration, PRE1/2 mutagenesis did not resolve the leak, suggesting the leak may not stem (solely) from these two elements. Next steps include revisiting the overall FUS1 promoter architecture, introducing additional repressive elements, or reinforcing the self-inhibition of the PAGER receptor upstream to lower pathway basal activity. Meanwhile, the yEGFP fluorescent reporter validated in Cycle 1 remains the reliable, working readout.
-        </p>
+      <h3 id="engineering-reporter-cycle4-learn">Learn</h3>
+      <p>
+        Under this configuration, PRE1/2 mutagenesis did not resolve the leak, suggesting the leak may not stem (solely) from these two elements. Next steps include revisiting the overall <i>FUS1</i> promoter architecture, introducing additional repressive elements, or reinforcing the self-inhibition of the PAGER receptor upstream to lower pathway basal activity. Meanwhile, the <i>yEGFP</i> fluorescent reporter validated in Cycle 1 remains the reliable, working readout.
+      </p>
     </div>
 
   </div>

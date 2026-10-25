@@ -9,22 +9,27 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/experiments.css">
-<link rel="stylesheet" href="../static/css/protocol.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/experiments.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/protocol.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -59,47 +64,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -108,52 +113,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -186,10 +199,6 @@
   <div class="ppb-track">
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
-</div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
 </div>
 
   <main class="">
@@ -295,8 +304,8 @@
 <li class="level3"><a href="#protocol-p02">02 &middot; Glycerol Stock Preparation and Cryopreservation</a></li>
 <li class="level3"><a href="#protocol-p23">23 &middot; Plasmid Extraction from Yeast</a></li>
 <li class="level3"><a href="#protocol-p24">24 &middot; Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</a></li>
-<li class="level3"><a href="#protocol-p25">25 &middot; Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</a></li>
-<li class="level3"><a href="#protocol-p26">26 &middot; yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</a></li>
+<li class="level3"><a href="#protocol-p25">25 &middot; Dynamic Detection of α-factor Gradient-Induced <i>MEL1</i> Expression via X-α-gal Blue-White Color Development</a></li>
+<li class="level3"><a href="#protocol-p26">26 &middot; <i>yEGFP</i> Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</a></li>
               </ul>
             </li>
           </ul>
@@ -345,11 +354,11 @@
             <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p01" title="Protocol 1 · E. coli Transformation and Culture Expansion"><span class="proto-chip__no">01</span><span class="proto-chip__title"><i>E. coli</i> Transformation and Culture Expansion</span></a><a class="proto-chip" href="#protocol-p02" title="Protocol 2 · Glycerol Stock Preparation and Cryopreservation"><span class="proto-chip__no">02</span><span class="proto-chip__title">Glycerol Stock Preparation and Cryopreservation</span></a><a class="proto-chip" href="#protocol-p03" title="Protocol 3 · Plasmid Extraction from E. coli"><span class="proto-chip__no">03</span><span class="proto-chip__title">Plasmid Extraction from <i>E. coli</i></span></a><a class="proto-chip" href="#protocol-p04" title="Protocol 4 · Restriction Enzyme Digestion"><span class="proto-chip__no">04</span><span class="proto-chip__title">Restriction Enzyme Digestion</span></a><a class="proto-chip" href="#protocol-p05" title="Protocol 5 · Agarose Gel Electrophoresis"><span class="proto-chip__no">05</span><span class="proto-chip__title">Agarose Gel Electrophoresis</span></a><a class="proto-chip" href="#protocol-p06" title="Protocol 6 · Colony PCR for E. coli"><span class="proto-chip__no">06</span><span class="proto-chip__title">Colony PCR for <i>E. coli</i></span></a></div>
             <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p07" title="Protocol 7 · Conventional PCR"><span class="proto-chip__no">07</span><span class="proto-chip__title">Conventional PCR</span></a><a class="proto-chip" href="#protocol-p08" title="Protocol 8 · Overlap Extension PCR"><span class="proto-chip__no">08</span><span class="proto-chip__title">Overlap Extension PCR</span></a><a class="proto-chip" href="#protocol-p09" title="Protocol 9 · PCR Purification"><span class="proto-chip__no">09</span><span class="proto-chip__title">PCR Purification</span></a><a class="proto-chip" href="#protocol-p10" title="Protocol 10 · Gel Extraction of PCR Products"><span class="proto-chip__no">10</span><span class="proto-chip__title">Gel Extraction of PCR Products</span></a><a class="proto-chip" href="#protocol-p11" title="Protocol 11 · Gibson Assembly"><span class="proto-chip__no">11</span><span class="proto-chip__title">Gibson Assembly</span></a><a class="proto-chip" href="#protocol-p12" title="Protocol 12 · Yeast Transformation"><span class="proto-chip__no">12</span><span class="proto-chip__title">Yeast Transformation</span></a><a class="proto-chip" href="#protocol-p13" title="Protocol 13 · Colony PCR for Saccharomyces cerevisiae"><span class="proto-chip__no">13</span><span class="proto-chip__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></div>
             <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p14" title="Protocol 14 · Yeast Growth Curve Measurement"><span class="proto-chip__no">14</span><span class="proto-chip__title">Yeast Growth Curve Measurement</span></a><a class="proto-chip" href="#protocol-p15" title="Protocol 15 · Microscopic Observation of Yeast Morphology"><span class="proto-chip__no">15</span><span class="proto-chip__title">Microscopic Observation of Yeast Morphology</span></a><a class="proto-chip" href="#protocol-p16" title="Protocol 16 · Detection of Yeast Fluorescence Signal After Treatment"><span class="proto-chip__no">16</span><span class="proto-chip__title">Detection of Yeast Fluorescence Signal After Treatment</span></a><a class="proto-chip" href="#protocol-p17" title="Protocol 17 · Confocal Imaging of Yeast Fluorescence After Treatment"><span class="proto-chip__no">17</span><span class="proto-chip__title">Confocal Imaging of Yeast Fluorescence After Treatment</span></a><a class="proto-chip" href="#protocol-p18" title="Protocol 18 · SDS-PAGE and Western Blotting"><span class="proto-chip__no">18</span><span class="proto-chip__title">SDS-PAGE and Western Blotting</span></a><a class="proto-chip" href="#protocol-p19" title="Protocol 19 · CRISPR-Cas9 Transformation for Gene Knockout in Yeast"><span class="proto-chip__no">19</span><span class="proto-chip__title">CRISPR-Cas9 Transformation for Gene Knockout in Yeast</span></a><a class="proto-chip" href="#protocol-p20" title="Protocol 20 · Functional Validation of the Yeast Sensor"><span class="proto-chip__no">20</span><span class="proto-chip__title">Functional Validation of the Yeast Sensor</span></a></div>
-            <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p21" title="Protocol 21 · Sensitivity Testing of the Yeast Sensor"><span class="proto-chip__no">21</span><span class="proto-chip__title">Sensitivity Testing of the Yeast Sensor</span></a><a class="proto-chip" href="#protocol-p22" title="Protocol 22 · Specificity Testing of the Yeast Sensor"><span class="proto-chip__no">22</span><span class="proto-chip__title">Specificity Testing of the Yeast Sensor</span></a><a class="proto-chip" href="#protocol-p23" title="Protocol 23 · Plasmid Extraction from Yeast"><span class="proto-chip__no">23</span><span class="proto-chip__title">Plasmid Extraction from Yeast</span></a><a class="proto-chip" href="#protocol-p24" title="Protocol 24 · Verification PCR from Yeast Liquid Culture (Lyticase Lysis)"><span class="proto-chip__no">24</span><span class="proto-chip__title">Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</span></a><a class="proto-chip" href="#protocol-p25" title="Protocol 25 · Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development"><span class="proto-chip__no">25</span><span class="proto-chip__title">Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</span></a><a class="proto-chip" href="#protocol-p26" title="Protocol 26 · yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs"><span class="proto-chip__no">26</span><span class="proto-chip__title">yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</span></a></div>
+            <div class="proto-grid__row"><a class="proto-chip" href="#protocol-p21" title="Protocol 21 · Sensitivity Testing of the Yeast Sensor"><span class="proto-chip__no">21</span><span class="proto-chip__title">Sensitivity Testing of the Yeast Sensor</span></a><a class="proto-chip" href="#protocol-p22" title="Protocol 22 · Specificity Testing of the Yeast Sensor"><span class="proto-chip__no">22</span><span class="proto-chip__title">Specificity Testing of the Yeast Sensor</span></a><a class="proto-chip" href="#protocol-p23" title="Protocol 23 · Plasmid Extraction from Yeast"><span class="proto-chip__no">23</span><span class="proto-chip__title">Plasmid Extraction from Yeast</span></a><a class="proto-chip" href="#protocol-p24" title="Protocol 24 · Verification PCR from Yeast Liquid Culture (Lyticase Lysis)"><span class="proto-chip__no">24</span><span class="proto-chip__title">Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</span></a><a class="proto-chip" href="#protocol-p25" title="Protocol 25 · Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development"><span class="proto-chip__no">25</span><span class="proto-chip__title">Dynamic Detection of α-factor Gradient-Induced <i>MEL1</i> Expression via X-α-gal Blue-White Color Development</span></a><a class="proto-chip" href="#protocol-p26" title="Protocol 26 · yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs"><span class="proto-chip__no">26</span><span class="proto-chip__title"><i>yEGFP</i> Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</span></a></div>
           </div>
           <p class="proto-download">
             <span class="proto-download__label">Prefer the typeset handbook?</span>
-            <a href="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/protocol/protocol.pdf"
+            <a href="../static/image/lab/wetlab/protocol/protocol.pdf"
               target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -418,8 +427,8 @@
             <li><a href="#protocol-p02"><span class="proto-list__no">Protocol 2</span>Glycerol Stock Preparation and Cryopreservation</a></li>
             <li><a href="#protocol-p23"><span class="proto-list__no">Protocol 23</span>Plasmid Extraction from Yeast</a></li>
             <li><a href="#protocol-p24"><span class="proto-list__no">Protocol 24</span>Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</a></li>
-            <li><a href="#protocol-p25"><span class="proto-list__no">Protocol 25</span>Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</a></li>
-            <li><a href="#protocol-p26"><span class="proto-list__no">Protocol 26</span>yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</a></li>
+            <li><a href="#protocol-p25"><span class="proto-list__no">Protocol 25</span>Dynamic Detection of α-factor Gradient-Induced <i>MEL1</i> Expression via X-α-gal Blue-White Color Development</a></li>
+            <li><a href="#protocol-p26"><span class="proto-list__no">Protocol 26</span><i>yEGFP</i> Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</a></li>
           </ul>
         </div>
 
@@ -669,7 +678,7 @@
         <p class="proto-step">3. Prepare 100× α-factor working solutions (sterile solutions required; membrane filtration may be applied after preparation if needed): for each final concentration, prepare a 100× working solution at 2400, 1200, 600, 300, 150, 75 and 37.5 μM respectively, and prepare a sterile-medium tube as the 0 μM (negative) counterpart.</p>
         <p class="proto-step">4. Load the 96-well plate (100 μL per well): add 99 μL of the exponential-phase culture to each well, then 1 μL of the corresponding 100× α-factor working solution, and mix by pipetting—the final concentrations become the 24, 12, 6, 3, 1.5, 0.75, 0.375 and 0 μM gradient. For the negative control add 99 μL of culture + 1 μL of sterile medium in place of the inducer; for the blank add pure SD-His medium only. Label all groups.</p>
         <p class="proto-step">5. One-plate loading and induction timing: after thorough mixing, load all groups into the black 96-well fluorescence microplate in one go, then place the plate in a 30°C incubator for static culture and start timing; no shaking is used from here on.</p>
-        <p class="proto-step">6. Time-course fluorescence detection: starting 1 h after induction, read fluorescence on the microplate reader once every hour for a total of 16 h, giving 16 time points (1 h to 16 h). Reader settings for yEGFP green fluorescence: excitation 485 nm, emission 528 nm (fine-tune per instrument).</p>
+        <p class="proto-step">6. Time-course fluorescence detection: starting 1 h after induction, read fluorescence on the microplate reader once every hour for a total of 16 h, giving 16 time points (1 h to 16 h). Reader settings for <i>yEGFP</i> green fluorescence: excitation 485 nm, emission 528 nm (fine-tune per instrument).</p>
         <p class="proto-step">7. Reading protocol: each hour briefly remove the plate for a fast read, then return it immediately to the 30°C incubator to minimize room-temperature exposure; include 3 technical replicates for every group to ensure accuracy and comparability.</p>
         <p class="proto-step">8. Data processing and analysis: subtract the medium background and yeast autofluorescence with the negative control to obtain corrected specific fluorescence; plot the time-course curves of fluorescence at each α-factor concentration, compare the maximum induced fluorescence, and analyze the dose-response relationship (use GraphPad/Excel for means, SD and between-group differences).</p>
         <p class="proto-note">*Note: Store α-factor at -20°C; solutions must be kept sterile, and membrane filtration may be applied after preparation if needed; the black 96-well plate reduces well-to-well crosstalk and background, and one-time plating with scheduled reads avoids the contamination and growth disturbance caused by repeated sampling.</p>
@@ -762,8 +771,8 @@
         <p class="proto-step">1. Yeast pre-culture Inoculate engineered yeast in SD-HIS liquid medium, shake at 30 °C, 220 rpm until mid-logarithmic phase (OD600=0.4-0.6). Adjust yeast suspension to identical cell density for all samples.</p>
         <p class="proto-step">2. Prepare H1N1-HA serial dilution Dilute H1N1-HA stock protein with sterile PBS. Add yeast, protein solution and medium into 96-well plate, achieve final HA concentrations from 0.1 nM-100 nM; set zero-HA PBS control. Final volume per well is 200 μL.</p>
         <p class="proto-step">3. Antigen-nanobody binding incubation Seal plate with breathable sealing film, incubate statically at 30 °C for sufficient time to allow HA-nanobody binding.</p>
-        <p class="proto-step">4. Pathway activation by DCZ Add DCZ to identical final concentration across all wells. Incubate plate at 30 °C for fixed induction time to trigger MAPK-FUS1-yEGFP cascade. Before measurement, shake plate for 1 min inside reader to resuspend settled yeast cells to avoid sedimentation bias.</p>
-        <p class="proto-step">5. Microplate-reader acquisition Record yEGFP fluorescence RFU (Ex 485 nm/Em 528 nm, bottom-read) and OD600 absorbance for every well.</p>
+        <p class="proto-step">4. Pathway activation by DCZ Add DCZ to identical final concentration across all wells. Incubate plate at 30 °C for fixed induction time to trigger MAPK-<i>FUS1</i>-<i>yEGFP</i> cascade. Before measurement, shake plate for 1 min inside reader to resuspend settled yeast cells to avoid sedimentation bias.</p>
+        <p class="proto-step">5. Microplate-reader acquisition Record <i>yEGFP</i> fluorescence RFU (Ex 485 nm/Em 528 nm, bottom-read) and OD600 absorbance for every well.</p>
         <p class="proto-step">6. Data analysis</p>
         <p class="proto-substep">a. Subtract medium blank value from raw RFU and raw OD 600.</p>
         <p class="proto-substep">b. Compute normalized fluorescence =Net RFU/Net OD600, correcting for differences in cell density per well.</p>
@@ -780,7 +789,7 @@
         <p class="proto-step">2. Prepare each protein working solution with sterile PBS. Dispense yeast suspension and corresponding protein solutions into 96-well plate. Each well final volume 200 μL.</p>
         <p class="proto-step">3. Seal plate, incubate statically at 30 °C for antigen- nanobody binding.</p>
         <p class="proto-step">4. Add DCZ to uniform final concentration for all wells. Fixed- time incubation at 30 °C for signal activation. Shake plate 1 min before measurement for cell resuspension.</p>
-        <p class="proto-step">5. Read RFU(yEGFP) and OD 600 via microplate- reader.</p>
+        <p class="proto-step">5. Read RFU(<i>yEGFP</i>) and OD 600 via microplate- reader.</p>
         <p class="proto-step">6. Data analysis</p>
         <p class="proto-substep">a. Subtract medium blank for raw RFU and OD 600. Compute normalized fluorescence = Net RFU / Net OD 600.</p>
         <p class="proto-substep">b. Subtract chassis-yeast normalized autofluorescence to obtain net normalized signal.</p>
@@ -826,7 +835,7 @@
         <p class="proto-step">7. Verify the amplified products by agarose gel electrophoresis; a specific band of the expected size indicates a positive clone.</p>
         <p class="proto-note">Note: Extend the lyticase incubation if lysis is incomplete. Adjust the annealing temperature by primer Tm and the extension time by fragment length. Store the remaining lysate at −20 °C for repeat PCR.</p>
         <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
-        <h3 id="protocol-p25">Protocol 25 &middot; Dynamic Detection of α-factor Gradient-Induced MEL1 Expression via X-α-gal Blue-White Color Development</h3>
+        <h3 id="protocol-p25">Protocol 25 &middot; Dynamic Detection of α-factor Gradient-Induced <i>MEL1</i> Expression via X-α-gal Blue-White Color Development</h3>
         <p class="proto-page-ref">Handbook pages 45–46</p>
         <h4 class="proto-label">Materials</h4>
         <p class="proto-text">X-α-gal Blue-White Color Development</p>
@@ -838,16 +847,16 @@
         <p class="proto-step">4. Inducer dosing on plates: once colonies appear, precisely add 2.5 μL of the corresponding gradient α-factor working solution above each colony group; add equal-volume sterile water for the negative group and keep a blank plate for the blank group.</p>
         <p class="proto-step">5. Liquid induction: aliquot the same OD600 0.4–0.6 culture into each group to form X-α-gal SD-His liquid reaction systems; add the corresponding α-factor concentrations, add equal-volume sterile water for the negative group, and use X-α-gal SD-His liquid without cells/inducer for the blank group; incubate at 30°C.</p>
         <p class="proto-step">6. Time-course recording: from induction, observe and photograph the blue/white color intensity and range of plate colonies and liquid systems every 1 h for a total of 8 h (8 time points, 1–8 h), keeping plate and liquid time points aligned.</p>
-        <p class="proto-step">7. Data analysis: compile the 8-time-point photos and color grades; score each sample on a unified scale (colorless / light blue / medium blue / deep blue); subtract blank-medium and negative background to obtain specific induced color; plot color intensity vs time for the plate and liquid systems, compare induction efficiency, color-onset time and maximum intensity across concentrations, and analyze the dose-response relationship of MEL1 expression.</p>
+        <p class="proto-step">7. Data analysis: compile the 8-time-point photos and color grades; score each sample on a unified scale (colorless / light blue / medium blue / deep blue); subtract blank-medium and negative background to obtain specific induced color; plot color intensity vs time for the plate and liquid systems, compare induction efficiency, color-onset time and maximum intensity across concentrations, and analyze the dose-response relationship of <i>MEL1</i> expression.</p>
         <p class="proto-note">Note: store α-factor at -20°C; store X-α-gal at -20°C protected from light; prepare X-α-gal medium freshly; the culture temperature is held at 30°C and the observation/photography conditions are kept consistent; 3 biological replicates per group.</p>
         <p class="proto-back"><a href="#protocol-overview">&uarr; Back to overview</a></p>
-        <h3 id="protocol-p26">Protocol 26 &middot; yEGFP Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</h3>
+        <h3 id="protocol-p26">Protocol 26 &middot; <i>yEGFP</i> Fluorescent Yeast Induction Assay for Signal Differences at Different Starting ODs</h3>
         <p class="proto-page-ref">Handbook pages 47–47</p>
         <h4 class="proto-label">Materials</h4>
         <p class="proto-text">Starting ODs</p>
-        <p class="proto-text">yEGFP fluorescent yeast glycerol stock or single colonies; SD-His liquid selective medium; α-factor stock solutions (final concentrations 12 μM, 1.2 μM and 0 μM); sterile black 96-well microplates with lids; microplate reader capable of OD600 and fluorescence measurement; sterile pipette tips and a multichannel pipette.</p>
+        <p class="proto-text"><i>yEGFP</i> fluorescent yeast glycerol stock or single colonies; SD-His liquid selective medium; α-factor stock solutions (final concentrations 12 μM, 1.2 μM and 0 μM); sterile black 96-well microplates with lids; microplate reader capable of OD600 and fluorescence measurement; sterile pipette tips and a multichannel pipette.</p>
         <h4 class="proto-label">Steps</h4>
-        <p class="proto-step">1. Pre-culture: inoculate the yEGFP fluorescent yeast from a glycerol stock or a picked single colony into 5 mL SD-His liquid medium and grow it to a certain density.</p>
+        <p class="proto-step">1. Pre-culture: inoculate the <i>yEGFP</i> fluorescent yeast from a glycerol stock or a picked single colony into 5 mL SD-His liquid medium and grow it to a certain density.</p>
         <p class="proto-step">2. Normalization and pre-culture to target OD: dilute the culture with fresh sterile SD-His to a starting OD600 of 0.1–0.2, then continue culturing for a period until the OD600 reaches a set value (e.g. about 0.4).</p>
         <p class="proto-step">3. Plating and induction setup: add the culture to a sterile black 96-well microplate with lid, 99 μL per well; induce with α-factor at final concentrations of 12 μM, 1.2 μM and 0 μM, and set up three replicates for each group.</p>
         <p class="proto-step">4. Sampling and starting-OD recording: starting from the moment the culture is added to the 96-well plate, perform one induction every 1 h (including 0 h); before each induction, take 3 samples and measure OD600 to record the starting OD of that induction round.</p>
@@ -884,122 +893,130 @@
 </script>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -1022,21 +1039,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   

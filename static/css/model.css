@@ -12,6 +12,54 @@
   border-radius: var(--radius-sm);
 }
 
+/* ============ Formula blocks ============ */
+
+/* Serif formula block for the scoring function and specificity index: cream tint plus a thick left rule lifts the
+   expression out of the surrounding list text, so the equation is read before its annotation.
+   Subscripts use <sub> and variables use <i>; no external math typesetting library is pulled in. */
+.content-card .model-formula {
+  margin: 0.6rem 0 0.85rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--color-primary-lighter);
+  border: 1px solid rgba(212, 165, 116, 0.45);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 8px rgba(139, 90, 43, 0.08);
+  font-family: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", serif;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--color-primary-dark);
+  overflow-x: auto;
+}
+
+/* Times New Roman subscripts sit deep enough to stretch the line box; line-height: 0 keeps the block height stable. */
+.content-card .model-formula sub {
+  font-size: 0.62em;
+  line-height: 0;
+}
+
+.content-card .model-formula-note {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--font-size-md);
+  color: var(--color-text-light);
+}
+
+/* Body subscripts: peptide variants (MT1_5) and ΔG_bind read as true indices, so they get a smaller size than the
+   browser default and no extra line height. The formula blocks above keep their own, tighter rule. */
+.content-card sub {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
+@media (max-width: 768px) {
+  .content-card .model-formula {
+    padding: 0.7rem 0.6rem;
+    font-size: 1rem;
+  }
+}
+
 /* ============ Card game area frame ============ */
 
 .model-game {
@@ -247,6 +295,14 @@
 .model-game__column,
 .model-game__center {
   min-width: 0;
+}
+
+/* 中栏纵向拉满整栏高：展示区底边与最下面一张抗体卡的底边对齐。
+   只给 center 设 align-self，board 其余项仍顶部对齐，两列卡牌不受影响。 */
+.model-game__center {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ============ Cards ============ */
@@ -720,7 +776,12 @@
 /* ============ 3D panel ============ */
 
 .model-game__viewer-block {
-  margin: 0 0 var(--spacing-lg);
+  /* 底边与抗体列底边对齐：不再留底部外边距，改由 flex 吃掉中栏剩余高度 */
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
   padding: var(--spacing-md);
   border: 1px solid var(--border-color-light);
   border-radius: var(--radius-md);
@@ -732,12 +793,18 @@
 
 .model-game__flip {
   perspective: 1400px;
+  /* 承接 viewer-block 的剩余高度并传给翻转卡内层 */
+  display: flex;
+  flex: 1;
+  min-height: 0;
 }
 
 .model-game__flip-inner {
   display: grid;
   transform-style: preserve-3d;
   transition: transform 0.5s var(--ease-smooth);
+  flex: 1;
+  min-height: 0;
 }
 
 .model-game__flip-face {
@@ -753,6 +820,20 @@
   transform: rotateY(180deg);
 }
 
+/* 正面（3D 面）纵向铺满：viewer 伸缩吃掉剩余高度，note/message 贴底不动 */
+.model-game__flip-face--3d {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 背面（排名面）同样纵向铺满，表格超高时面板内滚动 */
+.model-game__flip-face--numbers {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .model-game__viewer-block.is-flipped .model-game__flip-inner {
   transform: rotateY(180deg);
 }
@@ -765,6 +846,9 @@
 .model-game__flip-face .model-game__panel--ranking {
   min-height: 0;
   margin-bottom: 0;
+  /* 铺满整个背面，表格超高时面板内部滚动，不撑破翻转卡 */
+  flex: 1;
+  overflow: auto;
 }
 
 /* 排名表有 5 列，中间列被结果栏压到 318px，auto 布局会按内容撑开并溢出到右侧卡列上。
@@ -899,15 +983,18 @@
 
 .model-game__viewer {
   position: relative;
+  /* 高度由 flex 链接管：拉伸填满展示区，底边与抗体列底边对齐 */
+  flex: 1 1 auto;
   min-height: 12rem;
   border: 2px dashed var(--color-primary-light);
   border-radius: var(--radius-md);
   background: var(--bg-card-hover);
 }
 
+/* 展示区激活态（已载入结构）：虚线改实线。
+   高度不在此处写死（由 flex 接管）；is-ready 由 model-game.js 在
+   draw() 成功时添加、reset 时移除。 */
 .model-game__viewer.is-ready {
-  /* 高度压到 18rem：作为钉住面板时需给下方结果留出可视空间 */
-  height: 18rem;
   border-style: solid;
   border-color: var(--border-color);
   background: var(--bg-card);
@@ -1153,9 +1240,7 @@
     grid-template-columns: 4rem minmax(0, 1fr) 3.8rem auto;
   }
 
-  .model-game__viewer.is-ready {
-    height: 15rem;
-  }
+  /* 1100px 以下仍是三栏，中栏 flex 拉伸照旧生效，无需给 viewer 写高度 */
 }
 
 @media (max-width: 768px) {
@@ -1177,12 +1262,11 @@
     padding: var(--spacing-sm);
   }
 
+  /* 单栏堆叠时中栏与抗体列不拼高，viewer 用固定高度的舒适画布 */
   .model-game__viewer {
-    min-height: 9rem;
-  }
-
-  .model-game__viewer.is-ready {
-    height: 13rem;
+    flex: 0 0 auto;
+    height: 16rem;
+    min-height: 16rem;
   }
 
   .model-game__viewer-empty {
@@ -1243,12 +1327,6 @@
 
   .model-game__ranking-item .model-game__badge {
     grid-column: 1 / -1;
-  }
-
-  .model-game__viewer,
-  .model-game__viewer.is-ready {
-    height: 16rem;
-    min-height: 16rem;
   }
 
   .model-game__button {

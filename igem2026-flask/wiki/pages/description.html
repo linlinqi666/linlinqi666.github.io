@@ -6,8 +6,7 @@
 /* 摘要条：覆盖 index.css 的首页 300vh 规则
    ----------------------------------------------------------
    index.css 为首页滚动动画区定义了 .executive-summary{height:300vh;padding-top:100vh}，
-   而根站的 description 页不加载 index.css，所以没有这个问题；flask 站全站加载 index.css，
-   本页若不覆盖，每段摘要会被撑成三屏高（实测 2850px），正文被推到视口之外。
+   flask 站全站加载 index.css，本页若不覆盖，每段摘要会被撑成三屏高、正文被推到视口之外。
    contribution.css 的还原只在 .contribution-page 作用域下生效，本页没有该类，
    故在此按内容页口径重写一遍（多一层 .description-container，不会外溢）。
    同样的写法见 results.html 的 .results-page .executive-summary。 */
@@ -28,9 +27,7 @@
 {% endblock %}
 {% block page_content %}
 
-    
 <div class="description-container">
-
 
       <!-- 左侧导航栏 -->
       <aside class="description-sidebar">
@@ -46,9 +43,14 @@
 
         <div class="description-nav-wrapper">
           <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#description-abstract" class="nav-main-link">Abstract</a>
+              </div>
+            </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#project-background" class="nav-main-link">Background and Motivation</a>
+                <a href="#description-why-echo-yeast" class="nav-main-link">Why EchoYeast?</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -57,19 +59,19 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#problem-impact">Problem and Impact</a>
+                  <a href="#description-why-influenza">Why influenza?</a>
                 </li>
                 <li class="level3">
-                  <a href="#project-goals">Project Goals</a>
+                  <a href="#description-why-consider-air-and-exhaled-breath">Why consider air and exhaled breath?</a>
                 </li>
                 <li class="level3">
-                  <a href="#why-this-project">Why This Project</a>
+                  <a href="#description-why-engineer-yeast">Why engineer yeast?</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#pager-strategy" class="nav-main-link">Core Design: the PAGER Strategy</a>
+                <a href="#description-our-design" class="nav-main-link">Our design</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -78,16 +80,28 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#antigen-gated-receptor">Antigen-Gated Receptor Principle</a>
+                  <a href="#description-system-architecture">System architecture</a>
                 </li>
                 <li class="level3">
-                  <a href="#dual-reporter">Dual-Mode Reporter System</a>
+                  <a href="#description-module-1-ha-recognition">Module 1: HA recognition</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-2-antigen-gated-receptor-design">Module 2: antigen-gated receptor design</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-3-g-protein-coupling">Module 3: G-protein coupling</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-4-chassis-engineering">Module 4: chassis engineering</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-5-fus1-reporter-output">Module 5: <i>FUS1</i> reporter output</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#biological-parts" class="nav-main-link">Biological Parts Library</a>
+                <a href="#description-model-guided" class="nav-main-link">Model-guided design</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -96,22 +110,16 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#pager-fusion-protein">PAGER Fusion Protein</a>
+                  <a href="#description-computational-workflow">Computational workflow</a>
                 </li>
                 <li class="level3">
-                  <a href="#chassis-targets">Chassis Engineering Targets</a>
-                </li>
-                <li class="level3">
-                  <a href="#reporter-parts">Reporter System Parts</a>
-                </li>
-                <li class="level3">
-                  <a href="#vectors-markers">Vectors and Selection Markers</a>
+                  <a href="#description-the-limits-of-computational-evidence">The limits of computational evidence</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#modular-construction" class="nav-main-link">Experimental Design and Modular Construction</a>
+                <a href="#description-dbtl" class="nav-main-link">Design–Build–Test–Learn</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -120,22 +128,22 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#module-one">Module 1: Chassis Cell Engineering</a>
+                  <a href="#description-design">Design</a>
                 </li>
                 <li class="level3">
-                  <a href="#module-two">Module 2: Reporter System Construction</a>
+                  <a href="#description-build">Build</a>
                 </li>
                 <li class="level3">
-                  <a href="#module-three">Module 3: Gpa1-Gα Humanization</a>
+                  <a href="#description-test">Test</a>
                 </li>
                 <li class="level3">
-                  <a href="#module-four">Module 4: PAGER Recognition Fusion Protein</a>
+                  <a href="#description-learn">Learn</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#innovation-value" class="nav-main-link">Innovation and Social Value</a>
+                <a href="#description-detection" class="nav-main-link">From engineered cells to a detection concept</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -144,16 +152,62 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#innovation-points">Three Innovations</a>
+                  <a href="#description-hardware-development">Hardware development</a>
                 </li>
                 <li class="level3">
-                  <a href="#social-value">Social Value and Outlook</a>
+                  <a href="#description-integrating-sampling-with-biological-sensing">Integrating sampling with biological sensing</a>
+                </li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#description-hp" class="nav-main-link">Human Practices and application boundaries</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3">
+                  <a href="#description-from-detection-to-risk-information">From detection to risk information</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-what-echoyeast-cannot-currently-claim">What EchoYeast cannot currently claim</a>
                 </li>
               </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#references" class="nav-main-link">References</a>
+                <a href="#description-safety" class="nav-main-link">Safety and responsible deployment</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#description-current-status" class="nav-main-link">Current status and next steps</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3">
+                  <a href="#description-current-evidence">Current evidence</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-next-experimental-priorities">Next experimental priorities</a>
+                </li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#description-conclusion" class="nav-main-link">Conclusion</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#description-references" class="nav-main-link">References</a>
               </div>
             </li>
           </ul>
@@ -184,433 +238,341 @@
 
       <!-- 右侧内容区域 -->
       <div class="description-content">
-        <div id="project-background" class="content-card">
+
+        <!-- ============ 概览卡（常显） ============ -->
+        <div id="description-abstract" class="content-card">
           <figure class="page-mascot page-mascot--description" aria-hidden="true">
             <img src="https://static.igem.wiki/teams/6373/wiki/icon/extension/description.avif" alt="" width="440" height="278"
               loading="lazy" decoding="async">
           </figure>
+
+          <h2 id="description-echoyeast-let-yeast-respond-to-influenza-signals">EchoYeast: Let Yeast Respond to Influenza Signals</h2>
+          <h4 class="description-subtitle">An engineered yeast biosensor for influenza A hemagglutinin recognition and environmental surveillance</h4>
           <div class="executive-summary">
-            <p><strong>Executive summary: </strong>Rapid on-site testing for influenza A virus (IAV) runs into a clinical bottleneck: existing methods are too slow or too costly for field use. This project uses <i>Saccharomyces cerevisiae</i> BY4741 as the chassis and applies the PAGER programmable antigen-gated receptor technology to turn HA antigen recognition into a green fluorescent signal, building a low-cost, high-sensitivity point-of-care biosensor.</p>
+          <p><em><strong>Can a living cell transform an invisible antigen-recognition event into a readable response?</strong></em></p>
           </div>
-
-          <h2>Background and Motivation</h2>
-          <div id="problem-impact">
-            <h3>Problem and Impact</h3>
-            <p>Influenza is a major global public-health threat, and fast, accurate on-site screening is central to controlling transmission. Current clinical tests have the following limitations:</p>
-            <div class="concept-highlight">
-              <ul>
-                <li><strong>qRT-PCR: </strong>High accuracy, but costly, dependent on specialised laboratory equipment and slow, so it is hard to deploy at the primary-care level or in the field.</li>
-                <li><strong>ELISA: </strong>Suitable for high-throughput testing, but its sensitivity is lower, the incubation steps are involved, and it demands a controlled operating environment.</li>
-                <li><strong>Colloidal gold test strip:</strong> Simple to operate and fast on site, but it gives only a qualitative read-out and can miss samples with a low viral load.</li>
-              </ul>
-            </div>
-            <p>These methods cannot reconcile cost, sensitivity and portability at the same time, which makes a low-cost, highly sensitive, field-deployable detection platform necessary.</p>
-            <!-- [To add: comparison figure of the three detection methods, 1000x500 px, .webp, under 150 KB] -->
-          </div>
-
-          <div id="project-goals">
-            <h3>Project Goals</h3>
-            <p>The core goal is to apply the PAGER (Protein-fragment Assisted Interaction Reporter) programmable antigen-gated receptor technology in <i>S. cerevisiae</i>, build a membrane-surface antigen-recognition fusion protein, and achieve rapid, visual detection of influenza A HA antigen.</p>
-            <p>When IAV HA antigen is present, nanobodies displayed on the yeast surface capture it. The resulting steric hindrance relieves receptor autoinhibition and, with the DCZ agonist present, activates the downstream G-protein pathway. The FUS1 promoter then drives yEGFP/lacZ expression, producing green fluorescence or a blue colour, so that antigen binding is converted directly into a measurable signal.</p>
-          </div>
-
-          <div id="why-this-project">
-            <h3>Why This Project</h3>
-            <p>Yeast was chosen as the chassis for several reasons: BY4741 has a well-characterised genetic background, the molecular tools are mature, cultivation is simple and it is BSL-1, which suits scaled fermentation. The PAGER system decouples antigen recognition from receptor activation, so swapping the nanobody alone extends the sensor to other pathogens, which makes the design modular and extensible.</p>
-          </div>
+          <h4 id="description-abstract-title">Abstract</h4>
+          <p>Seasonal influenza remains a global public-health challenge. The World Health Organization estimates that seasonal influenza causes approximately one billion cases, three to five million severe cases and 290,000–650,000 respiratory deaths worldwide each year. Influenza A and influenza B viruses both contribute to seasonal epidemics, while currently circulating human influenza A viruses include A(H1N1)pdm09 and A(H3N2). Most established influenza testing workflows are designed around clinical or laboratory samples collected from individuals. <a class="cite-ref" href="#description-reference-1">[1]</a></p>
+          <p>EchoYeast explores a complementary question: <strong>can an engineered living cell recognize influenza A hemagglutinin (HA) and convert that recognition event into a measurable biological output?</strong></p>
+          <p>EchoYeast uses <i>Saccharomyces cerevisiae</i> BY4741 as an engineered chassis. The project combines an HA-recognizing nanobody, an antigen-gated GPCR-inspired receptor, a humanized G-protein coupling interface, the yeast pheromone-response MAPK pathway and a <i>FUS1</i>-driven reporter system. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <figure class="design-figure">
+          <img src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/description/description-fig1.avif"
+          alt="Six-step schematic of the intended EchoYeast signal chain: influenza A HA, R1a-B6 nanobody, MT1-gated hM1Dq receptor, Gpa1-Gαq chimera, yeast MAPK pathway, and FUS1-driven yEGFP or MEL1 reporter; labelled as an intended design whose complete HA sensing has not yet been validated."
+          width="1267" height="713" loading="lazy" decoding="async">
+          <figcaption>Figure 1. Intended HA-to-reporter signaling mechanism of EchoYeast.</figcaption>
+          </figure>
+          <p>Our current work supports the characterization of the downstream <i>FUS1</i> reporter system and the construction of several chassis-engineering modules, while full-length receptor expression, HA-dependent activation and integration with air sampling remain to be demonstrated. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>Therefore, EchoYeast is currently an engineering exploration of a modular living-cell biosensor, rather than a clinically validated diagnostic device or a field-deployed airborne influenza detector.</p>
         </div>
 
-        <div id="pager-strategy" class="content-card">
-          <div class="executive-summary">
-            <p><strong>Executive summary: </strong>The PAGER strategy achieves antigen gating through a three-part chimera of MT1 inhibitory peptide, hM1Dq receptor and anti-HA nanobody: the pathway stays closed without HA, and HA relieves the steric block and activates the dual-mode reporter system.</p>
-          </div>
-
-          <h2>Core Design: the PAGER Strategy</h2>
-          <div id="antigen-gated-receptor">
-            <h3>Antigen-Gated Receptor Principle</h3>
-            <div class="concept-highlight">
-              <p><strong>PAGER</strong>(Protein-fragment Assisted Interaction
-                Reporter, protein-fragment assisted interaction reporter) is a programmable antigen-gated receptor strategy built on steric control. Its core is to combine an inhibitory peptide, an antigen-recognition nanobody and a G-protein-coupled receptor (GPCR) into a single membrane fusion protein.</p>
-            </div>
-
-            <div class="fusion-protein-map">
-              <div class="map-title">PAGER fusion protein architecture (N → C terminus)</div>
-              <div class="map-diagram">
-                <div class="domain" title="Guides secretion and anchors the protein at the yeast membrane">α-factor signal peptide</div>
-                <div class="linker">(GGGS)₃</div>
-                <div class="domain" title="Self-inhibits hM1Dq when no antigen is present">MT1 inhibitory peptide</div>
-                <div class="linker">(GGGS)₃</div>
-                <div class="domain tag" title="Recognises the IAV HA antigen specifically">anti-HA nanobody</div>
-                <div class="linker">(GGGS)₃</div>
-                <div class="domain" title="Molecular switch that mimics antigen unlocking in vitro">TEVcs</div>
-                <div class="linker">Linker</div>
-                <div class="domain receptor" title="Receives the upstream signal and couples to the G-protein pathway">hM1Dq receptor</div>
-              </div>
-              <div class="map-notes">
-                <p><strong>Complete architecture:</strong> <code>α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq</code>. The flexible (GGGS)₃ linkers act as spacers so that the nanobody can reach through the yeast cell-wall pores and contact the viral particle.</p>
-              </div>
-            </div>
-
-            <div class="workflow-diagram">
-              <div class="workflow-step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                  <h4>Resting Closed State</h4>
-                  <p>Without IAV HA antigen, the MT1 inhibitory peptide keeps occupying the orthosteric site of the hM1Dq receptor, the downstream G-protein cascade is held in the closed state and no fluorescence is produced.</p>
-                </div>
-              </div>
-              <div class="workflow-arrow">→</div>
-              <div class="workflow-step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                  <h4>Antigen Recognition and Steric Unlocking</h4>
-                  <p>HA antigen binds the surface-displayed anti-HA nanobody, and the resulting steric bulk physically displaces the MT1 inhibitory peptide from the hM1Dq binding pocket, relieving autoinhibition.</p>
-                </div>
-              </div>
-              <div class="workflow-arrow">→</div>
-              <div class="workflow-step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                  <h4>DCZ Activation and Signal Output</h4>
-                  <p>The small-molecule agonist DCZ activates hM1Dq. The Gpa1–Gαq chimera triggers the MAPK pathway, and the FUS1 promoter drives yEGFP/lacZ expression, producing green fluorescence or a blue colour.</p>
-                </div>
-              </div>
-            </div>
-            <!-- [To add: PAGER antigen-gating mechanism diagram, 1200x600 px, .webp, under 150 KB] -->
-          </div>
-
-          <div id="dual-reporter">
-            <h3>Dual-Mode Reporter System</h3>
-            <p>Two reporter systems, fluorescent and colorimetric, were built to cover quantitative analysis, high-throughput screening and naked-eye read-out:</p>
-            <div class="reporter-system">
-              <div class="reporter-comparison">
-                <div class="reporter-card">
-                  <div class="reporter-title">Fluorescent Reporter</div>
-                  <p><code>pFUS1-yEGFP</code></p>
-                  <p>yEGFP serves as the green fluorescent reporter. Fluorescence intensity can be quantified by flow cytometry, giving high sensitivity and a wide dynamic range for precise quantification and high-throughput screening.</p>
-                </div>
-                <div class="reporter-card">
-                  <div class="reporter-title">Colorimetric Reporter</div>
-                  <p><code>pFUS1-lacZ</code></p>
-                  <p>lacZ encodes β-galactosidase, which turns blue after staining with the X-Gal substrate. This allows qualitative visual read-out without expensive instruments, which suits resource-limited field settings.</p>
-                </div>
-              </div>
-            </div>
-            <p>Both systems share the FUS1 promoter and differ only in the reporter gene, so the sensor response can be verified through the same pathway, together or independently.</p>
-          </div>
-        </div>
-
-        <div id="biological-parts" class="content-card">
-          <div class="executive-summary">
-            <p><strong>Executive summary: </strong>The parts library covers four groups: the PAGER fusion protein, the chassis engineering targets (STE2/FAR1/Sst2 knockouts and C-terminal humanization of Gpa1), the dual-mode reporter system, and the vectors and selection markers.
-            </p>
-          </div>
-
-          <h2>Biological Parts Library</h2>
-          <div id="pager-fusion-protein">
-            <h3>PAGER Fusion Protein</h3>
-            <p>Complete architecture: <code>α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq</code>. The function and sequence of each domain are listed below:</p>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Part Name</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Core Function</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Sequence Information</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">α-factor signal peptide</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Guides the fusion protein into the secretory pathway and anchors it at the yeast plasma membrane</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    MRFPSIFTAVLFAASSALA</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">(GGGS)₃ linker</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Separates functional domains so that each folds independently</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Synthetic flexible linker</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">MT1 inhibitory toxin</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Self-inhibitory switch that blocks hM1Dq in the absence of antigen</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    LTCVTSKSIFGITTENCPDGQNLCFKKWYYIVPRYSDITWGCAATCPKPTNVRETIRCCETD</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">anti-H1N1_HA nanobody</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Binds IAV HA specifically; the core recognition unit</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    QVQLVESGGGLVQPGGSLRLSCAASGSFFSRYRMGWYRQAPGEQRELVASIAYDGSTSYADPVKGRFTISRDNANTVHLQMYSLKPDDTAVYYCNLDPPGILYWGQGTQVTVSS
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">TEVcs (TEV cleavage site)</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Molecular switch for in vitro verification, mimicking antigen unlocking</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    ENLYFQS</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">hM1Dq human DREADD receptor</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Receives the upstream signal and couples to the downstream G-protein pathway; activatable by DCZ</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Humanized M1 muscarinic receptor</td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- [To add: PAGER fusion-protein domain map, 1200x400 px, .webp, under 150 KB] -->
-          </div>
-
-          <div id="chassis-targets">
-            <h3>Chassis Engineering Targets</h3>
-            <p>To remove endogenous signal interference, amplify the pathway response and restore human GPCR coupling, the BY4741 chassis was engineered as follows:</p>
-            <div class="gene-knockout-grid">
-              <div class="knockout-card">
-                <div class="gene-name">STE2</div>
-                <div class="gene-description">Encodes the endogenous yeast α-factor receptor</div>
-                <div class="strategy">
-                  <strong>Engineering strategy: </strong>A single-target sgRNA directs CRISPR-Cas9 to introduce a frameshift, giving a full gene knockout.
-                </div>
-                <div class="validation">
-                  <strong>Purpose: </strong>Removes the endogenous α-factor receptor and lowers background noise. 
-                </div>
-              </div>
-
-              <div class="knockout-card">
-                <div class="gene-name">FAR1</div>
-                <div class="gene-description">Cell-cycle arrest protein downstream of the pheromone pathway</div>
-                <div class="strategy">
-                  <strong>Engineering strategy: </strong>A single-target sgRNA directs CRISPR-Cas9 to introduce a frameshift, giving a full gene knockout.
-                </div>
-                <div class="validation">
-                  <strong>Purpose: </strong>Relieves mating-induced cell-cycle arrest so that growth can be followed in real time. 
-                </div>
-              </div>
-
-              <div class="knockout-card">
-                <div class="gene-name">Sst2</div>
-                <div class="gene-description">Negative regulator of G-protein signalling</div>
-                <div class="strategy">
-                  <strong>Engineering strategy: </strong>A single-target sgRNA directs CRISPR-Cas9 to introduce a frameshift, giving a full gene knockout.
-                </div>
-                <div class="validation">
-                  <strong>Purpose: </strong>Removes the negative regulator of G protein and amplifies the fluorescent signal. 
-                </div>
-              </div>
-            </div>
-            <p>In addition, <strong>Gpa1 is not knocked out</strong>. Instead, homologous recombination is used for a five-residue substitution at the C terminus: the native <code>KIGII</code> is replaced by the human Gαq sequence <code>EYNLV</code>, so that the humanized hM1Dq receptor couples efficiently to the yeast MAPK pathway.
-            </p>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Gene</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Modification Method</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Purpose</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>STE2</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR knockout</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Removes the endogenous α-factor receptor and lowers background noise</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>FAR1</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR knockout</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Relieves mating-induced cell-cycle arrest so that growth can be followed in real time</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>Sst2</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR knockout</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Removes the negative regulator of G protein and amplifies the fluorescent signal</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>Gpa1</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Five-residue substitution at the C terminus</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Native KIGII → human Gαq EYNLV, coupling hM1Dq to the yeast MAPK pathway
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- [To add: triple-knockout and Gpa1 humanization diagram, 1000x500 px, .webp, under 150 KB] -->
-          </div>
-
-          <div id="reporter-parts">
-            <h3>Reporter System Parts</h3>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Part</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Function</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Detection Method</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>FUS1 promoter</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">G-protein-responsive promoter; transcription starts on pathway activation</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Pathway switch</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>yEGFP</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Green fluorescent reporter</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Flow-cytometric quantification of fluorescence</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>lacZ</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">β-galactosidase reporter</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Qualitative verification by X-Gal staining</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div id="vectors-markers">
-            <h3>Vectors and Selection Markers</h3>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Vector/Marker</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Application</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>pML104</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR-Cas9 yeast knockout plasmid expressing Cas9 + sgRNA</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>pESC-HIS</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Yeast reporter backbone carrying the FUS1-yEGFP/lacZ cassette</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>pGADT7</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Cloning backbone for the PAGER fusion gene</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>URA3</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Uracil selection marker; engineered strains are selected on SD-Ura plates</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>Ampᴿ</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">Ampicillin resistance for selection during E. coli amplification</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="modular-construction" class="content-card">
-          <div class="executive-summary">
-            <p><strong>Executive summary: </strong>The project follows a four-stage pipeline — gene synthesis, amplification and verification in <i>E. coli</i>, chassis engineering in yeast, and protein expression with functional testing — to build the complete biosensor in a modular way.</p>
-          </div>
-
-          <h2>Experimental Design and Modular Construction</h2>
-          <p>The experimental work is divided into four functional modules. Each is developed independently and then integrated step by step into a complete yeast biosensor that responds to HA antigen.</p>
-
-          <div id="module-one" class="module-card">
-            <div class="module-header">
-              <span class="module-number">01</span>
-              <h3>Chassis Cell Engineering — Removing Endogenous Interference and Amplifying the Signal</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>Objective: </strong>Knock out STE2, FAR1 and Sst2 in BY4741 with CRISPR-Cas9 to rebuild a zero-background, high-sensitivity signalling host.
-              </div>
-              <p>The pML104 vector expresses Cas9 and a single-target sgRNA. The construct was transformed into yeast by LiAc/PEG, positive clones were selected on SD-Ura plates and verified by colony PCR and Sanger sequencing. Current status: in progress; the sgRNA vector is being rebuilt after a restriction digest failed.</p>
-              <!-- [To add: gel image verifying the CRISPR triple knockout, 1000x600 px, .webp, under 150 KB] -->
-            </div>
-          </div>
-
-          <div id="module-two" class="module-card">
-            <div class="module-header">
-              <span class="module-number">02</span>
-              <h3>Reporter System Construction — FUS1-Driven Dual-Mode Output</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>Objective: </strong>Build the pFUS1-yEGFP and pFUS1-lacZ reporter plasmids so that the signal can be both visualized and quantified.
-              </div>
-              <p>Using pESC-HIS as the backbone, the FUS1 promoter was fused to either yEGFP or lacZ. Once the reporter strain receives the upstream G-protein signal, transcription starts: yEGFP is used for flow-cytometric quantification and lacZ for qualitative X-Gal staining.</p>
-            </div>
-          </div>
-
-          <div id="module-three" class="module-card">
-            <div class="module-header">
-              <span class="module-number">03</span>
-              <h3>Gpa1-Gα Humanization — Restoring Human GPCR Coupling</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>Objective: </strong>Use the homologous recombination machinery of <i>S. cerevisiae</i> to replace the C-terminal KIGII of Gpa1 with the human Gαq EYNLV sequence, coupling hM1Dq to the yeast MAPK pathway.
-              </div>
-              <p>The linear integration cassette consists of a 500 bp upstream homology arm, the humanized Gpa1 sequence, a URA3 selection cassette and a 500 bp downstream homology arm. BY4741 is a ura3 auxotroph, so positive integrants can be selected on SD-Ura plates and confirmed by colony PCR and Sanger sequencing. Current status: waiting for the chassis knockouts to be completed.</p>
-            </div>
-          </div>
-
-          <div id="module-four" class="module-card">
-            <div class="module-header">
-              <span class="module-number">04</span>
-              <h3>PAGER Recognition Fusion Protein — Assembling and Expressing the Core Sensor Element</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>Objective: </strong>Synthesize the PAGER fusion gene, amplify it in <i>E. coli</i> and transform it into yeast, then verify membrane expression and antigen responsiveness.
-              </div>
-              <p>The fusion gene was codon-optimized for <i>S. cerevisiae</i>, flanked with NdeI and BamHI sites, synthesized in full and cloned into pGADT7 (plasmid ABX63942). Transformation into Top10 competent cells, plasmid extraction and double-digest verification confirmed the construct: four positive clones gave plasmid concentrations of 408.45 / 404.85 / 297.15 / 355.90 ng/μL with A260/A280 ≈ 1.9, and the band pattern matched the expected sizes (7939 bp backbone, 2063 bp insert). Next, the construct will be transformed into yeast by LiAc/PEG, protein expression will be checked by Western blot, and induction conditions will be optimized with a DCZ gradient (10 nM, 100 nM, 1 μM).</p>
-              <!-- [To add: double-digest gel and Western blot results, 1000x600 px, .webp, under 150 KB] -->
-            </div>
-          </div>
-        </div>
-
-        <div id="innovation-value" class="content-card">
-          <div class="executive-summary">
-            <p><strong>Executive summary: </strong>The project offers innovations on three levels — technology, chassis and platform — and carries social value in lowering public-health testing costs, empowering primary care and establishing a general pathogen-detection platform.</p>
-          </div>
-
-          <h2>Innovation and Social Value</h2>
-          <div id="innovation-points">
-            <h3>Three Innovations</h3>
-            <div class="summary-highlights">
-              <div class="highlight-item">
-                <strong>Technology:</strong> the PAGER system is extended for the first time to the detection of a large viral antigen in yeast, with steric hindrance used as the antigen-gated receptor switch.
-              </div>
-              <div class="highlight-item">
-                <strong>Chassis:</strong> knocking out STE2, FAR1 and Sst2 together with the humanized Gpa1–Gαq chimera markedly lowers background noise and improves signal sensitivity.
-              </div>
-              <div class="highlight-item">
-                <strong>Platform:</strong> the modular design makes the nanobody recognition unit swappable, so the sensor can be extended quickly to COVID-19, RSV, IAV variants and other respiratory pathogens.
-              </div>
-            </div>
-          </div>
-
-          <div id="social-value">
-            <h3>Social Value and Outlook</h3>
-            <p><strong>Lowering public-health testing costs:</strong> <i>S. cerevisiae</i> can be produced by large-scale fermentation and does not need expensive PCR instruments, which suits population-level screening.</p>
-            <p><strong>Empowering primary care:</strong> the workflow does not depend on standard laboratory conditions, so it fits rapid screening in community clinics, schools and border ports.</p>
-            <p><strong>Industrializing synthetic biology:</strong> a modular general-purpose detection platform supports national infectious-disease surveillance.</p>
-            <p><strong>Longer-term directions:</strong> optimize the signal output for semi-quantitative viral-load measurement and pair it with a portable fluorescence reader; swap the surface nanobody to cover COVID-19, RSV, IAV variants and other respiratory pathogens; and ultimately develop a standardized test kit for commercial use.</p>
-          </div>
-        </div>
-
-        <div id="references" class="content-card">
-          <div class="executive-summary">
-            <p><strong>Executive summary: </strong>This page was compiled from the project's experimental records and published literature. The complete citation list will be added and checked against DOI/PubMed IDs before the Wiki freeze.</p>
-          </div>
-
-          <h2>References</h2>
-          <ol class="references-list">
-            <li>[1] Author. PAGER-based biosensor design for viral antigen detection. <i>Journal of Synthetic Biology</i>.
-              2025. [DOI/PubMed ID]</li>
-            <li>[2] Author. Engineering Gαq chimeric G proteins in <i>Saccharomyces cerevisiae</i>. <i>Yeast</i>. 2024.
-              [DOI/PubMed ID]</li>
-            <li>[3] Author. CRISPR-Cas9 genome editing in budding yeast for signal pathway reconstruction. <i>Methods in
-                Molecular Biology</i>. 2024. [DOI/PubMed ID]</li>
-            <li>[4] Author. Nanobody-mediated detection of influenza A hemagglutinin. <i>Protein Engineering, Design and
-                Selection</i>. 2023. [DOI/PubMed ID]</li>
+        <!-- ============ Why EchoYeast?（Why influenza? + Why consider air + Why engineer yeast?） ============ -->
+        <div id="description-why-echo-yeast" class="content-card">
+          <h2 id="description-why-echo-yeast">Why EchoYeast?</h2>
+          <h3 id="description-why-influenza">Why influenza?</h3>
+          <h4 id="description-a-recurring-global-health-challenge">A recurring global health challenge</h4>
+          <p>Seasonal influenza affects populations worldwide and causes substantial morbidity and mortality every year. People at increased risk of severe influenza complications include older adults, young children, pregnant individuals, people with chronic diseases and people with weakened immune systems. Influenza outbreaks can also produce school absenteeism, work absenteeism and pressure on healthcare services. <a class="cite-ref" href="#description-reference-1">[1]</a></p>
+          <p>For schools, hospitals, nursing institutions, dormitories and other shared indoor environments, we ask whether environmental information could complement individual-centered surveillance.</p>
+          <p>This does not mean replacing clinical diagnosis, vaccination or established laboratory testing. It means exploring whether a shared environment can provide an additional source of information about respiratory-virus risk.</p>
+          <h4 id="description-a-global-policy-context">A global policy context</h4>
+          <p>The WHO Global Influenza Strategy 2019–2030 provides a framework for strengthening seasonal influenza prevention and control and preparing for future influenza pandemics. The strategy emphasizes stronger national capacities and the development of improved tools for influenza prevention, detection, control and treatment. <a class="cite-ref" href="#description-reference-2">[2]</a></p>
+          <p>United Nations Sustainable Development Goal Target 3.d calls for strengthening the capacity of countries, particularly developing countries, for early warning, risk reduction and management of national and global health risks. <a class="cite-ref" href="#description-reference-3">[3]</a></p>
+          <p>China’s 2024 guidance on an intelligent multi-point infectious-disease surveillance and early-warning system also calls for multiple surveillance channels, including environmental risk-factor monitoring, together with stronger risk assessment and early-warning coordination. <a class="cite-ref" href="#description-reference-4">[4]</a></p>
+          <p>These global and national frameworks provide the public-health context for our project, but they do not endorse EchoYeast or establish its technical performance.</p>
+          <h3 id="description-why-consider-air-and-exhaled-breath">Why consider air and exhaled breath?</h3>
+          <h4 id="description-influenza-related-signals-can-be-found-in-exhaled-particles">Influenza-related signals can be found in exhaled particles</h4>
+          <p>Respiratory particles can contain influenza-related material. Yan and colleagues detected influenza viral RNA in fine and coarse aerosol fractions collected from symptomatic seasonal influenza cases. In their study, infectious virus was recovered from a proportion of validly cultured fine-aerosol samples. The study also found that coughing and sneezing were not necessary for the generation of infectious aerosols. <a class="cite-ref" href="#description-reference-5">[5]</a></p>
+          <p>These findings support the importance of studying respiratory aerosols, but they do not prove that any environmental biosensor can provide presymptomatic diagnosis.</p>
+          <h4 id="description-airborne-virus-detection-is-an-integrated-engineering-problem">Airborne-virus detection is an integrated engineering problem</h4>
+          <p>Airborne-virus detection is affected by particle size, sampling efficiency, target concentration, sample recovery and the preservation of detectable material. A sampler may process a large volume of air while collecting only a small amount of target material into the receiving liquid. <a class="cite-ref" href="#description-reference-6">[6]</a></p>
+          <p>The performance of the complete system therefore depends on more than molecular recognition.</p>
+          <p>For EchoYeast, an integrated workflow must answer four questions:</p>
+          <ol class="description-list">
+          <li><strong>Can the target be collected from air or exhaled breath?</strong></li>
+          <li><strong>Does the collected material remain recognizable?</strong></li>
+          <li><strong>Can molecular recognition be transmitted into the engineered yeast pathway?</strong></li>
+          <li><strong>Can the final output be distinguished from background and nonspecific responses?</strong></li>
           </ol>
-          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+          <p>We regard sampling, recognition, signal processing and readout as one connected engineering chain.</p>
+          <h4 id="description-existing-airborne-virus-technologies">Existing airborne-virus technologies</h4>
+          <p>Airborne-virus monitoring is already an active research field. Li and colleagues developed an integrated aerosol-monitoring platform that detected multiple respiratory viruses, including influenza A, using aerosol sampling and microfluidic nucleic-acid detection. This work demonstrates the potential of integrated environmental surveillance while also illustrating the importance of sensitivity, sample enrichment, automation and field deployment. <a class="cite-ref" href="#description-reference-8">[8]</a></p>
+          <p>EchoYeast does not claim to outperform nucleic-acid-based systems. Instead, it explores whether an engineered living cell can provide a different route for antigen recognition and signal amplification</p>
+          <h3 id="description-why-engineer-yeast">Why engineer yeast?</h3>
+          <h4 id="description-existing-detection-methods-and-a-different-design-space">Existing detection methods and a different design space</h4>
+          <p>Influenza can be detected using methods including nucleic-acid testing, antigen detection and virus isolation. <a class="cite-ref" href="#description-reference-1">[1]</a></p>
+          <p>A systematic review and meta-analysis found that digital immunoassays and rapid nucleic-acid amplification tests generally showed higher pooled sensitivity than traditional rapid influenza diagnostic tests, while specificity was generally high across the evaluated categories. <a class="cite-ref" href="#description-reference-7">[7]</a></p>
+          <p>These methods are valuable, but they are generally designed around prepared samples and dedicated testing workflows.</p>
+          <p>EchoYeast explores a different design space in which recognition and signal processing are encoded within a living cell.</p>
+          <p>The intended advantages of this design are modularity, genetic programmability and the possibility of connecting recognition to intracellular amplification.</p>
+          <p>These are design goals rather than experimentally demonstrated advantages over existing diagnostic technologies.</p>
+          <h4 id="description-yeast-as-a-signal-processing-chassis">Yeast as a signal-processing chassis</h4>
+          <p>Yeast contains a native GPCR–G-protein–MAPK signaling architecture that can be connected to heterologous receptors. Previous work has shown that yeast GPCR signaling can be engineered and tuned to generate measurable responses to selected extracellular stimuli. <a class="cite-ref" href="#description-reference-9">[9]</a></p>
+          <p>We selected <i>S. cerevisiae</i> BY4741 as the chassis for EchoYeast and designed a modular system containing recognition, gating, signal coupling and reporter-output layers. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>The central principle is:</p>
+          <p><em><strong>The recognition event is converted into a cellular signaling event, and the cellular signaling event is converted into a reporter output.</strong></em></p>
         </div>
-      </div>
-    </div>
+
+        <!-- ============ Our design（System architecture + Module 1-5） ============ -->
+        <div id="description-our-design" class="content-card">
+          <h2 id="description-our-design">Our design</h2>
+          <h3 id="description-system-architecture">System architecture</h3>
+          <p>EchoYeast contains five connected engineering modules:</p>
+          <ol class="description-list">
+          <li><strong>HA recognition module</strong></li>
+          <li><strong>Antigen-gated receptor module</strong></li>
+          <li><strong>G-protein coupling module</strong></li>
+          <li><strong>Chassis-engineering module</strong></li>
+          <li><strong>Reporter-output module</strong></li>
+          </ol>
+          <p>The intended architecture is shown below:</p>
+          <figure class="design-figure">
+          <img src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/description/description-fig2.avif"
+          alt="Five-module architecture overview of EchoYeast: HA recognition, antigen-gated receptor, G-protein coupling, chassis engineering and reporter output, with dashed links marking signal transmission between modules."
+          width="1616" height="1212" loading="lazy" decoding="async">
+          <figcaption>Figure 2. Overall system architecture of EchoYeast.</figcaption>
+          </figure>
+          <p>This architecture is a design model. Each connection requires independent experimental validation. <a href="{{ url_for('pages', page='design') }}">Team Design</a> <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <h3 id="description-module-1-ha-recognition">Module 1: HA recognition</h3>
+          <h4 id="description-why-target-the-ha-stem-region">Why target the HA stem region?</h4>
+          <p>Influenza HA contains a relatively variable globular head and a more conserved membrane-proximal stem region. Gaiotto and Hufton used yeast display and deep mutational scanning to investigate cross-neutralizing nanobodies that bind a conserved pocket in the HA2 stem region. <a class="cite-ref" href="#description-reference-10">[10]</a></p>
+          <p>The HA stem therefore provides a literature-supported starting point for exploring recognition that is not restricted to a single highly variable head epitope.</p>
+          <h4 id="description-why-use-r1a-b6">Why use R1a-B6?</h4>
+          <p>Hufton and colleagues characterized R1a-B6 among a group of single-domain antibodies with cross-subtype neutralization activity in their experimental system. Their study also showed that antibody valency could alter neutralization potency against some influenza subtypes. <a class="cite-ref" href="#description-reference-11">[11]</a></p>
+          <p>We use R1a-B6 as a literature-informed HA stem-region recognition element for an H1N1 prototype design. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>We do not describe R1a-B6 as an H1N1-exclusive nanobody or as a universal detector for all influenza A subtypes. <a class="cite-ref" href="#description-reference-10">[10]</a> <a class="cite-ref" href="#description-reference-11">[11]</a></p>
+          <p>Our computational pipeline prioritized R1aB6 from a group of candidate nanobody sequences for further experimental consideration. <a href="{{ url_for('pages', page='model') }}">Team Model</a></p>
+          <p>Computational prioritization does not prove that the final fusion receptor is correctly expressed, localized to the membrane or able to retain antigen-binding activity.</p>
+          <p>The recognition module must therefore be validated at several levels:</p>
+          <ul class="description-list">
+          <li>sequence integrity;</li>
+          <li>protein folding;</li>
+          <li>antigen binding;</li>
+          <li>accessibility within the fusion receptor;</li>
+          <li>antigen-dependent effects on receptor state.</li>
+          </ul>
+          <h3 id="description-module-2-antigen-gated-receptor-design">Module 2: antigen-gated receptor design</h3>
+          <h4 id="description-pager-inspired-logic">PAGER-inspired logic</h4>
+          <p>PAGERs are programmable antigen-gated engineered GPCRs designed to connect antigen recognition with receptor activation. Their central mechanism uses a conditional autoinhibitory domain that suppresses receptor activity until antigen binding relieves the inhibition. <a class="cite-ref" href="#description-reference-12">[12]</a></p>
+          <p>EchoYeast adapts this logic to an engineered yeast chassis and uses an HA-recognition nanobody in the receptor design. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>Our intended receptor architecture is:</p>
+          <figure class="design-figure">
+          <img src="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/description/description-fig3.avif"
+          alt="Domain diagram of the expected EchoYeast HA-gated fusion receptor: alpha-factor signal peptide, GS linkers, MT1 autoinhibitory domain, anti-HA nanobody R1a-B6, TEV cleavage site and the hM1Dq receptor, drawn as an intended architecture."
+          width="1666" height="942" loading="lazy" decoding="async">
+          <figcaption>Figure 3. Expected architecture of the EchoYeast HA-gated fusion receptor.</figcaption>
+          </figure>
+          <p>The exact behavior of this architecture must be tested experimentally because a domain that functions in one host or scaffold may not function identically after transplantation into another system.</p>
+          <h4 id="description-the-roles-of-ha-and-dcz">The roles of HA and DCZ</h4>
+          <p>In the intended OFF state, MT1 is designed to maintain hM1Dq in a low-activity state in the absence of HA. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>In the intended ON state, HA binding to R1a-B6 is expected to relieve MT1-mediated autoinhibition through a steric mechanism. DCZ then provides the small-molecule agonist input required to activate the de-repressed hM1Dq receptor. <a class="cite-ref" href="#description-reference-12">[12]</a></p>
+          <p>Therefore:</p>
+          <p><em><strong>HA is designed to control receptor gating, while DCZ provides receptor activation.</strong></em></p>
+          <p>HA is not intended to function as the direct small-molecule agonist of hM1Dq.</p>
+          <p>The TEV cleavage site is included as an auxiliary positive-control element for testing whether removal of the inhibitory region can restore downstream activity. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>A TEV-induced response would not prove that HA gating works. It would only help distinguish downstream pathway failure from receptor-gating failure.</p>
+          <h3 id="description-module-3-g-protein-coupling">Module 3: G-protein coupling</h3>
+          <h4 id="description-why-humanize-gpa1">Why humanize Gpa1?</h4>
+          <p>The coupling specificity of a GPCR is influenced by the C-terminal region of the Gα subunit. <a class="cite-ref" href="#description-reference-13">[13]</a></p>
+          <p>Brown and colleagues showed that replacing the final five residues of yeast Gpa1 with mammalian Gα sequences could improve the coupling of heterologous receptors to the yeast mating pathway. <a class="cite-ref" href="#description-reference-14">[14]</a></p>
+          <p>Based on this principle, we designed a Gpa1–Gαq chimera in which the yeast Gpa1 C-terminal sequence is changed from <strong>KIGII</strong> to the human Gαq-derived sequence <strong>EYNLV</strong>. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>The intended purpose is to create a receptor-recognition interface while retaining the yeast Gpa1 backbone and downstream yeast signaling context.</p>
+          <h4 id="description-gpa1-g-q-chimera-construction-and-characterization">Gpa1–Gαq chimera construction and characterization</h4>
+          <p>We constructed the Gpa1-humanization template by assembling <i>GPA1</i> homology arms and the <i>URA3</i> selection marker, followed by yeast transformation and colony-PCR screening. Sanger sequencing confirmed that clones 12 and 17 matched the expected sequence in the target replacement region. Both strains showed reduced α-factor-induced shmoo formation and growth inhibition, while maintaining normal proliferation. When tested with the <i>FUS1</i>–<i>yEGFP</i> reporter, the humanized strains displayed strongly attenuated α-factor-induced fluorescence, indicating that Gpa1 humanization effectively suppressed the native α-factor–MAPK–<i>FUS1</i> response and reduced potential background activation. Direct coupling between the humanized Gpa1 chimera and hM1Dq in the complete receptor system remains to be validated. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <h3 id="description-module-4-chassis-engineering">Module 4: chassis engineering</h3>
+          <h4 id="description-far1-and-cell-cycle-arrest"><i>FAR1</i> and cell-cycle arrest</h4>
+          <p>Yeast pheromone signaling can induce G1-phase cell-cycle arrest, and <i>FAR1</i> connects pheromone signaling with cell-cycle regulation. <a class="cite-ref" href="#description-reference-15">[15]</a></p>
+          <p>We designed <i>FAR1</i> disruption to reduce the growth-arrest component of the native mating response and to explore a chassis more suitable for sustained sensor operation. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <h4 id="description-sst2-and-negative-regulation"><i>SST2</i> and negative regulation</h4>
+          <p><i>SST2</i> is a major negative regulator of Gpa1-mediated pheromone signaling in <i>S. cerevisiae</i>. <i>SST2</i> deletion can increase pheromone sensitivity, but it may also alter background signaling and the relationship between cell growth and reporter output. <a class="cite-ref" href="#description-reference-16">[16]</a></p>
+          <p>We therefore treated <i>SST2</i> disruption as a signal-regulation hypothesis rather than assuming that increased signal intensity automatically represents improved sensing performance.</p>
+          <h4 id="description-what-our-chassis-data-show">What our chassis data show</h4>
+          <p>Our project introduced four-base-pair deletions into the targeted <i>FAR1</i> and <i>SST2</i> loci and used colony PCR and Sanger sequencing for verification. Under the reported α-factor conditions, the <i>FAR1</i> knockout strain showed reduced growth inhibition compared with the parental strain. The <i>FAR1</i>/<i>SST2</i> double-knockout strain showed altered growth and total-fluorescence behavior under several α-factor concentrations. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>Total fluorescence and fluorescence normalized to optical density are not equivalent measurements. Our data show that a strain can produce higher total fluorescence without consistently producing higher fluorescence per unit biomass. <i>FUS1</i>–<i>yEGFP</i> Experimental Report</p>
+          <p>Because the double-knockout experiment did not include a same-batch <i>FAR1</i>-single-knockout comparator, the independent contribution of <i>SST2</i> deletion cannot be directly calculated from the current dataset. <i>FUS1</i>–<i>yEGFP</i> Experimental Report</p>
+          <p>The relevant engineering question is therefore not simply “which strain is brightest,” but:</p>
+          <p><em><strong>Which chassis produces a sufficiently strong, reproducible and interpretable signal while retaining acceptable growth and low background?</strong></em></p>
+          <h3 id="description-module-5-fus1-reporter-output">Module 5: <i>FUS1</i> reporter output</h3>
+          <h4 id="description-why-use-fus1">Why use <i>FUS1</i>?</h4>
+          <p><i>FUS1</i> is a pheromone-induced gene associated with yeast mating and cell fusion. <a class="cite-ref" href="#description-reference-17">[17]</a></p>
+          <p>Earlier promoter studies showed that <i>FUS1</i> transcription is strongly induced by mating pheromone and depends on the yeast pheromone-response pathway. The <i>FUS1</i> upstream region contains pheromone-response elements that contribute to its inducible transcriptional behavior. <a class="cite-ref" href="#description-reference-18">[18]</a></p>
+          <p>These characteristics make <i>FUS1</i> a suitable candidate for connecting the yeast MAPK pathway to a reporter gene.</p>
+          <h4 id="description-two-independent-reporter-routes">Two independent reporter routes</h4>
+          <p>We constructed two independent reporter routes:</p>
+          <ol class="description-list">
+          <li><strong>P_FUS1–<i>yEGFP</i></strong> for fluorescence;</li>
+          <li><strong>P_FUS1–<i>MEL1</i></strong> for colorimetric output.</li>
+          </ol>
+          <p>The two reporters are parallel constructs rather than a single dual-reporter construct. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>The <i>yEGFP</i> route was selected because yeast-enhanced GFP has been developed as a reporter for gene expression in fungal systems, including <i>S. cerevisiae</i>. <a class="cite-ref" href="#description-reference-19">[19]</a></p>
+          <p><i>MEL1</i> encodes yeast α-galactosidase, and its sequence and secretory-protein architecture have been characterized previously. <a class="cite-ref" href="#description-reference-20">[20]</a></p>
+          <h4 id="description-reporter-construction-and-factor-characterization">Reporter construction and α-factor characterization</h4>
+          <p>Our Registry-submission <i>FUS1</i> promoter is a 435-bp fragment corresponding to the <i>S. cerevisiae</i> S288C chromosome III region from 71,368 to 71,802 in reference sequence NC_001135.5. NCBI NC_001135.5</p>
+          <p>The complete P_FUS1–<i>yEGFP</i> reporter fragment used in our construction is 1,152 bp, consisting of the 435-bp <i>FUS1</i> promoter region and a 717-bp <i>yEGFP</i> coding region. <i>FUS1</i>–<i>yEGFP</i> Experimental Report</p>
+          <p>We used α-factor concentrations of 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM to characterize the <i>FUS1</i>–<i>yEGFP</i> response system. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>The reporter system showed increasing fluorescence with increasing α-factor concentration under the reported conditions. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>The parental growth response also showed concentration-dependent inhibition consistent with activation of the native mating pathway. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>These experiments support the functionality of the downstream <i>FUS1</i> reporter module.</p>
+          <p>They do not prove that HA can activate the upstream engineered receptor.</p>
+        </div>
+
+        <!-- ============ Model-guided design ============ -->
+        <div id="description-model-guided" class="content-card">
+          <h2 id="description-model-guided-design">Model-guided design</h2>
+          <h3 id="description-computational-workflow">Computational workflow</h3>
+          <p>EchoYeast contains several molecular interfaces that are difficult to screen experimentally one by one.</p>
+          <p>We therefore used a computational pipeline that included AlphaFold2 or ColabFold structure prediction, ClusPro docking, HADDOCK refinement, PyMOL and SPICE interface analysis, GROMACS molecular dynamics and MM/GBSA estimation. The modeling workflow screened 17 candidate nanobody sequences and prioritized R1aB6 for further consideration. The model also investigated two candidate gating routes involving hM1Dq and Ste2. The model proposed interface residues and mutation hypotheses that can be tested experimentally. <a href="{{ url_for('pages', page='model') }}">Team Model</a></p>
+          <h3 id="description-the-limits-of-computational-evidence">The limits of computational evidence</h3>
+          <p>Docking scores are not direct measurements of experimental affinity.</p>
+          <p>A simulated complex is not proof of protein expression, membrane localization or functional signaling in yeast.</p>
+          <p>The Model page explicitly defines the computational results as predictions that have not yet been validated by wet-lab experiments. <a href="{{ url_for('pages', page='model') }}">Team Model</a></p>
+          <p>We therefore use modeling to:</p>
+          <ul class="description-list">
+          <li>narrow the candidate pool;</li>
+          <li>prioritize constructs;</li>
+          <li>identify possible interface residues;</li>
+          <li>propose mutations;</li>
+          <li>guide the next experimental cycle.</li>
+          </ul>
+          <p>The role of modeling in EchoYeast is to generate testable hypotheses, not to replace functional validation</p>
+        </div>
+
+        <!-- ============ Design-Build-Test-Learn ============ -->
+        <div id="description-dbtl" class="content-card">
+          <h2 id="description-design-build-test-learn">Design–Build–Test–Learn</h2>
+          <p>EchoYeast was developed through iterative Design–Build–Test–Learn (DBTL) cycles rather than a single linear workflow. The project was divided into four functional modules: chassis engineering, Gpa1 humanization, the PAGER-inspired receptor and the <i>FUS1</i> reporter system. <a href="{{ url_for('pages', page='engineering') }}">Team Engineering</a></p>
+          <h3 id="description-design">Design</h3>
+          <p>We designed the <i>FUS1</i>–<i>yEGFP</i> and <i>FUS1</i>–<i>MEL1</i> reporter routes, <i>FAR1</i>/<i>SST2</i> chassis modifications, the Gpa1–Gαq chimera, the PAGER-inspired HA-gated receptor and a temperature-controlled optical readout module. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <h3 id="description-build">Build</h3>
+          <p>The designed modules were constructed through plasmid assembly, PCR-based donor construction, CRISPR–Cas9 genome editing, yeast transformation and reporter/hardware development. For Gpa1 humanization, the initial Gibson-assembly strategy was replaced by overlap-extension fusion PCR after sequence mutations were identified in the first donor-construction cycle. <a href="{{ url_for('pages', page='engineering') }}">Team Engineering</a> <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <h3 id="description-test">Test</h3>
+          <p>We tested the reporter system by α-factor induction and fluorescence measurement, evaluated engineered chassis strains through growth and fluorescence assays, verified genome-editing and Gpa1-humanization events by colony PCR and Sanger sequencing, and assessed receptor constructs using protein detection and HA/DCZ stimulation experiments. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <h3 id="description-learn">Learn</h3>
+          <p>Each cycle informed the next design. The reporter cycles established the <i>FUS1</i>–<i>yEGFP</i> route as a functional downstream output and guided subsequent reporter optimization. The chassis cycles led to a plasmid-free Δ<i>FAR1</i> Δ<i>SST2</i> strain with enhanced α-factor-induced fluorescence. The Gpa1-humanization cycles led to correctly genotyped strains 12 and 17, which showed reduced native α-factor-induced morphology, growth inhibition and <i>FUS1</i>–<i>yEGFP</i> fluorescence. <a href="{{ url_for('pages', page='engineering') }}">Team Engineering</a> <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>The receptor cycles revealed that expression, localization, autoinhibition and functional coupling must be optimized separately. Although the downstream reporter platform and several upstream modules have been established, the complete HA-gated receptor-to-reporter pathway remains to be validated. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+        </div>
+
+        <!-- ============ From engineered cells to a detection concept ============ -->
+        <div id="description-detection" class="content-card">
+          <h2 id="description-from-engineered-cells-to-a-detection-concept">From engineered cells to a detection concept</h2>
+          <h3 id="description-hardware-development">Hardware development</h3>
+          <p>Our hardware work focuses on creating a compact environment for culturing engineered yeast and reading its optical output. The system is designed to maintain the culture at approximately 30 °C, excite <i>yEGFP</i> at 485 nm and collect fluorescence near 528 nm. The excitation and collection paths are arranged approximately at 90° to reduce direct excitation-light interference. <a href="{{ url_for('pages', page='hardware') }}">Team Hardware</a></p>
+          <p>The hardware design includes a temperature-control module, a fluorescence-excitation module and a signal-acquisition module. Temperature is monitored using a PT100 sensor and MAX31865 interface, while the optical readout uses a 485-nm LED, a BPW34 photodiode, transimpedance amplification and an ADS1115 analog-to-digital converter controlled by an Arduino Nano. <a href="{{ url_for('pages', page='hardware') }}">Team Hardware</a></p>
+          <p>The collection vessel, heated block, optical interfaces and electronic circuit were iteratively redesigned to improve component placement, optical alignment and assembly. A standard cuvette was also used during the testing stage to evaluate temperature control and optical alignment before finalizing the custom vessel. <a href="{{ url_for('pages', page='hardware') }}">Team Hardware</a></p>
+          <p>At this stage, the hardware demonstrates the development of incubation and optical-readout modules. It should not yet be interpreted as a completed field-deployable influenza detector.</p>
+          <h3 id="description-integrating-sampling-with-biological-sensing">Integrating sampling with biological sensing</h3>
+          <p>Airborne-virus monitoring is commonly divided into two steps: aerosol collection followed by laboratory analysis. Sampling efficiency, particle size and target recovery can strongly influence the final result. <a class="cite-ref" href="#description-reference-6">[6]</a></p>
+          <p>EchoYeast explores whether the liquid receiving phase of an aerosol sampler could also serve as the environment in which engineered yeast responds to the collected material. This concept could reduce sample-transfer steps and connect sampling with biological signal generation.</p>
+          <p>However, this remains an integration hypothesis rather than a validated air-detection result. The complete workflow still requires independent evaluation of aerosol collection efficiency, target recovery, antigen preservation, sample-matrix compatibility, evaporation, foaming, nonspecific interference, optical background and waste containment.</p>
+          <p>Therefore, our current hardware contribution is the development of a temperature-controlled and optical-readout platform that could support future sampling integration, rather than proof that the complete sampling–response–readout workflow already functions.</p>
+        </div>
+
+        <!-- ============ Human Practices and application boundaries ============ -->
+        <div id="description-hp" class="content-card">
+          <h2 id="description-human-practices-and-application-boundaries">Human Practices and application boundaries</h2>
+          <h3 id="description-from-detection-to-risk-information">From detection to risk information</h3>
+          <p>Our Human Practices work involved clinicians, disease-control professionals, regulatory personnel, synthetic-biology researchers, engineers, educators and potential users. Their feedback highlighted the importance of effective measurement range, sampling conditions, response time, specificity, false-positive control, cost and standardization. <a href="{{ url_for('pages', page='human-practices') }}">Team Human Practices</a></p>
+          <p>These discussions helped us refine the application position of EchoYeast. Rather than presenting the project as a general portable virus detector, we define it as a platform exploring <strong>environmental or controlled-breath risk screening, not individual diagnosis</strong>.</p>
+          <p>For early validation, controlled sampling conditions, such as a defined exhaled-breath setup or a controlled chamber, may be more suitable than open-air environmental sampling because they allow better control of sampling variables. <a href="{{ url_for('pages', page='human-practices') }}">Team Human Practices</a></p>
+          <p>If sampling performance, specificity, response time and reproducibility are established, the system could later be explored for environmental screening in enclosed spaces. Any environmental result would represent a signal associated with the sampled environment, not proof that a particular person is infected.</p>
+          <h3 id="description-what-echoyeast-cannot-currently-claim">What EchoYeast cannot currently claim</h3>
+          <p>At the current stage, EchoYeast cannot claim that it:</p>
+          <ul class="description-list">
+          <li>detects infectious influenza virus;</li>
+          <li>quantifies airborne virus concentration;</li>
+          <li>diagnoses infected individuals;</li>
+          <li>distinguishes all influenza A subtypes;</li>
+          <li>outperforms qPCR or other established diagnostic methods;</li>
+          <li>has been validated using real environmental samples;</li>
+          <li>has completed the HA-to-reporter signaling chain.</li>
+          </ul>
+          <p>These limitations define the current application boundary of the project.</p>
+        </div>
+
+        <!-- ============ Safety and responsible deployment ============ -->
+        <div id="description-safety" class="content-card">
+          <h2 id="description-safety-and-responsible-deployment">Safety and responsible deployment</h2>
+          <p>The project uses purchased recombinant HA rather than live influenza virus. According to our Safety and Security page, the project does not use live influenza virus, replication-competent viral sequences or virulence-related genes. <a href="{{ url_for('pages', page='safety-and-security') }}">Team Safety and Security</a></p>
+          <p>The chassis is the laboratory strain <i>Saccharomyces cerevisiae</i> BY4741, and all experiments are conducted under laboratory safety procedures and a documented risk-assessment framework. <a href="{{ url_for('pages', page='safety-and-security') }}">Team Safety and Security</a></p>
+          <p>Auxotrophic selection and marker-removal procedures are included as components of the biological-containment design. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>Any future environmental or breath-sampling prototype should operate as a closed system and include defined procedures for sample handling, yeast inactivation and waste disposal.</p>
+          <p>We also apply the following interpretation boundaries:</p>
+          <ul class="description-list">
+          <li>an antigen-related signal is not equivalent to infectious-virus concentration;</li>
+          <li>an environmental signal is not equivalent to individual infection;</li>
+          <li>α-factor response is not equivalent to HA response;</li>
+          <li>computational prediction is not equivalent to experimental validation;</li>
+          <li>fluorescence should not be converted into airborne-virus concentration without independent calibration;</li>
+          <li>a positive signal should not be converted into a clinical risk level without analytical and epidemiological validation.</li>
+          </ul>
+        </div>
+
+        <!-- ============ Current status and next steps ============ -->
+        <div id="description-current-status" class="content-card">
+          <h2 id="description-current-status-and-next-steps">Current status and next steps</h2>
+          <h3 id="description-current-evidence">Current evidence</h3>
+          <div class="description-table-scroll">
+          <table>
+          <thead>
+          <tr><th>Module</th><th>Current evidence</th><th>Current interpretation</th></tr>
+          </thead>
+          <tbody>
+          <tr><td><i>FUS1</i>–<i>yEGFP</i> reporter</td><td>α-factor-dependent fluorescence was characterized</td><td>Supports the downstream reporter route</td></tr>
+          <tr><td><i>FAR1</i>/<i>SST2</i> chassis</td><td>Targeted edits and phenotypic changes were observed</td><td>Supports chassis engineering; the optimal chassis remains to be determined</td></tr>
+          <tr><td>Gpa1–Gαq engineering</td><td>Clones 12 and 17 matched the expected target sequence and showed reduced native α-factor responses</td><td>Supports both construction and functional characterization of the humanized chassis</td></tr>
+          <tr><td>Computational model</td><td>Candidate prioritization and testable hypotheses were generated</td><td>Provides experimental guidance but not validation</td></tr>
+          <tr><td>Hardware</td><td>Temperature-control and optical-readout modules were designed and iterated</td><td>Supports future sampling integration; complete air detection remains open</td></tr>
+          <tr><td>Full-length receptor</td><td>Expected receptor-specific band and HA/DCZ response were not observed</td><td>Complete HA-gated sensing remains unvalidated</td></tr>
+          </tbody>
+          </table>
+          </div>
+          <p>The Gpa1-humanization results should therefore not be described as sequence-only evidence. Clones 12 and 17 were sequence-confirmed, and the humanized chassis showed reduced α-factor-induced shmoo formation, growth inhibition and <i>FUS1</i>–<i>yEGFP</i> fluorescence while maintaining overall growth performance. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>However, these experiments characterized the effect of Gpa1 humanization on the native α-factor pathway. Direct functional coupling between the humanized Gpa1 chimera and hM1Dq in the complete receptor system still requires further validation. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <h3 id="description-next-experimental-priorities">Next experimental priorities</h3>
+          <p>Our next step is to validate the receptor pathway in a modular order.</p>
+          <p>First, receptor expression, stability and membrane localization should be evaluated separately. Second, the basic hM1Dq–G-protein–MAPK connection should be tested without the complete antigen-gating architecture. Third, TEV-mediated removal of the inhibitory region can be used to examine whether the downstream pathway is functional. Finally, HA recognition and HA-dependent receptor activation should be tested in the complete receptor.</p>
+          <p>If a reproducible HA-dependent response is obtained, the system should then be characterized for limit of detection, dynamic range, response time, signal-to-background ratio, specificity, reproducibility, sample-matrix interference and comparison with a reference method.</p>
+          <p>Sampling integration should be evaluated only after the biological response has been established.</p>
+        </div>
+
+        <!-- ============ Conclusion ============ -->
+        <div id="description-conclusion" class="content-card">
+          <h2 id="description-conclusion">Conclusion</h2>
+          <p>EchoYeast explores whether engineered yeast can convert influenza A HA recognition into a measurable cellular response.</p>
+          <p>The project combines literature-informed HA stem-region recognition, R1a-B6 nanobody-based antigen recognition, PAGER-inspired receptor design, hM1Dq and DCZ-dependent activation, Gpa1–Gαq coupling, <i>FAR1</i>/<i>SST2</i> chassis engineering, <i>FUS1</i>-driven reporter routes, model-guided candidate prioritization and temperature-controlled optical readout. <a href="{{ url_for('pages', page='design') }}">Team Design</a></p>
+          <p>Through iterative DBTL cycles, we established a functional downstream <i>FUS1</i> reporter system, obtained engineered chassis strains and developed several receptor and hardware modules. <a href="{{ url_for('pages', page='engineering') }}">Team Engineering</a> <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>At the same time, the complete HA-gated receptor-to-reporter pathway has not yet been experimentally validated, and the integration of aerosol sampling with biological sensing remains a future objective. <a href="{{ url_for('pages', page='results') }}">Team Results</a></p>
+          <p>We therefore present EchoYeast as a modular and testable living-cell biosensor framework, rather than a finished diagnostic product.</p>
+          <p><em><strong>Our vision is to let yeast respond to influenza signals.</strong></em><em><br></em><em><strong>Our responsibility is to prove every step of that response.</strong></em></p>
+        </div>
+
+        <!-- ============ References ============ -->
+        <div id="description-references" class="content-card">
+          <h2 id="description-references">References</h2>
+          <ol class="description-refs">
+            <li id="description-reference-1">World Health Organization. <strong>Influenza (seasonal)</strong> [Internet]. Geneva: World Health Organization. Available from: https://www.who.int/news-room/fact-sheets/detail/influenza-(seasonal).</li>
+            <li id="description-reference-2">World Health Organization. <strong>Global influenza strategy 2019–2030</strong> [Internet]. Geneva: World Health Organization; 2019. Available from: https://www.who.int/publications/i/item/9789241515320.</li>
+            <li id="description-reference-3">United Nations Department of Economic and Social Affairs. <strong>Goal 3: Ensure healthy lives and promote well-being for all at all ages</strong> [Internet]. Available from: https://sdgs.un.org/goals/goal3.</li>
+            <li id="description-reference-4">National Disease Control and Prevention Administration, National Health Commission, National Development and Reform Commission, Ministry of Education, Ministry of Civil Affairs, Ministry of Finance, Ministry of Agriculture and Rural Affairs, General Administration of Customs, and National Forestry and Grassland Administration. Notice on Issuing the Guiding Opinions on Establishing and Improving an Intelligent Multi-Point Trigger Infectious Disease Surveillance and Early Warning System [关于印发《关于建立健全智慧化多点触发传染病监测预警体系的指导意见》的通知] [Internet]. Document No. 国疾控监测发〔2024〕16号. 2024 Aug 23. Available from: https://www.gov.cn/zhengce/zhengceku/202408/content_6971481.htm. (In Chinese.)</li>
+            <li id="description-reference-5">Yan J, Grantham M, Pantelic J, Bueno de Mesquita PJ, Albert B, Liu F, et al. Infectious virus in exhaled breath of symptomatic seasonal influenza cases from a college community. Proc Natl Acad Sci U S A. 2018;115(5):1081–1086. doi:10.1073/pnas.1716561115.</li>
+            <li id="description-reference-6">Pan M, Lednicky JA, Wu CY. Collection, particle sizing and detection of airborne viruses. J Appl Microbiol. 2019;127(6):1596–1611. doi:10.1111/jam.14278.</li>
+            <li id="description-reference-7">Merckx J, Wali R, Schiller I, Caya C, Gore GC, Chartrand C, et al. Diagnostic accuracy of novel and traditional rapid tests for influenza infection compared with reverse transcriptase polymerase chain reaction: a systematic review and meta-analysis. Ann Intern Med. 2017;167(6):394–409. doi:10.7326/M17-0848.</li>
+            <li id="description-reference-8">Li B, Lin B, Wang Y, Shi Y, Zeng W, Zhao Y, et al. Multi-scenario surveillance of respiratory viruses in aerosols with sub-single-copy spatial resolution. Nat Commun. 2024;15:8770. doi:10.1038/s41467-024-53059-x.</li>
+            <li id="description-reference-9">Shaw WM, Yamauchi H, Mead J, Gowers GF, Bell DJ, Öling D, et al. Engineering a model cell for rational tuning of GPCR signaling. Cell. 2019;177(3):782–796.e27. doi:10.1016/j.cell.2019.02.023.</li>
+            <li id="description-reference-10">Gaiotto T, Hufton SE. Cross-neutralising nanobodies bind to a conserved pocket in the hemagglutinin stem region identified using yeast display and deep mutational scanning. PLoS One. 2016;11(10):e0164296. doi:10.1371/journal.pone.0164296.</li>
+            <li id="description-reference-11">Hufton SE, Risley P, Ball CR, Major D, Engelhardt OG, Poole S. The breadth of cross sub-type neutralisation activity of a single domain antibody to influenza hemagglutinin can be increased by antibody valency. PLoS One. 2014;9(8):e103294. doi:10.1371/journal.pone.0103294.</li>
+            <li id="description-reference-12">Kalogriopoulos NA, Tei R, Yan Y, Klein PM, Ravalin M, Cai B, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature. 2025;637(8044):230–239. doi:10.1038/s41586-024-08282-3.</li>
+            <li id="description-reference-13">Komatsuzaki K, Murayama Y, Giambarella U, Ogata E, Seino S, Nishimoto I. A novel system that reports the G-proteins linked to a given receptor: a study of type 3 somatostatin receptor. FEBS Lett. 1997;406(1–2):165–170. doi:10.1016/S0014-5793(97)00257-3.</li>
+            <li id="description-reference-14">Brown AJ, Dyos SL, Whiteway MS, White JH, Watson MA, Marzioch M, et al. Functional coupling of mammalian receptors to the yeast mating pathway using novel yeast/mammalian G protein alpha-subunit chimeras. Yeast. 2000;16(1):11–22. doi:10.1002/(SICI)1097-0061(20000115)16:1&lt;11::AID-YEA502&gt;3.0.CO;2-K.</li>
+            <li id="description-reference-15">Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor Far1. Curr Biol. 2014;24(12):1390–1396. doi:10.1016/j.cub.2014.05.002.</li>
+            <li id="description-reference-16">Chasse SA, Flanary P, Parnell SC, Hao N, Cha JY, Siderovski DP, et al. Genome-scale analysis reveals Sst2 as the principal regulator of mating pheromone signaling in the yeast <i>Saccharomyces cerevisiae</i>. Eukaryot Cell. 2006;5(2):330–346. doi:10.1128/EC.5.2.330-346.2006.</li>
+            <li id="description-reference-17">Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Mol Cell Biol. 1987;7(7):2316–2328. doi:10.1128/mcb.7.7.2316-2328.1987.</li>
+            <li id="description-reference-18">Hagen DC, McCaffrey G, Sprague GF Jr. Pheromone response elements are necessary and sufficient for basal and pheromone-induced transcription of the <i>FUS1</i> gene of <i>Saccharomyces cerevisiae</i>. Mol Cell Biol. 1991;11(6):2952–2961. doi:10.1128/mcb.11.6.2952-2961.1991.</li>
+            <li id="description-reference-19">Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in <i>Candida albicans</i>. Microbiology. 1997;143(Pt 2):303–311. doi:10.1099/00221287-143-2-303.</li>
+            <li id="description-reference-20">Liljeström PL. The nucleotide sequence of the yeast <i>MEL1</i> gene. Nucleic Acids Res. 1985;13(20):7257–7268. doi:10.1093/nar/13.20.7257.</li>
+          </ol>
+        </div>
+</div>
+</div>
+
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/components/sidebar-progress.js') }}" defer></script>

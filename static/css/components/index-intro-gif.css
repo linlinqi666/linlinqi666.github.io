@@ -76,7 +76,8 @@ html.intro-gif-running .intro-gif.intro-gif--hiding {
   }
 }
 
-/* 跳过按钮：无边框、无背景，直接压在 GIF 上，仅保留暖棕文字 */
+/* 跳过按钮：无边框、无背景，直接压在 GIF 上，仅保留暖棕文字。
+   2026-10-21 用户要求放大至约两倍：字重字号、内边距、箭头间距一并 ×2。 */
 .intro-gif__skip {
   position: absolute;
   right: max(var(--spacing-xl), env(safe-area-inset-right, 0px) + var(--spacing-xl));
@@ -84,14 +85,14 @@ html.intro-gif-running .intro-gif.intro-gif--hiding {
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-2xl);
+  gap: calc(var(--spacing-sm) * 2);
+  padding: calc(var(--spacing-sm) * 2) calc(var(--spacing-2xl) * 2);
   border: 0;
   border-radius: var(--radius-pill);
   background: none;
   color: var(--color-primary-dark);
   font-family: inherit;
-  font-size: var(--font-size-md);
+  font-size: calc(var(--font-size-md) * 2);
   font-weight: 600;
   cursor: pointer;
   transition: transform var(--duration-normal) var(--ease-smooth);
@@ -116,7 +117,6 @@ html.intro-gif-armed:not(.intro-gif-finished) body {
 html.intro-gif-armed:not(.intro-gif-finished) nav,
 html.intro-gif-armed:not(.intro-gif-finished) .hamburger-menu,
 html.intro-gif-armed:not(.intro-gif-finished) #page-progress-bar,
-html.intro-gif-armed:not(.intro-gif-finished) .scroll-progress-bar,
 html.intro-gif-armed:not(.intro-gif-finished) .mobile-menu-overlay {
   opacity: 0 !important;
   visibility: hidden !important;

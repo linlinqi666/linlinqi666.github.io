@@ -1,0 +1,134 @@
+/* Flask→根站同步样式（notebook）：由 2026-10-26-flask-to-root-sync.py 生成，勿手改 */
+
+  .notebook-page .content-card {
+    overflow-wrap: anywhere;
+  }
+  .notebook-page .content-card h2 {
+    margin: 0 0 0.9rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
+    font-size: var(--desc-font-size-3xl);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--desc-color-primary-darker, #4A3728);
+  }
+  .notebook-page .content-intro {
+    margin: 0 0 0.6rem;
+    color: var(--desc-color-primary-dark, #5D4632);
+    line-height: 1.8;
+    text-indent: 2em;
+  }
+  .notebook-page .content-intro:last-child {
+    margin-bottom: 0;
+  }
+  .notebook-page .pdf-embed {
+    width: 100%;
+    margin-top: 0.9rem;
+  }
+  .notebook-page .pdf-embed__object {
+    display: block;
+    width: 100%;
+    height: 82vh;
+    min-height: 640px;
+    border: 1px solid #e3d8c2;
+    border-radius: 10px;
+    background: #fffdf8;
+  }
+  .notebook-page .pdf-embed__fallback {
+    padding: 64px 24px;
+    text-align: center;
+    color: #8a7656;
+    font-size: var(--desc-font-size-lg);
+    line-height: 1.7;
+    text-indent: 0;
+  }
+  .notebook-page .notebook-pending {
+    margin: 0;
+    color: #8a7656;
+    font-size: var(--desc-font-size-lg);
+    line-height: 1.8;
+  }
+  /* 卡片下方协议深链：编号指向 protocol 页对应协议的收纳条（protocol#protocol-pNN） */
+  .notebook-resources {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--desc-color-primary-light, #D4A574);
+    font-size: var(--desc-font-size-sm);
+    line-height: 1.8;
+  }
+  .notebook-resources__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+  }
+  .notebook-resources__label {
+    color: #6b563c;
+    font-weight: 600;
+  }
+  .notebook-resources__all {
+    font-weight: 600;
+    color: var(--desc-color-primary-darker, #4A3728);
+    text-decoration: none;
+    border-bottom: 1px solid var(--desc-color-primary-light, #D4A574);
+    padding-bottom: 1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .notebook-resources__all:hover,
+  .notebook-resources__all:focus-visible {
+    color: var(--desc-color-primary-dark, #5D4632);
+    border-color: var(--desc-color-primary-dark, #5D4632);
+  }
+  .notebook-protocols {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.25rem 0.75rem;
+  }
+  /* navigation.css 的 .content-card ul>li(:before) 优先级更高，这里叠加页面类覆盖圆点与缩进 */
+  .notebook-page .notebook-protocols > li {
+    position: static;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+    min-width: 0;
+    font-size: var(--desc-font-size-sm);
+  }
+  .notebook-page .notebook-protocols > li::before {
+    content: none;
+  }
+  .notebook-protocols a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid rgba(212, 165, 116, 0.3);
+    border-radius: 6px;
+    background: rgba(255, 253, 248, 0.9);
+    color: var(--desc-color-primary-dark, #5D4632);
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .notebook-protocols a:hover,
+  .notebook-protocols a:focus-visible {
+    color: var(--desc-color-primary-darker, #4A3728);
+    border-color: var(--desc-color-primary-light, #D4A574);
+    background: #fff;
+  }
+  .notebook-protocols__no {
+    flex: 0 0 auto;
+    font-weight: 700;
+    color: #9a7b52;
+    font-variant-numeric: tabular-nums;
+  }
+  .notebook-protocols__title {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  @media (max-width: 768px) {
+    .notebook-page .pdf-embed__object { height: 70vh; min-height: 480px; }
+    .notebook-protocols { grid-template-columns: 1fr; }
+  }

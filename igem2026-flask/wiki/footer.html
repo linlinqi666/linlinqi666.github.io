@@ -1,127 +1,110 @@
 {% from "icons.html" import icon with context %}
+{# 全站公用 footer：气泡页脚。
+   上排：左半＝五个圆形母气泡（Project/Team/Wet Lab/Dry Lab/Human Practices）+ 分裂子气泡；
+        右半＝三个支持方 logo（CDN）。
+   气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+   子气泡方向每次随机（footer-bubbles.js，内联在 layout.html），没有固定角度。
+   下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。
+   href 沿用 flask 无扩展名相对路由；图片全部 CDN。 #}
 <section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <!-- 顶部内容：伙伴栏 + Contact Us。
-           伙伴栏（2026-10-04 重设计）：原「白色大卡 + logo 走马灯」改为可扩展芯片栏，
-           新增伙伴只需复制一个 .partner-chip。 -->
-      <div class="footer-top">
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/igem.avif" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao.avif" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/szpu.avif" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              {{ icon('youxiang') }}
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
-              class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              {{ icon('bilibili-fill') }}
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              {{ icon('weixin') }}
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/echoyeast-social.avif"
-                  alt="WeChat QR Code" class="wechat-qr-image">
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0" href="{{ url_for('pages', page='description') }}">Description</a>
+                <a class="bubble bubble--child" style="--i:1" href="{{ url_for('pages', page='design') }}">Design</a>
+                <a class="bubble bubble--child" style="--i:2" href="{{ url_for('pages', page='engineering') }}">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3" href="{{ url_for('pages', page='contribution') }}">Contribution</a>
               </div>
-            </a>
-          </div>
-        </div>
-      </div>
+            </div>
 
-      <!-- 特色分界线1 -->
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0" href="{{ url_for('pages', page='team') }}">Members</a>
+                <a class="bubble bubble--child" style="--i:1" href="{{ url_for('pages', page='attributions') }}">Attributions</a>
+              </div>
+            </div>
 
-      <!-- 导航链接区域（硬编码，跳过 Home）。
-           栏目顺序与链接名与根站 src/_includes/partials/footer.njk 逐项对齐
-           （2026-09-30 用户决定），href 沿用 flask 的无扩展名相对路由。 -->
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="description">Description</a></li>
-                <li><a href="design">Design</a></li>
-                <li><a href="engineering">Engineering</a></li>
-                <li><a href="contribution">Contribution</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0" href="{{ url_for('pages', page='protocol') }}">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1" href="{{ url_for('pages', page='results') }}">Results</a>
+                <a class="bubble bubble--child" style="--i:2" href="{{ url_for('pages', page='parts') }}">Parts</a>
+                <a class="bubble bubble--child" style="--i:3" href="{{ url_for('pages', page='safety-and-security') }}">Safety</a>
+                <a class="bubble bubble--child" style="--i:4" href="{{ url_for('pages', page='notebook') }}">Notebook</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="design">Design</a></li>
-                <li><a href="protocol">Protocol</a></li>
-                <li><a href="results">Results</a></li>
-                <li><a href="parts">Parts</a></li>
-                <li><a href="safety-and-security">Safety</a></li>
-                <li><a href="notebook">Notebook</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0" href="{{ url_for('pages', page='model') }}">Model</a>
+                <a class="bubble bubble--child" style="--i:1" href="{{ url_for('pages', page='hardware') }}">Hardware</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="model">Model</a></li>
-                <li><a href="hardware">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="human-practices">Integrated HP</a></li>
-                <li><a href="sustainability">Sustainability</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="team">Members</a></li>
-                <li><a href="attributions">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0" href="{{ url_for('pages', page='human-practices') }}">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1" href="{{ url_for('pages', page='sustainability') }}">Sustainability</a>
+              </div>
             </div>
 
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/szpu.avif"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
 
-      <!-- 特色分界线2 -->
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span><span class="divider-dot"></span><span class="divider-dot"></span>
-      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
 
-      <!-- 版权信息区域 -->
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a
-            href="https://gitlab.igem.org/2026/szpu-china" target="_blank"
-            rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="240010348@mail.szpu.edu.cn">
+            {{ icon('youxiang') }}
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            {{ icon('bilibili-fill') }}
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            {{ icon('weixin') }}
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/echoyeast-social.avif"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>

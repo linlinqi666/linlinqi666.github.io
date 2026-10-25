@@ -16,21 +16,19 @@
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
   {% include "partials/back-to-top.njk" %}
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="{{ basePath | default('') }}static/js/core/utils.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/components/page-loader.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/components/back-to-top.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/core/mobile-menu.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/core/page-progress-bar.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/core/scroll-progress-bar.js" defer></script>
-<script src="{{ basePath | default('') }}static/js/components/scroll-speed-control.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/core/search.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/components/section-fold.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/components/media-reveal.js" defer></script>
-  <script src="{{ basePath | default('') }}static/js/components/mascot-portal.js" defer></script>
-  {% for s in (js or []) %}<script src="{{ basePath | default('') }}{{ s }}" defer></script>{% endfor %}
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v={{ assetV }}：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="{{ basePath | default('') }}static/js/core/utils.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/page-loader.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/back-to-top.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/mobile-menu.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/nav-scroll-behavior.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/page-progress-bar.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/vendor/flexsearch.bundle.min.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/core/search.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/section-fold.js?v={{ assetV }}" defer></script>
+  <script src="{{ basePath | default('') }}static/js/components/image-pipeline.js?v={{ assetV }}" defer></script>
+  {% for s in (js or []) %}<script src="{{ basePath | default('') }}{{ s }}?v={{ assetV }}" defer></script>{% endfor %}
   {% block scripts %}{% endblock %}
 
   {# 页面加载进度条启动：全站只需一次，故内嵌在布局末尾（与 Flask 站 wiki/layout.html 同款写法）。

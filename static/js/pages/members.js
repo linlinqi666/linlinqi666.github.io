@@ -1284,20 +1284,14 @@
         setTimeout(function () { BackgroundController.prefetchAllPhotos(); }, 500);
       }
 
-      // 登记首屏关键图给加载遮罩：默认成员形象两种布局都在首屏；条带头像仅桌面端首屏可见
-      if (window.PageLoader && typeof window.PageLoader.register === 'function') {
-        const critical = [];
-        if (MemberData.members.length > 0) {
-          critical.push(ImageResolver.resolveImageCandidates(MemberData.members[0], 'photo'));
-        }
-        if (window.innerWidth > DESKTOP_BREAKPOINT) {
-          MemberData.members.slice(0, 6).forEach(function (member) {
-            const avatars = ImageResolver.resolveImageCandidates(member, 'avatar');
-            if (avatars && avatars.length) critical.push(avatars);
-          });
-        }
-        if (critical.length) window.PageLoader.register(critical);
-      }
+      /*
+       * 零关键图策略（2026-10-21 加载改造）：成员全屏背景大图与条带头像体积大、张数
+       * 多，原设计把它们登记给加载遮罩，会让「点击进入」被图片下载卡住——慢网/冷
+       * 缓存下页面长时间锁死，点击进不去（封面图也不再登记：封面是交互层，等待只
+       * 会拖住进入）。现改为：遮罩只等 DOM 就绪+最短展示时长就收尾；成员大图与
+       * 头像一律后台异步加载（预取见上，条带头像为 loading="lazy"），背景未就位
+       * 时由米黄底+羽化层兜底，条带切换/展开收起/简介栏等功能键全程可用。
+       */
 
       function scheduleResizeUpdate() {
         if (resizeRafId) return;

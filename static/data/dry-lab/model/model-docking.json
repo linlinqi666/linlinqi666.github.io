@@ -201,7 +201,8 @@
       ],
       "verdict": {
         "outcome": "lead",
-        "rank": 1,
+        "priority": "Medium",
+        "rank": 3,
         "zh": "Best H1N1 specificity (untreated-antigen index −93.25), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity risk, MM-GBSA ΔTOTAL −14.67 ± 1.31 kcal/mol (Cluster 1). The document therefore selects it as the recognition element.",
         "en": "Lead candidate: best H1N1 specificity (−93.25 untreated-antigen index), lowest HADDOCK score (−93.2), stable MD, moderate cross-reactivity, MM-GBSA ΔTOTAL = −14.67 ± 1.31 kcal/mol (Cluster 1)."
       },
@@ -244,7 +245,8 @@
       ],
       "verdict": {
         "outcome": "lead",
-        "rank": 2,
+        "priority": "Low",
+        "rank": 5,
         "zh": "Second-best HADDOCK score (−89.4), but the ClusPro specificity index is positive (+23.75); it has the lowest cross-reactivity risk yet poor H1N1 specificity.",
         "en": "Second-best HADDOCK score (−89.4) but positive ClusPro specificity index (+23.75): lowest cross-reactivity risk yet poor H1N1 specificity."
       },
@@ -287,7 +289,8 @@
       ],
       "verdict": {
         "outcome": "lead",
-        "rank": 3,
+        "priority": "High",
+        "rank": 1,
         "zh": "Third-best HADDOCK score (−84.6), but the ClusPro specificity index is weaker (−40.75) and the cross-reactivity risk is the highest.",
         "en": "Third by HADDOCK score (−84.6); weaker ClusPro specificity index (−40.75) and the highest cross-reactivity risk."
       },
@@ -330,6 +333,7 @@
       ],
       "verdict": {
         "outcome": "rejected",
+        "priority": "Low",
         "rank": 4,
         "zh": "Mid-range ClusPro specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk.",
         "en": "Rejected: mid-range specificity index (−57.35), fourth HADDOCK score (−71.1), higher cross-reactivity risk."
@@ -373,7 +377,8 @@
       ],
       "verdict": {
         "outcome": "rejected",
-        "rank": 5,
+        "priority": "High",
+        "rank": 2,
         "zh": "Second-best ClusPro specificity index (−72.55), but the worst HADDOCK score (−68.8), indicating poor interface quality.",
         "en": "Rejected: second-best specificity index (−72.55) but worst HADDOCK score (−68.8), indicating poor interface quality."
       },
@@ -547,7 +552,7 @@
       },
       {
         "item": "Path A coupling interface",
-        "conclusion": "hM1Dq ICL2/ICL3/H8 ↔ Gpa1 α5 C-terminus (single-chain Cluster 1, score −149.4)"
+        "conclusion": "hM1Dq ICL2/ICL3/H8 ↔ GPA1 α5 C-terminus (single-chain Cluster 1, score −149.4)"
       },
       {
         "item": "Path A membrane MD ΔTOTAL",
@@ -555,7 +560,7 @@
       },
       {
         "item": "Path B best gating peptide",
-        "conclusion": "MT1_5 (Ste2p × MT1_5 Cluster 1, score −99.2)"
+        "conclusion": "pep5 (Ste2 × pep5 Cluster 1, score −99.2)"
       },
       {
         "item": "Path B membrane MD ΔTOTAL",
@@ -731,7 +736,7 @@
   },
   "mmgbsa": {
     "engine": "gmx_MMPBSA 1.5.0.3",
-    "forcefield": "Amber14SB",
+    "forcefield": "Amber99SB-ILDN",
     "unit": "kcal/mol",
     "items": [
       {
@@ -789,7 +794,7 @@
         "contribution": -0.779
       }
     ],
-    "note": "Model5 §1.8, single-trajectory protocol of gmx_MMPBSA 1.5.0.3 with the Amber14SB force field. ΔTOTAL for Cluster 1 carries a reported SEM of ± 1.31 kcal/mol."
+    "note": "Model5 §1.8, single-trajectory protocol of gmx_MMPBSA 1.5.0.3 with the Amber99SB-ILDN force field. ΔTOTAL for Cluster 1 carries a reported SEM of ± 1.31 kcal/mol."
   },
   "pipeline": [
     {
@@ -888,7 +893,7 @@
       "decision": "Coupling interface validation"
     },
     {
-      "prediction": "The orthosteric site of Ste2p is occupied by MT1_5",
+      "prediction": "The orthosteric site of Ste2 is occupied by the auto-inhibitory peptide pep5",
       "decision": "Basis for Path B gating design"
     }
   ],

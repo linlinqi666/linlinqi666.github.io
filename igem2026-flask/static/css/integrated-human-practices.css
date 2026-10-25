@@ -81,8 +81,24 @@
   margin-bottom: var(--desc-spacing-xl);
 }
 
+/* 角饰（.page-mascot）悬在卡片右上角，其下沿探入卡片约 0.12 个装饰高；
+   节号贴卡片右缘时正好落进这段区域。带角饰的卡片把整组标题下移一个「装饰
+   下沿 + 间隙」的距离，节号仍贴右缘、且整行落在插图之外。 */
+.content-card:has(> .page-mascot) .hp-section-header {
+  padding-top: calc(var(--page-mascot-height) * 0.12 + 3rem);
+}
+
+/* 窄屏收起角饰（见 components.css 的 .description-container 规则），预留高度一并归零 */
+@media (max-width: 1024px) {
+  .content-card:has(> .page-mascot) .hp-section-header {
+    padding-top: 0;
+  }
+}
+
 .hp-section-number {
-  display: inline-block;
+  /* 节号独占一行并贴到卡片右边缘：标题与副标题仍居中，节号作为右侧标号出现 */
+  display: block;
+  text-align: right;
   font-size: var(--desc-font-size-2xl);
   font-weight: 700;
   color: var(--desc-color-primary-light);
@@ -92,8 +108,7 @@
 }
 
 /* iGEM Layout Strategy: 复用 description.css 的 h2 样式，避免自定义标题破坏系统统一性
-   2026-10-08：中文短标题时代遗留的 white-space:nowrap 会让英文长标题横向溢出卡片
-   （实测最长达 1524px / 容器 782px），改为正常换行并允许长词内断行。 */
+   标题必须允许正常换行并对长词内断行，否则长标题会横向溢出卡片。 */
 .content-card h2.hp-section-title {
   text-align: center;
   border-bottom: none;
@@ -114,7 +129,7 @@
   margin: 0 auto;
   text-align: center;
   text-indent: 0;
-  /* 2026-10-08：英文副标题同样可能超宽（实测 648/600），放开换行 */
+  /* 英文副标题同样可能超宽，放开换行 */
   white-space: normal;
   overflow-wrap: break-word;
 }
@@ -172,6 +187,39 @@
 .hp-subheading-l4 + p,
 .hp-subheading + p {
   text-indent: 2em;
+}
+
+/* ===== Stakeholder lists and framework quotation ===== */
+.hp-list {
+  margin: 0 0 var(--desc-spacing-lg);
+  padding-left: 1.4rem;
+  color: var(--desc-color-primary-darker);
+  line-height: 1.85;
+  font-size: var(--desc-font-size-md);
+}
+.hp-list > li {
+  margin: 0 0 0.35rem;
+}
+.hp-quote {
+  margin: var(--desc-spacing-xl) 0;
+  padding: var(--desc-spacing-lg) var(--desc-spacing-xl);
+  border-left: 3px solid var(--desc-color-accent);
+  background: var(--bg-card);
+  border-radius: 0 var(--desc-radius-sm) var(--desc-radius-sm) 0;
+}
+.hp-quote p {
+  margin: 0 0 0.5rem;
+  text-indent: 0;
+  font-style: italic;
+  color: var(--desc-color-primary-darker);
+  line-height: 1.85;
+}
+.hp-quote cite {
+  display: block;
+  text-align: right;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--desc-color-primary-light);
 }
 
 /* ===== Expert profile ===== */
@@ -284,6 +332,21 @@
   color: var(--desc-color-primary-darker);
   line-height: 1.85;
   font-size: var(--desc-font-size-md);
+}
+
+/* 参考文献列表：与 .hp-interview-context p 保持同一排版 */
+.hp-interview-context ol.ref-list {
+  margin: 0;
+  padding-left: 1.6rem;
+}
+
+.hp-interview-context ol.ref-list > li {
+  text-indent: 0;
+  margin: 0 0 0.35rem;
+  color: var(--desc-color-primary-darker);
+  line-height: 1.85;
+  font-size: var(--desc-font-size-md);
+  word-break: break-word;
 }
 
 /* ===== Insight cards ===== */
@@ -973,7 +1036,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -1279,7 +1342,7 @@
   }
 
   .hp-impact-badge {
-    font-size: 0.65rem;
+    font-size: 0.9375rem;
     padding: 2px 8px;
   }
 
@@ -1364,7 +1427,7 @@
   .hp-impact-item-icon {
     width: 20px;
     height: 20px;
-    font-size: 0.7rem;
+    font-size: 0.9375rem;
   }
 
   .hp-impact-items li strong {
@@ -1494,7 +1557,7 @@
     font-size: 22px; font-weight: 700; letter-spacing: 1px;
     color: #5c4d3c;
   }
-  .hz-map .hz-header .hz-hint { font-size: 13px; color: var(--hz-fg-muted, #8b7355); }
+  .hz-map .hz-header .hz-hint { font-size: 15px; color: var(--hz-fg-muted, #8b7355); }
 
 
 
@@ -1509,14 +1572,14 @@
     z-index: 1;
   }
   /* 中国地图层：默认始终可见 */
-  .hz-map .hz-china { 
-    opacity: 1; 
-    transform: none; 
+  .hz-map .hz-china {
+    opacity: 1;
+    transform: none;
     pointer-events: auto;
     visibility: visible;
   }
 
-  .hz-map .hz-layer > svg { 
+  .hz-map .hz-layer > svg {
     width: 100%; height: 100%; display: block;
   }
 
@@ -1551,7 +1614,7 @@
     border-radius: 12px;
     padding: 10px 12px;
     box-shadow: 0 6px 20px rgba(74,59,42,.15);
-    font-size: 13px;
+    font-size: 15px;
     backdrop-filter: blur(4px);
     min-width: 180px;
   }
@@ -1564,7 +1627,7 @@
   }
   .hz-map .hz-filter.collapsed .hz-filter-header { justify-content: center; }
   .hz-map .hz-filter-title {
-    font-weight: 700; font-size: 13px;
+    font-weight: 700; font-size: 15px;
     color: #4a3f33;
   }
   .hz-map .hz-filter.collapsed .hz-filter-title { display: none; }
@@ -1628,7 +1691,7 @@
   .hz-map .hz-pin .tip {
     position: absolute; bottom: 118%; left: 50%; transform: translateX(-50%);
     white-space: nowrap; padding: 4px 8px; border-radius: 6px;
-    background: rgba(74,59,42,.92); color: #fff; font-size: 11px;
+    background: rgba(74,59,42,.92); color: #fff; font-size: 15px;
     opacity: 0; pointer-events: none; transition: opacity .15s ease;
     box-shadow: 0 4px 12px rgba(74,59,42,.25); z-index: 10;
   }
@@ -1637,9 +1700,9 @@
 
   .hz-map .hz-legend {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    margin-top: 16px; font-size: 13px; color: #7d6d5a;
+    margin-top: 16px; font-size: 15px; color: #7d6d5a;
   }
-  .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
+  .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 15px; }
 
   .hz-map .hz-modal {
     position: fixed; inset: 0;
@@ -1686,23 +1749,23 @@
   .hz-map .hz-photo-ph {
     position: absolute; inset: 0; display: none;
     align-items: center; justify-content: center;
-    color: #8b7d6b; font-size: 14px; text-align: center; padding: 8px;
+    color: #8b7d6b; font-size: 15px; text-align: center; padding: 8px;
   }
   .hz-map .hz-modal-photo.hz-placeholder .hz-photo-ph { display: flex; }
   .hz-map .hz-modal-photo.hz-placeholder .hz-modal-photo-img { display: none; }
-  .hz-map .hz-photo-bio { font-size: 13px; line-height: 1.6; color: #5a4d3f; }
-  .hz-map .hz-photo-name { font-weight: 700; font-size: 14px; color: #3d342b; margin-bottom: 2px; }
-  .hz-map .hz-photo-org { color: #8b7355; font-size: 12px; margin-bottom: 6px; }
-  .hz-map .hz-photo-desc { color: #5a4d3f; font-size: 12.5px; }
+  .hz-map .hz-photo-bio { font-size: 15px; line-height: 1.6; color: #5a4d3f; }
+  .hz-map .hz-photo-name { font-weight: 700; font-size: 15px; color: #3d342b; margin-bottom: 2px; }
+  .hz-map .hz-photo-org { color: #8b7355; font-size: 15px; margin-bottom: 6px; }
+  .hz-map .hz-photo-desc { color: #5a4d3f; font-size: 15px; }
   .hz-map .hz-modal-content { flex: 1 1 auto; min-width: 0; }
   .hz-map .hz-modal-content h2 {
     margin: 0 0 4px; font-size: 22px; color: #6b8c42; font-weight: 700;
   }
   .hz-map .hz-modal-role {
-    margin: 0 0 12px; font-size: 14px; color: #5a4d3f; line-height: 1.5;
+    margin: 0 0 12px; font-size: 15px; color: #5a4d3f; line-height: 1.5;
   }
   .hz-map .hz-modal-section {
-    margin-top: 14px; font-size: 14px; line-height: 1.75; color: #4a4035;
+    margin-top: 14px; font-size: 15px; line-height: 1.75; color: #4a4035;
   }
   .hz-map .hz-modal-section:first-of-type { margin-top: 6px; }
   .hz-map .hz-modal-section strong {
@@ -1725,9 +1788,9 @@
     .hz-map .hz-modal,
     .hz-map .hz-modal-card,
     .hz-map .hz-container,
-    .hz-map #chinaProvinces path { 
-      transition: none !important; 
-      animation: none !important; 
+    .hz-map #chinaProvinces path {
+      transition: none !important;
+      animation: none !important;
       will-change: auto !important;
     }
   }

@@ -115,7 +115,7 @@ nav {
     box-shadow var(--duration-slow) var(--ease-smooth),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  /* 2026-10-12：移除基态 border-bottom（0.0625rem 白 8%）——
+  /* 移除基态 border-bottom（0.0625rem 白 8%）——
      早期透明/深色导航留下的分隔线，在 cream×米色配色下是一条多余发丝线；
      滚动态由 .scrolled 的 box-shadow 提供层次。 */
   border-bottom: none;
@@ -434,7 +434,7 @@ nav ul li:hover .dropdown-content {
 
 .nav-search__empty {
   color: rgba(139, 90, 43, 0.6);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   text-align: center;
   padding: 1.5rem 0.75rem;
 }
@@ -449,7 +449,7 @@ nav ul li:hover .dropdown-content {
 
 .nav-search__group-title {
   color: var(--color-primary);
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -467,7 +467,7 @@ nav ul li:hover .dropdown-content {
   border-radius: 0.5rem;
   color: var(--color-text);
   text-decoration: none;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   line-height: 1.5;
   transition: background 0.2s ease, color 0.2s ease;
 }
@@ -1272,9 +1272,12 @@ nav ul li:hover .dropdown-content {
 /* 保持原有类名以确保向后兼容 */
 .description-container {
   display: flex;
-  gap: 2rem;
+  gap: 2.8rem;
   padding: 2rem;
-  max-width: 87.5rem;
+  width: 100%;
+  /* 上限约 1696px：让长文档页在常见笔记本宽度下几乎铺满视口，
+     两侧只留 2rem 内边距，不再出现大片背景留白。 */
+  max-width: 106rem;
   margin: 0 auto;
   overflow: visible;
   align-items: flex-start;
@@ -1293,9 +1296,15 @@ nav ul li:hover .dropdown-content {
   max-width: var(--desc-sidebar-max-width, 20rem);
   z-index: var(--desc-sidebar-z-index, 10);
   flex-shrink: 0;
+  /* 侧栏锁高：纵向 flex 让目录区自己滚、装饰层与底部进度块常驻，不被长目录顶出视口 */
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 12rem);
+  overflow: hidden;
 }
 
 /* ===== 装饰元素 ===== */
+/* 装饰层铺满整个侧栏并裁切在卡片内；目录内容抬到装饰之上，装饰只做背景。 */
 .yeast-decoration {
   position: absolute;
   top: 0;
@@ -1305,6 +1314,11 @@ nav ul li:hover .dropdown-content {
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+}
+
+.description-sidebar .description-nav-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
 .yeast-cell {
@@ -1487,7 +1501,7 @@ nav ul li:hover .dropdown-content {
   text-decoration: none;
   font-size: var(--desc-font-size-sm-md, 0.85rem);
   font-weight: 500;
-  padding: 0.6rem 0.75rem;
+  padding: 0.7rem 0.9rem;
   border-radius: var(--desc-radius-xs, 0.25rem);
   transition: all var(--desc-duration-normal, 0.3s) ease;
   flex: 1;
@@ -1588,7 +1602,7 @@ nav ul li:hover .dropdown-content {
   font-size: var(--desc-font-size-sm, 0.82rem);
   color: var(--desc-color-primary-lightest, #6B5B45);
   text-decoration: none;
-  padding: 0.4rem 0.5rem;
+  padding: 0.5rem 0.65rem;
   border-radius: var(--desc-radius-xs, 0.25rem);
   transition: all var(--desc-duration-fast, 0.2s) ease;
 }
@@ -1860,6 +1874,34 @@ nav ul li:hover .dropdown-content {
 
 *::-webkit-scrollbar { display: none; }
 
+/* 页面滚动条：用主题蓝装饰（仅作用于页面根，不干扰组件内隐藏的滚动条） */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-blue-primary, #4A90D9) rgba(74, 144, 217, 0.12);
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: rgba(74, 144, 217, 0.10);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: var(--color-blue-primary, #4A90D9);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--color-blue-dark, #357ABD);
+  background-clip: padding-box;
+}
+
 html {
   min-height: 100%;
   height: auto;
@@ -1960,82 +2002,6 @@ body:not(.home-page) main { padding-top: 6.25rem; }
 #page-progress-bar.is-loading .ppb-glow { opacity: 1; }
 #page-progress-bar .ppb-fill--pulse { animation: ppb-pulse 0.6s ease-out; }
 
-.scroll-progress-bar {
-  position: fixed;
-  top: 50%;
-  right: clamp(0.5rem, 1.2vw, 1.25rem);
-  z-index: 9998;
-  width: 0.2rem;
-  height: clamp(5rem, 18vh, 10rem);
-  overflow: hidden;
-  border-radius: var(--radius-pill);
-  background: rgba(139, 90, 43, 0.16);
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.scroll-progress-fill {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 0;
-  border-radius: inherit;
-  background: linear-gradient(180deg, #D4A574, #8B5A2B);
-  transition: height 0.12s linear;
-  will-change: height;
-}
-
-/* ================================================== */
-/* 滚动进度条上下两端的「快速滚动」触区（2026-10-15 新增，同日按用户口径简化）  */
-/* 无可见图形（原小三角方案已废弃）：隐形触区约 100×100px，右贴视口、不压正文；  */
-/* 悬停/聚焦显示纯文字提示（无背景无边框），点击/按住即滚动。<900px 不启用。      */
-/* 逻辑见 static/js/components/scroll-speed-control.js                         */
-/* ================================================== */
-.scroll-speed-control {
-  position: fixed;
-  top: 50%;
-  right: 0;
-  /* 高于内容与侧栏(10001)，低于加载遮罩(100003)：提示文字不允许被正文盖住 */
-  z-index: 100000;
-  height: clamp(5rem, 18vh, 10rem);
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.scroll-speed-control .ssc-target {
-  position: absolute;
-  right: 0;
-  width: min(100px, var(--ssc-gutter, 100px));
-  height: 100px;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  color: inherit;
-  pointer-events: auto;
-  cursor: pointer;
-  touch-action: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.scroll-speed-control .ssc-target:focus { outline: none; }
-
-/* 判定区以进度条上下两端为中心各展开 50px */
-.scroll-speed-control .ssc-target--up { top: -50px; }
-.scroll-speed-control .ssc-target--down { bottom: -50px; }
-
-/* 右侧留白不足时由 JS 挂 .is-tight：宁可不给快滚，也绝不压住正文 */
-.scroll-speed-control.is-tight { display: none; }
-
-@media (max-width: 1200px) {
-  .scroll-speed-control .ssc-target { height: 88px; }
-}
-
-/* 窄屏不启用：原生惯性滚动更快，且触区容易压到正文 */
-@media (max-width: 900px) {
-  .scroll-speed-control { display: none; }
-}
-
 @keyframes ppb-shimmer {
   to { transform: translateX(100%); }
 }
@@ -2046,13 +2012,11 @@ body:not(.home-page) main { padding-top: 6.25rem; }
 
 @media (max-width: 768px) {
   #page-progress-bar { height: 0.1875rem; }
-  .scroll-progress-bar { right: 0.4rem; width: 0.16rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #page-progress-bar .ppb-fill,
-  #page-progress-bar .ppb-glow,
-  .scroll-progress-fill {
+  #page-progress-bar .ppb-glow {
     transition-duration: 0.01ms;
     animation-duration: 0.01ms;
   }
@@ -2105,21 +2069,21 @@ body:not(.home-page) main { padding-top: 6.25rem; }
   --desc-spacing-xs: 0.25rem;
   --desc-spacing-sm: 0.5rem;
   --desc-spacing-md: 0.75rem;
-  --desc-spacing-lg: 1rem;
-  --desc-spacing-xl: 1.25rem;
-  --desc-spacing-2xl: 1.5rem;
-  --desc-spacing-3xl: 2rem;
+  --desc-spacing-lg: 1.15rem;
+  --desc-spacing-xl: 1.5rem;
+  --desc-spacing-2xl: 1.75rem;
+  --desc-spacing-3xl: 2.5rem;
 
   /* 字体系统 - 页面专用 */
-  --desc-font-size-xs: 0.7rem;
-  --desc-font-size-sm: 0.82rem;
-  --desc-font-size-sm-md: 0.85rem;
-  --desc-font-size-md: 0.88rem;
-  --desc-font-size-md-lg: 0.92rem;
-  --desc-font-size-lg: 0.98rem;
-  --desc-font-size-xl: 1.1rem;
-  --desc-font-size-2xl: 1.2rem;
-  --desc-font-size-3xl: 1.55rem;
+  --desc-font-size-xs: 0.8rem;
+  --desc-font-size-sm: 0.94rem;
+  --desc-font-size-sm-md: 0.96rem;
+  --desc-font-size-md: 1rem;
+  --desc-font-size-md-lg: 1.04rem;
+  --desc-font-size-lg: 1.12rem;
+  --desc-font-size-xl: 1.26rem;
+  --desc-font-size-2xl: 1.42rem;
+  --desc-font-size-3xl: 1.9rem;
 
   /* 动画时长 - 页面专用 */
   --desc-duration-fast: 0.2s;
@@ -2145,8 +2109,8 @@ body:not(.home-page) main { padding-top: 6.25rem; }
   --desc-sidebar-position: sticky;
   --desc-sidebar-top-offset: 120px;
   --desc-sidebar-z-index: 10;
-  --desc-sidebar-min-width: 280px;
-  --desc-sidebar-max-width: 320px;
+  --desc-sidebar-min-width: 340px;
+  --desc-sidebar-max-width: 380px;
 
   /* 烧瓶进度计算因子 */
   --desc-flask-progress-factor: 0.85%;
@@ -2185,6 +2149,31 @@ body:not(.home-page) main { padding-top: 6.25rem; }
   --desc-flask-neck-width: 18px;
   --desc-flask-neck-height: 18px;
   --desc-flask-neck-offset-top: -12px;
+}
+
+/* ===== 中等视口降级 =====
+   容器放宽后，固定 380px 的侧栏在 1100–1600px 视口会把正文挤窄；
+   这两档按视口回收侧栏宽度与栏间距，保证正文始终是页面的主要视觉主体。 */
+@media (max-width: 1600px) {
+  :root {
+    --desc-sidebar-min-width: 300px;
+    --desc-sidebar-max-width: 340px;
+  }
+
+  .description-container {
+    gap: 2.2rem;
+  }
+}
+
+@media (max-width: 1360px) {
+  :root {
+    --desc-sidebar-min-width: 260px;
+    --desc-sidebar-max-width: 300px;
+  }
+
+  .description-container {
+    gap: 1.75rem;
+  }
 }
 
 /* ===== 页面布局 ===== */
@@ -2397,7 +2386,7 @@ html {
   margin: 0;
   font-weight: 500;
   color: var(--desc-color-primary-dark);
-  font-size: 0.94rem;
+  font-size: var(--desc-font-size-lg);
   line-height: 1.7;
 }
 
@@ -2441,6 +2430,203 @@ html {
   margin-bottom: var(--desc-spacing-sm);
   text-indent: 0;
   word-break: break-word;
+}
+
+/* ===== 引用角标与页内锚点（全站公共类） =====
+   正文引用标记写成 <a class="cite-ref" href="#<页前缀>-reference-<n>">[n]</a>；
+   角标显示为描边小方框并轻微上标。条目只渲染文字、不输出外链（iGEM 要求）。
+   目标条目加 scroll-margin-top 并用 :target 高亮，跳转不被顶栏遮挡。 */
+.cite-ref {
+  display: inline-block;
+  font-size: 0.72em;
+  line-height: 1.2;
+  vertical-align: 0.35em;
+  white-space: nowrap;
+  padding: 0 0.3em;
+  margin: 0 0.1em;
+  border: 1px solid rgba(139, 90, 43, 0.62);
+  border-radius: 3px;
+  background-color: rgba(139, 90, 43, 0.05);
+  color: var(--desc-color-primary-light, #8B5A2B);
+  text-decoration: none;
+  /* 正文段落的 text-indent 会被 inline-block 继承，在角标里撑出一段空白，
+     徽标被拉成「宽框 + 右侧数字」的两层框形态；角标必须显式清零缩进。 */
+  text-indent: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* 页面级 .content-card a 的下划线特异性高于 .cite-ref，会把下划线画到角标数字上；
+   这里用更长的选择器复位，角标只保留描边小方框。 */
+.content-card p a.cite-ref,
+.content-card li a.cite-ref,
+.content-card cite a.cite-ref {
+  text-decoration: none;
+}
+
+.cite-ref:hover {
+  border-color: rgba(139, 90, 43, 0.85);
+  background-color: rgba(139, 90, 43, 0.08);
+  text-decoration: none;
+}
+
+ol.ref-list > li {
+  scroll-margin-top: 130px;
+}
+
+ol.ref-list > li:target {
+  background: rgba(139, 90, 43, 0.08);
+  border-radius: 4px;
+}
+
+/* description 页的文末参考文献条目（ol.description-refs） */
+.content-card ol.description-refs {
+  padding-left: 1.6rem;
+  margin: 0;
+}
+
+.content-card ol.description-refs > li {
+  font-size: var(--desc-font-size-sm-md);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+  text-indent: 0;
+  word-break: break-word;
+  scroll-margin-top: 130px;
+}
+
+.content-card ol.description-refs > li:target {
+  background: rgba(139, 90, 43, 0.08);
+  border-radius: 4px;
+}
+
+/* ===== 参考文献条目编号统一为方括号 [n] =====
+   与正文角标同一套编号记法：条目不再使用 "1." 的默认序号，而是由计数器生成 "[1]"。
+   覆盖全站所有参考文献列表类名（ref-list / description-refs / safety-references /
+   hardware-references / result-references），新增列表沿用其一即可，无需另写样式。 */
+ol.ref-list,
+ol.description-refs,
+ol.safety-references,
+ol.hardware-references,
+ol.result-references,
+.content-card ol.ref-list,
+.content-card ol.description-refs {
+  list-style: none;
+  counter-reset: ref-num;
+  padding-left: 2.7rem;
+}
+
+ol.ref-list > li,
+ol.description-refs > li,
+ol.safety-references > li,
+ol.hardware-references > li,
+ol.result-references > li,
+.content-card ol.ref-list > li,
+.content-card ol.description-refs > li {
+  counter-increment: ref-num;
+  position: relative;
+}
+
+ol.ref-list > li::before,
+ol.description-refs > li::before,
+ol.safety-references > li::before,
+ol.hardware-references > li::before,
+ol.result-references > li::before,
+.content-card ol.ref-list > li::before,
+.content-card ol.description-refs > li::before {
+  content: "[" counter(ref-num) "]";
+  position: absolute;
+  left: -2.55rem;
+  width: 2.1rem;
+  text-align: right;
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+  color: #8B5A2B;
+}
+
+/* 段落间距令牌：navigation.css 其余规则引用了未定义的 --desc-spacing-sm-md，逐句成段时会塌成零间距 */
+.description-content {
+  --desc-spacing-sm-md: 0.75rem;
+}
+
+/* 节末参考文献指引：一节的引用集中列在该节末尾，正文不再逐句挂角标 */
+.description-content .section-refs {
+  margin: 1rem 0 0;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(139, 90, 43, 0.25);
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+  text-indent: 0;
+}
+
+.section-refs__label {
+  margin-right: 0.45rem;
+  font-weight: 600;
+}
+
+.section-refs a {
+  color: inherit;
+  text-decoration: none;
+  padding: 0 0.08em;
+}
+
+.section-refs a:hover {
+  text-decoration: underline;
+}
+
+/* description 页副标题（h2 之下、Abstract 之上） */
+.content-card .description-subtitle {
+  font-size: var(--desc-font-size-lg, 1.05rem);
+  font-weight: 500;
+  color: var(--desc-color-primary-light, #8B5A2B);
+  margin-top: calc(-1 * var(--desc-spacing-md, 1rem));
+  margin-bottom: var(--desc-spacing-lg, 1.2rem);
+  line-height: 1.6;
+}
+
+/* description 页正文清单（源稿里成组的要点条目） */
+.content-card .description-list {
+  margin: 0 0 var(--desc-spacing-lg, 1.2rem);
+  padding-left: 1.5rem;
+}
+
+.content-card .description-list li {
+  margin-bottom: 0.35rem;
+  line-height: 1.7;
+}
+
+/* 正文数据表（第 15.1 节证据表）：窄屏由外层容器横向滚动，不挤压列宽 */
+.description-table-scroll {
+  overflow-x: auto;
+  margin: 0 0 var(--desc-spacing-lg, 1.2rem);
+  -webkit-overflow-scrolling: touch;
+}
+
+.content-card .description-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--desc-font-size-sm-md);
+  line-height: 1.6;
+}
+
+.content-card .description-table th,
+.content-card .description-table td {
+  border: 1px solid var(--desc-border-color-card, rgba(139, 90, 43, 0.15));
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+  text-indent: 0;
+}
+
+.content-card .description-table thead th {
+  background: rgba(245, 235, 215, 0.7);
+  font-weight: 600;
+  color: var(--desc-color-primary-dark, #5D3A1A);
+}
+
+.content-card .description-table tbody th {
+  font-weight: 600;
+  background: rgba(245, 235, 215, 0.35);
+  white-space: nowrap;
 }
 
 /* ===== 概念高亮 ===== */
@@ -2491,7 +2677,7 @@ html {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
   margin-bottom: 0.6rem;
 }
 
@@ -2558,7 +2744,7 @@ html {
   padding: var(--desc-spacing-sm) var(--desc-spacing-lg);
   text-indent: 0;
   margin: 0;
-  font-size: 0.86rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
 
@@ -2573,7 +2759,7 @@ html {
   padding: var(--desc-spacing-xs) 0.6rem;
   background: rgba(139, 90, 43, 0.05);
   border-radius: var(--desc-radius-md);
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-lightest);
 }
 
@@ -2723,7 +2909,7 @@ html {
   background: rgba(139, 90, 43, 0.06);
   padding: var(--desc-spacing-sm) 0.4rem;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-dark);
   margin-bottom: 0.4rem;
 }
@@ -2739,7 +2925,7 @@ html {
   border-radius: 8px;
   padding: 0.85rem 1rem;
   border: 1px solid rgba(52, 168, 83, 0.12);
-  font-size: 0.88rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
 
@@ -2793,7 +2979,7 @@ html {
   padding: 0.4rem 0.6rem;
   background: rgba(139, 90, 43, 0.1);
   border-radius: 5px;
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-dark);
   border: 1px solid rgba(139, 90, 43, 0.15);
 }
@@ -2813,7 +2999,7 @@ html {
 }
 
 .map-notes {
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
 
@@ -2935,7 +3121,7 @@ html {
 .summary-references li {
   padding-left: 0;
   margin-bottom: 0.4rem;
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
   line-height: 1.55;
 }
 
@@ -3033,6 +3219,12 @@ html {
     font-size: var(--desc-font-size-md);
     line-height: 1.7;
     margin-bottom: var(--desc-spacing-sm);
+    /* 窄栏里两端对齐会把词间距拉成「白河」，字号放大后更明显，改回左对齐 */
+    text-align: left;
+  }
+
+  .executive-summary p {
+    text-align: left;
   }
 
   .content-card ul>li {
@@ -3071,7 +3263,7 @@ html {
   }
 
   .step-content h4 {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
   }
 
   .step-content p {
@@ -3086,7 +3278,7 @@ html {
 
   .strategy-card h4 {
     padding: var(--desc-spacing-sm) var(--desc-spacing-md) 0;
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
   }
 
   .strategy-card p {
@@ -3095,7 +3287,7 @@ html {
   }
 
   .feature-tag {
-    font-size: 0.7rem;
+    font-size: 0.9375rem;
     padding: 2px 0.5rem;
   }
 
@@ -3108,7 +3300,7 @@ html {
   .module-number {
     width: 26px;
     height: 26px;
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
   }
 
   .module-header h3 {
@@ -3156,11 +3348,11 @@ html {
   }
 
   .reporter-item h4 {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
   }
 
   .reporter-item code {
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
   }
 
   .reporter-item p:last-child {
@@ -3188,7 +3380,7 @@ html {
   }
 
   .domain {
-    font-size: 0.65rem;
+    font-size: 0.9375rem;
     padding: 0.25rem 0.4rem;
   }
 
@@ -3213,7 +3405,7 @@ html {
   }
 
   .concept-box strong {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
   }
 
   .concept-box p {
@@ -3257,7 +3449,7 @@ html {
   }
 
   .footer-right h3 {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
   }
 
   .footer-nav {
@@ -3266,7 +3458,7 @@ html {
   }
 
   .footer-nav a {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     padding: 8px 0;
     min-height: 44px;
     display: flex;
@@ -3274,11 +3466,11 @@ html {
   }
 
   .footer-bottom p {
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
   }
 
   .footer-bottom p a {
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
   }
 
   /* Last Updated 适配 */
@@ -3293,7 +3485,7 @@ html {
   }
 
   .last-updated span {
-    font-size: 0.6rem;
+    font-size: 0.9375rem;
   }
 }
 
@@ -3311,7 +3503,7 @@ html {
   }
 
   .content-card h3 {
-    font-size: 0.88rem;
+    font-size: 0.9375rem;
   }
 
   .content-card p {
@@ -3344,7 +3536,7 @@ html {
   }
 
   .footer-nav a {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     min-height: 48px;
   }
 }
@@ -3450,7 +3642,7 @@ footer {
 .footer-nav a {
   color: var(--desc-color-primary-lightest, #6B5B45);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
   transition: all 0.3s ease;
   padding: 0.3rem 0;
   display: block;
@@ -3476,7 +3668,7 @@ footer {
 
 .footer-bottom p {
   color: var(--desc-color-primary-lightest, #6B5B45);
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
   margin: 0;
   text-indent: 0;
   line-height: 1.6;
@@ -3486,7 +3678,7 @@ footer {
   color: var(--desc-color-primary, #8B5A2B);
   text-decoration: none;
   transition: color 0.3s ease;
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
 }
 
 .footer-bottom p a:hover {
@@ -3512,7 +3704,7 @@ footer {
 
 .last-updated span {
   color: var(--desc-color-primary-lightest, #6B5B45);
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   white-space: nowrap;
 }
 
@@ -3563,7 +3755,7 @@ footer {
   }
 
   .footer-nav a {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     padding: 0.5rem 0;
     min-height: 44px;
     display: flex;
@@ -3578,11 +3770,11 @@ footer {
   }
 
   .footer-bottom p {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
   }
 
   .footer-bottom p a {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
   }
 
   .last-updated {
@@ -3596,7 +3788,7 @@ footer {
   }
 
   .last-updated span {
-    font-size: 0.7rem;
+    font-size: 0.9375rem;
   }
 }
 
@@ -3640,7 +3832,7 @@ footer {
   }
 
   .footer-nav a {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     min-height: 48px;
   }
 }
@@ -4064,19 +4256,13 @@ footer {
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.contact-icon-wrapper:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-4px);
+  transition: none;
 }
 
 .contact-icon-wrapper .iconfont {
   font-size: 1.75rem;
   color: var(--color-white);
-  transition: transform 0.3s ease;
+  transition: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4084,10 +4270,6 @@ footer {
   width: 100%;
   height: 100%;
   padding-left: 15%;
-}
-
-.contact-icon-wrapper:hover .iconfont {
-  transform: scale(1.1);
 }
 
 /* Tooltip 提示框 */
@@ -4358,7 +4540,7 @@ footer {
   }
 
   .footer-column a {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     padding: 4px 0;
     display: block;
   }
@@ -4377,7 +4559,7 @@ footer {
   }
 
   .footer-bottom-section p {
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     line-height: 1.6;
   }
 }
@@ -4406,7 +4588,7 @@ footer {
   }
 
   .footer-column a {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
     padding: 6px 0;
     text-align: center;
   }
@@ -4496,4 +4678,615 @@ footer {
     width: 140px;
     height: 140px;
   }
+}
+
+/* ================================================================ */
+/* 以下为迁移根站 src/_includes/partials/{nav,footer}.njk */
+/* 的新样式（图片化导航 + 气泡页脚）。后置追加，同特异性规则胜出，覆盖    */
+/* 上方旧版 .logo / .footer-top / .footer-navigation 等（换模板后即成死   */
+/* 规则，无害）。与根站 navigation.css 对应块逐字一致（除 flask 的        */
+/* inline-SVG 图标尺寸补充）。                                             */
+/* ================================================================ */
+
+/*
+   注意：旧版 `nav .logo img { width/height:3.75rem }`（特异性 0,1,2）会把两图摁成
+   60×60 方块；故这里用 `.logo .logo__*`（0,2,0）提升特异性盖过它，恢复根站尺寸。 */
+nav .logo {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.3rem, 0.55vw, 0.7rem);
+  text-decoration: none;
+  flex: none;
+}
+
+.logo .logo__wordmark {
+  display: block;
+  height: clamp(2.2rem, 3.15vw, 3.75rem);
+  width: auto;
+}
+
+.logo .logo__mascot {
+  display: block;
+  height: clamp(2.7rem, 4.05vw, 4.85rem);
+  width: auto;
+}
+
+/* 覆盖旧版硬编码布局：菜单右侧定位、项间距、搜索边距，对齐根站 nav.njk 口径 */
+nav .nav-items {
+  margin-left: auto;
+}
+
+nav ul {
+  gap: clamp(0.1rem, 0.45vw, 0.55rem);
+  padding: 0;
+}
+
+nav .nav-search {
+  margin-left: clamp(0.5rem, 1.2vw, 1.5rem);
+  margin-right: 0;
+}
+
+/*
+   旧版 `nav ul li a` 为 display:block + 棕色(--color-primary)，导致图文上下堆叠、
+   文字发棕；下拉文字亦为棕、hover 铺底位移。这里以同特异性后置规则覆盖为根站口径：
+   主链接 flex 横排 + echo-blue + 700；下拉蓝字；下拉 hover 只加粗不铺底；
+   并补根站 `nav::after` 底部 3px 蓝条（随导航隐藏从中心收束，由 .nav-edge-ready 驱动）。 */
+nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.2rem, 0.42vw, 0.5rem);
+  color: var(--color-echo-blue);
+  padding: 0.25rem clamp(0.25rem, 0.42vw, 0.55rem);
+  min-width: 0;
+  font-size: clamp(0.9rem, 1.05vw, 1.32rem);
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+}
+
+/* 下拉子项文字改蓝（对齐根站 #4ea1d7） */
+.dropdown-content a {
+  color: #4ea1d7;
+}
+
+/* 下拉 hover 不再铺褐色底、不再位移，只加粗（对齐根站） */
+.dropdown-content a:hover {
+  color: #4ea1d7;
+  background: transparent;
+  font-weight: 700;
+  text-shadow: none;
+  border-radius: 0.5rem;
+  transform: none;
+}
+
+/* 底部 3px 蓝条（对齐根站 nav::after）：展开时导航先落位、线段再从中心向两端展开；
+   收起时线段先从两端收回中心、导航再上滑。JS 加 .nav-edge-ready 后才允许过渡。 */
+nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: #4ea1d7;
+  transform: scaleX(1);
+  transform-origin: 50% 50%;
+  pointer-events: none;
+  transition: none;
+}
+
+nav.nav-edge-ready::after {
+  transition: transform 0.5s cubic-bezier(0.45, 0, 0.55, 1) 0.35s;
+}
+
+nav.nav-edge-ready.nav-hidden::after {
+  transform: scaleX(0);
+  transition-delay: 0s;
+}
+
+nav.nav-edge-ready.nav-hidden {
+  transition-delay: 0.5s;
+}
+
+/* 导航主项前的插画（替代原 iconfont 字形），高度随视口缓变 */
+.nav-deco {
+  display: block;
+  height: clamp(2.45rem, 3.42vw, 4.1rem);
+  width: auto;
+  flex: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+.footer-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: clamp(1.2rem, 2.4vw, 2rem);
+}
+
+.footer-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.footer-bubbles {
+  flex: 1 1 50%;
+  min-width: 0;
+  max-width: 50%;
+}
+
+.bubble-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(340px, 26vw, 400px);
+}
+
+.bubble-group {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 108px;
+  height: 108px;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+}
+
+.bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.15;
+  padding: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease;
+}
+
+.bubble--parent {
+  width: 108px;
+  height: 108px;
+}
+
+.bubble--parent:hover,
+.bubble-group.is-active > .bubble--parent {
+  background: #fff;
+  color: #4ea1d7;
+  border-color: #fff;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  transform: scale(1.04);
+}
+
+.bubble-children {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.bubble--child {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80px;
+  height: 80px;
+  padding: 0.3rem;
+  font-size: 0.9375rem;
+  background: #fff;
+  color: #3f8dbb;
+  border-color: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+  transform: translate(-50%, -50%) scale(0.3);
+  opacity: 0;
+}
+
+.bubble-group.is-active .bubble--child {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bubble--child:hover {
+  background: #f2faff;
+  color: #2f7fb0;
+}
+
+/* 展开时其余母气泡压暗（只压暗、不夺指针） */
+.footer-bubbles[data-active] .bubble-group:not(.is-active) {
+  opacity: 0.42;
+}
+
+.bubble-group.is-active {
+  z-index: 4;
+}
+
+/* ---- 右 50%：支持方（无白底，三张尽量大） ----
+   注意：须显式覆盖旧版 .footer-partners 的 column/background/padding/border/border-radius
+   （层叠逐属性，未声明则保留旧值）。 */
+.footer-partners {
+  flex: 1 1 50%;
+  min-width: 0;
+  max-width: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: clamp(230px, 19vw, 262px);
+  gap: clamp(0.5rem, 1vw, 1rem);
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+.partner-chip {
+  flex: 1 1 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+
+.partner-chip:hover {
+  transform: translateY(-4px);
+  background: none;
+  box-shadow: none;
+}
+
+.partner-chip img {
+  display: block;
+  width: 140px;
+  height: auto;
+  max-width: 80%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.16));
+}
+
+/* ---- 下排：版权居中，社交图标绝对定位在右（左移 50px） ---- */
+.footer-bottom {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+  min-height: 2.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  display: block;
+  text-align: center;
+}
+
+.footer-bottom-section {
+  text-align: center;
+  font-size: clamp(0.7rem, 0.78vw, 0.82rem);
+  line-height: 1.55;
+}
+
+.footer-bottom-section p {
+  margin: 0;
+}
+
+/* 覆盖 mobile.css 的旧灰色规则；颜色继承 .section-footer 的白色 */
+.section-footer .footer-bottom-section p {
+  color: inherit;
+}
+
+.section-footer .footer-bottom-section p a {
+  color: inherit;
+}
+
+.footer-bottom-section a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-social {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* 圆钮：无底色、无边框，与页脚蓝底融为一体； */
+.footer-social .contact-icon-wrapper {
+  position: relative;
+  width: 2.6rem;
+  height: 2.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  transition: none;
+}
+
+.footer-social .contact-icon-wrapper .iconfont {
+  font-size: 1.15rem;
+  color: inherit;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* flask 用 icons.html 的 inline SVG（非 iconfont），补尺寸与配色 */
+.footer-social .contact-icon-wrapper svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: inherit;
+  fill: currentColor;
+  flex: none;
+}
+
+/* a 标签沿用全站 base 链接语义，但去掉下划线 */
+.footer-social a {
+  text-decoration: none;
+  border-bottom: 0;
+}
+
+/* tooltip（沿用旧交互，只缩尺寸） */
+.footer-social .contact-icon-wrapper::before,
+.footer-social .contact-icon-wrapper::after {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+.footer-social .contact-icon-wrapper::before {
+  content: attr(data-tooltip);
+  background: #fff;
+  color: #2f6f99;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 6px;
+  z-index: 10;
+}
+
+.footer-social .contact-icon-wrapper::after {
+  content: '';
+  border: 5px solid transparent;
+  border-top-color: #fff;
+  margin-bottom: -4px;
+  z-index: 10;
+}
+
+.footer-social .contact-icon-wrapper:hover::before,
+.footer-social .contact-icon-wrapper:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* 微信图标用二维码代替 tooltip */
+.footer-social .wechat-qr-wrapper::before,
+.footer-social .wechat-qr-wrapper::after {
+  display: none;
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 1560px) {
+  .footer-social {
+    right: 202px;
+  }
+}
+
+@media (max-width: 1500px) {
+  .footer-social {
+    position: static;
+    transform: none;
+    justify-content: flex-end;
+    margin-top: 0.85rem;
+    margin-right: 202px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .footer-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  .footer-bubbles,
+  .footer-partners {
+    max-width: none;
+    flex-basis: auto;
+  }
+
+  .footer-partners {
+    justify-content: space-between;
+    height: auto;
+  }
+
+  .partner-chip img {
+    max-height: 7rem;
+  }
+
+  .bubble-stage {
+    height: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-footer {
+    padding: 2rem 1rem;
+  }
+
+  .bubble-stage {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    height: auto;
+  }
+
+  .bubble-group {
+    position: static;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    transform: none !important;
+  }
+
+  .bubble--parent {
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    padding: 0.65rem 0.4rem;
+  }
+
+  .bubble-children {
+    position: static;
+    width: auto;
+    height: auto;
+    display: none;
+  }
+
+  .bubble-group.is-active .bubble-children {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .bubble--child,
+  .bubble-group.is-active .bubble--child {
+    position: static;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    transform: none !important;
+    opacity: 1;
+    pointer-events: auto;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    padding: 0.4rem 0.55rem;
+    transition: none;
+  }
+
+  .footer-partners {
+    flex-wrap: wrap;
+    gap: 1.2rem;
+  }
+
+  .partner-chip {
+    flex: 1 1 28%;
+  }
+
+  .partner-chip img {
+    max-height: 2.8rem;
+  }
+
+  .footer-bottom {
+    min-height: 0;
+  }
+
+  .footer-social {
+    position: static;
+    transform: none;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    margin-right: 7rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .bubble--parent {
+    font-size: 0.9375rem;
+    padding: 0.6rem 0.28rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble,
+  .bubble-group,
+  .partner-chip,
+  .footer-social .contact-icon-wrapper {
+    transition: none;
+  }
+}
+
+/*
+   否则 top:100% 会落到视口/页面之外。覆盖上方旧版 top:100% 规则。---- */
+.wechat-qr-container {
+  position: absolute;
+  left: 50%;
+  top: auto;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(6px) scale(0.8);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  margin-bottom: 8px;
+}
+
+.wechat-qr-wrapper:hover .wechat-qr-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.wechat-qr-arrow {
+  position: absolute;
+  left: 50%;
+  top: auto;
+  bottom: -12px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #ffffff;
+  z-index: 2;
 }

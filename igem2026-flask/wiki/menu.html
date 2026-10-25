@@ -1,114 +1,95 @@
-{% from "icons.html" import icon with context %}
-{# wiki/menu.html — 主导航（桌面与移动端共用同一个宏）；图标由 icons.html 的 inline SVG 宏输出，
-   不引入字体文件，资源全部本地化 #}
-{# 桌面导航：<nav> + .nav-items(#nav-items)；移动端：#hamburger-menu + #mobile-menu-overlay/#mobile-menu#}
-{# 栏目与顺序对齐根站 src/_includes/partials/nav.njk；href 使用本工程的无扩展名路由。
-   仓库内只保留 app.py 一个 Python 文件，导航不依赖任何 Python 数据模块。#}
-{# 与 static/js/core/mobile-menu.js 及 nav-scroll-behavior.js 兼容。#}
+{# wiki/menu.html — 主导航（桌面与移动端共用同一个宏）。
+   下拉子项为纯文字；品牌区改为「字标 + 吉祥物」两图并置（CDN）。
+   href 使用本工程无扩展名路由；active_page 由页面传入。#}
 
 {% macro navList() %}
   <li>
-    <a href="index.html"{% if active_page == 'home' %} class="active" aria-current="page"{% endif %}>
-      {{ icon('home') }}
+    <a href="{{ url_for('home') }}"{% if active_page == 'home' %} class="active" aria-current="page"{% endif %}>
+      <img class="nav-deco" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/nav-home.avif" alt="" aria-hidden="true" width="140" height="135" decoding="async">
       <span>Home</span>
     </a>
   </li>
   <li class="dropdown">
     <a href="#" class="dropdown-toggle">
-      {{ icon('xiangmu') }}
+      <img class="nav-deco" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/nav-project.avif" alt="" aria-hidden="true" width="140" height="139" decoding="async">
       <span>Project</span>
     </a>
     <div class="dropdown-content">
-      <a href="description"{% if active_page == 'description' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('jianjie') }}
+      <a href="{{ url_for('pages', page='description') }}"{% if active_page == 'description' %} class="active" aria-current="page"{% endif %}>
         <span>Description</span>
       </a>
-      <a href="design"{% if active_page == 'design' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('sheji') }}
+      <a href="{{ url_for('pages', page='design') }}"{% if active_page == 'design' %} class="active" aria-current="page"{% endif %}>
         <span>Design</span>
       </a>
-      <a href="engineering"{% if active_page == 'engineering' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('shezhichilun') }}
+      <a href="{{ url_for('pages', page='engineering') }}"{% if active_page == 'engineering' %} class="active" aria-current="page"{% endif %}>
         <span>Engineering</span>
       </a>
-      <a href="contribution"{% if active_page == 'contribution' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('gongxian') }}
+      <a href="{{ url_for('pages', page='contribution') }}"{% if active_page == 'contribution' %} class="active" aria-current="page"{% endif %}>
         <span>Contribution</span>
       </a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropdown-toggle">
-      {{ icon('tuandui') }}
+      <img class="nav-deco" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/nav-team.avif" alt="" aria-hidden="true" width="140" height="116" decoding="async">
       <span>Team</span>
     </a>
     <div class="dropdown-content">
-      <a href="team"{% if active_page == 'team' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('tuanduichengyuan') }}
+      <a href="{{ url_for('pages', page='team') }}"{% if active_page == 'team' %} class="active" aria-current="page"{% endif %}>
         <span>Members</span>
       </a>
-      <a href="attributions"{% if active_page == 'attributions' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('guishu') }}
+      <a href="{{ url_for('pages', page='attributions') }}"{% if active_page == 'attributions' %} class="active" aria-current="page"{% endif %}>
         <span>Attributions</span>
       </a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropdown-toggle">
-      {{ icon('cplus') }}
+      <img class="nav-deco" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/nav-dry-lab.avif" alt="" aria-hidden="true" width="140" height="124" decoding="async">
       <span>Dry Lab</span>
     </a>
     <div class="dropdown-content">
-      <a href="model"{% if active_page == 'model' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('wumoxing') }}
+      <a href="{{ url_for('pages', page='model') }}"{% if active_page == 'model' %} class="active" aria-current="page"{% endif %}>
         <span>Model</span>
       </a>
-      <a href="hardware"{% if active_page == 'hardware' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('yingjian') }}
+      <a href="{{ url_for('pages', page='hardware') }}"{% if active_page == 'hardware' %} class="active" aria-current="page"{% endif %}>
         <span>Hardware</span>
       </a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropdown-toggle">
-      {{ icon('shiyan-L') }}
+      <img class="nav-deco" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/nav-wet-lab.avif" alt="" aria-hidden="true" width="140" height="130" decoding="async">
       <span>Wet Lab</span>
     </a>
     <div class="dropdown-content">
-      <a href="protocol"{% if active_page == 'protocol' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('neirong') }}
+      <a href="{{ url_for('pages', page='protocol') }}"{% if active_page == 'protocol' %} class="active" aria-current="page"{% endif %}>
         <span>Protocol</span>
       </a>
-      <a href="results"{% if active_page == 'results' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('shiyanjieguo') }}
+      <a href="{{ url_for('pages', page='results') }}"{% if active_page == 'results' %} class="active" aria-current="page"{% endif %}>
         <span>Results</span>
       </a>
-      <a href="parts"{% if active_page == 'parts' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('jiyin') }}
+      <a href="{{ url_for('pages', page='parts') }}"{% if active_page == 'parts' %} class="active" aria-current="page"{% endif %}>
         <span>Parts</span>
       </a>
-      <a href="safety-and-security"{% if active_page == 'safety-and-security' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('anquan') }}
+      <a href="{{ url_for('pages', page='safety-and-security') }}"{% if active_page == 'safety-and-security' %} class="active" aria-current="page"{% endif %}>
         <span>Safety</span>
       </a>
-      <a href="notebook"{% if active_page == 'notebook' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('rizhi') }}
+      <a href="{{ url_for('pages', page='notebook') }}"{% if active_page == 'notebook' %} class="active" aria-current="page"{% endif %}>
         <span>Notebook</span>
       </a>
     </div>
   </li>
   <li class="dropdown">
     <a href="#" class="dropdown-toggle">
-      {{ icon('shehuishijian') }}
+      <img class="nav-deco" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/nav-human-practices.avif" alt="" aria-hidden="true" width="140" height="126" decoding="async">
       <span>Human Practices</span>
     </a>
     <div class="dropdown-content">
-      <a href="human-practices"{% if active_page == 'human-practices' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('shehuishijian') }}
+      <a href="{{ url_for('pages', page='human-practices') }}"{% if active_page == 'human-practices' %} class="active" aria-current="page"{% endif %}>
         <span>Integrated HP</span>
       </a>
-      <a href="sustainability"{% if active_page == 'sustainability' %} class="active" aria-current="page"{% endif %}>
-        {{ icon('shengtai') }}
+      <a href="{{ url_for('pages', page='sustainability') }}"{% if active_page == 'sustainability' %} class="active" aria-current="page"{% endif %}>
         <span>Sustainability</span>
       </a>
     </div>
@@ -127,7 +108,13 @@
 <!-- 桌面端导航 -->
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 品牌区改为「字标 + 吉祥物」两图并置（对齐根站 nav.njk），CDN 引用 -->
+    <a class="logo" href="{{ url_for('home') }}" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/echo-yeast-wordmark.avif"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/nav/echo-mascot.avif"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">

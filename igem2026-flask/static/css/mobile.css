@@ -634,9 +634,8 @@ a:active,
 }
 
 /* 减少布局偏移
-   2026-10-07：撤掉原来的 img{content-visibility:auto}。该写法给每张图片加了尺寸遏制，
+   撤掉原来的 img{content-visibility:auto}。该写法给每张图片加了尺寸遏制，
    而 contain-intrinsic-size 缺失时，视口外的图片会被按 0×0 计算，滚动到附近再突然撑开
-   ——图片密集页（wet-lab/result 等）实测整页高度可差数千像素，反而把布局偏移放大。
    图片的加载时机交给 loading="lazy"，尺寸预留交给 <img> 自带的 width/height 属性
    （浏览器据此在加载前按比例留位，见 static/css/components/media-reveal.css 的说明）。 */
 
@@ -1056,13 +1055,15 @@ img.loaded {
     transform: rotate(180deg);
   }
 
-  /* ===== 移动端侧边栏禁用粘性定位 ===== */
+  /* ===== 移动端侧边栏禁用粘性定位 =====
+     用 relative 而不是 static：仍保留侧栏的定位包含块，
+     .yeast-decoration 这类 absolute 装饰层才会裁在侧栏卡片内；
+     退回 static 会让装饰层改按 .description-container 铺满整页。 */
   .description-sidebar,
   .log-sidebar,
   .sidebar {
-    position: static !important;
+    position: relative !important;
     top: auto !important;
-    position: -webkit-static !important;
   }
 }
 
@@ -1082,13 +1083,15 @@ img.loaded {
     scroll-padding-top: 5rem;
   }
 
-  /* ===== 移动端侧边栏禁用粘性定位 ===== */
+  /* ===== 移动端侧边栏禁用粘性定位 =====
+     用 relative 而不是 static：仍保留侧栏的定位包含块，
+     .yeast-decoration 这类 absolute 装饰层才会裁在侧栏卡片内；
+     退回 static 会让装饰层改按 .description-container 铺满整页。 */
   .description-sidebar,
   .log-sidebar,
   .sidebar {
-    position: static !important;
+    position: relative !important;
     top: auto !important;
-    position: -webkit-static !important;
   }
 
   body {
@@ -1155,13 +1158,13 @@ img.loaded {
   }
 
   h2 {
-    font-size: clamp(1.35rem, 4.5vw, 1.5rem);
+    font-size: clamp(1.5rem, 5vw, 1.75rem);
     line-height: 1.3;
     letter-spacing: -0.01em;
   }
 
   h3 {
-    font-size: clamp(1.1rem, 3.5vw, 1.2rem);
+    font-size: clamp(1.25rem, 4vw, 1.42rem);
     line-height: 1.4;
   }
 
@@ -1171,7 +1174,7 @@ img.loaded {
   .mobile-content div,
   p,
   div {
-    font-size: clamp(0.9rem, 2.7vw, 1rem);
+    font-size: clamp(1rem, 2.9vw, 1.12rem);
     line-height: 1.6;
   }
 
@@ -1184,7 +1187,7 @@ img.loaded {
   }
 
   /* 首页透明拼装插画（hero/板块舞台/漂浮酵母）：不吃全局 img 的米色底与圆角，
-     否则透明 webp 背后垫出色块（REQ-20260928-002 移动端适配）。
+     否则透明 webp 背后垫出色块。
      同时取消 blanket 的 max-width:100%，让板块舞台内插画按各自 width% 定位
      （如 hero 的 width:140% 不会被 blanket 压回 100%）。 */
   .home-page .echo-stage img,
@@ -1196,7 +1199,7 @@ img.loaded {
   }
   /* 例外：s3 内容条图片必须保留显式高度（--s3-pill-h），否则被 blanket 的
      height:auto 与 .presentation-section img 撑成原图巨字。放最后加载层，
-     对所有页面统一生效（REQ-20260928-002） */
+     对所有页面统一生效。 */
   .home-page .art-stage--s3 .s3-pill img {
     height: var(--s3-pill-h);
     max-width: none;
@@ -1242,7 +1245,8 @@ img.loaded {
   .description-sidebar {
     width: 100%;
     min-width: 100%;
-    position: static;
+    /* relative 保留定位包含块，装饰层才裁在侧栏卡片内 */
+    position: relative;
   }
 
   /* ===== 按钮和链接触摸优化 ===== */
@@ -1268,12 +1272,12 @@ img.loaded {
   .footer-nav {
     columns: 1;
     line-height: 1.7;
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     padding: var(--mobile-spacing-sm) 0;
   }
 
   .footer-nav a {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     padding: var(--mobile-spacing-sm) 0;
     min-height: var(--mobile-tap-target);
     display: flex;
@@ -1281,7 +1285,7 @@ img.loaded {
   }
 
   .footer-bottom p {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
     color: var(--mobile-gray-600);
   }
 
@@ -1526,7 +1530,7 @@ img.loaded {
 
   /* 标签 - 移动端尺寸 */
   .member-tag {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     padding: 0.25rem 0.7rem;
   }
 
@@ -1554,7 +1558,7 @@ img.loaded {
   }
 
   .bio-tag {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     padding: 0.4rem 0.8rem;
   }
 
@@ -1669,7 +1673,7 @@ img.loaded {
   }
 
   .member-tag {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
     padding: 0.2rem 0.6rem;
   }
 
@@ -1679,12 +1683,12 @@ img.loaded {
   }
 
   .bio-tag {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     padding: 0.35rem 0.7rem;
   }
 
   .bio-description p {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
   }
 
   /* 点击状态 - 小屏幕保持固定位置 */
@@ -1736,18 +1740,18 @@ img.loaded {
 
   /* 标签 */
   .member-tag {
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     padding: 0.18rem 0.55rem;
   }
 
   .bio-tag {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
     padding: 0.3rem 0.6rem;
   }
 
   /* 描述 */
   .bio-description p {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     line-height: 1.4;
   }
 
@@ -1919,7 +1923,7 @@ img.loaded {
 
 /* ================================================== */
 /* final-cta 吉祥物门户：窄屏 2×2 排布（4 列会把每只压到 ~90px 不可读）。
-   放在最后加载层，沿用根站同一实现（REQ-20261004-001）。 */
+   放在最后加载层。 */
 /* ================================================== */
 @media (max-width: 768px) {
   #final-cta .summary-inner {
@@ -1933,7 +1937,7 @@ img.loaded {
   }
 
   .mascot-portal__label {
-    font-size: 12px;
+    font-size: 15px;
     letter-spacing: 0.04em;
   }
 }

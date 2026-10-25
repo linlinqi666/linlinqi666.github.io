@@ -17,10 +17,12 @@
 
 ### 5.3 内容页侧边栏 + 烧瓶进度（description.css + sidebar-progress.js）
 
-- 标记：`<aside class="description-sidebar">`，实测背景 `rgba(255,252,247,0.95)`、宽度约 `260px`（令牌范围 `min 280px / max 320px`）。
+- 标记：`<aside class="description-sidebar">`，实测背景 `rgba(255,252,247,0.95)`，宽度 `--desc-sidebar-min-width`～`--desc-sidebar-max-width`（17.5–20rem）。
 - 内嵌基于烧瓶液体的阅读进度可视化（`--desc-flask-*` 系列令牌，由 `sidebar-progress.js` 驱动随滚动上升）。
 - `description.css` 中明确标注：`--desc-sidebar-position: sticky`、`--desc-sidebar-top-offset:120px` 等为"绝对不能改（navigation.css 会接管）"的关键配置。
-- 仅"标准内容页"加载此组件；自定义布局页（design/notebook/members/attributions/sustainability/parts）无侧边栏，也不加载 `sidebar-progress.js`。
+- **装载范围（2026-10-21 校准）**：除首页、Members、Attributions 外，其余内容页都走这套侧栏——`description` / `design` / `engineering` / `contribution` / `model` / `hardware` / `protocol` / `results` / `parts` / `safety-and-security` / `notebook` / `integration human-practices` / `sustainability`，两站各 13 页。
+- **每个侧栏都必须带酵母装饰层**：`<div class="yeast-decoration">` 内含 3 个 `.yeast-cell` + 3 个 `.bubble`，`position:absolute; inset:0` 铺满卡片、`overflow:hidden` 裁在圆角内、`pointer-events:none` 只作背景，目录内容 `.description-nav-wrapper` 抬到 `z-index:1`。
+- **高度限制**：`.description-sidebar` 上 `display:flex` + `flex-direction:column` + `max-height: calc(100vh - 12rem)` + `overflow:hidden`；目录区 `flex:1 1 auto` + `min-height:0` + `overflow-y:auto` 自己滚，底部进度块常驻。这四个声明写在 `navigation.css`，两个工程必须一致。
 
 ### 5.4 进度条组件
 

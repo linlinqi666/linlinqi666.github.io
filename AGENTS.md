@@ -51,7 +51,7 @@
 ### 0.2 工程构建命令（不可混用）
 
 - 根目录站点：`npm run build:all`（Eleventy + 搜索索引）；预览 `npm run serve`。
-- igem2026-flask：`python -m compileall app.py site_nav.py` → `flask freeze`（生成 `public/`）；预览 `flask run`。
+- igem2026-flask：`python -m compileall app.py` → `flask freeze`（生成 `public/`）；预览 `flask run`。
 
 ## 1. 文档索引与优先级
 

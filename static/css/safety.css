@@ -43,6 +43,21 @@
   color: var(--desc-color-text-muted, #5b6b7a);
 }
 
+/* 表 3 前的计算说明：标签左对齐，公式单独居中成行
+   （选择器带 .content-card，优先级高于通用的 .content-card p 对齐与间距规则） */
+.content-card .safety-calculation-label {
+  margin: 1.25rem 0 0.35rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.content-card .safety-calculation-formula {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
 .safety-table th,
 .safety-table td {
   border: 1px solid var(--desc-color-border, rgba(15, 61, 62, 0.16));
@@ -116,13 +131,7 @@
 }
 
 /* ===== 正文引用角标与参考文献 ===== */
-.safety-cite {
-  font-size: 0.72em;
-  line-height: 1;
-  vertical-align: super;
-  white-space: nowrap;
-  padding: 0 0.05em;
-}
+/* 引用角标统一使用 .cite-ref（navigation.css 全站公共类，2026-10-21）。 */
 
 .safety-references {
   margin: 0.5rem 0 0;

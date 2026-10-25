@@ -542,6 +542,14 @@
         .dt-no-rows { padding: 24px; text-align: center; color: #8A7A66; font-style: italic; }
     
     </style>
+<style id="mg-theme-override">
+/* 汇总卡背景统一到棕金同一色系，用深浅区分类型；键色编码不动 */
+.summary-card.type-salt{background:linear-gradient(135deg,#A8683A 0%,#8B5A2B 100%);}
+.summary-card.type-disulfide{background:linear-gradient(135deg,#B2793F 0%,#96602F 100%);}
+.summary-card.type-hydrophobic{background:linear-gradient(135deg,#8C6A3E 0%,#6F522D 100%);}
+.summary-card.type-pi{background:linear-gradient(135deg,#9C7343 0%,#7C5A33 100%);}
+.stat-card{background:linear-gradient(135deg,#A06A28 0%,#7A4E1E 100%);}
+</style>
 </head>
 <body>
 
@@ -10114,5 +10122,6 @@ END`;
         _renderResidues(_dtResidueCsv);
     </script>
 
+<style id="mg-back-style">.mg-back{position:fixed;top:0.9rem;left:0.9rem;z-index:99999;display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border:1px solid #8B5A2B;border-radius:999px;background:rgba(255,248,231,0.95);color:#5D3A1A;font:600 0.8rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 0.2rem 0.6rem rgba(93,58,26,0.18);}.mg-back:hover{background:#FFF8E7;border-color:#5D3A1A;}</style><button type="button" class="mg-back" id="mg-back"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>Back</button><script>(function(){var b=document.getElementById("mg-back");if(!b)return;b.addEventListener("click",function(){if(window.history.length>1){window.history.back();}else{window.close();}});var s=document.createElement("style");s.textContent="@media print{.mg-back{display:none!important;}}";document.head.appendChild(s);})();</script>
 </body>
 </html>

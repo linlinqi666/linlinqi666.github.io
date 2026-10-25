@@ -9,20 +9,27 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/flask-sync/description.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -57,47 +64,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -106,52 +113,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -185,15 +200,10 @@
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
 </div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
-</div>
 
   <main class="">
     
 <div class="description-container">
-
 
       <!-- 左侧导航栏 -->
       <aside class="description-sidebar">
@@ -209,9 +219,14 @@
 
         <div class="description-nav-wrapper">
           <ul class="description-nav">
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#description-abstract" class="nav-main-link">Abstract</a>
+              </div>
+            </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#project-background" class="nav-main-link">项目背景与动机</a>
+                <a href="#description-why-echo-yeast" class="nav-main-link">Why EchoYeast?</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -220,19 +235,19 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#problem-impact">问题与潜在影响</a>
+                  <a href="#description-why-influenza">Why influenza?</a>
                 </li>
                 <li class="level3">
-                  <a href="#project-goals">项目目标</a>
+                  <a href="#description-why-consider-air-and-exhaled-breath">Why consider air and exhaled breath?</a>
                 </li>
                 <li class="level3">
-                  <a href="#why-this-project">为何选择此项目</a>
+                  <a href="#description-why-engineer-yeast">Why engineer yeast?</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#pager-strategy" class="nav-main-link">核心设计思路：PAGER策略</a>
+                <a href="#description-our-design" class="nav-main-link">Our design</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -241,16 +256,28 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#antigen-gated-receptor">抗原门控受体原理</a>
+                  <a href="#description-system-architecture">System architecture</a>
                 </li>
                 <li class="level3">
-                  <a href="#dual-reporter">双模式报告系统</a>
+                  <a href="#description-module-1-ha-recognition">Module 1: HA recognition</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-2-antigen-gated-receptor-design">Module 2: antigen-gated receptor design</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-3-g-protein-coupling">Module 3: G-protein coupling</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-4-chassis-engineering">Module 4: chassis engineering</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-module-5-fus1-reporter-output">Module 5: <i>FUS1</i> reporter output</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#biological-parts" class="nav-main-link">生物元件库</a>
+                <a href="#description-model-guided" class="nav-main-link">Model-guided design</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -259,22 +286,16 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#pager-fusion-protein">PAGER膜融合蛋白</a>
+                  <a href="#description-computational-workflow">Computational workflow</a>
                 </li>
                 <li class="level3">
-                  <a href="#chassis-targets">底盘改造靶点</a>
-                </li>
-                <li class="level3">
-                  <a href="#reporter-parts">报告系统元件</a>
-                </li>
-                <li class="level3">
-                  <a href="#vectors-markers">载体与筛选标记</a>
+                  <a href="#description-the-limits-of-computational-evidence">The limits of computational evidence</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#modular-construction" class="nav-main-link">实验设计与模块化构建</a>
+                <a href="#description-dbtl" class="nav-main-link">Design–Build–Test–Learn</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -283,22 +304,22 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#module-one">模块一：底盘细胞改造</a>
+                  <a href="#description-design">Design</a>
                 </li>
                 <li class="level3">
-                  <a href="#module-two">模块二：报告体系构建</a>
+                  <a href="#description-build">Build</a>
                 </li>
                 <li class="level3">
-                  <a href="#module-three">模块三：Gpa1-Gα人源化</a>
+                  <a href="#description-test">Test</a>
                 </li>
                 <li class="level3">
-                  <a href="#module-four">模块四：PAGER识别融合蛋白</a>
+                  <a href="#description-learn">Learn</a>
                 </li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#innovation-value" class="nav-main-link">创新点与社会价值</a>
+                <a href="#description-detection" class="nav-main-link">From engineered cells to a detection concept</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -307,16 +328,62 @@
               </div>
               <ul class="level2">
                 <li class="level3">
-                  <a href="#innovation-points">三大创新点</a>
+                  <a href="#description-hardware-development">Hardware development</a>
                 </li>
                 <li class="level3">
-                  <a href="#social-value">社会价值与展望</a>
+                  <a href="#description-integrating-sampling-with-biological-sensing">Integrating sampling with biological sensing</a>
+                </li>
+              </ul>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#description-hp" class="nav-main-link">Human Practices and application boundaries</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3">
+                  <a href="#description-from-detection-to-risk-information">From detection to risk information</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-what-echoyeast-cannot-currently-claim">What EchoYeast cannot currently claim</a>
                 </li>
               </ul>
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#references" class="nav-main-link">参考文献</a>
+                <a href="#description-safety" class="nav-main-link">Safety and responsible deployment</a>
+              </div>
+            </li>
+            <li class="level1 has-submenu">
+              <div class="nav-link-wrapper">
+                <a href="#description-current-status" class="nav-main-link">Current status and next steps</a>
+                <div class="toggle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <ul class="level2">
+                <li class="level3">
+                  <a href="#description-current-evidence">Current evidence</a>
+                </li>
+                <li class="level3">
+                  <a href="#description-next-experimental-priorities">Next experimental priorities</a>
+                </li>
+              </ul>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#description-conclusion" class="nav-main-link">Conclusion</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#description-references" class="nav-main-link">References</a>
               </div>
             </li>
           </ul>
@@ -347,565 +414,466 @@
 
       <!-- 右侧内容区域 -->
       <div class="description-content">
-        <div id="project-background" class="content-card">
+
+        <!-- ============ 概览卡（常显） ============ -->
+        <div id="description-abstract" class="content-card">
           <figure class="page-mascot page-mascot--description" aria-hidden="true">
             <img src="../static/image/any-icon/extension/description.png" alt="" width="440" height="278"
               loading="lazy" decoding="async">
           </figure>
+
+          <h2 id="description-echoyeast-let-yeast-respond-to-influenza-signals">EchoYeast: Let Yeast Respond to Influenza Signals</h2>
+          <h4 class="description-subtitle">An engineered yeast biosensor for influenza A hemagglutinin recognition and environmental surveillance</h4>
           <div class="executive-summary">
-            <p><strong>执行摘要：</strong>针对甲型流感病毒（IAV）现场快速检测的临床瓶颈，本项目以酿酒酵母 BY4741 为底盘，利用 PAGER 可编程抗原门控受体技术将 HA
-              抗原识别事件转化为绿色荧光信号，构建低成本、高灵敏度的 POCT 生物传感器。</p>
+          <p><em><strong>Can a living cell transform an invisible antigen-recognition event into a readable response?</strong></em></p>
           </div>
-
-          <h2>项目背景与动机</h2>
-          <div id="problem-impact">
-            <h3>问题与潜在影响</h3>
-            <p>流感作为全球重大公共卫生威胁，快速、准确的现场筛查是控制疫情传播的关键环节。现有临床检测方法存在以下局限：</p>
-            <div class="concept-highlight">
-              <ul>
-                <li><strong>qRT-PCR：</strong>高准确度，但成本高、依赖专业实验设备、检测周期长，难以满足基层与现场需求。</li>
-                <li><strong>ELISA：</strong>可高通量检测，但灵敏度偏低、孵育步骤复杂，对操作环境要求较高。</li>
-                <li><strong>胶体金试纸条：</strong>操作简便、现场快速，但只能定性判读，低病毒载量样本易漏检。</li>
-              </ul>
-            </div>
-            <p>上述方法在成本控制、灵敏度与便携性之间存在难以兼顾的矛盾，迫切需要开发一种低成本、高灵敏度、可现场部署的新型检测平台。</p>
-            <!-- [待补充：建议上传三种检测方法对比示意图，尺寸 1000×500px，.webp 格式并压缩至 150KB 以下] -->
-          </div>
-
-          <div id="project-goals">
-            <h3>项目目标</h3>
-            <p>本项目核心目标为：将 PAGER（Protein-fragment Assisted Interaction Reporter）可编程抗原门控受体技术应用于酿酒酵母，构建膜表面抗原识别融合蛋白，实现甲型流感病毒
-              HA 抗原的快速可视化检测。</p>
-            <p>当样本中存在 IAV HA 抗原时，酵母细胞表面的纳米抗体捕获抗原，通过空间位阻解除受体自抑制，在 DCZ 激动剂存在下激活下游 G 蛋白信号通路，驱动 FUS1 启动子表达 yEGFP/lacZ
-              报告基因，发出绿色荧光或蓝色显色信号，实现"抗原结合—荧光发光"的直接转换。</p>
-          </div>
-
-          <div id="why-this-project">
-            <h3>为何选择此项目</h3>
-            <p>选择酿酒酵母作为生物传感器底盘基于以下考量：BY4741 遗传背景清晰、分子操作成熟、培养条件简单、生物安全等级为 BSL-1，适合规模化发酵生产。PAGER
-              系统将抗原识别与受体激活解耦，仅通过替换纳米抗体即可拓展至其他病原体检测，具有高度的模块化与可扩展性。</p>
-          </div>
+          <h4 id="description-abstract-title">Abstract</h4>
+          <p>Seasonal influenza remains a global public-health challenge. The World Health Organization estimates that seasonal influenza causes approximately one billion cases, three to five million severe cases and 290,000–650,000 respiratory deaths worldwide each year. Influenza A and influenza B viruses both contribute to seasonal epidemics, while currently circulating human influenza A viruses include A(H1N1)pdm09 and A(H3N2). Most established influenza testing workflows are designed around clinical or laboratory samples collected from individuals. <a class="cite-ref" href="#description-reference-1">[1]</a></p>
+          <p>EchoYeast explores a complementary question: <strong>can an engineered living cell recognize influenza A hemagglutinin (HA) and convert that recognition event into a measurable biological output?</strong></p>
+          <p>EchoYeast uses <i>Saccharomyces cerevisiae</i> BY4741 as an engineered chassis. The project combines an HA-recognizing nanobody, an antigen-gated GPCR-inspired receptor, a humanized G-protein coupling interface, the yeast pheromone-response MAPK pathway and a <i>FUS1</i>-driven reporter system. <a href="../project/design.html">Team Design</a></p>
+          <figure class="design-figure">
+          <img src="../static/image/description/description-fig1.png"
+          alt="Six-step schematic of the intended EchoYeast signal chain: influenza A HA, R1a-B6 nanobody, MT1-gated hM1Dq receptor, Gpa1-Gαq chimera, yeast MAPK pathway, and FUS1-driven yEGFP or MEL1 reporter; labelled as an intended design whose complete HA sensing has not yet been validated."
+          width="1267" height="713" loading="lazy" decoding="async">
+          <figcaption>Figure 1. Intended HA-to-reporter signaling mechanism of EchoYeast.</figcaption>
+          </figure>
+          <p>Our current work supports the characterization of the downstream <i>FUS1</i> reporter system and the construction of several chassis-engineering modules, while full-length receptor expression, HA-dependent activation and integration with air sampling remain to be demonstrated. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>Therefore, EchoYeast is currently an engineering exploration of a modular living-cell biosensor, rather than a clinically validated diagnostic device or a field-deployed airborne influenza detector.</p>
         </div>
 
-        <div id="pager-strategy" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>PAGER 策略通过"MT1 抑制肽—hM1Dq 受体—anti-HA 纳米抗体"三元嵌合设计实现抗原门控：无 HA 时通路关闭，有 HA
-              时空间位阻解除抑制并激活双模式报告系统。</p>
-          </div>
-
-          <h2>核心设计思路：PAGER策略</h2>
-          <div id="antigen-gated-receptor">
-            <h3>抗原门控受体原理</h3>
-            <div class="concept-highlight">
-              <p><strong>PAGER</strong>（Protein-fragment Assisted Interaction
-                Reporter，蛋白片段辅助互作报告系统）是一种基于空间位阻调控的可编程抗原门控受体策略。其核心是将抑制肽、抗原识别纳米抗体与 G 蛋白偶联受体（GPCR）整合为单一膜融合蛋白。</p>
-            </div>
-
-            <div class="fusion-protein-map">
-              <div class="map-title">PAGER 膜融合蛋白结构（N→C 端）</div>
-              <div class="map-diagram">
-                <div class="domain" title="引导分泌并锚定在酵母细胞膜">α-factor 信号肽</div>
-                <div class="linker">(GGGS)₃</div>
-                <div class="domain" title="无抗原时自抑制 hM1Dq">MT1 抑制肽</div>
-                <div class="linker">(GGGS)₃</div>
-                <div class="domain tag" title="特异性识别 IAV HA 抗原">anti-HA 纳米抗体</div>
-                <div class="linker">(GGGS)₃</div>
-                <div class="domain" title="体外模拟抗原解锁的分子开关">TEVcs</div>
-                <div class="linker">Linker</div>
-                <div class="domain receptor" title="接收上游信号并偶联 G 蛋白通路">hM1Dq 受体</div>
-              </div>
-              <div class="map-notes">
-                <p><strong>完整组装结构：</strong><code>α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq</code>。柔性 (GGGS)₃
-                  接头作为空间延长臂，确保纳米抗体能够穿透酵母细胞壁孔隙并接触病毒颗粒抗原。</p>
-              </div>
-            </div>
-
-            <div class="workflow-diagram">
-              <div class="workflow-step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                  <h4>静息关闭状态</h4>
-                  <p>无 IAV HA 抗原时，MT1 抑制肽持续占据 hM1Dq 受体的正构位点，下游 G 蛋白级联被钳制在"关闭"状态，无荧光信号产生。</p>
-                </div>
-              </div>
-              <div class="workflow-arrow">→</div>
-              <div class="workflow-step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                  <h4>抗原识别与位阻解锁</h4>
-                  <p>HA 抗原与膜表面 anti-HA 纳米抗体结合，产生的空间位阻将 MT1 抑制肽从 hM1Dq 结合口袋中物理位移，解除自抑制。</p>
-                </div>
-              </div>
-              <div class="workflow-arrow">→</div>
-              <div class="workflow-step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                  <h4>DCZ 激活与信号输出</h4>
-                  <p>DCZ 小分子激动剂激活 hM1Dq，Gpa1-Gαq 嵌合蛋白触发 MAPK 通路，FUS1 启动子驱动 yEGFP/lacZ 表达，产生绿色荧光或蓝色显色。</p>
-                </div>
-              </div>
-            </div>
-            <!-- [待补充：建议上传 PAGER 抗原门控机制示意图，尺寸 1200×600px，.webp 格式并压缩至 150KB 以下] -->
-          </div>
-
-          <div id="dual-reporter">
-            <h3>双模式报告系统</h3>
-            <p>项目同时构建荧光与显色两套报告体系，以满足定量分析、高通量筛选与肉眼定性判读的不同需求：</p>
-            <div class="reporter-system">
-              <div class="reporter-comparison">
-                <div class="reporter-card">
-                  <div class="reporter-title">荧光报告体系</div>
-                  <p><code>pFUS1-yEGFP</code></p>
-                  <p>yEGFP 作为绿色荧光报告基因，可通过流式细胞术定量荧光强度，灵敏度高、动态范围宽，适用于精确定量与高通量筛选。</p>
-                </div>
-                <div class="reporter-card">
-                  <div class="reporter-title">显色报告体系</div>
-                  <p><code>pFUS1-lacZ</code></p>
-                  <p>lacZ 编码 β-半乳糖苷酶，经 X-Gal 底物染色后呈现蓝色，无需昂贵仪器即可实现肉眼定性观察，适合资源有限的现场环境。</p>
-                </div>
-              </div>
-            </div>
-            <p>两套系统共享 FUS1 启动子，仅在报告基因上存在差异，可通过同一信号通路同时或独立验证传感器响应。</p>
-          </div>
-        </div>
-
-        <div id="biological-parts" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>项目生物元件库包括 PAGER 膜融合蛋白、底盘改造靶点（STE2/FAR1/Sst2 敲除与 Gpa1 C 端人源化）、双模式报告系统以及载体与筛选标记四大类。
-            </p>
-          </div>
-
-          <h2>生物元件库</h2>
-          <div id="pager-fusion-protein">
-            <h3>PAGER膜融合蛋白</h3>
-            <p>完整组装结构：<code>α-factor-(GGGS)₃-MT1-(GGGS)₃-anti-HA-TEVcs-hM1Dq</code>。各结构域功能与序列信息如下：</p>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Part Name</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Core Function</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Sequence Information</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">α-factor signal peptide</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">引导融合蛋白分泌并锚定在酵母细胞膜</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    MRFPSIFTAVLFAASSALA</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">(GGGS)₃ linker</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">分隔功能结构域，保证独立折叠</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">人工柔性接头</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">MT1 inhibitory toxin</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">自抑制开关，无抗原时阻断 hM1Dq</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    LTCVTSKSIFGITTENCPDGQNLCFKKWYYIVPRYSDITWGCAATCPKPTNVRETIRCCETD</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">anti-H1N1_HA nanobody</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">特异性结合 IAV HA 抗原，核心识别单元</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    QVQLVESGGGLVQPGGSLRLSCAASGSFFSRYRMGWYRQAPGEQRELVASIAYDGSTSYADPVKGRFTISRDNANTVHLQMYSLKPDDTAVYYCNLDPPGILYWGQGTQVTVSS
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">TEVcs (TEV cleavage site)</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">功能验证分子开关，体外模拟抗原解锁</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem; font-family:monospace; word-break:break-all;">
-                    ENLYFQS</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">hM1Dq human DREADD receptor</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">接收上游信号，偶联下游 G 蛋白通路，可被 DCZ 激活</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">人源化 M1 毒蕈碱受体</td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- [待补充：建议上传 PAGER 融合蛋白结构域示意图，尺寸 1200×400px，.webp 格式并压缩至 150KB 以下] -->
-          </div>
-
-          <div id="chassis-targets">
-            <h3>底盘改造靶点</h3>
-            <p>为消除内源信号干扰、放大通路响应并重建人源 GPCR 信号偶联，对 BY4741 底盘进行以下基因工程改造：</p>
-            <div class="gene-knockout-grid">
-              <div class="knockout-card">
-                <div class="gene-name">STE2</div>
-                <div class="gene-description">编码酵母内源 α-factor 受体</div>
-                <div class="strategy">
-                  <strong>改造策略：</strong>CRISPR-Cas9 单靶点 sgRNA 介导移码突变，实现全基因敲除。
-                </div>
-                <div class="validation">
-                  <strong>改造目的：</strong>消除内源 α-factor 受体，降低背景噪音。
-                </div>
-              </div>
-
-              <div class="knockout-card">
-                <div class="gene-name">FAR1</div>
-                <div class="gene-description">信息素信号通路下游细胞周期抑制蛋白</div>
-                <div class="strategy">
-                  <strong>改造策略：</strong>CRISPR-Cas9 单靶点 sgRNA 介导移码突变，实现全基因敲除。
-                </div>
-                <div class="validation">
-                  <strong>改造目的：</strong>解除交配信号诱导的细胞周期停滞，维持细胞生长以进行实时监测。
-                </div>
-              </div>
-
-              <div class="knockout-card">
-                <div class="gene-name">Sst2</div>
-                <div class="gene-description">G 蛋白信号负调控因子</div>
-                <div class="strategy">
-                  <strong>改造策略：</strong>CRISPR-Cas9 单靶点 sgRNA 介导移码突变，实现全基因敲除。
-                </div>
-                <div class="validation">
-                  <strong>改造目的：</strong>去除 G 蛋白负调控因子，放大荧光信号。
-                </div>
-              </div>
-            </div>
-            <p>此外，<strong>Gpa1 并非敲除</strong>，而是通过同源重组进行 C 端 5 个氨基酸定点替换：将天然序列 <code>KIGII</code> 替换为人源 Gαq 序列
-              <code>EYNLV</code>，从而使人源化 hM1Dq 受体能够有效偶联酵母 MAPK 信号通路。
-            </p>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Gene</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Modification Method</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Purpose</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>STE2</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR knockout</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">消除内源 α-factor 受体，降低背景噪音</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>FAR1</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR knockout</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">解除交配信号诱导的细胞周期停滞，维持细胞生长以进行实时监测</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>Sst2</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR knockout</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">去除 G 蛋白负调控因子，放大荧光信号</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>Gpa1</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">C 端 5 个氨基酸定点替换</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">天然 KIGII → 人源 Gαq EYNLV，实现 hM1Dq 与酵母 MAPK 通路偶联
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- [待补充：建议上传三敲除与 Gpa1 人源化示意图，尺寸 1000×500px，.webp 格式并压缩至 150KB 以下] -->
-          </div>
-
-          <div id="reporter-parts">
-            <h3>报告系统元件</h3>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Part</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Function</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Detection Method</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>FUS1 promoter</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">G 蛋白响应型启动子，信号激活后启动转录</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">通路开关</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>yEGFP</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">绿色荧光报告基因</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">流式细胞术定量荧光强度</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>lacZ</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">β-半乳糖苷酶报告基因</td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">X-Gal 染色定性验证</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div id="vectors-markers">
-            <h3>载体与筛选标记</h3>
-            <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
-              <thead>
-                <tr style="background-color:#f0f7ff;">
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Vector/Marker</th>
-                  <th style="border:1px solid #b8d4e8; padding:0.6rem; text-align:left;">Application</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>pML104</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">CRISPR-Cas9 酵母敲除质粒，表达 Cas9 + sgRNA</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>pESC-HIS</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">酵母报告骨架，携带 FUS1-yEGFP/lacZ 盒</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>pGADT7</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">PAGER 融合蛋白基因克隆骨架</td>
-                </tr>
-                <tr style="background-color:#fafbfc;">
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>URA3</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">尿嘧啶营养筛选标记，在 SD-Ura 平板上筛选改造菌株</td>
-                </tr>
-                <tr>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;"><code>Ampᴿ</code></td>
-                  <td style="border:1px solid #b8d4e8; padding:0.6rem;">氨苄青霉素抗性，用于大肠杆菌扩增筛选</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="modular-construction" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>项目遵循"基因合成 → 大肠杆菌扩增验证 → 酵母底盘改造 → 蛋白表达与功能测试"四阶段流程，以模块化方式构建完整生物传感器。</p>
-          </div>
-
-          <h2>实验设计与模块化构建</h2>
-          <p>整体实验被划分为四个功能模块，各模块独立开发、逐步整合，最终形成可响应 HA 抗原的完整酵母生物传感器。</p>
-
-          <div id="module-one" class="module-card">
-            <div class="module-header">
-              <span class="module-number">01</span>
-              <h3>底盘细胞改造——消除内源干扰并放大信号</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>目标：</strong>通过 CRISPR-Cas9 对 BY4741 进行 STE2、FAR1、Sst2 三基因敲除，重构"零背景"高灵敏度信号宿主。
-              </div>
-              <p>利用 pML104 载体表达 Cas9 与单靶点 sgRNA，通过 LiAc/PEG 化学转化入酵母，SD-Ura 营养缺陷平板筛选阳性克隆，并经菌落 PCR 与 Sanger
-                测序验证。当前进度：进行中，酶切失败后重建 sgRNA 载体。</p>
-              <!-- [待补充：建议上传 CRISPR 三敲除验证电泳图，尺寸 1000×600px，.webp 格式并压缩至 150KB 以下] -->
-            </div>
-          </div>
-
-          <div id="module-two" class="module-card">
-            <div class="module-header">
-              <span class="module-number">02</span>
-              <h3>报告体系构建——FUS1 驱动的双模式输出</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>目标：</strong>构建 pFUS1-yEGFP 与 pFUS1-lacZ 报告质粒，实现信号的可视化与定量检测。
-              </div>
-              <p>以 pESC-HIS 为骨架，将 FUS1 启动子分别与 yEGFP 或 lacZ 报告基因连接。报告菌株接受上游 G 蛋白信号后启动转录：yEGFP 用于流式细胞术定量，lacZ 用于 X-Gal
-                染色定性。</p>
-            </div>
-          </div>
-
-          <div id="module-three" class="module-card">
-            <div class="module-header">
-              <span class="module-number">03</span>
-              <h3>Gpa1-Gα人源化——重建人源 GPCR 信号偶联</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>目标：</strong>利用酿酒酵母同源重组机制，将 Gpa1 C 末端 KIGII 替换为人源 Gαq 的 EYNLV，实现 hM1Dq 与酵母 MAPK 通路的偶联。
-              </div>
-              <p>线性整合片段结构为：500 bp 上游同源臂—人源化 Gpa1 突变序列—URA3 筛选盒—500 bp 下游同源臂。BY4741 为 ura3 营养缺陷型菌株，可通过 SD-Ura
-                平板筛选阳性整合克隆，最终经菌落 PCR 与 Sanger 测序确认替换。当前进度：待底盘敲除完成后进行。</p>
-            </div>
-          </div>
-
-          <div id="module-four" class="module-card">
-            <div class="module-header">
-              <span class="module-number">04</span>
-              <h3>PAGER识别融合蛋白——核心传感器元件的组装与表达</h3>
-            </div>
-            <div class="module-content">
-              <div class="objective-box">
-                <strong>目标：</strong>完成 PAGER 融合蛋白基因的合成、大肠杆菌扩增与酵母转化，验证膜表面表达及抗原响应功能。
-              </div>
-              <p>融合基因经酿酒酵母密码子优化后，两端添加 NdeI 与 BamHI 位点，全基因合成并克隆至 pGADT7（质粒编号 ABX63942）。通过 Top10
-                感受态细胞转化、质粒提取与双酶切验证确认构建正确：4 个阳性克隆质粒浓度为 408.45 / 404.85 / 297.15 / 355.90 ng/μL，A260/A280 ≈
-                1.9，电泳条带与理论值（骨架 7939 bp，插入片段 2063 bp）一致。后续将通过 LiAc/PEG 转化入酵母，Western Blot 验证蛋白表达，并以 DCZ（10 nM、100
-                nM、1 μM）梯度诱导优化检测条件。</p>
-              <!-- [待补充：建议上传双酶切验证电泳图与 WB 结果图，尺寸 1000×600px，.webp 格式并压缩至 150KB 以下] -->
-            </div>
-          </div>
-        </div>
-
-        <div id="innovation-value" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>项目在技术、底盘与平台三个维度实现创新，并具备降低公共卫生检测成本、赋能基层医疗与构建通用病原体检测平台的社会价值。</p>
-          </div>
-
-          <h2>创新点与社会价值</h2>
-          <div id="innovation-points">
-            <h3>三大创新点</h3>
-            <div class="summary-highlights">
-              <div class="highlight-item">
-                <strong>技术创新：</strong>首次将 PAGER 系统拓展至酵母中大分子病毒抗原检测，通过空间位阻实现抗原门控受体开关。
-              </div>
-              <div class="highlight-item">
-                <strong>底盘创新：</strong>STE2/FAR1/Sst2 三基因敲除联合人源化 Gpa1-Gαq 嵌合蛋白，显著降低背景噪音并提升信号灵敏度。
-              </div>
-              <div class="highlight-item">
-                <strong>平台创新：</strong>模块化设计使纳米抗体识别单元可替换，可快速拓展至 COVID-19、RSV、IAV 变异株等多种呼吸道病原体检测。
-              </div>
-            </div>
-          </div>
-
-          <div id="social-value">
-            <h3>社会价值与展望</h3>
-            <p><strong>降低公共卫生检测成本：</strong>酿酒酵母可大规模发酵生产，无需昂贵 PCR 仪器，适合大规模人群筛查。</p>
-            <p><strong>基层医疗赋能：</strong>检测流程不依赖标准实验室条件，适用于社区诊所、校园、口岸等现场快速筛查场景。</p>
-            <p><strong>合成生物学产业化：</strong>构建模块化通用检测平台，支撑国家传染病防控体系建设。</p>
-            <p><strong>长期拓展方向：</strong>优化信号输出实现半定量病毒载量检测，匹配便携式荧光读数仪；替换膜表面纳米抗体可拓展至 COVID-19、RSV、IAV
-              变异株等呼吸道病原体；最终开发标准化检测试剂盒用于商业用途。</p>
-          </div>
-        </div>
-
-        <div id="references" class="content-card">
-          <div class="executive-summary">
-            <p><strong>执行摘要：</strong>本页面内容基于项目实验记录与已发表文献整理，完整引用列表将在后续 Wiki 冻结前补充并核对 DOI/PubMed ID。</p>
-          </div>
-
-          <h2>参考文献</h2>
-          <ol class="references-list">
-            <li>[1] 作者. PAGER-based biosensor design for viral antigen detection. <i>Journal of Synthetic Biology</i>.
-              2025. [DOI/PubMed ID]</li>
-            <li>[2] 作者. Engineering Gαq chimeric G proteins in <i>Saccharomyces cerevisiae</i>. <i>Yeast</i>. 2024.
-              [DOI/PubMed ID]</li>
-            <li>[3] 作者. CRISPR-Cas9 genome editing in budding yeast for signal pathway reconstruction. <i>Methods in
-                Molecular Biology</i>. 2024. [DOI/PubMed ID]</li>
-            <li>[4] 作者. Nanobody-mediated detection of influenza A hemagglutinin. <i>Protein Engineering, Design and
-                Selection</i>. 2023. [DOI/PubMed ID]</li>
+        <!-- ============ Why EchoYeast?（Why influenza? + Why consider air + Why engineer yeast?） ============ -->
+        <div id="description-why-echo-yeast" class="content-card">
+          <h2 id="description-why-echo-yeast">Why EchoYeast?</h2>
+          <h3 id="description-why-influenza">Why influenza?</h3>
+          <h4 id="description-a-recurring-global-health-challenge">A recurring global health challenge</h4>
+          <p>Seasonal influenza affects populations worldwide and causes substantial morbidity and mortality every year. People at increased risk of severe influenza complications include older adults, young children, pregnant individuals, people with chronic diseases and people with weakened immune systems. Influenza outbreaks can also produce school absenteeism, work absenteeism and pressure on healthcare services. <a class="cite-ref" href="#description-reference-1">[1]</a></p>
+          <p>For schools, hospitals, nursing institutions, dormitories and other shared indoor environments, we ask whether environmental information could complement individual-centered surveillance.</p>
+          <p>This does not mean replacing clinical diagnosis, vaccination or established laboratory testing. It means exploring whether a shared environment can provide an additional source of information about respiratory-virus risk.</p>
+          <h4 id="description-a-global-policy-context">A global policy context</h4>
+          <p>The WHO Global Influenza Strategy 2019–2030 provides a framework for strengthening seasonal influenza prevention and control and preparing for future influenza pandemics. The strategy emphasizes stronger national capacities and the development of improved tools for influenza prevention, detection, control and treatment. <a class="cite-ref" href="#description-reference-2">[2]</a></p>
+          <p>United Nations Sustainable Development Goal Target 3.d calls for strengthening the capacity of countries, particularly developing countries, for early warning, risk reduction and management of national and global health risks. <a class="cite-ref" href="#description-reference-3">[3]</a></p>
+          <p>China’s 2024 guidance on an intelligent multi-point infectious-disease surveillance and early-warning system also calls for multiple surveillance channels, including environmental risk-factor monitoring, together with stronger risk assessment and early-warning coordination. <a class="cite-ref" href="#description-reference-4">[4]</a></p>
+          <p>These global and national frameworks provide the public-health context for our project, but they do not endorse EchoYeast or establish its technical performance.</p>
+          <h3 id="description-why-consider-air-and-exhaled-breath">Why consider air and exhaled breath?</h3>
+          <h4 id="description-influenza-related-signals-can-be-found-in-exhaled-particles">Influenza-related signals can be found in exhaled particles</h4>
+          <p>Respiratory particles can contain influenza-related material. Yan and colleagues detected influenza viral RNA in fine and coarse aerosol fractions collected from symptomatic seasonal influenza cases. In their study, infectious virus was recovered from a proportion of validly cultured fine-aerosol samples. The study also found that coughing and sneezing were not necessary for the generation of infectious aerosols. <a class="cite-ref" href="#description-reference-5">[5]</a></p>
+          <p>These findings support the importance of studying respiratory aerosols, but they do not prove that any environmental biosensor can provide presymptomatic diagnosis.</p>
+          <h4 id="description-airborne-virus-detection-is-an-integrated-engineering-problem">Airborne-virus detection is an integrated engineering problem</h4>
+          <p>Airborne-virus detection is affected by particle size, sampling efficiency, target concentration, sample recovery and the preservation of detectable material. A sampler may process a large volume of air while collecting only a small amount of target material into the receiving liquid. <a class="cite-ref" href="#description-reference-6">[6]</a></p>
+          <p>The performance of the complete system therefore depends on more than molecular recognition.</p>
+          <p>For EchoYeast, an integrated workflow must answer four questions:</p>
+          <ol class="description-list">
+          <li><strong>Can the target be collected from air or exhaled breath?</strong></li>
+          <li><strong>Does the collected material remain recognizable?</strong></li>
+          <li><strong>Can molecular recognition be transmitted into the engineered yeast pathway?</strong></li>
+          <li><strong>Can the final output be distinguished from background and nonspecific responses?</strong></li>
           </ol>
-          <!-- iGEM Check: [ ] Units Included [ ] N >= 3 [ ] Control Group Defined -->
+          <p>We regard sampling, recognition, signal processing and readout as one connected engineering chain.</p>
+          <h4 id="description-existing-airborne-virus-technologies">Existing airborne-virus technologies</h4>
+          <p>Airborne-virus monitoring is already an active research field. Li and colleagues developed an integrated aerosol-monitoring platform that detected multiple respiratory viruses, including influenza A, using aerosol sampling and microfluidic nucleic-acid detection. This work demonstrates the potential of integrated environmental surveillance while also illustrating the importance of sensitivity, sample enrichment, automation and field deployment. <a class="cite-ref" href="#description-reference-8">[8]</a></p>
+          <p>EchoYeast does not claim to outperform nucleic-acid-based systems. Instead, it explores whether an engineered living cell can provide a different route for antigen recognition and signal amplification</p>
+          <h3 id="description-why-engineer-yeast">Why engineer yeast?</h3>
+          <h4 id="description-existing-detection-methods-and-a-different-design-space">Existing detection methods and a different design space</h4>
+          <p>Influenza can be detected using methods including nucleic-acid testing, antigen detection and virus isolation. <a class="cite-ref" href="#description-reference-1">[1]</a></p>
+          <p>A systematic review and meta-analysis found that digital immunoassays and rapid nucleic-acid amplification tests generally showed higher pooled sensitivity than traditional rapid influenza diagnostic tests, while specificity was generally high across the evaluated categories. <a class="cite-ref" href="#description-reference-7">[7]</a></p>
+          <p>These methods are valuable, but they are generally designed around prepared samples and dedicated testing workflows.</p>
+          <p>EchoYeast explores a different design space in which recognition and signal processing are encoded within a living cell.</p>
+          <p>The intended advantages of this design are modularity, genetic programmability and the possibility of connecting recognition to intracellular amplification.</p>
+          <p>These are design goals rather than experimentally demonstrated advantages over existing diagnostic technologies.</p>
+          <h4 id="description-yeast-as-a-signal-processing-chassis">Yeast as a signal-processing chassis</h4>
+          <p>Yeast contains a native GPCR–G-protein–MAPK signaling architecture that can be connected to heterologous receptors. Previous work has shown that yeast GPCR signaling can be engineered and tuned to generate measurable responses to selected extracellular stimuli. <a class="cite-ref" href="#description-reference-9">[9]</a></p>
+          <p>We selected <i>S. cerevisiae</i> BY4741 as the chassis for EchoYeast and designed a modular system containing recognition, gating, signal coupling and reporter-output layers. <a href="../project/design.html">Team Design</a></p>
+          <p>The central principle is:</p>
+          <p><em><strong>The recognition event is converted into a cellular signaling event, and the cellular signaling event is converted into a reporter output.</strong></em></p>
         </div>
-      </div>
-    </div>
+
+        <!-- ============ Our design（System architecture + Module 1-5） ============ -->
+        <div id="description-our-design" class="content-card">
+          <h2 id="description-our-design">Our design</h2>
+          <h3 id="description-system-architecture">System architecture</h3>
+          <p>EchoYeast contains five connected engineering modules:</p>
+          <ol class="description-list">
+          <li><strong>HA recognition module</strong></li>
+          <li><strong>Antigen-gated receptor module</strong></li>
+          <li><strong>G-protein coupling module</strong></li>
+          <li><strong>Chassis-engineering module</strong></li>
+          <li><strong>Reporter-output module</strong></li>
+          </ol>
+          <p>The intended architecture is shown below:</p>
+          <figure class="design-figure">
+          <img src="../static/image/description/description-fig2.png"
+          alt="Five-module architecture overview of EchoYeast: HA recognition, antigen-gated receptor, G-protein coupling, chassis engineering and reporter output, with dashed links marking signal transmission between modules."
+          width="1616" height="1212" loading="lazy" decoding="async">
+          <figcaption>Figure 2. Overall system architecture of EchoYeast.</figcaption>
+          </figure>
+          <p>This architecture is a design model. Each connection requires independent experimental validation. <a href="../project/design.html">Team Design</a> <a href="../wet-lab/result.html">Team Results</a></p>
+          <h3 id="description-module-1-ha-recognition">Module 1: HA recognition</h3>
+          <h4 id="description-why-target-the-ha-stem-region">Why target the HA stem region?</h4>
+          <p>Influenza HA contains a relatively variable globular head and a more conserved membrane-proximal stem region. Gaiotto and Hufton used yeast display and deep mutational scanning to investigate cross-neutralizing nanobodies that bind a conserved pocket in the HA2 stem region. <a class="cite-ref" href="#description-reference-10">[10]</a></p>
+          <p>The HA stem therefore provides a literature-supported starting point for exploring recognition that is not restricted to a single highly variable head epitope.</p>
+          <h4 id="description-why-use-r1a-b6">Why use R1a-B6?</h4>
+          <p>Hufton and colleagues characterized R1a-B6 among a group of single-domain antibodies with cross-subtype neutralization activity in their experimental system. Their study also showed that antibody valency could alter neutralization potency against some influenza subtypes. <a class="cite-ref" href="#description-reference-11">[11]</a></p>
+          <p>We use R1a-B6 as a literature-informed HA stem-region recognition element for an H1N1 prototype design. <a href="../project/design.html">Team Design</a></p>
+          <p>We do not describe R1a-B6 as an H1N1-exclusive nanobody or as a universal detector for all influenza A subtypes. <a class="cite-ref" href="#description-reference-10">[10]</a> <a class="cite-ref" href="#description-reference-11">[11]</a></p>
+          <p>Our computational pipeline prioritized R1aB6 from a group of candidate nanobody sequences for further experimental consideration. <a href="../dry-lab/model.html">Team Model</a></p>
+          <p>Computational prioritization does not prove that the final fusion receptor is correctly expressed, localized to the membrane or able to retain antigen-binding activity.</p>
+          <p>The recognition module must therefore be validated at several levels:</p>
+          <ul class="description-list">
+          <li>sequence integrity;</li>
+          <li>protein folding;</li>
+          <li>antigen binding;</li>
+          <li>accessibility within the fusion receptor;</li>
+          <li>antigen-dependent effects on receptor state.</li>
+          </ul>
+          <h3 id="description-module-2-antigen-gated-receptor-design">Module 2: antigen-gated receptor design</h3>
+          <h4 id="description-pager-inspired-logic">PAGER-inspired logic</h4>
+          <p>PAGERs are programmable antigen-gated engineered GPCRs designed to connect antigen recognition with receptor activation. Their central mechanism uses a conditional autoinhibitory domain that suppresses receptor activity until antigen binding relieves the inhibition. <a class="cite-ref" href="#description-reference-12">[12]</a></p>
+          <p>EchoYeast adapts this logic to an engineered yeast chassis and uses an HA-recognition nanobody in the receptor design. <a href="../project/design.html">Team Design</a></p>
+          <p>Our intended receptor architecture is:</p>
+          <figure class="design-figure">
+          <img src="../static/image/description/description-fig3.png"
+          alt="Domain diagram of the expected EchoYeast HA-gated fusion receptor: alpha-factor signal peptide, GS linkers, MT1 autoinhibitory domain, anti-HA nanobody R1a-B6, TEV cleavage site and the hM1Dq receptor, drawn as an intended architecture."
+          width="1666" height="942" loading="lazy" decoding="async">
+          <figcaption>Figure 3. Expected architecture of the EchoYeast HA-gated fusion receptor.</figcaption>
+          </figure>
+          <p>The exact behavior of this architecture must be tested experimentally because a domain that functions in one host or scaffold may not function identically after transplantation into another system.</p>
+          <h4 id="description-the-roles-of-ha-and-dcz">The roles of HA and DCZ</h4>
+          <p>In the intended OFF state, MT1 is designed to maintain hM1Dq in a low-activity state in the absence of HA. <a href="../project/design.html">Team Design</a></p>
+          <p>In the intended ON state, HA binding to R1a-B6 is expected to relieve MT1-mediated autoinhibition through a steric mechanism. DCZ then provides the small-molecule agonist input required to activate the de-repressed hM1Dq receptor. <a class="cite-ref" href="#description-reference-12">[12]</a></p>
+          <p>Therefore:</p>
+          <p><em><strong>HA is designed to control receptor gating, while DCZ provides receptor activation.</strong></em></p>
+          <p>HA is not intended to function as the direct small-molecule agonist of hM1Dq.</p>
+          <p>The TEV cleavage site is included as an auxiliary positive-control element for testing whether removal of the inhibitory region can restore downstream activity. <a href="../project/design.html">Team Design</a></p>
+          <p>A TEV-induced response would not prove that HA gating works. It would only help distinguish downstream pathway failure from receptor-gating failure.</p>
+          <h3 id="description-module-3-g-protein-coupling">Module 3: G-protein coupling</h3>
+          <h4 id="description-why-humanize-gpa1">Why humanize Gpa1?</h4>
+          <p>The coupling specificity of a GPCR is influenced by the C-terminal region of the Gα subunit. <a class="cite-ref" href="#description-reference-13">[13]</a></p>
+          <p>Brown and colleagues showed that replacing the final five residues of yeast Gpa1 with mammalian Gα sequences could improve the coupling of heterologous receptors to the yeast mating pathway. <a class="cite-ref" href="#description-reference-14">[14]</a></p>
+          <p>Based on this principle, we designed a Gpa1–Gαq chimera in which the yeast Gpa1 C-terminal sequence is changed from <strong>KIGII</strong> to the human Gαq-derived sequence <strong>EYNLV</strong>. <a href="../project/design.html">Team Design</a></p>
+          <p>The intended purpose is to create a receptor-recognition interface while retaining the yeast Gpa1 backbone and downstream yeast signaling context.</p>
+          <h4 id="description-gpa1-g-q-chimera-construction-and-characterization">Gpa1–Gαq chimera construction and characterization</h4>
+          <p>We constructed the Gpa1-humanization template by assembling <i>GPA1</i> homology arms and the <i>URA3</i> selection marker, followed by yeast transformation and colony-PCR screening. Sanger sequencing confirmed that clones 12 and 17 matched the expected sequence in the target replacement region. Both strains showed reduced α-factor-induced shmoo formation and growth inhibition, while maintaining normal proliferation. When tested with the <i>FUS1</i>–<i>yEGFP</i> reporter, the humanized strains displayed strongly attenuated α-factor-induced fluorescence, indicating that Gpa1 humanization effectively suppressed the native α-factor–MAPK–<i>FUS1</i> response and reduced potential background activation. Direct coupling between the humanized Gpa1 chimera and hM1Dq in the complete receptor system remains to be validated. <a href="../wet-lab/result.html">Team Results</a></p>
+          <h3 id="description-module-4-chassis-engineering">Module 4: chassis engineering</h3>
+          <h4 id="description-far1-and-cell-cycle-arrest"><i>FAR1</i> and cell-cycle arrest</h4>
+          <p>Yeast pheromone signaling can induce G1-phase cell-cycle arrest, and <i>FAR1</i> connects pheromone signaling with cell-cycle regulation. <a class="cite-ref" href="#description-reference-15">[15]</a></p>
+          <p>We designed <i>FAR1</i> disruption to reduce the growth-arrest component of the native mating response and to explore a chassis more suitable for sustained sensor operation. <a href="../project/design.html">Team Design</a></p>
+          <h4 id="description-sst2-and-negative-regulation"><i>SST2</i> and negative regulation</h4>
+          <p><i>SST2</i> is a major negative regulator of Gpa1-mediated pheromone signaling in <i>S. cerevisiae</i>. <i>SST2</i> deletion can increase pheromone sensitivity, but it may also alter background signaling and the relationship between cell growth and reporter output. <a class="cite-ref" href="#description-reference-16">[16]</a></p>
+          <p>We therefore treated <i>SST2</i> disruption as a signal-regulation hypothesis rather than assuming that increased signal intensity automatically represents improved sensing performance.</p>
+          <h4 id="description-what-our-chassis-data-show">What our chassis data show</h4>
+          <p>Our project introduced four-base-pair deletions into the targeted <i>FAR1</i> and <i>SST2</i> loci and used colony PCR and Sanger sequencing for verification. Under the reported α-factor conditions, the <i>FAR1</i> knockout strain showed reduced growth inhibition compared with the parental strain. The <i>FAR1</i>/<i>SST2</i> double-knockout strain showed altered growth and total-fluorescence behavior under several α-factor concentrations. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>Total fluorescence and fluorescence normalized to optical density are not equivalent measurements. Our data show that a strain can produce higher total fluorescence without consistently producing higher fluorescence per unit biomass. <i>FUS1</i>–<i>yEGFP</i> Experimental Report</p>
+          <p>Because the double-knockout experiment did not include a same-batch <i>FAR1</i>-single-knockout comparator, the independent contribution of <i>SST2</i> deletion cannot be directly calculated from the current dataset. <i>FUS1</i>–<i>yEGFP</i> Experimental Report</p>
+          <p>The relevant engineering question is therefore not simply “which strain is brightest,” but:</p>
+          <p><em><strong>Which chassis produces a sufficiently strong, reproducible and interpretable signal while retaining acceptable growth and low background?</strong></em></p>
+          <h3 id="description-module-5-fus1-reporter-output">Module 5: <i>FUS1</i> reporter output</h3>
+          <h4 id="description-why-use-fus1">Why use <i>FUS1</i>?</h4>
+          <p><i>FUS1</i> is a pheromone-induced gene associated with yeast mating and cell fusion. <a class="cite-ref" href="#description-reference-17">[17]</a></p>
+          <p>Earlier promoter studies showed that <i>FUS1</i> transcription is strongly induced by mating pheromone and depends on the yeast pheromone-response pathway. The <i>FUS1</i> upstream region contains pheromone-response elements that contribute to its inducible transcriptional behavior. <a class="cite-ref" href="#description-reference-18">[18]</a></p>
+          <p>These characteristics make <i>FUS1</i> a suitable candidate for connecting the yeast MAPK pathway to a reporter gene.</p>
+          <h4 id="description-two-independent-reporter-routes">Two independent reporter routes</h4>
+          <p>We constructed two independent reporter routes:</p>
+          <ol class="description-list">
+          <li><strong>P_FUS1–<i>yEGFP</i></strong> for fluorescence;</li>
+          <li><strong>P_FUS1–<i>MEL1</i></strong> for colorimetric output.</li>
+          </ol>
+          <p>The two reporters are parallel constructs rather than a single dual-reporter construct. <a href="../project/design.html">Team Design</a></p>
+          <p>The <i>yEGFP</i> route was selected because yeast-enhanced GFP has been developed as a reporter for gene expression in fungal systems, including <i>S. cerevisiae</i>. <a class="cite-ref" href="#description-reference-19">[19]</a></p>
+          <p><i>MEL1</i> encodes yeast α-galactosidase, and its sequence and secretory-protein architecture have been characterized previously. <a class="cite-ref" href="#description-reference-20">[20]</a></p>
+          <h4 id="description-reporter-construction-and-factor-characterization">Reporter construction and α-factor characterization</h4>
+          <p>Our Registry-submission <i>FUS1</i> promoter is a 435-bp fragment corresponding to the <i>S. cerevisiae</i> S288C chromosome III region from 71,368 to 71,802 in reference sequence NC_001135.5. NCBI NC_001135.5</p>
+          <p>The complete P_FUS1–<i>yEGFP</i> reporter fragment used in our construction is 1,152 bp, consisting of the 435-bp <i>FUS1</i> promoter region and a 717-bp <i>yEGFP</i> coding region. <i>FUS1</i>–<i>yEGFP</i> Experimental Report</p>
+          <p>We used α-factor concentrations of 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM to characterize the <i>FUS1</i>–<i>yEGFP</i> response system. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>The reporter system showed increasing fluorescence with increasing α-factor concentration under the reported conditions. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>The parental growth response also showed concentration-dependent inhibition consistent with activation of the native mating pathway. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>These experiments support the functionality of the downstream <i>FUS1</i> reporter module.</p>
+          <p>They do not prove that HA can activate the upstream engineered receptor.</p>
+        </div>
+
+        <!-- ============ Model-guided design ============ -->
+        <div id="description-model-guided" class="content-card">
+          <h2 id="description-model-guided-design">Model-guided design</h2>
+          <h3 id="description-computational-workflow">Computational workflow</h3>
+          <p>EchoYeast contains several molecular interfaces that are difficult to screen experimentally one by one.</p>
+          <p>We therefore used a computational pipeline that included AlphaFold2 or ColabFold structure prediction, ClusPro docking, HADDOCK refinement, PyMOL and SPICE interface analysis, GROMACS molecular dynamics and MM/GBSA estimation. The modeling workflow screened 17 candidate nanobody sequences and prioritized R1aB6 for further consideration. The model also investigated two candidate gating routes involving hM1Dq and Ste2. The model proposed interface residues and mutation hypotheses that can be tested experimentally. <a href="../dry-lab/model.html">Team Model</a></p>
+          <h3 id="description-the-limits-of-computational-evidence">The limits of computational evidence</h3>
+          <p>Docking scores are not direct measurements of experimental affinity.</p>
+          <p>A simulated complex is not proof of protein expression, membrane localization or functional signaling in yeast.</p>
+          <p>The Model page explicitly defines the computational results as predictions that have not yet been validated by wet-lab experiments. <a href="../dry-lab/model.html">Team Model</a></p>
+          <p>We therefore use modeling to:</p>
+          <ul class="description-list">
+          <li>narrow the candidate pool;</li>
+          <li>prioritize constructs;</li>
+          <li>identify possible interface residues;</li>
+          <li>propose mutations;</li>
+          <li>guide the next experimental cycle.</li>
+          </ul>
+          <p>The role of modeling in EchoYeast is to generate testable hypotheses, not to replace functional validation</p>
+        </div>
+
+        <!-- ============ Design-Build-Test-Learn ============ -->
+        <div id="description-dbtl" class="content-card">
+          <h2 id="description-design-build-test-learn">Design–Build–Test–Learn</h2>
+          <p>EchoYeast was developed through iterative Design–Build–Test–Learn (DBTL) cycles rather than a single linear workflow. The project was divided into four functional modules: chassis engineering, Gpa1 humanization, the PAGER-inspired receptor and the <i>FUS1</i> reporter system. <a href="../project/engineering.html">Team Engineering</a></p>
+          <h3 id="description-design">Design</h3>
+          <p>We designed the <i>FUS1</i>–<i>yEGFP</i> and <i>FUS1</i>–<i>MEL1</i> reporter routes, <i>FAR1</i>/<i>SST2</i> chassis modifications, the Gpa1–Gαq chimera, the PAGER-inspired HA-gated receptor and a temperature-controlled optical readout module. <a href="../project/design.html">Team Design</a></p>
+          <h3 id="description-build">Build</h3>
+          <p>The designed modules were constructed through plasmid assembly, PCR-based donor construction, CRISPR–Cas9 genome editing, yeast transformation and reporter/hardware development. For Gpa1 humanization, the initial Gibson-assembly strategy was replaced by overlap-extension fusion PCR after sequence mutations were identified in the first donor-construction cycle. <a href="../project/engineering.html">Team Engineering</a> <a href="../wet-lab/result.html">Team Results</a></p>
+          <h3 id="description-test">Test</h3>
+          <p>We tested the reporter system by α-factor induction and fluorescence measurement, evaluated engineered chassis strains through growth and fluorescence assays, verified genome-editing and Gpa1-humanization events by colony PCR and Sanger sequencing, and assessed receptor constructs using protein detection and HA/DCZ stimulation experiments. <a href="../wet-lab/result.html">Team Results</a></p>
+          <h3 id="description-learn">Learn</h3>
+          <p>Each cycle informed the next design. The reporter cycles established the <i>FUS1</i>–<i>yEGFP</i> route as a functional downstream output and guided subsequent reporter optimization. The chassis cycles led to a plasmid-free Δ<i>FAR1</i> Δ<i>SST2</i> strain with enhanced α-factor-induced fluorescence. The Gpa1-humanization cycles led to correctly genotyped strains 12 and 17, which showed reduced native α-factor-induced morphology, growth inhibition and <i>FUS1</i>–<i>yEGFP</i> fluorescence. <a href="../project/engineering.html">Team Engineering</a> <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>The receptor cycles revealed that expression, localization, autoinhibition and functional coupling must be optimized separately. Although the downstream reporter platform and several upstream modules have been established, the complete HA-gated receptor-to-reporter pathway remains to be validated. <a href="../wet-lab/result.html">Team Results</a></p>
+        </div>
+
+        <!-- ============ From engineered cells to a detection concept ============ -->
+        <div id="description-detection" class="content-card">
+          <h2 id="description-from-engineered-cells-to-a-detection-concept">From engineered cells to a detection concept</h2>
+          <h3 id="description-hardware-development">Hardware development</h3>
+          <p>Our hardware work focuses on creating a compact environment for culturing engineered yeast and reading its optical output. The system is designed to maintain the culture at approximately 30 °C, excite <i>yEGFP</i> at 485 nm and collect fluorescence near 528 nm. The excitation and collection paths are arranged approximately at 90° to reduce direct excitation-light interference. <a href="../dry-lab/hardware.html">Team Hardware</a></p>
+          <p>The hardware design includes a temperature-control module, a fluorescence-excitation module and a signal-acquisition module. Temperature is monitored using a PT100 sensor and MAX31865 interface, while the optical readout uses a 485-nm LED, a BPW34 photodiode, transimpedance amplification and an ADS1115 analog-to-digital converter controlled by an Arduino Nano. <a href="../dry-lab/hardware.html">Team Hardware</a></p>
+          <p>The collection vessel, heated block, optical interfaces and electronic circuit were iteratively redesigned to improve component placement, optical alignment and assembly. A standard cuvette was also used during the testing stage to evaluate temperature control and optical alignment before finalizing the custom vessel. <a href="../dry-lab/hardware.html">Team Hardware</a></p>
+          <p>At this stage, the hardware demonstrates the development of incubation and optical-readout modules. It should not yet be interpreted as a completed field-deployable influenza detector.</p>
+          <h3 id="description-integrating-sampling-with-biological-sensing">Integrating sampling with biological sensing</h3>
+          <p>Airborne-virus monitoring is commonly divided into two steps: aerosol collection followed by laboratory analysis. Sampling efficiency, particle size and target recovery can strongly influence the final result. <a class="cite-ref" href="#description-reference-6">[6]</a></p>
+          <p>EchoYeast explores whether the liquid receiving phase of an aerosol sampler could also serve as the environment in which engineered yeast responds to the collected material. This concept could reduce sample-transfer steps and connect sampling with biological signal generation.</p>
+          <p>However, this remains an integration hypothesis rather than a validated air-detection result. The complete workflow still requires independent evaluation of aerosol collection efficiency, target recovery, antigen preservation, sample-matrix compatibility, evaporation, foaming, nonspecific interference, optical background and waste containment.</p>
+          <p>Therefore, our current hardware contribution is the development of a temperature-controlled and optical-readout platform that could support future sampling integration, rather than proof that the complete sampling–response–readout workflow already functions.</p>
+        </div>
+
+        <!-- ============ Human Practices and application boundaries ============ -->
+        <div id="description-hp" class="content-card">
+          <h2 id="description-human-practices-and-application-boundaries">Human Practices and application boundaries</h2>
+          <h3 id="description-from-detection-to-risk-information">From detection to risk information</h3>
+          <p>Our Human Practices work involved clinicians, disease-control professionals, regulatory personnel, synthetic-biology researchers, engineers, educators and potential users. Their feedback highlighted the importance of effective measurement range, sampling conditions, response time, specificity, false-positive control, cost and standardization. <a href="../human-practices/integrated human-practices.html">Team Human Practices</a></p>
+          <p>These discussions helped us refine the application position of EchoYeast. Rather than presenting the project as a general portable virus detector, we define it as a platform exploring <strong>environmental or controlled-breath risk screening, not individual diagnosis</strong>.</p>
+          <p>For early validation, controlled sampling conditions, such as a defined exhaled-breath setup or a controlled chamber, may be more suitable than open-air environmental sampling because they allow better control of sampling variables. <a href="../human-practices/integrated human-practices.html">Team Human Practices</a></p>
+          <p>If sampling performance, specificity, response time and reproducibility are established, the system could later be explored for environmental screening in enclosed spaces. Any environmental result would represent a signal associated with the sampled environment, not proof that a particular person is infected.</p>
+          <h3 id="description-what-echoyeast-cannot-currently-claim">What EchoYeast cannot currently claim</h3>
+          <p>At the current stage, EchoYeast cannot claim that it:</p>
+          <ul class="description-list">
+          <li>detects infectious influenza virus;</li>
+          <li>quantifies airborne virus concentration;</li>
+          <li>diagnoses infected individuals;</li>
+          <li>distinguishes all influenza A subtypes;</li>
+          <li>outperforms qPCR or other established diagnostic methods;</li>
+          <li>has been validated using real environmental samples;</li>
+          <li>has completed the HA-to-reporter signaling chain.</li>
+          </ul>
+          <p>These limitations define the current application boundary of the project.</p>
+        </div>
+
+        <!-- ============ Safety and responsible deployment ============ -->
+        <div id="description-safety" class="content-card">
+          <h2 id="description-safety-and-responsible-deployment">Safety and responsible deployment</h2>
+          <p>The project uses purchased recombinant HA rather than live influenza virus. According to our Safety and Security page, the project does not use live influenza virus, replication-competent viral sequences or virulence-related genes. <a href="../wet-lab/safety.html">Team Safety and Security</a></p>
+          <p>The chassis is the laboratory strain <i>Saccharomyces cerevisiae</i> BY4741, and all experiments are conducted under laboratory safety procedures and a documented risk-assessment framework. <a href="../wet-lab/safety.html">Team Safety and Security</a></p>
+          <p>Auxotrophic selection and marker-removal procedures are included as components of the biological-containment design. <a href="../project/design.html">Team Design</a></p>
+          <p>Any future environmental or breath-sampling prototype should operate as a closed system and include defined procedures for sample handling, yeast inactivation and waste disposal.</p>
+          <p>We also apply the following interpretation boundaries:</p>
+          <ul class="description-list">
+          <li>an antigen-related signal is not equivalent to infectious-virus concentration;</li>
+          <li>an environmental signal is not equivalent to individual infection;</li>
+          <li>α-factor response is not equivalent to HA response;</li>
+          <li>computational prediction is not equivalent to experimental validation;</li>
+          <li>fluorescence should not be converted into airborne-virus concentration without independent calibration;</li>
+          <li>a positive signal should not be converted into a clinical risk level without analytical and epidemiological validation.</li>
+          </ul>
+        </div>
+
+        <!-- ============ Current status and next steps ============ -->
+        <div id="description-current-status" class="content-card">
+          <h2 id="description-current-status-and-next-steps">Current status and next steps</h2>
+          <h3 id="description-current-evidence">Current evidence</h3>
+          <div class="description-table-scroll">
+          <table>
+          <thead>
+          <tr><th>Module</th><th>Current evidence</th><th>Current interpretation</th></tr>
+          </thead>
+          <tbody>
+          <tr><td><i>FUS1</i>–<i>yEGFP</i> reporter</td><td>α-factor-dependent fluorescence was characterized</td><td>Supports the downstream reporter route</td></tr>
+          <tr><td><i>FAR1</i>/<i>SST2</i> chassis</td><td>Targeted edits and phenotypic changes were observed</td><td>Supports chassis engineering; the optimal chassis remains to be determined</td></tr>
+          <tr><td>Gpa1–Gαq engineering</td><td>Clones 12 and 17 matched the expected target sequence and showed reduced native α-factor responses</td><td>Supports both construction and functional characterization of the humanized chassis</td></tr>
+          <tr><td>Computational model</td><td>Candidate prioritization and testable hypotheses were generated</td><td>Provides experimental guidance but not validation</td></tr>
+          <tr><td>Hardware</td><td>Temperature-control and optical-readout modules were designed and iterated</td><td>Supports future sampling integration; complete air detection remains open</td></tr>
+          <tr><td>Full-length receptor</td><td>Expected receptor-specific band and HA/DCZ response were not observed</td><td>Complete HA-gated sensing remains unvalidated</td></tr>
+          </tbody>
+          </table>
+          </div>
+          <p>The Gpa1-humanization results should therefore not be described as sequence-only evidence. Clones 12 and 17 were sequence-confirmed, and the humanized chassis showed reduced α-factor-induced shmoo formation, growth inhibition and <i>FUS1</i>–<i>yEGFP</i> fluorescence while maintaining overall growth performance. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>However, these experiments characterized the effect of Gpa1 humanization on the native α-factor pathway. Direct functional coupling between the humanized Gpa1 chimera and hM1Dq in the complete receptor system still requires further validation. <a href="../wet-lab/result.html">Team Results</a></p>
+          <h3 id="description-next-experimental-priorities">Next experimental priorities</h3>
+          <p>Our next step is to validate the receptor pathway in a modular order.</p>
+          <p>First, receptor expression, stability and membrane localization should be evaluated separately. Second, the basic hM1Dq–G-protein–MAPK connection should be tested without the complete antigen-gating architecture. Third, TEV-mediated removal of the inhibitory region can be used to examine whether the downstream pathway is functional. Finally, HA recognition and HA-dependent receptor activation should be tested in the complete receptor.</p>
+          <p>If a reproducible HA-dependent response is obtained, the system should then be characterized for limit of detection, dynamic range, response time, signal-to-background ratio, specificity, reproducibility, sample-matrix interference and comparison with a reference method.</p>
+          <p>Sampling integration should be evaluated only after the biological response has been established.</p>
+        </div>
+
+        <!-- ============ Conclusion ============ -->
+        <div id="description-conclusion" class="content-card">
+          <h2 id="description-conclusion">Conclusion</h2>
+          <p>EchoYeast explores whether engineered yeast can convert influenza A HA recognition into a measurable cellular response.</p>
+          <p>The project combines literature-informed HA stem-region recognition, R1a-B6 nanobody-based antigen recognition, PAGER-inspired receptor design, hM1Dq and DCZ-dependent activation, Gpa1–Gαq coupling, <i>FAR1</i>/<i>SST2</i> chassis engineering, <i>FUS1</i>-driven reporter routes, model-guided candidate prioritization and temperature-controlled optical readout. <a href="../project/design.html">Team Design</a></p>
+          <p>Through iterative DBTL cycles, we established a functional downstream <i>FUS1</i> reporter system, obtained engineered chassis strains and developed several receptor and hardware modules. <a href="../project/engineering.html">Team Engineering</a> <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>At the same time, the complete HA-gated receptor-to-reporter pathway has not yet been experimentally validated, and the integration of aerosol sampling with biological sensing remains a future objective. <a href="../wet-lab/result.html">Team Results</a></p>
+          <p>We therefore present EchoYeast as a modular and testable living-cell biosensor framework, rather than a finished diagnostic product.</p>
+          <p><em><strong>Our vision is to let yeast respond to influenza signals.</strong></em><em><br></em><em><strong>Our responsibility is to prove every step of that response.</strong></em></p>
+        </div>
+
+        <!-- ============ References ============ -->
+        <div id="description-references" class="content-card">
+          <h2 id="description-references">References</h2>
+          <ol class="description-refs">
+            <li id="description-reference-1">World Health Organization. <strong>Influenza (seasonal)</strong> [Internet]. Geneva: World Health Organization. Available from: https://www.who.int/news-room/fact-sheets/detail/influenza-(seasonal).</li>
+            <li id="description-reference-2">World Health Organization. <strong>Global influenza strategy 2019–2030</strong> [Internet]. Geneva: World Health Organization; 2019. Available from: https://www.who.int/publications/i/item/9789241515320.</li>
+            <li id="description-reference-3">United Nations Department of Economic and Social Affairs. <strong>Goal 3: Ensure healthy lives and promote well-being for all at all ages</strong> [Internet]. Available from: https://sdgs.un.org/goals/goal3.</li>
+            <li id="description-reference-4">National Disease Control and Prevention Administration, National Health Commission, National Development and Reform Commission, Ministry of Education, Ministry of Civil Affairs, Ministry of Finance, Ministry of Agriculture and Rural Affairs, General Administration of Customs, and National Forestry and Grassland Administration. Notice on Issuing the Guiding Opinions on Establishing and Improving an Intelligent Multi-Point Trigger Infectious Disease Surveillance and Early Warning System [关于印发《关于建立健全智慧化多点触发传染病监测预警体系的指导意见》的通知] [Internet]. Document No. 国疾控监测发〔2024〕16号. 2024 Aug 23. Available from: https://www.gov.cn/zhengce/zhengceku/202408/content_6971481.htm. (In Chinese.)</li>
+            <li id="description-reference-5">Yan J, Grantham M, Pantelic J, Bueno de Mesquita PJ, Albert B, Liu F, et al. Infectious virus in exhaled breath of symptomatic seasonal influenza cases from a college community. Proc Natl Acad Sci U S A. 2018;115(5):1081–1086. doi:10.1073/pnas.1716561115.</li>
+            <li id="description-reference-6">Pan M, Lednicky JA, Wu CY. Collection, particle sizing and detection of airborne viruses. J Appl Microbiol. 2019;127(6):1596–1611. doi:10.1111/jam.14278.</li>
+            <li id="description-reference-7">Merckx J, Wali R, Schiller I, Caya C, Gore GC, Chartrand C, et al. Diagnostic accuracy of novel and traditional rapid tests for influenza infection compared with reverse transcriptase polymerase chain reaction: a systematic review and meta-analysis. Ann Intern Med. 2017;167(6):394–409. doi:10.7326/M17-0848.</li>
+            <li id="description-reference-8">Li B, Lin B, Wang Y, Shi Y, Zeng W, Zhao Y, et al. Multi-scenario surveillance of respiratory viruses in aerosols with sub-single-copy spatial resolution. Nat Commun. 2024;15:8770. doi:10.1038/s41467-024-53059-x.</li>
+            <li id="description-reference-9">Shaw WM, Yamauchi H, Mead J, Gowers GF, Bell DJ, Öling D, et al. Engineering a model cell for rational tuning of GPCR signaling. Cell. 2019;177(3):782–796.e27. doi:10.1016/j.cell.2019.02.023.</li>
+            <li id="description-reference-10">Gaiotto T, Hufton SE. Cross-neutralising nanobodies bind to a conserved pocket in the hemagglutinin stem region identified using yeast display and deep mutational scanning. PLoS One. 2016;11(10):e0164296. doi:10.1371/journal.pone.0164296.</li>
+            <li id="description-reference-11">Hufton SE, Risley P, Ball CR, Major D, Engelhardt OG, Poole S. The breadth of cross sub-type neutralisation activity of a single domain antibody to influenza hemagglutinin can be increased by antibody valency. PLoS One. 2014;9(8):e103294. doi:10.1371/journal.pone.0103294.</li>
+            <li id="description-reference-12">Kalogriopoulos NA, Tei R, Yan Y, Klein PM, Ravalin M, Cai B, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature. 2025;637(8044):230–239. doi:10.1038/s41586-024-08282-3.</li>
+            <li id="description-reference-13">Komatsuzaki K, Murayama Y, Giambarella U, Ogata E, Seino S, Nishimoto I. A novel system that reports the G-proteins linked to a given receptor: a study of type 3 somatostatin receptor. FEBS Lett. 1997;406(1–2):165–170. doi:10.1016/S0014-5793(97)00257-3.</li>
+            <li id="description-reference-14">Brown AJ, Dyos SL, Whiteway MS, White JH, Watson MA, Marzioch M, et al. Functional coupling of mammalian receptors to the yeast mating pathway using novel yeast/mammalian G protein alpha-subunit chimeras. Yeast. 2000;16(1):11–22. doi:10.1002/(SICI)1097-0061(20000115)16:1&lt;11::AID-YEA502&gt;3.0.CO;2-K.</li>
+            <li id="description-reference-15">Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor Far1. Curr Biol. 2014;24(12):1390–1396. doi:10.1016/j.cub.2014.05.002.</li>
+            <li id="description-reference-16">Chasse SA, Flanary P, Parnell SC, Hao N, Cha JY, Siderovski DP, et al. Genome-scale analysis reveals Sst2 as the principal regulator of mating pheromone signaling in the yeast <i>Saccharomyces cerevisiae</i>. Eukaryot Cell. 2006;5(2):330–346. doi:10.1128/EC.5.2.330-346.2006.</li>
+            <li id="description-reference-17">Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Mol Cell Biol. 1987;7(7):2316–2328. doi:10.1128/mcb.7.7.2316-2328.1987.</li>
+            <li id="description-reference-18">Hagen DC, McCaffrey G, Sprague GF Jr. Pheromone response elements are necessary and sufficient for basal and pheromone-induced transcription of the <i>FUS1</i> gene of <i>Saccharomyces cerevisiae</i>. Mol Cell Biol. 1991;11(6):2952–2961. doi:10.1128/mcb.11.6.2952-2961.1991.</li>
+            <li id="description-reference-19">Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in <i>Candida albicans</i>. Microbiology. 1997;143(Pt 2):303–311. doi:10.1099/00221287-143-2-303.</li>
+            <li id="description-reference-20">Liljeström PL. The nucleotide sequence of the yeast <i>MEL1</i> gene. Nucleic Acids Res. 1985;13(20):7257–7268. doi:10.1093/nar/13.20.7257.</li>
+          </ol>
+        </div>
+</div>
+</div>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -928,21 +896,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   

@@ -9,21 +9,26 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/model.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/model.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -58,47 +63,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -107,52 +112,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -185,10 +198,6 @@
   <div class="ppb-track">
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
-</div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
 </div>
 
   <main class="">
@@ -248,16 +257,17 @@
               <ul class="level2">
                 <li class="level3"><a href="#model-path-a-prep">A.1 hM1Dq Structure Preparation</a></li>
                 <li class="level3"><a href="#model-path-a-a2">A.2 MT1 Peptide Structure</a></li>
-                <li class="level3"><a href="#model-path-a-a3">A.3 Gpa1 Humanization</a></li>
+                <li class="level3"><a href="#model-path-a-a3">A.3 Gpa1 (G&alpha;) Humanization</a></li>
                 <li class="level3"><a href="#model-path-a-a4">A.4 OPM/PPM Membrane Alignment</a></li>
-                <li class="level3"><a href="#model-path-a-docking">A.5&ndash;A.6 HADDOCK Docking</a></li>
-                <li class="level3"><a href="#model-path-a-interface">A.7 SPICE Interface Analysis</a></li>
+                <li class="level3"><a href="#model-path-a-docking">A.5 HADDOCK Docking (hM1Dq &times; MT1)</a></li>
+                <li class="level3"><a href="#model-path-a-a6">A.6 HADDOCK Docking (hM1Dq &times; Gpa1 (G&alpha;) Humanization)</a></li>
+                <li class="level3"><a href="#model-path-a-interface">A.7 Comprehensive SPICE Interaction Profiling</a></li>
                 <li class="level3"><a href="#model-path-a-md">A.8&ndash;A.10 Membrane MD &amp; MM-GBSA</a></li>
               </ul>
             </li>
             <li class="level1 has-submenu">
               <div class="nav-link-wrapper">
-                <a href="#model-path-b" class="nav-main-link">Path B: Ste2p Gating</a>
+                <a href="#model-path-b" class="nav-main-link">Path B: Ste2 Gating</a>
                 <div class="toggle-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -265,11 +275,12 @@
                 </div>
               </div>
               <ul class="level2">
-                <li class="level3"><a href="#model-path-b-prep">B.1 Ste2p Preparation &amp; OPM</a></li>
+                <li class="level3"><a href="#model-path-b-prep">B.1 Ste2 Preparation &amp; OPM</a></li>
                 <li class="level3"><a href="#model-path-b-b2">B.2 Peptide Design &amp; AF2</a></li>
                 <li class="level3"><a href="#model-path-b-docking">B.3 HADDOCK Docking</a></li>
-                <li class="level3"><a href="#model-path-b-interface">B.4 SPICE Interface Analysis</a></li>
+                <li class="level3"><a href="#model-path-b-interface">B.4 Comprehensive SPICE Interaction Profiling</a></li>
                 <li class="level3"><a href="#model-path-b-md">B.5&ndash;B.7 Membrane MD &amp; MM-GBSA</a></li>
+                <li class="level3"><a href="#model-path-b-wetlab">B.8 Model-to-Wet Lab Validation</a></li>
               </ul>
             </li>
             <li class="level1">
@@ -279,7 +290,17 @@
             </li>
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#model-references" class="nav-main-link">References &amp; Conclusion</a>
+                <a href="#model-best-model" class="nav-main-link">Best Model Self-Assessment</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#model-conclusion" class="nav-main-link">Conclusion</a>
+              </div>
+            </li>
+            <li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#model-references" class="nav-main-link">References</a>
               </div>
             </li>
           </ul>
@@ -311,14 +332,17 @@
       <!-- Right content area -->
       <div class="description-content">
         <div id="model-overview" class="content-card">
+          <figure class="page-mascot page-mascot--model" aria-hidden="true">
+            <img src="../static/image/any-icon/extension/model.png" alt="" width="440" height="452"
+              loading="lazy" decoding="async">
+          </figure>
           <div class="content-text-frame">
             <h2>Overview</h2>
 
             <p><strong>Executive Summary</strong></p>
             <p>The core challenge of EchoYeast is to rapidly and reproducibly screen, from 17 nanobody sequences,
-              the recognition element with the highest specificity for H1N1 HA and the lowest cross-reactivity risk
-              in the absence of experimental structures and wet-lab screening conditions, and to further validate the
-              molecular mechanisms of two gating systems (hM1Dq and Ste2p).</p>
+              the recognition element with the highest specificity for H1N1 HA and the lowest cross-reactivity risk,
+              and to further validate the molecular mechanisms of two gating systems (hM1Dq and Ste2).</p>
             <p>We established a computational-first / model-guided multiscale molecular docking and simulation
               pipeline:</p>
             <ul>
@@ -329,11 +353,13 @@
               <li>100 ns MD with GROMACS;</li>
               <li>Binding free energy calculation and per-residue decomposition with gmx_MMPBSA;</li>
               <li>Positive control redocking with 9VH4;</li>
-              <li>Parallel modeling of the Path A (hM1Dq) and Path B (Ste2p) gating systems.</li>
+              <li>Parallel modeling of the Path A (hM1Dq) and Path B (Ste2) gating systems.</li>
             </ul>
             <p>By combining multiple orthogonal computational methods, we reduced the 17-candidate nanobody pool to
-              a single lead (R1aB6) and identified a testable mutational hypothesis (R31A), providing a prioritized
-              experimental roadmap rather than a replacement for wet-lab validation.</p>
+              a single lead (R1aB6) and identified a testable mutational hypothesis (R31A). Crucially, our
+              model-guided design of the Ste2 gating construct was successfully translated into a living yeast chassis
+              and verified via colony PCR and sequencing, completing the dry-to-wet lab design loop. This provides a
+              prioritized experimental roadmap rather than a replacement for wet-lab validation.</p>
 
             <p>Key conclusions:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
@@ -366,7 +392,7 @@
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MM-GBSA ΔG_bind</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MM-GBSA ΔG<sub>bind</sub></td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−14.67 kcal/mol (Cluster 1) / −14.39 kcal/mol (Cluster 5)</td>
                 </tr>
                 
@@ -397,7 +423,7 @@
                 
                 <tr style="border-bottom:1px solid #D4A574;">
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Path B best gating peptide</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_5 (Ste2p × MT1_5 Cluster 1, score −99.2)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep5 (Ste2 × pep5 Cluster 1, score −99.2)</td>
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
@@ -408,10 +434,12 @@
               </tbody>
             </table>
 
-            <p><strong>Important Statement:</strong> All computational data on this page are derived from molecular
-              modeling and have not yet been validated by wet-lab experiments. The ultimate value of the model lies
-              in providing testable hypotheses (the ARG-B:31 hotspot and the R31A mutant) and prioritization for
-              subsequent experiments.</p>
+            <p><strong>Important Statement:</strong> Except for the Ste2 gating construct assembly reported in B.8, all
+              computational data on this page are derived from molecular modeling and have not yet been validated by
+              wet-lab experiments. The ultimate value of the model lies in providing testable hypotheses (the ARG-B:31
+              hotspot and the R31A mutant) and prioritization for subsequent experiments.</p>
+            <p><strong>Wet-Lab Translation:</strong> The model-designed Ste2 gating construct (pep + nanobody) was
+              successfully assembled in yeast and verified by sequencing (96.9% identity).</p>
 
             <p><strong>1. Motivation and Design Need</strong></p>
             <p>EchoYeast requires a nanobody that specifically recognizes the hemagglutinin (HA) of influenza A
@@ -423,8 +451,8 @@
               <li>Among the 17 candidate nanobodies, which one has the optimal binding ability and specificity for
                 H1N1 HA?</li>
               <li>What is the binding mode between this nanobody and H1N1 HA? What are the key hotspot residues?</li>
-              <li>In the two gating systems hM1Dq and Ste2p, how do MT1/MT1_5 bind the receptor? How does Gpa1
-                couple?</li>
+              <li>In the two gating systems hM1Dq and Ste2, how do the auto-inhibitory peptides bind the receptor? How
+                does Gpa1 couple?</li>
               <li>Which candidates should be prioritized for wet-lab experiments? Which should be eliminated?</li>
             </ul>
             <p>We adopt a computational-first / model-guided strategy, using multiscale computational models to guide
@@ -434,18 +462,18 @@
             <p><strong>2.1 Three main lines</strong></p>
             <p>Part 1 (Common Foundation): HA &times; nanobody docking &mdash; screening R1aB6<br>
               &#9500;&#9472;&#9472; Path A (hM1Dq gating system): hM1Dq + MT1 + humanized Gpa1<br>
-              &#9492;&#9472;&#9472; Path B (Ste2p gating system): Ste2p + MT1_5 + Gpa1</p>
+              &#9492;&#9472;&#9472; Path B (Ste2 gating system): Ste2 + auto-inhibitory peptides + Gpa1</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-2-1-pipeline.png" alt="Figure 1. Overall EchoYeast modelling pipeline: 17 nanobody sequences are structure-predicted with AlphaFold2/ColabFold 1.6.2 and docked by ClusPro against 6 antigens; the top 5 candidates are refined with HADDOCK 2.5, analysed with PyMOL + SPICE, and checked with 100 ns MD and MM-GBSA against the 9VH4 positive control; Part 2 runs the same pipeline on the hM1Dq and Ste2p gating systems" loading="lazy" width="1268" height="762" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 1. Overall modelling pipeline: Part 1 screens the recognition element (17 nanobodies → R1aB6); Part 2 validates the two gating systems at atomic level (computational predictions, not experimental results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-2-1-pipeline-fix.png" alt="Figure 1. Overall EchoYeast modelling pipeline: 17 nanobody sequences are structure-predicted with AlphaFold2/ColabFold 1.6.2 and docked by ClusPro against 6 antigens; the top 5 candidates are refined with HADDOCK 2.5, analysed with PyMOL + SPICE, and checked with 100 ns MD and MM-GBSA against the 9VH4 positive control; Part 2 runs the same pipeline on the hM1Dq and Ste2 gating systems" loading="lazy" width="1268" height="762" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 1. Overall modelling pipeline: Part 1 screens the recognition element (17 nanobodies → R1aB6); Part 2 validates the two gating systems at atomic level (computational predictions, not experimental results)</figcaption>
             </figure>
 
             <p><strong>2.2 Logic Chain</strong></p>
             <p>Question (Which nanobody is optimal?) &rarr; Hypothesis (rigid + semi-flexible + MD can converge
-              candidates [AMBIGUOUS]) &rarr; Methods (ClusPro &rarr; HADDOCK &rarr; PyMOL/SPICE &rarr; 100 ns MD
+              candidates) &rarr; Methods (ClusPro &rarr; HADDOCK &rarr; PyMOL/SPICE &rarr; 100 ns MD
               &rarr; MM-GBSA) &rarr; Outputs (specificity index / HADDOCK score / interface residues / RMSD /
-              &Delta;G_bind / hotspot residues) &rarr; Validation (positive control redocking + multi-method
+              &Delta;G<sub>bind</sub> / hotspot residues) &rarr; Validation (positive control redocking + multi-method
               cross-validation) &rarr; Design decision (select R1aB6, propose an R31A mutant).</p>
 
             <p><strong>2.3 Seven-Stage Method Workflow (Part 1)</strong></p>
@@ -508,22 +536,22 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">What are the binding free energy and hotspots?</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">gmx_MMPBSA + per-residue decomposition</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔG_bind, hotspot residues</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">ΔG<sub>bind</sub>, hotspot residues</td>
                 </tr>
                 
               </tbody>
             </table>
 
             <p><strong>2.4 Rationale for Method Selection</strong></p>
-            <p>Our pipeline adopts a physics-based strategy, prioritizing interpretability and reproducibility. ClusPro
-              was chosen for fast rigid-body screening across 17 candidates. HADDOCK was selected for its semi-flexible
-              refinement, allowing CDR loop flexibility based on our AlphaFold2 pLDDT scores. Finally, GROMACS with the
+            <p>Our pipeline adopts a physics-based strategy, prioritizing interpretability and reproducibility. ClusPro<a class="cite-ref" href="#model-reference-1">[1]</a>
+              was chosen for fast rigid-body screening<a class="cite-ref" href="#model-reference-2">[2]</a> across 17 candidates. HADDOCK was selected for its semi-flexible<a class="cite-ref" href="#model-reference-3">[3]</a>
+              refinement, allowing CDR loop flexibility based on our AlphaFold2 pLDDT scores. Finally, GROMACS<a class="cite-ref" href="#model-reference-5">[5]</a> with the
               Amber99SB-ILDN force field was used to capture the explicit-solvent dynamics, which is essential for
               accurate MM-GBSA calculations. This multi-scale approach ensures that our computational predictions
               provide an actionable roadmap for wet-lab experiments.</p>
 
             <p><strong>2.5 Gating System Pathways (Path A / B)</strong></p>
-            <p>Each pathway follows a unified workflow: Structure preparation &rarr; OPM/PPM membrane alignment
+            <p>Each pathway follows a unified workflow: Structure preparation &rarr; OPM/PPM membrane alignment<a class="cite-ref" href="#model-reference-11">[11]</a>
               &rarr; HADDOCK docking &rarr; SPICE analysis &rarr; CHARMM-GUI membrane system &rarr; GROMACS MD
               &rarr; gmx_MMPBSA.</p>
           </div>
@@ -771,13 +799,22 @@
                  form is used uniformly on this page pending lab verification (open item MQ-1). -->
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-3-plddt.png" alt="Figure 2. Bar chart of average pLDDT (blue) and CDR3 pLDDT (red) for the 17 candidate nanobodies; the dashed line marks the CDR3 pLDDT 65 threshold below which a candidate was set as flexible in HADDOCK" loading="lazy" width="1268" height="552" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 2. Average and CDR3 pLDDT of the 17 candidate nanobodies from structure prediction (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 2. Average and CDR3 pLDDT of the 17 candidate nanobodies from structure prediction (computational prediction results)</figcaption>
             </figure>
+
+            <p>AlphaFold2/ColabFold<a class="cite-ref" href="#model-reference-7">[7]</a><a class="cite-ref" href="#model-reference-8">[8]</a> was utilized for initial structure prediction, leveraging its deep learning
+              architecture trained with FAPE and cross-entropy losses to generate high-confidence models
+              (pLDDT &gt; 90) for downstream docking.</p>
 
             <h3 id="model-screening">1.4 ClusPro Rigid Docking</h3>
             <ul>
-              <li><strong>Scoring function:</strong> E = 0.40E_rep − 0.40E_att + 600E_elec + 1.00E_DAR.</li>
-              <li><strong>Specificity index:</strong> ( E_H1N1 − E_H3N2 + E_H1N1 − E_H5N1 ) / 2. A more negative value indicates better specificity for H1N1.</li>
+              <li><strong>Scoring function:</strong>
+                <div class="model-formula"><i>E</i> = 0.40<i>E</i><sub>rep</sub> &minus;&nbsp;0.40<i>E</i><sub>att</sub> +&nbsp;600<i>E</i><sub>elec</sub> +&nbsp;1.00<i>E</i><sub>DAR</sub></div>
+              </li>
+              <li><strong>Specificity index:</strong>
+                <div class="model-formula">( <i>E</i><sub>H1N1</sub> &minus; <i>E</i><sub>H3N2</sub> + <i>E</i><sub>H1N1</sub> &minus; <i>E</i><sub>H5N1</sub> ) / 2</div>
+                <span class="model-formula-note">A more negative value indicates better specificity for H1N1.</span>
+              </li>
               <li><strong>Positive control:</strong> re-docking of the experimentally resolved 9VH4 complex serves as the control for the docking pipeline.</li>
             </ul>
 
@@ -786,7 +823,7 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-cluspro-screen.webp" alt="Figure 3. Left: ClusPro scores of the 17 candidates against H1N1, H3N2, H5N1 (weighted score; more negative means stronger binding); Right: average specificity advantage of each candidate against H1N1, with the red flag marking the most specific one" loading="lazy" width="1400" height="693" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 3. ClusPro scores and average specificity advantage of the 17 candidates: left, scores against the three influenza A HA antigens; right, specificity advantage (more negative = more specific, red flag marks the best candidate) (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 3. ClusPro scores and average specificity advantage of the 17 candidates: left, scores against the three influenza A HA antigens; right, specificity advantage (more negative = more specific, red flag marks the best candidate) (computational prediction results)</figcaption>
             </figure>
 
             <p>The 5 refined candidates' scores and specificity indices under the untreated antigen:</p>
@@ -798,7 +835,7 @@
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H3N2</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">H5N1</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Specificity Index</th>
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Conclusion</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Priority Level</th>
                 </tr>
               </thead>
               <tbody>
@@ -809,7 +846,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−863.4</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−817.9</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−93.25</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Medium (Rank 3)</td>
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
@@ -818,7 +855,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−845.0</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−1003.9</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−72.55</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Rejected</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">High (Rank 2)</td>
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
@@ -827,7 +864,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−915.6</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−813.1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−57.35</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Rejected</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Low (Rank 4)</td>
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
@@ -836,7 +873,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−950.5</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−1013.4</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−40.75</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">High (Rank 1)</td>
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
@@ -845,13 +882,11 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−764.4</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">−867.9</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">23.75</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Selected</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Low (Rank 5)</td>
                 </tr>
                 
               </tbody>
             </table>
-            <p>The ranking is R1aB6 &gt; R2bD9 &gt; R2bE8 &gt; R1aA5 &gt; R2aF9 (from most negative to least negative specificity index).</p>
-
             <p>Stage 3 (cross-reactivity assessment). Cross-reactivity risk is expressed as the average binding energy
               of candidates against unrelated viral antigens (SARS, HIV1, RSVF); a more negative value indicates
               stronger binding and higher cross-reactivity risk:</p>
@@ -915,6 +950,16 @@
                 
               </tbody>
             </table>
+
+            <p><strong>Final Screening Integration:</strong> While R1aA5 and R2bD9 showed the strongest absolute
+              binding affinities against H1N1 (Rank 1 and 2), their binding was not specific&mdash;evidenced by their
+              poor specificity indices (&minus;40.75 and &minus;72.55) and high cross-reactivity risks (Highest and
+              Moderate).</p>
+            <p>In contrast, R1aB6 had a slightly lower raw binding energy (Rank 3) but achieved the most negative
+              specificity index (&minus;93.25). By integrating both binding strength and subtype specificity (and
+              noting its moderate cross-reactivity risk), R1aB6 was ultimately selected as the final lead for
+              downstream HADDOCK refinement and wet-lab validation.</p>
+
             <!-- MQ-7: the source document has two additional 17-antibody charts (processed antigen, cross-reactivity) placed after 5.3.2 / 5.3.3,
                  whose candidate-number cross-reference tables contradict the numbering in the screening figure, so they cannot be mapped row-by-row to this section's tables; this page therefore does not cite those two charts,
                  and the related results are presented only in tables. See md/10-一手分析.md §5.1, §6. -->
@@ -922,7 +967,7 @@
             <h3 id="model-haddock">1.5 HADDOCK 2.5 Semi-Flexible Refinement</h3>
             <p>Active residues: HA1 (25, 45&ndash;49, 305&ndash;307, 332), HA2 (361&ndash;364, 381&ndash;385, 388,
               391&ndash;392, 395&ndash;396, 399), and nanobody CDR residues. Results after semi-flexible refinement
-              of the 5 refined candidates against H1N1 HA:</p>
+              of the 5 refined candidates against H1N1 HA<a class="cite-ref" href="#model-reference-4">[4]</a>:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
@@ -978,19 +1023,22 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-specificity-vs-haddock.webp" alt="Figure 4. Combined view: horizontal axis is the ClusPro specificity index (more negative is better), vertical axis is the HADDOCK score (more negative is better); R1aB6 falls in the optimal lower-left region, while R2aF9 falls in the right region with poor specificity" loading="lazy" width="1269" height="952" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 4. Combined view of the two metrics: horizontal axis is the ClusPro specificity index, vertical axis is the HADDOCK score, both better when more negative; R1aB6 sits at the optimal position in both directions (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 4. Combined view of the two metrics: horizontal axis is the ClusPro specificity index, vertical axis is the HADDOCK score, both better when more negative; R1aB6 sits at the optimal position in both directions (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-haddock-bars.webp" alt="Figure 5. Bar chart of HADDOCK scores for the 5 candidates, with score, BSA, and cluster size N annotated on the bars" loading="lazy" width="1269" height="793" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 5. HADDOCK score, buried surface area (BSA), and cluster size (N) for the 5 candidates (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 5. HADDOCK score, buried surface area (BSA), and cluster size (N) for the 5 candidates (computational prediction results)</figcaption>
               <!-- The source document's own figure plots BSA 2634 Å² (R1aA5) and 2539 Å² (R2bE8), while its table —
                    and the raw HADDOCK cluster stat files behind the card game — record 2630.4 Å² and 2619.9 Å².
                    The table above follows the document table and the raw stat files. -->
             </figure>
 
+            <div class="model-formula"><strong>Rigid-body docking (it0):</strong> HADDOCK<sub>rigidbody</sub> = 0.01<i>E</i><sub>vdw</sub> + 1.0<i>E</i><sub>elec</sub> + 1.0<i>E</i><sub>desolv</sub> + 0.01<i>E</i><sub>air</sub> &minus; 0.01BSA</div>
+            <div class="model-formula"><strong>Flexible refinement (it1):</strong> HADDOCK<sub>flexref</sub> = 1.0<i>E</i><sub>vdw</sub> + 1.0<i>E</i><sub>elec</sub> + 1.0<i>E</i><sub>desolv</sub> + 0.1<i>E</i><sub>air</sub> &minus; 0.01BSA</div>
+
             <h3 id="model-interface">1.6 PyMOL + SPICE Interface Analysis</h3>
-            <p>Interface analysis targets the best combination, R1aB6 with H1N1 HA. PyMOL gives 30 interface residues on the HA side (27–32, 44–53, 303–332, 358–396) and 24 residues on the nanobody side (CDR1 27–37, CDR2 44–65, CDR3 101–104). SPICE gives the following counts of interaction types for the two best clusters of the refinement:</p>
+            <p>Interface analysis targets the best combination, R1aB6 with H1N1 HA. PyMOL gives 30 interface residues on the HA side (27–32, 44–53, 303–332, 358–396) and 24 residues on the nanobody side (CDR1 27–37, CDR2 44–65, CDR3 101–104). SPICE<a class="cite-ref" href="#model-reference-9">[9]</a> gives the following counts of interaction types for the two best clusters of the refinement:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
@@ -1081,7 +1129,7 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-6-interface.png" alt="Figure 6. 3D view of the R1aB6–H1N1 HA interface: ARG-B:31 (red) reaches GLU-A:51, SER-A:53 and SER-A:304 (cyan) of the HA receptor" loading="lazy" width="880" height="880" style="max-width:520px; width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 6. 3D view of the R1aB6&ndash;H1N1 HA interface with the hotspot ARG-B:31 highlighted (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 6. 3D view of the R1aB6&ndash;H1N1 HA interface with the hotspot ARG-B:31 highlighted (computational prediction results)</figcaption>
             </figure>
 
             
@@ -1256,22 +1304,36 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-7-rmsd-cluster5.png" alt="Figure 7. Backbone RMSD of the R1aB6–H1N1 HA complex (Cluster 5) over the 100 ns simulation; the dashed line marks the 90–100 ns mean of 0.4574 nm" loading="lazy" width="2967" height="1466" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 7. Backbone RMSD of the R1aB6&ndash;H1N1 HA complex (Cluster 5): the trajectory stabilises after the first ~10 ns, with a 90&ndash;100 ns mean of 0.4574 nm (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 7. Backbone RMSD of the R1aB6&ndash;H1N1 HA complex (Cluster 5): the trajectory stabilises after the first ~10 ns, with a 90&ndash;100 ns mean of 0.4574 nm (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-7-rmsf-cluster5.png" alt="Figure 8. Per-residue RMSF of the R1aB6–H1N1 HA complex (Cluster 5); the green dashed line marks the hotspot ARG-B:31 at residue 31" loading="lazy" width="3267" height="1466" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 8. Per-residue RMSF of the R1aB6&ndash;H1N1 HA complex (Cluster 5): interface residues fluctuate less than 0.25 nm, and the hotspot ARG-B:31 (green line) lies in a locally rigid CDR3 region (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 8. Per-residue RMSF of the R1aB6&ndash;H1N1 HA complex (Cluster 5): interface residues fluctuate less than 0.25 nm, and the hotspot ARG-B:31 (green line) lies in a locally rigid CDR3 region (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-7-rg.png" alt="Figure 9. Radius of gyration of the R1aB6–H1N1 HA complex over the 100 ns simulation, with the 90–100 ns mean of 3.7154 nm marked" loading="lazy" width="1267" height="569" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 9. Radius of gyration of the R1aB6&ndash;H1N1 HA complex: the Rg stabilises at 3.7154 nm (90&ndash;100 ns mean), indicating a compact, stable complex (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 9. Radius of gyration of the R1aB6&ndash;H1N1 HA complex: the Rg stabilises at 3.7154 nm (90&ndash;100 ns mean), indicating a compact, stable complex (computational prediction results)</figcaption>
             </figure>
 
+            <p><strong>Molecular Dynamics Engine: The Leapfrog Integrator in GROMACS.</strong> To simulate the atomic
+              trajectories of our complexes over 100 ns, GROMACS numerically integrates Newton&rsquo;s equations of
+              motion. We utilized the Leapfrog integrator, a standard and highly efficient algorithm that updates
+              velocities and positions in an interleaved, half-step manner:</p>
+            <div class="model-formula"><strong>Velocity update:</strong> <i>v</i>(<i>t</i> + &Delta;<i>t</i>/2) = <i>v</i>(<i>t</i> &minus; &Delta;<i>t</i>/2) + (&Delta;<i>t</i>/<i>m</i>) &middot; <i>F</i>(<i>t</i>)</div>
+            <div class="model-formula"><strong>Position update:</strong> <i>r</i>(<i>t</i> + &Delta;<i>t</i>) = <i>r</i>(<i>t</i>) + &Delta;<i>t</i> &middot; <i>v</i>(<i>t</i> + &Delta;<i>t</i>/2)</div>
+            <p>&Delta;<i>t</i> is the integration time step (typically 2 fs).</p>
+            <p>Interleaved Update: velocities are updated for half-steps, while positions are advanced by full steps,
+              allowing the algorithm to &ldquo;leapfrog&rdquo; over the current state.</p>
+            <p>Efficiency &amp; Stability: this method requires storing only one set of positions and velocities at a
+              time, drastically reducing memory usage. Crucially, as a time-reversible and symplectic integrator, it
+              prevents numerical energy drift during long simulations. This provides the rigorous mathematical
+              foundation for the stable RMSD and RMSF trajectories we observed in our 100 ns MD.</p>
+
             <h3 id="model-mmgbsa">1.8 gmx_MMPBSA Binding Free Energy</h3>
-            <p>MM-GBSA calculations were performed using the single-trajectory protocol implemented in
-              gmx_MMPBSA 1.5.0.3, with the Amber14SB force field for the
+            <p>MM-GBSA calculations<a class="cite-ref" href="#model-reference-6">[6]</a> were performed using the single-trajectory protocol implemented in
+              gmx_MMPBSA 1.5.0.3, with the Amber99SB-ILDN force field for the
               binding free energy estimation, for both clusters of the refined complex:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
@@ -1361,16 +1423,16 @@
                 
               </tbody>
             </table>
-            <p>Model5 §1.8, single-trajectory protocol of gmx_MMPBSA 1.5.0.3 with the Amber14SB force field. ΔTOTAL for Cluster 1 carries a reported SEM of ± 1.31 kcal/mol.</p>
+            <p>Model5 §1.8, single-trajectory protocol of gmx_MMPBSA 1.5.0.3 with the Amber99SB-ILDN force field. ΔTOTAL for Cluster 1 carries a reported SEM of ± 1.31 kcal/mol.</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-8-decomposition-receptor.png" alt="Figure 10. Per-residue MM-GBSA decomposition on the receptor (HA) side: GLU-A:51, ILE-A:361 and ARG-A:329 contribute most" loading="lazy" width="1267" height="699" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 10. Per-residue MM-GBSA decomposition, receptor (HA) side (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 10. Per-residue MM-GBSA decomposition, receptor (HA) side (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-8-decomposition-ligand.png" alt="Figure 11. Per-residue MM-GBSA decomposition on the ligand (nanobody) side: ARG-B:31 (green) is the dominant contributor at −5.46 kcal/mol" loading="lazy" width="1267" height="699" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 11. Per-residue MM-GBSA decomposition, ligand (nanobody) side: ARG-B:31 is the dominant contributor (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 11. Per-residue MM-GBSA decomposition, ligand (nanobody) side: ARG-B:31 is the dominant contributor (computational prediction results)</figcaption>
             </figure>
 
             <h3 id="model-positive-control">1.9 Positive Control: 9VH4 Re-docking</h3>
@@ -1418,18 +1480,18 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-9-positive-control.png" alt="Figure 12. PyMOL output of the positive-control re-docking: interface CA i-RMSD = 2.113 Å over 119 atoms and receptor superposition RMSD = 0.349 Å" loading="lazy" width="549" height="116" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 12. i-RMSD evidence from the positive-control re-docking (computational validation of the protocol)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 12. i-RMSD evidence from the positive-control re-docking (computational validation of the protocol)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-1-9-superposition.png" alt="Figure 13. Superposition of the re-docked positive-control complex onto the experimental 9VH4 complex" loading="lazy" width="1029" height="772" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 13. Superposition diagram of the positive-control re-docking (computational validation of the protocol)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 13. Superposition diagram of the positive-control re-docking (computational validation of the protocol)</figcaption>
             </figure>
 
           </div>
 
         
-        <div id="model-game" class="content-card" data-base-path="../"
+        <div id="model-game" class="content-card" data-base-path="/"
              data-icon-base="https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/icon/">
           <h2>1.10 Card Game</h2>
           <p>The card game covers HADDOCK 2.5 semi-flexible refinement only: the H1N1 HA antigen
@@ -1588,11 +1650,13 @@
 
             <p class="model-game__fallback" id="model-game-fallback" hidden></p>
             <p class="model-game__status" id="model-game-status" role="status" aria-live="polite"></p>
-            <p class="model-game__caption">Scores are HADDOCK 2.5 semi-flexible values for the selected cluster of each
-              nanobody &times; H1N1 HA complex, with its RMSD, structure count and intermolecular
-              energy; HADDOCK cluster numbers order structures by population rather than by score, so the selector lists
-              each cluster with its own score. Card artwork comes from the project's own card-game icon set. All
-              values are computational predictions that have not been validated by wet-lab experiments.</p>
+            <p class="model-game__caption">Scores displayed represent the mean values for the selected cluster of each
+              nanobody &times; H1N1 HA complex, along with the standard deviation, RMSD, structure count, and
+              intermolecular energy. Note that HADDOCK orders clusters by population (structure count) rather than by
+              score. Therefore, the interface defaults to the most populated cluster (e.g., Cluster 1), but the final
+              candidate selection prioritizes the best-scoring cluster (e.g., R1aB6 Cluster 5, score &minus;93.2). Card
+              artwork comes from the project's own icon set. All values are computational predictions that have not been
+              validated by wet-lab experiments.</p>
           </div>
         </div>
 
@@ -1676,22 +1740,22 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-1a-af2-5cxv.png" alt="Figure 14. Superposition of the AF2-predicted hM1Dq (red) onto the experimental 5CXV structure (grey)" loading="lazy" width="939" height="704" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 14. Superposition of the AF2 prediction onto 5CXV (RMSD 1.568 &Aring; over 1913 atoms; computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 14. Superposition of the AF2 prediction onto 5CXV (RMSD 1.568 &Aring; over 1913 atoms; computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-1b-mutations.png" alt="Figure 15. Mutation validation screenshots: position 106 mutates to CYS (Y106C) and position 196 to GLY (A196G)" loading="lazy" width="1173" height="880" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 15. Mutation validation at positions 106 (Y106C) and 196 (A196G) (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 15. Mutation validation at positions 106 (Y106C) and 196 (A196G) (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-1c-ppm-opm.png" alt="Figure 16. Superposition of the PPM-aligned AF2 model onto the 5CXV OPM membrane orientation" loading="lazy" width="939" height="704" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 16. PPM alignment vs. 5CXV OPM membrane orientation (RMSD 0.884 &Aring; over 141 atoms; computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 16. PPM alignment vs. 5CXV OPM membrane orientation (RMSD 0.884 &Aring; over 141 atoms; computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-1c-ppm-opm-alt.png" alt="Figure 17. Alternative view of the PPM-aligned AF2 model superimposed onto the 5CXV OPM orientation" loading="lazy" width="939" height="704" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 17. PPM alignment vs. 5CXV OPM, alternative view (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 17. PPM alignment vs. 5CXV OPM, alternative view (computational prediction results)</figcaption>
             </figure>
 
             <h3 id="model-path-a-a2">A.2 MT1 Inhibitory Peptide Structure</h3>
@@ -1702,14 +1766,24 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-2-mt1.png" alt="Figure 18. MT1 inhibitory toxin structure with its three disulfide bonds highlighted in yellow" loading="lazy" width="1173" height="880" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 18. MT1 structure and its three disulfide bonds (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 18. MT1 structure and its three disulfide bonds (computational prediction results)</figcaption>
             </figure>
 
-            <h3 id="model-path-a-a3">A.3 Gpa1 Humanization Engineering</h3>
+            <h3 id="model-path-a-a3">A.3 Gpa1 (G&alpha;) Humanization Engineering</h3>
             <p>Source: RCSB 9SH6 (2.77 &Aring;)</p>
             <p>Wild-type C-terminus: KIGII</p>
             <p>Engineered C-terminus: EYNLV + stop codon TGA</p>
             <p>Chain mapping: chain D = G&alpha;, chain C = G&beta;, chain G = G&gamma;</p>
+
+            <p><strong>Computational Validation Status:</strong></p>
+            <p>While the humanized Gpa1 (G&alpha;) was successfully engineered and docked to the hM1Dq receptor
+              using HADDOCK 2.5 (yielding a favorable score of &minus;149.4 for the single-chain complex), a full
+              100 ns membrane Molecular Dynamics (MD) simulation of the complete hM1Dq-Gpa1 complex was not
+              performed in this iteration.</p>
+            <p><strong>Reason:</strong> The complete heterotrimeric G-protein membrane system is exceptionally large
+              (~850,000 atoms). Running a 100 ns MD under our current computational resources would require
+              2&ndash;3 weeks. Therefore, we validated the interaction interface via HADDOCK and SPICE analysis,
+              and have listed the full membrane MD as a key Future Work item.</p>
 
             <h3 id="model-path-a-a4">A.4 OPM/PPM Membrane Alignment</h3>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
@@ -1741,32 +1815,66 @@
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-4-7tm.png" alt="Figure 19. 7TM structure of hM1Dq and a schematic of its membrane embedding (blue discs represent the membrane)" loading="lazy" width="1269" height="952" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 19. 7TM structure of hM1Dq and its membrane embedding (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 19. 7TM structure of hM1Dq and its membrane embedding (computational prediction results)</figcaption>
             </figure>
 
-            <h3 id="model-path-a-docking">A.5&ndash;A.6 HADDOCK Docking of the Two Coupling Interfaces</h3>
+            <h3 id="model-path-a-docking">A.5 HADDOCK Docking of hM1Dq &times; MT1</h3>
+            <p>Best cluster = Cluster 1:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Docking System</th>
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Best Cluster</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Metric</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">HADDOCK score</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;83.3</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster size</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">76</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">RMSD</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.5 &Aring;</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">BSA</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1531.9 &Aring;<sup>2</sup></td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Z-score</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;1.4</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D4A574;">
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Elec</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;309.1</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-fig-a-5-hm1dq-mt1.png" alt="Figure 20. Structure of the hM1Dq × MT1 Cluster 1 complex: MT1 (yellow) occupies the extracellular orthosteric site of hM1Dq" loading="lazy" width="1269" height="987" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 20. Structure of the hM1Dq &times; MT1 Cluster 1 complex (computational prediction results)</figcaption>
+            </figure>
+
+            <h3 id="model-path-a-a6">A.6 HADDOCK Docking of hM1Dq &times; Gpa1 (G&alpha;) Humanization</h3>
+            <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
+              <thead>
+                <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Docking system</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Best cluster</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Score</th>
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Cluster Size</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Size</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">RMSD (&Aring;)</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">BSA (&Aring;<sup>2</sup>)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; MT1</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster 1</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;83.3</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">76</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.5</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1531.9</td>
-                </tr>
-                <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; Gpa1 (total)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; Gpa1 total</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster 6</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;131.7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">12</td>
@@ -1774,7 +1882,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3715.9</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; G&alpha; single chain</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">hM1Dq &times; Gp&alpha; single chain</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Cluster 1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;149.4</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">29</td>
@@ -1783,17 +1891,12 @@
                 </tr>
               </tbody>
             </table>
-            <p>Key conclusion: The single-chain Cluster 1 of hM1Dq &times; Gpa&alpha; (&minus;149.4) was superior to
+            <p>Key conclusion: The single-chain Cluster 1 of hM1Dq &times; Gp&alpha; (&minus;149.4) was superior to
               total Cluster 6 (&minus;131.7), supporting that the GPCR&ndash;G protein coupling interface is primarily
-              mediated by G&alpha;. For the toxin complex, the best cluster has an RMSD of 0.5 &Aring;, a Z-score of
-              &minus;1.4 and an electrostatic term of &minus;309.1.</p>
+              mediated by G&alpha;.</p>
 
-            <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-a-5-hm1dq-mt1.png" alt="Figure 20. Structure of the hM1Dq × MT1 Cluster 1 complex: MT1 (yellow) occupies the extracellular orthosteric site of hM1Dq" loading="lazy" width="1269" height="987" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 20. Structure of the hM1Dq &times; MT1 Cluster 1 complex (computational prediction results)</figcaption>
-            </figure>
-
-            <h3 id="model-path-a-interface">A.7 SPICE Interface Analysis</h3>
+            <h3 id="model-path-a-interface">A.7 Comprehensive SPICE Interaction Profiling</h3>
+            <p>To thoroughly understand the interaction mechanisms, we utilized the SPICE web server to comprehensively profile the binding interface. This analysis encompasses Contact Analysis (bond types and pairs), Interface Analysis (residue-level details), SASA Analysis (buried surface area), and downloadable Tabular Data.</p>
             <p>We used SPICE to perform interface analysis on the hM1Dq &times; MT1 (Cluster 1) complex, with the
               distance threshold set to 5.0 &Aring;. The analysis results revealed the key residues and interactions
               driving binding.</p>
@@ -1882,8 +1985,8 @@
             <p>Key finding: The extracellular orthosteric site of hM1Dq is competitively occupied by MT1, whereas the
               intracellular ICL2/ICL3/H8 is bound by the C-terminus of the &alpha;5 helix of Gpa1. The two do not
               overlap spatially and can theoretically bind simultaneously.</p>
-            <p><strong>Note:</strong> SPICE contact residues (5.0 &Aring;) yielded 38/39 residues, whereas the MM-GBSA
-              per-residue decomposition (6.0 &Aring;) captured 50/63 interface residues.</p>
+            <p><strong>Note:</strong> SPICE contact residues (5.0 &Aring;) yielded 38 residues, whereas the MM-GBSA
+              per-residue decomposition (6.0 &Aring;) captured 50 interface residues.</p>
 
             
             
@@ -1966,19 +2069,19 @@
 </div>
 
 
-            <h3 id="model-path-a-md">A.8&ndash;A.10 CHARMM-GUI Membrane System, GROMACS MD &amp; MM-GBSA</h3>
-            <p>The complex was embedded with CHARMM-GUI using a rectangular box of 150 &Aring; with a 22.5 &Aring; water
-              layer, KCl at 0.15 M, 310 K, and the CHARMM36m force field with TIP3P water, giving 631,498 atoms.
+            <h3 id="model-path-a-md">A.8&ndash;A.10 Membrane MD &amp; MM-GBSA (hM1Dq + MT1)</h3>
+            <p>The complex was embedded with CHARMM-GUI<a class="cite-ref" href="#model-reference-10">[10]</a> using a rectangular box of 150 &Aring; with a 22.5 &Aring; water
+              layer, KCl at 0.15 M, 310 K, and the CHARMM36m<a class="cite-ref" href="#model-reference-13">[13]</a> force field with TIP3P<a class="cite-ref" href="#model-reference-15">[15]</a> water, giving 631,498 atoms.
               Membrane lipid ratio basis: approximate plasma membrane composition of BY4741 <i>Saccharomyces
               cerevisiae</i>. The membrane lipid composition was set to approximate the <i>S. cerevisiae</i> BY4741
-              plasma membrane, based on lipidomics data from Ejsing et al. (2009) and Zinser et al. (1991):
-              Ergosterol 30%, POPI 28%, POPC 17%, POPE 14%, POPA 6%, POPS 5%.</p>
+              plasma membrane, based on lipidomics data from Ejsing et al. (2009)<a class="cite-ref" href="#model-reference-19">[19]</a> and Zinser et al. (1991)<a class="cite-ref" href="#model-reference-20">[20]</a>:
+              Ergosterol 30%, POPI 28%, POPC 17%, POPE 14%, POPA 6%, POPS 5%<a class="cite-ref" href="#model-reference-14">[14]</a>.</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Parameter</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">hM1Dq + MT1</th>
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">hM1Dq + Gpa&alpha; single chain</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">hM1Dq + Gp&alpha; single chain</th>
                 </tr>
               </thead>
               <tbody>
@@ -2024,6 +2127,17 @@
                 </tr>
               </tbody>
             </table>
+            <p><strong>Note on system size and simulation status:</strong></p>
+            <p>Both atom counts (631,498 and ~850,000) represent the fully solvated systems, which include the
+              protein/peptide, lipids, ions (KCl), and explicit TIP3P water molecules. The pure protein atom count is
+              only a few thousand.</p>
+            <p><strong>Why is the single-chain system larger (~850,000)?</strong> Although the hM1Dq+Gp&alpha; complex
+              has fewer protein residues than the hM1Dq+MT1 complex, its required X/Y box dimension was significantly
+              larger (188.52 &Aring; vs. 150 &Aring;). This larger area accommodated substantially more water
+              molecules, resulting in a higher total atom count.</p>
+            <p><strong>Simulation status:</strong> The 100 ns MD simulation was successfully completed for the hM1Dq +
+              MT1 system (631,498 atoms). The larger hM1Dq + Gp&alpha; system (~850,000 atoms) was not simulated in
+              this iteration due to computational resource limits and is listed as Future Work.</p>
             <p><strong>A.9 GROMACS MD</strong></p>
             <p>100 ns production MD has been completed for hM1Dq + MT1.</p>
             <p>MM-GBSA gave:</p>
@@ -2067,39 +2181,39 @@
             </table>
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-9-rmsd.png" alt="Figure 21. Backbone RMSD of the hM1Dq + MT1 membrane complex over the 100 ns simulation" loading="lazy" width="1268" height="715" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 21. Backbone RMSD of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 21. Backbone RMSD of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-9-rmsf.png" alt="Figure 22. Per-residue RMSF of the hM1Dq + MT1 membrane complex, with Asp105 (TM3, MT1 binding) marked" loading="lazy" width="1269" height="521" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 22. Per-residue RMSF of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 22. Per-residue RMSF of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-9-rg.png" alt="Figure 23. Radius of gyration of the hM1Dq + MT1 membrane complex over the 100 ns simulation" loading="lazy" width="1268" height="715" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 23. Radius of gyration of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 23. Radius of gyration of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
             </figure>
 
             <!-- The source document's A.7 lists total 38 explicitly named interface residues (20 hM1Dq + 18 MT1),
                  while its A.10 reports 50 interface residues (30 hM1Dq + 20 MT1). This page shows the explicit A.7
                  lists above and cites the A.10 total as recorded in the document. -->
             <p><strong>A.10 MM-GBSA + Per-residue</strong></p>
-            <p>Interface residues: SPICE identified 50 interface residues (30 on the hM1Dq side and 20 on the MT1
+            <p>Interface residues: MM-GBSA per-residue decomposition identified 50 interface residues (30 on the hM1Dq side and 20 on the MT1
               side). TRP:28&ndash;TYR:35 of MT1 are the main binding anchors. The full G&alpha; single-chain system is
               about 850,000 atoms and was listed as future work.</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
               <img src="../static/image/dry-lab/model/model-fig-a-10-mmgbsa.png" alt="Figure 24. MM-GBSA energy decomposition of hM1Dq + MT1: ΔVDWAALS −57.36, ΔEEL +32.76, ΔEGB −7.41, ΔESURF −8.36, ΔGGAS −24.60, ΔGSOLV −15.77, ΔTOTAL −40.37 kcal/mol" loading="lazy" width="1267" height="770" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 24. MM-GBSA energy terms of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 24. MM-GBSA energy terms of the hM1Dq + MT1 membrane complex (computational prediction results)</figcaption>
             </figure>
           </div>
         </div>
 
         <div id="model-path-b" class="content-card">
           <div class="content-text-frame">
-            <h2>Path B: Ste2p Gating System</h2>
+            <h2>Path B: Ste2 Gating System</h2>
 
-            <h3 id="model-path-b-prep">B.1 Ste2p Structure Preparation and OPM Processing</h3>
+            <h3 id="model-path-b-prep">B.1 Ste2 Structure Preparation and OPM Processing</h3>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
@@ -2162,14 +2276,14 @@
               </tbody>
             </table>
             <p>Processing steps: Download 7qb9.cif &rarr; remove non-polymer and non-A chains in PyMOL &rarr; save
-              Ste2p_OPM_chainA.pdb (2295 atoms).</p>
+              Ste2_OPM_chainA.pdb (2295 atoms).</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-1a-ste2p.png" alt="Figure 25. Schematic of the 7TM structure of Ste2p in its membrane embedding" loading="lazy" width="1269" height="987" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 25. 7TM structure of Ste2p (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-1a-ste2p.png" alt="Figure 25. Schematic of the 7TM structure of Ste2 in its membrane embedding" loading="lazy" width="1269" height="987" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 25. 7TM structure of Ste2 (computational prediction results)</figcaption>
             </figure>
 
-            <h3 id="model-path-b-b2">B.2 &alpha;-factor Inhibitory Peptide Design and AF2 Prediction</h3>
+            <h3 id="model-path-b-b2">B.2 Auto-inhibitory Peptides Design and AF2 Prediction</h3>
             <p>Method: ColabFold, msamode single_sequence, numrecycle 1, nummodels 1. All completed in approximately
               15 seconds:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
@@ -2207,7 +2321,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.033</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep5 (MT1_5)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep5</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">FHLLQLKPGQPMY</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">72.2</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.032</td>
@@ -2233,7 +2347,7 @@
               </tbody>
             </table>
 
-            <h3 id="model-path-b-docking">B.3 Ste2p &times; MT1_5 HADDOCK Docking</h3>
+            <h3 id="model-path-b-docking">B.3 Ste2 &times; pep5 (Auto-inhibitory peptide) HADDOCK Docking</h3>
             <p>Comparison of the best clusters for the 8 peptides:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
@@ -2247,56 +2361,56 @@
               </thead>
               <tbody>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep5</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;99.2</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">33</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.6</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_8</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep8</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;98.6</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">125</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">5.3</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_1</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;96.5</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">68</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.8</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_3</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep3</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C1</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;96.2</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">57</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.9</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_2</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep2</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C6</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;93.2</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.7</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_4</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep4</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C9</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;92.7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">6</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1.0</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_6</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep6</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C5</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;91.7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">13</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">0.9</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">MT1_7</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">pep7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">C7</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">&minus;89.9</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">8</td>
@@ -2304,23 +2418,24 @@
                 </tr>
               </tbody>
             </table>
-            <p>Screening conclusion: MT1_5 is the best overall (HADDOCK score &minus;99.2, RMSD 0.6 &Aring;, Zscore
+            <p>Screening conclusion: pep5 is the best overall (HADDOCK score &minus;99.2, RMSD 0.6 &Aring;, Zscore
               &minus;2.1, VdW contacts &minus;72.0).</p>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-3-haddock.png" alt="Figure 26. Bar chart of HADDOCK scores for the eight α-factor-derived peptides docked onto Ste2p; MT1_5 (red) is the best overall" loading="lazy" width="1269" height="755" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 26. HADDOCK scores of the eight peptides against Ste2p (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-3-haddock.png" alt="Figure 26. Bar chart of HADDOCK scores for the eight α-factor-derived peptides docked onto Ste2; pep5 (red) is the best overall" loading="lazy" width="1269" height="755" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 26. HADDOCK scores of the eight peptides against Ste2 (computational prediction results)</figcaption>
             </figure>
 
-            <h3 id="model-path-b-interface">B.4 SPICE Interface Analysis</h3>
-            <p>We used SPICE to perform interface analysis on the Ste2p &times; MT1_5 (Cluster 1) complex, with a
+            <h3 id="model-path-b-interface">B.4 Comprehensive SPICE Interaction Profiling</h3>
+            <p>To thoroughly understand the interaction mechanisms, we utilized the SPICE web server to comprehensively profile the binding interface. This analysis encompasses Contact Analysis (bond types and pairs), Interface Analysis (residue-level details), SASA Analysis (buried surface area), and downloadable Tabular Data.</p>
+            <p>We used SPICE to perform interface analysis on the Ste2 &times; pep5 (Cluster 1) complex, with a
               distance threshold of 5.0 &Aring;. The results revealed numerous polar interactions and hydrophobic
               contacts.</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Ste2p Residue</th>
-                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">MT1_5 Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Ste2 Residue</th>
+                  <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">pep5 Residue</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Interaction</th>
                   <th style="border:1px solid #D4A574; padding:8px; text-align:left; color:#5D3A1A; font-weight:700;">Distance (&Aring;)</th>
                 </tr>
@@ -2461,27 +2576,27 @@
               </tbody>
             </table>
             <p>Interface residue statistics (SPICE definition, distance threshold 5.0 &Aring;):</p>
-            <p>Ste2p-side interface residues: 27 (TYR A:101, TYR A:106, TYR A:111, ALA A:112, GLY A:115, TYR A:128,
+            <p>Ste2-side interface residues: 27 (TYR A:101, TYR A:106, TYR A:111, ALA A:112, GLY A:115, TYR A:128,
               THR A:192, ASP A:195, VAL A:196, SER A:197, ALA A:198, THR A:199, GLN A:200, LYS A:202, PHE A:204,
               ASN A:205, THR A:208, ILE A:209, TYR A:266, SER A:267, LEU A:268, LYS A:269, PRO A:270, GLY A:273,
               THR A:274, ASP A:275, THR A:278)</p>
-            <p>MT1_5-side interface residues: all 12 (PHE B:1, HIS B:2, LEU B:3, LEU B:4, GLN B:5, LEU B:6, LYS B:7,
+            <p>pep5-side interface residues: all 12 (PHE B:1, HIS B:2, LEU B:3, LEU B:4, GLN B:5, LEU B:6, LYS B:7,
               PRO B:8, GLY B:9, GLN B:10, PRO B:11, MET B:12)</p>
-            <p>Conclusion: Ste2p primarily binds to MT1_5 through ECL2 (TYR A:106, TYR A:111, ALA A:112, GLY A:115,
+            <p>Conclusion: Ste2 primarily binds to pep5 through ECL2 (TYR A:106, TYR A:111, ALA A:112, GLY A:115,
               TYR A:128), ECL3 (THR A:192, ASP A:195, VAL A:196, SER A:197, ALA A:198, THR A:199, GLN A:200,
               LYS A:202, PHE A:204, ASN A:205, THR A:208, ILE A:209) and TM7 (TYR A:266, SER A:267, LEU A:268,
               LYS A:269, PRO A:270, GLY A:273, THR A:274, ASP A:275, THR A:278). The N-terminus (PHE1HIS2) and middle
-              region (LYS7PRO8) of MT1_5 are the primary anchors.</p>
-            <p><strong>Note:</strong> SPICE contact residues (5.0 &Aring;) yielded 38/39 residues, whereas the MM-GBSA
-              per-residue decomposition (6.0 &Aring;) captured 50/63 interface residues.</p>
+              region (LYS7PRO8) of pep5 are the primary anchors.</p>
+            <p><strong>Note:</strong> SPICE contact residues (5.0 &Aring;) yielded 39 residues for Path B, whereas the MM-GBSA
+              per-residue decomposition (6.0 &Aring;) captured 63 interface residues.</p>
 
             
             
 <div class="model-report" id="model-report-ste2p" data-report-group data-report-key="Ste2p">
   <div class="model-report__head">
-    <h3 class="model-report__title" data-no-fold>Interaction Reports: Ste2p × MT1_5 Cluster 1</h3>
-    <p class="model-report__meta">Path B gating complex &middot; Ste2p × MT1_5 (Cluster 1)</p>
-    <p class="model-report__desc">Four analyses of the Path B gating complex. The alpha-factor-derived peptide MT1_5 binds mainly through ECL2, ECL3 and TM7 of Ste2p.</p>
+    <h3 class="model-report__title" data-no-fold>Interaction Reports: Ste2 × pep5 Cluster 1</h3>
+    <p class="model-report__meta">Path B gating complex &middot; Ste2 × pep5 (Cluster 1)</p>
+    <p class="model-report__desc">Four analyses of the Path B gating complex. The auto-inhibitory peptide pep5 binds mainly through ECL2, ECL3 and TM7 of Ste2.</p>
   </div>
 
   <ul class="model-report__links">
@@ -2603,13 +2718,12 @@
             </table>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-5-docking.png" alt="Figure 27. Schematic of the Ste2p + MT1_5 docking: MT1_5 (yellow) binds the extracellular face of Ste2p (grey) in its membrane embedding" loading="lazy" width="1269" height="987" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 27. Schematic of the Ste2p + MT1_5 docking (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-5-docking.png" alt="Figure 27. Schematic of the Ste2 + pep5 docking: pep5 (yellow) binds the extracellular face of Ste2 (grey) in its membrane embedding" loading="lazy" width="1269" height="987" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 27. Schematic of the Ste2 + pep5 docking (computational prediction results)</figcaption>
             </figure>
 
             <p><strong>B.6 GROMACS MD</strong></p>
-            <p>100 ns production MD has been completed, with a performance of 68 ns/day. The backbone RMSD stabilized at
-              0.4100 nm (90&ndash;100 ns mean).</p>
+            <p>100 ns production MD has been completed, with a performance of 68 ns/day. The backbone RMSD stabilized at 0.4651 nm (90&ndash;100 ns mean).</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
@@ -2649,29 +2763,29 @@
               </tbody>
             </table>
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-6-rmsd.png" alt="Figure 28. Backbone RMSD of the Ste2p + MT1_5 membrane complex over the 100 ns simulation, with the 90–100 ns mean of 0.4100 nm marked" loading="lazy" width="1267" height="569" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 28. Backbone RMSD of the Ste2p + MT1_5 membrane complex (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-6-rmsd-fix.png" alt="Figure 28. Backbone RMSD of the Ste2 + pep5 membrane complex over the 100 ns simulation, with the 90–100 ns mean of 0.4651 nm marked" loading="lazy" width="1267" height="569" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 28. Backbone RMSD of the Ste2 + pep5 membrane complex (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-6-rmsf.png" alt="Figure 29. Per-residue RMSF of the Ste2p + MT1_5 membrane complex, with the ECL2, ECL3 and TM7 binding sites shaded" loading="lazy" width="3567" height="1466" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 29. Per-residue RMSF of the Ste2p + MT1_5 membrane complex, ECL2 / ECL3 / TM7 binding sites shaded (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-6-rmsf-fix.png" alt="Figure 29. Per-residue RMSF of the Ste2 + pep5 membrane complex, with the ECL2, ECL3 and TM7 binding sites shaded" loading="lazy" width="3567" height="1466" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 29. Per-residue RMSF of the Ste2 + pep5 membrane complex, ECL2 / ECL3 / TM7 binding sites shaded (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-6-rg.png" alt="Figure 30. Radius of gyration of the Ste2p + MT1_5 membrane complex over the 100 ns simulation" loading="lazy" width="1268" height="715" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 30. Radius of gyration of the Ste2p + MT1_5 membrane complex (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-6-rg.png" alt="Figure 30. Radius of gyration of the Ste2 + pep5 membrane complex over the 100 ns simulation" loading="lazy" width="1268" height="715" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 30. Radius of gyration of the Ste2 + pep5 membrane complex (computational prediction results)</figcaption>
             </figure>
 
             <figure style="margin:1.5rem 0; text-align:center;">
-              <img src="../static/image/dry-lab/model/model-fig-b-7-mmgbsa.png" alt="Figure 31. MM-GBSA energy decomposition of Ste2p + MT1_5: ΔVDWAALS −52.93, ΔEEL −123.14, ΔEGB +152.61, ΔESURF −7.97, ΔGGAS −176.07, ΔGSOLV +144.63, ΔTOTAL −31.43 kcal/mol" loading="lazy" width="1267" height="769" style="max-width:100%; height:auto; border:1px solid #ddd;">
-              <figcaption style="margin-top:.5rem; color:#666; font-size:.9rem;">Figure 31. MM-GBSA energy terms of the Ste2p + MT1_5 membrane complex (computational prediction results)</figcaption>
+              <img src="../static/image/dry-lab/model/model-fig-b-7-mmgbsa.png" alt="Figure 31. MM-GBSA energy decomposition of Ste2 + pep5: ΔVDWAALS −52.93, ΔEEL −123.14, ΔEGB +152.61, ΔESURF −7.97, ΔGGAS −176.07, ΔGSOLV +144.63, ΔTOTAL −31.43 kcal/mol" loading="lazy" width="1267" height="769" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 31. MM-GBSA energy terms of the Ste2 + pep5 membrane complex (computational prediction results)</figcaption>
             </figure>
 
             <p><strong>B.7 MM-GBSA + Per-residue</strong></p>
-            <p>Ste2p + MT1_5 MM-GBSA results:</p>
+            <p>Ste2 + pep5 MM-GBSA results:</p>
             <p>Per-residue decomposition (63 interface residues):</p>
-            <p>Key residues on the Ste2p receptor side (ECL2/ECL3 regions):</p>
+            <p>Key residues on the Ste2 receptor side (ECL2/ECL3 regions):</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
@@ -2698,9 +2812,35 @@
                 </tr>
               </tbody>
             </table>
-            <p>All 12 residues on the MT1_5 ligand side:</p>
+            <p>All 12 residues on the pep5 ligand side:</p>
             <p>PHE1, HSD2, LEU3, LEU4, GLN5, LEU6, LYS7, PRO8, GLY9, GLN10, PRO11, MET12</p>
-            <p>The Ste2p + Gpa1 coupling was not run: listed as Future Work.</p>
+            <p>The Ste2 + Gpa1 coupling was not run: listed as Future Work.</p>
+
+            <h3 id="model-path-b-wetlab">B.8 Model-to-Wet Lab Validation: Ste2 Gating Construct Assembly</h3>
+            <p><strong>Bridging Dry and Wet Lab: From Prediction to Construction</strong></p>
+            <p>Our computational screening evaluated 8 auto-inhibitory peptide variants. Among them, one
+              auto-inhibitory peptide (FHLLQLKPGQPMY) achieved the best HADDOCK score (&minus;99.2). However, for the
+              initial wet-lab assembly, we intentionally selected pep1 (CRGPQLKPGQPMY) as the baseline gating peptide.
+              This decision was driven by the fact that pep1 shares an identical C-terminal core (QLKPGQPMY) with the native
+              &alpha;-factor pheromone (WHWLQLKPGQPMY). This core sequence is critical for recognition by the native Ste2 receptor, ensuring optimal structural compatibility and membrane trafficking in vivo. The N-terminal extension of pep5 (FHLL...) improved docking scores in silico, but we prioritized the native physiological compatibility for the first wet-lab iteration.</p>
+            <p>The optimized auto-inhibitory peptide remains our top computationally designed candidate, and a direct
+              comparative functional assay between pep1 and the optimized auto-inhibitory peptide will be conducted in
+              the next phase of the DBTL cycle.</p>
+            <p>To demonstrate the practical utility of our Path B model, we translated the in silico gating concept
+              into a physical yeast chassis. Based on our docking insights, we selected the auto-inhibitory peptide and
+              fused it with an anti-HA nanobody to the N-terminus of the native Ste2 receptor.</p>
+            <p>Our model provided the exact sequence blueprint for this complex fusion. As verified in the wet lab, the
+              construct was successfully integrated into the yeast genome. Colony PCR and Sanger sequencing confirmed a
+              96.90% sequence identity with our computationally designed reference.</p>
+
+            <figure style="margin:1.5rem 0; text-align:center;">
+              <img src="../static/image/dry-lab/model/model-fig-b-8-wetlab-validation.png" alt="Figure 32. Wet-lab validation of the model-guided Ste2 gating construct: A and B show the selective-plating plates of the transformed yeast colonies; C shows the colony PCR and agarose gel electrophoresis confirming integration of the designed fusion sequence" loading="lazy" width="830" height="382" style="max-width:100%; height:auto; border:1px solid #ddd;">
+              <figcaption style="margin-top:.5rem; color:#666; font-size: 0.9375rem;">Figure 32. Wet-lab validation of the model-guided Ste2 gating construct. Colony PCR and sequencing confirmed the successful assembly of the designed fusion sequence.</figcaption>
+            </figure>
+
+            <p><strong>The Closed Loop:</strong> This successful assembly bridges our computational predictions and
+              experimental engineering. The model successfully guided the design of a functional, engineered yeast
+              receptor, which is now ready for downstream signaling assays.</p>
           </div>
         </div>
 
@@ -2742,7 +2882,7 @@
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Single-chain score is better, supporting the simplification decision</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">M1MT7 superposition with predicted hM1Dq</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">M1 superposition with predicted hM1Dq</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Active sites are consistent</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
@@ -2788,7 +2928,7 @@
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">The orthosteric site of Ste2p is occupied by MT1_5</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">The orthosteric site of Ste2 is occupied by the auto-inhibitory peptide pep5</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Basis for Path B gating design</td>
                 </tr>
                 
@@ -2815,7 +2955,7 @@
                 </tr>
                 
                 <tr style="border-bottom:1px solid #D4A574;">
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Single-chain simplification of hM1Dq + Gpaα</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Single-chain simplification of hM1Dq + Gα</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Does not include Gβγ and may overestimate the conformational stability of Gα</td>
                 </tr>
                 
@@ -2849,23 +2989,17 @@
                 Exit 139; fix: truncate residues 461&ndash;512 and switch to a single chain.</li>
               <li>Accidental incorporation of CHL1 cholesterol: In one CHARMM-GUI run, ergosterol was mistakenly
                 replaced with cholesterol (360 CHL1); corrected after reconstruction.</li>
-              <li>Membrane system too large: hM1Dq + Gpa1 total has 584,325 atoms and cannot run MD stably under WSL;
-                hM1Dq + Gpa&alpha; single chain has approximately 850,000 atoms, estimated to take 2&ndash;3 weeks,
-                listed as Future Work.</li>
-              <li>Ste2p + Gpa1 coupling was not run: listed as Future Work.</li>
-              <li>The Ste2p + MT1_5 complex was simulated without its downstream Gpa1 coupling partner, which may
+              <li>Membrane system size limitation: While the hM1Dq + Gpa1 trimer contains 584,325 atoms, the simplified hM1Dq + Gp&alpha; single-chain system expanded to ~850,000 atoms due to the requirement for a larger explicit solvent box. Due to computational resource limits and the estimated 2&ndash;3 weeks required for a 100 ns simulation, the full single-chain membrane MD was listed as Future Work.</li>
+              <li>Ste2 + Gpa1 coupling was not run: listed as Future Work.</li>
+              <li>The Ste2 + pep5 complex was simulated without its downstream Gpa1 coupling partner, which may
                 affect the conformational sampling of the intracellular loops.</li>
             </ul>
 
             <p><strong>Membrane MD validation of G protein coupling</strong></p>
-            <p>This work has completed membrane MD validation of two gating interfaces, hM1Dq&ndash;MT1 and
-              Ste2p&ndash;MT1_5. For the G protein coupling interfaces (hM1Dq&ndash;Gpa1 and Ste2p&ndash;Gpa1), we have
-              completed HADDOCK semi-flexible refinement and SPICE interface analysis and identified key coupling
-              residues. Because the complete Gpa1 trimer membrane system (approximately 850,000 atoms) requires
-              approximately 2&ndash;3 weeks to complete 100 ns MD under the available computational resources, we list
-              it as next-stage work. The current HADDOCK data (Gpa&alpha; single-chain score = &minus;149.4, superior to
-              total = &minus;131.7) already support the conclusion that the coupling interface is primarily mediated by
-              G&alpha;.</p>
+            <p>This work has completed membrane MD validation for two gating interfaces, hM1Dq&ndash;MT1 and
+              Ste2&ndash;pep5. For the G protein coupling interfaces (hM1Dq&ndash;Gpa1 and Ste2&ndash;Gpa1), we have completed HADDOCK semi-flexible refinement and SPICE interface analysis to identify key coupling residues.
+
+              Because the complete hM1Dq + Gp&alpha; single-chain membrane system required a larger simulation box, its total atom count expanded to approximately 850,000 atoms (including explicit solvent). Running a 100 ns MD for this system under our available computational resources would take 2&ndash;3 weeks, so we have listed it as next-stage work. The current HADDOCK data (Gp&alpha; single-chain score = &minus;149.4, superior to total = &minus;131.7) already support the conclusion that the coupling interface is primarily mediated by               G&alpha;.</p>
 
             <p><strong>Reproducibility.</strong> Parameters are recorded as follows:</p>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
@@ -2924,8 +3058,12 @@
               source code and parameter files are also available in the iGEM Registry Part pages or upon request.</p>
             <!-- The source document also lists its local directory tree (E:\ECHOYEAST\...); a local filesystem
                  layout is not meaningful for wiki readers and is therefore not reproduced here. -->
+          </div>
+        </div>
 
-            <p><strong>Best Model SelfAssessment</strong></p>
+        <div id="model-best-model" class="content-card">
+          <div class="content-text-frame">
+            <h2>Best Model Self-Assessment</h2>
             <table style="width:100%; border-collapse:collapse; margin:1rem 0; background:#FFFFFF;">
               <thead>
                 <tr style="border-bottom:2px solid #8B5A2B; background:#FCE7CB;">
@@ -2939,66 +3077,36 @@
                 <tr style="border-bottom:1px solid #D4A574;">
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">1. How impressive are the modeling/computational methods?</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Integration of 5 independent methods (ClusPro / HADDOCK / PyMOL+SPICE / 100 ns MD / MM-GBSA); parallel modeling of two gating systems; positive control validation</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Membrane MD for some systems has not been run (Gpa1)</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Membrane MD for some systems has not been run (hM1Dq + Gp&alpha; single-chain complex)</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Listed as Future Work, with resource limitations clearly stated</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">2. Does it aid understanding, prediction, and design?</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Identification of R1aB6 as the optimal candidate; discovery of the ARG-B:31 hotspot; proposal of the R31A mutant</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">No wet-lab validation yet</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Identification of R1aB6 as the optimal candidate; discovery of the ARG-B:31 hotspot; proposal of the R31A mutant; designed the Ste2 gating fusion construct</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">No wet-lab SPR data for the R31A mutant affinity yet</td>
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Propose an SPR + ELISA experimental plan</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">3. Was it developed/validated using experimental or related data?</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Positive control 9VH4 redocking (i-RMSD = 2.113 &Aring;); AF2 vs 5CXV superposition (RMSD 1.568 &Aring;); M1MT7 overlap validation</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">No wet-lab experiments</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Clearly define experimental plans in Future Work</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Positive control 9VH4 redocking (i-RMSD = 2.113 &Aring;); AF2 vs 5CXV superposition. AND Wet-lab validation: Model-designed Ste2 gating construct (pep + nanobody) was successfully assembled and verified via colony PCR and Sanger sequencing</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Construct assembly validated, but functional gating signaling has not yet been tested</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Future experiments will focus on the functional fluorescent assay to test the actual gating signaling</td>
                 </tr>
                 <tr style="border-bottom:1px solid #D4A574;">
                   <td style="border:1px solid #D4A574; padding:8px; color:#333333;">4. Can it serve as a good example for others?</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Complete workflow, reproducible parameters, GitHub code and data; interactive Card Game demonstration</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Some data remain to be supplemented</td>
-                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Continue organizing <code>E:\ECHOYEAST</code> and upload it to GitHub</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Complete workflow, reproducible parameters, GitHub code and data; interactive Card Game demonstration; successfully bridged dry and wet lab</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Some MD trajectory raw data remain to be compressed</td>
+                  <td style="border:1px solid #D4A574; padding:8px; color:#333333;">Continue organizing all raw data and upload everything to GitHub</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <div id="model-references" class="content-card">
+        <div id="model-conclusion" class="content-card">
           <div class="content-text-frame">
-            <h2>References &amp; Conclusion</h2>
+            <h2>Conclusion</h2>
 
-            <h3 id="model-references-list">References</h3>
-            <ol>
-              <li>Kozakov D, et al. The ClusPro web server for protein&ndash;protein docking. <i>Nat Protoc</i>. 2017;12(2):255&ndash;278.</li>
-              <li>Desta IT, et al. Performance and Its Limits in Rigid Body Protein&ndash;Protein Docking. <i>Structure</i>. 2020;28(9):1071&ndash;1081.</li>
-              <li>Dominguez C, et al. HADDOCK: a protein&ndash;protein docking approach based on biochemical or biophysical information. <i>J Am Chem Soc</i>. 2003;125(7):1731&ndash;1737.</li>
-              <li>Honorato RV, et al. The HADDOCK2.4 web server for integrative modeling of biomolecular complexes. <i>Nat Protoc</i>. 2024;19:3219&ndash;3241.</li>
-              <li>Abraham MJ, et al. GROMACS: High performance molecular simulations through multilevel parallelism from laptops to supercomputers. <i>SoftwareX</i>. 2015;1&ndash;2:19&ndash;25.</li>
-              <li>Vald&eacute;s-Tresanco MS, et al. gmx_MMPBSA: A New Tool to Perform End-State Free Energy Calculations with GROMACS. <i>J Chem Theory Comput</i>. 2021;17(10):6281&ndash;6291.</li>
-              <li>Jumper J, et al. Highly accurate protein structure prediction with AlphaFold. <i>Nature</i>. 2021;596:583&ndash;589.</li>
-              <li>Mirdita M, et al. ColabFold: making protein folding accessible to all. <i>Nat Methods</i>. 2022;19:679&ndash;682.</li>
-              <li>Ashraf FB, Lonardi S. Comparative structural analysis of protein complexes with SPICE. <i>Nucleic Acids Res</i>. 2026;54(W1):W321&ndash;W326.</li>
-              <li>Jo S, et al. CHARMM-GUI: A Web-Based Graphical User Interface for CHARMM. <i>J Comput Chem</i>. 2008;29(11):1859&ndash;1865.</li>
-              <li>Lomize MA, et al. OPM database and PPM web server: resources for positioning of proteins in membranes. <i>Nucleic Acids Res</i>. 2012;40:D370&ndash;D376.</li>
-              <li>Pettersen EF, et al. UCSF ChimeraX: Structure visualization for researchers, educators, and developers. <i>Protein Sci</i>. 2021;30(1):70&ndash;82.</li>
-              <li>Schr&ouml;dinger, LLC. The PyMOL Molecular Graphics System, Version 2.x.</li>
-              <li>Case DA, et al. Amber 2020. University of California, San Francisco.</li>
-              <li>Berman HM, et al. The Protein Data Bank. <i>Nucleic Acids Res</i>. 2000;28:235&ndash;242.</li>
-              <li>Lindorff-Larsen K, et al. <i>Proteins</i>. 2010;78(8):1950&ndash;1958. (Amber99SB-ILDN)</li>
-              <li>Huang J, et al. <i>Nat Methods</i>. 2017;14(1):71&ndash;73. (CHARMM36m)</li>
-              <li>Klauda JB, et al. <i>J Phys Chem B</i>. 2010;114(23):7830&ndash;7843. (CHARMM36 lipid)</li>
-              <li>Jorgensen WL, et al. <i>J Chem Phys</i>. 1983;79(2):926&ndash;935. (TIP3P)</li>
-              <li>Bussi G, et al. <i>J Chem Phys</i>. 2007;126(1):014101. (V-rescale)</li>
-              <li>Parrinello M, Rahman A. <i>J Appl Phys</i>. 1981;52(12):7182&ndash;7190. (Parrinello-Rahman)</li>
-              <li>Essmann U, et al. <i>J Chem Phys</i>. 1995;103(19):8577&ndash;8593. (PME)</li>
-              <li>Ejsing CS, et al. <i>Proc Natl Acad Sci USA</i>. 2009;106(7):2136&ndash;2141.</li>
-              <li>Zinser E, et al. <i>J Bacteriol</i>. 1991;173(6):2026&ndash;2034.</li>
-              <li>van der Rest ME, et al. <i>Microbiol Rev</i>. 1995;59(2):303&ndash;322.</li>
-            </ol>
-
-            <h3 id="model-conclusion">Conclusion</h3>
             <p>The modeling work of EchoYeast embodies the core value of the iGEM computational-first / model-guided
               strategy. Starting from 17 candidate nanobodies, through a five-stage multiscale workflow of ClusPro
               &rarr; HADDOCK &rarr; PyMOL/SPICE &rarr; GROMACS &rarr; gmx_MMPBSA, combined with positive control 9VH4
@@ -3006,10 +3114,10 @@
               ARG-B:31, and proposed a testable hypothesis, the R31A mutant.</p>
             <p>In parallel, we advanced the modeling of two gating systems:</p>
             <p>Path A: hM1Dq + MT1 (&Delta;TOTAL = &minus;40.37 &plusmn; 1.27 kcal/mol, 50 interface residues)</p>
-            <p>Path B: Ste2p + MT1_5 (&Delta;TOTAL = &minus;31.43 &plusmn; 3.46 kcal/mol, 63 interface residues)</p>
-            <p>Both have completed 100 ns membrane MD, MM-GBSA, and per-residue decomposition, and through SPICE
-              interface analysis revealed the specific interaction networks, providing atomic-level structural support
-              for the whole-cell biosensor of EchoYeast.</p>
+            <p>Path B: Ste2 + pep5 (&Delta;TOTAL = &minus;31.43 &plusmn; 3.46 kcal/mol, 63 interface residues)</p>
+            <p>Both gating interfaces (hM1Dq&ndash;MT1 and Ste2&ndash;pep5) have completed 100 ns membrane MD, MM-GBSA,
+              and per-residue decomposition, and through SPICE interface analysis revealed the specific interaction
+              networks, providing atomic-level structural support for the whole-cell biosensor of EchoYeast.</p>
             <p>The value of the model lies not in replacing wet-lab experiments, but in providing precise targets and
               prioritization for them &mdash; this is precisely the direction advocated by the iGEM Best Model Award.
               All simulation inputs, parameter files, and analysis scripts are available at the
@@ -3017,128 +3125,1070 @@
               ensuring full reproducibility of the computational workflow.</p>
             <p><strong>Note:</strong> The repository is public. If you encounter network issues accessing GitHub, the
               source code and parameter files are also available in the iGEM Registry Part pages or upon request.</p>
+
+          </div>
+        </div>
+
+        <div id="model-references" class="content-card">
+          <div class="content-text-frame">
+            <h2>References</h2>
+
+            <ol class="ref-list">
+              <li id="model-reference-1">Kozakov D, et al. The ClusPro web server for protein&ndash;protein docking. <i>Nat Protoc</i>. 2017;12(2):255&ndash;278.</li>
+              <li id="model-reference-2">Desta IT, et al. Performance and Its Limits in Rigid Body Protein&ndash;Protein Docking. <i>Structure</i>. 2020;28(9):1071&ndash;1081.</li>
+              <li id="model-reference-3">Dominguez C, et al. HADDOCK: a protein&ndash;protein docking approach based on biochemical or biophysical information. <i>J Am Chem Soc</i>. 2003;125(7):1731&ndash;1737.</li>
+              <li id="model-reference-4">Honorato RV, et al. The HADDOCK2.4 web server for integrative modeling of biomolecular complexes. <i>Nat Protoc</i>. 2024;19:3219&ndash;3241.</li>
+              <li id="model-reference-5">Abraham MJ, et al. GROMACS: High performance molecular simulations through multilevel parallelism from laptops to supercomputers. <i>SoftwareX</i>. 2015;1&ndash;2:19&ndash;25.</li>
+              <li id="model-reference-6">Vald&eacute;s-Tresanco MS, et al. gmx_MMPBSA: A New Tool to Perform End-State Free Energy Calculations with GROMACS. <i>J Chem Theory Comput</i>. 2021;17(10):6281&ndash;6291.</li>
+              <li id="model-reference-7">Jumper J, et al. Highly accurate protein structure prediction with AlphaFold. <i>Nature</i>. 2021;596:583&ndash;589.</li>
+              <li id="model-reference-8">Mirdita M, et al. ColabFold: making protein folding accessible to all. <i>Nat Methods</i>. 2022;19:679&ndash;682.</li>
+              <li id="model-reference-9">Ashraf FB, Lonardi S. Comparative structural analysis of protein complexes with SPICE. <i>Nucleic Acids Res</i>. 2026;54(W1):W321&ndash;W326.</li>
+              <li id="model-reference-10">Jo S, et al. CHARMM-GUI: A Web-Based Graphical User Interface for CHARMM. <i>J Comput Chem</i>. 2008;29(11):1859&ndash;1865.</li>
+              <li id="model-reference-11">Lomize MA, et al. OPM database and PPM web server: resources for positioning of proteins in membranes. <i>Nucleic Acids Res</i>. 2012;40:D370&ndash;D376.</li>
+              <li id="model-reference-12">Pettersen EF, et al. UCSF ChimeraX: Structure visualization for researchers, educators, and developers. <i>Protein Sci</i>. 2021;30(1):70&ndash;82.</li>
+              <li id="model-reference-13">Huang J, et al. <i>Nat Methods</i>. 2017;14(1):71&ndash;73. (CHARMM36m)</li>
+              <li id="model-reference-14">Klauda JB, et al. <i>J Phys Chem B</i>. 2010;114(23):7830&ndash;7843. (CHARMM36 lipid)</li>
+              <li id="model-reference-15">Jorgensen WL, et al. <i>J Chem Phys</i>. 1983;79(2):926&ndash;935. (TIP3P)</li>
+              <li id="model-reference-16">Bussi G, et al. <i>J Chem Phys</i>. 2007;126(1):014101. (V-rescale)</li>
+              <li id="model-reference-17">Parrinello M, Rahman A. <i>J Appl Phys</i>. 1981;52(12):7182&ndash;7190. (Parrinello-Rahman)</li>
+              <li id="model-reference-18">Essmann U, et al. <i>J Chem Phys</i>. 1995;103(19):8577&ndash;8593. (PME)</li>
+              <li id="model-reference-19">Ejsing CS, et al. <i>Proc Natl Acad Sci USA</i>. 2009;106(7):2136&ndash;2141.</li>
+              <li id="model-reference-20">Zinser E, et al. <i>J Bacteriol</i>. 1991;173(6):2026&ndash;2034.</li>
+              <li id="model-reference-21">van der Rest ME, et al. <i>Microbiol Rev</i>. 1995;59(2):303&ndash;322.</li>
+            </ol>
           </div>
         </div>
       </div>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+/**
+ * Model page: interactive docking card game (semi-flexible only).
+ *
+ * The payload is inlined by the page template:
+ *   window.MODEL_GAME_DATA   real HADDOCK 2.5 output (static/data/dry-lab/model/game-docking.json)
+ *
+ * The game covers HADDOCK 2.5 semi-flexible refinement of 5 nanobodies against H1N1 HA only.
+ *
+ * Behaviour the page promises:
+ *   - picking one card draws that molecule on its own; adding the antigen card draws the docked complex
+ *   - each nanobody card shows the HADDOCK score of its best cluster
+ *   - the cluster selector lists that nanobody's clusters with score, RMSD, structure count and energy terms
+ *   - card faces carry the antibody / antigen artwork from the project's card-game icon set
+ */
+(function () {
+  'use strict';
+
+  var DATA = window.MODEL_GAME_DATA;
+  var root = document.getElementById('model-game');
+  if (!DATA || !root) {
+    return;
+  }
+
+  // CDN 姿态载荷脚本直接写 window.MODEL_POSE_DATA[key]；页面自身不定义该对象时，
+  // 每个载荷脚本都会抛 TypeError，3D 只能退回本地 .pdb.gz 回退（线上无此文件）。
+  window.MODEL_POSE_DATA = window.MODEL_POSE_DATA || {};
+
+  var basePath = root.getAttribute('data-base-path') || '';
+
+  // 站点根由请求的脚本根注入（冻结期为 /szpu-china，本地预览为 ""），
+  // 不能用 data-base-path 的相对值推算：线上同一个页面有两种 URL 形态
+  // （/szpu-china/model 与 /szpu-china/model/），相对基准在前者下会被当成文件名而丢掉一级，
+  // 3Dmol 曾因此被请求到站点根下（丢失一级路径）而直接 404。
+  var SITE_ROOT = "../";
+
+  var structBase = SITE_ROOT + DATA.structureBase;
+  var PALETTE = ['#8B5A2B', '#3F6B7A', '#A8442F', '#4F7A3A'];
+
+  var el = {
+    antibodies: document.getElementById('model-game-antibodies'),
+    antigens: document.getElementById('model-game-antigens'),
+    slotAb: document.getElementById('model-game-slot-antibody'),
+    slotAg: document.getElementById('model-game-slot-antigen'),
+    viewer: document.getElementById('model-game-viewer'),
+    note: document.getElementById('model-game-viewer-note'),
+    message: document.getElementById('model-game-viewer-message'),
+    ranking: document.getElementById('model-game-ranking'),
+    result: document.getElementById('model-game-result'),
+    select: document.getElementById('model-game-select'),
+    selectLabel: document.getElementById('model-game-select-label'),
+    status: document.getElementById('model-game-status'),
+    fallback: document.getElementById('model-game-fallback'),
+    rail: document.getElementById('model-game-rail'),
+    railToggle: document.getElementById('model-game-rail-toggle'),
+    load3d: document.getElementById('model-game-load3d'),
+    style: document.getElementById('model-game-style'),
+    flip: document.getElementById('model-game-viewer-toggle')
+  };
+
+  var state = { antibody: null, antigen: null, cluster: null, model: null, style: 'cartoon' };
+  var viewer = null;
+  var molPromise = null;
+  var lastPdb = '';
+  var lastSplit = false;
+
+  // ------------------------------------------------------------------ helpers
+  function h(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) {
+      n.className = cls;
+    }
+    if (text !== undefined && text !== null) {
+      n.textContent = String(text);
+    }
+    return n;
+  }
+
+  function minus(value, digits) {
+    return typeof value === 'number'
+      ? value.toFixed(digits === undefined ? 2 : digits).replace('-', MINUS)
+      : EMDASH;
+  }
+
+  function say(text) {
+    if (el.status) {
+      el.status.textContent = text || '';
+    }
+  }
+
+  function warn(text) {
+    if (!el.message) {
+      return;
+    }
+    el.message.textContent = text || '';
+    el.message.hidden = !text;
+  }
+
+  function byId(list, id) {
+    for (var i = 0; i < list.length; i += 1) {
+      if (list[i].id === id) {
+        return list[i];
+      }
+    }
+    return null;
+  }
+
+  /** 半柔性只跑过 H1N1，卡牌抗原列表就是数据里的全部抗原。 */
+  function allowedAntigens() {
+    return DATA.antigens.slice();
+  }
+
+  /** 卡牌图标：模型页把图标目录作为 data 属性挂在容器上。 */
+  function iconUrl(file) {
+    if (!file) {
+      return '';
+    }
+    if (/^(https?:)?\//.test(file)) {
+      return file;
+    }
+    var base = root.getAttribute('data-icon-base') || '';
+    return base + file;
+  }
+
+  // ------------------------------------------------------------------ 3D
+  var MINUS = '−';
+  var EMDASH = '—';
+  var TIMES = '×';
+  var EMD = '—';
+  var ELL = '…';
+  var DOT = '·';
+  var DEG = 'Å';
+  var PM = '±';
+
+  function load3Dmol() {
+    if (window.$3Dmol) {
+      return Promise.resolve(window.$3Dmol);
+    }
+    if (molPromise) {
+      return molPromise;
+    }
+    molPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = SITE_ROOT + 'static/js/3dmol/3Dmol-min.js';
+      s.onload = function () {
+        window.$3Dmol ? resolve(window.$3Dmol) : reject(new Error('3Dmol did not initialise'));
+      };
+      s.onerror = function () {
+        reject(new Error('3Dmol could not be loaded'));
+      };
+      document.head.appendChild(s);
+    });
+    return molPromise;
+  }
+
+  /* 结构载荷：复合物与单分子都压成 pose-*.js 放在 iGEM CDN
+     （§16.5 合规：数据走 static.igem.wiki，仓库内不放结构二进制）。
+     线上取 CDN；本地预览若 CDN 不可达则回退到仓库内 .pdb.gz。 */
+  var POSE_BASE = (window.MEDIA_BASE || 'https://static.igem.wiki/teams/6373/wiki') +
+    '/lab/drylab/model/pose-js-payload/';
+  var poseLoading = {};
+
+  function poseRef(rel) {
+    // complexes/flex/R1aA5_H1N1_c1_m1.pdb.gz -> R1aA5_H1N1_flex -> pose-r1a5-h1n1-flex.js
+    var m = /([A-Za-z0-9]+)_(H1N1)_(c\d+_m\d+)\.pdb\.gz$/i.exec(rel);
+    if (m) {
+      var key = m[1] + '_' + m[2] + '_flex';
+      return { key: key, file: 'pose-' + key.toLowerCase().replace(/_/g, '-') + '.js' };
+    }
+    // nanobodies/R1aB6.pdb.gz -> R1aB6_nanobody
+    m = /(?:^|\/)(?:nanobodies|antibodies)\/([A-Za-z0-9]+)\.pdb\.gz$/i.exec(rel);
+    if (m) {
+      return { key: m[1] + '_nanobody', file: 'pose-nanobody-' + m[1].toLowerCase() + '.js' };
+    }
+    // antigens/native/H1N1_native.pdb.gz -> H1N1_native
+    m = /(?:^|\/)antigens\/(native|processed)\/([A-Za-z0-9]+)_\1\.pdb\.gz$/i.exec(rel);
+    if (m) {
+      var variant = m[1].toLowerCase();
+      return {
+        key: m[2] + '_' + variant,
+        file: 'pose-antigen-' + m[2].toLowerCase() + '-' + variant + '.js'
+      };
+    }
+    return null;
+  }
+
+  function b64Floats(b64) {
+    var bin = window.atob(b64);
+    var u8 = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i += 1) {
+      u8[i] = bin.charCodeAt(i);
+    }
+    return new Float32Array(u8.buffer);
+  }
+
+  function pad(v, n) {
+    var s = String(v);
+    while (s.length < n) {
+      s = ' ' + s;
+    }
+    return s.slice(-n);
+  }
+
+  function pdbFromPayload(p) {
+    var xyz = b64Floats(p.xyz);
+    var atom = p.atom.split('|');
+    var resn = p.resn.split('|');
+    var resi = p.resi.split('|');
+    var elem = p.elem.split('|');
+    var lines = [];
+    for (var i = 0; i < p.n; i += 1) {
+      var name = atom[i] || 'C';
+      // 13-16 列：长度 <=3 时右对齐（与标准 PDB 一致）
+      var nm = name.length >= 4 ? name.slice(0, 4) : (' ' + name);
+      var f = function (v) {
+        return pad(v.toFixed(3), 8);
+      };
+      lines.push(
+        'ATOM  ' + pad(i + 1, 5) + ' ' + pad(nm, 4) + ' ' + pad(resn[i] || 'UNK', 3) + ' ' +
+        (p.chain ? p.chain.charAt(i) || 'A' : 'A') + pad(resi[i] || 1, 4) + '    ' +
+        f(xyz[i * 3]) + f(xyz[i * 3 + 1]) + f(xyz[i * 3 + 2]) +
+        '  1.00  0.00          ' + pad(elem[i] || 'C', 2)
+      );
+    }
+    lines.push('END');
+    return lines.join('\n');
+  }
+
+  function loadPoseScript(ref) {
+    if (window.MODEL_POSE_DATA && window.MODEL_POSE_DATA[ref.key]) {
+      return Promise.resolve(window.MODEL_POSE_DATA[ref.key]);
+    }
+    if (!poseLoading[ref.key]) {
+      poseLoading[ref.key] = new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.src = POSE_BASE + ref.file;
+        s.onload = function () {
+          if (window.MODEL_POSE_DATA && window.MODEL_POSE_DATA[ref.key]) {
+            resolve(window.MODEL_POSE_DATA[ref.key]);
+          } else {
+            reject(new Error('pose payload missing: ' + ref.file));
+          }
+        };
+        s.onerror = function () {
+          reject(new Error('pose payload could not be loaded: ' + ref.file));
+        };
+        document.head.appendChild(s);
+      });
+    }
+    return poseLoading[ref.key];
+  }
+
+  function fetchStructureFallback(rel) {
+    return fetch(structBase + rel).then(function (res) {
+      if (!res.ok) {
+        throw new Error('HTTP ' + res.status);
+      }
+      if (!/\.gz$/i.test(rel)) {
+        return res.text();
+      }
+      if (typeof DecompressionStream === 'function' && res.body) {
+        return new Response(res.body.pipeThrough(new DecompressionStream('gzip'))).text();
+      }
+      return res.text();
+    });
+  }
+
+  function fetchStructure(rel) {
+    var ref = poseRef(rel);
+    if (!ref) {
+      return fetchStructureFallback(rel);
+    }
+    return loadPoseScript(ref).then(pdbFromPayload).catch(function (err) {
+      if (window.console && console.warn) {
+        console.warn('[model-game] CDN pose unavailable, falling back to local:', err.message);
+      }
+      return fetchStructureFallback(rel);
+    });
+  }
+
+  function chainIds(pdb) {
+    var seen = {};
+    var out = [];
+    var lines = pdb.split('\n');
+    for (var i = 0; i < lines.length; i += 1) {
+      var l = lines[i];
+      if (l.slice(0, 4) === 'ATOM' || l.slice(0, 6) === 'HETATM') {
+        var c = l.charAt(21);
+        if (c && c !== ' ' && !seen[c]) {
+          seen[c] = 1;
+          out.push(c);
+        }
+      }
+    }
+    return out;
+  }
+
+  function styleFor(color) {
+    return state.style === 'cartoon'
+      ? { cartoon: { color: color || PALETTE[0] } }
+      : { stick: { colorscheme: 'grayCarbon', radius: 0.16 } };
+  }
+
+  function paint(pdb, split) {
+    if (!split) {
+      viewer.setStyle({}, styleFor());
+      return;
+    }
+    var chains = chainIds(pdb);
+    if (!chains.length) {
+      viewer.setStyle({}, styleFor());
+      return;
+    }
+    chains.forEach(function (c, i) {
+      viewer.setStyle({ chain: c }, styleFor(PALETTE[i % PALETTE.length]));
+    });
+  }
+
+  function draw(rel, label, split) {
+    warn('');
+    if (el.note) {
+      el.note.textContent = 'Loading ' + label + ELL;
+    }
+    return fetchStructure(rel)
+      .then(function (pdb) {
+        return load3Dmol().then(function (mol) {
+          var empty = el.viewer.querySelector('.model-game__viewer-empty');
+          if (empty) {
+            empty.remove();
+          }
+          if (viewer) {
+            try {
+              viewer.clear();
+            } catch (err) {
+              viewer = null;
+            }
+          }
+          viewer = mol.createViewer(el.viewer, { backgroundColor: '#FFFCF2' });
+          // 展示区激活：虚线框改实线（高度由 CSS flex 接管，不在此设）
+          el.viewer.classList.add('is-ready');
+          viewer.addModel(pdb, 'pdb');
+          lastPdb = pdb;
+          lastSplit = split;
+          paint(pdb, split);
+          viewer.zoomTo();
+          viewer.render();
+          if (el.note) {
+            el.note.textContent = label;
+          }
+        });
+      })
+      .catch(function (err) {
+        if (el.note) {
+          el.note.textContent = '';
+        }
+        warn('Could not load this structure: ' + err.message);
+      });
+  }
+
+  /** One card -> that molecule on its own; two cards -> the docked complex. */
+  function currentStructure() {
+    var ab = state.antibody;
+    var ag = state.antigen;
+    if (ab && ag) {
+      var flex = DATA.flexible[ab];
+      var cluster = null;
+      for (var i = 0; i < flex.clusters.length; i += 1) {
+        if (flex.clusters[i].cluster === state.cluster) {
+          cluster = flex.clusters[i];
+        }
+      }
+      if (!cluster) {
+        return null;
+      }
+      var model = cluster.models.filter(function (m) {
+        return m.model === state.model;
+      })[0] || cluster.models[0];
+      state.model = model.model;
+      return {
+        rel: model.file,
+        label: 'Complex ' + ab + ' ' + TIMES + ' ' + ag + ' — Cluster ' + cluster.cluster + ', Model ' + model.model,
+        split: true
+      };
+    }
+    if (ab) {
+      return { rel: byId(DATA.antibodies, ab).file, label: 'Nanobody ' + ab + ' — predicted structure', split: false };
+    }
+    if (ag) {
+      var antigen = byId(DATA.antigens, ag);
+      return {
+        rel: antigen.processed,
+        label: ag + ' HA — complex-processed antigen',
+        split: false
+      };
+    }
+    return null;
+  }
+
+  // ------------------------------------------------------------------ cards
+  function cardNode(kind, item, stats, icon) {
+    var b = h('button', 'model-card model-card--' + kind);
+    b.type = 'button';
+    b.draggable = true;
+    b.setAttribute('data-kind', kind);
+    b.setAttribute('data-id', item.id);
+    var url = iconUrl(icon);
+    if (url) {
+      var img = document.createElement('img');
+      img.className = 'model-card__icon';
+      img.src = url;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      b.appendChild(img);
+    }
+    var body = h('span', 'model-card__body');
+    body.appendChild(h('span', 'model-card__name', item.label || item.id));
+    stats.forEach(function (row) {
+      var line = h('span', 'model-card__stat');
+      line.appendChild(h('span', 'model-card__stat-k', row[0]));
+      line.appendChild(h('span', 'model-card__stat-v', row[1]));
+      body.appendChild(line);
+    });
+    b.appendChild(body);
+    return b;
+  }
+
+  function renderCards() {
+    var icons = DATA.icons || {};
+    var abIcons = icons.antibodies || {};
+    var agIcons = icons.antigens || {};
+    if (el.antibodies) {
+      el.antibodies.innerHTML = '';
+      DATA.antibodies.forEach(function (ab) {
+        var flex = DATA.flexible[ab.id];
+        var best = flex.clusters.filter(function (c) {
+          return c.cluster === flex.bestCluster;
+        })[0];
+        el.antibodies.appendChild(cardNode('antibody', ab, [
+          ['HADDOCK', minus(best.score, 1) + ' (C' + best.cluster + ')']
+        ], abIcons[ab.id]));
+      });
+    }
+    if (el.antigens) {
+      el.antigens.innerHTML = '';
+      DATA.antigens.forEach(function (ag) {
+        el.antigens.appendChild(cardNode('antigen', ag, [], agIcons[ag.id]));
+      });
+    }
+  }
+
+  // ------------------------------------------------------------------ selector
+  function syncSelector() {
+    if (!el.select || !el.selectLabel) {
+      return;
+    }
+    var options = [];
+    var label = 'HADDOCK cluster';
+    if (state.antibody) {
+      options = DATA.flexible[state.antibody].clusters.slice().sort(function (a, b) {
+        return a.score - b.score;
+      }).map(function (c) {
+        return {
+          value: c.cluster,
+          text: 'Cluster ' + c.cluster + '  ' + DOT + '  ' + minus(c.score, 3) + '  (' + c.nstruc + ' structures)'
+        };
+      });
+    }
+    el.selectLabel.textContent = label;
+    el.select.innerHTML = '';
+    options.forEach(function (o) {
+      var opt = h('option', null, o.text);
+      opt.value = String(o.value);
+      el.select.appendChild(opt);
+    });
+    el.select.disabled = !options.length;
+    if (!options.length) {
+      return;
+    }
+    var want = state.cluster;
+    var has = options.some(function (o) {
+      return String(o.value) === String(want);
+    });
+    if (!has) {
+      want = options[0].value;
+    }
+    el.select.value = String(want);
+    state.cluster = Number(want);
+    var c = DATA.flexible[state.antibody].clusters.filter(function (x) {
+      return x.cluster === state.cluster;
+    })[0];
+    state.model = c && c.models.length ? c.models[0].model : null;
+  }
+
+  // ------------------------------------------------------------------ results
+  function metricTable(rows) {
+    var t = h('table', 'model-game__table');
+    var tb = h('tbody');
+    rows.forEach(function (r) {
+      var tr = h('tr');
+      tr.appendChild(h('th', null, r[0]));
+      tr.appendChild(h('td', null, r[1]));
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb);
+    return t;
+  }
+
+  function renderResult() {
+    if (!el.result) {
+      return;
+    }
+    el.result.innerHTML = '';
+    var ab = state.antibody;
+    var ag = state.antigen;
+
+    if (!ab && !ag) {
+      el.result.appendChild(h('p', 'model-game__result-hint', 'Pick a nanobody card, an antigen card, or both.'));
+      return;
+    }
+    if (ab && !ag) {
+      el.result.appendChild(h('p', 'model-game__result-hint',
+        'Nanobody ' + ab + ' selected, its predicted structure is drawn above. Add an antigen card for the docking result.'));
+      return;
+    }
+    if (!ab && ag) {
+      el.result.appendChild(h('p', 'model-game__result-hint',
+        ag + ' HA selected, its antigen structure is drawn above. Add a nanobody card for the docking result.'));
+      return;
+    }
+
+    var flex = DATA.flexible[ab];
+    var c = flex.clusters.filter(function (x) {
+      return x.cluster === state.cluster;
+    })[0];
+    if (!c) {
+      el.result.appendChild(h('p', 'model-game__result-hint', 'No cluster selected for this nanobody.'));
+      return;
+    }
+    el.result.appendChild(h('h4', 'model-game__result-title',
+      'HADDOCK 2.5 ' + DOT + ' ' + ab + ' ' + TIMES + ' ' + ag + ' ' + DOT + ' Cluster ' + c.cluster));
+    el.result.appendChild(metricTable([
+      ['HADDOCK score', minus(c.score, 3) + ' ' + PM + ' ' + minus(c.scoreSd, 3)],
+      ['Cluster RMSD', minus(c.rmsd, 3) + ' ' + PM + ' ' + minus(c.rmsdSd, 3) + ' ' + DEG],
+      ['Structures in cluster', String(c.nstruc)],
+      ['Intermolecular energy', minus(c.einter, 2) + ' kcal/mol'],
+      ['van der Waals + 0.1 electrostatic', minus(c.evdwEelec, 2) + ' kcal/mol'],
+      ['van der Waals', minus(c.evdw, 2) + ' kcal/mol'],
+      ['Electrostatic', minus(c.ediel, 2) + ' kcal/mol'],
+      ['Cluster shown', 'Cluster ' + c.cluster + ' representative structure']
+    ]));
+    el.result.appendChild(h('p', 'model-game__result-note',
+      'Semi-flexible refinement was run against ' + DATA.flexAntigen + ' HA only. Each nanobody card defaults to the '
+      + 'best cluster of its run; the cluster selector switches to any other cluster of the same run, and score, '
+      + 'RMSD, structure count and energy terms are the HADDOCK values for the selected cluster.'));
+  }
+
+  /** 数字面板：与卡牌同一数据源的半柔性结果排名（每个抗体的最佳簇）。 */
+  function renderRanking() {
+    if (!el.ranking || !DATA.flexible) {
+      return;
+    }
+    var rows = DATA.antibodies.map(function (ab) {
+      var flex = DATA.flexible[ab.id];
+      var best = flex.clusters.filter(function (c) {
+        return c.cluster === flex.bestCluster;
+      })[0] || flex.clusters[0];
+      return { id: ab.id, best: best, clusters: flex.clusters.length };
+    }).sort(function (a, b) {
+      return a.best.score - b.best.score;
+    });
+    el.ranking.innerHTML = '';
+    el.ranking.appendChild(h('p', 'model-game__panel-title',
+      'Best HADDOCK cluster per nanobody (' + DATA.flexAntigen + ' HA)'));
+    var table = h('table', 'model-game__table');
+    var thead = h('thead');
+    var hr = h('tr');
+    ['Nanobody', 'Cluster', 'HADDOCK score', 'RMSD', 'Structures'].forEach(function (t) {
+      hr.appendChild(h('th', null, t));
+    });
+    thead.appendChild(hr);
+    table.appendChild(thead);
+    var tb = h('tbody');
+    rows.forEach(function (r) {
+      var tr = h('tr');
+      if (state.antibody === r.id) {
+        tr.className = 'is-best';
+      }
+      tr.appendChild(h('td', null, r.id));
+      tr.appendChild(h('td', null, 'C' + r.best.cluster));
+      tr.appendChild(h('td', null, minus(r.best.score, 3)));
+      tr.appendChild(h('td', null, minus(r.best.rmsd, 3) + ' ' + DEG));
+      tr.appendChild(h('td', null, String(r.best.nstruc)));
+      tb.appendChild(tr);
+    });
+    table.appendChild(tb);
+    el.ranking.appendChild(table);
+    el.ranking.appendChild(h('p', 'model-game__result-note',
+      'HADDOCK 2.5 semi-flexible scores against ' + DATA.flexAntigen + ' HA; a more negative score is a better '
+      + 'interface. This ranking is independent of the cluster selector.'));
+  }
+
+  // ------------------------------------------------------------------ 可折叠结果栏
+  // 收起态只留一条窄边，board 拿回全部宽度；展开态以覆盖层浮出，不推开 board。
+  // 每次选择卡牌后自动展开一次，省得用户先点开才有反馈；之后可随时手动收起。
+  function setRail(open) {
+    if (!el.rail || !el.railToggle) {
+      return;
+    }
+    var next = open ? 'open' : 'closed';
+    if (el.rail.getAttribute('data-rail-state') === next) {
+      return;
+    }
+    el.rail.setAttribute('data-rail-state', next);
+    el.rail.classList.toggle('is-open', open);
+    el.railToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  function markRailHasResult(has) {
+    if (el.rail) {
+      el.rail.setAttribute('data-has-result', has ? 'true' : 'false');
+    }
+  }
+
+  // ------------------------------------------------------------------ sync
+  // 槽位按钮内含箭头指示与文本两个子节点，只改文本节点，避免把箭头一起抹掉。
+  // 文案保持短句：槽位上方的 Nanobody / Antigen 小标签已经说明了归属，
+  // 按钮内再写全称会在窄栏里换行。
+  function setSlot(slot, text, filled) {
+    if (!slot) {
+      return;
+    }
+    var label = slot.querySelector('.model-game__slot-text');
+    if (label) {
+      label.textContent = text;
+    } else {
+      slot.textContent = text;
+    }
+    slot.classList.toggle('is-filled', filled);
+  }
+
+  function paintSlots() {
+    var ab = byId(DATA.antibodies, state.antibody);
+    var ag = byId(DATA.antigens, state.antigen);
+    setSlot(el.slotAb,
+      ab ? ab.id : (state.antigen ? 'Drop one here' : 'Drop here'), !!ab);
+    setSlot(el.slotAg,
+      ag ? ag.label : (state.antibody ? 'Drop one here' : 'Drop here'), !!ag);
+    Array.prototype.forEach.call(root.querySelectorAll('.model-card'), function (c) {
+      var on = (c.getAttribute('data-kind') === 'antibody' && c.getAttribute('data-id') === state.antibody)
+        || (c.getAttribute('data-kind') === 'antigen' && c.getAttribute('data-id') === state.antigen);
+      c.classList.toggle('is-selected', on);
+    });
+  }
+
+  function sync() {
+    var hadPair = !!(state.antibody && state.antigen);
+    paintSlots();
+    syncSelector();
+    renderResult();
+    // 有成对结果时才点亮窄条上的小圆点
+    markRailHasResult(hadPair);
+    // 选了卡牌就自动展开结果面板一次，让用户立刻看到反馈
+    if (hadPair) {
+      setRail(true);
+    }
+    var target = currentStructure();
+    if (!target) {
+      say('');
+      return;
+    }
+    say(target.label);
+    draw(target.rel, target.label, target.split);
+  }
+
+  function setCard(kind, id) {
+    if (kind === 'antibody') {
+      state.antibody = state.antibody === id ? null : id;
+      if (state.antibody) {
+        state.cluster = DATA.flexible[state.antibody].bestCluster;
+        state.model = null;
+      }
+    } else {
+      var ok = allowedAntigens().some(function (a) {
+        return a.id === id;
+      });
+      if (!ok) {
+        say('Semi-flexible refinement was only run against ' + DATA.flexAntigen + ' HA.');
+        return;
+      }
+      state.antigen = state.antigen === id ? null : id;
+    }
+    sync();
+  }
+
+  // ------------------------------------------------------------------ wiring
+  function onCardEvent(ev) {
+    var card = ev.target.closest ? ev.target.closest('.model-card') : null;
+    if (!card || !root.contains(card) || card.disabled) {
+      return;
+    }
+    if (ev.type === 'dragstart') {
+      ev.dataTransfer.setData('text/plain', card.getAttribute('data-kind') + ':' + card.getAttribute('data-id'));
+      ev.dataTransfer.effectAllowed = 'copy';
+      card.classList.add('is-dragging');
+      root.classList.add('is-dragging');
+      return;
+    }
+    if (ev.type === 'dragend') {
+      card.classList.remove('is-dragging');
+      root.classList.remove('is-dragging');
+      return;
+    }
+    setCard(card.getAttribute('data-kind'), card.getAttribute('data-id'));
+  }
+
+  function wireDeck(node) {
+    if (!node) {
+      return;
+    }
+    ['click', 'dragstart', 'dragend'].forEach(function (type) {
+      node.addEventListener(type, onCardEvent);
+    });
+  }
+
+  function wireDropZone(node, kind) {
+    if (!node) {
+      return;
+    }
+    node.addEventListener('dragover', function (ev) {
+      ev.preventDefault();
+      ev.dataTransfer.dropEffect = 'copy';
+      node.classList.add('is-over');
+    });
+    node.addEventListener('dragleave', function () {
+      node.classList.remove('is-over');
+    });
+    node.addEventListener('drop', function (ev) {
+      ev.preventDefault();
+      node.classList.remove('is-over');
+      root.classList.remove('is-dragging');
+      var payload = (ev.dataTransfer.getData('text/plain') || '').split(':');
+      if (payload.length === 2) {
+        setCard(payload[0], payload[1]);
+      }
+    });
+    node.addEventListener('click', function () {
+      if (kind === 'antibody') {
+        state.antibody = null;
+      } else {
+        state.antigen = null;
+      }
+      sync();
+    });
+  }
+
+  function restyle() {
+    if (viewer && lastPdb) {
+      paint(lastPdb, lastSplit);
+      viewer.render();
+    }
+  }
+
+  function init() {
+    renderCards();
+    renderRanking();
+    wireDeck(el.antibodies);
+    wireDeck(el.antigens);
+    wireDropZone(el.slotAb, 'antibody');
+    wireDropZone(el.slotAg, 'antigen');
+
+    // 3Dmol 画布不随容器尺寸自动重排：展示区高度由 CSS flex 接管后，
+    // 窗口缩放、断点切换、结果栏开合都会改变容器高度，需手动同步画布。
+    if (el.viewer && typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(function () {
+        if (viewer) {
+          try {
+            viewer.resize();
+            viewer.render();
+          } catch (err) {
+            /* 画布尚未就绪或已销毁时忽略 */
+          }
+        }
+      });
+      ro.observe(el.viewer);
+    }
+
+    if (el.railToggle) {
+      el.railToggle.addEventListener('click', function () {
+        setRail(el.rail.getAttribute('data-rail-state') !== 'open');
+      });
+    }
+    if (el.select) {
+      el.select.addEventListener('change', function () {
+        var v = Number(el.select.value);
+        state.cluster = v;
+        var c = DATA.flexible[state.antibody].clusters.filter(function (x) {
+          return x.cluster === v;
+        })[0];
+        state.model = c && c.models.length ? c.models[0].model : null;
+        sync();
+      });
+    }
+    if (el.load3d) {
+      el.load3d.addEventListener('click', function () {
+        var t = currentStructure();
+        if (t) {
+          draw(t.rel, t.label, t.split);
+        } else {
+          say('Pick a card first.');
+        }
+      });
+    }
+    if (el.style) {
+      el.style.addEventListener('click', function () {
+        state.style = state.style === 'cartoon' ? 'stick' : 'cartoon';
+        // 按钮文案保持短词，才能和另外两个按钮排在一行；全称放进 title 与 aria-label。
+        var label = state.style === 'cartoon' ? 'Cartoon' : 'Stick';
+        var full = 'Display Mode: ' + label;
+        el.style.textContent = label;
+        el.style.title = full;
+        el.style.setAttribute('aria-label', full);
+        restyle();
+      });
+    }
+    if (el.flip) {
+      el.flip.addEventListener('click', function () {
+        var on = el.flip.getAttribute('aria-expanded') === 'true';
+        var block = root.querySelector('.model-game__viewer-block');
+        el.flip.setAttribute('aria-expanded', on ? 'false' : 'true');
+        if (block) {
+          block.classList.toggle('is-flipped', !on);
+        }
+        var short = on ? 'Scores' : '3D';
+        var full = on ? 'Show the HADDOCK score ranking instead of the 3D view'
+          : 'Show the 3D structure instead of the ranking';
+        el.flip.textContent = short;
+        el.flip.title = full;
+        el.flip.setAttribute('aria-label', full);
+        if (!on) {
+          renderRanking();
+        }
+      });
+    }
+
+    var random = document.getElementById('model-game-random-pair');
+    if (random) {
+      random.addEventListener('click', function () {
+        var ab = DATA.antibodies[Math.floor(Math.random() * DATA.antibodies.length)].id;
+        var pool = allowedAntigens();
+        var ag = pool[Math.floor(Math.random() * pool.length)].id;
+        state.antibody = ab;
+        state.antigen = ag;
+        state.cluster = DATA.flexible[ab].bestCluster;
+        state.model = null;
+        sync();
+      });
+    }
+    var reset = document.getElementById('model-game-reset');
+    if (reset) {
+      reset.addEventListener('click', function () {
+        state.antibody = null;
+        state.antigen = null;
+        state.cluster = null;
+        state.model = null;
+        say('');
+        if (el.note) {
+          el.note.textContent = '';
+        }
+        if (viewer) {
+          try {
+            viewer.clear();
+          } catch (err) {
+            viewer = null;
+          }
+        }
+        lastPdb = '';
+        el.viewer.classList.remove('is-ready');
+        var empty = el.viewer.querySelector('.model-game__viewer-empty');
+        if (!empty) {
+          var slot = document.createElement('div');
+          slot.className = 'model-game__viewer-empty';
+          slot.innerHTML = '<p>Pick a card to draw its structure. The 3D library is downloaded only at that step.</p>';
+          el.viewer.appendChild(slot);
+        }
+        sync();
+      });
+    }
+
+    renderCards();
+    syncSelector();
+    renderResult();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+});
+</script>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -3161,28 +4211,27 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script><script src="../static/js/pages/model-game.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script><script src="../static/js/pages/model-game.js?v=1792945710" defer></script>
   
 <script>
-// Data payload for the card game: HADDOCK 2.5 semi-flexible results against H1N1 HA
-// (static/data/dry-lab/model/game-docking.json, generated from the raw output under
-// static/expriments/drylab/model/new_model/card_game/).
-// The page scripts are loaded with defer, so this is ready when they execute.
-window.MODEL_GAME_DATA = {"meta":{"sourceFlexible":"new_model/card_game/柔性/<job>/clusters_haddock-sorted.stat_best4 + new_model/card_game/complexes/半柔性/<job>/ (cluster representative models)","sourceScores":"new_model/card_game/scores/flexible/<Ab>_H1N1_cluster.out (cluster membership)","sourceIcons":"new_model/card_game/抗体图标/纳米抗体1..5.png + 抗原图标/抗原1.png (hosted as AVIF on the iGEM CDN under lab/drylab/model/icon/; the PNG copies under static/image/dry-lab/model/icons/ are the source material)","note":"Computational predictions from HADDOCK 2.5 semi-flexible refinement against H1N1 HA only. Not validated by wet-lab experiments.","selection":"The card game is semi-flexible only: one antigen (H1N1 HA) against 5 nanobodies. Each nanobody card shows the HADDOCK score of its best cluster; the cluster selector lists that nanobody's clusters with score, RMSD, structure count and energy terms."},"structureBase":"static/data/dry-lab/model/structures/game/","flexAntigen":"H1N1","antibodies":[{"id":"R1aB6","label":"R1aB6","file":"nanobodies/R1aB6.pdb.gz"},{"id":"R1aA5","label":"R1aA5","file":"nanobodies/R1aA5.pdb.gz"},{"id":"R2bD9","label":"R2bD9","file":"nanobodies/R2bD9.pdb.gz"},{"id":"R2bE8","label":"R2bE8","file":"nanobodies/R2bE8.pdb.gz"},{"id":"R2aF9","label":"R2aF9","file":"nanobodies/R2aF9.pdb.gz"}],"antigens":[{"id":"H1N1","label":"H1N1 HA","processed":"antigens/processed/H1N1_processed.pdb.gz"}],"flexible":{"R1aB6":{"job":"768813-H1N1R1aB6","bestCluster":1,"clusters":[{"cluster":1,"score":-77.863,"scoreSd":2.075,"rmsd":0.429,"rmsdSd":0.284,"rmsdEmin":4.411,"nstruc":33,"einter":-104.23,"enb":-219.59,"evdwEelec":-74.86,"evdw":-58.77,"ediel":-160.82,"models":[{"model":1,"file":"complexes/flex/R1aB6_H1N1_c1_m1.pdb.gz"}]}]},"R1aA5":{"job":"768877-H1N1R1aA5","bestCluster":1,"clusters":[{"cluster":1,"score":-64.988,"scoreSd":2.443,"rmsd":0.559,"rmsdSd":0.377,"rmsdEmin":8.201,"nstruc":33,"einter":328.25,"enb":-195.9,"evdwEelec":-102.76,"evdw":-92.41,"ediel":-103.49,"models":[{"model":1,"file":"complexes/flex/R1aA5_H1N1_c1_m1.pdb.gz"}]}]},"R2bD9":{"job":"768878-H1N1R2bD9","bestCluster":1,"clusters":[{"cluster":1,"score":-53.696,"scoreSd":3.099,"rmsd":1.257,"rmsdSd":0.729,"rmsdEmin":6.527,"nstruc":45,"einter":318.76,"enb":-242.8,"evdwEelec":-97.74,"evdw":-81.62,"ediel":-161.18,"models":[{"model":1,"file":"complexes/flex/R2bD9_H1N1_c1_m1.pdb.gz"}]}]},"R2aF9":{"job":"769982-H1N1R2aF9","bestCluster":1,"clusters":[{"cluster":1,"score":-89.406,"scoreSd":1.501,"rmsd":0.899,"rmsdSd":0.687,"rmsdEmin":0.899,"nstruc":61,"einter":172.24,"enb":-337.93,"evdwEelec":-122.13,"evdw":-98.16,"ediel":-239.78,"models":[{"model":1,"file":"complexes/flex/R2aF9_H1N1_c1_m1.pdb.gz"}]}]},"R2bE8":{"job":"769985-H1N1R2bE8","bestCluster":1,"clusters":[{"cluster":1,"score":-42.171,"scoreSd":0.967,"rmsd":0.571,"rmsdSd":0.368,"rmsdEmin":10.4,"nstruc":19,"einter":355.27,"enb":-219.21,"evdwEelec":-87.7,"evdw":-73.09,"ediel":-146.12,"models":[{"model":1,"file":"complexes/flex/R2bE8_H1N1_c1_m1.pdb.gz"}]}]}},"icons":{"base":"https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/icon/","antibodies":{"R1aB6":"nanobody-r1ab6.avif","R1aA5":"nanobody-r1aa5.avif","R2bD9":"nanobody-r2bd9.avif","R2bE8":"nanobody-r2be8.avif","R2aF9":"nanobody-r2af9.avif"},"antigens":{"H1N1":"antigen-h1n1.avif"}}};
+  /* 交互演示的两份数据载荷：MODEL_DOCKING_DATA 供排名面板（与页面表格同源），
+     MODEL_GAME_DATA 供对接演示本身（ClusPro 刚体对接 + HADDOCK 半柔性精修）。
+     app.py 的 load_model_docking() / load_model_game() 复刻根站
+     src/_data/modelDocking.js 与 modelGame.js 的桥接口径；
+     页面脚本以 defer 加载，执行时这里已经就绪。 */
+  window.MODEL_GAME_DATA = {"meta":{"sourceFlexible":"new_model/card_game/柔性/<job>/clusters_haddock-sorted.stat_best4 + new_model/card_game/complexes/半柔性/<job>/ (cluster representative models)","sourceScores":"new_model/card_game/scores/flexible/<Ab>_H1N1_cluster.out (cluster membership)","sourceIcons":"new_model/card_game/抗体图标/纳米抗体1..5.png + 抗原图标/抗原1.png (hosted as AVIF on the iGEM CDN under lab/drylab/model/icon/; the PNG copies under static/image/dry-lab/model/icons/ are the source material)","note":"Computational predictions from HADDOCK 2.5 semi-flexible refinement against H1N1 HA only. Not validated by wet-lab experiments.","selection":"The card game is semi-flexible only: one antigen (H1N1 HA) against 5 nanobodies. Each nanobody card shows the HADDOCK score of its best cluster; the cluster selector lists that nanobody's clusters with score, RMSD, structure count and energy terms."},"structureBase":"static/data/dry-lab/model/structures/game/","flexAntigen":"H1N1","antibodies":[{"id":"R1aB6","label":"R1aB6","file":"nanobodies/R1aB6.pdb.gz"},{"id":"R1aA5","label":"R1aA5","file":"nanobodies/R1aA5.pdb.gz"},{"id":"R2bD9","label":"R2bD9","file":"nanobodies/R2bD9.pdb.gz"},{"id":"R2bE8","label":"R2bE8","file":"nanobodies/R2bE8.pdb.gz"},{"id":"R2aF9","label":"R2aF9","file":"nanobodies/R2aF9.pdb.gz"}],"antigens":[{"id":"H1N1","label":"H1N1 HA","processed":"antigens/processed/H1N1_processed.pdb.gz"}],"flexible":{"R1aB6":{"job":"768813-H1N1R1aB6","bestCluster":1,"clusters":[{"cluster":1,"score":-77.863,"scoreSd":2.075,"rmsd":0.429,"rmsdSd":0.284,"rmsdEmin":4.411,"nstruc":33,"einter":-104.23,"enb":-219.59,"evdwEelec":-74.86,"evdw":-58.77,"ediel":-160.82,"models":[{"model":1,"file":"complexes/flex/R1aB6_H1N1_c1_m1.pdb.gz"}]}]},"R1aA5":{"job":"768877-H1N1R1aA5","bestCluster":1,"clusters":[{"cluster":1,"score":-64.988,"scoreSd":2.443,"rmsd":0.559,"rmsdSd":0.377,"rmsdEmin":8.201,"nstruc":33,"einter":328.25,"enb":-195.9,"evdwEelec":-102.76,"evdw":-92.41,"ediel":-103.49,"models":[{"model":1,"file":"complexes/flex/R1aA5_H1N1_c1_m1.pdb.gz"}]}]},"R2bD9":{"job":"768878-H1N1R2bD9","bestCluster":1,"clusters":[{"cluster":1,"score":-53.696,"scoreSd":3.099,"rmsd":1.257,"rmsdSd":0.729,"rmsdEmin":6.527,"nstruc":45,"einter":318.76,"enb":-242.8,"evdwEelec":-97.74,"evdw":-81.62,"ediel":-161.18,"models":[{"model":1,"file":"complexes/flex/R2bD9_H1N1_c1_m1.pdb.gz"}]}]},"R2aF9":{"job":"769982-H1N1R2aF9","bestCluster":1,"clusters":[{"cluster":1,"score":-89.406,"scoreSd":1.501,"rmsd":0.899,"rmsdSd":0.687,"rmsdEmin":0.899,"nstruc":61,"einter":172.24,"enb":-337.93,"evdwEelec":-122.13,"evdw":-98.16,"ediel":-239.78,"models":[{"model":1,"file":"complexes/flex/R2aF9_H1N1_c1_m1.pdb.gz"}]}]},"R2bE8":{"job":"769985-H1N1R2bE8","bestCluster":1,"clusters":[{"cluster":1,"score":-42.171,"scoreSd":0.967,"rmsd":0.571,"rmsdSd":0.368,"rmsdEmin":10.4,"nstruc":19,"einter":355.27,"enb":-219.21,"evdwEelec":-87.7,"evdw":-73.09,"ediel":-146.12,"models":[{"model":1,"file":"complexes/flex/R2bE8_H1N1_c1_m1.pdb.gz"}]}]}},"icons":{"base":"https://static.igem.wiki/teams/6373/wiki/lab/drylab/model/icon/","antibodies":{"R1aB6":"nanobody-r1ab6.avif","R1aA5":"nanobody-r1aa5.avif","R2bD9":"nanobody-r2bd9.avif","R2bE8":"nanobody-r2be8.avif","R2aF9":"nanobody-r2af9.avif"},"antigens":{"H1N1":"antigen-h1n1.avif"}}};
 </script>
 
 

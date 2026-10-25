@@ -1,3 +1,7 @@
+{# 静态资源版本号：app.py 的 context_processor 会注入构建期 mtime；未注入时退回固定值。
+   用途：GitLab Pages 对 HTML 与 CSS/JS 都发 max-age=600 且各自过期，缺版本号会出现
+   「新 HTML + 旧 CSS」错配。 #}
+{% set assetV = assetV | default('20261019b') %}
 {% set htmlClass = htmlClass | default('') %}
 {% set bodyClass = bodyClass | default('') %}
 {% set mainClass = mainClass | default('') %}
@@ -41,7 +45,9 @@
  */
 (function () {
   var root = document.documentElement;
-  var MAX_WAIT = 8000;
+  // 必须 >= 控制器 page-loader.js 的 MAX_WAIT，否则遮罩会先被这里放开，
+  // 登记的关键图还没结清就把页面放行（首页 9 张 CDN 图时 8s 偏紧）
+  var MAX_WAIT = 12000;
   try {
     root.classList.add('page-loader-armed');
     setTimeout(function () {
@@ -61,17 +67,19 @@
 })();
 </script>
 
+    <!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+         几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+  <link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+  <link rel="dns-prefetch" href="https://static.igem.wiki">
+
     <!-- 加载顺序：基础样式 → 导航样式 → 全局样式 → 移动端 → 组件（见下方 components.css） -->
   
-  <link rel="stylesheet" href="{{ url_for('static', filename='iconfont/iconfont.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation/navigation.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
-    <!-- 全站组件样式合集（2026-10-10：components/ 下 6 个小文件保序合并；等价性自检 384/384 行一致）。
-         必须置于 mobile.css 之后：原 section-fold / media-reveal / page-loader /
-         scroll-progress-bar 的 link 本就在 mobile.css 之后，移动位置会反转层叠关系。 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation/navigation.css') }}?v={{ assetV }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}?v={{ assetV }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}?v={{ assetV }}">
+    <!-- 全站组件样式合集。必须置于 mobile.css 之后：原 section-fold / media-reveal / page-loader 的
+         link 本就在 mobile.css 之后，移动位置会反转层叠关系。 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v={{ assetV }}">
   {% block styles %}{% endblock %}
 
   
@@ -86,19 +94,15 @@
 
     <!-- 全站核心脚本（模块化，按依赖顺序加载）。 utils.js 必须最先：它发布 window.iGEMUtils 与 window.MEDIA_BASE。 新增页面请沿用此脚本组织方式，
      不要改回手工 bundle。 -->
-  <script src="{{ url_for('static', filename='js/core/utils.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/mobile-menu.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/nav-scroll-behavior.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/scroll-progress-bar.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/components/scroll-speed-control.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/vendor/flexsearch.bundle.min.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/core/search.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/components/section-fold.js') }}" defer></script>
-  <!-- 返回顶部按钮 / 图片到达淡入：此前只有 CSS 被引用、JS 缺引用（组件半成品），
-       2026-10-10 补齐其脚本引用，使功能与样式配套。 -->
-  <script src="{{ url_for('static', filename='js/components/back-to-top.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/components/media-reveal.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/utils.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/mobile-menu.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/nav-scroll-behavior.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/page-progress-bar.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/vendor/flexsearch.bundle.min.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/core/search.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/section-fold.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/back-to-top.js') }}?v={{ assetV }}" defer></script>
+  <script src="{{ url_for('static', filename='js/components/media-reveal.js') }}?v={{ assetV }}" defer></script>
   {% block scripts %}{% endblock %}
 </head>
 
@@ -117,17 +121,10 @@
     </div>
   </div>
 
-    <!-- 全站滚动阅读进度条（2026-10-15 补齐 markup）：此前 flask 站只有它的 CSS/JS、
-         没有元素，进度条实际从未渲染。上下两端的「快速滚动」隐形触区由
-         js/components/scroll-speed-control.js 挂在同一位置（判定区随右侧留白自适应）。 -->
-  <div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-    <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
-  </div>
-
   
-    <!-- 2026-10-14：原为空 <header></header>——它被 header{} 规则撑出每页约 92px 死空间，
-         且与部分页面自己的 <header class="*-hero"> 构成重复地标。改为等尺寸占位 div（.site-top-spacer，
-         样式见 index.css「header, .site-top-spacer」段），版式完全不变，members 页的隐藏规则同步更新。 -->
+    <!-- 顶部占位：原 <header></header> 被 header{} 规则撑出死空间，且与部分页面自己的
+         <header class="*-hero"> 构成重复地标。改为等尺寸占位 div（.site-top-spacer，
+         样式见 index.css「header, .site-top-spacer」段，版式完全不变，members 页的隐藏规则同步更新。 -->
   <div class="site-top-spacer" aria-hidden="true"></div>
 
     <!-- 汉堡菜单按钮（仅移动端显示） -->
@@ -142,8 +139,7 @@
   </main>
   {% block footer %}{% include "footer.html" %}{% endblock %}
 
-    <!-- 全站「返回顶部」悬浮按钮：两张图叠合（外圈为透明底美工图并持续旋转，hover 时整体上下浮动）。
-       2026-10-11 换用美工新图（透明底，取代旧版自带环绕文字+底色的 avif）。 -->
+    <!-- 全站「返回顶部」悬浮按钮：两张图叠合（外圈为透明底美工图并持续旋转，hover 时整体上下浮动）。 -->
   <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top">
     <span class="back-to-top__ring" aria-hidden="true">
       
@@ -169,17 +165,29 @@
   
 <script>
 /*
- * page-loader.js — 全站页级加载遮罩控制器（根站） * * 与 <head> 内同步执行的 page-loader-arm.js 配套： * arm —— 首帧即显示遮罩并锁滚动（防原生内容闪烁）
- * * 本文件 —— 收集首屏关键插画 → 预加载 → 判定收尾 → 收起遮罩并派发 pageloader:done * * 收尾条件（详见 README 第十五/十六节）： * DOM 就绪 AND 所有已登记关键图结清 AND 已过最小展示时长 * 任一超时（MAX_WAIT / 单图 IMG_TIMEOUT）
- * 都强制收尾，绝不永久阻塞。 * * 对外接口（IIFE，挂 window.PageLoader）： * window.PageLoader.register(urls) // 登记首屏关键图；
- * 字符串 | [url] | [[候选1,候选2]] * window.PageLoader.done(cb) // 收尾回调（首页 GIF 交接用） * window.PageLoader.isDone()
+ * page-loader.js — 全站页级加载遮罩控制器
+ * 与 <head> 内同步执行的 page-loader-arm.js 配套：
+ *   arm —— 首帧即显示遮罩并锁滚动（防原生内容闪烁）
+ *   本文件 —— 收集首屏关键插画 → 预加载 → 判定收尾 → 收起遮罩并派发 pageloader:done
+ * 收尾条件（详见 README 第十五/十六节）：
+ *   DOM 就绪 AND 所有已登记关键图结清 AND 已过最小展示时长
+ *   任一超时（MAX_WAIT / 单图 IMG_TIMEOUT）都强制收尾，绝不永久阻塞
+ * 对外接口（IIFE，挂 window.PageLoader）：
+ *   window.PageLoader.register(urls)  // 登记首屏关键图；字符串 | [url] | [[候选1,候选2]]
+ *   window.PageLoader.done(cb)        // 收尾回调（首页 GIF 交接用）
+ *   window.PageLoader.isDone()
  */
 (function () {
   'use strict';
 
   var MIN_SHOW = 600;     // 最小展示时长（防闪烁），ms
-  var MAX_WAIT = 8000;    // 全局强制收尾兜底，ms
-  var IMG_TIMEOUT = 3000; // 单张关键图超时，ms
+  /* 全局强制收尾兜底。首页已登记 9 张关键图（检测方法屏 5 张 + 探索屏 4 张吉祥物，
+     走 CDN），8s 在冷缓存下容易先到期，等于白登记；仍是无条件兜底，绝不永久阻塞。 */
+  var MAX_WAIT = 12000;   // ms
+  var IMG_TIMEOUT = 9000; // 单张关键图超时，ms
+  /* 关键图软截止：首页关键图走 PageLoader.register，8000ms 内未结清即放行，避免
+     CDN 冷缓存下等图过久；MAX_WAIT 为硬上限兜底，绝不永久阻塞。 */
+  var SOFT_WAIT = 8000;
   var EXIT_BUFFER = 420;  // 淡出后清理 done 类的延迟，ms
 
   var root = document.documentElement;
@@ -266,10 +274,24 @@
         settle();
         return;
       }
+      loadOne(candidates[idx], false);
+    }
+
+    /* 失败重试一次：CDN 高峰时的 403/5xx 多为瞬时限流，带 cache-buster 再要一次
+       往往就拿到了；仍失败才换候选 / 放弃。只重试一次，不放大拥塞。 */
+    function loadOne(url, retried) {
       var img = new Image();
       img.onload = settle;
-      img.onerror = function () { idx++; next(); };
-      img.src = candidates[idx];
+      img.onerror = function () {
+        if (settled) return;
+        if (!retried) {
+          loadOne(url + (url.indexOf('?') >= 0 ? '&' : '?') + 'r=1', true);
+          return;
+        }
+        idx++;
+        next();
+      };
+      img.src = url;
     }
 
     next();
@@ -282,11 +304,16 @@
     var elapsed = now() - state.start;
     if (elapsed >= MAX_WAIT) return finish('timeout');
 
-    var domReady = document.readyState !== 'loading';
+    var domReady = state.domReady || document.readyState !== 'loading';
     var minShow = prefersReducedMotion() ? 0 : MIN_SHOW;
 
     if (domReady && state.pending === 0 && elapsed >= minShow) {
       return finish('ready');
+    }
+
+    // 软截止：图还没齐也先放行（脚本必须已结清，否则动效会全废）
+    if (domReady && elapsed >= Math.max(minShow, SOFT_WAIT)) {
+      return finish('soft');
     }
 
     var wait = Math.min(
@@ -354,6 +381,17 @@
 
   function init() {
     overlay = document.getElementById('page-loader');
+    /* 页级就绪只看 DOMContentLoaded。document.readyState 要到 'complete' 才不是
+       'loading'，而 'complete' 会等所有 eager 图——只要有一张关键图挂住（CDN 限流、
+       连接被掐），整页就永远进不去。关键图该等多久由 SOFT_WAIT / IMG_TIMEOUT 单独管。 */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        state.domReady = true;
+        evaluate();
+      });
+    } else {
+      state.domReady = true;
+    }
     var groups = collectFromDom();
     for (var i = 0; i < groups.length; i++) loadGroup(groups[i]);
     evaluate();
@@ -367,171 +405,319 @@
 })();
 </script>
 
-  
 <script>
 /*
- * * 2) 「图片啪地出现」—— 交给本脚本：尚未解码完成的正文图片先瞬时置为 opacity 0， * 解码完成（load）后淡入；已在缓存/已解码的图片不参与，避免"闪一下"。
- * * * 边界（改之前先读 README §5.14.2 与第八节约束）： * - 只处理 <main> 内的 <img>：导航、页脚、加载遮罩（page-loader）、返回顶部等 * 已有自己动画体系的组件一律不掺和；
- * * - data-no-reveal（加在 img 自身或任意祖先上）可让该区域退出； * - prefers-reduced-motion: reduce 时整个脚本不生效，
- * 图片直接显示； * - 脚本 404 / 被拦截时页面照常（CSS 默认不隐藏任何图片）； * - 数据驱动页（members 等）中途插入的图片由 MutationObserver 兜住，
- * * window.load 后 + 3s 宽限即停止观察，不在滚动期常驻。
+ * footer-bubbles.js — 页脚「气泡网」交互（内联全局小组件）。
+ * 五个母气泡是一个整体：一个展开会把自己的子气泡甩出，同时反推自己、推挤其余四个；
+ * 子气泡方向每次随机，紧贴母气泡。位移交给 CSS transition，不跑 rAF 循环。
+ * 降级：≤768px 退回 CSS 手风琴；prefers-reduced-motion 由 CSS 关过渡。
  */
 (function () {
   'use strict';
 
-  var CLS = 'media-reveal';
-  var PENDING = CLS + '--pending';
-  var GRACE_MS = 3000;
+  var root = document.querySelector('.footer-bubbles');
+  if (!root) return;
 
-  function prefersReducedMotion() {
-    var u = window.iGEMUtils;
-    if (u && typeof u.prefersReducedMotion === 'function') return u.prefersReducedMotion();
-    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var stage = root.querySelector('.bubble-stage');
+  var groups = Array.prototype.slice.call(root.querySelectorAll('.bubble-group'));
+  if (!stage || !groups.length) return;
+
+  var D = 108;
+  var GAP_X = 60;
+  var GAP_Y = 46;
+  var MIN_GAP = 10;
+
+  var canHover = !!(window.matchMedia && window.matchMedia('(hover: hover)').matches);
+  var mqMobile = window.matchMedia ? window.matchMedia('(max-width: 768px)') : null;
+  var active = -1;
+  var closeTimer = 0;
+  var childVectors = groups.map(function () { return []; });
+
+  function isMobile() {
+    return !!(mqMobile && mqMobile.matches);
   }
 
-  function eligible(img) {
-    if (!img || img.tagName !== 'IMG') return false;
-    if (img.hasAttribute('data-no-reveal')) return false;
-    if (img.closest && img.closest('[data-no-reveal]')) return false;
-    if (!img.closest || !img.closest('main')) return false;
-    return true;
+  function basePositions() {
+    var W = stage.clientWidth;
+    var H = stage.clientHeight;
+    var clusterW = D * 3 + GAP_X * 2;
+    var clusterH = D * 2 + GAP_Y;
+    var x0 = Math.max(0, (W - clusterW) / 2);
+    var y0 = Math.max(0, (H - clusterH) / 2);
+    var col = D + GAP_X;
+    var half = col / 2;
+    return [
+      { x: x0, y: y0 },
+      { x: x0 + col, y: y0 },
+      { x: x0 + col * 2, y: y0 },
+      { x: x0 + half, y: y0 + D + GAP_Y },
+      { x: x0 + half + col, y: y0 + D + GAP_Y }
+    ];
   }
 
-    /* * 把一张「还没解码完」的图片置为待出现，解码完成后淡入 */
-  function arm(img) {
-    if (!eligible(img)) return;
-    if (img.classList.contains(PENDING)) return;
-    // 已解码完成（含缓存命中）的图片直接跳过：闪一下比直接显示更糟
-    if (img.complete && img.naturalWidth > 0) return;
+  function solve() {
+    var pos = basePositions();
 
-    img.classList.add(CLS, PENDING);
+    if (active >= 0) {
+      var vec = childVectors[active] || [];
+      var sx = 0;
+      var sy = 0;
+      for (var k = 0; k < vec.length; k++) {
+        sx += vec[k].x;
+        sy += vec[k].y;
+      }
+      var len = Math.sqrt(sx * sx + sy * sy);
+      var rx;
+      var ry;
+      if (len < 0.001) {
+        var a = Math.random() * Math.PI * 2;
+        rx = Math.cos(a);
+        ry = Math.sin(a);
+      } else {
+        rx = -sx / len;
+        ry = -sy / len;
+      }
+      pos[active].x += rx * 34;
+      pos[active].y += ry * 34;
 
-    function done() {
-      img.removeEventListener('load', done);
-      img.removeEventListener('error', done);
-      img.classList.remove(PENDING);
+      for (var j = 0; j < pos.length; j++) {
+        if (j === active) continue;
+        var dx = pos[j].x - pos[active].x;
+        var dy = pos[j].y - pos[active].y;
+        var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        var force = Math.min(70, 7000 / (dist + 20));
+        pos[j].x += (dx / dist) * force;
+        pos[j].y += (dy / dist) * force;
+      }
     }
-    img.addEventListener('load', done);
 
-    img.addEventListener('error', done);
-  }
-
-  function armAll(root) {
-    var scope = root || document;
-    var imgs = scope.querySelectorAll ? scope.querySelectorAll('main img') : [];
-    Array.prototype.forEach.call(imgs, arm);
-  }
-
-  function init() {
-    if (prefersReducedMotion()) return; // 降级：什么都不做，图片全部直接可见
-    armAll(document);
-
-    // 数据驱动页会在 DOMContentLoaded 之后插入图片；只在加载窗口内观察，随后断开
-    if (window.MutationObserver) {
-      var observer = new MutationObserver(function (records) {
-        for (var i = 0; i < records.length; i++) {
-          var added = records[i].addedNodes;
-          for (var j = 0; j < added.length; j++) {
-            var node = added[j];
-            if (node.nodeType !== 1) continue;
-            if (node.tagName === 'IMG') arm(node);
-            else if (node.querySelectorAll) armAll(node);
+    for (var it = 0; it < 8; it++) {
+      for (var a1 = 0; a1 < pos.length; a1++) {
+        for (var b1 = a1 + 1; b1 < pos.length; b1++) {
+          var ddx = pos[b1].x - pos[a1].x;
+          var ddy = pos[b1].y - pos[a1].y;
+          var d = Math.sqrt(ddx * ddx + ddy * ddy) || 0.01;
+          var min = D + MIN_GAP;
+          if (d < min) {
+            var push = (min - d) / 2;
+            pos[a1].x -= (ddx / d) * push;
+            pos[a1].y -= (ddy / d) * push;
+            pos[b1].x += (ddx / d) * push;
+            pos[b1].y += (ddy / d) * push;
           }
         }
+      }
+    }
+
+    var W = stage.clientWidth;
+    var H = stage.clientHeight;
+    for (var m = 0; m < pos.length; m++) {
+      pos[m].x = Math.max(-8, Math.min(W - D + 8, pos[m].x));
+      pos[m].y = Math.max(-8, Math.min(H - D + 8, pos[m].y));
+    }
+    return pos;
+  }
+
+  function apply() {
+    if (isMobile()) {
+      for (var i = 0; i < groups.length; i++) {
+        groups[i].style.transform = '';
+        var kids = groups[i].querySelectorAll('.bubble--child');
+        for (var k = 0; k < kids.length; k++) {
+          kids[k].style.transform = '';
+          kids[k].style.opacity = '';
+          kids[k].style.transitionDelay = '';
+        }
+      }
+      return;
+    }
+    var pos = solve();
+    for (var g = 0; g < groups.length; g++) {
+      groups[g].style.transform = 'translate(' + pos[g].x.toFixed(1) + 'px,' + pos[g].y.toFixed(1) + 'px)';
+    }
+  }
+
+  function relaxChildren(pts) {
+    var min = D;
+    var rMin = D / 2 + 40 * 0.62;
+    var rMax = D / 2 + 40 * 1.15;
+    for (var it = 0; it < 24; it++) {
+      var moved = false;
+      for (var i = 0; i < pts.length; i++) {
+        for (var j = i + 1; j < pts.length; j++) {
+          var dx = pts[j].x - pts[i].x;
+          var dy = pts[j].y - pts[i].y;
+          var d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+          if (d < min) {
+            var push = (min - d) / 2 + 0.1;
+            pts[i].x -= (dx / d) * push;
+            pts[i].y -= (dy / d) * push;
+            pts[j].x += (dx / d) * push;
+            pts[j].y += (dy / d) * push;
+            moved = true;
+          }
+        }
+      }
+      for (var k = 0; k < pts.length; k++) {
+        var r = Math.sqrt(pts[k].x * pts[k].x + pts[k].y * pts[k].y) || 0.01;
+        if (r < rMin) { pts[k].x = pts[k].x / r * rMin; pts[k].y = pts[k].y / r * rMin; moved = true; }
+        else if (r > rMax) { pts[k].x = pts[k].x / r * rMax; pts[k].y = pts[k].y / r * rMax; moved = true; }
+      }
+      if (!moved) break;
+    }
+    return pts;
+  }
+
+  function spawn(i) {
+    var kids = Array.prototype.slice.call(groups[i].querySelectorAll('.bubble--child'));
+    var n = kids.length;
+    var childR = 40;
+    var baseAngle = Math.random() * Math.PI * 2;
+    var base = basePositions();
+
+    var avoid = [];
+    for (var j = 0; j < base.length; j++) {
+      if (j === i) continue;
+      avoid.push({ x: base[j].x + D / 2, y: base[j].y + D / 2 });
+    }
+    var pcx = base[i].x + D / 2;
+    var pcy = base[i].y + D / 2;
+
+    var pts = [];
+    for (var k = 0; k < n; k++) {
+      var angle = baseAngle + (k * Math.PI * 2) / n + (Math.random() - 0.5) * 0.8;
+      var r = D / 2 + childR * 0.82 + (Math.random() - 0.5) * 10;
+      pts.push({ x: Math.cos(angle) * r, y: Math.sin(angle) * r });
+    }
+
+    var ok = false;
+    for (var attempt = 0; attempt < 6 && !ok; attempt++) {
+      relaxChildren(pts);
+      ok = true;
+      for (var m = 0; m < pts.length; m++) {
+        for (var a2 = 0; a2 < avoid.length; a2++) {
+          var ddx = pcx + pts[m].x - avoid[a2].x;
+          var ddy = pcy + pts[m].y - avoid[a2].y;
+          if (Math.sqrt(ddx * ddx + ddy * ddy) < childR + D / 2 + 8) { ok = false; break; }
+        }
+        if (!ok) break;
+      }
+      if (!ok) {
+        var rot = 0.5 + Math.random() * 0.4;
+        for (var q = 0; q < pts.length; q++) {
+          var px = pts[q].x * Math.cos(rot) - pts[q].y * Math.sin(rot);
+          var py = pts[q].x * Math.sin(rot) + pts[q].y * Math.cos(rot);
+          pts[q].x = px;
+          pts[q].y = py;
+        }
+      }
+    }
+
+    var vecs = [];
+    for (var t = 0; t < pts.length; t++) {
+      vecs.push({ x: pts[t].x, y: pts[t].y });
+      kids[t].style.transitionDelay = (t * 32) + 'ms';
+      kids[t].style.transform =
+        'translate(calc(-50% + ' + pts[t].x.toFixed(1) + 'px), calc(-50% + ' + pts[t].y.toFixed(1) + 'px)) scale(1)';
+      kids[t].style.opacity = '1';
+    }
+    childVectors[i] = vecs;
+  }
+
+  function collapse(i) {
+    var kids = groups[i].querySelectorAll('.bubble--child');
+    for (var k = 0; k < kids.length; k++) {
+      kids[k].style.transitionDelay = (k * 18) + 'ms';
+      kids[k].style.transform = 'translate(-50%,-50%) scale(0.35)';
+      kids[k].style.opacity = '0';
+    }
+  }
+
+  function setActive(group) {
+    var idx = groups.indexOf(group);
+    if (idx === active) return;
+
+    if (active >= 0) collapse(active);
+    active = idx;
+
+    for (var i = 0; i < groups.length; i++) {
+      var on = i === idx;
+      groups[i].classList.toggle('is-active', on);
+      var btn = groups[i].querySelector('.bubble--parent');
+      if (btn) btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    }
+
+    if (idx >= 0) {
+      root.setAttribute('data-active', '');
+      if (!isMobile()) spawn(idx);
+    } else {
+      root.removeAttribute('data-active');
+    }
+    apply();
+  }
+
+  function clearTimer() {
+    if (closeTimer) {
+      window.clearTimeout(closeTimer);
+      closeTimer = 0;
+    }
+  }
+
+  for (var i = 0; i < groups.length; i++) {
+    (function (group) {
+      var btn = group.querySelector('.bubble--parent');
+      if (!btn) return;
+
+      if (canHover) {
+        group.addEventListener('pointerenter', function (e) {
+          if (e.pointerType && e.pointerType !== 'mouse') return;
+          clearTimer();
+          setActive(group);
+        });
+        group.addEventListener('pointerleave', function (e) {
+          if (e.pointerType && e.pointerType !== 'mouse') return;
+          clearTimer();
+          closeTimer = window.setTimeout(function () { setActive(null); }, 180);
+        });
+      }
+
+      btn.addEventListener('click', function () {
+        clearTimer();
+        if (canHover) setActive(group);
+        else setActive(group.classList.contains('is-active') ? null : group);
       });
-      observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
 
-      var stop = function () { window.setTimeout(function () { observer.disconnect(); }, GRACE_MS); };
-      if (document.readyState === 'complete') stop();
-      else window.addEventListener('load', stop, { once: true });
+      btn.addEventListener('focus', function () {
+        clearTimer();
+        setActive(group);
+      });
+
+      group.addEventListener('focusout', function (e) {
+        if (!group.contains(e.relatedTarget)) {
+          clearTimer();
+          setActive(null);
+        }
+      });
+    })(groups[i]);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      clearTimer();
+      setActive(null);
     }
-  }
+  });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  var resizeTimer = 0;
+  window.addEventListener('resize', function () {
+    if (resizeTimer) window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(apply, 120);
+  });
+
+  apply();
 })();
 </script>
 
-  
-<script>
-/*
- * back-to-top.js — 全站「返回顶部」按钮行为 * * 与 markup（partials/back-to-top.njk）/ 样式（css/components/back-to-top.css）
- * 配套： * 1) 滚过一屏（scrollY > 阈值）后给按钮打 .back-to-top--visible，滚回顶部自动隐藏； * 2) 点击平滑滚回顶部；prefers-reduced-motion 下直接跳（不做长动画）
- * * 3) 键盘可达（<button> + aria-label），隐藏时用 visibility 移出可聚焦序列； * 4) 只用被动滚动监听 + rAF 节流，不阻塞滚动；
- * 离开页面时解绑。
- */
-(function () {
-  'use strict';
-
-  var SHOW_AFTER = 240;   // 滚过多少 px 后出现（≈一屏内的起手距离）
-
-  function prefersReducedMotion() {
-    try {
-      if (window.iGEMUtils && window.iGEMUtils.prefersReducedMotion) {
-        return window.iGEMUtils.prefersReducedMotion();
-      }
-      return !!(window.matchMedia &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function init() {
-    var btn = document.getElementById('back-to-top');
-    if (!btn) return;
-
-    var ticking = false;
-
-    function sync() {
-      ticking = false;
-      btn.classList.toggle('back-to-top--visible', window.scrollY > SHOW_AFTER);
-    }
-
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(sync);
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    sync();   // 首屏若已带锚点跳转（#xxx）也能正确判定
-
-    btn.addEventListener('click', function () {
-      if (prefersReducedMotion() || typeof window.scrollTo !== 'function') {
-        window.scrollTo(0, 0);
-        return;
-      }
-      try {
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (e) {
-        window.scrollTo(0, 0);   // 极老浏览器：直接跳
-      }
-      // 收尾把焦点还给文档开头，键盘用户不会停在屏幕外的按钮上
-      var main = document.querySelector('main');
-      if (main) {
-        main.setAttribute('tabindex', '-1');
-        main.focus({ preventScroll: true });
-      }
-    });
-
-    window.addEventListener('pagehide', function () {
-      window.removeEventListener('scroll', onScroll);
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
-  } else {
-    init();
-  }
-})();
-</script>
-
-  
   {% block body_scripts %}{% endblock %}
 
 </body>

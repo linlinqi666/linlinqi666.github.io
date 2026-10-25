@@ -20,6 +20,38 @@ th.sa .si::after { content: "\25B2"; color: #0d6efd; }
 th.sd .si::after { content: "\25BC"; color: #0d6efd; }
 .table-sm td, .table-sm th { padding: 0.2rem 0.45rem; white-space: nowrap; }
 </style>
+<style id="mg-theme-override">
+:root{
+  --bs-body-bg:#FFF8E7;
+  --bs-body-color:#4A2E12;
+  --bs-border-color:#E3C9A3;
+  --bs-border-color-translucent:rgba(227,201,163,.6);
+  --bs-secondary-color:rgba(245,230,211,.65);
+  --bs-secondary-bg:rgba(245,230,211,.55);
+  --bs-tertiary-color:#7A6A52;
+  --bs-link-color:#8B5A2B;
+  --bs-link-hover-color:#5D3A1A;
+  --bs-primary:#8B5A2B;
+  --bs-primary-rgb:139,90,43;
+  --bs-emphasis-color:#3A2410;
+  --bs-heading-color:#5D3A1A;
+}
+body{background:#FFF8E7;}
+.card,.list-group-item{background-color:#FFFCF2;border-color:#E3C9A3;}
+.nav-tabs{border-bottom-color:#D9BC93;}
+.nav-tabs .nav-link{color:#7A6A52;}
+.nav-tabs .nav-link:hover{border-color:#D9BC93 #D9BC93 #FFF8E7;}
+.nav-tabs .nav-link.active{color:#5D3A1A;background-color:#FFFCF2;border-color:#D9BC93 #D9BC93 #FFFCF2;}
+.nav-pills .nav-link.active{background-color:#8B5A2B;color:#FFF8E7;}
+.table{color:#4A2E12;border-color:#E3C9A3;}
+.table>thead th{background:#F5E6CE;border-bottom:2px solid #D9BC93;color:#5D3A1A;}
+.table-light{background:#F5E6CE;color:#4A2E12;}
+.form-control,.form-select{background:#FFFCF2;border-color:#D9BC93;color:#4A2E12;}
+.form-control:focus,.form-select:focus{border-color:#8B5A2B;box-shadow:0 0 0 .2rem rgba(139,90,43,.2);}
+.btn-outline-success{color:#8B5A2B;border-color:#8B5A2B;}
+.btn-outline-success:hover{background:#8B5A2B;border-color:#7A4E1E;color:#FFF8E7;}
+.badge.bg-secondary{background:#A8683A!important;color:#FFFCF2;}
+</style>
 </head>
 <body>
 <div class="container-fluid py-3">
@@ -92,5 +124,6 @@ function dlCSV(tId, fname) {
   a.download = fname; a.click();
 }
 </script>
+<style id="mg-back-style">.mg-back{position:fixed;top:0.9rem;left:0.9rem;z-index:99999;display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border:1px solid #8B5A2B;border-radius:999px;background:rgba(255,248,231,0.95);color:#5D3A1A;font:600 0.8rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 0.2rem 0.6rem rgba(93,58,26,0.18);}.mg-back:hover{background:#FFF8E7;border-color:#5D3A1A;}</style><button type="button" class="mg-back" id="mg-back"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>Back</button><script>(function(){var b=document.getElementById("mg-back");if(!b)return;b.addEventListener("click",function(){if(window.history.length>1){window.history.back();}else{window.close();}});var s=document.createElement("style");s.textContent="@media print{.mg-back{display:none!important;}}";document.head.appendChild(s);})();</script>
 </body>
 </html>

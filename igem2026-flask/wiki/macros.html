@@ -20,9 +20,6 @@
 {% endmacro %}
 
 {# iGEM 合规图片宏：站点图片必须走官方图床 static.igem.wiki。
-   基址为实测可用形态：teams/6373/wiki/（2026-09-30 实测）。
-   旧基址 2026/szpu-china/ 实测整片 403（含已存在的文件），已废弃；
-   static.igem.wiki 对"不存在的对象"返回 403 application/xml，故 403 = 待上传。
    用法：{{ igem_img("lab/wetlab/model/xxx.webp", "示意图") }}
    参数：
      name  wiki/ 之后的路径（上传时用的目标路径，如 "lab/wetlab/<页面>/<文件>"）
@@ -41,9 +38,8 @@
         static/js/core/utils.js 暴露的 window.MEDIA_BASE 与 wiki/README。
    参数：
      rel  wiki/ 之后的完整路径；上传目标按页面归属分两类：
-          wet-lab 页面 lab/wetlab/<页面 slug>/<文件名>（design、protocol 已按此摆放），
-          dry-lab 页面 lab/drylab/<页面 slug>/<文件名>（model 的 4 张图已按此上传）。
-          待上传文件先归集到 static/image/wait/<页面>/（见技能 check_images.py）。
+          wet-lab 页面 lab/wetlab/<页面 slug>/<文件名>，
+          dry-lab 页面 lab/drylab/<页面 slug>/<文件名>。
 #}
 {% macro media(rel) %}https://static.igem.wiki/teams/6373/wiki/{{ rel }}{% endmacro %}
 

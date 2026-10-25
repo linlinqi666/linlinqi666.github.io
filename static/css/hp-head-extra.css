@@ -1,0 +1,591 @@
+.description-container { width: 100%; max-width: 106rem; }
+  .description-content { width: 100%; }
+  .hp-flat-root { margin: 0 0 2.2rem; }
+  .hp-flat-carousel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(.55rem, 1.5vw, 1.25rem); }
+  .hp-flat-viewport { overflow: hidden; min-width: 0; }
+  .hp-flat-track { display: flex; flex-wrap: nowrap; transition: transform .42s ease; }
+  .hp-flat-track.is-moving { will-change: transform; }
+  .hp-flat-track > * { min-width: 0; }
+  .hp-flat-card { position: relative; flex: 0 0 25%; min-width: 0; aspect-ratio: 1.35 / 1; overflow: hidden; padding: 0; border: 0; background: rgba(139,115,85,.12); color: #fff; cursor: pointer; opacity: .72; transition: opacity .28s ease, transform .28s cubic-bezier(.22,1,.36,1), outline-color .28s ease; animation: hpCardIn .55s cubic-bezier(.22,1,.36,1) backwards; }
+  .hp-flat-card:nth-child(1) { animation-delay: .05s; }
+  .hp-flat-card:nth-child(2) { animation-delay: .13s; }
+  .hp-flat-card:nth-child(3) { animation-delay: .21s; }
+  .hp-flat-card:nth-child(4) { animation-delay: .29s; }
+  .hp-flat-card:nth-child(5) { animation-delay: .37s; }
+  .hp-flat-card:nth-child(6) { animation-delay: .45s; }
+  .hp-flat-card:nth-child(7) { animation-delay: .53s; }
+  .hp-flat-card:nth-child(8) { animation-delay: .61s; }
+  /* 无配图的文章：纯文字卡片，保证条目不被隐藏 */
+  .hp-flat-card--text { background: linear-gradient(150deg, #efe4cf 0%, #dfd0b6 100%); }
+  .hp-flat-card--text span { left: .9rem; right: .9rem; bottom: auto; top: 50%; transform: translateY(-50%); color: #5c4d3c; text-shadow: none; font-size: clamp(.8rem, 1.15vw, 1rem); line-height: 1.35; }
+  .hp-flat-card + .hp-flat-card { border-left: 1rem solid transparent; background-clip: padding-box; }
+  .hp-flat-card.is-active { opacity: 1; box-shadow: 0 12px 26px -14px rgba(74,59,42,.5); }
+  .hp-flat-card::after { content: ""; position: absolute; inset: 0; border: 2px solid rgba(166,124,82,.9); opacity: 0; pointer-events: none; }
+  /* 到位特效：切换到某板块时，对应卡片金环闪现 + 轻微回弹，提示“已滚动到该位置” */
+  .hp-flat-card.is-arriving { animation: hpCardArrive .62s cubic-bezier(.22,1,.36,1); }
+  .hp-flat-card.is-arriving::after { animation: hpCardRing .62s ease-out; }
+  @keyframes hpCardArrive {
+    0% { transform: scale(.96); box-shadow: 0 0 0 0 rgba(166,124,82,.5); }
+    55% { transform: scale(1.03); }
+    100% { transform: none; box-shadow: 0 0 0 12px rgba(166,124,82,0); }
+  }
+  @keyframes hpCardRing { 0% { opacity: .95; } 100% { opacity: 0; } }
+  .hp-flat-card img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .42s ease; }
+  .hp-flat-card:hover, .hp-flat-card:focus-visible { transform: translateY(-4px); opacity: .92; }
+  .hp-flat-card.is-active:hover, .hp-flat-card.is-active:focus-visible { opacity: 1; }
+  .hp-flat-card:hover img, .hp-flat-card:focus-visible img { transform: scale(1.06); }
+  .hp-flat-card span { position: absolute; left: .75rem; bottom: .65rem; font-size: clamp(.82rem, 1.3vw, 1.05rem); font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.45); transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .28s ease; opacity: .92; }
+  .hp-flat-card:hover span, .hp-flat-card:focus-visible span { transform: translateY(-2px); opacity: 1; }
+  @keyframes hpCardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: .72; transform: none; } }
+  @keyframes hpIntroIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .hp-flat-intro.is-switching .hp-flat-intro-date,
+  .hp-flat-intro.is-switching .hp-flat-intro-title,
+  .hp-flat-intro.is-switching .hp-flat-intro-count { animation: hpIntroIn .32s ease both; }
+  .hp-flat-button { width: 2.5rem; height: 2.5rem; padding: 0; border: 1px solid rgba(139,115,85,.55); border-radius: 50%; background: transparent; color: #6f5b44; font: 1.25rem/1 serif; cursor: pointer; transition: background-color .2s ease, color .2s ease, transform .2s ease; }
+  .hp-flat-button:hover, .hp-flat-button:focus-visible { background: #8b7355; color: #fff8e7; transform: scale(1.08); }
+  .hp-flat-intro { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: baseline; gap: 1rem; padding: 1rem 0 0; border-top: 1px solid rgba(139,115,85,.28); color: #5c4d3c; }
+  .hp-flat-intro-date, .hp-flat-intro-count { font-size: 0.9375rem; letter-spacing: .1em; white-space: nowrap; color: #8b7355; }
+  .hp-flat-intro-title { margin: 0; font-size: clamp(1.05rem,1.5vw,1.25rem); line-height: 1.65; }
+  .hp-flat-detail-panel { margin-top: 0; }
+  .hp-flat-detail-panel > .detail-viewport { overflow: hidden; transition: height .42s cubic-bezier(.22, 1, .36, 1); }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track { display: flex; align-items: flex-start; transition: transform .42s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+  .hp-flat-detail-panel > .detail-viewport > .detail-track > .detail-slide[aria-hidden="false"] { visibility: visible; }
+  @media (prefers-reduced-motion: reduce) { .hp-flat-detail-panel > .detail-viewport, .hp-flat-detail-panel > .detail-viewport > .detail-track { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-flat-card, .hp-flat-card img, .hp-flat-card span, .hp-flat-button,
+    .hp-flat-card.is-arriving, .hp-flat-card.is-arriving::after,
+    .hp-flat-intro.is-switching .hp-flat-intro-date,
+    .hp-flat-intro.is-switching .hp-flat-intro-title,
+    .hp-flat-intro.is-switching .hp-flat-intro-count { animation: none !important; transition: none !important; }
+  }
+  @media (max-width: 700px) {
+    .description-container {  }
+    .hp-flat-carousel { gap: .45rem; }
+    .hp-flat-button { width: 2rem; height: 2rem; }
+    .hp-flat-card { aspect-ratio: 1.75 / 1; }
+    .hp-flat-intro { grid-template-columns: 1fr auto; gap: .5rem .8rem; }
+    .hp-flat-intro-title { grid-column: 1 / -1; grid-row: 2; }
+  }
+  /* 手机档（≤480px）容器满宽：三层内边距叠加后内容宽度只剩视口的 65% */
+  @media (max-width: 480px) {
+    .description-container { width: 100%; padding-inline: 12px; }
+  }
+
+
+  /* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
+  .hz-map * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* 该页面包含全屏地图与角色模态框；确保全局固定导航始终位于页面内容之上。 */
+  nav { z-index: 200 !important; }
+
+  .hz-map {
+    --hz-accent: #a67c52;
+    --hz-filter-bg: rgba(255,255,255,.92);
+    --hz-filter-text: #3d342b;
+    --hz-filter-border: rgba(139,115,85,.25);
+    --hz-map-bg-1: #e8dfd2;
+    --hz-map-bg-2: #d6c9b6;
+    --hz-province-fill: #c9b99a;
+    --hz-province-stroke: #a8997d;
+    --hz-province-hover: #b8a883;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #4a3f33;
+    max-width: 560px; margin: 0 auto;
+    /* 去掉外层大白框：外层只作轻量承载，视觉重心交给地图容器；标题直接落在页面奶油底上 */
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    /* 隔离层叠与布局，避免影响宿主页面 */
+    isolation: isolate;
+  }
+
+  /* 页面只保留两个主容器：概述+地图，以及人物信息；信息区内部不再绘制套盒子。 */
+  .hp-overview-map-card { margin-top: var(--desc-spacing-3xl); }
+  .hz-details-card { margin-top: var(--desc-spacing-3xl); }
+  .hz-details-card.hz-details { width: 100%; max-width: none; margin: var(--desc-spacing-3xl) 0 0; scroll-margin-top: 6rem; padding: 1.75rem 2rem; }
+  .hz-details-intro { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+  .hz-details-intro h2 { margin: 0 0 1.25rem; color: #5c4d3c; }
+  .hz-details-intro p { max-width: 760px; line-height: 1.7; color: #6f604e; }
+  .hz-detail-panel { margin-top: 1.75rem; border-radius: 0; }
+  .hz-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.75rem; }
+  .hz-intro-block { padding-top: 1rem; border-top: 1px solid rgba(139,115,85,.2); }
+  .hz-intro-block h3 { margin: 0 0 .45rem; font-size: 1.12rem; color: #5c4d3c; }
+  .hz-intro-block p { margin: 0; font-size: 1.12rem; line-height: 1.75; color: #6f604e; }
+  .hz-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 .25rem 0 .5rem; vertical-align: middle; }
+  .hz-legend-dot.science { background: #4A90E2; }
+  .hz-legend-dot.industry { background: #9013FE; }
+  .hz-legend-dot.policy { background: #E94B3C; }
+  .hz-legend-dot.public { background: #F5A623; }
+  @media (max-width: 680px) { .hz-intro-grid { grid-template-columns: 1fr; } }
+  .hz-detail-viewport { overflow: hidden; border-radius: 18px; }
+  .hz-detail-track { display: flex; align-items: flex-start; transition: transform .5s cubic-bezier(.22,1,.36,1); will-change: transform; }
+  .hz-detail-slide { flex: 0 0 100%; min-width: 100%; }
+  .hz-detail-card { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 1.5rem; align-items: start; padding: 1.5rem; border: 1px solid rgba(139,115,85,.2); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 14px 36px rgba(74,59,42,.14); }
+  .hz-detail-card:not(:has(.hz-detail-card__photo)) { grid-template-columns: 1fr; }
+  .hz-detail-card__photo { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
+  .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: 0.9375rem; letter-spacing: .08em; text-transform: uppercase; }
+  .hz-detail-card h3 { margin: 0; color: #5c4d3c; }
+  .hz-detail-card__meta { margin: .4rem 0 1rem; color: #7d6d5a; }
+  .hz-detail-card__copy { margin: 0 0 .9rem; line-height: 1.75; color: #4a3f33; }
+  .hz-detail-card__list { margin: 0 0 1rem; padding-left: 1.25rem; display: grid; gap: .55rem; }
+  .hz-detail-card__list li { line-height: 1.7; color: #4a3f33; }
+  .hz-detail-card__list li strong { color: #5c4d3c; }
+  .hz-detail-card__table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: 1rem; background: rgba(255,255,255,.6); border: 1px solid rgba(139,115,85,.28); border-radius: 12px; overflow: hidden; }
+  .hz-detail-card__table th, .hz-detail-card__table td { padding: .6rem .8rem; border-bottom: 1px solid rgba(139,115,85,.18); text-align: left; vertical-align: top; line-height: 1.55; }
+  .hz-detail-card__table th { background: rgba(139,115,85,.14); color: #5c4d3c; font-weight: 700; }
+  .hz-detail-card__table tr:last-child td { border-bottom: none; }
+  .hz-map .hz-cluster.is-active { transform: translate(-50%, -100%) scale(1.14); z-index: 30; filter: drop-shadow(0 6px 9px rgba(74,59,42,.42)); }
+  .hz-detail-card:focus { outline: 3px solid rgba(139,115,85,.45); outline-offset: 3px; }
+  @media (max-width: 680px) { .hz-details-intro, .hz-detail-card { padding: 1.15rem; } .hz-detail-card { grid-template-columns: 1fr; } .hz-detail-card__photo { max-width: 260px; } }
+  @media (prefers-reduced-motion: reduce) { .hz-detail-track { transition: none; } }
+
+  .hz-map .hz-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px; margin-bottom: 18px;
+  }
+  .hz-map .hz-header h1 {
+    font-size: 24px; font-weight: 700; letter-spacing: 1px;
+    color: #5c4d3c;
+  }
+  .hz-map .hz-header .hz-hint { font-size: 15px; color: #7d6d5a; }
+
+
+  .hz-map .hz-container {
+    position: relative; width: 100%;
+    aspect-ratio: 314 / 360;        /* 中国地图 natural ratio */
+    border-radius: 22px;
+    /* 用 padding 给边缘 pin 留出安全区，避免被圆角背景裁切 */
+    padding: 18px; box-sizing: border-box;
+    /* 去掉生硬大白框：细腻主题渐变 + 内高光 + 柔和投影，呈现“悬浮地图”质感 */
+    background:
+      radial-gradient(130% 120% at 50% -18%, #f7f0e3 0%, #ece0cd 58%, #dccdb2 100%);
+    border: 1px solid rgba(139,115,85,.30);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.55) inset,
+      0 22px 55px -20px rgba(74,59,42,.32);
+    overflow: hidden;
+    /* 覆盖 static CSS 中的 contain，避免创建额外 stacking context 导致图钉被地图层覆盖 */
+    contain: none !important;
+  }
+
+  .hz-map .hz-layer {
+    position: absolute; inset: 18px;
+    z-index: 1;
+    /* 覆盖 static CSS 中的 contain/content-visibility */
+    contain: none !important;
+    content-visibility: visible !important;
+  }
+  /* 中国地图层：默认始终可见 */
+  .hz-map .hz-china {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .hz-map .hz-layer > svg {
+    width: 100%; height: 100%; display: block;
+    contain: none !important;
+  }
+
+  .hz-map .hz-pins {
+    position: absolute; top: 18px; left: 18px; right: 18px; bottom: 18px;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .hz-map .hz-pins .hz-cluster,
+  .hz-map .hz-pins .hz-cluster-popover { pointer-events: auto; }
+
+  .hz-map #chinaProvinces path:focus,
+  .hz-map #chinaProvinces path:focus-visible { outline: none; }
+
+  /* 中国地图：省份路径 - 暖棕主题，悬停高亮 */
+  .hz-map #chinaProvinces path {
+    fill: var(--hz-province-fill); stroke: var(--hz-province-stroke); stroke-width: .8;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: fill .2s ease, stroke .2s ease;
+    contain: none !important;
+  }
+  .hz-map #chinaProvinces path:hover {
+    fill: var(--hz-province-hover);
+    stroke: var(--hz-province-stroke);
+  }
+
+  /* ===== 筛选面板 ===== */
+  .hz-map .hz-filter {
+    position: absolute; top: 14px; left: 14px; z-index: 20;
+    background: var(--hz-filter-bg);
+    color: var(--hz-filter-text);
+    border: 1px solid var(--hz-filter-border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    box-shadow: 0 6px 20px rgba(74,59,42,.15);
+    font-size: 15px;
+    backdrop-filter: blur(4px);
+    min-width: 180px;
+  }
+  .hz-map .hz-filter.collapsed {
+    min-width: auto; padding: 8px;
+  }
+  .hz-map .hz-filter-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+  }
+  .hz-map .hz-filter.collapsed .hz-filter-header { justify-content: center; }
+  .hz-map .hz-filter-title {
+    font-weight: 700; font-size: 15px;
+    color: #4a3f33;
+  }
+  .hz-map .hz-filter.collapsed .hz-filter-title { display: none; }
+  .hz-map .hz-filter-toggle {
+    width: 24px; height: 24px; border: none; border-radius: 6px;
+    background: transparent; color: #5c4d3c; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; line-height: 1;
+    transition: background .15s;
+  }
+  .hz-map .hz-filter-toggle:hover { background: rgba(139,115,85,.12); }
+  .hz-map .hz-filter-options { margin-top: 8px; }
+  .hz-map .hz-filter.collapsed .hz-filter-options { display: none; }
+  .hz-map .hz-filter label {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; margin: 5px 0;
+    line-height: 1.35;
+  }
+  .hz-map .hz-filter input[type="checkbox"] {
+    width: 14px; height: 14px; accent-color: var(--hz-accent); cursor: pointer;
+  }
+  .hz-map .hz-filter .hz-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .hz-map .hz-filter .hz-dot.science { background: #4A90E2; }
+  .hz-map .hz-filter .hz-dot.policy { background: #E94B3C; }
+  .hz-map .hz-filter .hz-dot.agriculture { background: #7ED321; }
+  .hz-map .hz-filter .hz-dot.industry { background: #9013FE; }
+  .hz-map .hz-filter .hz-dot.public { background: #F5A623; }
+  @media (max-width: 640px) {
+    .hz-map .hz-filter {
+      position: relative; top: auto; right: auto;
+      margin: 10px 0 0;
+      border-radius: 10px;
+      box-shadow: none;
+      background: rgba(255,255,255,.9);
+    }
+  }
+
+  /* 省份集合点：地图图钉造型（上圆头 + 下尖尾），针尖对准坐标；头内放专家照片或默认人像剪影 */
+  .hz-map .hz-cluster {
+    --pin-head: 32px;
+    --pin-tail: 14px;
+    position: absolute; width: var(--pin-head);
+    height: calc(var(--pin-head) + var(--pin-tail) - 2px);
+    padding: 0;
+    transform: translate(-50%, -100%); transform-origin: 50% 100%;
+    z-index: 25; cursor: pointer;
+    appearance: none; border: none;
+    background: transparent; color: transparent;
+    filter: drop-shadow(0 3px 4px rgba(74,59,42,.35));
+    transition: transform .18s cubic-bezier(.4,0,.2,1), filter .18s ease;
+    contain: none !important;
+    overflow: visible;
+  }
+  /* 针尾：等腰三角，随分类色 */
+  .hz-map .hz-cluster::before {
+    content: ""; position: absolute; left: 50%; top: calc(var(--pin-head) - 7px);
+    width: calc(var(--pin-head) * .46); height: calc(var(--pin-tail) + 8px);
+    transform: translateX(-50%);
+    background: var(--cluster-color, #8B7355);
+    clip-path: polygon(50% 100%, 4% 0, 96% 0);
+  }
+  /* 针头：圆形头像位 */
+  .hz-map .hz-cluster__head {
+    position: absolute; top: 0; left: 0;
+    width: var(--pin-head); height: var(--pin-head);
+    border-radius: 50%; box-sizing: border-box;
+    background: #f3ead8; border: 2px solid var(--cluster-color, #8B7355);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .hz-map .hz-cluster__head--count {
+    background: var(--cluster-color, #8B7355); border-color: #fff8e7;
+    color: #fff; font-size: 15px; font-weight: 700; line-height: 1;
+  }
+  /* 多专家针头的人数角标 */
+  .hz-map .hz-cluster__badge {
+    position: absolute; right: -3px; top: calc(var(--pin-head) - 8px);
+    min-width: 15px; height: 15px; padding: 0 3px; box-sizing: border-box;
+    border-radius: 50%; border: 1.5px solid #fff8e7;
+    background: var(--cluster-color, #8B7355); color: #fff;
+    font-size: 15px; font-weight: 700; line-height: 12px; text-align: center;
+  }
+  .hz-map .hz-cluster__photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .hz-map .hz-cluster__silhouette { width: 74%; height: 74%; fill: #a89177; }
+  .hz-map .hz-cluster__count,
+  .hz-map .hz-cluster__name { display: none; }
+  .hz-map .hz-cluster:hover,
+  .hz-map .hz-cluster:focus-visible,
+  .hz-map .hz-cluster.is-active {
+    transform: translate(-50%, -100%) scale(1.14); z-index: 30; outline: none;
+    filter: drop-shadow(0 6px 9px rgba(74,59,42,.42));
+  }
+  .hz-map .hz-cluster-popover {
+    position: absolute; left: 0; top: 0; z-index: 40; width: min(280px, calc(100% - 24px));
+    padding: 14px; border: 1px solid rgba(139,115,85,.36); border-radius: 14px;
+    background: rgba(255,250,240,.98); color: #4a3f33; box-shadow: 0 14px 34px rgba(74,59,42,.24);
+  }
+  .hz-cluster-popover[hidden] { display: none; }
+  .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 15px; }
+  .hz-cluster-popover__header span { color:#8b7355; font-size: 15px; }
+  .hz-cluster-popover ul { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; list-style:none; max-height:240px; overflow:auto; }
+  /* 全局内容卡列表用 li::before 画圆点，会渗进浮层列表，这里显式清除 */
+  .hz-cluster-popover ul li::before { content:none; display:none; }
+  .hz-cluster-expert { display:flex; align-items:center; gap:9px; width:100%; padding:9px 10px; border:1px solid rgba(139,115,85,.18); border-radius:9px; background:#fff8e7; color:#4a3f33; text-align:left; cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
+  .hz-cluster-expert[data-category="science"]:hover,
+  .hz-cluster-expert[data-category="science"]:focus-visible { border-color:#4A90E2; background:#eaf2fb; outline:none; }
+  .hz-cluster-expert[data-category="policy"]:hover,
+  .hz-cluster-expert[data-category="policy"]:focus-visible { border-color:#E94B3C; background:#fcebe9; outline:none; }
+  .hz-cluster-expert[data-category="industry"]:hover,
+  .hz-cluster-expert[data-category="industry"]:focus-visible { border-color:#9013FE; background:#f4e8fb; outline:none; }
+  .hz-cluster-expert[data-category="public"]:hover,
+  .hz-cluster-expert[data-category="public"]:focus-visible { border-color:#F5A623; background:#fbeed6; outline:none; }
+  .hz-cluster-expert__name, .hz-cluster-expert__meta { display:block; }
+  .hz-cluster-expert__name { font-weight:700; font-size: 15px; }
+  .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size: 15px; line-height:1.4; }
+  /* 展开列表里的小头像：有照片用照片，无照片用人像剪影 */
+  .hz-cluster-expert__body { min-width:0; }
+  .hz-cluster-expert__avatar {
+    flex:0 0 auto; width:32px; height:32px; border-radius:50%; box-sizing:border-box;
+    border:1px solid rgba(139,115,85,.35); background:#f3ead8; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hz-cluster-expert__avatar img { display:block; width:100%; height:100%; object-fit:cover; }
+  .hz-cluster-expert__avatar .hz-cluster__silhouette { width: 74%; height: 74%; fill:#a89177; }
+  @media (max-width: 640px) {
+    .hz-map .hz-cluster-popover { position: relative; left:auto; top:auto; width:100%; margin-top:10px; }
+    .hz-map .hz-cluster { --pin-head: 24px; --pin-tail: 10px; }
+    .hz-map .hz-cluster__head--count { font-size: 11px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hz-map .hz-cluster { transition:none; }
+  }
+
+  .hz-map .hz-legend {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-top: 16px; font-size: 15px; color: #7d6d5a;
+  }
+  .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 15px; }
+
+  /* ===== 地图与专家索引并排（等高）；全部专家收进一个大收纳条 ===== */
+  .hz-map-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.5rem; align-items: stretch; max-width: 900px; margin: 0 auto; }
+  .hz-map-layout .hz-map { max-width: none; width: 100%; margin: 0; }
+  .hz-expert-index { display: flex; flex-direction: column; gap: .25rem; min-height: 0; overflow: auto; padding: .8rem .7rem; border: 1px solid rgba(139,115,85,.2); border-radius: 14px; background: rgba(255,250,240,.85); box-shadow: 0 0.25rem 1rem rgba(139,90,43,.08); }
+  .hz-expert-index__item { background: rgba(255,255,255,.65); border: 1px solid rgba(139,115,85,.16); }
+  .hz-expert-index__item:hover, .hz-expert-index__item:focus-visible { background: #fff8e7; transform: translateX(2px); border-color: rgba(139,115,85,.4); }
+  .hz-expert-index__group { display: flex; align-items: center; gap: .4rem; margin: .55rem 0 .2rem; font-size: 0.9375rem; font-weight: 700; color: #5c4d3c; }
+  .hz-expert-index__group:first-child { margin-top: 0; }
+  .hz-expert-index__item { display: flex; align-items: center; gap: .55rem; padding: .3rem .45rem; border-radius: 9px; color: #5c4d3c; text-decoration: none; transition: background-color .15s ease, transform .15s ease, border-color .15s ease; }
+  .hz-expert-index__item:hover, .hz-expert-index__item:focus-visible { background: rgba(139,115,85,.14); outline: none; }
+  .hz-expert-index__avatar { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; overflow: hidden; background: #f3ead8; border: 1px solid rgba(139,115,85,.35); display: flex; align-items: center; justify-content: center; }
+  .hz-expert-index__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hz-expert-index__avatar .hz-cluster__silhouette { width: 74%; height: 74%; fill: #a89177; }
+  .hz-expert-index__name { font-size: .85rem; line-height: 1.3; }
+  .hz-expert-fold-all { margin-top: 1.5rem; }
+  /* 展开动画：内容淡入下滑，收起无动画（原生 details 无高度过渡，用内容入场补偿） */
+  .hz-expert-fold-all[open] > .section-fold__body { animation: hpFoldReveal .38s cubic-bezier(.22,1,.36,1); }
+  .hz-expert-fold-all[open] > summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  @keyframes hpFoldReveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  .hz-expert-fold-all > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; padding: .85rem 1.1rem; border: 1px solid rgba(139,115,85,.28); border-radius: 12px; background: rgba(139,115,85,.1); }
+  .hz-expert-fold-all > summary::-webkit-details-marker { display: none; }
+  .hz-expert-fold-all__title { font-weight: 700; color: #5c4d3c; font-size: 1.02rem; }
+  .hz-expert-fold-all__hint { font-size: 0.9375rem; color: #8b7355; }
+  .hz-expert-stack { display: grid; gap: 1.1rem; min-width: 0; margin-top: 1.1rem; }
+  .hz-expert-stack .hz-detail-slide { width: 100%; }
+  /* 锚点定位预留固定导航高度，避免专家标题被顶栏遮住 */
+  .hz-expert-stack h3[id^="expert-"] { scroll-margin-top: 5.5rem; }
+  @media (max-width: 860px) {
+    .hz-map-layout { grid-template-columns: 1fr; }
+    .hz-expert-index { flex-direction: row; flex-wrap: wrap; }
+    .hz-expert-index__group { width: 100%; }
+  }
+  /* 图片预留位：后续补图时直接替换为 <img> */
+  .hp-photo-slot { display: grid; place-items: center; min-height: 170px; margin: 1rem 0; border: 1px dashed rgba(139,115,85,.45); border-radius: 12px; background: rgba(139,115,85,.08); color: #8b7355; font-size: 0.9375rem; letter-spacing: .04em; }
+
+  /* ===== 专家详情：会议照片画廊 =====
+     与活动照片墙同一套规格：统一 4:3 + cover 铺满，不留白；图注图下常显。 */
+  .hz-detail-card__gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin-top: 1.15rem; align-items: start; max-width: 960px; }
+  .hz-detail-card__gallery figure { margin: 0; overflow: hidden; border-radius: 12px; }
+  .hz-detail-card__gallery img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
+  .hz-detail-card__gallery figcaption { margin-top: .3rem; font-size: 0.9375rem; letter-spacing: .02em; color: #8b7355; }
+
+  /* ===== 专家卡「返回地图」按钮：收起收纳条并滚回地图（行为在页面内联脚本的 setupBackToMap） ===== */
+  .hz-detail-card__back { grid-column: 1 / -1; margin-top: 1.1rem; }
+  .hz-back-to-map {
+    appearance: none; border: 1px solid rgba(139,115,85,.35); background: rgba(139,115,85,.08);
+    color: #7d6d5a; font: inherit; font-size: 0.9375rem; letter-spacing: .03em;
+    padding: .45rem .95rem; border-radius: 999px; cursor: pointer;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .hz-back-to-map:hover { background: rgba(139,115,85,.18); color: #5f5347; }
+  .hz-back-to-map:focus-visible { outline: 2px solid rgba(139,115,85,.55); outline-offset: 2px; }
+  /* 单图：宽度对齐多图画廊的单列（220–340px），并保证不宽于正文列 */
+  .hz-detail-card__gallery--single { grid-template-columns: minmax(220px, 340px); }
+  /* 专家卡响应式：1340px 以下正文列会被压窄，头像列固定 220px 会把正文与下方画廊
+     一起挤扁；此区间改为上下堆叠，正文占满整卡宽。
+     放在 680px 规则之前，保证 ≤680px 仍沿用原有的头像 260px 上限。 */
+  @media (max-width: 1340px) {
+    .hz-detail-card { grid-template-columns: 1fr; }
+    .hz-detail-card__photo { max-width: 220px; }
+  }
+  @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
+
+  /* ===== 活动照片墙：统一比例铺满网格 =====
+     img 统一 4:3 + object-fit:cover 裁切铺满，同排所有图等高、图注底对齐；
+     图注仍为图片下方常显（不改回悬停浮层）。 */
+  .hp-photo-grid--flow { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; overflow: visible; }
+  .hp-photo-grid--flow .hp-photo-item { overflow: hidden; border-radius: 12px; }
+  .hp-photo-grid--flow .hp-photo-item img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
+  .hp-photo-grid--flow .hp-photo-item figcaption { position: static; opacity: 1; transform: none; background: none; color: #7d6d5a; padding: .45rem .1rem 0; font-size: 0.9375rem; }
+  .hp-photo-grid--dense { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+  /* ===== 全页图片统一动效 =====
+     照片墙 / 会议画廊 / 专家头像共用同一套过渡时值与 hover 放大倍率，避免各容器手感不一。 */
+  .hp-photo-item img,
+  .hz-detail-card__gallery img,
+  .hz-detail-card__photo {
+    transition: transform .6s ease, opacity .3s cubic-bezier(.16, 1, .3, 1);
+  }
+  .hp-photo-item:hover img,
+  .hz-detail-card__gallery figure:hover img,
+  .hz-detail-card__photo:hover { transform: scale(1.05); }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-photo-item img,
+    .hz-detail-card__gallery img,
+    .hz-detail-card__photo { transition: none; }
+    .hp-photo-item:hover img,
+    .hz-detail-card__gallery figure:hover img,
+    .hz-detail-card__photo:hover { transform: none; }
+  }
+
+  /* ===== 浮层与图钉动画 ===== */
+  @keyframes hzPopoverIn {
+    from { opacity: 0; transform: translateY(10px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes hzItemIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes hzPinFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes hzPinPulse {
+    0%   { opacity: .55; transform: scale(.85); }
+    100% { opacity: 0;   transform: scale(1.9); }
+  }
+
+  /* 移入展开专家列表：浮层淡入上移 + 轻微放大 */
+  .hz-cluster-popover {
+    animation: hzPopoverIn .24s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  /* 浮层内专家项依次错落出现，强化“展开列表”的动效感 */
+  .hz-cluster-popover ul li { animation: hzItemIn .26s ease both; }
+  .hz-cluster-popover ul li:nth-child(1) { animation-delay: .05s; }
+  .hz-cluster-popover ul li:nth-child(2) { animation-delay: .10s; }
+  .hz-cluster-popover ul li:nth-child(3) { animation-delay: .15s; }
+  .hz-cluster-popover ul li:nth-child(4) { animation-delay: .20s; }
+  .hz-cluster-popover ul li:nth-child(5) { animation-delay: .25s; }
+  .hz-cluster-popover ul li:nth-child(6) { animation-delay: .30s; }
+  .hz-cluster-popover ul li:nth-child(7) { animation-delay: .35s; }
+  .hz-cluster-popover ul li:nth-child(8) { animation-delay: .40s; }
+
+  /* 图钉渲染时依次淡入，形成“落点”节奏 */
+  .hz-map .hz-cluster { animation: hzPinFade .5s ease both; }
+
+  /* 激活图钉的脉冲圈（贴合针头圆形），提示当前选中 */
+  .hz-map .hz-cluster::after {
+    content: ""; position: absolute; top: 0; left: 0;
+    width: var(--pin-head); height: var(--pin-head);
+    border-radius: 50%;
+    border: 2px solid var(--cluster-color, #8B7355);
+    opacity: 0; pointer-events: none;
+  }
+  .hz-map .hz-cluster.is-active::after { animation: hzPinPulse 1.6s ease-out infinite; }
+
+  /* 尊重用户的减弱动效偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .hz-map .hz-layer,
+    .hz-map .hz-cluster,
+    .hz-map .hz-container,
+    .hz-map #chinaProvinces path,
+    .hz-cluster-popover,
+    .hz-cluster-popover ul li,
+    .hz-map .hz-cluster::after {
+      transition: none !important;
+      animation: none !important;
+      will-change: auto !important;
+    }
+  }
+
+  /* ===== 图片检视浮层（照片墙 / 会议画廊，点击放大、组内左右切换） ===== */
+  .hp-photo-item img,
+  .hz-detail-card__gallery img { cursor: zoom-in; }
+  .hp-photo-item img:focus-visible,
+  .hz-detail-card__gallery img:focus-visible { outline: 3px solid rgba(139,115,85,.55); outline-offset: 3px; }
+
+  .hp-image-viewer { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; animation: hpViewerIn .2s ease both; }
+  .hp-image-viewer[hidden] { display: none; }
+  .hp-image-viewer__backdrop { position: absolute; inset: 0; background: rgba(52,41,30,.93); }
+  .hp-image-viewer__frame { position: relative; margin: 0; display: grid; gap: .8rem; justify-items: center; max-width: min(1180px, 92vw); }
+  .hp-image-viewer__img { max-width: 100%; max-height: 76vh; width: auto; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 26px 62px rgba(26,18,10,.55); }
+  .hp-image-viewer__caption { max-width: 760px; color: #f4ecdb; font-size: 0.9375rem; line-height: 1.65; text-align: center; }
+  .hp-image-viewer__count { position: absolute; top: 1.15rem; left: 50%; transform: translateX(-50%); margin: 0; color: #f4ecdb; font-size: .78rem; letter-spacing: .1em; }
+  .hp-image-viewer__close,
+  .hp-image-viewer__nav { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid rgba(244,236,219,.55); border-radius: 50%; background: rgba(52,41,30,.55); color: #f4ecdb; font-size: 1.4rem; line-height: 1; cursor: pointer; transition: background-color .2s ease, transform .2s ease; }
+  .hp-image-viewer__close:hover,
+  .hp-image-viewer__nav:hover,
+  .hp-image-viewer__close:focus-visible,
+  .hp-image-viewer__nav:focus-visible { background: #8b7355; transform: scale(1.06); }
+  .hp-image-viewer__close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.1rem; }
+  .hp-image-viewer__nav { position: absolute; top: 50%; transform: translateY(-50%); }
+  .hp-image-viewer__nav:hover { transform: translateY(-50%) scale(1.06); }
+  .hp-image-viewer__nav--prev { left: 1.25rem; }
+  .hp-image-viewer__nav--next { right: 1.25rem; }
+  .hp-image-viewer__nav[hidden] { display: none; }
+  body.hp-viewer-open { overflow: hidden; }
+  @media (max-width: 680px) {
+    .hp-image-viewer__img { max-height: 62vh; }
+    .hp-image-viewer__nav { top: auto; bottom: 3.4rem; transform: none; }
+    .hp-image-viewer__nav:hover { transform: scale(1.06); }
+    .hp-image-viewer__nav--prev { left: 18%; }
+    .hp-image-viewer__nav--next { right: 18%; }
+    .hp-image-viewer__close { top: 1rem; right: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-image-viewer { animation: none; }
+    .hp-image-viewer__close,
+    .hp-image-viewer__nav { transition: none; }
+    .hp-image-viewer__close:hover,
+    .hp-image-viewer__nav:hover,
+    .hp-image-viewer__close:focus-visible,
+    .hp-image-viewer__nav:focus-visible { transform: none; }
+    .hp-image-viewer__nav:hover { transform: translateY(-50%); }
+  }
+  @keyframes hpViewerIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ===== 窄屏内容宽度收敛 =====
+     手机档容器满宽后，三层内边距仍会把正文挤窄（360px 视口下专家卡一度只剩 233px）。
+     这两条必须放在本块末尾：.hz-details-card.hz-details（0,2,0）定义在上面的 .content-card（0,1,0）之后，
+     只有同块且更晚出现才能稳定覆盖。 */
+  @media (max-width: 700px) {
+    .content-card,
+    .hz-details-card.hz-details { padding: 24px 18px; }
+  }
+  @media (max-width: 480px) {
+    .content-card,
+    .hz-details-card.hz-details { padding: 20px 14px; }
+    .hz-detail-card { padding: 1.15rem 1rem; }
+  }

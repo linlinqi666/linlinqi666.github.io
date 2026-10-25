@@ -10,8 +10,47 @@
  */
 
 const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * 静态资源版本号：取 static/css 与 static/js 下最新的 mtime（秒）。
+ *
+ * 为什么需要：本地 HTTP 服务与 Pages 托管都按 Last-Modified 做启发式缓存，
+ * HTML 与 CSS/JS 各自独立过期，于是常出现「新 HTML + 旧 CSS」的错配
+ * （实测：7 个动画图层退回原尺寸、说明块掉到页顶）。给链接挂 ?v= 后，
+ * HTML 一变 URL 就变，两者不可能再错配。
+ *
+ * 每次构建自动重算，不需要手工维护版本串。
+ */
+function computeAssetV() {
+  let newest = 0;
+  const walk = (dir) => {
+    let entries;
+    try {
+      entries = fs.readdirSync(dir, { withFileTypes: true });
+    } catch (e) {
+      return;
+    }
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else {
+        try {
+          newest = Math.max(newest, Math.floor(fs.statSync(full).mtimeMs / 1000));
+        } catch (e) { /* 忽略单个文件的读取失败 */ }
+      }
+    }
+  };
+  walk(path.join(__dirname, 'static', 'css'));
+  walk(path.join(__dirname, 'static', 'js'));
+  return String(newest || Date.now());
+}
 
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addGlobalData('assetV', computeAssetV);
+
   // 注：不启用 addPassthroughCopy。static/ 已作为源文件提交在仓库根目录，
   // 构建产物（output: "."）直接复用根目录下的 static/，无需复制；clean:false
   // 保证非破坏性，绝不删除根目录任何既有文件。

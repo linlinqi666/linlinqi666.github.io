@@ -9,7 +9,6 @@
 {% block head_extra %}
     <!-- 首页开场动画组件样式 -->
 <style>
-/* 内嵌自 static/css/components/index-intro-gif.css（2026-10-10，仅本页使用，原文件已删除） */
 /* 首页 GIF 开场动画（#intro-gif）
    状态机由 <html> 上的类驱动：
    无类 = 不播放（无 JS / 降级）；intro-gif-armed = 播放期隐藏导航并锁滚动；
@@ -88,7 +87,8 @@ html.intro-gif-running .intro-gif.intro-gif--hiding {
   }
 }
 
-/* 跳过按钮：无边框、无背景，直接压在 GIF 上，仅保留暖棕文字 */
+/* 跳过按钮：无边框、无背景，直接压在 GIF 上，仅保留暖棕文字。
+   2026-10-21 用户要求放大至约两倍：字重字号、内边距、箭头间距一并 ×2。 */
 .intro-gif__skip {
   position: absolute;
   right: max(var(--spacing-xl), env(safe-area-inset-right, 0px) + var(--spacing-xl));
@@ -96,14 +96,14 @@ html.intro-gif-running .intro-gif.intro-gif--hiding {
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-2xl);
+  gap: calc(var(--spacing-sm) * 2);
+  padding: calc(var(--spacing-sm) * 2) calc(var(--spacing-2xl) * 2);
   border: 0;
   border-radius: var(--radius-pill);
   background: none;
   color: var(--color-primary-dark);
   font-family: inherit;
-  font-size: var(--font-size-md);
+  font-size: calc(var(--font-size-md) * 2);
   font-weight: 600;
   cursor: pointer;
   transition: transform var(--duration-normal) var(--ease-smooth);
@@ -128,17 +128,18 @@ html.intro-gif-armed:not(.intro-gif-finished) body {
 html.intro-gif-armed:not(.intro-gif-finished) nav,
 html.intro-gif-armed:not(.intro-gif-finished) .hamburger-menu,
 html.intro-gif-armed:not(.intro-gif-finished) #page-progress-bar,
-html.intro-gif-armed:not(.intro-gif-finished) .scroll-progress-bar,
 html.intro-gif-armed:not(.intro-gif-finished) .mobile-menu-overlay {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
-/* 播放结束后导航栏淡入。
+/* 播放结束后导航栏淡入（非首页）。
+   首页（home-scroll-snap）导航改由 hover 接管，intro 结束后不淡入，保持收起，
+   等待「3 秒保底」或鼠标移入顶部触发带呼出。
    刻意不设 animation-fill-mode：动画结束即回落到基础态，
    避免长期覆盖 nav-scroll-behavior.js 的 .nav-hidden 位移。 */
-html.intro-gif-finished nav {
+html.intro-gif-finished:not(.home-scroll-snap) nav {
   animation: introGifNavIn var(--duration-slow) var(--ease-smooth);
 }
 
@@ -368,7 +369,11 @@ html.intro-gif-finished nav {
         <img fetchpriority="low" loading="lazy" class="art art--human-practices-chart" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/03-human-practices-chart.avif" alt="Line chart of influenza detections by subtype">
         <img fetchpriority="low" loading="lazy" class="art art--human-practices-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/03-human-practices-mascot-cape.webp" alt="EchoYeast peeking out at the bottom right">
         
-        <p class="art art--human-practices-axis art-title-text" lang="en">Week start date</p>
+        <!-- 2026-10-21：删去横轴标题「Week start date」，同位置改为数据来源标注（WHO FluNet） -->
+        <p class="art art--human-practices-source" lang="en">
+          Data source: <a href="https://www.who.int/toolkits/flunet/" target="_blank" rel="noopener noreferrer">WHO FluNet</a>,
+          Global Influenza Programme
+        </p>
         <p class="art art--human-practices-legend-subtypes art-legend" lang="en">Influenza subtypes</p>
         <p class="art art--human-practices-legend-h1n1 art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#acdaf2" aria-hidden="true"></span>A(H1N1)pdm09</p>
         <p class="art art--human-practices-legend-pos art-legend" lang="en"><span class="art-legend__swatch" style="--swatch:#f0a609" aria-hidden="true"></span>Influenza percent positive</p>
@@ -405,12 +410,12 @@ html.intro-gif-finished nav {
         <p class="statistics-caption" lang="en">Contemporary popular methods for detecting H1N1 influenza</p>
         <!-- <img fetchpriority="low" loading="lazy" class="art art--statistics-cloud" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-cloud.webp" alt="" aria-hidden="true"> -->
         <img fetchpriority="low" loading="lazy" class="art art--statistics-hill" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-hill.webp" alt="" aria-hidden="true">
-        <img fetchpriority="low" loading="lazy" class="art art--statistics-qpcr" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-qpcr.webp" alt="qPCR">
-        <img fetchpriority="low" loading="lazy" class="art art--statistics-elisa" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-elisa.webp" alt="ELISA">
-        <img fetchpriority="low" loading="lazy" class="art art--statistics-cgis" id="statistics-cgis" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-cgis.webp" alt="CGIS">
-        <img fetchpriority="low" loading="lazy" class="art art--statistics-arc" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-dashed-arc.webp" alt="" aria-hidden="true">
+        <img loading="lazy" class="art art--statistics-qpcr" data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-qpcr.webp" alt="qPCR">
+        <img loading="lazy" class="art art--statistics-elisa" data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-elisa.webp" alt="ELISA">
+        <img loading="lazy" class="art art--statistics-cgis" data-critical id="statistics-cgis" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-circle-cgis.webp" alt="CGIS">
+        <img loading="lazy" class="art art--statistics-arc" data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-dashed-arc.webp" alt="" aria-hidden="true">
         
-        <img fetchpriority="low" loading="lazy" class="art art--statistics-link" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-dashed-arc.webp"
+        <img loading="lazy" class="art art--statistics-link" data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-dashed-arc.webp"
           alt="" aria-hidden="true" decoding="async">
         <img fetchpriority="low" loading="lazy" class="art art--statistics-bulb" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-bulb.webp" alt="" aria-hidden="true">
         <img fetchpriority="low" loading="lazy" class="art art--statistics-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/04-statistics-mascot-thinking.webp" alt="EchoYeast thinking about detection methods">
@@ -541,60 +546,143 @@ html.intro-gif-finished nav {
       <h2 class="sr-only">Research content: Workflow and principle</h2>
       
       <div class="art-stage art-stage--dbtl-cycle">
-        
+
         <img fetchpriority="low" loading="lazy" class="art art--dbtl-cycle-wave" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/shared-wave-5.webp" alt="" aria-hidden="true" decoding="async">
-        
-        <p class="art art--dbtl-cycle-title art-title-text" lang="en">Research content:<br>Workflow and principle</p>
-        <!-- 原理示意图：首次滑入本屏时由 dbtl-pump.js 触发「想法泵出」入场——
-             以吉祥物头部中心为最小值点，沿上弓弧线飞向现有位置并逐渐放大；
-             无 JS / prefers-reduced-motion 时静态直出（脚本只加类，不做默认隐藏） -->
-        <img fetchpriority="low" loading="lazy" class="art art--dbtl-cycle-diagram" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/08-dbtl-cycle-workflow-diagram.webp" alt="Diagram of the workflow and mechanism">
+
+        <!-- 屏幕标题只保留上面的 h2.sr-only：视觉版式以左侧原理说明为正文（与根站一致）。
+             措辞按「项目设计为」口径：讲的是设计机制，不是已获得的实验结论。 -->
+        <div class="art art--dbtl-cycle-note" lang="en">
+          <p class="pager-note__lead">How PAGER antigen-gated receptors work</p>
+          <p class="pager-note__body">Nanobodies (Nb) specifically recognize and bind influenza HA
+            antigen; through steric hindrance and conformational changes, they push the
+            autoinhibitory peptide MT1 away from the receptor’s orthosteric binding site. Once the
+            binding site is exposed, the small-molecule agonist DCZ can bind and activate the
+            receptor. The activated receptor transmits signals downstream via the G protein-coupled
+            pathway, ultimately initiating reporter gene expression driven by the <i>FUS1</i> promoter.</p>
+        </div>
+
+        <!-- PAGER 受体的滚动叙事动画（随滚动进度逐帧推进，四类素材同出一张 1600×1600 画布）：
+              受体自右向左擦入 → 一颗 MT1 横置落在中央正构位点（开场完全透明，随动画渐变实）→
+              五颗 HA 从各处飞入、最大那颗停到 Nb 头顶且保持结合不脱落 → MT1 被解除、上飘淡出 →
+              两颗 DCZ 自膜外落进中央螺旋两侧凹槽并放光环。
+              几何由下方 pager-scroll-story 内联脚本运行时量测。
+              降级红线：隐藏态只由该脚本加 js-pager-story 类；无 JS / prefers-reduced-motion /
+              窄屏矮屏一律静态直出（受体 + 两颗 DCZ 嵌在凹槽，结合那颗 HA 仍停在 Nb 头顶，环境抗原与 MT1 不可见），
+              本屏仍是普通 100vh 吸附屏。
+             data-no-reveal：可见性由动画逐帧写内联 opacity，跳过 media-reveal 的解码淡入。
+             data-critical：整屏内容，参与加载闸门（其余 DCZ/HA 同 URL，命中缓存）。 -->
+        <img loading="lazy" class="pager__layer pager__receptor" data-no-reveal data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/hm1dq-fix.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__dcz" data-dcz="left" data-no-reveal data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/dcz.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__dcz" data-dcz="right" data-no-reveal data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/dcz.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__ha pager__ha--bind" data-ha="bind" data-no-reveal data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/ha.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__ha" data-ha="1" data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/ha.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__ha" data-ha="2" data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/ha.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__ha" data-ha="3" data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/ha.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <img loading="lazy" class="pager__layer pager__ha" data-ha="4" data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/ha.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+        <!-- 每颗 DCZ 落位瞬间的一次性扩散光环（纯底色渐变，不承载信息） -->
+        <span class="pager__halo" data-halo="left" data-no-reveal aria-hidden="true"></span>
+        <span class="pager__halo" data-halo="right" data-no-reveal aria-hidden="true"></span>
+        <img loading="lazy" class="pager__layer pager__mt1" data-mt1="dock" data-no-reveal data-critical src="https://static.igem.wiki/teams/6373/wiki/icon/index-animation/mt1.avif"
+          alt="" aria-hidden="true" width="1600" height="1600" decoding="async">
+
+
+        <!-- 动画不是唯一的信息载体：无障碍与无脚本读法都靠这段文字（含科学表述边界） -->
+        <p class="sr-only">How the PAGER receptor is designed to work. The yeast cell membrane is designed to
+          carry an hM1Dq receptor whose extracellular recognition unit is an anti-H1N1 HA nanobody (Nb),
+          while the MT1 inhibitor is designed to keep hM1Dq blocked whenever no antigen is present. When
+          an influenza A (H1N1) HA antigen binds the nanobody, the inhibitor is designed to be displaced
+          from the receptor; with DCZ holding hM1Dq ready, the receptor is designed to hand the signal to
+          the humanised G&alpha; protein (the <i>Saccharomyces cerevisiae</i> Gpa1 C-terminus, last five
+          residues changed from KIGII to EYNLV) and then to the yeast MAPK cascade, where the <i>FUS1</i> promoter
+          drives the <i>yEGFP</i> or <i>lacZ</i> reporter. All of this is the intended design; no detection performance is
+          claimed here.</p>
+
         <img fetchpriority="low" loading="lazy" class="art art--dbtl-cycle-mascot" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/08-dbtl-cycle-mascot-laptop.webp" alt="EchoYeast working on a laptop">
       </div>
     </section>
 
-    <!-- 模块 8: 未来愿景 -->
-    <section id="future-vision" class="presentation-section yeast-screen yeast-screen--reverse" data-title="Future vision">
+    <!-- 模块 8: 未来愿景
+         data-sticker-clear：右栏四段铺到屏幕右下角，常驻的「回到顶部」按钮会压住末段正文，
+         本屏占据视口时让按钮暂时隐去（见 static/js/components/back-to-top.js）。 -->
+    <section id="future-vision" class="presentation-section yeast-screen yeast-screen--reverse" data-title="Future vision" data-sticker-clear>
       <div class="yeast-screen__inner yeast-screen--reverse">
         <div class="yeast-screen__content">
-          
-          <h2 class="sr-only">Future Vision: From H1N1 to the Broad Spectrum Platform</h2>
-          <img fetchpriority="low" loading="lazy" class="fv-title-img reveal" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/09-future-vision-title.avif"
-            alt="Future Vision" width="1056" height="529" decoding="async">
-          <img fetchpriority="low" loading="lazy" class="fv-sub-img reveal" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/09-future-vision-subtitle.avif"
-            alt="From H1N1 to the Broad Spectrum Platform" width="1219" height="88" decoding="async">
-          
-          
-          <div class="fv-quadrants">
-            <div class="fv-core reveal">
-              <p class="fv-core__text">PAGER-Yeast is designed to be antigen-agnostic: swap the recognition
-                unit and the signal readout stays the same. The H1N1 prototype is the first instance of a
-                platform rather than a single-purpose test — the same yeast, the same reporter, one new
-                nanobody at a time.</p>
+          <!-- 2026-10-21（用户提供英文正文，逐字照录）：整屏改为「左标题 + 右侧四段」。
+               左栏自上而下：Future Vision 字图眉标 → 主标题 → 导语 → 页底总结句（细线分隔）；
+               右栏：四段纵向排列，段首细线 + 序号 01–04。
+               原「五模块」四宫格与副题胶囊字图（From H1N1 to the Broad Spectrum Platform）
+               随新文本撤下；本屏只描述愿景与后续验证需求，不声称任何检测性能。 -->
+          <h2 class="sr-only">Future Vision: From Modular Research to Shared Public Health Value</h2>
+          <div class="fv-split">
+            <div class="fv-lead">
+              <img fetchpriority="low" loading="lazy" class="fv-title-img reveal" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/09-future-vision-title.avif"
+                alt="Future Vision" width="1056" height="529" decoding="async">
+              <h2 class="fv-headline reveal">From Modular Research to Shared Public Health Value</h2>
+              <p class="fv-deck reveal">EchoYeast’s contribution goes beyond the pursuit of a single biosensor.
+                By sharing characterized reporter parts, yeast-engineering evidence, computational hypotheses,
+                and the lessons from designs that did not yet work, we aim to give future teams a clearer
+                starting point. Our long-term vision is to explore how modular living-cell sensing could support
+                environmental monitoring—through open research, careful validation, and responsible design.</p>
+              <div class="fv-closing reveal">
+                <p class="fv-closing__line">Our contribution today is a documented foundation for further research.</p>
+                <p class="fv-closing__line fv-closing__line--strong">Our vision for tomorrow is more accessible,
+                  evidence-based environmental monitoring.</p>
+              </div>
             </div>
-            <article class="fv-card fv-card--tl reveal">
-              <h3 class="fv-card__title">A wide target space</h3>
-              <p class="fv-card__body">Influenza A viruses carry 18 hemagglutinin and 11 neuraminidase
-                subtypes (H1–H18, N1–N11) — every combination is a potential target for a swapped recognition
-                unit <small>(CDC, Types of Influenza Viruses, 2025)</small>.</p>
-            </article>
-            <article class="fv-card fv-card--ml reveal">
-              <h3 class="fv-card__title">Modular recognition unit</h3>
-              <p class="fv-card__body">Keeping the α-factor secretion anchor and linker scaffold and swapping
-                only the VHH sequence would extend coverage toward H5, H7 and other subtypes, while the
-                downstream GPCR signal rewiring and the dual-mode reporter stay universal.</p>
-            </article>
-            <article class="fv-card fv-card--mr reveal">
-              <h3 class="fv-card__title">Field-ready readout</h3>
-              <p class="fv-card__body">Paired with a low-cost portable fluorescence reader, the same platform
-                could serve primary-care screening, school morning checks and border quarantine ports.</p>
-            </article>
-            <article class="fv-card fv-card--tr reveal">
-              <h3 class="fv-card__title">Demand that already exists</h3>
-              <p class="fv-card__body">A(H5) bird flu has been causing outbreaks in U.S. dairy cows, with
-                71 human cases reported since February 2024 — new subtypes keep crossing over while detection
-                still waits on a laboratory pathway <small>(CDC, A(H5) Bird Flu Current Situation, 2026)</small>.</p>
-            </article>
+            <ol class="fv-list">
+              <li class="fv-item reveal">
+                <span class="fv-item__num" aria-hidden="true">01</span>
+                <div class="fv-item__text">
+                  <h3 class="fv-item__title">Reusable Knowledge for Future Teams</h3>
+                  <p class="fv-item__body">We contribute <i>FUS1</i>-based reporter parts, yeast-editing
+                    components, and documentation of Gpa1 C-terminal engineering. Together with construction
+                    records and characterization results, these resources provide starting points for future
+                    yeast-biosensor projects. Clearly distinguishing demonstrated results from unresolved
+                    questions helps others assess what can be reused and what still requires validation.</p>
+                </div>
+              </li>
+              <li class="fv-item reveal">
+                <span class="fv-item__num" aria-hidden="true">02</span>
+                <div class="fv-item__text">
+                  <h3 class="fv-item__title">A Future Role in Environmental Monitoring</h3>
+                  <p class="fv-item__body">Our long-term goal is to explore whether yeast-based sensing could
+                    complement existing approaches to monitoring influenza-related environmental signals. Such a
+                    system would not replace clinical testing or determine whether an individual is infected.
+                    Any future application would require evidence of specificity, sensitivity, reliability, and
+                    performance in relevant sample conditions.</p>
+                </div>
+              </li>
+              <li class="fv-item reveal">
+                <span class="fv-item__num" aria-hidden="true">03</span>
+                <div class="fv-item__text">
+                  <h3 class="fv-item__title">Accessibility as a Design Goal</h3>
+                  <p class="fv-item__body">Our temperature-controlled optical-readout prototype allows us to
+                    explore how biological sensing might be paired with accessible instrumentation.
+                    Affordability, ease of operation, maintenance, and local resource needs remain design
+                    priorities rather than demonstrated advantages. Their practical value must be assessed
+                    alongside biological performance.</p>
+                </div>
+              </li>
+              <li class="fv-item reveal">
+                <span class="fv-item__num" aria-hidden="true">04</span>
+                <div class="fv-item__text">
+                  <h3 class="fv-item__title">Open Development, Responsible Progress</h3>
+                  <p class="fv-item__body">We aim to share not only successful modules, but also
+                    limitations—including unresolved full-length receptor expression and HA-dependent
+                    activation. Future work must address biological containment, sample handling, and the
+                    interpretation of results. By making both progress and uncertainty visible, EchoYeast seeks
+                    to support more transparent and responsible biosensor development.</p>
+                </div>
+              </li>
+            </ol>
           </div>
         </div>
       </div>
@@ -609,24 +697,24 @@ html.intro-gif-finished nav {
         <div class="yeast-screen__content">
           <h2 class="yeast-screen__title reveal">Explore Our Wiki</h2>
           <div class="mascot-portal-row" role="navigation" aria-label="Sub-page navigation">
-            <a href="/design" class="mascot-portal reveal">
-              <img fetchpriority="low" class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-design.webp"
-                alt="Design section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+            <a href="{{ url_for('pages', page='design') }}" class="mascot-portal reveal">
+              <img loading="eager" fetchpriority="low" class="mascot-portal__img" data-critical data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-design.webp"
+                alt="Design section mascot" width="1280" height="1280" decoding="async">
               <span class="mascot-portal__label">Design</span>
             </a>
-            <a href="/results" class="mascot-portal reveal">
-              <img fetchpriority="low" class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-result.webp"
-                alt="Results section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+            <a href="{{ url_for('pages', page='results') }}" class="mascot-portal reveal">
+              <img loading="eager" fetchpriority="low" class="mascot-portal__img" data-critical data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-result.webp"
+                alt="Results section mascot" width="1280" height="1280" decoding="async">
               <span class="mascot-portal__label">Results</span>
             </a>
-            <a href="/model" class="mascot-portal reveal">
-              <img fetchpriority="low" class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-model.webp"
-                alt="Dry Lab modelling section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+            <a href="{{ url_for('pages', page='model') }}" class="mascot-portal reveal">
+              <img loading="eager" fetchpriority="low" class="mascot-portal__img" data-critical data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-model.webp"
+                alt="Dry Lab modelling section mascot" width="1280" height="1280" decoding="async">
               <span class="mascot-portal__label">Model</span>
             </a>
-            <a href="/human-practices" class="mascot-portal reveal">
-              <img fetchpriority="low" class="mascot-portal__img" src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-hp.webp"
-                alt="Human Practices section mascot" width="1280" height="1280" loading="lazy" decoding="async">
+            <a href="{{ url_for('pages', page='human-practices') }}" class="mascot-portal reveal">
+              <img loading="eager" fetchpriority="low" class="mascot-portal__img" data-critical data-no-reveal src="https://static.igem.wiki/teams/6373/wiki/icon/second-section/home/10-explore-hp.webp"
+                alt="Human Practices section mascot" width="1280" height="1280" decoding="async">
               <span class="mascot-portal__label">Human Practices</span>
             </a>
           </div>
@@ -686,7 +774,7 @@ html.intro-gif-finished nav {
 /*
  * * * executive-summary-animation.js * 首页 Executive Summary 滚动驱动动画 + 酵母屏动效 + 交互增强 * * 功能： * - 监听页面滚动，
  * 根据 #executive-summary 在视口中的位置计算动画进度。 * - section 高度为 300vh，主体 sticky 在 100vh~200vh 区间固定。
- * * - 将进度写入 CSS 自定义属性 --es-progress，由 CSS 驱动： * · 0.0 ~ 0.5：Gpa1 标签从徽章中心向左移动至最终位置。 * · 0.5 ~ 1.0：人源基因及其黑色背景块从完全透明渐显。
+ * * - 将进度写入 CSS 自定义属性 --es-progress，由 CSS 驱动： * · 0.0 ~ 0.5：GPA1 标签从徽章中心向左移动至最终位置。 * · 0.5 ~ 1.0：人源基因及其黑色背景块从完全透明渐显。
  * * - 为 8 屏酵母插画应用现有 floatYeast 关键帧动画。 * - Hero 打字机效果、滚动渐入（IntersectionObserver）与 Start Journey 平滑滚动。
  */
 (function () {
@@ -1210,11 +1298,24 @@ html.intro-gif-finished nav {
   
 <script>
 /*
- * * * home-nav.js * 首页（html.home-scroll-snap）专属导航与底部吸附行为。 * * 背景：全站 nav-scroll-behavior.js 的"下滚收起 / 上滚弹出"在首页会与 scroll-snap * 吸附屏冲突——向上滚动浏览内容时会把固定顶栏弹出，
- * 遮挡画面。 * 首页改为由 hover 呼出，并让底部 footer 脱离吸附以便自由浏览。 * * 行为： * 1. 导航栏默认收起（由 nav-scroll-behavior.js 在 home-page 下 hideNav 初始化）
- * * 鼠标移入「距顶部 <150px 的触发带」或悬停于导航栏上时呼出； * 移出触发带且不在导航栏上即收起。这样上滚浏览内容时不会弹出遮挡。 * 2. 底部 footer 进入视口后把 scroll-snap-type 切为 none（脱离吸附）
- * * 允许自由滚动浏览 footer；离开 footer 区域恢复 y mandatory。 * * 依赖：nav-scroll-behavior.js 已在 home-page 下停用方向性收起/弹出（见其 handleScroll）
- * * 并将 isHomePage 存入 state，避免本脚本与滚动方向逻辑打架。
+ * home-nav.js
+ * 首页（html.home-scroll-snap）专属导航行为。
+ *
+ * 背景：全站 nav-scroll-behavior.js 的"下滚收起 / 上滚弹出"在首页会与 scroll-snap
+ *       吸附屏冲突——向上滚动浏览内容时会把固定顶栏弹出，遮挡画面。
+ *       首页改为由 hover 呼出，并让底部 footer 脱离吸附以便自由浏览。
+ *
+ * 行为：
+ * 1. 导航栏默认收起（由 nav-scroll-behavior.js 在 home-page 下 hideNav 初始化）。
+ *    鼠标移入「距顶部 <150px 的触发带」或悬停于导航栏上时呼出；
+ *    移出触发带且不在导航栏上即收起。这样上滚浏览内容时不会弹出遮挡。
+ * 2. 一次性保底（2026-10-21 用户要求）：首屏（GIF 开场结束）后 3 秒内无滚动，
+ *    自动弹出顶部导航栏且保持显示（不收回），避免评委不知道导航栏存在。
+ *    保底已触发时导航栏改由滚动方向控制：下滚收回、上滑弹出。
+ *    3 秒内发生过滚动则保底取消，维持 hover 呼出逻辑；保底只触发一次。
+ *
+ * 依赖：nav-scroll-behavior.js 已在 home-page 下停用方向性收起/弹出（见其 handleScroll），
+ *       并将 isHomePage 存入 state，避免本脚本与滚动方向逻辑打架。
  */
 (function () {
   'use strict';
@@ -1222,11 +1323,30 @@ html.intro-gif-finished nav {
   var root = document.documentElement;
   if (!root.classList.contains('home-scroll-snap')) return; // 仅作用于首页
 
-  var isMobile = window.matchMedia('(max-width: 768px)').matches;
   var nav = document.querySelector('nav');
   if (!nav) return;
 
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
   var REVEAL_ZONE = 150; // 距顶部触发带高度（px）
+  var PIN_DELAY = 3000; // 首屏无滚动保底时长（ms）
+  var SCROLL_THRESHOLD = 80; // 与全站 nav-scroll-behavior.js 一致的滚动方向阈值（px）
+  var GIF_MAX_WAIT = 12000; // 开场动画最长时长 + 收尾余量（ms）
+
+  var pinned = false; // 保底已触发：导航栏不再随鼠标移出收起，改由滚动方向控制
+  var fallbackDone = false; // 保底只触发一次的标记
+  var armTimer = null; // 保底计时器
+  var fallbackClockStarted = false;
+  var lastPinY = 0; // 保底后方向性控制的滚动基准
+
+  function navHide() {
+    nav.classList.add('nav-hidden');
+    root.classList.add('nav-collapsed');
+  }
+
+  function navShow() {
+    nav.classList.remove('nav-hidden');
+    root.classList.remove('nav-collapsed');
+  }
 
   // ===== 1. hover 呼出 / 移出收起（桌面端） =====
   if (!isMobile) {
@@ -1237,15 +1357,14 @@ html.intro-gif-finished nav {
     function applyHover() {
       rafId = null;
       if (lastY === null) return;
+      if (pinned) return; // 保底已触发：导航栏不随鼠标移出收起
       // 鼠标悬停于导航子树（含展开的下拉菜单）时保持显示，避免菜单被收起
       var overNav = !!(lastEvent && lastEvent.target && lastEvent.target.closest &&
         lastEvent.target.closest('nav'));
       if (lastY < REVEAL_ZONE || overNav) {
-        nav.classList.remove('nav-hidden');
-        root.classList.remove('nav-collapsed');
+        navShow();
       } else {
-        nav.classList.add('nav-hidden');
-        root.classList.add('nav-collapsed');
+        navHide();
       }
     }
 
@@ -1256,9 +1375,120 @@ html.intro-gif-finished nav {
     });
     // 指针离开文档（如移到浏览器 chrome / 地址栏）时收起，避免悬停残影
     document.addEventListener('mouseleave', function () {
-      nav.classList.add('nav-hidden');
-      root.classList.add('nav-collapsed');
+      if (pinned) return;
+      navHide();
     });
+  }
+
+  // ===== 2. 一次性保底：首屏 3 秒无滚动 → 弹出导航栏且保持显示 =====
+  function getScrollY() {
+    return window.pageYOffset || document.documentElement.scrollTop;
+  }
+
+  function cancelUserScrollWatch() {
+    document.removeEventListener('wheel', onUserScroll);
+    document.removeEventListener('touchstart', onUserScroll);
+    document.removeEventListener('touchmove', onUserScroll);
+    document.removeEventListener('keydown', onNavKey);
+  }
+
+  function cancelFallback() {
+    if (armTimer) clearTimeout(armTimer);
+    armTimer = null;
+    fallbackDone = true; // 用户已滚动：保底不再触发
+    cancelUserScrollWatch();
+  }
+
+  // 键盘翻页/滚动键视为用户滚动（scroll-snap 页面键盘也可滚动）
+  function onNavKey(e) {
+    if (e.key === ' ' || e.key === 'PageUp' || e.key === 'PageDown' ||
+      e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Home' || e.key === 'End') {
+      onUserScroll();
+    }
+  }
+
+  // 只认「用户主动滚动」：滚轮 / 触摸 / 滚动键。
+  // 不用 scroll 事件判定——scroll-snap 吸附、程序性 scrollTo 等非用户滚动
+  // 也会触发 scroll 事件，会把保底误判为"用户已滚动"而取消。
+  function onUserScroll() {
+    // 开场动画播放期间（finished 之前）页面锁定滚动，不计入"用户滚动"。
+    // finished 后即使 armed 类残留 450ms（收尾延时移除），也要开始计。
+    if (!root.classList.contains('intro-gif-finished') &&
+      (root.classList.contains('intro-gif-armed') ||
+        root.classList.contains('intro-gif-running'))) return;
+    cancelFallback();
+  }
+
+  function armFallbackClock() {
+    if (fallbackClockStarted || isMobile || fallbackDone) return;
+    fallbackClockStarted = true;
+    armTimer = setTimeout(function () {
+      armTimer = null;
+      if (fallbackDone || pinned) return;
+      triggerFallback();
+    }, PIN_DELAY);
+    document.addEventListener('wheel', onUserScroll, { passive: true });
+    document.addEventListener('touchstart', onUserScroll, { passive: true });
+    document.addEventListener('touchmove', onUserScroll, { passive: true });
+    document.addEventListener('keydown', onNavKey);
+  }
+
+  function triggerFallback() {
+    if (fallbackDone || pinned) return;
+    pinned = true;
+    fallbackDone = true;
+    lastPinY = getScrollY();
+    navShow();
+    cancelUserScrollWatch();
+  }
+
+  // 开场动画播放中：等 intro-gif-finished 再起保底时钟；未播放则立即起表。
+  // 站内跳转 / 无 JS / prefers-reduced-motion 时不加 intro-gif-armed，
+  // 直接按"首屏已就绪"处理。
+  function startFallbackClock() {
+    if (fallbackClockStarted || isMobile) return;
+    if (!root.classList.contains('intro-gif-armed') ||
+      root.classList.contains('intro-gif-finished')) {
+      armFallbackClock();
+      return;
+    }
+    var mo = new MutationObserver(function () {
+      if (root.classList.contains('intro-gif-finished')) {
+        mo.disconnect();
+        armFallbackClock();
+      }
+    });
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+    // 兜底：观察器失效时按 GIF 最长总时长（9.2s + 收尾）后照常起表
+    window.setTimeout(function () { mo.disconnect(); }, GIF_MAX_WAIT);
+    window.setTimeout(function () {
+      if (!fallbackClockStarted) armFallbackClock();
+    }, GIF_MAX_WAIT);
+  }
+
+  // ===== 3. 保底触发后的方向性滚动控制：下滚收回、上滑弹出 =====
+  function onPinScroll() {
+    if (!pinned) return;
+    var y = getScrollY();
+    var delta = y - lastPinY;
+    if (Math.abs(delta) >= SCROLL_THRESHOLD) {
+      if (delta > 0) {
+        navHide();
+      } else {
+        navShow();
+      }
+      lastPinY = y;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      startFallbackClock();
+      document.addEventListener('scroll', onPinScroll, { passive: true });
+    });
+  } else {
+    startFallbackClock();
+    document.addEventListener('scroll', onPinScroll, { passive: true });
   }
 
 })();
@@ -1267,14 +1497,28 @@ html.intro-gif-finished nav {
   
 <script>
 /*
- * * * ============================================ * iGEM SZPU-2026 - 首页离屏动画停表 * ============================================ * * @description * scroll-snap 满屏分屏下，
- * 相邻屏虽然看不到，其 infinite 合成动画 * （hero 浮动、burden 背景漂移/呼吸、药丸轮播等）仍在合成器里持续跑， * 多屏叠加放大 GPU/合成开销——用户实测「第二屏计数、
- * 轮播优点屏」滚动卡顿。 * * 行为：IO 观察每个 .presentation-section，完全离开视口（含 12% 缓冲带） * → 打 data-offscreen；
- * 回到缓冲带内 → 摘除。CSS 侧统一 * `animation-play-state: paused`（见 index.css「首页离屏动画停表」段）， * 回到视口从暂停点继续，
- * 不跳帧。实测 Chrome 在 * 「相邻屏边界相切」（ratio 恰为 0 且 isIntersecting 仍为 true）状态下， * 进/出该状态都可能不产生 IO 回调——导致快速滚到相邻屏后 attr 残留，
- * * 滚回来收不到恢复回调，药丸轮播卡在 paused。 * 修复双保险： * ① rootMargin 12% 缓冲带 + 布尔 isIntersecting 判定：相切态视为可见，
- * * 离/进缓冲带是真正的 intersecting 翻转，IO 100% 可靠触发； * ② 滚动节流兜底自检：已打 attr 的 section 若矩形与视口相交，立即摘除—— * 无论 IO 行为如何，
- * 可见的 section 绝不会被停在 paused。 * * @降级红线 * 无 IO / 无 JS 时不打标，所有动画照常播放——本脚本只做性能增强，不接管可见性。
+ * ============================================
+ * iGEM SZPU-2026 - 首页离屏动画停表
+ * ============================================
+ *
+ * scroll-snap 满屏分屏下，相邻屏虽然看不到，其 infinite 合成动画
+ * （hero 浮动、burden 背景漂移/呼吸、药丸轮播等）仍在合成器里持续跑，
+ * 多屏叠加放大 GPU/合成开销。
+ *
+ * 行为：IO 观察每个 .presentation-section，完全离开视口（含 12% 缓冲带）
+ * → 打 data-offscreen；回到缓冲带内 → 摘除。CSS 侧统一
+ * `animation-play-state: paused`（见 index.css「首页离屏动画停表」段），
+ * 回到视口从暂停点继续，不跳帧。
+ *
+ * 修复双保险：
+ * ① rootMargin 12% 缓冲带 + 布尔 isIntersecting 判定：相邻屏边界相切时
+ *    （ratio 为 0 但 isIntersecting 仍为 true）IO 可能不回调，缓冲带确保
+ *    离/进是真正的 intersecting 翻转，IO 可靠触发；
+ * ② 滚动节流兜底自检：已打 attr 的 section 若矩形与视口相交，立即摘除——
+ *    无论 IO 行为如何，可见的 section 绝不会被停在 paused。
+ *
+ * @降级红线
+ * 无 IO / 无 JS 时不打标，所有动画照常播放——本脚本只做性能增强，不接管可见性。
  */
 (function () {
   'use strict';
@@ -1648,7 +1892,10 @@ html.intro-gif-finished nav {
           return;
         }
         attempts += 1;
-        if (attempts > 30) {
+        /* 等待上限按帧数计：30 帧 ≈ 0.5s 太紧。慢网下用户滑到该屏时图往往还没解码，
+           measure() 量到 0 尺寸就直接放弃（disarm）——表现就是「这一屏的 JS 失效」。
+           与根站 statistics-reveal.js 的 300 帧（≈5s）对齐。 */
+        if (attempts > 300) {
           callback(false);
           return;
         }
@@ -1841,34 +2088,163 @@ html.intro-gif-finished nav {
 
   
 <script>
-/*
- * * * ============================================ * iGEM SZPU-2026 - 首页 dbtl-cycle 屏「想法泵出」入场动画 * ============================================ * * @description * 用户创意：右侧「工作流程与原理示意图」看起来是从左边酵母吉祥物头部 * "泵出的想法"——以头部中心为图片的最小值点（scale ≈ 0.05）
- * * 沿一条先向上弓起、再飞向右上的弧线移动到现有设计位置，过程中逐渐放大。 * * - 触发：首次滑入本屏（IntersectionObserver），每次页面加载只播一次；
- * * 滑走再滑回不重播，刷新才重置。 * - 结束态：与 index.css 现有布局逐像素一致（收尾清内联样式交回 CSS）。 * - 降级红线：无 JS / prefers-reduced-motion / 无 IO / 无 WAAPI 时不接管 * 任何可见性，
- * 页面直接呈现完整静态布局（隐藏类只由本脚本添加）。 * - 几何运行时量测（桌面与 ≤768px 两套定位数值通用）；量测放在进入视口的 * 回调里并校验尺寸——mobile.css 的全局 `img { content-visibility: auto }` * 会让视口外图片拿到 0 高度矩形。
- * * * 依赖：window.iGEMUtils（core/utils.js）；缺失时回退到 window.matchMedia。
+/**
+ * ============================================
+ * iGEM SZPU-2026 - 首页 dbtl-cycle 屏「PAGER 原理」滚动叙事动画
+ * ============================================
+ *
+ * @description
+ *   用户创意：把原来那张整幅「工作流程与原理」示意图换成一段滚动叙事——
+ *   页面滚动到本屏后画面被钉住不动，滚动进度直接当动画进度（0 → 1）：
+ *     0.02–0.10  hM1Dq 受体自画面右侧擦入（clip-path 由右向左展开），
+ *                 最终固定在原示意图所在的舞台中部；MT1 抑制药丸跟着同一段擦入出现，
+ *                 始终横置在中央正构位点上压住口袋（无抗原 → 受体被抑制）；
+ *                 它没有独立的入场位移，读起来就是「一开始就接在受体上」；
+ *     0.24–0.60  五个 HA 抗原分别从页面各处、不同方向、远近不同地接近 Nb 受体
+ *                 （环境中抗原很多），其中体积最大的那一个在 0.60 落到 Nb 方块头顶；
+ *     0.60–0.79  抗原结合后 MT1 被解除：向上飘离并淡出；
+ *     0.79–0.91  MT1 一走，已结合在 Nb 上的那颗 HA 也随之脱落，向上偏左飞走并淡出；
+ *     0.88–0.99  口袋彻底空出来之后，两颗 DCZ 配体自膜外飞来，分别落进中央螺旋两侧的
+ *                 凹槽并稳住，落定瞬间各放一次极轻的扩散光环，受体随之收一次激活呼吸。
+ *
+ *   - 触发与进度：滚动驱动，进度 = (scrollY - 轨道顶) / (轨道高 - 视口高)。
+ *     本屏在桌面端被拉高为 360vh 轨道（<html class="pager-story-track">，由本脚本
+ *     确认视口与动效偏好后才加）、舞台 sticky 钉住，所以「滚动时锁页面位置」；
+ *     钉住期间整页 scroll-snap 被关掉（否则 mandatory 吸附会在两屏之间的空档里
+ *     反复把滚动位置拉回吸附点），退出轨道时恢复。
+ *   - 几何全部运行时量测：图层方框与舞台都是 CSS 百分比定位，禁止把某个断点的
+ *     像素坐标写死；四张素材同出一张 1600×1600 画布，图层方框与 transform-origin
+ *     即该画布坐标，位移量按舞台尺寸换算成 px。
+ *   - 只写 transform / opacity / clip-path，不碰布局属性。
+ *   - 降级红线：无 JS、prefers-reduced-motion、窄屏（≤768px）、矮视口（≤560px 高）
+ *     一律不接管：页面直接是静态终态（受体 + 两颗 DCZ 嵌在凹槽里，结合那颗 HA 仍停在
+ *     Nb 头顶，环境抗原与 MT1 不可见），
+ *     本屏也仍是普通 100vh 吸附屏（不加高、不放开吸附）。
+ *
+ * 依赖：window.iGEMUtils（core/utils.js）；缺失时回退到原生实现。
  */
 (function () {
   'use strict';
 
-  var STAGE = '.art-stage--dbtl-cycle';
-  var DIAGRAM = '.art--dbtl-cycle-diagram';
-  var MASCOT = '.art--dbtl-cycle-mascot';
-  var ARMED = 'js-pump-armed';
-  var DONE = 'pump-done';
+  var ARMED = 'js-pager-story';
+  var TRACK = 'pager-story-track';
+  var PINNED = 'pager-story-pinned';
+  var TRACK_MQ = '(min-width: 769px) and (min-height: 561px)';
 
-    /* * 参数集中区（交付微调入口） */
+  /** 参数集中区（交付微调入口） */
   var T = {
-    fly: 1150        // 单次飞行总时长（ms）
+    /**
+     * 前导 / 收尾缓冲（占整段滚动进度的比例）。
+     *
+     * 没有缓冲时，上一屏刚锁住就开始擦入、动画刚走完就立刻解锁，进出都很突兀。
+     * 前导段：锁住后先让标题 / 说明 / 吉祥物安静地停一拍，再开始叙事；
+     * 收尾段：叙事走到终态后再停一拍才解锁，让下一屏的进入不至于砸下来。
+     * 两段都只是把叙事区间压缩到 [lead, 1-trail]，动画本身的节奏不变。
+     */
+    lead: 0.08,
+    trail: 0.08,
+    enter: [0.02, 0.10],      // 受体入场区间（占总进度）
+    enterFromX: 70,          // 入场起始横向偏移（占图层方框宽度的 %）
+    idle: [0.10, 0.60],      // 受体已落位、HA 未动之前的极缓呼吸区间
+    idleAmp: 0.012,          // 呼吸缩放幅度
+    activateAmp: 0.008,      // 两颗 DCZ 都落进之后受体那一下激活呼吸的幅度
+    mt1FadeFrom: 0.45,       // MT1 飘走过程中的淡出起点（占解除进度）
+    mt1In: [0.10, 0.32],     // MT1 渐显窗口：开场完全透明，受体落定后才随动画变实
+    dczIn: [0.88, 0.99],     // 两颗 DCZ 出现 → 飞向各自的凹槽 → 落定（外框区间）
+    haOut: [0.94, 1.00]      // 环境抗原淡出区间（结合那颗一直停在 Nb 头顶）
   };
-  var HEAD = { x: 0.49, y: 0.36 };  // 头部中心在吉祥物图内的比例位置（对照素材量取）
-  var START_SCALE = 0.05;           // 起始最小缩放（头部中心的最小值点）
-  var EMERGE_SCALE = 0.08;          // 在头部浮现完成时的缩放
-  var EMERGE_AT = 0.14;             // 浮现完成的时间点（占全程比例）
-  var MID_AT = 0.45;                // 轨迹中段控制点的时间点
-  var MID_PROGRESS = 0.42;          // 中段控制点沿主轨迹的位置（0=头部，1=终点）
-  var MID_SCALE = 0.32;             // 中段缩放（“逐渐变大”的中间值）
-  var BOW_UP = 0.06;                // 轨迹向上弓起量（占舞台高度比例，泵出感）
+
+  /** 所有素材共用的一张 1600×1600 画布；坐标换算一律按这个边长归一 */
+  var CANVAS = 1600;
+
+  /**
+   * 唯一的 MT1 抑制肽：横置于中央正构位点，把口袋压住。
+   *
+   * center 是药丸素材里的可见中心（也就是 .pager__mt1 的 transform-origin），
+   * 落点 / 飘走点都写画布坐标，换算时一律减去 center，所以 rotate / scale 之后
+   * 药丸的可见中心仍然精确落在落点上。
+   * 正构位点取画布 (834,438)——中央螺旋 x[772,887] 顶部、两个凹槽之间的口袋开口。
+   * MT1 始终横放压在口袋上沿（两颗 TM 球上方的横梁处），读起来才是「一块东西盖住了
+   * 结合位」；素材原生主轴约 -8°（近水平），所以横置姿态直接用原生角，不再额外旋转。
+   * 可见度不随受体擦入：开场（p < T.mt1In[0]）完全透明，待受体落定后由 T.mt1In 窗口
+   * 随动画渐变实，被解除（MT1.outWin）时再上飘并淡出。
+   */
+  var MT1 = {
+    center: [998.5, 446.5],
+    dock: [834, 452],                        // 落点（口袋开口，横置：坐在两颗 TM 上方的横梁上）
+    leave: [886, 58],                        // 飘走终点：向上、略偏右
+    rotHold: -8, rotOut: -8,
+    holdScale: 0.88, scaleOut: 0.7,
+    outWin: [0.60, 0.79]
+  };
+
+  /**
+   * 结合那颗抗原的落点偏移（占图层尺寸的比例，相对 HA 图层天然位置画布 694.5,426）。
+   * 落点画布 (681,56)：Nb 方块填充区在画布 x[564,795]、y[46,360]，顶边 y≈48–67，
+   * 抗原停在顶边上，下半身压住方块上沿、不遮住方块里的 Nb 标注（标注从 y≈148 起）。
+   */
+  var BIND = { x: -0.0084375, y: -0.23125 };
+
+  /**
+   * 两颗 DCZ 配体：MT1 被解除之后的第二个事件。
+   *
+   * 素材里小球的球心就在画布正中 (800,800)，所以这个图层的天然位置＝画布中心；
+   * 两颗分别落进中央螺旋两侧的凹槽（画布 x 736 / 928，通道宽约 72 / 80），
+   * 视觉上「小分子钻进了 MT1 让出来的口袋」。0.62 时球径约 76，正好卡在通道里。
+   * from 是起飞点的舞台百分比（膜外上方），两颗错开一点时间，像先后被吸进凹槽。
+   * 用户 2026-10-21 要求球径整体放大 1.3 倍、落点不变：dockScale 0.62 → 0.806，
+   * 起飞景深 scaleFrom 同比例放大（0.34 → 0.442）以保持「由远及近」的纵深比。
+   */
+  var DCZ_DOCKS = [
+    {
+      key: 'left',
+      from: [78, -14],
+      dock: [736, 477],
+      inWin: [0.895, 0.988]
+    },
+    {
+      key: 'right',
+      from: [99, -3],
+      dock: [928, 477],
+      inWin: [0.880, 0.968]
+    }
+  ];
+
+  /** DCZ 飞行的公共参数 */
+  var DCZ = {
+    scaleFrom: 0.442,        // 起飞时的景深（远小近大）
+    dockScale: 0.806,        // 落在凹槽里的球径（用户 2026-10-21：在 0.62 基础上 ×1.3）
+    flyEnd: 0.58,            // 局部进度：到这里位置已经落定
+    pop: 0.09,               // 落定那一下的鼓包幅度（占自身尺寸）
+    wobble: 0.006,           // 飞行途中的轻微上抛（占舞台尺寸）
+    haloFrom: 0.5,           // 光环起始直径（相对光环自身）
+    haloTo: 1.75
+  };
+
+  /** 图层里飘着的抗原要「闲得住」：到位后原地缓慢浮动（幅度是舞台百分比） */
+  var FLOAT = {
+    cycles: [2.4, 2.0],      // x / y 方向的浮动周期数（整段进度内）
+    rotAmp: 7,               // 浮动时的自转角（度）
+    breath: 0.035            // 浮动时的缩放呼吸
+  };
+
+  /**
+   * HA 抗原分镜。from/park 都是抗原本体中心在舞台上的百分比位置。
+   *
+   * - 结合那颗（bind）：from 起飞 → win 末帧落到 bind 偏移位（Nb 方块头顶）→ 一直接在那里，
+   *   不随 MT1 撤走而解离（结合后一直停在 Nb 头顶）。
+   * - 环境抗原：inWin 区间内从画面外飞到 park 停住，随后原地浮动到 haOut 才淡出。
+   *   scale = 远近（越大越近），wob = 浮动幅度（舞台 %），ph = 相位（错开节奏）。
+   */
+  var SCENES = [
+    { key: 'bind', win: [0.240, 0.600], from: [104, 6], scale: 1.10, bind: BIND },
+    { key: '1', inWin: [0.150, 0.330], from: [-10, 88], park: [44, 30], scale: 0.82, wob: [1.5, 1.1], ph: 0.0 },
+    { key: '2', inWin: [0.170, 0.360], from: [8, 116], park: [38, 72], scale: 0.66, wob: [1.2, 1.4], ph: 2.1 },
+    { key: '3', inWin: [0.160, 0.350], from: [38, -14], park: [50, 17], scale: 1.00, wob: [1.6, 1.2], ph: 4.2 },
+    { key: '4', inWin: [0.180, 0.340], from: [104, 96], park: [93, 48], scale: 0.88, wob: [1.3, 1.5], ph: 5.6 }
+  ];
+
+  /* ---------------- 小工具 ---------------- */
 
   function ready(fn) {
     if (document.readyState === 'loading') {
@@ -1898,160 +2274,354 @@ html.intro-gif-finished nav {
     };
   }
 
-  function translateScale(dx, dy, scale) {
-    return 'translate(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px) scale(' + scale.toFixed(4) + ')';
+  function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  /** 把总进度 p 映射到 [a,b] 区间内的 0→1 局部进度 */
+  function seg(p, a, b) { return clamp01((p - a) / (b - a)); }
+
+  function easeOutCubic(t) { var u = 1 - t; return 1 - u * u * u; }
+  function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function easeInOutSine(t) { return -(Math.cos(Math.PI * t) - 1) / 2; }
+
+  /** 轻微回弹：抗原「落到 Nb 上」时压一下再稳住 */
+  function easeOutBack(t) {
+    var c1 = 0.8, c3 = 1.8, u = t - 1;
+    return 1 + c3 * u * u * u + c1 * u * u;
   }
 
+  function smoothstep(edge0, edge1, v) {
+    var t = clamp01((v - edge0) / (edge1 - edge0));
+    return t * t * (3 - 2 * t);
+  }
+
+  /* ---------------- 主流程 ---------------- */
+
   ready(function () {
-    var stage = document.querySelector(STAGE);
+    var section = document.getElementById('dbtl-cycle');
+    if (!section) return;
+    var stage = section.querySelector('.art-stage--dbtl-cycle');
     if (!stage) return;
+    var receptor = stage.querySelector('.pager__receptor');
+    var mtNode = stage.querySelector('.pager__mt1[data-mt1="dock"]');
+    if (!receptor || !mtNode) return;
 
-    var section = stage.closest('section') || stage;
-    var diagram = stage.querySelector(DIAGRAM);
-    var mascot = stage.querySelector(MASCOT);
-    if (!diagram || !mascot) return;
-
-    // ---- 降级红线：能力不齐就不接管可见性 ----
-    if (reducedMotion()
-      || !('IntersectionObserver' in window)
-      || typeof Element.prototype.animate !== 'function') {
-      return;
+    // 两颗 DCZ 与各自的光环按 data-dcz / data-halo 对位（left / right）
+    var dczs = [];
+    for (var k = 0; k < DCZ_DOCKS.length; k++) {
+      var orb = stage.querySelector('.pager__dcz[data-dcz="' + DCZ_DOCKS[k].key + '"]');
+      var ring = stage.querySelector('.pager__halo[data-halo="' + DCZ_DOCKS[k].key + '"]');
+      if (!orb || !ring) return;
+      dczs.push({ cfg: DCZ_DOCKS[k], el: orb, halo: ring, dx: 0, dy: 0, fx: 0, fy: 0 });
     }
 
-    var geo = null;          // { dx, dy, midX, midY }
-    var done = false;
-    var runningAnims = [];
+    var actors = [];
+    for (var i = 0; i < SCENES.length; i++) {
+      var node = stage.querySelector('.pager__ha[data-ha="' + SCENES[i].key + '"]');
+      if (!node) continue;
+      actors.push({ cfg: SCENES[i], el: node, dx: 0, dy: 0, fx: 0, fy: 0, px: 0, py: 0 });
+    }
+    if (!actors.length) return;
 
-    // ---- armed：只加类（CSS 负责 opacity:0 / z-index / will-change）----
-    stage.classList.add(ARMED);
+    var root = document.documentElement;
+    var trackMQ = window.matchMedia ? window.matchMedia(TRACK_MQ) : null;
+    var armed = false;
+    var freeScroll = false;
+    var lastP = -1;
+    var frame = 0;
 
-    // 吉祥物素材异常时放弃隐藏态，避免示意图永久不可见
-    diagram.addEventListener('error', disarm);
+    // 轨道几何：一次量测、滚动期间不再读布局（滚动热路径不调 getBoundingClientRect）
+    var trackTop = 0;
+    var span = 1;
+    var size = 1;
+    var stageW = 1;
+    var stageH = 1;
+    var naturalX = 0;
+    var naturalY = 0;
+    var mtDockX = 0;
+    var mtDockY = 0;
+    var mtLeaveX = 0;
+    var mtLeaveY = 0;
 
-    // ================================================== 量测：头部中心（起点）与示意图中心（终点）都从实时 rect 取 ==================================================
     function measure() {
-      var d = diagram.getBoundingClientRect();
-      var m = mascot.getBoundingClientRect();
-      // 宽或高为 0：图片未解码 / content-visibility 跳过布局 → 视为无效
-      if (!d.width || !d.height || !m.width || !m.height) return false;
+      var sectionRect = section.getBoundingClientRect();
+      var stageRect = stage.getBoundingClientRect();
+      var boxRect = receptor.getBoundingClientRect();
+      if (!boxRect.width || !stageRect.width) return false;
 
-      var headX = m.left + m.width * HEAD.x;
-      var headY = m.top + m.height * HEAD.y;
-      var endX = d.left + d.width / 2;
-      var endY = d.top + d.height / 2;
-      var dx = headX - endX;                    // 隐藏态位移：中心叠到头部
-      var dy = headY - endY;
-      var stageH = stage.getBoundingClientRect().height || 1;
+      trackTop = sectionRect.top + window.scrollY;
+      span = sectionRect.height - window.innerHeight;
+      if (span <= 0) return false;
 
-      // 中段控制点：沿主轨迹走到 MID_PROGRESS，再向上弓起 → “先冒头、再飞向右上”
-      var rest = 1 - MID_PROGRESS;
-      geo = {
-        dx: dx,
-        dy: dy,
-        midX: dx * rest,
-        midY: dy * rest - BOW_UP * stageH
-      };
+      size = boxRect.width;
+      stageW = stageRect.width;
+      stageH = stageRect.height;
+
+      // HA 图层天然位置（抗原本体中心在画布 695,426 上）
+      naturalX = boxRect.left - stageRect.left + size * 0.4341;
+      naturalY = boxRect.top - stageRect.top + size * 0.2663;
+
+      // MT1 图层的位移＝画布坐标差（transform-origin 就在药丸可见中心上）
+      mtDockX = (MT1.dock[0] - MT1.center[0]) / CANVAS * size;
+      mtDockY = (MT1.dock[1] - MT1.center[1]) / CANVAS * size;
+      mtLeaveX = (MT1.leave[0] - MT1.center[0]) / CANVAS * size;
+      mtLeaveY = (MT1.leave[1] - MT1.center[1]) / CANVAS * size;
+
+      // DCZ 图层天然位置＝方框中心（球心在画布 800,800 上）：
+      // 起飞点按舞台百分比换算，落点按画布坐标换算
+      var boxCx = boxRect.left - stageRect.left + size * 0.5;
+      var boxCy = boxRect.top - stageRect.top + size * 0.5;
+      for (var d = 0; d < dczs.length; d++) {
+        var o = dczs[d];
+        o.fx = stageW * o.cfg.from[0] / 100 - boxCx;
+        o.fy = stageH * o.cfg.from[1] / 100 - boxCy;
+        o.dx = (o.cfg.dock[0] - CANVAS / 2) / CANVAS * size;
+        o.dy = (o.cfg.dock[1] - CANVAS / 2) / CANVAS * size;
+      }
+
+      for (var i = 0; i < actors.length; i++) {
+        var a = actors[i];
+        a.fx = stageW * a.cfg.from[0] / 100 - naturalX;
+        a.fy = stageH * a.cfg.from[1] / 100 - naturalY;
+        // park 是舞台百分比 → 换成相对天然位置的 px 偏移（只算一次，滚动热路径纯算术）
+        if (a.cfg.park) {
+          a.px = stageW * a.cfg.park[0] / 100 - naturalX;
+          a.py = stageH * a.cfg.park[1] / 100 - naturalY;
+          a.wx = stageW * a.cfg.wob[0] / 100;
+          a.wy = stageH * a.cfg.wob[1] / 100;
+        }
+        // 结合那颗：落点偏移（bind）；环境抗原为 0
+        a.dx = a.cfg.bind ? a.cfg.bind.x * size : 0;
+        a.dy = a.cfg.bind ? a.cfg.bind.y * size : 0;
+      }
       return true;
     }
 
-    function applyHiddenState() {
-      if (!measure()) return false;
-      diagram.style.transform = translateScale(geo.dx, geo.dy, START_SCALE);
-      return true;
+    /** 未夹位的进度：<0 本屏尚未钉住，>1 本屏已滚完 */
+    function rawProgress() {
+      return (window.scrollY - trackTop) / span;
     }
 
-        /* * 等图片完成布局（content-visibility: auto 的图片在视口外没有真实尺寸） */
-    function measureWhenReady(callback) {
-      var attempts = 0;
-      (function tick() {
-        if (measure()) {
-          callback(true);
-          return;
-        }
-        attempts += 1;
-        if (attempts > 30) {
-          callback(false);
-          return;
-        }
-        requestAnimationFrame(tick);
-      })();
+    /**
+     * 放开 / 恢复整页 mandatory 吸附 —— 两段式：
+     *
+     *   轨道顶还在下方（raw ≤ 0）：吸附保持开启。轨道本身是吸附点（scroll-snap-align:
+     *     start + snap-stop: always），所以从上一屏滚过来会有正常的「翻页吸附」，
+     *     一次甩动也只会停在轨道顶，不会冲掉整段叙事。
+     *   轨道内部（0 < raw < exitRaw）：关掉吸附。这段没有别的吸附点，mandatory 会把
+     *     停在中途的用户拽回最近那一屏，叙事就永远停不住。
+     *   轨道完全滚完（raw ≥ exitRaw）：轨道底已到视口顶、下一屏正好贴住视口顶，
+     *     此时恢复吸附不产生任何位移跳变。
+     *
+     * 判据一律用 rawProgress 而不是「提前若干屏就放开」：提前放开等于把进入时的
+     * 吸附抹掉，用户感受不到「锁定」这一下。滚动事件在滚动过程中就派发，
+     * 因此落在边界那一帧就会切换，不会出现「先被拽回去再解锁」。
+     */
+    function setFreeScroll(on) {
+      if (freeScroll === on) return;
+      freeScroll = on;
+      root.classList.toggle(PINNED, on);
     }
 
-    // ================================================== 进入视口：量测 → 泵出 ==================================================
-    var observer = new IntersectionObserver(function (entries) {
-      for (var i = 0; i < entries.length; i++) {
-        if (entries[i].isIntersecting) {
-          observer.disconnect();
-          onEnterView();
-          return;
+    /**
+     * 出口吸附的恢复点：叙事走完后，舞台还会被下一屏推着上移整整一屏。若等到轨道
+     * 完全滚出（raw = 1 + vh/span）才恢复吸附，用户早已停进下一屏，出口就完全没有
+     * 「吸附」可言。改在「下一屏盖住视口一半」时恢复：此时最近的吸附点就是下一屏顶，
+     * 浏览器会把剩下不到半屏的距离吸过去，出口也就有了那一下。
+     * 回滚时同一判据反向成立：一旦退回轨道内（raw 低于该值）立刻放开，不会把人拽住。
+     */
+    function exitRaw() {
+      return 1 + 0.5 * window.innerHeight / span;
+    }
+
+    function render(p) {
+      // ---- 受体：自右向左擦入并落定 ----
+      var e = seg(p, T.enter[0], T.enter[1]);
+      var ee = easeOutCubic(e);
+      var breath = 1
+        + T.idleAmp * Math.sin(Math.PI * seg(p, T.idle[0], T.idle[1]))
+        // DCZ 落进之后受体收一下：两次极轻的激活呼吸，首尾都归零
+        + T.activateAmp * Math.sin(Math.PI * 2 * seg(p, T.dczIn[1] - 0.02, 1));
+      receptor.style.transform = 'translateX(' + ((1 - ee) * T.enterFromX).toFixed(2)
+        + '%) scale(' + (breath * (0.965 + 0.035 * ee)).toFixed(4) + ')';
+      // 必须始终写显式值：清空内联会回落到 armed 类的 inset(0 0 0 100%) 隐藏态
+      receptor.style.clipPath = 'inset(0 0 0 ' + ((1 - ee) * 100).toFixed(2) + '%)';
+      receptor.style.opacity = clamp01(e / 0.4).toFixed(3);
+
+      // ---- MT1：开场完全透明 → 受体落定后随动画渐变实 → 被解除时飘离淡出 ----
+      var mo = easeInOutCubic(seg(p, MT1.outWin[0], MT1.outWin[1]));
+      var mx = lerp(mtDockX, mtLeaveX, mo);
+      var my = lerp(mtDockY, mtLeaveY, mo);
+      mtNode.style.transform = 'translate(' + mx.toFixed(1) + 'px,' + my.toFixed(1)
+        + 'px) rotate(' + lerp(MT1.rotHold, MT1.rotOut, mo).toFixed(2) + 'deg) scale('
+        + lerp(MT1.holdScale, MT1.scaleOut, mo).toFixed(3) + ')';
+      // 开场（p < mt1In[0]）完全透明；mt1In 窗口内随动画逐渐变实；解除阶段再淡出
+      var mtIn = smoothstep(T.mt1In[0], T.mt1In[1], p);
+      mtNode.style.opacity = (mtIn * (1 - smoothstep(T.mt1FadeFrom, 1, mo))).toFixed(3);
+
+      // ---- HA 抗原 ----
+      for (var i = 0; i < actors.length; i++) {
+        var a = actors[i];
+        if (a.cfg.park) {
+          renderIdleHa(a, p);
+        } else {
+          renderBinder(a, p);
         }
       }
-    }, { threshold: 0.45 });
-    observer.observe(section);
 
-    function onEnterView() {
-      measureWhenReady(function (ok) {
-        if (!ok) {
-        // 量测失败（素材异常）：放弃隐藏态，恢复完整静态布局
-          disarm();
-          return;
-        }
-        applyHiddenState();
-        pump();
-        window.setTimeout(finish, T.fly + 90);
-      });
+      // ---- DCZ：MT1 被解除之后，两颗分别落进两侧凹槽 ----
+      for (var j = 0; j < dczs.length; j++) {
+        renderDcz(dczs[j], p);
+      }
     }
 
-    function pump() {
-      var anim = diagram.animate([
-        { transform: translateScale(geo.dx, geo.dy, START_SCALE), opacity: 0, offset: 0 },
-        // 在头部快速浮现（想法点亮），并微微放大
-        { transform: translateScale(geo.dx, geo.dy, EMERGE_SCALE), opacity: 1, offset: EMERGE_AT },
-        // 中段：沿弧线已离开头部，尺寸明显变大
-        { transform: translateScale(geo.midX, geo.midY, MID_SCALE), opacity: 1, offset: MID_AT },
-        // 终点：现有设计位置
-        { transform: translateScale(0, 0, 1), opacity: 1, offset: 1 }
-      ], {
-        duration: T.fly,
-        // 起步稍缓、末端减速：泵出的“喷发感” + 平稳落位
-        easing: 'cubic-bezier(0.3, 0.7, 0.3, 1)',
-        // 必须用 both：只用 backwards 时动画结束后效果失效， 元素会回落到内联隐藏 transform + armed 的 opacity:0 → 到位后闪没（见 pitfalls A1）
-        fill: 'both'
-      });
-      runningAnims.push(anim);
+    /**
+     * DCZ：膜外飞进来 → 落进凹槽 → 落定鼓一下 → 停住。
+     *
+     * 位置插值用 easeOutCubic（精准停住，不越过口袋），尺寸在落定段单独加一个
+     * sin 鼓包（0 → 峰 → 0），读起来是「压进去了」而不是「飞过头又弹回来」。
+     * 落定瞬间放一次扩散光环，把「结合」这一个事件从连续飞行里单独拎出来。
+     */
+    function renderDcz(o, p) {
+      var t = seg(p, o.cfg.inWin[0], o.cfg.inWin[1]);
+      var ef = easeOutCubic(seg(t, 0, DCZ.flyEnd));
+      var hx = lerp(o.fx, o.dx, ef);
+      var hy = lerp(o.fy, o.dy, ef)
+        - Math.sin(Math.PI * seg(t, 0, DCZ.flyEnd)) * DCZ.wobble * size;
+      var pop = Math.sin(Math.PI * seg(t, DCZ.flyEnd - 0.03, 1)) * DCZ.pop;
+      var ds = lerp(DCZ.scaleFrom, DCZ.dockScale, ef) + pop;
+
+      o.el.style.transform = 'translate(' + hx.toFixed(1) + 'px,' + hy.toFixed(1) + 'px) scale('
+        + ds.toFixed(3) + ')';
+      o.el.style.opacity = clamp01(t / 0.12).toFixed(3);
+
+      var ht = seg(t, DCZ.flyEnd, 1);
+      o.halo.style.transform = 'translate(' + o.dx.toFixed(1) + 'px,' + o.dy.toFixed(1)
+        + 'px) scale(' + lerp(DCZ.haloFrom, DCZ.haloTo, easeOutCubic(ht)).toFixed(3) + ')';
+      o.halo.style.opacity = (Math.sin(Math.PI * Math.pow(ht, 0.7)) * 0.9).toFixed(3);
     }
 
-        /* * * 收尾：交回 CSS 布局——去隐藏类、清内联 transform、取消 WAAPI 动画。 * 全部在同一帧内完成；末帧 == CSS 默认态，取消不产生跳变。 */
-    function finish() {
-      done = true;
-      stage.classList.remove(ARMED);
-      stage.classList.add(DONE);
-      diagram.style.transform = '';
-      runningAnims.forEach(function (a) {
-        try { a.cancel(); } catch (e) { /* 已取消则忽略 */ }
-      });
-      runningAnims = [];
-      window.removeEventListener('resize', onResizeDebounced);
+    /** 结合那颗：飞到 Nb 方块头顶后常驻，不再解离飞走 */
+    function renderBinder(a, p) {
+      var t = seg(p, a.cfg.win[0], a.cfg.win[1]);
+      var te = easeOutBack(t);
+      var hx = lerp(a.fx, a.dx, te) + Math.sin(Math.PI * t) * 0.008 * size;   // 两端归零的微摆
+      var hy = lerp(a.fy, a.dy, te) - Math.sin(Math.PI * t) * 0.006 * size;
+
+      // 越接近越大：0.82 → 1，制造「由远及近」的纵深；结合后维持不缩放、不旋转脱落
+      var hs = a.cfg.scale * lerp(0.82, 1, clamp01(te));
+      a.el.style.transform = 'translate(' + hx.toFixed(1) + 'px,' + hy.toFixed(1)
+        + 'px) scale(' + hs.toFixed(3) + ')';
+      // 飞入时淡入，结合后保持不淡出（停留 Nb 头顶）
+      a.el.style.opacity = clamp01(t / 0.15).toFixed(3);
+    }
+
+    /** 环境抗原：飞到停泊位 → 原地缓慢浮动 → 末段淡出 */
+    function renderIdleHa(a, p) {
+      var t = seg(p, a.cfg.inWin[0], a.cfg.inWin[1]);
+      var te = easeInOutSine(t);
+      var hx = lerp(a.fx, a.px, te);
+      var hy = lerp(a.fy, a.py, te);
+
+      // 浮动幅度随「到位程度」渐入，避免到位瞬间被正弦项拽一下
+      var w = te;
+      var ang = Math.PI * 2 * p;
+      hx += w * a.wx * Math.sin(ang * FLOAT.cycles[0] + a.cfg.ph);
+      hy += w * a.wy * Math.cos(ang * FLOAT.cycles[1] + a.cfg.ph * 1.7);
+      var rot = w * FLOAT.rotAmp * Math.sin(ang * 1.6 + a.cfg.ph * 2.3);
+
+      // 越接近越大：0.82 → 1，制造「由远及近」的纵深；到位后保留极缓的呼吸
+      var hs = a.cfg.scale * lerp(0.82, 1, clamp01(t))
+        * (1 + w * FLOAT.breath * Math.sin(ang * 1.3 + a.cfg.ph));
+
+      a.el.style.transform = 'translate(' + hx.toFixed(1) + 'px,' + hy.toFixed(1)
+        + 'px) scale(' + hs.toFixed(3) + ') rotate(' + rot.toFixed(2) + 'deg)';
+      a.el.style.opacity = (clamp01(t / 0.2) * (1 - smoothstep(T.haOut[0], T.haOut[1], p))).toFixed(3);
+    }
+
+    /**
+     * 原始进度 → 叙事进度：两端各留一段缓冲。
+     * 缓冲区内叙事进度被夹在 0（空场待机）与 1（终态定格），画面不动但仍在钉住状态，
+     * 所以进出轨道都有一段「锁住但静止」的过渡，不会一锁就开始、一走完就解锁。
+     */
+    function storyProgress() {
+      var raw = rawProgress();
+      var spanP = 1 - T.lead - T.trail;
+      if (spanP <= 0) return clamp01(raw);
+      return clamp01((raw - T.lead) / spanP);
+    }
+
+    function update() {
+      frame = 0;
+      var raw = rawProgress();
+      setFreeScroll(raw > 0 && raw < exitRaw());
+      var p = storyProgress();
+      if (p === lastP) return;
+      lastP = p;
+      render(p);
+    }
+
+    function schedule() {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    }
+
+    function arm() {
+      if (armed) return false;
+      // 先加轨道类再量测：轨道高度本身由这个类决定（360vh），
+      // 不加类量到的会是未加高的 100vh，进度分母就错了
+      root.classList.add(TRACK);
+      if (!measure()) {
+        root.classList.remove(TRACK);
+        return false;
+      }
+      armed = true;
+      stage.classList.add(ARMED);
+      lastP = -1;
+      update();
+      window.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('resize', onResize);
+      if (trackMQ) trackMQ.addEventListener('change', onTrackChange);
+      return true;
     }
 
     function disarm() {
+      if (!armed) return;
+      armed = false;
       stage.classList.remove(ARMED);
-      window.removeEventListener('resize', onResizeDebounced);
+      root.classList.remove(TRACK);
+      setFreeScroll(false);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', onResize);
+      if (trackMQ) trackMQ.removeEventListener('change', onTrackChange);
+      if (frame) { cancelAnimationFrame(frame); frame = 0; }
     }
 
-    // ================================================== 窗口尺寸变化：播放前重新量测（桌面 / ≤768px 两套定位数值） ==================================================
     function onResize() {
-      if (done) return;
-      if (window.innerHeight === 0) return;
-      applyHiddenState();
+      if (!measure()) return;
+      lastP = -1;
+      update();
     }
-    var onResizeDebounced = debounce(onResize, 180);
-    window.addEventListener('resize', onResizeDebounced);
+
+    // 视口跨过断点（桌面轨道 ↔ 窄屏静态）时整体装卸，不留半接管状态
+    function onTrackChange() {
+      if (trackMQ.matches && !reducedMotion()) {
+        if (!armed) arm();
+      } else {
+        disarm();
+      }
+    }
+
+    // ---- 降级红线：能力不齐就不接管可见性 ----
+    if (!trackMQ || !trackMQ.matches || reducedMotion()) return;
+    if (typeof requestAnimationFrame !== 'function') return;
+    arm();
   });
 })();
-</script>
+
 
   
+</script>
 <script>
 /*
  * 从页面打开那刻起数字持续跳动， * 读者停留的每一秒都在涨。另有一条「秒节拍」轨道：光点每秒扫一趟 = 约 21 人。 * 这两者是本屏"持续抓住视觉"的核心，入场动画只负责第一次亮相。

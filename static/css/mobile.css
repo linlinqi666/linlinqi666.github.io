@@ -638,7 +638,7 @@ a:active,
    而 contain-intrinsic-size 缺失时，视口外的图片会被按 0×0 计算，滚动到附近再突然撑开
    ——图片密集页（wet-lab/result 等）实测整页高度可差数千像素，反而把布局偏移放大。
    图片的加载时机交给 loading="lazy"，尺寸预留交给 <img> 自带的 width/height 属性
-   （浏览器据此在加载前按比例留位，见 static/css/components/media-reveal.css 的说明）。 */
+   （浏览器据此在加载前按比例留位）。 */
 
 /* 优化渲染性能 */
 .section-bg-img,
@@ -1056,13 +1056,15 @@ img.loaded {
     transform: rotate(180deg);
   }
 
-  /* ===== 移动端侧边栏禁用粘性定位 ===== */
+  /* ===== 移动端侧边栏禁用粘性定位 =====
+     用 relative 而不是 static：仍保留侧栏的定位包含块，
+     .yeast-decoration 这类 absolute 装饰层才会裁在侧栏卡片内；
+     退回 static 会让装饰层改按 .description-container 铺满整页。 */
   .description-sidebar,
   .log-sidebar,
   .sidebar {
-    position: static !important;
+    position: relative !important;
     top: auto !important;
-    position: -webkit-static !important;
   }
 }
 
@@ -1082,13 +1084,15 @@ img.loaded {
     scroll-padding-top: 5rem;
   }
 
-  /* ===== 移动端侧边栏禁用粘性定位 ===== */
+  /* ===== 移动端侧边栏禁用粘性定位 =====
+     用 relative 而不是 static：仍保留侧栏的定位包含块，
+     .yeast-decoration 这类 absolute 装饰层才会裁在侧栏卡片内；
+     退回 static 会让装饰层改按 .description-container 铺满整页。 */
   .description-sidebar,
   .log-sidebar,
   .sidebar {
-    position: static !important;
+    position: relative !important;
     top: auto !important;
-    position: -webkit-static !important;
   }
 
   body {
@@ -1115,9 +1119,23 @@ img.loaded {
     box-shadow: var(--mobile-shadow-lg);
   }
 
-  nav .logo img {
-    width: 2.5rem;
-    height: 6.25rem;
+  /* 品牌区（2026-10-19）：字标 + 吉祥物，不再使用单张方形 logo */
+  nav .logo {
+    gap: 0.35rem;
+  }
+
+  nav .logo__wordmark {
+    height: 2.15rem;
+  }
+
+  nav .logo__mascot {
+    height: 2.55rem;
+  }
+
+  /* 移动端抽屉主项前的插画：缩到 30px 左右，避免行高被撑开 */
+  .mobile-menu .nav-deco {
+    height: 1.9rem;
+    margin-right: 0.75rem;
   }
 
   /* ===== 搜索按钮 ===== */
@@ -1403,7 +1421,8 @@ img.loaded {
   .description-sidebar {
     width: 100%;
     min-width: 100%;
-    position: static;
+    /* relative 保留定位包含块，装饰层才裁在侧栏卡片内 */
+    position: relative;
   }
 
   /* ===== 按钮和链接触摸优化 ===== */

@@ -94,11 +94,11 @@ const GROUPS = [
   {
     id: 'Ste2p',
     anchor: 'model-report-ste2p',
-    label: 'Ste2p × MT1_5 (Cluster 1)',
+    label: 'Ste2 × pep5 (Cluster 1)',
     system: 'Path B gating complex',
-    title: 'Interaction Reports: Ste2p × MT1_5 Cluster 1',
-    desc: 'Four analyses of the Path B gating complex. The alpha-factor-derived peptide MT1_5 binds '
-      + 'mainly through ECL2, ECL3 and TM7 of Ste2p.',
+    title: 'Interaction Reports: Ste2 × pep5 Cluster 1',
+    desc: 'Four analyses of the Path B gating complex. The auto-inhibitory peptide pep5 binds '
+      + 'mainly through ECL2, ECL3 and TM7 of Ste2.',
     links: [
       {
         key: 'contact',

@@ -17,9 +17,7 @@
 /* ==========================================================
    1. 页面作用域与两栏布局
    ========================================================== */
-/* 锚点跳转偏移：与全站其他内容页（design.css 的 html { scroll-padding-top: 120px }）
-   保持一致，由滚动容器统一承担，不再在每张卡片上用 scroll-margin 叠加，
-   避免 Flask 贡献页（不加载 design.css）与其他页面机制分裂、偏移翻倍。 */
+/* 锚点跳转偏移：与全站其他内容页保持一致，由滚动容器统一承担。 */
 html {
   scroll-padding-top: 120px;
 }
@@ -30,40 +28,7 @@ html {
 }
 
 /* ==========================================================
-   2. 页首标题区（本页唯一 h1）
-   ========================================================== */
-.contribution-hero {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 0.25rem;
-}
-
-.contribution-hero h1 {
-  margin: 0;
-  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--desc-color-primary-darker, #4A3728);
-}
-
-.contribution-hero__sub {
-  margin: 0.35rem 0 0;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--desc-color-primary-dark, #5D4632);
-  text-indent: 0;
-}
-
-.contribution-hero__rule {
-  margin-top: 0.6rem;
-  height: 3px;
-  width: 4.5rem;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--desc-color-primary, #8B5A2B) 0%, var(--desc-color-primary-light, #D4A574) 100%);
-}
-
-/* ==========================================================
-   3. 内容卡片
+   2. 内容卡片
    ========================================================== */
 .contribution-page .content-card {
   background: var(--bg-card, #ffffff);
@@ -79,7 +44,7 @@ html {
   margin: 0 0 1rem;
   padding-bottom: 0.4rem;
   border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
-  font-size: 1.4rem;
+  font-size: var(--desc-font-size-3xl);
   font-weight: 700;
   line-height: 1.4;
   color: var(--desc-color-primary-darker, #4A3728);
@@ -91,16 +56,30 @@ html {
   border-left: 3px solid var(--desc-color-primary, #8B5A2B);
   border-radius: 0 0.25rem 0.25rem 0;
   background: rgba(139, 90, 43, 0.04);
-  font-size: 1.05rem;
+  font-size: var(--desc-font-size-2xl);
   font-weight: 600;
   line-height: 1.5;
   color: var(--desc-color-primary-darker, #4A3728);
 }
 
+/* 三级目录（Wet-Lab Contributions 内的条目级标题）：比 h3 更轻，不带色块，仅留左缩进与细线 */
+.contribution-page .content-card h4.content-subh4 {
+  margin: 1rem 0 0.5rem 1.2rem;
+  padding: 0 0 0.25rem;
+  border-left: none;
+  border-bottom: 1px dashed rgba(139, 90, 43, 0.28);
+  border-radius: 0;
+  background: none;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--desc-color-primary, #8B5A2B);
+}
+
 .contribution-page .content-card p {
   margin: 0 0 0.75rem;
   color: var(--desc-color-primary-darker, #4A3728);
-  font-size: 0.95rem;
+  font-size: var(--desc-font-size-lg);
   line-height: 1.8;
   text-indent: 0;
   text-align: justify;
@@ -142,7 +121,7 @@ html {
 .contribution-page .i18n-zh {
   display: block;
   margin-top: 0.2rem;
-  font-size: 0.82rem;
+  font-size: 0.9375rem;
   font-weight: 400;
   line-height: 1.65;
   color: var(--desc-color-primary-lightest, #6B5B45);
@@ -197,7 +176,7 @@ html {
 }
 
 .contribution-page .executive-summary .i18n-zh {
-  font-size: 0.82rem;
+  font-size: 0.9375rem;
 }
 
 /* ==========================================================
@@ -242,14 +221,14 @@ html {
 }
 
 .contribution-page .field-label .i18n-en {
-  font-size: 0.85rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--desc-color-primary, #8B5A2B);
 }
 
 .contribution-page .field-label .i18n-zh {
   margin-top: 0.05rem;
-  font-size: 0.74rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-lightest, #6B5B45);
 }
 
@@ -258,7 +237,7 @@ html {
 }
 
 .contribution-page .field-value .i18n-zh {
-  font-size: 0.82rem;
+  font-size: 0.9375rem;
 }
 
 .contribution-page .link-list > li {
@@ -275,7 +254,40 @@ html {
 }
 
 .contribution-page .link-list a .i18n-zh {
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
+}
+
+/* 正文内的普通项目符号列表（与字段表区分：无标签列） */
+.contribution-page .plain-list {
+  margin: 0.2rem 0 0.9rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  color: var(--desc-color-primary-darker, #4A3728);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.contribution-page .plain-list > li {
+  margin: 0 0 0.35rem;
+}
+
+.contribution-page .plain-list > li::before {
+  content: none;
+}
+
+/* 大节末尾的跳转链接：与正文段落拉开距离，作为该节的收口 */
+.contribution-page .link-list--section-end {
+  margin: 1.1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(139, 90, 43, 0.22);
+}
+
+.contribution-page .link-list--section-end > li {
+  padding: 0;
+}
+
+.contribution-page .link-list--section-end a {
+  font-weight: 600;
 }
 
 /* 正文链接：常态带下划线，读者一眼能认出是可点的链接 */
@@ -311,7 +323,7 @@ html {
   padding: 0.05rem 0.45rem;
   border: 1px solid;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
   white-space: nowrap;
   vertical-align: 0.1em;
@@ -348,7 +360,7 @@ html {
   width: 100%;
   border-collapse: collapse;
   background: var(--bg-card, #ffffff);
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
 }
 
 .contribution-page .data-table th {
@@ -376,28 +388,28 @@ html {
 }
 
 .contribution-page .data-table .i18n-en {
-  font-size: 0.88rem;
+  font-size: 0.9375rem;
 }
 
 .contribution-page .data-table .i18n-zh {
-  font-size: 0.78rem;
+  font-size: 0.9375rem;
 }
 
 .contribution-page .data-table code {
-  font-size: 0.78rem;
+  font-size: 0.9375rem;
 }
 
 /* ==========================================================
    9. 侧栏目录双语与发酵进度（补齐此前无定义的类）
    ========================================================== */
 .contribution-page .description-nav .i18n-en {
-  font-size: 0.82rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-darker, #4A3728);
 }
 
 .contribution-page .description-nav .i18n-zh {
   margin-top: 0.1rem;
-  font-size: 0.72rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-lightest, #6B5B45);
   opacity: 0.9;
 }
@@ -408,7 +420,7 @@ html {
 }
 
 .contribution-page .progress-percentage {
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--desc-color-primary, #8B5A2B);
 }
@@ -416,7 +428,7 @@ html {
 /* 三级目录：Other contributions → Dry Lab / HP → O1-O4 */
 .contribution-page .level2-has-sub > a {
   display: block;
-  font-size: 0.86rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--desc-color-primary-dark, #4A3525);
   text-decoration: none;
@@ -441,7 +453,7 @@ html {
 
 .contribution-page ul.level3 li a {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   color: var(--desc-color-primary-lightest, #6B5B45);
   text-decoration: none;
   padding: 0.3rem 0.5rem;
@@ -473,9 +485,8 @@ html {
 
 /* ==========================================================
    10. 侧栏：限制展开高度，目录内部滚动，发酵容器常驻可见
-   —— 2026-10-18 起本组规则已提升到 index.css 的全站
-      .description-sidebar（Model 等长目录页面同样需要）。
-      此处保留为页面级兜底；若两者冲突，以 index.css 的全站规则为准。
+   —— 目录展开后总高会超过视口，把发酵进度顶出屏幕；这里把侧栏锁在视口内，
+      目录自己承担滚动，发酵容器固定在侧栏底部。
    ========================================================== */
 .contribution-page .description-container {
   align-items: flex-start;
@@ -555,7 +566,7 @@ html {
   }
 
   .contribution-page .content-card h2 {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
   }
 
   .contribution-page .field-list > li {
@@ -564,15 +575,141 @@ html {
   }
 
   .contribution-page .data-table {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
   }
 
   .contribution-page .data-table th,
   .contribution-page .data-table td {
     padding: 0.4rem;
   }
+}
 
-  .contribution-hero {
-    padding: 1.25rem 1rem 0.25rem;
+/* ==========================================================
+   12. 内嵌 PDF（Human Practices 卡的 Influenza A in the Air 文档）
+   ========================================================== */
+
+.contribution-page .pdf-embed {
+  width: 100%;
+  margin: 0 0 1.25rem;
+}
+
+.contribution-page .pdf-embed__object {
+  display: block;
+  width: 100%;
+  height: 82vh;
+  min-height: 640px;
+  border: 1px solid #e3d8c2;
+  border-radius: 10px;
+  background: #fffdf8;
+}
+
+.contribution-page .pdf-embed__fallback {
+  padding: 64px 24px;
+  text-align: center;
+  color: #8a7656;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .contribution-page .pdf-embed__object {
+    height: 70vh;
+    min-height: 480px;
   }
+}
+
+/* ==========================================================
+   9. 湿实验 Parts 图块与目录直接条目
+   ========================================================== */
+
+/* 质粒 / 载体图：居中限宽，图注与说明置于图下 */
+.contribution-page .contrib-figure {
+  margin: 1rem 0 1.25rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(139, 90, 43, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.contribution-page .contrib-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 40rem;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+.contribution-page .contrib-figure figcaption {
+  margin-top: 0.6rem;
+}
+
+.contribution-page .contrib-figure__caption {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--desc-color-primary-dark, #4A3525);
+}
+
+.contribution-page .contrib-figure__desc {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+/* 段末页面指引词：小字号，紧贴段落收尾 */
+.contribution-page .contrib-refs {
+  display: inline-block;
+  margin-left: 0.3rem;
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--desc-color-primary-lightest, #6B5B45);
+}
+
+/* 目录中不带子项的二级条目：与带子项的组标题同级同款 */
+.contribution-page .level2-flat > a {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--desc-color-primary-dark, #4A3525);
+  text-decoration: none;
+}
+
+.contribution-page .level2-flat > a:hover {
+  background: rgba(122, 74, 26, 0.06);
+}
+
+.contribution-page .level2-flat > a.active {
+  background: rgba(122, 74, 26, 0.06);
+  color: var(--desc-color-primary-dark, #4A3525);
+}
+
+/* 展开后条目较多，放宽二级列表高度上限避免尾部被裁 */
+.contribution-page .description-nav .level1.expanded .level2 {
+  max-height: 60rem;
+}
+
+/* 角饰悬在卡片顶沿右侧，标题收窄到装饰左缘之内，末词不再被插图盖住；
+   收窄量留出「Yeast Engineering」整组换行所需的余量，1280 档下第一行止于 for */
+#contribution-wetlab h2 {
+  max-width: calc(100% - 165px);
+}
+
+/* 窄屏收起角饰（components.css），标题恢复整行宽度 */
+@media (max-width: 1024px) {
+  #contribution-wetlab h2 {
+    max-width: none;
+  }
+}
+
+/* 标题末两词作为一个整体换行，避免末词被单独挤到第二行 */
+.keep-together {
+  white-space: nowrap;
 }

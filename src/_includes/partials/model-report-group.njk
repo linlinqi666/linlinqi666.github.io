@@ -8,9 +8,9 @@
    Expects `reportGroup` in context. #}
 <div class="model-report" id="{{ reportGroup.anchor }}" data-report-group data-report-key="{{ reportGroup.id }}">
   <div class="model-report__head">
-    <h3 class="model-report__title" data-no-fold>{{ reportGroup.title }}</h3>
-    <p class="model-report__meta">{{ reportGroup.system }} &middot; {{ reportGroup.label }}</p>
-    <p class="model-report__desc">{{ reportGroup.desc }}</p>
+    <h3 class="model-report__title" data-no-fold>{{ reportGroup.title | safe }}</h3>
+    <p class="model-report__meta">{{ reportGroup.system }} &middot; {{ reportGroup.label | safe }}</p>
+    <p class="model-report__desc">{{ reportGroup.desc | safe }}</p>
   </div>
 
   <ul class="model-report__links">

@@ -9,21 +9,27 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/safety.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/safety.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -58,47 +64,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -107,52 +113,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -185,10 +199,6 @@
   <div class="ppb-track">
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
-</div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
 </div>
 
   <main class="">
@@ -289,8 +299,8 @@
 
         <div id="safety-risk-matrix" class="content-card">
           <h2>LS Risk Matrix</h2>
-          <p>This table uses an LS (Likelihood × Severity) risk matrix to carry out an item-by-item safety assessment of the project's experimental workflow <a class="safety-cite" href="#safety-reference-1">[1]</a><a class="safety-cite" href="#safety-reference-2">[2]</a>. L denotes likelihood: the probability that the risk event occurs under the existing training, facilities, SOPs and protective conditions. S denotes severity: the consequence for human health, experimental progress and the environment once it occurs. L and S are each graded from 1 to 5, and the risk value is L × S: 1–4 low risk, 5–9 general risk, 10–16 moderately high risk, 17–25 high risk. The table also lists the initial risk, the existing control measures and the residual risk; the L and S of every item carry an independent scoring rationale rather than a blanket score, so each score corresponds one-to-one with a specific operation, material and set of control conditions.</p>
-          <p>When reading the table, the risk value is the initial risk before control measures are applied, and the residual risk is what remains after training, SOPs, PPE, clean benches, fume hoods, SDS consultation and waste inactivation have been applied. We assessed 15 experimental steps, covering HA hemagglutinin handling, BY4741 yeast culture and passaging, transformation, CRISPR-Cas9 knockout of FAR1/SST2, Gpa1-Gaq homologous recombination, PAGER receptor expression, DCZ1/DCZ small-molecule agonist handling, X-α-Gal and MEL1 colorimetric detection, yEGFP fluorescence detection, centrifugation and glassware handling, autoclave and UV equipment, the air-sampling interface, waste collection and inactivation, routine laboratory management, and the environmental release risk of the engineered yeast. Most steps carry an initial risk value of 1–2 and fall in the low-risk band. The highest risk value is DCZ1/DCZ small-molecule agonist handling, with L=2 and S=2 giving a risk value of 4, still within the low-risk band; the reason is that handling small-molecule chemicals may occasionally involve skin contact or inhalation, but after consulting the SDS, wearing gloves and goggles, working in a fume hood or clean bench and segregating waste liquids, the residual risk drops to low.</p>
+          <p>This table uses an LS (Likelihood × Severity) risk matrix to carry out an item-by-item safety assessment of the project's experimental workflow <a class="cite-ref" href="#safety-reference-1">[1]</a><a class="cite-ref" href="#safety-reference-2">[2]</a>. L denotes likelihood: the probability that the risk event occurs under the existing training, facilities, SOPs and protective conditions. S denotes severity: the consequence for human health, experimental progress and the environment once it occurs. L and S are each graded from 1 to 5, and the risk value is L × S: 1–4 low risk, 5–9 general risk, 10–16 moderately high risk, 17–25 high risk. The table also lists the initial risk, the existing control measures and the residual risk; the L and S of every item carry an independent scoring rationale rather than a blanket score, so each score corresponds one-to-one with a specific operation, material and set of control conditions.</p>
+          <p>When reading the table, the risk value is the initial risk before control measures are applied, and the residual risk is what remains after training, SOPs, PPE, clean benches, fume hoods, SDS consultation and waste inactivation have been applied. We assessed 16 experimental steps, covering HA handling, BY4741 yeast culture and passaging, transformation, CRISPR-Cas9 knockout of <i>FAR1</i>/<i>SST2</i>, <i>GPA1</i>–Gαq homologous recombination, PAGER receptor expression, DCZ1/DCZ small-molecule agonist handling, X-α-Gal and <i>MEL1</i> colorimetric detection, <i>yEGFP</i> fluorescence detection, centrifugation and glassware handling, autoclave and UV equipment, the use of flammable solvents and heating equipment, the air-sampling interface, waste collection and inactivation, routine laboratory management, and the environmental release risk of the engineered yeast. Most steps carry an initial risk value of 1–2 and fall in the low-risk band. The highest risk value is the use of flammable solvents and heating equipment, with L=2 and S=3 giving a risk value of 6, which falls in the general-risk band: ethanol and similar solvents, once spilled and then exposed to a flame, an electric spark or a hot surface, may cause local burns and damage to the bench and equipment. With solvents drawn in limited quantities and kept in a dedicated cabinet, heating equipment attended while in use and switched off before leaving, and a fire extinguisher and hydrant within reach, the residual risk drops to low. The next highest is DCZ1/DCZ small-molecule agonist handling, with L=2 and S=2 giving a risk value of 4, still within the low-risk band; the reason is that handling small-molecule chemicals may occasionally involve skin contact or inhalation, but after consulting the SDS, wearing gloves and goggles, working in a fume hood or clean bench and segregating waste liquids, the residual risk drops to low.</p>
 
           <h3 id="safety-grading">How the matrix is graded</h3>
           <div class="safety-table-scroll">
@@ -379,6 +389,8 @@
               </tbody>
             </table>
           </div>
+          <p class="safety-calculation-label">Calculation:</p>
+          <p class="safety-calculation-formula">LS = L × S</p>
           <div class="safety-table-scroll">
             <table class="safety-table">
               <caption>Table 3. Risk value = L × S.</caption>
@@ -422,10 +434,10 @@
           </div>
 
           <h3 id="safety-matrix">Item-by-item assessment</h3>
-          <p>The 15 steps below are scored one by one. L and S are given as the grade followed by its rationale, so that every score can be traced back to the operation, the material and the control conditions it refers to. On a narrow screen the table scrolls sideways.</p>
+          <p>The 16 steps below are scored one by one. L and S are given as the grade followed by its rationale, so that every score can be traced back to the operation, the material and the control conditions it refers to. On a narrow screen the table scrolls sideways.</p>
           <div class="safety-table-scroll">
             <table class="safety-table safety-table--matrix">
-              <caption>Table 4. Item-by-item LS assessment of the project workflow: 15 experimental steps, initial risk, control measures and residual risk.</caption>
+              <caption>Table 4. Item-by-item LS assessment of the project workflow: 16 experimental steps, initial risk, control measures and residual risk.</caption>
               <thead>
                 <tr>
                   <th scope="col">No.</th><th scope="col">Experimental step</th><th scope="col">Hazard category</th><th scope="col">Risk scenario</th><th scope="col">L</th><th scope="col">S</th><th scope="col">Risk value</th><th scope="col">Level</th><th scope="col">Control measures</th><th scope="col">Residual risk</th>
@@ -474,7 +486,7 @@
                 
                 <tr>
                   <th scope="row">4</th>
-                  <td>CRISPR-Cas9 knockout of FAR1/SST2</td>
+                  <td>CRISPR-Cas9 knockout of <i>FAR1</i>/<i>SST2</i></td>
                   <td>Biological/chemical</td>
                   <td>Handling of pML104, sgRNA and selection reagents</td>
                   <td><span class="safety-grade">1</span><span class="safety-rationale">Rare: per SOP, avoiding aerosols; no live virus involved</span></td>
@@ -487,7 +499,7 @@
                 
                 <tr>
                   <th scope="row">5</th>
-                  <td>Gpa1-Gaq homologous recombination</td>
+                  <td><i>GPA1</i>-Gαq homologous recombination</td>
                   <td>Biological</td>
                   <td>Leakage of engineered yeast or donor DNA</td>
                   <td><span class="safety-grade">1</span><span class="safety-rationale">Rare: handled in the biosafety cabinet; donor DNA is non-pathogenic</span></td>
@@ -526,7 +538,7 @@
                 
                 <tr>
                   <th scope="row">8</th>
-                  <td>X-α-Gal chromogenic substrate and MEL1 detection</td>
+                  <td>X-α-Gal chromogenic substrate and <i>MEL1</i> detection</td>
                   <td>Chemical</td>
                   <td>Reagent contact or mixing of waste liquids</td>
                   <td><span class="safety-grade">1</span><span class="safety-rationale">Rare: small amounts used, gloves worn, waste collected separately</span></td>
@@ -539,7 +551,7 @@
                 
                 <tr>
                   <th scope="row">9</th>
-                  <td>yEGFP fluorescence detection</td>
+                  <td><i>yEGFP</i> fluorescence detection</td>
                   <td>Physical</td>
                   <td>Exposure to UV or the fluorescence instrument</td>
                   <td><span class="safety-grade">1</span><span class="safety-rationale">Rare: instruments have covers and are used after training</span></td>
@@ -578,6 +590,19 @@
                 
                 <tr>
                   <th scope="row">12</th>
+                  <td>Use of flammable solvents and heating equipment</td>
+                  <td>Chemical/physical</td>
+                  <td>Flammable solvents such as ethanol spill and are ignited by a flame, an electric spark or a hot surface</td>
+                  <td><span class="safety-grade">2</span><span class="safety-rationale">Uncommon: solvents are drawn in limited quantities and kept in a dedicated cabinet; no open flame at the bench</span></td>
+                  <td><span class="safety-grade">3</span><span class="safety-rationale">Moderate: may cause local burns and damage to the bench and equipment; can be dealt with using a fire extinguisher</span></td>
+                  <td>6</td>
+                  <td>General</td>
+                  <td>Solvents drawn as needed and returned to the cabinet after use; heating equipment attended while in use and switched off before leaving; extinguisher and hydrant within reach, access kept clear</td>
+                  <td>Low</td>
+                </tr>
+                
+                <tr>
+                  <th scope="row">13</th>
                   <td>Air-sampling interface and liquid sample application</td>
                   <td>Biological/physical</td>
                   <td>Leakage or aerosol from simulated samples</td>
@@ -590,7 +615,7 @@
                 </tr>
                 
                 <tr>
-                  <th scope="row">13</th>
+                  <th scope="row">14</th>
                   <td>Waste collection and inactivation</td>
                   <td>Environmental/biological</td>
                   <td>Escape of engineered yeast or chemical waste-liquid contamination</td>
@@ -603,7 +628,7 @@
                 </tr>
                 
                 <tr>
-                  <th scope="row">14</th>
+                  <th scope="row">15</th>
                   <td>Routine laboratory management and records</td>
                   <td>Human factors</td>
                   <td>Inadequate training, operating error, missing records</td>
@@ -616,7 +641,7 @@
                 </tr>
                 
                 <tr>
-                  <th scope="row">15</th>
+                  <th scope="row">16</th>
                   <td>Environmental release of the engineered yeast</td>
                   <td>Environmental</td>
                   <td>Yeast escaping into the natural environment</td>
@@ -635,12 +660,12 @@
 
         <div id="safety-lab-environment" class="content-card">
           <h2>Laboratory Safety Environment</h2>
-          <p>The laboratory we work in has strict and well-developed safety management. Entry is controlled by access authorization, the areas are clearly divided, and operations of different risk levels are carried out in their corresponding areas. Warning signs for biological hazards, chemical hazards, flammability, corrosion, autoclaving, ultraviolet light, eyewash, first aid, fire extinguishers, emergency exits and waste segregation are posted throughout the laboratory, and SOPs, emergency contacts and safety reminders are posted at key locations <a class="safety-cite" href="#safety-reference-2">[2]</a>. A Safety Emergency Response Plan for Teaching Laboratories (Trial) is also posted in a prominent position, compiled in accordance with the Work Safety Law, the Fire Protection Law and the Emergency Response Law of the People's Republic of China and the Regulations on the Safety Management of Hazardous Chemicals; it sets out the emergency organizational structure, the escalation and reporting procedure and 24-hour emergency contact numbers (Figure 1). After entering the laboratory we can quickly identify the sources of risk, the boundaries of operation and the location of emergency equipment.</p>
-          <p>The laboratory is equipped with clean benches, fume hoods, an autoclave, an eyewash station, an emergency shower, first-aid kits, fire extinguishers, spill kits, absorbent materials, sharps containers, biohazard waste bags and chemical waste containers. Flammable liquids and other hazardous chemicals are kept in a dedicated storage cabinet with the corresponding SDS documentation on hand, and hazardous waste is placed in segregated collection containers and never poured away at will (Figure 3). The eyewash station and emergency shower (Figure 2) are always available. For microbiological work we operate inside a clean bench; for volatile or irritant chemicals we work in a fume hood (Figure 5). Our supervising teachers give safety reminders tailored to each specific experiment, and team members also remind and check one another. After experiments we handle biological waste and chemical waste by category and autoclave materials that need inactivation. Overall, the laboratory's level of safety, its warning system and its emergency provision give us a reliable basis for carrying out this project.</p>
+          <p>The laboratory we work in has strict and well-developed safety management. Entry is controlled by access authorization, the areas are clearly divided, and operations of different risk levels are carried out in their corresponding areas. Warning signs for biological hazards, chemical hazards, flammability, corrosion, autoclaving, ultraviolet light, eyewash, first aid, fire extinguishers, emergency exits and waste segregation are posted throughout the laboratory, and SOPs, emergency contacts and safety reminders are posted at key locations <a class="cite-ref" href="#safety-reference-2">[2]</a>. A Safety Emergency Response Plan for Teaching Laboratories (Trial) is also posted in a prominent position, compiled in accordance with the Work Safety Law, the Fire Protection Law and the Emergency Response Law of the People's Republic of China and the Regulations on the Safety Management of Hazardous Chemicals; it sets out the emergency organizational structure, the escalation and reporting procedure and 24-hour emergency contact numbers. Fire-fighting facilities are provided close at hand: the hydrant cabinets and extinguisher boxes around the laboratory are grouped together, their doors carry signage and inspection records, and the access to them is kept clear (Figure 1). After entering the laboratory we can quickly identify the sources of risk, the boundaries of operation and the location of both emergency equipment and fire-fighting equipment (Figure 4).</p>
+          <p>The laboratory is equipped with clean benches, fume hoods, an autoclave, an eyewash station, an emergency shower, first-aid kits, fire extinguishers, spill kits, absorbent materials, sharps containers, biohazard waste bags and chemical waste containers. Flammable liquids and other hazardous chemicals are kept in a dedicated storage cabinet with the corresponding SDS documentation on hand, and hazardous waste is placed in segregated collection containers and never poured away at will (Figure 3). The eyewash station and emergency shower (Figure 2) are always available. For microbiological work we operate inside a clean bench; for volatile or irritant chemicals we work in a fume hood (Figure 5). Our supervising teachers give safety reminders tailored to each specific experiment, and team members also remind and check one another. After experiments we handle biological waste and chemical waste by category and autoclave materials that need inactivation. Overall, the laboratory's level of safety, its warning system and its emergency provision give us a reliable basis for carrying out this project. On fire safety, the hydrant cabinets and extinguisher boxes are close at hand and the access to them is kept clear; flammable solvents are drawn only as needed and returned to the cabinet after use, and heating equipment is attended while in use and switched off before we leave.</p>
           
           <figure class="safety-figure">
-            <img src="../static/image/safety/safety-fig1.jpg" alt="Figure 1. The Safety Emergency Response Plan for Teaching Laboratories (Trial) posted in the laboratory" width="1100" height="1467" loading="lazy" decoding="async">
-            <figcaption>Figure 1. The Safety Emergency Response Plan for Teaching Laboratories (Trial) posted in the laboratory<span class="safety-figure-note">Part of Figure 1 has been pixelated. The obscured area contains the names and contact details of the members of our laboratory’s emergency response team for safety incidents; to protect their privacy we have removed this personal information from materials released outside the team. All other content is unchanged.</span></figcaption>
+            <img src="../static/image/lab/wetlab/safety/safety-fig1-hydrant.png" alt="Figure 1. The hydrant cabinet and extinguisher box near the laboratory" width="1279" height="1706" loading="lazy" decoding="async">
+            <figcaption>Figure 1. The hydrant cabinet and extinguisher box near the laboratory</figcaption>
           </figure>
           
           <figure class="safety-figure">
@@ -663,23 +688,38 @@
             <figcaption>Figure 5. The fume hood</figcaption>
           </figure>
           
+          <figure class="safety-figure">
+            <img src="../static/image/lab/wetlab/safety/safety-fig6-first-aid.png" alt="Figure 6. The first-aid kit near the laboratory" width="1279" height="1706" loading="lazy" decoding="async">
+            <figcaption>Figure 6. The first-aid kit near the laboratory</figcaption>
+          </figure>
+          
         </div>
 
         <div id="safety-personal" class="content-card">
           <h2>Personal Safety</h2>
-          <p>All our members have received laboratory safety training and passed the laboratory access requirements <a class="safety-cite" href="#safety-reference-1">[1]</a><a class="safety-cite" href="#safety-reference-2">[2]</a>. We are familiar with the laboratory safety rules, emergency procedures and personal protective requirements. Before any laboratory activity in this project began, our supervising teachers gave us an additional targeted safety briefing, focusing on the biological materials involved, the risks of the reagents, the boundaries of operation and the record-keeping requirements. During the experiments our activities were recorded and reported, and we had studied the reagents we used in advance to confirm their risks.</p>
-          <p>For personal protection we select and correctly wear lab coats, gloves, goggles and masks according to the risk of the specific operation, keep proper working practice inside a clean bench or fume hood, wash our hands properly before and after experiments, and take off our lab coats before leaving the laboratory. We all know where the eyewash station, first-aid kit, fire extinguisher, spill kit and emergency shower are, and in the event of a spill, contact or suspected exposure we know how to respond immediately and report it. During experiments we supervise one another's protective equipment and working state, keep records complete, and never carry out high-risk operations alone. Overall, personal safety is not a paper rule for us but a practical habit and a team consensus in daily experiments.</p>
+          <p>All our members have received laboratory safety training and met the laboratory access requirements <a class="cite-ref" href="#safety-reference-1">[1]</a><a class="cite-ref" href="#safety-reference-2">[2]</a>. We are familiar with the laboratory safety rules, emergency procedures and personal protective requirements. Before any laboratory activity in this project began, our supervising teachers gave us an additional targeted safety briefing, focusing on the biological materials involved, the risks of the reagents, the boundaries of operation and the record-keeping requirements. During the experiments our activities were recorded and reported, and we had studied the reagents we used in advance to confirm their risks.</p>
+          <p>For personal protection we select and correctly wear lab coats, gloves, goggles and masks according to the risk of the specific operation, keep proper working practice inside a clean bench or fume hood, wash our hands properly before and after experiments, and take off our lab coats before leaving the laboratory. We all know where the eyewash station, first-aid kit (Figure 6), fire extinguisher, spill kit and emergency shower are, and in the event of a spill, contact or suspected exposure we know how to respond immediately and report it. During experiments we supervise one another's protective equipment and working state, keep records complete, and never carry out high-risk operations alone. Overall, personal safety is not a paper rule for us but a practical habit and a team consensus in daily experiments.</p>
         </div>
 
         <div id="safety-project" class="content-card">
           <h2>Project Safety</h2>
-          <p>The target detected in this project is the hemagglutinin (HA) protein on the surface of influenza A virus. The HA hemagglutinin used in our experiments is purchased; it is not infectious and does not possess the physiological activity of influenza A virus. An influenza vaccine based on recombinant HA protein contains only hemagglutinin as a single antigenic protein and no viral genome, so it cannot self-replicate and is itself non-infectious <a class="safety-cite" href="#safety-reference-3">[3]</a>. The HA hemagglutinin used in this experiment therefore does not produce the infectious characteristics of influenza A virus, cannot infect people and cannot make people ill. We do not handle live virus, we introduce no replication-competent viral sequences, and we introduce no virulence-related genes.</p>
-          <p>For the recognition element we use an anti-HA nanobody (VHH) as the recognition domain <a class="safety-cite" href="#safety-reference-4">[4]</a>, and the human hM1Dq receptor as the signalling core <a class="safety-cite" href="#safety-reference-5">[5]</a>. The PAGER (Programmable Antigen-gated G-protein-coupled Engineered Receptors) receptor uses an "antigen-gated de-repression" logic <a class="safety-cite" href="#safety-reference-6">[6]</a>: in the absence of HA, the MT1 auto-inhibitory peptide occupies the orthosteric site of hM1Dq and holds the receptor at a low background; once HA binds the nanobody, steric hindrance relieves the MT1 inhibition, and the DCZ small molecule then activates hM1Dq <a class="safety-cite" href="#safety-reference-7">[7]</a>, triggering the downstream yeast MAPK pathway and FUS1 reporter gene output. This self-inhibitory design reduces background leakage and false-positive risk <a class="safety-cite" href="#safety-reference-6">[6]</a>.</p>
-          <p>For the chassis we use the non-pathogenic, laboratory-standard <em>Saccharomyces cerevisiae</em> BY4741. <em>S. cerevisiae</em> is classed at the lowest risk level in national biosafety listings, and this project is carried out entirely under biosafety level 1 (BSL-1) conditions <a class="safety-cite" href="#safety-reference-1">[1]</a>. BY4741 is an internationally used laboratory chassis with a well-defined genetic background; it is naturally auxotrophic for histidine (His), leucine (Leu), methionine (Met) and uracil (Ura), cannot synthesise these four essential nutrients and must obtain them from outside <a class="safety-cite" href="#safety-reference-8">[8]</a>. The vector system, the reporter system and the plasmids used for GPA1 humanisation/knockout constructed in this study carry LEU, HIS and URA selection markers respectively, complementing the corresponding auxotrophies.</p>
-          <p>To ensure biosafety we also designed a marker-removal strategy: the URA marker is removed by 5-fluoroorotic acid (5-FOA) counter-selection <a class="safety-cite" href="#safety-reference-9">[9]</a>, returning the engineered strain to a uracil-auxotrophic state after modification, which together with the chassis's original histidine, leucine and methionine auxotrophies makes it a quadruple auxotroph. This multiple-auxotrophy mechanism makes it difficult for the strain to proliferate effectively in environments lacking the corresponding nutrient supplements; conditions that supply all four free nutrients simultaneously and at sufficient concentration do not normally exist in the natural environment, so our engineered yeast survives and proliferates mainly in specially formulated media.</p>
-          <p>This design — genetically modifying an already auxotrophic strain and layering a marker-removal step on top — makes it difficult for the strain to proliferate effectively outside the specific supplemented medium, thereby reducing the risk of environmental release. It should be noted that auxotrophy is usually regarded as the first layer of biological containment, and its protective strength depends on the availability of the essential nutrients in the surrounding environment <a class="safety-cite" href="#safety-reference-10">[10]</a>; work elsewhere has pushed yeast escape frequencies below 10⁻⁹ by introducing stronger barriers such as dependence on an unnatural amino acid. We therefore do not rest the whole safety case on auxotrophy itself, but also adopt enclosed operation, autoclave inactivation of waste and standardised management, forming multiple layers of protection.</p>
-          <p>For chassis modification we use the CRISPR-Cas9 system <a class="safety-cite" href="#safety-reference-11">[11]</a> to knock out FAR1 <a class="safety-cite" href="#safety-reference-12">[12]</a> and SST2 <a class="safety-cite" href="#safety-reference-13">[13]</a>, removing interference from the yeast's own mating pathway with the cell cycle and signal strength; we also designed a Gpa1-Gaq chimeric G protein, replacing the five C-terminal amino acids KIGII of yeast Gpa1 with EYNLV from human Gαq <a class="safety-cite" href="#safety-reference-14">[14]</a>, so that hM1Dq can couple to the yeast MAPK pathway. The reporter module uses the pheromone-responsive FUS1 promoter <a class="safety-cite" href="#safety-reference-15">[15]</a> to drive yEGFP <a class="safety-cite" href="#safety-reference-16">[16]</a> or MEL1 <a class="safety-cite" href="#safety-reference-17">[17]</a> expression, producing green fluorescence or a blue colour respectively. These modifications target only signal transduction and reporter output; they introduce no pathogenic factors and do not enhance the yeast's pathogenicity or environmental fitness.</p>
-          <p>All cultures, consumables and waste containing the engineered yeast are collected according to the laboratory's biological waste rules and autoclaved or otherwise effectively inactivated before disposal. Waste liquids containing chemical reagents are collected separately and handed to a qualified institution. The whole system is modular: replacing only the nanobody domain would allow it to be extended to the detection of other respiratory pathogens <a class="safety-cite" href="#safety-reference-6">[6]</a>, and the safety assessment will be updated in step with any change of target.</p>
+          <p>The target detected in this project is the hemagglutinin (HA) protein on the surface of influenza A virus. The HA used in our experiments is purchased; it is not infectious and does not possess the biological activity of influenza A virus. An influenza vaccine based on recombinant HA protein contains only hemagglutinin as a single antigenic protein and no viral genome, so it cannot self-replicate and is itself non-infectious <a class="cite-ref" href="#safety-reference-3">[3]</a>. The HA used in this experiment therefore does not produce the infectious characteristics of influenza A virus, cannot infect people and cannot make people ill. We do not handle live virus, we introduce no replication-competent viral sequences, and we introduce no virulence-related genes.</p>
+          <p>For the recognition element we use an anti-HA nanobody (VHH) as the recognition domain <a class="cite-ref" href="#safety-reference-4">[4]</a>, and the human hM1Dq receptor as the signalling core <a class="cite-ref" href="#safety-reference-5">[5]</a>. The PAGER (Programmable Antigen-gated G-protein-coupled Engineered Receptors) receptor uses an "antigen-gated de-repression" logic <a class="cite-ref" href="#safety-reference-6">[6]</a>: in the absence of HA, the MT1 auto-inhibitory peptide occupies the orthosteric site of hM1Dq and holds the receptor at a low background; once HA binds the nanobody, steric hindrance relieves the MT1 inhibition, and the DCZ small molecule then activates hM1Dq <a class="cite-ref" href="#safety-reference-7">[7]</a>, triggering the downstream yeast MAPK pathway and <i>FUS1</i> reporter gene output. This self-inhibitory design reduces background leakage and false-positive risk <a class="cite-ref" href="#safety-reference-6">[6]</a>.</p>
+          <p>For the chassis we use the non-pathogenic, laboratory-standard <i>Saccharomyces cerevisiae</i> BY4741. <i>S. cerevisiae</i> is classed at the lowest risk level in national biosafety listings, and this project is carried out entirely under biosafety level 1 (BSL-1) conditions <a class="cite-ref" href="#safety-reference-1">[1]</a>. BY4741 is an internationally used laboratory chassis with a well-defined genetic background; it is naturally auxotrophic for histidine (His), leucine (Leu), methionine (Met) and uracil (Ura), cannot synthesise these four essential nutrients and must obtain them from outside <a class="cite-ref" href="#safety-reference-8">[8]</a>. The vector system, the reporter system and the plasmids used for <i>GPA1</i> humanisation/knockout constructed in this study carry LEU, HIS and URA selection markers respectively, complementing the corresponding auxotrophies.</p>
+          <p>To ensure biosafety we also designed a marker-removal strategy: the URA marker is removed by 5-fluoroorotic acid (5-FOA) counter-selection <a class="cite-ref" href="#safety-reference-9">[9]</a>, returning the engineered strain to a uracil-auxotrophic state after modification, which together with the chassis's original histidine, leucine and methionine auxotrophies makes it a quadruple auxotroph. This multiple-auxotrophy mechanism makes it difficult for the strain to proliferate effectively in environments lacking the corresponding nutrient supplements; conditions that supply all four free nutrients simultaneously and at sufficient concentration do not normally exist in the natural environment, so our engineered yeast survives and proliferates mainly in specially formulated media.</p>
+          <figure class="safety-figure">
+            <img src="../static/image/safety/safety-ex-1.avif" alt="Growth of wild-type Saccharomyces cerevisiae BY4741 on a complete YPD plate and four single-dropout SD plates lacking histidine, leucine, uracil or methionine" width="1100" height="1366" loading="lazy" decoding="async">
+            <figcaption>Figure 7. Growth of wild-type <em>Saccharomyces cerevisiae</em> BY4741 on different selective media. The strain forms colonies on complete YPD but not on the four single-dropout SD plates lacking histidine, leucine, uracil or methionine.</figcaption>
+          </figure>
+          <p>To verify this native auxotrophy experimentally, wild-type <em>Saccharomyces cerevisiae</em> BY4741 was streaked on a complete YPD plate and four different single-dropout SD plates (lacking histidine, leucine, uracil, or methionine, respectively). Growth was observed after incubation. The absence of colonies on the dropout plates confirms the strain's natural auxotrophy, which is the genetic basis on which the marker-removal and quadruple-auxotrophy containment strategy described above is built.</p>
+          <figure class="safety-figure">
+            <img src="../static/image/safety/safety-ex-2.avif" alt="Colony growth on SD-His selection plates after yeast transformation: three experimental plates (A–C) and a negative-control plate with no DNA added (D)" width="1000" height="1000" loading="lazy" decoding="async">
+            <figcaption>Figure 8. Colony growth on SD-His selection plates after yeast transformation. (A, B, C) Experimental transformation plates; (D) Negative-control plate (no DNA added).</figcaption>
+          </figure>
+          <p>We further confirmed the stringency of the histidine selection used in our chassis work. Following the transformation of the reporter plasmid into <em>S. cerevisiae</em> BY4741 competent cells, the transformation mixture was plated on SD-His selective medium to screen for positive transformants. As shown in Figure 8, robust colony growth was observed on the three experimental plates (Figure 8A–C), indicating a successful transformation process. In contrast, the negative-control plate (Figure 8D), which lacked the plasmid DNA, showed no colony growth. This absence of colonies on the negative control confirms that the SD-His selection pressure is stringent and there was no contamination or untransformed background growth.</p>
+          <p>This design — genetically modifying an already auxotrophic strain and layering a marker-removal step on top — makes it difficult for the strain to proliferate effectively outside the specific supplemented medium, thereby reducing the risk of environmental release. It should be noted that auxotrophy is usually regarded as the first layer of biological containment, and its protective strength depends on the availability of the essential nutrients in the surrounding environment <a class="cite-ref" href="#safety-reference-10">[10]</a>; work elsewhere has pushed yeast escape frequencies below 10⁻⁹ by introducing stronger barriers such as dependence on an unnatural amino acid. We therefore do not rest the whole safety case on auxotrophy itself, but also adopt enclosed operation, autoclave inactivation of waste and standardized management, forming multiple layers of protection.</p>
+          <p>For chassis modification we use the CRISPR-Cas9 system <a class="cite-ref" href="#safety-reference-11">[11]</a> to knock out <i>FAR1</i> <a class="cite-ref" href="#safety-reference-12">[12]</a> and <i>SST2</i> <a class="cite-ref" href="#safety-reference-13">[13]</a>, removing interference from the yeast's own mating pathway with the cell cycle and signal strength; we also designed a Gpa1-Gαq chimeric G protein, replacing the five C-terminal amino acids KIGII of yeast Gpa1 with EYNLV from human Gαq <a class="cite-ref" href="#safety-reference-14">[14]</a>, so that hM1Dq can couple to the yeast MAPK pathway. The reporter module uses the pheromone-responsive <i>FUS1</i> promoter <a class="cite-ref" href="#safety-reference-15">[15]</a> to drive <i>yEGFP</i> <a class="cite-ref" href="#safety-reference-16">[16]</a> or <i>MEL1</i> <a class="cite-ref" href="#safety-reference-17">[17]</a> expression, producing green fluorescence or a blue colour respectively. These modifications target only signal transduction and reporter output; they introduce no pathogenic factors and do not enhance the yeast's pathogenicity or environmental fitness.</p>
+          <p>All cultures, consumables and waste containing the engineered yeast are collected according to the laboratory's biological waste rules and autoclaved or otherwise effectively inactivated before disposal. Waste liquids containing chemical reagents are collected separately and handed to a qualified institution. The whole system is modular: replacing only the nanobody domain would allow it to be extended to the detection of other respiratory pathogens <a class="cite-ref" href="#safety-reference-6">[6]</a>, and the safety assessment will be updated in step with any change of target.</p>
         </div>
 
         <div id="safety-references" class="content-card">
@@ -690,35 +730,35 @@
             
             <li id="safety-reference-2">General Administration of Quality Supervision, Inspection and Quarantine of the PRC; Standardization Administration of the PRC. Laboratories — General requirements for biosafety: GB 19489—2008. Beijing: Standards Press of China, 2008. (In Chinese)</li>
             
-            <li id="safety-reference-3">Clark TW, Tregoning JS, Lister H, et al. Recent advances in the influenza virus vaccine landscape: a comprehensive overview of technologies and trials. Clinical Microbiology Reviews, 2024, 37(4): e0002524.</li>
+            <li id="safety-reference-3">Clark TW, Tregoning JS, Lister H, et al. Recent advances in the influenza virus vaccine landscape: a comprehensive overview of technologies and trials. Clinical Microbiology Reviews, 2024, 37(4): e0002524. doi: 10.1128/cmr.00025-24.</li>
             
-            <li id="safety-reference-4">Gaiotto T, Hufton SE. Cross-neutralising nanobodies bind to a conserved pocket in the hemagglutinin stem region identified using yeast display and deep mutational scanning. PLoS One, 2016, 11(10): e0164296.</li>
+            <li id="safety-reference-4">Gaiotto T, Hufton SE. Cross-neutralising nanobodies bind to a conserved pocket in the hemagglutinin stem region identified using yeast display and deep mutational scanning. PLoS One, 2016, 11(10): e0164296. doi: 10.1371/journal.pone.0164296.</li>
             
-            <li id="safety-reference-5">Armbruster BN, Li X, Pausch MH, et al. Evolving the lock to fit the key to create a family of G protein-coupled receptors potently activated by an inert ligand. Proceedings of the National Academy of Sciences, 2007, 104(12): 5163-5168.</li>
+            <li id="safety-reference-5">Armbruster BN, Li X, Pausch MH, et al. Evolving the lock to fit the key to create a family of G protein-coupled receptors potently activated by an inert ligand. Proceedings of the National Academy of Sciences, 2007, 104(12): 5163-5168. doi: 10.1073/pnas.0700293104.</li>
             
-            <li id="safety-reference-6">Kalogriopoulos NA, Tei R, Yan Y, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature, 2025, 637(8044): 230-239.</li>
+            <li id="safety-reference-6">Kalogriopoulos NA, Tei R, Yan Y, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature, 2025, 637(8044): 230-239. doi: 10.1038/s41586-024-08282-3.</li>
             
-            <li id="safety-reference-7">Nagai Y, Kikuchi E, Lerchner W, et al. Deschloroclozapine, a potent and selective chemogenetic actuator enables rapid neuronal and behavioral modulations in mice and monkeys. Nature Neuroscience, 2020, 23(9): 1157-1167.</li>
+            <li id="safety-reference-7">Nagai Y, Kikuchi E, Lerchner W, et al. Deschloroclozapine, a potent and selective chemogenetic actuator enables rapid neuronal and behavioral modulations in mice and monkeys. Nature Neuroscience, 2020, 23(9): 1157-1167. doi: 10.1038/s41593-020-0661-3.</li>
             
-            <li id="safety-reference-8">Brachmann CB, Davies A, Cost GJ, et al. Designer deletion strains derived from Saccharomyces cerevisiae S288C: a useful set of strains and plasmids for PCR-mediated gene disruption and other applications. Yeast, 1998, 14(2): 115-132.</li>
+            <li id="safety-reference-8">Brachmann CB, Davies A, Cost GJ, et al. Designer deletion strains derived from <i>Saccharomyces cerevisiae</i> S288C: a useful set of strains and plasmids for PCR-mediated gene disruption and other applications. Yeast, 1998, 14(2): 115-132. doi: 10.1002/(SICI)1097-0061(19980130)14:2&lt;115::AID-YEA204&gt;3.0.CO;2-2.</li>
             
-            <li id="safety-reference-9">Boeke JD, La Croute F, Fink GR. A positive selection for mutants lacking orotidine-5′-phosphate decarboxylase activity in yeast: 5-fluoro-orotic acid resistance. Molecular and General Genetics, 1984, 197(2): 345-346.</li>
+            <li id="safety-reference-9">Boeke JD, La Croute F, Fink GR. A positive selection for mutants lacking orotidine-5′-phosphate decarboxylase activity in yeast: 5-fluoro-orotic acid resistance. Molecular and General Genetics, 1984, 197(2): 345-346. doi: 10.1007/BF00330984.</li>
             
-            <li id="safety-reference-10">Chang T, Ding W, Yan S, et al. A robust yeast biocontainment system with two-layered regulation switch dependent on unnatural amino acid. Nature Communications, 2023, 14(1): 6487.</li>
+            <li id="safety-reference-10">Chang T, Ding W, Yan S, et al. A robust yeast biocontainment system with two-layered regulation switch dependent on unnatural amino acid. Nature Communications, 2023, 14(1): 6487. doi: 10.1038/s41467-023-42358-4.</li>
             
-            <li id="safety-reference-11">Laughery MF, Hunter T, Brown A, et al. New vectors for simple and streamlined CRISPR-Cas9 genome editing in Saccharomyces cerevisiae. Yeast, 2015, 32(12): 711-720.</li>
+            <li id="safety-reference-11">Laughery MF, Hunter T, Brown A, et al. New vectors for simple and streamlined CRISPR-Cas9 genome editing in <i>Saccharomyces cerevisiae</i>. Yeast, 2015, 32(12): 711-720. doi: 10.1002/yea.3098.</li>
             
-            <li id="safety-reference-12">Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor Far1. Current Biology, 2014, 24(12): 1390-1396.</li>
+            <li id="safety-reference-12">Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor Far1. Current Biology, 2014, 24(12): 1390-1396. doi: 10.1016/j.cub.2014.05.002.</li>
             
-            <li id="safety-reference-13">Chasse SA, Flanary P, Parnell SC, et al. Genome-scale analysis reveals Sst2 as the principal regulator of mating pheromone signaling in the yeast Saccharomyces cerevisiae. Eukaryotic Cell, 2006, 5(2): 330-346.</li>
+            <li id="safety-reference-13">Chasse SA, Flanary P, Parnell SC, et al. Genome-scale analysis reveals <i>SST2</i> as the principal regulator of mating pheromone signaling in the yeast <i>Saccharomyces cerevisiae</i>. Eukaryotic Cell, 2006, 5(2): 330-346. doi: 10.1128/EC.5.2.330-346.2006.</li>
             
-            <li id="safety-reference-14">Brown AJ, Dyos SL, Whiteway MS, et al. Functional coupling of mammalian receptors to the yeast mating pathway using novel yeast/mammalian G protein α-subunit chimeras. Yeast, 2000, 16(1): 11-22.</li>
+            <li id="safety-reference-14">Brown AJ, Dyos SL, Whiteway MS, et al. Functional coupling of mammalian receptors to the yeast mating pathway using novel yeast/mammalian G protein α-subunit chimeras. Yeast, 2000, 16(1): 11-22. doi: 10.1002/(SICI)1097-0061(20000115)16:1&lt;11::AID-YEA502&gt;3.0.CO;2-K.</li>
             
-            <li id="safety-reference-15">Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Molecular and Cellular Biology, 1987, 7(7): 2316-2328.</li>
+            <li id="safety-reference-15">Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Molecular and Cellular Biology, 1987, 7(7): 2316-2328. doi: 10.1128/mcb.7.7.2316-2328.1987.</li>
             
-            <li id="safety-reference-16">Cormack BP, Bertram G, Egerton M, et al. Yeast-enhanced green fluorescent protein (yEGFP): a reporter of gene expression in Candida albicans. Microbiology, 1997, 143(2): 303-311.</li>
+            <li id="safety-reference-16">Cormack BP, Bertram G, Egerton M, et al. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in <i>Candida albicans</i>. Microbiology, 1997, 143(2): 303-311. doi: 10.1099/00221287-143-2-303.</li>
             
-            <li id="safety-reference-17">Liljeström PL. The nucleotide sequence of the yeast MEL1 gene. Nucleic Acids Research, 1985, 13(20): 7257-7268.</li>
+            <li id="safety-reference-17">Liljeström PL. The nucleotide sequence of the yeast <i>MEL1</i> gene. Nucleic Acids Research, 1985, 13(20): 7257-7268. doi: 10.1093/nar/13.20.7257.</li>
             
           </ol>
         </div>
@@ -726,122 +766,130 @@
 </div>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -864,21 +912,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   

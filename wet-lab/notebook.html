@@ -9,22 +9,28 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/log.css">
-<link rel="stylesheet" href="../static/css/components/pdf-embed.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/log.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/pdf-embed.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/flask-sync/notebook.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -59,47 +65,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -108,52 +114,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -187,13 +201,11 @@
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
 </div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
-</div>
 
   <main class="">
     
+
+
 <div class="description-container notebook-page">
   <aside class="description-sidebar">
     <div class="yeast-decoration">
@@ -229,71 +241,151 @@
         </li>
         <li class="level1">
           <div class="nav-link-wrapper">
+            <a href="#notebook-ste2" class="nav-main-link"><i>STE2</i> Gating Engineering</a>
+          </div>
+        </li>
+        <li class="level1">
+          <div class="nav-link-wrapper">
             <a href="#notebook-reporter" class="nav-main-link">Reporter Module</a>
           </div>
         </li>
       </ul>
     </div>
+
+    
+    <div class="progress-section">
+      <div class="progress-flask">
+        <div class="flask-body">
+          <div class="flask-neck"></div>
+          <div class="flask-liquid">
+            <div class="liquid-fill"></div>
+            <div class="bubbling">
+              <div class="ferment-bubble f-bubble-1"></div>
+              <div class="ferment-bubble f-bubble-2"></div>
+              <div class="ferment-bubble f-bubble-3"></div>
+              <div class="ferment-bubble f-bubble-4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flask-progress">
+          <span class="progress-percentage" id="progress-percentage">0%</span>
+        </div>
+      </div>
+      <div class="progress-title">Fermentation Progress</div>
+    </div>
   </aside>
 
   <div class="description-content">
     <div id="notebook-overview" class="content-card">
-      <figure class="page-mascot page-mascot--notebook" aria-hidden="true">
-        <img src="../static/image/any-icon/extension/notebook.png" alt="" width="440" height="482"
-          loading="lazy" decoding="async">
-      </figure>
+          <figure class="page-mascot page-mascot--notebook" aria-hidden="true">
+            <img src="../static/image/any-icon/extension/notebook.png" alt="" width="440" height="482"
+              loading="lazy" decoding="async">
+          </figure>
       <h2>Notebook</h2>
       <p class="content-intro">
-        These notebooks serve as the main entry for our wet-lab documentation of the yeast-based biosensor targeting airborne influenza A virus (IAV). Our PAGER (Protein-fragment Assisted GPCR Expression Reporter) antigen-gated receptor system is built in four independent functional modules. Below you can access experimental records for chassis engineering, humanized G-protein chimera construction, PAGER fusion-receptor assembly, and reporter-module validation respectively. Each record links to the Protocol page, and to external resources cited inside the document.
+        These notebooks serve as the main entry for our wet-lab documentation of the yeast-based biosensor targeting airborne influenza A virus (IAV). Our PAGER (Protein-fragment Assisted GPCR Expression Reporter) antigen-gated receptor system is built in four independent functional modules. Below you can access experimental records for chassis engineering, humanized G-protein chimera construction, PAGER fusion-receptor assembly, and reporter-module validation respectively. Under each record, the protocols cited in that document are listed by number as they appear in the Protocol page, and each number opens that protocol directly.
       </p>
     </div>
 
     <div id="notebook-chassis" class="content-card">
       <h2>Chassis Engineering</h2>
       <p class="content-intro">
-        This notebook records wet-lab procedures for chassis optimization of our yeast biosensor. We performed CRISPR-Cas9-mediated knockout of endogenous FAR1 and SST2 in <i>Saccharomyces cerevisiae</i> BY4741, aiming to eliminate cell-cycle arrest and G-protein-signaling negative feedback, so as to improve signal sensitivity for our downstream PAGER antigen-gated receptor system.
+        This notebook records wet-lab procedures for chassis optimization of our yeast biosensor. We performed CRISPR-Cas9-mediated knockout of endogenous <i>FAR1</i> and <i>SST2</i> in <i>Saccharomyces cerevisiae</i> BY4741, aiming to eliminate cell-cycle arrest and G-protein-signaling negative feedback, so as to improve signal sensitivity for our downstream PAGER antigen-gated receptor system.
       </p>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="../static/image/lab/wetlab/notebook/notebook-chassis-far1-sst2-knockout.pdf"
+                aria-label="Notebook - Construction of the FAR1 SST2 Knockout Yeast Strain">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
       
-      
-      
-      
-
-<div class="pdf-embed">
-  <object class="pdf-embed__object" type="application/pdf"
-          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-chassis-far1-sst2-knockout.pdf#page=1"
-          aria-label="Notebook - Construction of the FAR1/SST2 Knockout Yeast Strain">
-    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
-  </object>
-</div>
-
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Chassis Engineering →</a>
-        <span class="notebook-resources__label">Resources in document:</span>
-        <a href="https://www.yeastgenome.org/" target="_blank" rel="noopener">SGD</a>
-        <a href="https://www.benchling.com" target="_blank" rel="noopener">Benchling</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="../wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p01"><span class="notebook-protocols__no">01</span><span class="notebook-protocols__title"><i>E. coli</i> Transformation and Culture Expansion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p03"><span class="notebook-protocols__no">03</span><span class="notebook-protocols__title">Plasmid Extraction from <i>E. coli</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p05"><span class="notebook-protocols__no">05</span><span class="notebook-protocols__title">Agarose Gel Electrophoresis</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p07"><span class="notebook-protocols__no">07</span><span class="notebook-protocols__title">Conventional PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p08"><span class="notebook-protocols__no">08</span><span class="notebook-protocols__title">Overlap Extension PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p09"><span class="notebook-protocols__no">09</span><span class="notebook-protocols__title">PCR Purification</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p10"><span class="notebook-protocols__no">10</span><span class="notebook-protocols__title">Gel Extraction of PCR Products</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p11"><span class="notebook-protocols__no">11</span><span class="notebook-protocols__title">Gibson Assembly</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p12"><span class="notebook-protocols__no">12</span><span class="notebook-protocols__title">Yeast Transformation</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p13"><span class="notebook-protocols__no">13</span><span class="notebook-protocols__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p14"><span class="notebook-protocols__no">14</span><span class="notebook-protocols__title">Yeast Growth Curve Measurement</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p16"><span class="notebook-protocols__no">16</span><span class="notebook-protocols__title">Detection of Yeast Fluorescence Signal After Treatment</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p19"><span class="notebook-protocols__no">19</span><span class="notebook-protocols__title">CRISPR-Cas9 Transformation for Gene Knockout in Yeast</span></a></li>
+          
+        </ul>
       </div>
     </div>
 
     <div id="notebook-gpa1" class="content-card">
       <h2>Humanized G-Protein Chimera</h2>
       <p class="content-intro">
-        This notebook records the humanization engineering of GPA1 in <i>Saccharomyces cerevisiae</i> — replacing the native C-terminal KIGII motif with the human Gαq EYNLV sequence to retune G-protein coupling for the PAGER receptor.
+        This notebook records the humanization engineering of <i>GPA1</i> in <i>Saccharomyces cerevisiae</i> — replacing the native C-terminal KIGII motif with the human Gαq EYNLV sequence to retune G-protein coupling for the PAGER receptor.
       </p>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="../static/image/lab/wetlab/notebook/notebook-gpa1-humanization.pdf"
+                aria-label="Notebook - Humanization Engineering of GPA1 in Saccharomyces cerevisiae">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
       
-      
-      
-      
-
-<div class="pdf-embed">
-  <object class="pdf-embed__object" type="application/pdf"
-          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-gpa1-humanization.pdf#page=1"
-          aria-label="Notebook - Humanization Engineering of GPA1 in Saccharomyces cerevisiae">
-    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
-  </object>
-</div>
-
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Humanized G-Protein Chimera →</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="../wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p01"><span class="notebook-protocols__no">01</span><span class="notebook-protocols__title"><i>E. coli</i> Transformation and Culture Expansion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p02"><span class="notebook-protocols__no">02</span><span class="notebook-protocols__title">Glycerol Stock Preparation and Cryopreservation</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p03"><span class="notebook-protocols__no">03</span><span class="notebook-protocols__title">Plasmid Extraction from <i>E. coli</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p04"><span class="notebook-protocols__no">04</span><span class="notebook-protocols__title">Restriction Enzyme Digestion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p05"><span class="notebook-protocols__no">05</span><span class="notebook-protocols__title">Agarose Gel Electrophoresis</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p07"><span class="notebook-protocols__no">07</span><span class="notebook-protocols__title">Conventional PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p08"><span class="notebook-protocols__no">08</span><span class="notebook-protocols__title">Overlap Extension PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p10"><span class="notebook-protocols__no">10</span><span class="notebook-protocols__title">Gel Extraction of PCR Products</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p11"><span class="notebook-protocols__no">11</span><span class="notebook-protocols__title">Gibson Assembly</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p12"><span class="notebook-protocols__no">12</span><span class="notebook-protocols__title">Yeast Transformation</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p13"><span class="notebook-protocols__no">13</span><span class="notebook-protocols__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p14"><span class="notebook-protocols__no">14</span><span class="notebook-protocols__title">Yeast Growth Curve Measurement</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p15"><span class="notebook-protocols__no">15</span><span class="notebook-protocols__title">Microscopic Observation of Yeast Morphology</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p16"><span class="notebook-protocols__no">16</span><span class="notebook-protocols__title">Detection of Yeast Fluorescence Signal After Treatment</span></a></li>
+          
+        </ul>
       </div>
     </div>
 
@@ -302,21 +394,100 @@
       <p class="content-intro">
         This notebook records the construction of the PAGER antigen-gated system for Influenza A virus detection — assembly of the membrane-anchored scFv–Gα–Gγ fusion receptor, yeast transformation, expression validation, and HA-antigen-induced activation detection.
       </p>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="../static/image/lab/wetlab/notebook/notebook-pager-antigen-gated.pdf"
+                aria-label="Notebook - Construction of the PAGER Antigen-Gated System for Influenza A Virus Detection">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
       
-      
-      
-      
-
-<div class="pdf-embed">
-  <object class="pdf-embed__object" type="application/pdf"
-          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-pager-antigen-gated.pdf#page=1"
-          aria-label="Notebook - Construction of the PAGER Antigen-Gated System for Influenza A Virus Detection">
-    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
-  </object>
-</div>
-
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: PAGER Fusion Receptor →</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="../wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p01"><span class="notebook-protocols__no">01</span><span class="notebook-protocols__title"><i>E. coli</i> Transformation and Culture Expansion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p03"><span class="notebook-protocols__no">03</span><span class="notebook-protocols__title">Plasmid Extraction from <i>E. coli</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p04"><span class="notebook-protocols__no">04</span><span class="notebook-protocols__title">Restriction Enzyme Digestion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p05"><span class="notebook-protocols__no">05</span><span class="notebook-protocols__title">Agarose Gel Electrophoresis</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p06"><span class="notebook-protocols__no">06</span><span class="notebook-protocols__title">Colony PCR for <i>E. coli</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p07"><span class="notebook-protocols__no">07</span><span class="notebook-protocols__title">Conventional PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p11"><span class="notebook-protocols__no">11</span><span class="notebook-protocols__title">Gibson Assembly</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p12"><span class="notebook-protocols__no">12</span><span class="notebook-protocols__title">Yeast Transformation</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p13"><span class="notebook-protocols__no">13</span><span class="notebook-protocols__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p16"><span class="notebook-protocols__no">16</span><span class="notebook-protocols__title">Detection of Yeast Fluorescence Signal After Treatment</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p17"><span class="notebook-protocols__no">17</span><span class="notebook-protocols__title">Confocal Imaging of Yeast Fluorescence After Treatment</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p18"><span class="notebook-protocols__no">18</span><span class="notebook-protocols__title">SDS-PAGE and Western Blotting</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p23"><span class="notebook-protocols__no">23</span><span class="notebook-protocols__title">Plasmid Extraction from Yeast</span></a></li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div id="notebook-ste2" class="content-card">
+      <h2><i>STE2</i> Gating Engineering</h2>
+      <p class="content-intro">
+        This notebook records the <i>STE2</i> gating engineering track, in which the native &alpha;-factor receptor was redesigned into an antigen-gated surface receptor: the gating construct (signal peptide&ndash;antagonist&ndash;anti-H1N1_HA nanobody&ndash;ALFA tag&ndash;TEVcs) and its sequence synthesis, amplification of the <i>STE2</i> upstream and downstream homology arms, sgRNA and repair-template assembly, isolation of the gating-engineered strains, the <i>STE2</i>&ndash;yEGFP fusion used for membrane-localisation checks, protein-expression detection, and the functional validation runs.
+      </p>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-ste2.pdf"
+                aria-label="Notebook - STE2 Gating Engineering">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
+      
+      <div class="notebook-resources">
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="../wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p01"><span class="notebook-protocols__no">01</span><span class="notebook-protocols__title"><i>E. coli</i> Transformation and Culture Expansion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p03"><span class="notebook-protocols__no">03</span><span class="notebook-protocols__title">Plasmid Extraction from <i>E. coli</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p04"><span class="notebook-protocols__no">04</span><span class="notebook-protocols__title">Restriction Enzyme Digestion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p05"><span class="notebook-protocols__no">05</span><span class="notebook-protocols__title">Agarose Gel Electrophoresis</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p07"><span class="notebook-protocols__no">07</span><span class="notebook-protocols__title">Conventional PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p08"><span class="notebook-protocols__no">08</span><span class="notebook-protocols__title">Overlap Extension PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p09"><span class="notebook-protocols__no">09</span><span class="notebook-protocols__title">PCR Purification</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p10"><span class="notebook-protocols__no">10</span><span class="notebook-protocols__title">Gel Extraction of PCR Products</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p11"><span class="notebook-protocols__no">11</span><span class="notebook-protocols__title">Gibson Assembly</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p12"><span class="notebook-protocols__no">12</span><span class="notebook-protocols__title">Yeast Transformation</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p13"><span class="notebook-protocols__no">13</span><span class="notebook-protocols__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p14"><span class="notebook-protocols__no">14</span><span class="notebook-protocols__title">Yeast Growth Curve Measurement</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p18"><span class="notebook-protocols__no">18</span><span class="notebook-protocols__title">SDS-PAGE and Western Blotting</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p20"><span class="notebook-protocols__no">20</span><span class="notebook-protocols__title">Functional Validation of the Yeast Sensor</span></a></li>
+          
+        </ul>
       </div>
     </div>
 
@@ -325,143 +496,184 @@
       <p class="content-intro">
         This notebook records the construction and validation of our reporting system — the output module that converts PAGER receptor activation into a measurable luminescence/colorimetric signal for influenza A virus detection.
       </p>
+      <div class="pdf-embed">
+        <object class="pdf-embed__object" type="application/pdf"
+                data="../static/image/lab/wetlab/notebook/notebook-reporter-module-fix.pdf"
+                aria-label="Notebook - Construction of the Reporting System">
+          <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
+        </object>
+      </div>
       
-      
-      
-      
-
-<div class="pdf-embed">
-  <object class="pdf-embed__object" type="application/pdf"
-          data="https://static.igem.wiki/teams/6373/wiki/lab/wetlab/notebook/notebook-reporter-module.pdf#page=1"
-          aria-label="Notebook - Construction of the Reporting System">
-    <p class="pdf-embed__fallback">This notebook PDF is not available yet.</p>
-  </object>
-</div>
-
       <div class="notebook-resources">
-        <a class="notebook-resources__protocol" href="protocol.html">Protocol: Reporter Module →</a>
+        <div class="notebook-resources__head">
+          <span class="notebook-resources__label">Protocols cited in this record</span>
+          <a class="notebook-resources__all" href="../wet-lab/protocol.html">All 26 protocols &rarr;</a>
+        </div>
+        <ul class="notebook-protocols">
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p01"><span class="notebook-protocols__no">01</span><span class="notebook-protocols__title"><i>E. coli</i> Transformation and Culture Expansion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p03"><span class="notebook-protocols__no">03</span><span class="notebook-protocols__title">Plasmid Extraction from <i>E. coli</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p04"><span class="notebook-protocols__no">04</span><span class="notebook-protocols__title">Restriction Enzyme Digestion</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p05"><span class="notebook-protocols__no">05</span><span class="notebook-protocols__title">Agarose Gel Electrophoresis</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p07"><span class="notebook-protocols__no">07</span><span class="notebook-protocols__title">Conventional PCR</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p09"><span class="notebook-protocols__no">09</span><span class="notebook-protocols__title">PCR Purification</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p10"><span class="notebook-protocols__no">10</span><span class="notebook-protocols__title">Gel Extraction of PCR Products</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p11"><span class="notebook-protocols__no">11</span><span class="notebook-protocols__title">Gibson Assembly</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p12"><span class="notebook-protocols__no">12</span><span class="notebook-protocols__title">Yeast Transformation</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p13"><span class="notebook-protocols__no">13</span><span class="notebook-protocols__title">Colony PCR for <i>Saccharomyces cerevisiae</i></span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p14"><span class="notebook-protocols__no">14</span><span class="notebook-protocols__title">Yeast Growth Curve Measurement</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p16"><span class="notebook-protocols__no">16</span><span class="notebook-protocols__title">Detection of Yeast Fluorescence Signal After Treatment</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p17"><span class="notebook-protocols__no">17</span><span class="notebook-protocols__title">Confocal Imaging of Yeast Fluorescence After Treatment</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p23"><span class="notebook-protocols__no">23</span><span class="notebook-protocols__title">Plasmid Extraction from Yeast</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p24"><span class="notebook-protocols__no">24</span><span class="notebook-protocols__title">Verification PCR from Yeast Liquid Culture (Lyticase Lysis)</span></a></li>
+          
+          <li><a href="../wet-lab/protocol.html#protocol-p25"><span class="notebook-protocols__no">25</span><span class="notebook-protocols__title">Dynamic Detection of &alpha;-factor Gradient-Induced <i>MEL1</i> Expression via X-&alpha;-gal Blue-White Color Development</span></a></li>
+          
+        </ul>
       </div>
     </div>
   </div>
 </div>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -484,21 +696,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   

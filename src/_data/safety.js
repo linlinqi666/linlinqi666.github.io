@@ -76,7 +76,7 @@ module.exports = {
         residual: 'Low'
       },
       {
-        no: '4', step: 'CRISPR-Cas9 knockout of FAR1/SST2', hazard: 'Biological/chemical',
+        no: '4', step: 'CRISPR-Cas9 knockout of <i>FAR1</i>/<i>SST2</i>', hazard: 'Biological/chemical',
         scenario: 'Handling of pML104, sgRNA and selection reagents',
         l: { v: '1', r: 'Rare: per SOP, avoiding aerosols; no live virus involved' },
         s: { v: '2', r: 'Slight: chemical reagents may cause local irritation, controllable' },
@@ -85,7 +85,7 @@ module.exports = {
         residual: 'Low'
       },
       {
-        no: '5', step: 'Gpa1-Gaq homologous recombination', hazard: 'Biological',
+        no: '5', step: 'GPA1-Gaq homologous recombination', hazard: 'Biological',
         scenario: 'Leakage of engineered yeast or donor DNA',
         l: { v: '1', r: 'Rare: handled in the biosafety cabinet; donor DNA is non-pathogenic' },
         s: { v: '1', r: 'Minor: non-pathogenic yeast and DNA, no infection risk' },
@@ -112,7 +112,7 @@ module.exports = {
         residual: 'Low'
       },
       {
-        no: '8', step: 'X-α-Gal chromogenic substrate and MEL1 detection', hazard: 'Chemical',
+        no: '8', step: 'X-α-Gal chromogenic substrate and <i>MEL1</i> detection', hazard: 'Chemical',
         scenario: 'Reagent contact or mixing of waste liquids',
         l: { v: '1', r: 'Rare: small amounts used, gloves worn, waste collected separately' },
         s: { v: '2', r: 'Slight: possible local irritation, controllable' },
@@ -121,7 +121,7 @@ module.exports = {
         residual: 'Low'
       },
       {
-        no: '9', step: 'yEGFP fluorescence detection', hazard: 'Physical',
+        no: '9', step: '<i>yEGFP</i> fluorescence detection', hazard: 'Physical',
         scenario: 'Exposure to UV or the fluorescence instrument',
         l: { v: '1', r: 'Rare: instruments have covers and are used after training' },
         s: { v: '2', r: 'Slight: possible skin or eye discomfort, preventable' },
@@ -204,15 +204,15 @@ module.exports = {
     { num: 5, text: 'Armbruster BN, Li X, Pausch MH, et al. Evolving the lock to fit the key to create a family of G protein-coupled receptors potently activated by an inert ligand. Proceedings of the National Academy of Sciences, 2007, 104(12): 5163-5168.', link: 'https://doi.org/10.1073/pnas.0700293104' },
     { num: 6, text: 'Kalogriopoulos NA, Tei R, Yan Y, et al. Synthetic GPCRs for programmable sensing and control of cell behaviour. Nature, 2025, 637(8044): 230-239.', link: 'https://doi.org/10.1038/s41586-024-08282-3' },
     { num: 7, text: 'Nagai Y, Kikuchi E, Lerchner W, et al. Deschloroclozapine, a potent and selective chemogenetic actuator enables rapid neuronal and behavioral modulations in mice and monkeys. Nature Neuroscience, 2020, 23(9): 1157-1167.', link: 'https://doi.org/10.1038/s41593-020-0661-3' },
-    { num: 8, text: 'Brachmann CB, Davies A, Cost GJ, et al. Designer deletion strains derived from Saccharomyces cerevisiae S288C: a useful set of strains and plasmids for PCR-mediated gene disruption and other applications. Yeast, 1998, 14(2): 115-132.', link: 'https://doi.org/10.1002/(SICI)1097-0061(19980130)14:2<115::AID-YEA204>3.0.CO;2-2' },
+    { num: 8, text: 'Brachmann CB, Davies A, Cost GJ, et al. Designer deletion strains derived from <i>Saccharomyces cerevisiae</i> S288C: a useful set of strains and plasmids for PCR-mediated gene disruption and other applications. Yeast, 1998, 14(2): 115-132.', link: 'https://doi.org/10.1002/(SICI)1097-0061(19980130)14:2<115::AID-YEA204>3.0.CO;2-2' },
     { num: 9, text: 'Boeke JD, La Croute F, Fink GR. A positive selection for mutants lacking orotidine-5′-phosphate decarboxylase activity in yeast: 5-fluoro-orotic acid resistance. Molecular and General Genetics, 1984, 197(2): 345-346.', link: 'https://doi.org/10.1007/BF00330984' },
     { num: 10, text: 'Chang T, Ding W, Yan S, et al. A robust yeast biocontainment system with two-layered regulation switch dependent on unnatural amino acid. Nature Communications, 2023, 14(1): 6487.', link: 'https://doi.org/10.1038/s41467-023-42358-4' },
-    { num: 11, text: 'Laughery MF, Hunter T, Brown A, et al. New vectors for simple and streamlined CRISPR-Cas9 genome editing in Saccharomyces cerevisiae. Yeast, 2015, 32(12): 711-720.', link: 'https://doi.org/10.1002/yea.3098' },
-    { num: 12, text: 'Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor Far1. Current Biology, 2014, 24(12): 1390-1396.', link: 'https://doi.org/10.1016/j.cub.2014.05.002' },
-    { num: 13, text: 'Chasse SA, Flanary P, Parnell SC, et al. Genome-scale analysis reveals Sst2 as the principal regulator of mating pheromone signaling in the yeast Saccharomyces cerevisiae. Eukaryotic Cell, 2006, 5(2): 330-346.', link: 'https://doi.org/10.1128/EC.5.2.330-346.2006' },
+    { num: 11, text: 'Laughery MF, Hunter T, Brown A, et al. New vectors for simple and streamlined CRISPR-Cas9 genome editing in <i>Saccharomyces cerevisiae</i>. Yeast, 2015, 32(12): 711-720.', link: 'https://doi.org/10.1002/yea.3098' },
+    { num: 12, text: 'Pope PA, Bhaduri S, Pryciak PM. Regulation of cyclin-substrate docking by a G1 arrest signaling pathway and the Cdk inhibitor <i>FAR1</i>. Current Biology, 2014, 24(12): 1390-1396.', link: 'https://doi.org/10.1016/j.cub.2014.05.002' },
+    { num: 13, text: 'Chasse SA, Flanary P, Parnell SC, et al. Genome-scale analysis reveals <i>SST2</i> as the principal regulator of mating pheromone signaling in the yeast <i>Saccharomyces cerevisiae</i>. Eukaryotic Cell, 2006, 5(2): 330-346.', link: 'https://doi.org/10.1128/EC.5.2.330-346.2006' },
     { num: 14, text: 'Brown AJ, Dyos SL, Whiteway MS, et al. Functional coupling of mammalian receptors to the yeast mating pathway using novel yeast/mammalian G protein α-subunit chimeras. Yeast, 2000, 16(1): 11-22.', link: 'https://doi.org/10.1002/(SICI)1097-0061(20000115)16:1<11::AID-YEA502>3.0.CO;2-K' },
     { num: 15, text: 'Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. Molecular and Cellular Biology, 1987, 7(7): 2316-2328.', link: 'https://doi.org/10.1128/mcb.7.7.2316-2328.1987' },
-    { num: 16, text: 'Cormack BP, Bertram G, Egerton M, et al. Yeast-enhanced green fluorescent protein (yEGFP): a reporter of gene expression in Candida albicans. Microbiology, 1997, 143(2): 303-311.', link: 'https://doi.org/10.1099/00221287-143-2-303' },
-    { num: 17, text: 'Liljeström PL. The nucleotide sequence of the yeast MEL1 gene. Nucleic Acids Research, 1985, 13(20): 7257-7268.', link: 'https://doi.org/10.1093/nar/13.20.7257' }
+    { num: 16, text: 'Cormack BP, Bertram G, Egerton M, et al. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in Candida albicans. Microbiology, 1997, 143(2): 303-311.', link: 'https://doi.org/10.1099/00221287-143-2-303' },
+    { num: 17, text: 'Liljeström PL. The nucleotide sequence of the yeast <i>MEL1</i> gene. Nucleic Acids Research, 1985, 13(20): 7257-7268.', link: 'https://doi.org/10.1093/nar/13.20.7257' }
   ]
 };

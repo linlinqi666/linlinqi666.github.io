@@ -129,7 +129,7 @@
   .hz-detail-slide { flex: 0 0 100%; min-width: 100%; }
   .hz-detail-card { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 1.5rem; align-items: start; padding: 1.5rem; border: 1px solid rgba(139,115,85,.2); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 14px 36px rgba(74,59,42,.14); }
   .hz-detail-card:not(:has(.hz-detail-card__photo)) { grid-template-columns: 1fr; }
-  .hz-detail-card__photo { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
+  .hz-detail-card__photo { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
   .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
   .hz-detail-card h3 { margin: 0; color: #5c4d3c; }
   .hz-detail-card__meta { margin: .4rem 0 1rem; color: #7d6d5a; }
@@ -184,14 +184,14 @@
     content-visibility: visible !important;
   }
   /* 中国地图层：默认始终可见 */
-  .hz-map .hz-china { 
-    opacity: 1; 
-    transform: none; 
+  .hz-map .hz-china {
+    opacity: 1;
+    transform: none;
     pointer-events: auto;
     visibility: visible;
   }
 
-  .hz-map .hz-layer > svg { 
+  .hz-map .hz-layer > svg {
     width: 100%; height: 100%; display: block;
     contain: none !important;
   }
@@ -447,7 +447,6 @@
   @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
 
   /* ===== 活动照片墙：统一比例铺满网格 =====
-     用户要求：比例不同的图必须铺满存放图片的容器，不留白。
      img 统一 4:3 + object-fit:cover 裁切铺满，同排所有图等高、图注底对齐；
      图注仍为图片下方常显（不改回悬停浮层）。 */
   .hp-photo-grid--flow { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; overflow: visible; }
@@ -529,9 +528,9 @@
     .hz-map #chinaProvinces path,
     .hz-cluster-popover,
     .hz-cluster-popover ul li,
-    .hz-map .hz-cluster::after { 
-      transition: none !important; 
-      animation: none !important; 
+    .hz-map .hz-cluster::after {
+      transition: none !important;
+      animation: none !important;
       will-change: auto !important;
     }
   }

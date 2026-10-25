@@ -77,10 +77,11 @@ igem2026-flask/
 ├── app.py                 # Frozen-Flask entry: / -> home.html, /<page> -> pages/<page>.html
 ├── dependencies.txt       # Flask + Frozen-Flask
 ├── (migrate_wiki.py)      # one-off migration helper, now in ../对话归档/research-reports/gitlab/
-├── static/                # vendored CSS/JS/images (served from iGEM GitLab Pages)
-│   ├── bootstrap/         # Bootstrap 5.3.3 vendored locally (no 3rd-party CDN)
-│   ├── css/wiki.css       # team base styles
-│   └── image/             # all images, referenced as /static/image/...
+├── static/                # vendored CSS/JS + data (served from iGEM GitLab Pages)
+│   ├── css/index.css      # 全站基础样式（原 base.css 已并入顶部）
+│   ├── js/                # core / components / pages（页面专属脚本已内嵌，见下）
+│   ├── data/              # 模型数据；PDB 由 JSON 的 structureBase 动态拼接
+│   └── image/, lab/       # 仅 CDN 上传暂存，不入库
 ├── wiki/
 │   ├── layout.html        # shared layout: Bootstrap + blocks title/lead/page_content
 │   ├── menu.html          # Bootstrap navbar (official 2026 page set)
@@ -167,6 +168,54 @@ now contains JS/CSS only (verified: 0 remaining local image references).
 - **接回顺序**：① CSS 链接 → ② 同步 arm（必须非 defer、先于 `<body>` 渲染）→ ③ defer
   控制器 → ④ `<body>` 标记；然后把两个文件加回推送清单的 CSS / JS 组，并把
   `2026-09-29-test-public-build.js` 的脚本数断言从 7 改回 8。
+
+## 迁移前必做：页面与组件清洁整理（所有 agent 通用，2026-10-20 立规）
+
+**任何"把本地文件推去 GitLab"的动作，第一步不是拷文件，而是清洁整理。** 历史事故（2026-10-11/12、10-19）都是"没清就推"，导致 CI 连红、线上与本地不一致。按下面顺序做完，才能进 `flask freeze`。
+
+### 0. 判定口径：哪些能动、哪些绝对不动
+
+- **根站（仓库根目录静态站）没有的页面 = 我们不参与**：本地占位版不得推送，也不得加导航入口（见上文「页面口径」）。
+- **官方模板自带的资源，零引用也不删**：`static/js/3dmol/3Dmol-2.0.1-min.js`、`static/js/reports-lib/*`（bootstrap / chart）在远端树里存在，删了等于删官方资源。孤儿扫描必须区分「本地遗留」与「官方自带」。
+- `static/image/`（176 MB）、`static/lab/`（12 MB）是 CDN 上传暂存，**不入库**；`public/` 是构建产物。
+
+### 1. 页面级清洁
+
+| 检查 | 判定方式 | 处理 |
+|---|---|---|
+| 未完成占位（TBD／待补／空 section） | `check_migration.py` R12 | 清掉占位或补内容，带占位不得上线 |
+| 页面专属 JS/CSS 散落成独立文件 | 单页引用且 < 10 KB | 内嵌到该页 `page_content` **末尾**，并用 `document.addEventListener('DOMContentLoaded', …)` 包裹 |
+| 同一页面重复引入同一资源 | 扫 `{% block styles %}` / `{% block scripts %}` | 去重；`utils.js` 必须最前 |
+| 多段内联块逻辑重叠 | 逐页比对 | 合并进共享文件，或删掉后加载的那份 |
+
+> **内联的坑（2026-10-20 实测）**：`{% block scripts %}` 渲染在 layout 的 `<head>`，原脚本靠 `defer` 在解析后执行；直接内联会提前到 head 解析期——`model-game.js` 拿不到 DOM 直接 return、`members.js` 报「缺少依赖 utils.js」。必须移到 body 末尾 + `DOMContentLoaded` 包裹。
+
+### 2. 组件级清洁（资源瘦身）
+
+- **孤儿扫描**：仓库根执行 `python .codebuddy/skills/igem-wiki-migration-guard/scripts/audit_flask_assets.py`。自有 CSS/JS 孤儿必须为 0；官方模板资源即使 0 引用也保留。
+- **数据瘦身（本项目最大头）**：`static/data` 的 PDB 由 `game-docking.json` / `model-docking.json` 的 `structureBase + file` **动态拼路径**加载，按文件名 grep 会全部误判为未引用。正确判定是读 JSON 里的 `clusters[].models[].file`、`antibodies[].file`、`antigens[].processed`，只保留这些文件，其余归档。
+  2026-10-20 已归档 283 个 / 32.5 MB 到 `对话归档/2026-10/2026-10-20-unreachable-structures/`：`complexes/rigid/` 全量（83）、`antigens/native/` 全量（2）、`complexes/flex/` 中非 `*_c1_m1` 的 195 个、`antigens/processed` 多余 1 个。
+- **跨文件重复 CSS**：先按加载顺序判断保留谁——layout 顺序是 `navigation → index → mobile → components → 页面样式`；human-practices 页是 `integrated-human-practices → hp-head-extra`（后者覆盖前者）。
+  **自动删重复规则风险高**：用文本删除时容易连相邻规则的 `}` 一起切掉（2026-10-20 实测：`navigation.css` 掉 3 个 `}`、`integrated-human-practices.css` 掉 4 个，导致整页样式失效，已回滚）。要处理必须逐条人工确认，并校验 `{` / `}` 计数相等后再构建。
+- **合并小 CSS**：单文件 < 1 KB 且只被 layout 引用 → 并入 `index.css` 顶部（`base.css` 已于 2026-10-20 并入）。
+
+### 3. 注释级清洁
+
+- 推送文件里**不得**出现日志句：日期、「本轮／原先／迁移版」、「实测／用户要求」、本地路径（`对话归档/…`）、内部脚本名、`文件:行号`。
+- **保留**：功能说明、参数说明、许可头（`@license` / `Copyright`）、第三方库全部注释。
+- 工具：`python 对话归档/temporary-tools/comment_audit_flask_full.py --scan|--fix`（幂等）。改完再扫一遍必须为 0 条。
+
+### 4. 引用级清洁（防 CI 404）
+
+- 删任何文件前：`url_for('static', filename=…)` 与字面 `static/…` **两路都要 grep**（红线 R-C）。
+- 删完立刻 `flask freeze` + `check_migration.py`，确认无新增 FAIL。
+- **本工程 URL 带 `/szpu-china/` 前缀**：`check_migration.py` 的 R14 与 `find_broken_links.py` 按 `public/` 根解析，会把这些引用**全部误报**成断链（实测 336／21 条，真实为 0）。真实判定用前缀感知脚本 `对话归档/temporary-tools/check_links_prefixed.py`（2026-10-20：1317 个引用 / 真实断链 0）。
+- **删除清单要自己再分一遍**：`gen_manual_upload_list.py` 的「要删除」只认 4 个故意不建的页面，本地删掉/内嵌掉的资产会被归进「官方独有」，必须人工区分「我们删的（要同步删）」与「官方模板自带的（不能删）」。判定口径：`git ls-tree -r --name-only igem/main` 减去本地文件，再逐个 grep 引用；0 引用才可删。
+
+### 5. 顺序不可颠倒
+
+清洁整理 → `flask freeze` → `check_migration.py`（无新增 FAIL）→ `gen_manual_upload_list.py`（**全树差集，禁止手写清单**）→ CI 就绪度闸 → 分批推送（同页结构+样式+脚本同批）→ 线上复验。
+脚本与细则见 `.codebuddy/skills/igem-wiki-migration-guard/SKILL.md`。
 
 ## Asset layout & upload workflow (2026-10-10)
 

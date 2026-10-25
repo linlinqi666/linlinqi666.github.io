@@ -57,26 +57,33 @@
       'surface-display', 'proof-of-concept',
       // 实验页公共区块（材料 / 安全 / 排错）与安全页
       'reagents-', 'safety-', 'progress-', 'troubleshooting',
-      // dry-lab Model 页正文小节（2026-09-27：卡片 model-award / model-overview / model-game /
+      // dry-lab Model 页正文小节（卡片 model-award / model-overview / model-game /
       // model-assumptions / model-data-parameters / model-results / model-validation，
       // 小节 model-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
       'model-',
       // Contribution 页结构（概览 / 部件 / 协议 / 其他贡献 / 获取与许可 / 归属与致谢）；
-      // 同前缀 parts- 亦用于 Wet Lab › Parts 页（2026-10-18 改到标准内容页骨架：
-      // 卡片 parts-overview / parts-flow / parts-chassis / parts-gpa1 / parts-reporter /
-      // parts-vectors，表格每行一个 parts-<registry slug>）
+      // 同前缀 parts- 亦用于 Wet Lab › Parts 页（卡片 parts-overview / parts-flow /
+      // parts-chassis / parts-gpa1 / parts-reporter / parts-vectors，
+      // 表格每行一个 parts-<registry slug>）
       'contribution-', 'parts-', 'protocols-', 'other-', 'access-', 'attribution',
-      // dry-lab Hardware 页正文小节（2026-10-15：卡片 hardware-overview /
+      // Contribution 页三级目录小节（Wet-Lab 的 wetlab-<语义>、Human Practices 的
+      // hp-<语义>）；未登记则侧栏子目无法随滚动高亮，见 README §5.14.2
+      'wetlab-', 'hp-',
+      // dry-lab Hardware 页正文小节（卡片 hardware-overview /
       // hardware-problem / hardware-worth / hardware-origin / hardware-goals / hardware-iterations /
       // hardware-log / hardware-architecture / hardware-specifications / hardware-bom /
       // hardware-instrument / hardware-test-plan / hardware-challenges / hardware-future，
       // 小节 hardware-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
       'hardware-',
-      // Human Practices › Sustainability 页（2026-10-18：卡片 sustainability-overview /
+      // Human Practices › Sustainability 页（卡片 sustainability-overview /
       // sustainability-sdg3 / sustainability-sdg4 / sustainability-sdg9 / sustainability-sdg17 /
       // sustainability-summary / sustainability-references，小节 sustainability-<语义>；
       // 未登记则滚动高亮失效，见 README §5.14.2）
-      'sustainability-'
+      'sustainability-',
+      // Project › Description 页（2026-10-20 按队伍提供的 EchoYeast Description.docx 重写；
+      // 卡片 description-abstract / description-why-influenza / … / description-references，
+      // 小节 description-<语义>；未登记则滚动高亮失效，见 README §5.14.2）
+      'description-'
     ]
   };
 

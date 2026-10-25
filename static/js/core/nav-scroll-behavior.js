@@ -331,6 +331,19 @@
       if (state.navElement) hideNav();
     }
 
+    // 2026-10-19：首帧之后再开启导航底边的「展开 / 收束」过渡。
+    // 首页初始 hideNav 必须是瞬时的——若过渡一开始就生效，线段会先演一遍
+    // 收束、导航才上滑，首屏会闪一下。先把隐藏态落定，再加过渡开关。
+    if (state.navElement) {
+      const nav = state.navElement;
+      const armEdge = function () { nav.classList.add('nav-edge-ready'); };
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(armEdge);
+      } else {
+        window.setTimeout(armEdge, 0);
+      }
+    }
+
     // 绑定滚动事件到实际滚动容器
     state.scrollHandler = handleScroll;
     state.resizeHandler = debouncedResize;

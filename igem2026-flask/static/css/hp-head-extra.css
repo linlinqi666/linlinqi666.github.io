@@ -1,4 +1,4 @@
-.description-container { width: min(85vw, 1440px); margin-inline: auto; }
+.description-container { width: 100%; max-width: 106rem; }
   .description-content { width: 100%; }
   .hp-flat-root { margin: 0 0 2.2rem; }
   .hp-flat-carousel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(.55rem, 1.5vw, 1.25rem); }
@@ -44,8 +44,8 @@
   .hp-flat-button { width: 2.5rem; height: 2.5rem; padding: 0; border: 1px solid rgba(139,115,85,.55); border-radius: 50%; background: transparent; color: #6f5b44; font: 1.25rem/1 serif; cursor: pointer; transition: background-color .2s ease, color .2s ease, transform .2s ease; }
   .hp-flat-button:hover, .hp-flat-button:focus-visible { background: #8b7355; color: #fff8e7; transform: scale(1.08); }
   .hp-flat-intro { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: baseline; gap: 1rem; padding: 1rem 0 0; border-top: 1px solid rgba(139,115,85,.28); color: #5c4d3c; }
-  .hp-flat-intro-date, .hp-flat-intro-count { font-size: .78rem; letter-spacing: .1em; white-space: nowrap; color: #8b7355; }
-  .hp-flat-intro-title { margin: 0; font-size: clamp(.95rem,1.35vw,1.1rem); line-height: 1.65; }
+  .hp-flat-intro-date, .hp-flat-intro-count { font-size: 0.9375rem; letter-spacing: .1em; white-space: nowrap; color: #8b7355; }
+  .hp-flat-intro-title { margin: 0; font-size: clamp(1.05rem,1.5vw,1.25rem); line-height: 1.65; }
   .hp-flat-detail-panel { margin-top: 0; }
   .hp-flat-detail-panel > .detail-viewport { overflow: hidden; transition: height .42s cubic-bezier(.22, 1, .36, 1); }
   .hp-flat-detail-panel > .detail-viewport > .detail-track { display: flex; align-items: flex-start; transition: transform .42s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
@@ -61,7 +61,7 @@
     .hp-flat-intro.is-switching .hp-flat-intro-count { animation: none !important; transition: none !important; }
   }
   @media (max-width: 700px) {
-    .description-container { width: min(92vw, 1440px); }
+    .description-container {  }
     .hp-flat-carousel { gap: .45rem; }
     .hp-flat-button { width: 2rem; height: 2rem; }
     .hp-flat-card { aspect-ratio: 1.75 / 1; }
@@ -72,7 +72,6 @@
   @media (max-width: 480px) {
     .description-container { width: 100%; padding-inline: 12px; }
   }
-  
 
 
   /* 所有选择器都限定在 .hz-map 根容器内，迁移到其它页面不会与宿主样式冲突 */
@@ -113,8 +112,8 @@
   .hz-detail-panel { margin-top: 1.75rem; border-radius: 0; }
   .hz-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.75rem; }
   .hz-intro-block { padding-top: 1rem; border-top: 1px solid rgba(139,115,85,.2); }
-  .hz-intro-block h3 { margin: 0 0 .45rem; font-size: .95rem; color: #5c4d3c; }
-  .hz-intro-block p { margin: 0; font-size: .9rem; line-height: 1.75; color: #6f604e; }
+  .hz-intro-block h3 { margin: 0 0 .45rem; font-size: 1.12rem; color: #5c4d3c; }
+  .hz-intro-block p { margin: 0; font-size: 1.12rem; line-height: 1.75; color: #6f604e; }
   .hz-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 .25rem 0 .5rem; vertical-align: middle; }
   .hz-legend-dot.science { background: #4A90E2; }
   .hz-legend-dot.industry { background: #9013FE; }
@@ -126,15 +125,15 @@
   .hz-detail-slide { flex: 0 0 100%; min-width: 100%; }
   .hz-detail-card { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 1.5rem; align-items: start; padding: 1.5rem; border: 1px solid rgba(139,115,85,.2); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 14px 36px rgba(74,59,42,.14); }
   .hz-detail-card:not(:has(.hz-detail-card__photo)) { grid-template-columns: 1fr; }
-  .hz-detail-card__photo { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
-  .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+  .hz-detail-card__photo { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; background: rgba(139,115,85,.12); }
+  .hz-detail-card__eyebrow { margin: 0 0 .35rem; color: #8b7355; font-size: 0.9375rem; letter-spacing: .08em; text-transform: uppercase; }
   .hz-detail-card h3 { margin: 0; color: #5c4d3c; }
   .hz-detail-card__meta { margin: .4rem 0 1rem; color: #7d6d5a; }
   .hz-detail-card__copy { margin: 0 0 .9rem; line-height: 1.75; color: #4a3f33; }
   .hz-detail-card__list { margin: 0 0 1rem; padding-left: 1.25rem; display: grid; gap: .55rem; }
   .hz-detail-card__list li { line-height: 1.7; color: #4a3f33; }
   .hz-detail-card__list li strong { color: #5c4d3c; }
-  .hz-detail-card__table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: .92rem; background: rgba(255,255,255,.6); border: 1px solid rgba(139,115,85,.28); border-radius: 12px; overflow: hidden; }
+  .hz-detail-card__table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: 1rem; background: rgba(255,255,255,.6); border: 1px solid rgba(139,115,85,.28); border-radius: 12px; overflow: hidden; }
   .hz-detail-card__table th, .hz-detail-card__table td { padding: .6rem .8rem; border-bottom: 1px solid rgba(139,115,85,.18); text-align: left; vertical-align: top; line-height: 1.55; }
   .hz-detail-card__table th { background: rgba(139,115,85,.14); color: #5c4d3c; font-weight: 700; }
   .hz-detail-card__table tr:last-child td { border-bottom: none; }
@@ -148,11 +147,10 @@
     flex-wrap: wrap; gap: 12px; margin-bottom: 18px;
   }
   .hz-map .hz-header h1 {
-    font-size: 22px; font-weight: 700; letter-spacing: 1px;
+    font-size: 24px; font-weight: 700; letter-spacing: 1px;
     color: #5c4d3c;
   }
-  .hz-map .hz-header .hz-hint { font-size: 13px; color: #7d6d5a; }
-
+  .hz-map .hz-header .hz-hint { font-size: 15px; color: #7d6d5a; }
 
 
   .hz-map .hz-container {
@@ -181,14 +179,14 @@
     content-visibility: visible !important;
   }
   /* 中国地图层：默认始终可见 */
-  .hz-map .hz-china { 
-    opacity: 1; 
-    transform: none; 
+  .hz-map .hz-china {
+    opacity: 1;
+    transform: none;
     pointer-events: auto;
     visibility: visible;
   }
 
-  .hz-map .hz-layer > svg { 
+  .hz-map .hz-layer > svg {
     width: 100%; height: 100%; display: block;
     contain: none !important;
   }
@@ -226,7 +224,7 @@
     border-radius: 12px;
     padding: 10px 12px;
     box-shadow: 0 6px 20px rgba(74,59,42,.15);
-    font-size: 13px;
+    font-size: 15px;
     backdrop-filter: blur(4px);
     min-width: 180px;
   }
@@ -239,7 +237,7 @@
   }
   .hz-map .hz-filter.collapsed .hz-filter-header { justify-content: center; }
   .hz-map .hz-filter-title {
-    font-weight: 700; font-size: 13px;
+    font-weight: 700; font-size: 15px;
     color: #4a3f33;
   }
   .hz-map .hz-filter.collapsed .hz-filter-title { display: none; }
@@ -313,7 +311,7 @@
   }
   .hz-map .hz-cluster__head--count {
     background: var(--cluster-color, #8B7355); border-color: #fff8e7;
-    color: #fff; font-size: 13px; font-weight: 700; line-height: 1;
+    color: #fff; font-size: 15px; font-weight: 700; line-height: 1;
   }
   /* 多专家针头的人数角标 */
   .hz-map .hz-cluster__badge {
@@ -321,7 +319,7 @@
     min-width: 15px; height: 15px; padding: 0 3px; box-sizing: border-box;
     border-radius: 50%; border: 1.5px solid #fff8e7;
     background: var(--cluster-color, #8B7355); color: #fff;
-    font-size: 10px; font-weight: 700; line-height: 12px; text-align: center;
+    font-size: 15px; font-weight: 700; line-height: 12px; text-align: center;
   }
   .hz-map .hz-cluster__photo { display: block; width: 100%; height: 100%; object-fit: cover; }
   .hz-map .hz-cluster__silhouette { width: 74%; height: 74%; fill: #a89177; }
@@ -339,8 +337,8 @@
     background: rgba(255,250,240,.98); color: #4a3f33; box-shadow: 0 14px 34px rgba(74,59,42,.24);
   }
   .hz-cluster-popover[hidden] { display: none; }
-  .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; }
-  .hz-cluster-popover__header span { color:#8b7355; font-size:12px; }
+  .hz-cluster-popover__header { display:flex; justify-content:space-between; gap: 10px; margin-bottom: 10px; font-size: 15px; }
+  .hz-cluster-popover__header span { color:#8b7355; font-size: 15px; }
   .hz-cluster-popover ul { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; list-style:none; max-height:240px; overflow:auto; }
   /* 全局内容卡列表用 li::before 画圆点，会渗进浮层列表，这里显式清除 */
   .hz-cluster-popover ul li::before { content:none; display:none; }
@@ -354,8 +352,8 @@
   .hz-cluster-expert[data-category="public"]:hover,
   .hz-cluster-expert[data-category="public"]:focus-visible { border-color:#F5A623; background:#fbeed6; outline:none; }
   .hz-cluster-expert__name, .hz-cluster-expert__meta { display:block; }
-  .hz-cluster-expert__name { font-weight:700; font-size:13px; }
-  .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size:11px; line-height:1.4; }
+  .hz-cluster-expert__name { font-weight:700; font-size: 15px; }
+  .hz-cluster-expert__meta { margin-top:3px; color:#7d6d5a; font-size: 15px; line-height:1.4; }
   /* 展开列表里的小头像：有照片用照片，无照片用人像剪影 */
   .hz-cluster-expert__body { min-width:0; }
   .hz-cluster-expert__avatar {
@@ -376,9 +374,9 @@
 
   .hz-map .hz-legend {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    margin-top: 16px; font-size: 13px; color: #7d6d5a;
+    margin-top: 16px; font-size: 15px; color: #7d6d5a;
   }
-  .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 12px; }
+  .hz-map .hz-legend .hz-note { color: #9e8f7b; font-size: 15px; }
 
   /* ===== 地图与专家索引并排（等高）；全部专家收进一个大收纳条 ===== */
   .hz-map-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.5rem; align-items: stretch; max-width: 900px; margin: 0 auto; }
@@ -386,7 +384,7 @@
   .hz-expert-index { display: flex; flex-direction: column; gap: .25rem; min-height: 0; overflow: auto; padding: .8rem .7rem; border: 1px solid rgba(139,115,85,.2); border-radius: 14px; background: rgba(255,250,240,.85); box-shadow: 0 0.25rem 1rem rgba(139,90,43,.08); }
   .hz-expert-index__item { background: rgba(255,255,255,.65); border: 1px solid rgba(139,115,85,.16); }
   .hz-expert-index__item:hover, .hz-expert-index__item:focus-visible { background: #fff8e7; transform: translateX(2px); border-color: rgba(139,115,85,.4); }
-  .hz-expert-index__group { display: flex; align-items: center; gap: .4rem; margin: .55rem 0 .2rem; font-size: .78rem; font-weight: 700; color: #5c4d3c; }
+  .hz-expert-index__group { display: flex; align-items: center; gap: .4rem; margin: .55rem 0 .2rem; font-size: 0.9375rem; font-weight: 700; color: #5c4d3c; }
   .hz-expert-index__group:first-child { margin-top: 0; }
   .hz-expert-index__item { display: flex; align-items: center; gap: .55rem; padding: .3rem .45rem; border-radius: 9px; color: #5c4d3c; text-decoration: none; transition: background-color .15s ease, transform .15s ease, border-color .15s ease; }
   .hz-expert-index__item:hover, .hz-expert-index__item:focus-visible { background: rgba(139,115,85,.14); outline: none; }
@@ -402,7 +400,7 @@
   .hz-expert-fold-all > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; padding: .85rem 1.1rem; border: 1px solid rgba(139,115,85,.28); border-radius: 12px; background: rgba(139,115,85,.1); }
   .hz-expert-fold-all > summary::-webkit-details-marker { display: none; }
   .hz-expert-fold-all__title { font-weight: 700; color: #5c4d3c; font-size: 1.02rem; }
-  .hz-expert-fold-all__hint { font-size: .8rem; color: #8b7355; }
+  .hz-expert-fold-all__hint { font-size: 0.9375rem; color: #8b7355; }
   .hz-expert-stack { display: grid; gap: 1.1rem; min-width: 0; margin-top: 1.1rem; }
   .hz-expert-stack .hz-detail-slide { width: 100%; }
   /* 锚点定位预留固定导航高度，避免专家标题被顶栏遮住 */
@@ -413,20 +411,20 @@
     .hz-expert-index__group { width: 100%; }
   }
   /* 图片预留位：后续补图时直接替换为 <img> */
-  .hp-photo-slot { display: grid; place-items: center; min-height: 170px; margin: 1rem 0; border: 1px dashed rgba(139,115,85,.45); border-radius: 12px; background: rgba(139,115,85,.08); color: #8b7355; font-size: .85rem; letter-spacing: .04em; }
+  .hp-photo-slot { display: grid; place-items: center; min-height: 170px; margin: 1rem 0; border: 1px dashed rgba(139,115,85,.45); border-radius: 12px; background: rgba(139,115,85,.08); color: #8b7355; font-size: 0.9375rem; letter-spacing: .04em; }
 
   /* ===== 专家详情：会议照片画廊 =====
      与活动照片墙同一套规格：统一 4:3 + cover 铺满，不留白；图注图下常显。 */
   .hz-detail-card__gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin-top: 1.15rem; align-items: start; max-width: 960px; }
   .hz-detail-card__gallery figure { margin: 0; overflow: hidden; border-radius: 12px; }
   .hz-detail-card__gallery img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(139,115,85,.22); background: rgba(139,115,85,.08); }
-  .hz-detail-card__gallery figcaption { margin-top: .3rem; font-size: .76rem; letter-spacing: .02em; color: #8b7355; }
+  .hz-detail-card__gallery figcaption { margin-top: .3rem; font-size: 0.9375rem; letter-spacing: .02em; color: #8b7355; }
 
-  /* ===== 专家卡「返回地图」按钮：收起收纳条并滚回地图（行为见 hp-map.js setupBackToMap） ===== */
+  /* ===== 专家卡「返回地图」按钮：收起收纳条并滚回地图（行为在页面内联脚本的 setupBackToMap） ===== */
   .hz-detail-card__back { grid-column: 1 / -1; margin-top: 1.1rem; }
   .hz-back-to-map {
     appearance: none; border: 1px solid rgba(139,115,85,.35); background: rgba(139,115,85,.08);
-    color: #7d6d5a; font: inherit; font-size: .8rem; letter-spacing: .03em;
+    color: #7d6d5a; font: inherit; font-size: 0.9375rem; letter-spacing: .03em;
     padding: .45rem .95rem; border-radius: 999px; cursor: pointer;
     transition: background .2s ease, color .2s ease, transform .2s ease;
   }
@@ -434,8 +432,8 @@
   .hz-back-to-map:focus-visible { outline: 2px solid rgba(139,115,85,.55); outline-offset: 2px; }
   /* 单图：宽度对齐多图画廊的单列（220–340px），并保证不宽于正文列 */
   .hz-detail-card__gallery--single { grid-template-columns: minmax(220px, 340px); }
-  /* 专家卡响应式：1340px 以下正文列会被压到 300px 上下（实测 1100px 时仅 199px），
-     头像列固定 220px 会把正文与下方画廊一起挤扁；此区间改为上下堆叠，正文占满整卡宽。
+  /* 专家卡响应式：1340px 以下正文列会被压窄，头像列固定 220px 会把正文与下方画廊
+     一起挤扁；此区间改为上下堆叠，正文占满整卡宽。
      放在 680px 规则之前，保证 ≤680px 仍沿用原有的头像 260px 上限。 */
   @media (max-width: 1340px) {
     .hz-detail-card { grid-template-columns: 1fr; }
@@ -444,13 +442,12 @@
   @media (max-width: 680px) { .hz-detail-card__gallery { grid-template-columns: 1fr; } }
 
   /* ===== 活动照片墙：统一比例铺满网格 =====
-     用户要求：比例不同的图必须铺满存放图片的容器，不留白。
      img 统一 4:3 + object-fit:cover 裁切铺满，同排所有图等高、图注底对齐；
      图注仍为图片下方常显（不改回悬停浮层）。 */
   .hp-photo-grid--flow { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; overflow: visible; }
   .hp-photo-grid--flow .hp-photo-item { overflow: hidden; border-radius: 12px; }
   .hp-photo-grid--flow .hp-photo-item img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
-  .hp-photo-grid--flow .hp-photo-item figcaption { position: static; opacity: 1; transform: none; background: none; color: #7d6d5a; padding: .45rem .1rem 0; font-size: .8rem; }
+  .hp-photo-grid--flow .hp-photo-item figcaption { position: static; opacity: 1; transform: none; background: none; color: #7d6d5a; padding: .45rem .1rem 0; font-size: 0.9375rem; }
   .hp-photo-grid--dense { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
   /* ===== 全页图片统一动效 =====
@@ -526,9 +523,9 @@
     .hz-map #chinaProvinces path,
     .hz-cluster-popover,
     .hz-cluster-popover ul li,
-    .hz-map .hz-cluster::after { 
-      transition: none !important; 
-      animation: none !important; 
+    .hz-map .hz-cluster::after {
+      transition: none !important;
+      animation: none !important;
       will-change: auto !important;
     }
   }
@@ -544,7 +541,7 @@
   .hp-image-viewer__backdrop { position: absolute; inset: 0; background: rgba(52,41,30,.93); }
   .hp-image-viewer__frame { position: relative; margin: 0; display: grid; gap: .8rem; justify-items: center; max-width: min(1180px, 92vw); }
   .hp-image-viewer__img { max-width: 100%; max-height: 76vh; width: auto; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 26px 62px rgba(26,18,10,.55); }
-  .hp-image-viewer__caption { max-width: 760px; color: #f4ecdb; font-size: .85rem; line-height: 1.65; text-align: center; }
+  .hp-image-viewer__caption { max-width: 760px; color: #f4ecdb; font-size: 0.9375rem; line-height: 1.65; text-align: center; }
   .hp-image-viewer__count { position: absolute; top: 1.15rem; left: 50%; transform: translateX(-50%); margin: 0; color: #f4ecdb; font-size: .78rem; letter-spacing: .1em; }
   .hp-image-viewer__close,
   .hp-image-viewer__nav { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid rgba(244,236,219,.55); border-radius: 50%; background: rgba(52,41,30,.55); color: #f4ecdb; font-size: 1.4rem; line-height: 1; cursor: pointer; transition: background-color .2s ease, transform .2s ease; }

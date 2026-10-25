@@ -9,21 +9,27 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/contribution.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/pdf-embed.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -58,47 +64,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -107,52 +113,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -186,15 +200,10 @@
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
 </div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
-</div>
 
   <main class="contribution-page">
     
-<h1 class="sr-only">Contribution</h1>
-
+    
 <div class="description-container">
 
       <!-- 左侧导航栏 -->
@@ -213,45 +222,52 @@
             
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#contribution-overview" class="nav-main-link"><span class="i18n-en">Overview</span></a>
-              </div>
-              
-            </li>
-            
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#contribution-protocols" class="nav-main-link"><span class="i18n-en">1. Protocols</span></a>
+                <a href="#contribution-wetlab" class="nav-main-link"><span class="i18n-en">Wet-Lab Contributions</span></a>
               </div>
               
               <ul class="level2">
+                <li class="level2-flat">
+                  <a href="#wetlab-reporter-parts"><span class="i18n-en">Pheromone-responsive reporter parts</span></a>
+                </li>
+
+                <li class="level2-flat">
+                  <a href="#wetlab-far1-sst2"><span class="i18n-en"><i>FAR1</i>/<i>SST2</i> editing components</span></a>
+                </li>
+
+                <li class="level2-flat">
+                  <a href="#wetlab-gpa1-module"><span class="i18n-en">Gpa1 C-terminal engineering module</span></a>
+                </li>
+
+                <li class="level2-flat">
+                  <a href="#wetlab-records"><span class="i18n-en">Construction and troubleshooting records</span></a>
+                </li>
+
                 
-                <li class="level3">
-                  <a href="#protocol-pager-chain"><span class="i18n-en">PAGER receptor: cloning to read-out</span></a>
+                <li class="level2-has-sub">
+                  <a href="#wetlab-validation"><span class="i18n-en">From Engineering to Validation</span></a>
+                  
+                  <ul class="level3">
+                    
+                    <li><a href="#wetlab-genediting"><span class="i18n-en">Translating Gene Editing into Verifiable Phenotypes</span></a></li>
+                    
+                    <li><a href="#wetlab-construction"><span class="i18n-en">Refining Construction Methods</span></a></li>
+                    
+                    <li><a href="#wetlab-connecting"><span class="i18n-en">Connecting Modifications to Behavior</span></a></li>
+                    
+                  </ul>
                   
                 </li>
                 
-                <li class="level3">
-                  <a href="#protocol-crispr"><span class="i18n-en">Yeast CRISPR-Cas9 knockout</span></a>
+                <li class="level2-has-sub">
+                  <a href="#wetlab-resources"><span class="i18n-en">Reusable Design Resources</span></a>
                   
-                </li>
-                
-                <li class="level3">
-                  <a href="#protocol-donor"><span class="i18n-en">Two routes to a long donor</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#protocol-gradient"><span class="i18n-en">Three read-outs, one gradient</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#protocol-colony-pcr"><span class="i18n-en">Fast colony PCR screen</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#protocol-yeast-plasmid"><span class="i18n-en">Yeast plasmid extraction</span></a>
+                  <ul class="level3">
+                    
+                    <li><a href="#wetlab-strategy"><span class="i18n-en">A Genetic Engineering Strategy for Yeast</span></a></li>
+                    
+                    <li><a href="#wetlab-starting"><span class="i18n-en">A Starting Point for Cross-Species Coupling</span></a></li>
+                    
+                  </ul>
                   
                 </li>
                 
@@ -261,38 +277,7 @@
             
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#contribution-parts" class="nav-main-link"><span class="i18n-en">2. Parts</span></a>
-              </div>
-              
-              <ul class="level2">
-                
-                <li class="level3">
-                  <a href="#parts-pager"><span class="i18n-en">PAGER recognition fusion receptor</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#parts-gpa1"><span class="i18n-en">Humanised Gpa1 interface strains</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#parts-deltafar1"><span class="i18n-en">Δfar1 chassis strain</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#parts-reporter"><span class="i18n-en">FUS1 promoter reporter cassette</span></a>
-                  
-                </li>
-                
-              </ul>
-              
-            </li>
-            
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#contribution-model" class="nav-main-link"><span class="i18n-en">3. Model</span></a>
+                <a href="#contribution-model" class="nav-main-link"><span class="i18n-en">Model</span></a>
               </div>
               
               <ul class="level2">
@@ -323,71 +308,14 @@
             
             <li class="level1">
               <div class="nav-link-wrapper">
-                <a href="#contribution-hp" class="nav-main-link"><span class="i18n-en">4. Human Practices</span></a>
+                <a href="#contribution-hp" class="nav-main-link"><span class="i18n-en">Human Practices</span></a>
               </div>
               
               <ul class="level2">
                 
-                <li class="level3">
-                  <a href="#hp-yeast-workshop"><span class="i18n-en">The yeast workshop</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#hp-apic"><span class="i18n-en">A card exercise others can run</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#hp-southchina"><span class="i18n-en">South China Meetup</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#hp-together"><span class="i18n-en">Together with iGEM</span></a>
-                  
-                </li>
-                
-              </ul>
-              
-            </li>
-            
-            <li class="level1">
-              <div class="nav-link-wrapper">
-                <a href="#contribution-troubleshooting" class="nav-main-link"><span class="i18n-en">5. Troubleshooting</span></a>
-              </div>
-              
-              <ul class="level2">
-                
-                <li class="level3">
-                  <a href="#ts-cloning"><span class="i18n-en">No colonies at six concentrations</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#ts-donor"><span class="i18n-en">Mismatches after 500 bp</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#ts-western"><span class="i18n-en">Western blot at 40 kD</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#ts-sst2"><span class="i18n-en">SST2: ten clones, no knockout</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#ts-immuno"><span class="i18n-en">Immunofluorescence showed nothing</span></a>
-                  
-                </li>
-                
-                <li class="level3">
-                  <a href="#ts-ratio"><span class="i18n-en">A260/280 of 2.848 and 3.800</span></a>
-                  
-                </li>
+                <li class="level3"><a href="#hp-apic"><span class="i18n-en">APiC question cards</span></a></li>
+                <li class="level3"><a href="#hp-yeast-workshop"><span class="i18n-en">The workshop record</span></a></li>
+                <li class="level3"><a href="#hp-sharing-lessons"><span class="i18n-en">Sharing knowledge</span></a></li>
                 
               </ul>
               
@@ -422,7 +350,7 @@
       <!-- 右侧内容区域 -->
       <div class="description-content">
         
-        <div id="contribution-overview" class="content-card">
+        <div id="contribution-wetlab" class="content-card">
           
           <figure class="page-mascot page-mascot--contribution" aria-hidden="true">
             <img src="../static/image/any-icon/extension/contribution.png" alt="" width="440" height="453"
@@ -430,331 +358,180 @@
           </figure>
           
           
-          <h2><span class="i18n-en">Contribution</span></h2>
+          <h2><span class="i18n-en">Wet-Lab Contributions: Reusable Parts for <span class="keep-together">Yeast Engineering</span></span></h2>
           <div class="content-body">
-            
-            <p class="executive-summary"><span class="i18n-en">Six protocol sets, four parts, a modelling pipeline, four team exchanges, and six records of where we got stuck.</span></p>
+            <p><span class="i18n-en">Our wet-lab contribution is a set of documented genetic components and characterization results that future teams can use when engineering yeast signaling systems. The parts cover pheromone-responsive reporting, <i>FAR1</i>/<i>SST2</i> editing and <i>GPA1</i> C-terminal modification. Their sequences and intended roles are indexed on our Parts page, while construction and experimental evidence are documented on our Engineering and Results pages. <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a> · <a href="../project/engineering.html">Engineering</a> · <a href="../wet-lab/result.html">Results</a></span></span></p>
+
             
 
             
               
-            <p><span class="i18n-en">iGEM asks two things of this page: document the contribution, and explain why it is a contribution to fellow iGEMers. There is no fixed definition. The examples given are new or improved parts, software or tools, optimised protocols, and anything else with a clear benefit to later teams.</span></p>
+            
+            <h3 id="wetlab-reporter-parts" data-no-fold><span class="i18n-en">1. Pheromone-responsive reporter parts</span></h3>
+
+            <p><span class="i18n-en"><strong>Featured parts:</strong> BBa_26J53MF4 — <i>FUS1</i> promoter · BBa_26D8D1SG — <i>FUS1</i>–<i>yEGFP</i> reporter fragment</span></p>
+
+            <figure class="contrib-figure">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/project/fig1-pesc-his-fus1-yegfp-map.avif" alt="Annotated plasmid map of pESC-HIS-P_FUS1-yEGFP with the FUS1 promoter, the yEGFP reporter gene, the CYC1 terminator and the vector backbone elements labelled." width="1188" height="1150" loading="lazy" decoding="async">
+              <figcaption>
+                <span class="contrib-figure__caption">Figure 1. Plasmid map of pESC-HIS-P_FUS1-yEGFP.</span>
+                <span class="contrib-figure__desc">The 7,181-bp plasmid contains the <i>FUS1</i> promoter, the <i>yEGFP</i> reporter gene, and a downstream <i>CYC1</i> terminator, together with the annotated backbone elements. The map shows the plasmid context of the <i>FUS1</i> promoter and <i>FUS1</i>–<i>yEGFP</i> reporter fragment contributed by our team, rather than the boundaries of either individual Registry part. Map generated using SnapGene.</span>
+              </figcaption>
+            </figure>
+
+            <p><span class="i18n-en">We provide a defined 435-bp <i>FUS1</i> promoter fragment and a 1,152-bp composite fragment combining this promoter with the <i>yEGFP</i> coding sequence. The promoter is recorded separately from the reporter, allowing future teams to reuse the regulatory element or the assembled fluorescence readout according to their own designs. <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a></span></span></p>
+
+            <p><span class="i18n-en">We characterized the reporter in BY4741 using α-factor induction, fluorescence imaging, time-course measurements and growth assays. These experiments provide a reference for evaluating downstream yeast pheromone-pathway output and comparing engineered chassis strains. <span class="contrib-refs"><a href="../wet-lab/result.html">Results</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Value for future teams:</strong> a characterized reporter starting point for yeast signaling studies. The composite is a reporter fragment, not a complete standalone expression system; a suitable vector and transcriptional termination context must be supplied. Its α-factor characterization does not establish HA detection. <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a> · <a href="../project/design.html">Design</a></span></span></p>
+
+            <h3 id="wetlab-far1-sst2" data-no-fold><span class="i18n-en">2. <i>FAR1</i>/<i>SST2</i> editing components</span></h3>
+
+            <p><span class="i18n-en"><strong>Featured composite parts:</strong> BBa_26IKMSKO — <i>FAR1</i> sgRNA expression cassette · BBa_26YVX4QT — <i>SST2</i> sgRNA expression cassette</span></p>
+
+            <p><span class="i18n-en"><strong>Matching repair templates:</strong> BBa_26HN2W3G — <i>FAR1</i> repair template · BBa_262SR0ED — <i>SST2</i> repair template</span></p>
+
+            <figure class="contrib-figure">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/project/fig2-pml104-vector-map.avif" alt="Annotated map of the pML104 vector used for yeast editing, showing URA3, the SNR52 promoter, the SUP4 terminator and other labelled vector features." width="1058" height="1142" loading="lazy" decoding="async">
+              <figcaption>
+                <span class="contrib-figure__caption">Figure 2. Map of the pML104 vector used in the yeast-editing workflow.</span>
+                <span class="contrib-figure__desc">The 11,258-bp map displays annotated vector features, including <i>URA3</i>, the <i>SNR52</i> promoter, and the <i>SUP4</i> terminator. The <i>FAR1</i>- and <i>SST2</i>-targeting sequences are not explicitly identified in this view; therefore, this figure presents the vector context rather than a target-specific sgRNA part map. Map generated using SnapGene.</span>
+              </figcaption>
+            </figure>
+
+            <p><span class="i18n-en">We provide target-specific sgRNA expression cassettes and matching repair templates for <i>FAR1</i> and <i>SST2</i> editing in BY4741. Each cassette combines a yeast RNA polymerase III promoter, a target-specific spacer, the SpCas9 sgRNA scaffold and a terminator. The repair templates are designed to introduce frameshift-producing four-base-pair deletions. <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a></span></span></p>
+
+            <p><span class="i18n-en">Following an unsuccessful initial construction round, we revised guide assembly and repair-template design. Colony screening and Sanger sequencing subsequently identified the intended <i>FAR1</i> and <i>SST2</i> edits, and growth and fluorescence measurements characterized the resulting chassis under α-factor induction. <span class="contrib-refs"><a href="../project/engineering.html">Engineering</a> · <a href="../wet-lab/result.html">Results</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Value for future teams:</strong> matched targeting and repair components, together with a documented editing workflow and genotype-to-phenotype evaluation. These components require Cas9 and the appropriate donor and host context; the sgRNA cassette alone is not a complete knockout system. <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a> · <a href="../project/engineering.html">Engineering</a></span></span></p>
+
+            <h3 id="wetlab-gpa1-module" data-no-fold><span class="i18n-en">3. A Gpa1 C-terminal engineering module</span></h3>
+
+            <p><span class="i18n-en"><strong>Featured basic part:</strong> BBa_26EG2LOR — Gαq-derived EYNLV sequence with stop codon</span></p>
+
+            <p><span class="i18n-en"><strong>Associated composite:</strong> BBa_266K1VDV — <i>GPA1</i> C-terminal humanization cassette</span></p>
+
+            <figure class="contrib-figure">
+              <img src="https://static.igem.wiki/teams/6373/wiki/lab/project/fig4-gpa1-humanization-map.avif" alt="Partial annotated map of the GPA1 C-terminal humanization construct, showing the humanization sequence and the adjacent URA3-associated annotations." width="1704" height="296" loading="lazy" decoding="async">
+              <figcaption>
+                <span class="contrib-figure__caption">Figure 4. Partial annotated map of the <i>GPA1</i> C-terminal humanization construct.</span>
+                <span class="contrib-figure__desc">The view shows the region labeled as the humanization sequence and the adjacent <i>URA3</i>-associated annotations. It provides local construct context but does not delineate the complete donor boundaries or both homology arms. Map generated using SnapGene.</span>
+              </figcaption>
+            </figure>
+
+            <p><span class="i18n-en">BBa_26EG2LOR is an 18-bp module encoding the Gαq-derived C-terminal sequence EYNLV followed by a stop codon. We used this sequence in a <i>GPA1</i>-editing design intended to replace the native Gpa1 C-terminal pentapeptide KIGII. It is a replacement segment, not a complete G-protein coding sequence. <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a></span></span></p>
+
+            <p><span class="i18n-en">After revising the donor-construction strategy to overlap-extension fusion PCR, we obtained strains 12 and 17 with the expected target-region sequence. The humanized chassis was further characterized through α-factor-induced morphology, growth and <i>FUS1</i>–<i>yEGFP</i> fluorescence measurements, which showed attenuated native pheromone responses. <span class="contrib-refs"><a href="../project/engineering.html">Engineering</a> · <a href="../wet-lab/result.html">Results</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Value for future teams:</strong> a defined replacement module and a documented starting point for studying yeast G-protein interfaces. The evidence supports the edited-chassis phenotype; it does not independently establish hM1Dq coupling or attribute every observed change solely to the 18-bp replacement. <span class="contrib-refs"><a href="../wet-lab/result.html">Results</a></span></span></p>
+
+            <h3 id="wetlab-records" data-no-fold><span class="i18n-en">Reusable construction and troubleshooting records</span></h3>
+
+            <p><span class="i18n-en">Alongside these parts, we document unsuccessful construction attempts and the design changes that followed, including revised sgRNA assembly, repair-template redesign and the switch from a multi-round donor-construction route to overlap-extension fusion PCR. These records give future teams practical alternatives to evaluate rather than only presenting the final successful constructs. <span class="contrib-refs"><a href="../project/engineering.html">Engineering</a></span></span></p>
+
+            <p><span class="i18n-en"><strong>Explore the resources:</strong> <span class="contrib-refs"><a href="../wet-lab/parts.html">Parts</a> · <a href="../project/engineering.html">Engineering</a> · <a href="../wet-lab/result.html">Results</a></span></span></p>
+
+            <h3 id="wetlab-validation" data-no-fold><span class="i18n-en">From Successful Engineering to Functional Validation</span></h3>
 
               
             
               
-            <p class="content-intro"><span class="i18n-en">Everything below is something we actually did, and every entry says how far it got. Section 5 is the part we would read first if we were starting again: six things that did not work. This page does not report detection sensitivity, specificity or limits of detection, because we have not measured them.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="contribution-protocols" class="content-card">
-          
-          
-          <h2><span class="i18n-en">1. Protocols</span></h2>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Six sets, all written from our own runs. Three belong to the gating chain: getting a membrane receptor to appear in yeast, editing the chassis underneath it, and reading the pathway out. The other three are the small ones that keep a large batch of clones moving.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="protocol-pager-chain" class="content-card">
-          
-          
-          <h3><span class="i18n-en">1.1 PAGER receptor: cloning to read-out</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">The hard part of a yeast receptor project is not the design. It is making the protein appear, proving it did, and then getting a signal out of it. This set walks the whole way: pGADT7 into <i>Escherichia coli</i>, plasmid prep, double digest, yeast transformation, plasmid recovery from yeast, colony PCR, Western blot, immunofluorescence, and the DCZ read on a plate reader.</span></p>
+            <p><span class="i18n-en">Our experimental work addresses two specific questions: how can the native signaling regulation of yeast be reliably modified, and how can we determine whether precise engineering of the G-protein interface changes cellular signaling behavior?</span></p>
 
               
             
               
-            <p><span class="i18n-en">Temperatures, times, enzyme amounts, cell-wall lysis conditions and the DCZ working gradient sit at the step they belong to. Snail enzyme and lyticase are not interchangeable here, and the difference is written where it matters rather than collected in a notes section at the end.</span></p>
+            <h4 id="wetlab-genediting" class="content-subh4"><span class="i18n-en">Translating Gene Editing into Verifiable Phenotypes</span></h4>
 
               
             
               
-            <p><span class="i18n-en">Where it got to. The cloning chain closed: a 472 bp one-step product, a 689 bp colony PCR band, transformation worked. The protein layer did not close. The blot band sits near 60 kD with a lot of non-specific signal, immunofluorescence came back negative, and the plate read-out exists only as photographs. Treat the first half as working and the second half as a starting point.</span></p>
+            <p><span class="i18n-en">Obtaining the target strain was not the endpoint of our work. During the editing of <i>FAR1</i> and <i>SST2</i>, our initial construction attempt failed to yield the desired strains, prompting us to revise our construction strategy. We ultimately confirmed the intended genetic modifications by sequencing. The resulting strains carried a 4-bp deletion in each target gene, providing clear sequence-level evidence for subsequent validation.</span></p>
 
               
             
               
-            <p><span class="i18n-en">It is on the Protocol page as Protocols 6, 13, 17, 18, 20, 21 and 22, and in the 47-page handbook.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="protocol-crispr" class="content-card">
-          
-          
-          <h3><span class="i18n-en">1.2 Yeast CRISPR-Cas9 knockout</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">A complete knockout in BY4741: plasmid prep from pML104, inverse PCR for the sgRNA, two rounds of fusion PCR for the repair template, competent cells, transformation, colony PCR, sequencing, and an α-factor gradient check at the end. The repair template is two arms of 658 and 528 bp fused into a 1146 bp product over 40 bp of overlap. pML104 came from Addgene #67638.</span></p>
+            <p><span class="i18n-en">More importantly, we combined genotype verification with growth and fluorescence characterization under α-factor induction. Comparing the wild-type, single-knockout, and double-knockout strains allowed us to determine whether the effects of gene deletion extended beyond the DNA level to cellular growth and reporter output. Our results showed that the double knockout altered the growth response to stimulation and produced higher reporter fluorescence under the tested conditions. These findings support the functional characterization of the engineered chassis beyond successful strain construction alone.</span></p>
 
               
             
               
-            <p><span class="i18n-en">Every number is fixed, so it can be followed as written. The sentence that matters most is a judgement rather than a parameter: a missing colony PCR band does not mean the knockout worked, because the band can also be missing because the PCR failed. Sequencing decides. Read the gel as the result and you will eventually report a knockout you do not have.</span></p>
+            <h4 id="wetlab-construction" class="content-subh4"><span class="i18n-en">Refining Construction Methods to Ensure Sequence Accuracy</span></h4>
 
               
             
               
-            <p><span class="i18n-en">FAR1 came out; SST2 did not, in ten clones. One gene working does not make a protocol universal, and the reverse primer sequence is missing from the source record, so that gap is left visible. Protocol 19 on the Protocol page carries the flow; the arm lengths and overlap are in the chassis module record.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="protocol-donor" class="content-card">
-          
-          
-          <h3><span class="i18n-en">1.3 Two routes to a long donor</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">We built the Gpa1 donor twice, and the first route lost. Route one: build a circular plasmid on pRS426, then release the fragment by PCR. Route two: multi-fragment fusion PCR, three products joined by their terminal overlaps.</span></p>
+            <p><span class="i18n-en">Unlike the double-knockout strategy, <i>GPA1</i> engineering required precise replacement of five amino acids at the C-terminus of the protein. Our initial strategy, which combined Gibson Assembly with multiple rounds of PCR, resulted in sequence errors in the donor fragment. We subsequently adopted overlap-extension fusion PCR to reorganize the homology arms and selection cassette. This revised strategy yielded strains 12 and 17, whose target sequences were confirmed by sequencing. The modification replaced the native C-terminal pentapeptide KIGII with EYNLV, corresponding to the human Gαq C-terminal sequence.</span></p>
 
               
             
               
-            <p><span class="i18n-en">The two routes fail in different places, which is why keeping both is worth more than keeping the winner. Route one accumulates mismatches over repeated long PCR and tends to fail at the in-vivo step. Route two is short, but has to be repeated every time. A team can now choose by fragment length instead of by trial.</span></p>
+            <p><span class="i18n-en">The value of this work lies not only in obtaining the correctly modified strains, but also in documenting why the construction strategy was changed, how the alternative approach addressed the initial problem, and how the final sequence was verified. These details provide a practical reference for researchers undertaking precise genomic modifications in yeast, offering more transferable information than a positive PCR result alone.</span></p>
 
               
             
               
-            <p><span class="i18n-en">Sequencing rejected route one, and the source record calls its feasibility poor. It is written that way here rather than softened into "needs optimisation". Route two produced the fragment and gave strains 12 and 17. Protocol 8 on overlap extension PCR is the relevant page; the route comparison stays with the Gpa1 module record.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="protocol-gradient" class="content-card">
-          
-          
-          <h3><span class="i18n-en">1.4 Three read-outs, one gradient</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">One α-factor series, eight points from 24 down to 0 μM, read three ways at once: MEL1 with X-α-gal blue-white development over time, yEGFP fluorescence in a black 96-well plate at 488/507 nm normalised to OD<sub>600</sub>, and an OD<sub>600</sub> growth curve to see whether the inducer is suppressing growth on its own.</span></p>
+            <h4 id="wetlab-connecting" class="content-subh4"><span class="i18n-en">Connecting Sequence Modifications to Cellular Behavior</span></h4>
 
               
             
               
-            <p><span class="i18n-en">Time points, replication and controls are already specified, so the template transfers to another induction system without redesign. Three things to know before reusing it:</span></p>
+            <p><span class="i18n-en">Both engineering strategies required us to address a question beyond successful construction: did the modified cells exhibit the expected functional changes? For the double-knockout strategy, growth curves and fluorescence output were used to examine the relationship between signaling responses and cellular state. For <i>GPA1</i> humanization, we further investigated growth and morphological changes under α-factor induction.</span></p>
 
               
             
               
-            <ul class="plain-list">
-              
-              <li><span class="i18n-en">The α-factor scale is in the tens of μM, which is 10<sup>3</sup> to 10<sup>4</sup> above the nM range usually quoted. It still needs checking and should not be copied into a figure as if it were a standard curve.</span></li>
-              
-              <li><span class="i18n-en">MEL1 and lacZ are not interchangeable. A number from one does not mean the same thing in the other.</span></li>
-              
-              <li><span class="i18n-en">Replicate numbers for schemes 01 to 03 are missing from the record.</span></li>
-              
-            </ul>
+            <p><span class="i18n-en">The current results indicate that <i>GPA1</i>-humanized yeast exhibits altered phenotypes associated with native pheromone stimulation. However, these changes do not by themselves demonstrate that a heterologous GPCR has successfully coupled to the downstream yeast signaling pathway. In addition, the descriptions of fluorescence responses in different sections of our Wiki are inconsistent. The direction and magnitude of this response must therefore be determined by re-examining the original data before a definitive conclusion can be drawn. Distinguishing confirmed findings from observations that remain unresolved is an important part of the experimental knowledge we make available to future researchers.</span></p>
 
               
             
               
-            <p><span class="i18n-en">Protocols 14, 25 and 26 on the Protocol page.</span></p>
-
-              
             
-          </div>
-        </div>
-        
-        <div id="protocol-colony-pcr" class="content-card">
-          
-          
-          <h3><span class="i18n-en">1.5 Fast colony PCR screen</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">NaOH lysis in 10 μL, 98 °C for 3 minutes and 4 °C for 2 minutes over five cycles. Built for the first pass over dozens of candidates, before committing to culture and plasmid prep.</span></p>
+            <h3 id="wetlab-resources" data-no-fold><span class="i18n-en">Reusable Design Resources for Yeast Signaling Chassis Engineering</span></h3>
 
               
             
               
-            <p><span class="i18n-en">It is a screen and not a verdict, which is why it sits next to 1.2 rather than replacing the sequencing step there. Its false-negative rate has not been measured. Protocols 6 and 13 on the Protocol page.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="protocol-yeast-plasmid" class="content-card">
-          
-          
-          <h3><span class="i18n-en">1.6 Yeast plasmid extraction</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Snail enzyme lysis at 37 °C for 3 hours, lysis held under 3 minutes, elution with buffer pre-warmed to 60 °C, written for plasmids near 10 kb.</span></p>
+            <p><span class="i18n-en">We organized two core aspects of our yeast chassis engineering—native signaling regulation and G-protein input-interface reprogramming—into biological parts that can be independently accessed, adapted, combined, and further validated. These resources provide concrete sequence references and starting points for future yeast signaling engineering projects.</span></p>
 
               
             
               
-            <p><span class="i18n-en">Conditions that carry a 5 kb bacterial plasmid lose a 10 kb yeast plasmid, and the elution temperature accounts for most of the difference. Some of our batches gave A260/280 of 2.848 and 3.800, well above the ~1.8 that pure DNA should show; another gave 1.289, low enough to suggest protein carryover. The numbers are recorded without an explanation. Protocol 23 on the Protocol page.</span></p>
+            <h4 id="wetlab-strategy" class="content-subh4"><span class="i18n-en">A Directly Accessible Genetic Engineering Strategy for Yeast</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">We submitted the <i>FAR1</i> and <i>SST2</i> sgRNA expression cassettes (BBa_26IKMSKO and BBa_26YVX4QT, respectively), together with their corresponding repair templates (BBa_26HN2W3G and BBa_262SR0ED), to the iGEM Registry. Each repair template incorporates a 4-bp deletion and a PAM-site modification designed to disrupt the target gene and reduce the likelihood of repeated recognition by the same sgRNA following editing.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">These parts provide sequence-level design references for researchers seeking to modify cell-cycle responses or negative regulation of G-protein signaling in yeast. By consulting the published sequences and construct information, users can assess their suitability after checking the target locus, PAM sequence, and homology regions in their own strain, rather than designing the entire editing system from scratch.</span></p>
+
+              
+            
+              
+            <h4 id="wetlab-starting" class="content-subh4"><span class="i18n-en">A Sequence-Level Starting Point for Cross-Species Receptor Coupling</span></h4>
+
+              
+            
+              
+            <p><span class="i18n-en">We submitted the <i>GPA1</i> C-terminal humanization cassette with a <i>URA3</i> selection marker (BBa_266K1VDV), as well as a basic part encoding the Gαq-derived pentapeptide EYNLV followed by a stop codon (BBa_26EG2LOR). The composite cassette contains upstream and downstream homology arms, the target replacement sequence, and the <i>URA3</i> selection module, providing a defined construct for targeted modification of the yeast <i>GPA1</i> locus.</span></p>
+
+              
+            
+              
+            <p><span class="i18n-en">The target sequences in strains 12 and 17 were verified, providing experimental evidence that the intended sequence replacement was achieved. For teams seeking to connect heterologous GPCRs to yeast signaling networks, this construct offers a concrete starting point for further design and comparison. Nevertheless, successful sequence replacement does not establish effective coupling of the human receptor to the yeast signaling pathway; downstream signal transmission must be validated independently.</span></p>
 
               
             
               
             <ul class="link-list link-list--section-end">
               
-              <li><a href="../wet-lab/protocol.html"><span class="i18n-en">All 26 protocols and the 47-page handbook PDF — Protocol page</span></a></li>
+              <li><a href="../wet-lab/protocol.html"><span class="i18n-en">More details on the Protocol page.</span></a></li>
               
-            </ul>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="contribution-parts" class="content-card">
-          
-          
-          <h2><span class="i18n-en">2. Parts</span></h2>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Four things we built. Two carry sequences that are not ours, and those are named where they appear instead of being left implicit. Registry numbers and repository links are not listed here because submission is still open; the Parts page carries the registered elements.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="parts-pager" class="content-card">
-          
-          
-          <h3><span class="i18n-en">2.1 PAGER recognition fusion receptor</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">The PAGER fusion receptor, cloned in pGADT7 and ordered: α-factor signal peptide, (GGGS)<sub>3</sub> linker, MT1 inhibitory toxin, (GGGS)<sub>3</sub> linker, anti-H1N1_HA nanobody, TEV cleavage site, hM1Dq human DREADD receptor.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">The point of it is the joint, not the sequence. Recognition sits at one end and the output interface at the other, so replacing the nanobody retargets the whole receptor to another antigen without touching the fusion architecture or the vector. That is the piece worth borrowing, even by a project that looks nothing like ours.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Where it got to: cloning closed, protein and function open. A 472 bp one-step product and a successful yeast transformation on one side; a blot band near 60 kD full of non-specific signal, and a DCZ plate read-out that exists only as images, on the other.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">MT1 and the anti-H1N1_HA nanobody are third-party sequences. Their source and licence have to be confirmed before any Registry submission, and neither is ours to hand on quietly. hM1Dq is the human DREADD receptor.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="parts-gpa1" class="content-card">
-          
-          
-          <h3><span class="i18n-en">2.2 Humanised Gpa1 interface strains</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Five residues, KIGII to EYNLV, with a stop codon behind them, URA3 marker, in BY4741. Strains 12 and 17 match the design exactly by sequencing. The swap follows the Gαq C-terminal chimera reported by Komatsuzaki and colleagues in 1997, and that is stated in the record rather than absorbed into "our construct".</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">The C-terminus decides which receptor a Gα subunit can couple to. If a project needs a human GPCR to talk to the yeast mating pathway, this is the interface, and section 1.3 shows both ways of building the donor including the one that lost.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">What we can say: both strains match the design, and three phenotype layers, morphology, growth and fluorescence, point the same way, with the α-factor response weaker after the swap. What we cannot say: that the pathway coupling works. A weaker α-factor response is not evidence of sensing function, and the source record does not settle whether route two counts as a success. The background is recorded as BY4741 in most places and S288C in the materials section; that conflict is still open.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="parts-deltafar1" class="content-card">
-          
-          
-          <h3><span class="i18n-en">2.3 Δfar1 chassis strain</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">BY4741, <code>MATa his3Δ1 leu2Δ0 met15Δ0 ura3Δ0</code>, FAR1 removed by CRISPR/Cas9. Clones F2 and F10 carry the 4 bp deletion that shifts the reading frame, confirmed by sequencing.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Every yeast monitoring project meets the same wall: pheromone signalling arrests the cell cycle and the culture stops dividing, which is fatal for a device meant to keep reporting. Removing FAR1 lifts that, and starting from this strain skips designing sgRNA, homology arms and a clone screen. One thing to be clear about: SST2 was not knocked out. All ten clones kept the band, the line was dropped, and this strain carries no SST2 edit. pML104 came from Addgene #67638.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="parts-reporter" class="content-card">
-          
-          
-          <h3><span class="i18n-en">2.4 FUS1 promoter reporter cassette</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">A FUS1 promoter driving a reporter, on pESC-HIS with 40 bp homology arms, in two versions that do not have data yet: MEL1 with X-α-gal blue-white screening, and yEGFP with plate-reader fluorescence.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Six schemes exist with expected outcomes and nothing measured. The two read-out systems are not interchangeable and the project has not settled which is primary, so both are kept. What can be borrowed now is the skeleton and the scheme design, not a characterised part. Designed by this team; the PRE1/PRE2 promoter library scheme stays with the reporter module record.</span></p>
-
-              
-            
-              
-            <ul class="link-list link-list--section-end">
-              
-              <li><a href="../wet-lab/parts.html"><span class="i18n-en">Registered elements, sequences and Registry links — Parts page</span></a></li>
+              <li><a href="../wet-lab/parts.html"><span class="i18n-en">More details on the Parts page.</span></a></li>
               
             </ul>
 
@@ -766,7 +543,7 @@
         <div id="contribution-model" class="content-card">
           
           
-          <h2><span class="i18n-en">3. Model</span></h2>
+          <h2><span class="i18n-en">Model</span></h2>
           <div class="content-body">
             
 
@@ -776,16 +553,11 @@
 
               
             
-          </div>
-        </div>
-        
-        <div id="model-screening" class="content-card">
-          
-          
-          <h3><span class="i18n-en">3.1 Seventeen candidates, one lead</span></h3>
-          <div class="content-body">
+              
             
+            <h3 id="model-screening" data-no-fold><span class="i18n-en">Seventeen candidates, one lead</span></h3>
 
+              
             
               
             <p><span class="i18n-en">Screening a nanobody panel costs reagent and weeks. We replaced the first pass with two docking stages, a rigid ClusPro sweep over the whole panel and HADDOCK 2.5 semi-flexible refinement on what survived, and added a specificity index so that H1N1-selective binders separate from cross-reactive ones instead of everything ranking by docking score. Seventeen candidates became one lead, R1aB6, with no binding assay run.</span></p>
@@ -793,41 +565,31 @@
               
             
               
-            <p><span class="i18n-en">A team with a panel and no structures can repeat this on predicted models and order a shortlist instead of a library. The specificity index is the part worth taking, because without it the ranking collapses back into "best score wins", which is how cross-reactive binders get ordered. No binding assay has confirmed the ranking; the Model page carries the inputs and parameters.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="model-gating" class="content-card">
-          
-          
-          <h3><span class="i18n-en">3.2 Both gating interfaces</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">An inhibitory-peptide gate only works if blocking the outside leaves the inside intact. We tested that on both systems: hM1Dq with the MT1 peptide and Ste2p with MT1_5, each membrane-aligned before docking, refined in HADDOCK, then run through CHARMM-GUI membrane building, 100 ns GROMACS dynamics, SPICE interface analysis and gmx_MMPBSA. Both come out the same way, with the peptide in the orthosteric site and the intracellular G-protein interface left free.</span></p>
+            <p><span class="i18n-en">A team with a panel and no structures can repeat this on predicted models and order a shortlist instead of a library. The specificity index is the part worth taking, because without it the ranking collapses back into "best score wins", which is how cross-reactive binders get ordered. No binding assay has confirmed the ranking.</span></p>
 
               
             
               
-            <p><span class="i18n-en">That is a check on an assumption, not a demonstration of gating in cells, and it is written as the former. The workflow is the reusable part: it transfers to any receptor and peptide pair, including ones with no experimental structure. Path A and Path B on the Model page.</span></p>
+            
+            <h3 id="model-gating" data-no-fold><span class="i18n-en">Both gating interfaces</span></h3>
 
               
             
-          </div>
-        </div>
-        
-        <div id="model-hotspot" class="content-card">
-          
-          
-          <h3><span class="i18n-en">3.3 One hotspot, one hypothesis</span></h3>
-          <div class="content-body">
-            
+              
+            <p><span class="i18n-en">An inhibitory-peptide gate only works if blocking the outside leaves the inside intact. We tested that on both systems: hM1Dq with the MT1 peptide and Ste2 with MT1_5, each membrane-aligned before docking, refined in HADDOCK, then run through CHARMM-GUI membrane building, 100 ns GROMACS dynamics, SPICE interface analysis and gmx_MMPBSA. Both come out the same way, with the peptide in the orthosteric site and the intracellular G-protein interface left free.</span></p>
 
+              
+            
+              
+            <p><span class="i18n-en">That is a check on an assumption, not a demonstration of gating in cells, and it is written as the former. The workflow is the reusable part: it transfers to any receptor and peptide pair, including ones with no experimental structure.</span></p>
+
+              
+            
+              
+            
+            <h3 id="model-hotspot" data-no-fold><span class="i18n-en">One hotspot, one hypothesis</span></h3>
+
+              
             
               
             <p><span class="i18n-en">One number did most of the work here. Per-residue decomposition of the R1aB6–HA complex puts ARG-B:31 at −5.46 kcal/mol, well clear of its neighbours, which turns into a single experiment: make R31A and measure it by SPR or ELISA.</span></p>
@@ -839,16 +601,11 @@
 
               
             
-          </div>
-        </div>
-        
-        <div id="model-reproducibility" class="content-card">
-          
-          
-          <h3><span class="i18n-en">3.4 The pipeline as files</span></h3>
-          <div class="content-body">
+              
             
+            <h3 id="model-reproducibility" data-no-fold><span class="i18n-en">The pipeline as files</span></h3>
 
+              
             
               
             <p><span class="i18n-en">A pipeline published without its inputs is a figure, not a tool. HADDOCK and ClusPro inputs, parameter files and analysis scripts are kept with the work, and the 9VH4 complex is re-docked through the same pipeline as a positive control so the numbers have something to sit against.</span></p>
@@ -863,7 +620,7 @@
               
             <ul class="link-list link-list--section-end">
               
-              <li><a href="../dry-lab/model.html"><span class="i18n-en">The full modelling record, parameters and results — Model page</span></a></li>
+              <li><a href="../dry-lab/model.html"><span class="i18n-en">More details on the Model page.</span></a></li>
               
             </ul>
 
@@ -873,405 +630,181 @@
         </div>
         
         <div id="contribution-hp" class="content-card">
-          
-          
-          <h2><span class="i18n-en">4. Human Practices — working with other teams</span></h2>
+
+          <h2><span class="i18n-en">Human Practices Contributions</span></h2>
           <div class="content-body">
-            
 
-            
-              
-            <p><span class="i18n-en">Only the exchanges between teams: what we learned, what we gave back, and the two formats we built that another team could run itself. The interviews, the survey and the education work are on the Integrated Human Practices page.</span></p>
+            <p><span class="i18n-en"><em>Preface to Influenza A in the Air.</em> After our social practice, we recognised that many important questions about influenza A virus in the air — how it is transmitted, how long it can persist in air and on surfaces, how environmental conditions affect it, and what different detection signals can actually establish — draw on several fields and are dispersed across the literature. We therefore read the relevant studies and organised what we learned into this <i>Influenza A in the Air</i> contribution, bringing together the evidence, key data, study conditions and references needed to examine these questions. The document does not present new experimental findings; it structures existing research into a continuous, accessible and traceable resource that can help readers develop an overall understanding of airborne transmission, environmental persistence, detection and control of influenza A. In this way, it provides a reference for learning, discussion and project development, reduces duplicated searching, and makes the material available for further use, checking and improvement within the iGEM community.</span></p>
 
-              
-            
-          </div>
-        </div>
-        
-        <div id="hp-yeast-workshop" class="content-card">
-          
-          
-          <h3><span class="i18n-en">4.1 The yeast workshop</span></h3>
-          <div class="content-body">
-            
+<div class="pdf-embed">
+  <object class="pdf-embed__object" type="application/pdf"
+          data="https://static.igem.wiki/teams/6373/wiki/lab/project/influenza-a-in-the-air.pdf#page=1"
+          aria-label="Influenza A in the Air — a knowledge base on airborne transmission, detection and control, compiled as a contribution to the iGEM community">
+    <p class="pdf-embed__fallback">The Influenza A in the Air document is not available here yet.</p>
+  </object>
+</div>
 
-            
-              
-            <p><span class="i18n-en">CAU-China called a themed online meeting for teams doing yeast chassis engineering. Six came: CAU-China, NEFU-China, SZPU-China, Keystone, NKU and SHSID. Each reported its design and its blockers, then the discussion went to transformation efficiency, knockout, reporter leak, membrane protein expression and biosafety.</span></p>
+            <h3 id="hp-apic" data-no-fold><span class="i18n-en">The discussion format: APiC question cards</span></h3>
 
-              
-            
-              
-            <p><span class="i18n-en">What we gave. CAU-China asked why CRISPR-Cas9 rather than homologous recombination, and how long a round takes. The answer came with a trap worth passing on: when the linear fragment and the CRISPR plasmid go in together, the fragment can circularise on its own and finish the knockout by homologous recombination. A frameshift at the target site therefore does not prove that Cas9 cut. Read the sequencing result as proof and you will eventually report an edit you cannot attribute.</span></p>
+            <p><span class="i18n-en">Our Human Practices work produced a second, less obvious contribution: a format for peer discussion. At the APiC project exchange we replaced the usual sequence of project presentations with structured question cards built around iGEM award tracks. Each card directed discussion through five dimensions — value positioning, design rationale, analysis of previous projects, critical self-evaluation, and future optimisation — so that teams spent their time examining why a design was appropriate rather than describing what it aimed to do.</span></p>
 
-              
-            
-              
-            <p><span class="i18n-en">What we took. Low transformation efficiency, unstable auxotrophic selection, low CRISPR success rates, high reporter background: the same five problems in six labs. That changed how we read our own failures, and the practical notes, longer homology arms, more fragment, direct PCR recovery when the bands are clean, went into section 1.2. Recorded on the Human Practices page under the Online Yeast Workshop.</span></p>
+            <p><span class="i18n-en">The format proved reusable because it does not depend on shared subject matter. Teams working on different biological questions can use the same cards, because the questions are about reasoning rather than about pathogens. The cards and the process are documented so that future organisers can adapt them to other award tracks, exchange events and review sessions.</span></p>
 
-              
-            
-          </div>
-        </div>
-        
-        <div id="hp-apic" class="content-card">
-          
-          
-          <h3><span class="i18n-en">4.2 A card exercise others can run</span></h3>
-          <div class="content-body">
-            
+            <ul class="link-list">
 
-            
-              
-            <p><span class="i18n-en">APiC, the first Asia-Pacific iGEM Community Conference, hosted by SUSTech and HKU, gave us a table. We used it for something other than a poster: the iGEM Project Prism Program, fifteen cards, one per special award, ten questions on the back of each.</span></p>
+              <li><a href="../human-practices/integrated human-practices.html#section-apic"><span class="i18n-en">Related resource: Human Practices — APiC Conference</span></a></li>
 
-              
-            
-              
-            <p><span class="i18n-en">The exercise is mechanical on purpose. Pick the two cards that match where your project actually stands. Read all ten questions. Check the award criteria against past winning wikis and judges comments. Answer every question against your own evidence. Report back in a few sentences. The proposal and the step-by-step note were written in Chinese and English so visiting teams could follow without a translator.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">It is a format rather than a report, which is why it belongs here. Five award tracks came back filled in and the questions and answers are recorded on the Human Practices page. The card set and the process note can be reused at any meetup; that was the point of writing them down.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="hp-southchina" class="content-card">
-          
-          
-          <h3><span class="i18n-en">4.3 South China Meetup</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">We presented the project from chassis to read-out at the South China meetup and then sat through a mock review. The questions are the output, and they came in four groups: response time, pathway validation and virus concentration thresholds; model calculations, cost control and chassis replacement; where a device would sit, data coverage in a large space, and home self-testing; and the standing two, advantage over existing methods and biosafety approval.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Collected in one place, that is a rehearsal set for any yeast biosensor defence, which is what it was for us. They are questions, not answers. Human Practices page, South China Meetup section.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="hp-together" class="content-card">
-          
-          
-          <h3><span class="i18n-en">4.4 Together with iGEM</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">JLU-FBH (Jilin University) edited <em>Together with iGEM</em>, a handbook in which each team takes one common misconception about synthetic biology and explains why it misleads. Seventeen teams contributed; JLU-FBH collected, organised and laid it out. Our six entries are all on influenza A, two of them on the design itself: that environmental monitoring complements clinical testing rather than competing with it, and that engineered yeast is not a pathogen and can run safely inside a sealed device.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">It is a model for a multi-team publication that needs no laboratory, and the six entries are reusable public-communication text on influenza A. The full PDF is embedded on the Human Practices page.</span></p>
-
-              
-            
-              
-            <ul class="link-list link-list--section-end">
-              
-              <li><a href="../human-practices/integrated human-practices.html"><span class="i18n-en">The full exchange records — Integrated Human Practices page</span></a></li>
-              
             </ul>
 
-              
-            
-          </div>
-        </div>
-        
-        <div id="contribution-troubleshooting" class="content-card">
-          
-          
-          <h2><span class="i18n-en">5. Troubleshooting</span></h2>
-          <div class="content-body">
-            
+            <h3 id="hp-yeast-workshop" data-no-fold><span class="i18n-en">The workshop record: making experimental experience shareable</span></h3>
 
-            
-              
-            <p><span class="i18n-en">Six places where we stopped. Each gives what we saw, what we concluded at the time, and what we did next. Three of them are not good news. They are here because when a team hits the same phenomenon, knowing that someone else also stopped there is worth more than knowing everything went smoothly for us.</span></p>
+            <p><span class="i18n-en">The third contribution came out of an online yeast workshop that brought together CAU-China, NEFU-China, SZPU-China, Keystone, NKU and SHSID. The discussion covered transformation efficiency, gene knockout, selection stability, reporter leakage, membrane-protein expression and localisation, product formats and biosafety. Much of what made it useful was not the methods themselves but the troubleshooting attached to them: which failure modes were recognised, which controls distinguished them, and what remained unresolved.</span></p>
 
-              
-            
-          </div>
-        </div>
-        
-        <div id="ts-cloning" class="content-card">
-          
-          
-          <h3><span class="i18n-en">5.1 No colonies at six concentrations</span></h3>
-          <div class="content-body">
-            
+            <p><span class="i18n-en">Two lessons from that discussion are recorded in the workshop write-up. The first is a methodological caution: a mutation at a target site does not by itself establish that Cas9 cleavage caused it, so controls and independent genotype verification are needed before a knockout is claimed. The second is that methods shared by other teams should be preserved with their attribution — CAU-China's combination of fluorescently tagged receptors, FM4-64 membrane staining and confocal microscopy, and the alginate microsphere and freeze-dried colour-card formats discussed by Keystone and NKU, are recorded as theirs. None of the methods discussed originated with us; the value of the record lies in the exchange itself and in keeping each method attached to the team that described it.</span></p>
 
-            
-              
-            <p><span class="i18n-en">The one-step cloning product went into <i>Escherichia coli</i> at six plating concentrations. Not one target colony.</span></p>
+            <ul class="link-list">
 
-              
-            
-              
-            <p><span class="i18n-en">The assembly itself had worked, since the verification PCR gave the expected band, so the failure was in the transformation. The positive-control plate grew something we judged to be contaminant, which made the control worthless. We stopped repeating the transformation, skipped recovering the intermediate plasmid in cells, and used the reaction mixture directly as template for the next step.</span></p>
+              <li><a href="../human-practices/integrated human-practices.html#expert-yeast-online"><span class="i18n-en">Related resource: Human Practices — Online Yeast Workshop</span></a></li>
 
-              
-            
-              
-            <p><span class="i18n-en">The transferable part is the rule rather than the failure: once assembly is confirmed in vitro, stop trying to get the intermediate plasmid back out of cells.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="ts-donor" class="content-card">
-          
-          
-          <h3><span class="i18n-en">5.2 Mismatches after 500 bp</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Sequencing the linear donor showed heavy mismatching past 500 bp.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Repeated rounds of long-fragment PCR accumulate mutations. Compounding it, no second primer set had been designed for the 2289 bp fragment, so one primer pair gave 800 to 1000 bp of usable read and the rest of the fragment was never covered. The route was judged poor in feasibility and dropped for fusion PCR.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Two criteria come out of it: when to stop building a plasmid and go plasmid-free, and the reminder that a single primer pair will not verify a fragment of this length however clean the gel looks.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="ts-western" class="content-card">
-          
-          
-          <h3><span class="i18n-en">5.3 Western blot at 40 kD</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">We expected a little over 60 kD and measured near 40 kD. Not resolved at the time, recorded as it happened. Later batches moved the band nearer 60 kD, with a lot of non-specific signal still in the lane.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">A weight shift on a yeast membrane protein has several causes and is common. Seeing that another team hit it and did not clear it on the first pass makes it less likely to be read as a successful expression result, and pushes the next check toward lysis and antibody before anything else. Protocol 18 on the Protocol page.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="ts-sst2" class="content-card">
-          
-          
-          <h3><span class="i18n-en">5.4 SST2: ten clones, no knockout</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">For SST2, clones S1 through S10 all produced a band. The knockout did not happen. The record is kept and the line was dropped.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Ten clean negatives are data. Anyone attempting the same target now knows it did not fall over here, which is worth knowing before a season goes into it, and it is why the Δfar1 strain in section 2.3 is described without an SST2 edit. The chassis module record holds this; the FAR1 half is Protocol 19.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="ts-immuno" class="content-card">
-          
-          
-          <h3><span class="i18n-en">5.5 Immunofluorescence showed nothing</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Samples 1 to 4 and the negative control all showed no clear fluorescence. Recorded as it stands.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Negative imaging results rarely get written down, which makes them look like operator error when they happen to you. Having one on record lets the next team compare instead of assume, and it is why section 1.1 pairs the blot with localisation rather than treating one as a proxy for the other. Protocol 17 on the Protocol page.</span></p>
-
-              
-            
-          </div>
-        </div>
-        
-        <div id="ts-ratio" class="content-card">
-          
-          
-          <h3><span class="i18n-en">5.6 A260/280 of 2.848 and 3.800</span></h3>
-          <div class="content-body">
-            
-
-            
-              
-            <p><span class="i18n-en">Some yeast plasmid batches gave A260/280 of 2.848 and 3.800. Pure DNA sits near 1.8, so anything above 2.0 does not mean much. Another batch gave 1.289, low enough to suggest protein carryover. The source record notes the values without interpreting them.</span></p>
-
-              
-            
-              
-            <p><span class="i18n-en">Read the ratio before trusting the yield. Two batches failing in opposite directions under one protocol says the variance is in the execution rather than the recipe, which is a more useful conclusion than either number. Protocol 23 on the Protocol page.</span></p>
-
-              
-            
-              
-            <ul class="link-list link-list--section-end">
-              
-              <li><a href="../wet-lab/notebook.html"><span class="i18n-en">The four module notebooks behind these records — Notebook page</span></a></li>
-              
             </ul>
 
-              
-            
+            <h3 id="hp-sharing-lessons" data-no-fold><span class="i18n-en">What we learned about sharing knowledge</span></h3>
+
+            <p><span class="i18n-en">Three things became clear across these activities. Structured questions produce better exchanges than presentations, because they force specificity. Documented troubleshooting is more valuable than documented success, because most teams fail in similar ways. And a contribution is strongest when it preserves attribution, because that is what allows the next team to build on it rather than repeat it.</span></p>
+
           </div>
         </div>
         
       </div>
     </div>
 
-  </main>
-  <section id="footer" class="section-footer">
   
+
+  </main>
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -1294,21 +827,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   

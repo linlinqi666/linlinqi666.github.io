@@ -40,7 +40,7 @@
 
 - 声明式：`<img data-critical>` / `[data-critical-bg]`。
 - 命令式：JS 驱动、以 `background-image` 呈现的资源调用 `PageLoader.register()`。
-- **members 页（首批落地）**：桌面端登记默认成员（队长 Jie Xia）的大幅背景形象候选；另登记左侧条带首屏可见的前 6 位成员头像。移动端无大图，故只登记头像。见 `static/js/pages/members.js` 的 `init()`。
+- **members 页（2026-10-21 零关键图策略）**：整页**不登记任何关键图**（封面图也不再带 `data-critical`）——成员全屏背景大图与条带头像体积大、张数多，原设计挂在闸门上，导致慢网/冷缓存下「点击进入」被锁死（flask 站软截止 8s、硬上限 12s，期间点击无效）。现改为：遮罩只等 DOM 就绪+最短展示时长即收尾；成员大图与头像后台异步预取（`prefetchAllPhotos()` 串行 + 头像 `loading="lazy"`），背景未就位由米黄底+羽化层兜底，功能键全程可用。见 `static/js/pages/members.js` 与 `igem2026-flask/wiki/pages/team.html` 的 `init()`。
 
 ### 16.4 首页 GIF 开场交接（修复「卡没」）
 

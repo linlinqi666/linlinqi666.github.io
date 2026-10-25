@@ -1,4 +1,3 @@
-
 /**
  * nav-scroll-behavior.js
  * 智能导航栏滚动显示/隐藏功能
@@ -91,6 +90,7 @@
     scrollHandler: null,      // scroll 事件 handler 引用
     resizeHandler: null,      // resize 事件 handler 引用
     anchorLockActive: false,  // 站内锚点跳转锁是否生效
+    topShowSuppressed: false, // 首屏加载后抑制“到达顶部即显示”，直到用户真正滚动过
     anchorSettleTimer: null,  // 落位静默判定计时器
     anchorMaxTimer: null,     // 最长锁定兜底计时器
     anchorClickHandler: null  // 锚点点击委托 handler 引用
@@ -152,15 +152,22 @@
           return;
         }
 
+        // 首页（home-page）导航由 home-nav.js 的 hover 逻辑接管：不按滚动方向收起/弹出，
+        // 也不在顶部强制显示，避免向上滚动浏览内容时把固定顶栏弹出遮挡画面。
+        if (state.isHomePage) {
+          state.lastScrollY = currentScrollY;
+          return;
+        }
+
         const scrollDelta = currentScrollY - state.lastScrollY;
 
         if (Math.abs(scrollDelta) > 10) {
           log('log', 'scrollY:', Math.round(currentScrollY), 'delta:', Math.round(scrollDelta), 'visible:', state.isNavVisible);
         }
 
-        // 页面顶部强制显示
+        // 页面顶部强制显示（首屏加载后先抑制，避免一进页面就弹出导航）
         if (currentScrollY <= CONFIG.TOP_THRESHOLD) {
-          if (!state.isNavVisible) {
+          if (!state.topShowSuppressed && !state.isNavVisible) {
             showNav();
           }
           state.lastScrollY = currentScrollY;
@@ -169,6 +176,8 @@
 
         // 滚动距离超过阈值才触发切换
         if (Math.abs(scrollDelta) >= CONFIG.SCROLL_THRESHOLD) {
+          // 用户已真正滚动过 → 解除首屏抑制，恢复正常规则（含“到顶部显示”）
+          state.topShowSuppressed = false;
           if (scrollDelta > 0 && state.isNavVisible) {
             // 向下滚动且导航栏可见 → 隐藏
             hideNav();
@@ -258,6 +267,9 @@
 
     nav.classList.add(NAV_HIDDEN_CLASS);
     state.isNavVisible = false;
+    // 联动：导航栏收起后顶栏不再占位，让首页 scroll-snap 吸附点回到视口顶部，
+    // 避免 html.home-scroll-snap 的 scroll-padding-top 造成顶部 100px 空白。
+    document.documentElement.classList.add('nav-collapsed');
 
     log('log', '导航栏已隐藏 (scrollY:', Math.round(getScrollY()), ')');
   }
@@ -272,6 +284,8 @@
 
     nav.classList.remove(NAV_HIDDEN_CLASS);
     state.isNavVisible = true;
+    // 联动：导航栏显示后恢复顶部让位，首页 scroll-snap 吸附点让出顶栏高度。
+    document.documentElement.classList.remove('nav-collapsed');
 
     log('log', '导航栏已显示 (scrollY:', Math.round(getScrollY()), ')');
   }
@@ -308,6 +322,27 @@
     state.isWindowScroll = scrollInfo.isWindow;
     state.lastScrollY = getScrollY();
     state.initialized = true;
+
+    // 首页首屏：不自动弹出导航栏（保持收起），用户滚动后再按智能规则显示
+    const isHomePage = !!(document.body && document.body.classList.contains('home-page'));
+    state.isHomePage = isHomePage;
+    if (isHomePage) {
+      state.topShowSuppressed = true;
+      if (state.navElement) hideNav();
+    }
+
+    // 首帧之后再开启导航底边的「展开 / 收束」过渡。
+    // 首页初始 hideNav 必须是瞬时的——若过渡一开始就生效，线段会先演一遍
+    // 收束、导航才上滑，首屏会闪一下。先把隐藏态落定，再加过渡开关。
+    if (state.navElement) {
+      const nav = state.navElement;
+      const armEdge = function () { nav.classList.add('nav-edge-ready'); };
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(armEdge);
+      } else {
+        window.setTimeout(armEdge, 0);
+      }
+    }
 
     // 绑定滚动事件到实际滚动容器
     state.scrollHandler = handleScroll;

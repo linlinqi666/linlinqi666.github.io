@@ -1125,7 +1125,11 @@ body.home-page {
   .hp-sidebar {
     width: 100%;
     min-width: 100%;
-    position: static;
+    /* relative 而非 static：窄屏把侧栏放回常规流（不用 sticky），但仍要保留它的
+       定位包含块，否则 .yeast-decoration 会改按 .description-container 铺满整页；
+       top: auto 抵消桌面端 base 规则的 top: 120px。 */
+    position: relative;
+    top: auto;
     max-height: none;
   }
 
@@ -1194,12 +1198,12 @@ html.home-scroll-snap.nav-collapsed {
   scroll-padding-top: 0;
 }
 
-/* 首页底部 footer 作为最后一个吸附屏：footer 高度 > 100vh，
-   吸附到其顶部后可在 footer 内部继续自由滚动浏览，避免 mandatory 把它
-   拉回 final-cta 导致 footer 无法到达/浏览。 */
+/* 2026-10-20：footer 改为内容高度（气泡导航版，不再占满一屏）。
+   align:end 让页面滚到最底时把 footer 底边贴住视口底，保留「最后一块」
+   的吸附语义，又不强制锁定整屏；min-height 归零交给内容撑高。 */
 html.home-scroll-snap #footer.section-footer {
-  scroll-snap-align: start;
-  min-height: 100vh;
+  scroll-snap-align: end;
+  min-height: 0;
 }
 
 .yeast-screen {
@@ -1660,6 +1664,12 @@ html.home-scroll-snap #footer.section-footer {
 
 .echo-art {
   position: absolute;
+  /* 2026-10-19：图片契约给每张图补了 width/height 属性，浏览器会把 height
+     当作表现性提示（优先级低于作者样式）。本屏所有图层都是「定宽 + 等比高」，
+     不写 height:auto 时盒子会被属性高度锁死（1510×526 的字标在 863 宽下仍是
+     527 高），object-fit:contain 再把它上下留白——标语盒子因此下移、压进字标，
+     就是用户看到的「文字掉下来了」。这里统一交回等比缩放。 */
+  height: auto;
   object-fit: contain;
   pointer-events: none;
   user-select: none;
@@ -1735,8 +1745,14 @@ html.home-scroll-snap #footer.section-footer {
    坐标换算自设计稿 1080×607：字区 x95–560 / y300–385 → left 8.8% / top 49% / width 43%。 */
 .echo-art--tagline {
   left: 8.8%;
-  /* 2026-10-08：整体下移约 50px（top:49% 已含该偏移）；2026-10-09 误加的 100px 已撤销 */
-  top: 49%;
+  /* 2026-10-19：不再用固定的 49%。标语的纵向位置必须跟着字标走：
+       字标 top = 19% + 50px，高 = 44.9% × (526/1510) = 15.64vw
+     故 标语 top = 字标 top + 字标高 + 28px。
+     固定百分比在不同宽高比下会与字标叠压（1920×900 下重叠 80px），
+     这条耦合关系按设计稿 1080×607 的 20px 间隙折算；留到 28px 是为了
+     抵消两层 floatYeastSoft 各自 ±6px 的相位差（最坏情况仍 ≥ 14px）。
+     改其中一个就必须同步另一个，勿单独调。 */
+  top: calc(19% + 50px + 15.64vw + 28px);
   width: 43%;
   animation-delay: 0.45s;
 }
@@ -1868,10 +1884,25 @@ html.home-scroll-snap #footer.section-footer {
 /* 各屏字号（换算自原图）：标题按「行宽 = 原图宽」、图例按去色块后文本宽 */
 .art-stage--public-health .art--public-health-title { font-size: clamp(13px, 2.45vw, 52px); }
 .art-stage--project-intro .art--project-intro-title { font-size: clamp(18px, 6vw, 126px); }
-.art-stage--dbtl-cycle .art--dbtl-cycle-title       { font-size: clamp(12px, 3.6vw, 76px); }
 .art-stage--safety .art--safety-title               { font-size: clamp(13px, 4.1vw, 86px); }
 .art-stage--human-practices .art--human-practices-title            { font-size: clamp(10px, 2.5vw, 52px); }
-.art-stage--human-practices .art--human-practices-axis             { font-size: clamp(9px, 2.5vw, 52px); }
+/* 2026-10-21：删去横轴标题「Week start date」，同位置改为数据来源标注（WHO FluNet）。
+   普通小字，不用 art-title-text（那条是 nowrap 的大圆体标题）。 */
+.art-stage--human-practices .art--human-practices-source {
+  margin: 0;
+  font-family: 'Arial Rounded MT Bold', 'Baloo 2', 'Comic Sans MS', 'Segoe UI',
+    'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(11px, 1.3vw, 24px);
+  line-height: 1.35;
+  color: #5b9bd0;
+}
+.art-stage--human-practices .art--human-practices-source a {
+  color: #3c99de;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+.art-stage--human-practices .art--human-practices-source a:hover { color: #2b7cc4; }
 /* 2026-10-06d：三段图例字号统一（原 33/43/17px 视觉大小不一，用户要求一致），
    实测以 1.6vw 为基准；宽度由文本长度自然决定，高度（视觉大小）一致 */
 .art-stage--human-practices .art--human-practices-legend-subtypes,
@@ -1884,7 +1915,6 @@ html.home-scroll-snap #footer.section-footer {
 /* ================================================== */
 .art-stage--public-health .art--public-health-title,
 .art-stage--project-intro .art--project-intro-title,
-.art-stage--dbtl-cycle .art--dbtl-cycle-title,
 .art-stage--safety .art--safety-title,
 .art-stage--human-practices .art--human-practices-title { z-index: 3; }
 
@@ -1978,52 +2008,61 @@ html.home-scroll-snap #footer.section-footer {
    素材已按 alpha 紧裁 → 元素满宽贴底、高度走原比例即可；不再用「画布高分数定位」。
    同时退出浮动动画列表：贴底横条上下浮动会在底缘露出米黄底缝。 */
 .art-stage--dbtl-cycle .art--dbtl-cycle-wave { left: 0; bottom: 0; width: 100%; height: auto; animation: none; }
-.art-stage--dbtl-cycle .art--dbtl-cycle-title { left: 3.7%; top: 7.9%; width: 37.4%; z-index: 7; }  /* 标题（左上）；抬层避免被飞行的 HA 压住 */
 .art-stage--dbtl-cycle .art--dbtl-cycle-mascot { left: 1%; bottom: 0; width: 27%; z-index: 6; }  /* 笔记本吉祥物（贴底锚定）；压在飞行抗原之上＝抗原从它身后经过 */
 
 /* 原理说明（左列，吉祥物头顶上方）。措辞按「项目设计为」口径——讲设计机制，
    不讲已获得的实验结论。 */
 .art-stage--dbtl-cycle .art--dbtl-cycle-note {
   left: 3.7%;
-  top: 26%;
-  width: 30%;
+  top: 11.5%;
+  width: 35%;
   z-index: 6;
   font-family: 'Arial Rounded MT Bold', 'Baloo 2', 'Segoe UI', var(--font-sans, sans-serif);
   text-wrap: pretty;
 }
 .pager-note__lead {
-  margin: 0 0 0.55em;
-  font-size: clamp(0.92rem, 1.28vw, 1.32rem);
+  margin: 0 0 0.5em;
+  font-size: clamp(1.05rem, 1.55vw, 1.6rem);
   font-weight: 700;
   letter-spacing: 0.01em;
   color: #4d9fd8;
 }
+/* 正文较长（机制全链一句话），字号/行距压到在吉祥物头顶之上收尾：
+   1600×900 与 1366×768 下末行底缘都比吉祥物盒顶高出一行以内 */
 .pager-note__body {
   margin: 0;
-  font-size: clamp(0.8rem, 1.02vw, 1.06rem);
+  font-size: clamp(0.85rem, 1.12vw, 1.2rem);
   font-weight: 400;
-  line-height: 1.68;
+  line-height: 1.5;
   color: #5f7182;
 }
 
 /* ---------- dbtl-cycle：PAGER 原理滚动叙事（替换原流程示意图） ----------
-   三张素材（hM1Dq / MT1 / HA）由美术在同一张 1600×1600 画布上分层导出，
-   坐标天然对齐：HA 图层里抗原本体的中心 (694.5, 426)、MT1 图层里抑制药丸的中心
-   (1000, 444) 都落在这套画布坐标上。因此所有图层共用同一个方框（--pager-size）
-   与各自的 transform-origin，运动一律只写 translate/rotate/scale，
-   位移量由 pager-scroll-story.js 运行时量测舞台尺寸后换算。 */
+   四张素材（hM1Dq / MT1 / HA / DCZ）由美术在同一张 1600×1600 画布上分层导出，
+   坐标天然对齐：HA 图层里抗原本体的中心 (694.5, 426)、MT1 图层里抑制药丸的可见
+   中心 (998.5, 446.5)、DCZ 图层里配体小球的球心 (800, 800) 都落在这套画布坐标上。
+   因此所有图层共用同一个方框（--pager-size），transform-origin 一律取素材的可见
+   中心（rotate / scale 不会把图形甩离落点），位移量由 pager-scroll-story.js
+   运行时量测舞台尺寸后换算。 */
 .art-stage--dbtl-cycle {
-  --pager-size: min(94vh, 80vw);   /* 画布方框边长（可见受体约占其 54% 高、63% 宽） */
-  --pager-cx: 68%;                 /* 方框中心偏右：左列留给标题与原理说明 */
-  --pager-cy: 50%;
+  --pager-size: min(94vh, 80vw);   /* 画布方框边长（受体本体约占其 55% 高、80% 宽） */
+  --pager-cx: 68%;                 /* 方框中心偏右：左列留给原理说明 */
+  --pager-cy: 58%;                 /* 画布下移：美术把内容画在画布上半，方框居视口正中会让受体整体偏高 */
+  --pager-drop: 150px;             /* 整组图层（受体 / 配体 / 抗原 / 光环）再统一下移的像素量 */
+}
+
+/* 矮视口（笔记本 768/700 高）承受不住整 150px 的下移，按可用高度收一半，避免受体底缘出画 */
+@media (max-height: 820px) and (min-width: 769px) {
+  .art-stage--dbtl-cycle { --pager-drop: 60px; }
 }
 /* 轨道总高必须声明在本屏（不能声明在舞台子元素上：自定义属性只向下继承）。
-   叙事行程 = 该值 - 100vh ≈ 4 屏，比首版 260vh 放慢约 1.5 倍。 */
-#dbtl-cycle { --dbtl-track: 500vh; }
+   叙事行程 = 该值 - 100vh ≈ 4.6 屏，其中首尾各 8% 是缓冲段，
+   纯叙事行程 ≈ 3.8 屏，比首版的 260vh 放慢约 1.5 倍。 */
+#dbtl-cycle { --dbtl-track: 560vh; }
 .pager__layer {
   position: absolute;
   left: var(--pager-cx);
-  top: var(--pager-cy);
+  top: calc(var(--pager-cy) + var(--pager-drop, 0px));
   width: var(--pager-size);
   height: var(--pager-size);
   margin: calc(var(--pager-size) / -2) 0 0 calc(var(--pager-size) / -2);
@@ -2033,24 +2072,49 @@ html.home-scroll-snap #footer.section-footer {
   z-index: 3;
 }
 .pager__receptor { --ox: 50%;     --oy: 50%;     z-index: 2; }  /* hM1Dq 本体：以画布中心为基准 */
-.pager__mt1      { --ox: 62.38%;  --oy: 27.88%;  z-index: 4;    /* MT1 本体中心 (1000,444)/1600 */ }
-.pager__ha       { --ox: 43.41%;  --oy: 26.63%;                 /* HA 本体中心 (694.5,426)/1600 */ }
-.pager__ha--bind { z-index: 5; }                                 /* 结合到 Nb 的那一个压在最上 */
+.pager__mt1      { --ox: 62.41%;  --oy: 27.91%;  z-index: 4;    /* MT1 药丸可见中心 (998.5,446.5)/1600，只有一颗 */ }
+.pager__ha       { --ox: 43.41%;  --oy: 26.63%;  z-index: 3;    /* HA 本体中心 (694.5,426)/1600 */ }
+.pager__ha--bind { z-index: 5; }                                 /* 结合的那一个压在最上 */
+.pager__dcz      { --ox: 50%;     --oy: 50%;     z-index: 6; }   /* DCZ 小球：球心 (800,800)，左右各一个副本 */
 
-/* 静态终态（无 JS / reduced-motion / 窄屏矮屏）：HA 图层的天然位置就是 Nb 结合位
-   （抗原正好坐在 Nb 方框顶上），故无需位移；MT1 需要从素材原生倾角转回横置，
-   并落到受体顶面两颗 DCZ 小球之间的空档（画布 866,825，旋转后收 12%；
-   位移 = (866-1000, 825-444)/1600）。 */
-.pager__mt1 { transform: translate(-8.375%, 23.8125%) rotate(40deg) scale(0.88); }
-.pager__ha { opacity: 0; }        /* 环境中的其余抗原只服务于动画，静态版面不出现 */
-.pager__ha--bind { opacity: 1; }
+/* DCZ 落位瞬间的扩散光环：只有底色渐变，不承载信息，尺寸按画布比例给，
+   位置由 JS 与 DCZ 落点一起写（同一套 translate）。 */
+.pager__halo {
+  --halo-d: calc(var(--pager-size) * 0.09);
+  position: absolute;
+  left: var(--pager-cx);
+  top: calc(var(--pager-cy) + var(--pager-drop, 0px));
+  width: var(--halo-d);
+  height: var(--halo-d);
+  margin: calc(var(--halo-d) / -2) 0 0 calc(var(--halo-d) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(247, 184, 88, 0.62) 0%,
+    rgba(247, 184, 88, 0.26) 46%,
+    rgba(247, 184, 88, 0) 72%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 静态终态（无 JS / reduced-motion / 窄屏矮屏）：与动画终帧一致——
+   MT1 已被解除、飘离画面（不显示）；结合在 Nb 头顶的那颗抗原保持结合、留在原位；
+   两颗 DCZ 分别嵌在中央螺旋两侧的凹槽里（画布 736,477 与 928,477；位移 = (球心 - 800)/1600）。 */
+.pager__mt1 { transform: translate(-10.28125%, 0.34375%) rotate(-8deg) scale(0.88); opacity: 0; }
+.pager__ha { opacity: 0; }        /* 环境抗原只服务于叙事，静态版面不出现 */
+.pager__ha--bind { opacity: 1; transform: translate(-0.84375%, -23.125%); }
+.pager__dcz { transform: translate(-4%, -20.1875%) scale(0.806); }
+.pager__dcz[data-dcz="right"] { transform: translate(8%, -20.1875%) scale(0.806); }
 
 /* armed 隐藏态只由 JS 加类（pager-scroll-story.js），默认 CSS 不隐藏任何内容 */
 .js-pager-story .pager__receptor { opacity: 0; clip-path: inset(0 0 0 100%); }
 .js-pager-story .pager__mt1,
-.js-pager-story .pager__ha { opacity: 0; }
+.js-pager-story .pager__ha,
+.js-pager-story .pager__dcz,
+.js-pager-story .pager__halo { opacity: 0; }
 /* 只在轨道钉住期间提层：6 个 900×900 的合成层常驻会白占显存 */
-html.pager-story-pinned .pager__layer { will-change: transform, opacity; }
+html.pager-story-pinned .pager__layer,
+html.pager-story-pinned .pager__halo { will-change: transform, opacity; }
 
 /* 滚动轨道：把本屏拉高成 360vh 的轨道，舞台 sticky 钉在视口顶，滚动进度即动画进度
    （钉住期间页面位置锁死，视觉不随滚动漂移）。
@@ -2060,7 +2124,11 @@ html.pager-story-pinned .pager__layer { will-change: transform, opacity; }
 html.pager-story-track #dbtl-cycle {
   display: block;
   min-height: var(--dbtl-track, 360vh);
-  scroll-snap-align: none;
+  /* 轨道必须自己是吸附点：上一屏滚过来时才有「翻页进入」那一下；
+     轨道内部没有别的吸附点，所以进入后由脚本放开吸附（见 pager-scroll-story.js）。
+     scroll-snap-stop: always 让快速一甩也停在轨道顶，不会直接冲掉整段叙事。 */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 html.pager-story-track #dbtl-cycle .art-stage--dbtl-cycle {
   position: sticky;
@@ -2732,11 +2800,13 @@ html.home-scroll-snap.pager-story-pinned { scroll-snap-type: none; }
 .art-stage--human-practices .art--human-practices-title { left: 18.1%; top: 5.9%; width: 63.3%; }    /* 图表标题 */
 /* 折线图：原图卡片比例约 2.97，切片本身 3.98 —— 用 padding 撑高卡片、background 补白；
    圆角/描边/阴影由 CSS 补（切片是直角白底矩形） */
+/* 2026-10-21：图表整体拉高（宽 90%→94%、上沿 20%→19%、内边距 3%→3.2%），
+   让图表在屏里更饱满；删除原横轴标题定位规则 */
 .art-stage--human-practices .art--human-practices-chart {
-  left: 5%;
-  top: 20%;
-  width: 90%;
-  padding: 3% 1.2%;
+  left: 3%;
+  top: 18%;
+  width: 94%;
+  padding: 4.2% 1.2%;
   background: #fff;
   border-radius: 14px;
   border: 1px solid rgba(120, 160, 200, 0.35);
@@ -2745,7 +2815,8 @@ html.home-scroll-snap.pager-story-pinned { scroll-snap-type: none; }
 /* 右下角探出头的吉祥物（素材曾被误删，已从 backups/webp-original 取回；
    位置按原图右下角量取） */
 .art-stage--human-practices .art--human-practices-mascot { left: 77.6%; top: 70.4%; width: 15.9%; }
-.art-stage--human-practices .art--human-practices-axis { left: 40.9%; top: 76%; width: 20.4%; }      /* 横轴标题 Week start date */
+/* 2026-10-21：来源标注落在图表左侧空白处（原横轴标题位置已删） */
+.art-stage--human-practices .art--human-practices-source { left: 3.2%; top: 74.5%; width: 30%; }
 .art-stage--human-practices .art--human-practices-legend-subtypes { left: 7.4%; top: 91.4%; width: 15.4%; }  /* 图例：Influenza subtypes */
 .art-stage--human-practices .art--human-practices-legend-h1n1 { left: 29.3%; top: 91.4%; width: 15.9%; }     /* 图例：A(H1N1)pdm09 */
 .art-stage--human-practices .art--human-practices-legend-pos { left: 50%; top: 91.4%; width: 11.9%; }        /* 图例：Influenza percent positive */
@@ -2787,7 +2858,6 @@ html.home-scroll-snap.pager-story-pinned { scroll-snap-type: none; }
   /* dbtl-cycle：竖屏紧凑纵排 —— 标题左上 → PAGER 原理图居中偏上 → 波浪+笔记本吉祥物贴底。
      窄屏不做滚动轨道（snap 本就关闭），直接呈现静态终态；方框按视口收小并居中，
      避开左下角的笔记本吉祥物。 */
-  .art-stage--dbtl-cycle .art--dbtl-cycle-title   { left: 4%;  top: 4%;  width: 58%; }
   /* 说明块：竖屏改满宽横排，夹在标题与原理图之间（桌面那条 30% 窄栏会竖成一条）
      优先级要比上面的桌面规则高，故用 #dbtl-cycle 前缀 */
   #dbtl-cycle .art-stage--dbtl-cycle .art--dbtl-cycle-note { left: 4%; top: 11%; width: 88%; }
@@ -2823,8 +2893,8 @@ html.home-scroll-snap.pager-story-pinned { scroll-snap-type: none; }
 
   /* human-practices：竖屏紧凑纵排 —— 标题 → 图表满宽 → 横轴标题+三图例紧跟图表下方 → 吉祥物右中 → 波浪贴底 */
   .art-stage--human-practices .art--human-practices-title   { left: 8%;  top: 4%;  width: 84%; }
-  .art-stage--human-practices .art--human-practices-chart   { left: 3%;  top: 12%; width: 94%; }
-  .art-stage--human-practices .art--human-practices-axis    { left: 34%; top: 37%; width: 32%; }
+  .art-stage--human-practices .art--human-practices-chart   { left: 3%;  top: 10%; width: 94%; padding: 6% 2%; }
+  .art-stage--human-practices .art--human-practices-source  { left: 4%;  top: 60%; width: 56%; }
   .art-stage--human-practices .art--human-practices-legend-subtypes { left: 5%;  top: 43%; width: 20%; }
   .art-stage--human-practices .art--human-practices-legend-h1n1     { left: 30%; top: 43%; width: 21%; }
   .art-stage--human-practices .art--human-practices-legend-pos      { left: 56%; top: 43%; width: 16%; }
@@ -2961,192 +3031,259 @@ html.home-scroll-snap.pager-story-pinned { scroll-snap-type: none; }
    - 标题泡泡从 555px 收到 min(38%, 340px)（2.0 宽高比下 ≈170px 高）；
    - 颜色统一走本屏主体蓝色系（#1f6ea6 / #2f6f96 / #6b8aa3），去掉棕色系与
      渐变底；光晕（box-shadow）与 hover 上浮按用户要求移除，回归正常排版。 */
-/* 2026-10-17b：标题字图与副题胶囊按用户要求放大到原来的 1.5 倍
-   （340→510 / 640→960；矮视口档 280→420 / 520→780 同步放大 1.5 倍）。 */
+/* 2026-10-21（左标题 + 右侧四段定版）：Future Vision 字图降为左栏眉标，不再居中；
+   副题胶囊字图（From H1N1 to the Broad Spectrum Platform）随新文本撤下，样式一并删除。 */
 .fv-title-img {
   display: block;
-  margin: 0 auto clamp(2px, 0.7vh, 6px);
-  width: min(57%, 510px);
-  height: auto;
-}
-
-.fv-sub-img {
-  display: block;
-  margin: 0 auto clamp(6px, 1.3vh, 14px);
-  width: min(92%, 960px);
+  margin: 0 0 clamp(0.5rem, 1.6vh, 1rem);
+  /* 2026-10-21（用户反馈「标题图太小，起码要和下文正文一样宽」）：由视口驱动的
+     小眉标改为撑满左栏宽度——左栏就是内文列宽，字图与正文同宽。 */
+  width: 100%;
+  max-width: 100%;
   height: auto;
 }
 
 /* 2026-10-06f：本屏内容加宽到页宽约 92%（用户手绘稿要求整体铺开到版心两侧）；
-   2026-10-06h：正文改主题色——与 influenza-burden 屏同口径的主体蓝压暗版
-   （#2f6f96 / 次要 #4f86a8），不用 --color-echo-blue 纯色：米黄底上长段正文
-   对比度不足（≈2.6:1），压暗后 ≈4.9:1 可读。 */
-#future-vision .yeast-screen__inner { width: 94%; max-width: 1560px; }
-#future-vision .yeast-screen__content { max-width: min(92vw, 1500px); color: #2f6f96; }
+   2026-10-21（用户反馈「文字里的蓝色都换成上面标题那种蓝色」）：全屏文字统一到
+   Future Vision 字图的品牌蓝 #3c99de（原压暗版 #2f6f96 / #1f6ea6 / #4f86a8 全部撤换）。 */
+/* 版心整体略向上收：右下角常驻的「回到顶部」圆章钉在视口右下角，内容铺满后
+   会与最后一段的末行打架，故给内容盒下沿留一段空档（flex 居中下等于整体上移）。 */
+#future-vision .yeast-screen__inner { width: 94%; max-width: 1560px; padding-bottom: clamp(3.4rem, 11vh, 6.4rem); }
+#future-vision .yeast-screen__content { max-width: min(92vw, 1500px); color: #3c99de; }
 #future-vision .yeast-screen__content > p { margin-block: 0.8em; line-height: 1.8; }
 #future-vision .yeast-screen__list { margin-block: 1em; }
 #future-vision .yeast-screen__list li { margin-bottom: 0.5em; line-height: 1.7; }
-#future-vision .yeast-screen__list strong { color: #1f6ea6; }
-#future-vision .yeast-screen__placeholder { color: #4f86a8; }
+#future-vision .yeast-screen__list strong { color: #3c99de; }
+#future-vision .yeast-screen__placeholder { color: #3c99de; }
 
-/* ---------- future-vision 五块内容（2026-10-17b 用户定版） ----------
-   版式：纵向编排——核心愿景单独一列横贯在四块**上方**（不再夹在四块中间），
-        居中、粗体、字号明显大于分点；四个分点在其下排成 2×2 **等宽等高**网格
-        （grid 行用 1fr，两行等高，不再出现一长一短）。
+/* ---------- future-vision（2026-10-21 用户定版：左标题 + 右侧四段） ----------
+   版式：.fv-split 两栏——左 40% 竖排「Future Vision 眉标 → 主标题 → 导语 → 页底总结句」，
+        右 60% 四段纵向排列，段首细线 + 序号 01–04。
    去 chrome：无外框、无盒底、无圆角、无投影，纯文字排版。
-   出现顺序：1 核心愿景 → 2 左上 → 3 左下 → 4 右下 → 5 右上（transition-delay 实现），
-        五块整体入场约 8s（用户要求「维持在 8 秒左右，不要太快」）。
+   入场：左栏自上而下先行，右栏四段逐行推入（细线由左向右展开），总结句收尾；
+        只在首次进入时播一次（见 head 内联脚本的 fv-reveal-arm）。
    字号/间距沿用 vh 驱动 clamp：视口越矮收得越紧，整屏压在 100vh 内。 */
-#future-vision .fv-quadrants {
+#future-vision .fv-split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr 1fr;
-  grid-template-areas:
-    "core core"
-    "tl tr"
-    "ml mr";
+  grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+  column-gap: clamp(1.6rem, 4.5vw, 3.6rem);
   align-items: stretch;
-  column-gap: clamp(1.5rem, 6vw, 6rem);
-  row-gap: clamp(0.8rem, 3vh, 2rem);
-  max-width: min(86vw, 1240px);
-  margin: clamp(0.9rem, 2.4vh, 1.8rem) auto 0;
+  /* 版心铺到 92vw：原 84vw/1120px 在 1440 宽的视口里左右各空出 160px，
+     整屏像是缩在中间；配合下面的 min-height 与右栏 space-between 一起把内容撑满。 */
+  max-width: min(92vw, 1400px);
+  min-height: min(68vh, 660px);
+  margin-inline: auto;
   text-align: left;
 }
 
-#future-vision .fv-card {
-  width: 100%;
+/* 左栏：字图 → 主标题 → 导语 → 总结句自上而下排列，总结句紧跟导语 */
+#future-vision .fv-lead {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#future-vision .fv-headline {
+  margin: 0 0 clamp(0.5rem, 1.6vh, 0.95rem);
+  font-size: clamp(1.36rem, 3.28vh, 2.02rem);
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  color: #3c99de;
+  text-wrap: balance;
+}
+
+#future-vision .fv-deck {
+  margin: 0;
+  font-size: clamp(0.82rem, 1.74vh, 0.94rem);
+  line-height: 1.7;
+  color: #3c99de;
+}
+
+/* 页底总结句：细线上方收口，第二句加重，形成「今天 / 明天」的对句节奏。
+   2026-10-21（用户反馈「中间留白太多，下面的文字往上抬」）：不再靠 margin-top:auto
+   顶到栏底，改为紧接导语、只留一段固定间距。 */
+#future-vision .fv-closing {
+  /* 版心拉高后，左栏底部的总结句落到与右栏末段同一条基线上（不再浮在半空） */
+  margin-top: auto;
+  padding-top: clamp(0.5rem, 1.5vh, 0.9rem);
+  border-top: 1px solid rgba(60, 153, 222, 0.22);
+}
+#future-vision .fv-closing__line {
+  margin: 0;
+  font-size: clamp(0.84rem, 1.75vh, 0.96rem);
+  line-height: 1.58;
+  color: #3c99de;
+}
+#future-vision .fv-closing__line--strong {
+  margin-top: 0.25em;
+  font-weight: 700;
+  color: #3c99de;
+}
+
+#future-vision .fv-list {
+  min-width: 0;
+  margin: 0;
   padding: 0;
-  background: none;
-  border: 0;
-  border-radius: 0;
-  text-align: left;
+  list-style: none;
+  /* 四条纵向撑满栏高：段落之间的呼吸由 space-between 均分，不再堆在栏顶留一大片空底 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-#future-vision .fv-card--tl { grid-area: tl; }
-#future-vision .fv-card--tr { grid-area: tr; }
-#future-vision .fv-card--ml { grid-area: ml; }
-#future-vision .fv-card--mr { grid-area: mr; }
 
-#future-vision .fv-card__title {
-  margin: 0 0 clamp(0.25rem, 0.8vh, 0.45rem);
-  font-size: clamp(0.88rem, 1.9vh, 1.02rem);
+#future-vision .fv-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(0.65rem, 1.5vw, 1.1rem);
+  padding-block: clamp(0.5rem, 1.45vh, 0.92rem);
+}
+
+/* 段首细线：默认就是终态；首播时由左向右展开（见本文件末的入场段） */
+#future-vision .fv-item::before,
+#future-vision .fv-item:last-child::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(60, 153, 222, 0.26);
+  transform-origin: left center;
+}
+#future-vision .fv-item::before { top: 0; }
+#future-vision .fv-item:last-child::after { bottom: 0; }
+
+#future-vision .fv-item__num {
+  font-size: clamp(0.7rem, 1.42vh, 0.82rem);
+  font-weight: 700;
+  line-height: 1.95;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(60, 153, 222, 0.62);
+}
+
+#future-vision .fv-item__title {
+  margin: 0 0 clamp(0.18rem, 0.6vh, 0.38rem);
+  font-size: clamp(0.92rem, 1.9vh, 1.06rem);
   font-weight: 700;
   line-height: 1.35;
-  color: #1f6ea6;
-}
-#future-vision .fv-card__body {
-  margin: 0;
-  font-size: clamp(0.78rem, 1.6vh, 0.9rem);
-  line-height: 1.55;
-  color: #2f6f96;
-}
-#future-vision .fv-card__body small { color: #6b8aa3; font-size: 0.82em; }
-
-/* 核心愿景：置于四块上方、居中；粗体 + 放大字号，与分点形成层级差 */
-#future-vision .fv-core {
-  grid-area: core;
-  justify-self: center;
-  width: 100%;
-  max-width: min(78%, 860px);
-  padding: 0;
-  text-align: center;
-  background: none;
-  border: 0;
-  border-radius: 0;
-}
-#future-vision .fv-core__text {
-  margin: 0;
-  font-size: clamp(1rem, 2.2vh, 1.28rem);
-  line-height: 1.55;
-  font-weight: 700;
-  color: #1f6ea6;
+  color: #3c99de;
 }
 
-/* 入场：自下而上淡入，五块按 1→5 错峰，单块 1.1s、总跨度约 7.8s。
-   2026-10-17c：只在首次进入时播放一次（用户要求）——隐藏态挂在
-   html.fv-reveal-arm 下，该标记由 head 内联脚本按 localStorage 决定是否打上；
-   已播过 / 减少动效 / 无 JS 时没有该标记，五块默认可见（终态），不再等 8s。
-   延迟选择器必须与上面的 .reveal 规则同优先级并放在它之后，
+#future-vision .fv-item__body {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.64vh, 0.9rem);
+  line-height: 1.6;
+  color: #3c99de;
+}
+
+/* 入场：左栏（眉标 → 标题 → 导语）先起，右栏四段逐行推入、细线随之由左展开，
+   总结句收尾。单块 0.7s、错峰 0.14s，整屏约 1.8s。
+   只在首次进入时播放一次：隐藏态挂在 html.fv-reveal-arm 下，该标记由 head 内联
+   脚本按 localStorage 决定是否打上；已播过 / 减少动效 / 无 JS 时没有该标记，
+   内容默认可见（终态）。延迟选择器必须与上面的 .reveal 规则同优先级并放在它之后，
    否则会被 transition 简写里的 delay:0s 覆盖——实测过，错峰会整体失效。 */
-html.fv-reveal-arm #future-vision .fv-quadrants .reveal {
+html.fv-reveal-arm #future-vision .fv-split .reveal {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(14px);
   transition:
-    opacity 1.1s var(--ease-smooth),
-    transform 1.1s var(--ease-smooth);
+    opacity 0.7s var(--ease-smooth),
+    transform 0.7s var(--ease-smooth);
 }
-html.fv-reveal-arm #future-vision .fv-quadrants .reveal.reveal--visible {
+html.fv-reveal-arm #future-vision .fv-split .reveal.reveal--visible {
   opacity: 1;
   transform: none;
 }
-html.fv-reveal-arm #future-vision .fv-quadrants .fv-core    { transition-delay: 0s; }     /* 1 */
-html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--tl { transition-delay: 1.8s; }  /* 2 */
-html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--ml { transition-delay: 3.6s; }  /* 3 */
-html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--mr { transition-delay: 5.4s; }  /* 4 */
-html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--tr { transition-delay: 7.2s; }  /* 5 */
+
+html.fv-reveal-arm #future-vision .fv-item::before,
+html.fv-reveal-arm #future-vision .fv-item:last-child::after {
+  transform: scaleX(0);
+  transition: transform 0.8s var(--ease-smooth);
+}
+html.fv-reveal-arm #future-vision .fv-item.reveal--visible::before,
+html.fv-reveal-arm #future-vision .fv-item.reveal--visible:last-child::after {
+  transform: scaleX(1);
+}
+
+html.fv-reveal-arm #future-vision .fv-split .fv-title-img { transition-delay: 0s; }
+html.fv-reveal-arm #future-vision .fv-split .fv-headline  { transition-delay: 0.1s; }
+html.fv-reveal-arm #future-vision .fv-split .fv-deck      { transition-delay: 0.22s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(1) { transition-delay: 0.42s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(2) { transition-delay: 0.56s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(3) { transition-delay: 0.70s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(4) { transition-delay: 0.84s; }
+html.fv-reveal-arm #future-vision .fv-split .fv-closing   { transition-delay: 1.02s; }
+
+html.fv-reveal-arm #future-vision .fv-item:nth-child(1)::before { transition-delay: 0.48s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(2)::before { transition-delay: 0.62s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(3)::before { transition-delay: 0.76s; }
+html.fv-reveal-arm #future-vision .fv-item:nth-child(4)::before,
+html.fv-reveal-arm #future-vision .fv-item:nth-child(4)::after  { transition-delay: 0.90s; }
 
 @media (prefers-reduced-motion: reduce) {
-  html.fv-reveal-arm #future-vision .fv-quadrants .reveal,
-  html.fv-reveal-arm #future-vision .fv-quadrants .reveal.reveal--visible {
+  html.fv-reveal-arm #future-vision .fv-split .reveal,
+  html.fv-reveal-arm #future-vision .fv-split .reveal.reveal--visible {
     opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+  html.fv-reveal-arm #future-vision .fv-item::before,
+  html.fv-reveal-arm #future-vision .fv-item:last-child::after {
     transform: none;
     transition: none;
     transition-delay: 0s;
   }
 }
 
-@media (max-width: 900px) {
-  #future-vision .fv-quadrants {
-    max-width: 100%;
-    column-gap: clamp(1rem, 4vw, 2rem);
-    row-gap: clamp(0.9rem, 3vh, 1.6rem);
+/* 平板竖屏及以下：单列堆叠——左栏在上、四段在下。
+   收窄版心并补出左右余量，避免文字顶到视口边缘、行长过长。 */
+@media (max-width: 820px) {
+  #future-vision .fv-split {
+    grid-template-columns: 1fr;
+    row-gap: clamp(0.9rem, 2.4vh, 1.8rem);
+    max-width: min(100%, 620px);
+    min-height: 0;
   }
-  #future-vision .fv-core { max-width: 92%; }
+  #future-vision .yeast-screen__inner { padding-block: clamp(1.2rem, 5vh, 2.6rem); }
+  #future-vision .fv-closing { margin-top: clamp(0.85rem, 2.4vh, 1.6rem); }
 }
 
-@media (max-width: 600px) {
-  #future-vision .fv-quadrants {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "core"
-      "tl"
-      "tr"
-      "ml"
-      "mr";
-    row-gap: clamp(0.8rem, 2.6vh, 1.4rem);
+/* 769–820px 属于「单列但仍在吸附区」的窄带：单列内容常高过一屏，
+   mandatory 吸附会把底部弹回去，故这一窄带关掉吸附（≤768px 已由移动端规则关闭）。 */
+@media (min-width: 769px) and (max-width: 820px) {
+  html.home-scroll-snap {
+    scroll-snap-type: none;
   }
-  #future-vision .fv-core { max-width: 100%; }
 }
 
 @media (max-width: 768px) {
-  .fv-title-img { width: min(93%, 450px); }
-  .fv-sub-img   { width: 100%; }
+  .fv-title-img { width: 100%; }
   #future-vision .yeast-screen__inner { width: 100%; }
   #future-vision .yeast-screen__content { max-width: 100%; }
 }
 
-/* 2026-10-16：矮视口（≤820px 高，含 1366x768 / 1280x800 / 1024x768 笔记本小窗）
-   再收一档字号、行距与行间距，确保整屏内容压在 100vh 内——mandatory 吸附下
-   超高屏的底部内容滚不到、也 snap 不回去。 */
-@media (max-height: 820px) {
-  .fv-title-img { width: min(48%, 420px); }
-  .fv-sub-img { width: min(84%, 780px); }
-  #future-vision .fv-quadrants { row-gap: clamp(0.7rem, 2.8vh, 1.6rem); }
-  #future-vision .fv-card__title { font-size: clamp(0.84rem, 1.7vh, 0.98rem); line-height: 1.3; }
-  #future-vision .fv-card__body { font-size: clamp(0.74rem, 1.5vh, 0.86rem); line-height: 1.45; }
-  #future-vision .fv-core__text { font-size: clamp(0.95rem, 2vh, 1.18rem); line-height: 1.5; }
+/* 手机：单列时正文比桌面放大一档（12px 级太小），并给出版心左右留白 */
+@media (max-width: 600px) {
+  #future-vision .fv-split { padding-inline: 0.4rem; }
+  #future-vision .fv-headline { font-size: clamp(1.2rem, 3.2vh, 1.55rem); }
+  #future-vision .fv-deck { font-size: clamp(0.8rem, 1.7vh, 0.9rem); }
+  #future-vision .fv-item__title { font-size: clamp(0.88rem, 1.9vh, 1rem); }
+  #future-vision .fv-item__body { font-size: clamp(0.8rem, 1.65vh, 0.9rem); line-height: 1.55; }
+  #future-vision .fv-closing__line { font-size: clamp(0.8rem, 1.65vh, 0.9rem); }
 }
 
-/* 2026-10-17：取消「矮视口 + ≤1100px 折两列」的兜底——去 chrome 后单块文字高度
-   大幅下降，1024x768 实测三列仍在 768px 内（核心愿景不再被拉成整行一条）。 */
-
-/* 窄屏单列（≤600px）再收一档：标题放大 1.5 倍后，单列整屏高度会多出约 12px，
-   核心愿景字号再降一档（仍保持粗体与层级差），把整屏压回 100vh 内。 */
-@media (max-width: 600px) {
-  .fv-title-img { width: min(86%, 330px); }
-  .fv-sub-img { width: 100%; }
-  #future-vision .fv-card__title { font-size: clamp(0.84rem, 1.7vh, 0.95rem); }
-  #future-vision .fv-card__body { font-size: clamp(0.74rem, 1.45vh, 0.84rem); line-height: 1.42; }
-  #future-vision .fv-core__text { font-size: clamp(0.88rem, 1.9vh, 1rem); line-height: 1.45; }
+/* 矮视口（≤820px 高，含 1366x768 / 1280x800 / 1024x768 笔记本小窗）
+   再收一档字号、行距与行间距，确保整屏内容压在 100vh 内——mandatory 吸附下
+   超高屏的底部内容滚不到、也 snap 不回去。 */
+@media (max-height: 820px) and (min-width: 601px) {
+  #future-vision .fv-headline { font-size: clamp(1.26rem, 2.95vh, 1.84rem); }
+  #future-vision .fv-deck { font-size: clamp(0.8rem, 1.55vh, 0.9rem); line-height: 1.6; }
+  #future-vision .fv-item { padding-block: clamp(0.42rem, 1.2vh, 0.72rem); }
+  #future-vision .fv-item__title { font-size: clamp(0.88rem, 1.72vh, 0.98rem); }
+  #future-vision .fv-item__body { font-size: clamp(0.78rem, 1.5vh, 0.88rem); line-height: 1.54; }
+  #future-vision .fv-closing__line { font-size: clamp(0.78rem, 1.48vh, 0.88rem); }
 }
 /* ================================================== */
 /* passive-to-active 屏（2026-10-13 新增，位于 human-practices 与 statistics 之间）
@@ -3219,7 +3356,7 @@ html.fv-reveal-arm #future-vision .fv-quadrants .fv-card--tr { transition-delay:
   font-size: clamp(1.6rem, 2.8vw, 2.5rem);
   line-height: 1.3;
   font-weight: 700;
-  color: var(--color-brown-dark);
+  color: var(--color-echo-blue);
   margin-bottom: var(--spacing-lg);
 }
 

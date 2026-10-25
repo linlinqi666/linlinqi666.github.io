@@ -1,7 +1,5 @@
-/* 全站组件样式合集（2026-10-10 合并）
-   由 static/css/components/ 下 6 个小文件按 layout.html 原引用顺序保序拼接而成，
-   层叠顺序与合并前完全一致（已做等价性自检）。
-   原文件已删除；如需拆分回溯见 git 历史。 */
+/* 全站组件样式合集：由 static/css/components/ 下 6 个小文件按 layout.html 原引用顺序
+   保序拼接而成，层叠顺序与合并前完全一致；如需拆分回溯见 git 历史。 */
 
 /* ==== 合并自 static/css/components/page-progress-bar.css ==== */
 /* ================================================== */
@@ -110,7 +108,7 @@
   position: fixed !important;
   z-index: 100002 !important;
   top: 0.625rem !important;
-  font-size: 0.6875rem !important;
+  font-size: 0.9375rem !important;
   font-weight: 600 !important;
   font-family: Arial, sans-serif !important;
   color: #8B5A2B !important;
@@ -165,7 +163,7 @@
   }
 
   #page-progress-bar .ppb-label {
-    font-size: 0.625rem !important;
+    font-size: 0.9375rem !important;
     padding: 0.125rem 0.3125rem !important;
   }
 }
@@ -209,6 +207,14 @@
   visibility: visible;
   transform: translateY(0);
   transition: opacity 0.28s ease, visibility 0s, transform 0.28s ease;
+}
+
+/* 让位：内容铺满右下角的区块（[data-sticker-clear]）占据视口时收起按钮，避免压住正文 */
+.back-to-top--visible.back-to-top--yield {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s, transform 0.28s ease;
 }
 
 .back-to-top__ring,
@@ -284,7 +290,6 @@
 /* ==== 合并自 static/css/components/section-fold.css ==== */
 /* 通用正文小节收纳条
  * 配套 static/js/components/section-fold.js（全站加载）。
- * 2026-09-27 建立；2026-10-07 增加展开/收起动画。
  *
  * 运行时把 .content-card 内带 id 的 h3 及其后续内容包成 <details class="section-fold">，默认折叠。
  * 任何页面只要给正文小节 h3 加 id（<页面前缀>-<语义>），即自动获得收纳条 + 展开动画，无需写 JS/CSS。
@@ -380,20 +385,21 @@
 
 /* ==== 合并自 static/css/components/media-reveal.css ==== */
 /*
- * 图片到达动画 * 配套 static/js/components/media-reveal.js（全站加载）。 * * 规定写法（写对了就自动获得「加载前预留空间 + 到达淡入」，
- * 两站通用）： * <img src="…" alt="…" width="1200" height="800" loading="lazy" decoding="async"> * - width / height 写图片真实像素：浏览器据此在**加载前**就按比例预留位置，
- * 页面不会跳； * - loading="lazy" 交给浏览器按需加载，decoding="async" 避免解码阻塞主线程； * - 到达淡入由本组件的 JS 负责，HTML 侧不需要写任何 class。
- * * * 降级红线（不得回退）： * - 默认状态不隐藏任何图片：无 JS、reduced-motion、脚本 404 时图片照常直接显示； * - 隐藏类 .media-reveal--pending 只由 JS 在读不到「已解码」状态时添加；
- * * - 图片加载失败（error）也照常显示，不会因为等不到 load 而永久隐身。
+ * 图片到达：默认可见，不再有「解码完成才淡入」。
+ *
+ * 历史问题：.media-reveal--pending 曾把未解码的图片设为 opacity: 0，
+ * 请求一旦挂住/被取消，图片就永久透明（探索屏吉祥物「两个透明」即此路径）。
+ * 现在 JS 只清残留类、不添加任何隐藏类；这里保留一条反向兜底，
+ * 让旧缓存 HTML 里残留的 --pending 也照常显示。
+ *
+ * 空间预留仍由 <img> 的 width / height 真实像素负责，页面不会跳。
  */
 .media-reveal {
-  transition: opacity var(--duration-normal, 0.3s) var(--ease-smooth, ease);
+  transition: none;
 }
 
-/* 隐藏必须是瞬时的：否则从 opacity 1 淡到 0 会先闪一下要淡入的图 */
 .media-reveal--pending {
-  opacity: 0;
-  transition: none;
+  opacity: 1;
 }
 
 /* ==== 合并自 static/css/components/page-loader.css ==== */
@@ -475,7 +481,7 @@ html.page-loader-done .page-loader {
   animation: page-loader-halo 2.4s var(--pl-ease) infinite;
 }
 
-/* 帧容器默认可见 —— 原先等 frames-ready 才显示，弱网下整段加载期只剩 Loading 文字（无动画），现改为图未到时留空、到一帧显一帧；兜底三点仅在两帧全部失败时保留。 */
+/* 帧容器默认可见：图未到时留空、到一帧显一帧；兜底三点仅在两帧全部失败时保留。 */
 .page-loader__frames {
   position: relative;
   width: var(--pl-frame);
@@ -505,7 +511,7 @@ html.page-loader-done .page-loader {
 
 .page-loader__text {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--pl-line);
@@ -551,21 +557,11 @@ html.page-loader-done .page-loader {
   html.page-loader-done .page-loader { transition: none; }
 }
 
-/* ==== 合并自 static/css/components/scroll-progress-bar.css ==== */
-/* ================================================== */
-/* 滚动阅读进度条样式已禁用                                */
-/* 原因：右侧垂直蓝色进度条与首页章节速览面板视觉冲突          */
-/* 如需恢复，请参考历史版本或改用顶部极细进度条方案            */
-/* ================================================== */
 
-/* #scroll-progress-bar,
-#scroll-progress-fill {
-  display: none;
-} */
 
 /* ==== 合并自 static/css/components/page-mascot.css ==== */
 /* ================================================== */
-/* 内容页正文顶沿吉祥物装饰（2026-10-18 并入）：
+/* 内容页正文顶沿吉祥物装饰：
        用法：把 figure 写在第一个内容卡（.content-card）内部最前面，
        class 为 page-mascot page-mascot--<页面名>；图片走
        static.igem.wiki 的 icon/extension/<页面名>.avif。
@@ -633,13 +629,13 @@ html.page-loader-done .page-loader {
 }
 
 .page-mascot--engineering {
-  top: -36px;
+  top: -3px;
   right: 3.5rem;
 }
 
 .page-mascot--contribution {
   top: 81px;
-  right: 3rem;
+  right: 0;
 }
 
 .page-mascot--attributions {
@@ -673,7 +669,7 @@ html.page-loader-done .page-loader {
 }
 
 .page-mascot--notebook {
-  top: 32px;
+  top: 86px;
   right: 3rem;
 }
 
@@ -721,4 +717,69 @@ html.page-loader-done .page-loader {
   .parts-page:has(.page-mascot) .parts-hero {
     padding-right: 96px;
   }
+}
+
+/* ==================================================
+   官方模板占位页（Measurement / Inclusivity / Entrepreneurship）
+   这三页只用了 iGEM 模板自带的裸类名（.row / .col-* / .bd-callout），
+   全站没有任何规则命中它们：正文退回浏览器默认 16px、.row 满铺视口，
+   与内容页标准不一致。这里按内容页骨架补齐容器宽度与字号档。
+   ================================================== */
+body:not(.home-page) main .row {
+  max-width: 106rem;
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+body:not(.home-page) main .row [class*='col'] {
+  width: 100%;
+  max-width: none;
+}
+
+body:not(.home-page) main .row p {
+  font-size: var(--desc-font-size-lg);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+body:not(.home-page) main .row ul,
+body:not(.home-page) main .row ol {
+  font-size: var(--desc-font-size-lg);
+  line-height: 1.8;
+}
+
+body:not(.home-page) main .row h2 {
+  font-size: var(--desc-font-size-3xl);
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 2.25rem 0 0.9rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 2px solid var(--desc-color-primary-light, #D4A574);
+}
+
+body:not(.home-page) main .row h4 {
+  font-size: var(--desc-font-size-2xl);
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+}
+
+body:not(.home-page) main .row hr {
+  border: 0;
+  border-top: 1px solid var(--desc-border-color, rgba(139, 90, 43, 0.2));
+  margin: 0.75rem 0 1.25rem;
+}
+
+body:not(.home-page) main .bd-callout {
+  max-width: 106rem;
+  margin-inline: auto;
+  padding: var(--desc-spacing-2xl);
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--desc-border-color-light, #e3d8c2);
+  border-left: 3px solid var(--desc-color-primary-light, #D4A574);
+  border-radius: var(--desc-radius-md, 8px);
+}
+
+body:not(.home-page) main .mt-4 {
+  margin-top: var(--desc-spacing-2xl);
 }

@@ -20,8 +20,14 @@
   'use strict';
 
   var MIN_SHOW = 600;     // 最小展示时长（防闪烁），ms
-  var MAX_WAIT = 12000;   // 全局强制收尾兜底，ms
-  var IMG_TIMEOUT = 3000; // 单张关键图默认超时，ms
+  /* 上限一律压短：进页体验宁可「先看到、稍后补齐」，也不要长时间白屏。
+     6000 / 2500 是本轮分层方案给出的口径（见 docs/architecture/media-delivery.md）。 */
+  var MAX_WAIT = 6000;    // 全局强制收尾兜底，ms
+  var IMG_TIMEOUT = 5000; // 单张关键图（l0）超时，ms
+  /* 关键图软截止：到点先放行首屏，未结清的关键图继续在后台下载（Image 请求不会
+     因为遮罩收起而中断）。CDN 高峰拥堵时，等满 MAX_WAIT 的代价是白屏十几秒，
+     而用户真正会立刻看到的那一屏早就齐了——软截止就是为这个场景兜底。 */
+  var SOFT_WAIT = 2500;
   var EXIT_BUFFER = 420;  // 淡出后清理 done 类的延迟，ms
 
   var root = document.documentElement;
@@ -61,14 +67,20 @@
   /* ---- 2026-10-05：原 probeFrames（探测两帧就绪后隐藏兜底三点）随
      fallback 三点一并移除——两帧循环即默认，帧图仍由 arm.js 预取。 ---- */
 
-  /* ---- 声明式关键资源：<img data-critical> / [data-critical-bg] ---- */
+  /* ---- 声明式关键资源：<img data-tier="l0"> / <img data-critical> / [data-critical-bg] ----
+     分层方案把「进页必须可见」统一表达为 data-tier="l0"；data-critical 是旧写法，
+     继续兼容，避免存量页面漏等。 */
   function collectFromDom() {
     var groups = [];
     var i;
-    var imgs = document.querySelectorAll('img[data-critical]');
-    for (i = 0; i < imgs.length; i++) {
-      var u = imgs[i].currentSrc || imgs[i].getAttribute('src');
-      if (u) groups.push([u]);
+    var l0 = document.querySelectorAll('img[data-tier="l0"], img[data-critical]');
+    var used = [];
+    for (i = 0; i < l0.length; i++) {
+      var u = l0[i].currentSrc || l0[i].getAttribute('src');
+      if (u && used.indexOf(u) < 0) {
+        used.push(u);
+        groups.push([u]);
+      }
     }
     var bgs = document.querySelectorAll('[data-critical-bg]');
     for (i = 0; i < bgs.length; i++) {
@@ -111,10 +123,33 @@
         settle();
         return;
       }
+      loadOne(candidates[idx], false);
+    }
+
+    /* 失败重试一次：CDN 高峰时的 403/5xx 多为瞬时限流，带 cache-buster 再要一次
+       往往就拿到了；仍失败才换候选 / 放弃。只重试一次，不放大拥塞。 */
+    function loadOne(url, retried) {
       var img = new Image();
-      img.onload = settle;
-      img.onerror = function () { idx++; next(); };
-      img.src = candidates[idx];
+      /* load 只代表字节到齐，解码还没发生——用户看到的是空白。decode() 返回才算
+         「真的能画」，这是分层方案把就绪判据从 load 换成 decode 的原因。
+         不支持 decode / 跨域 reject 时按「字节已到」放行，绝不等死。 */
+      img.onload = function () {
+        if (typeof img.decode === 'function') {
+          img.decode().then(settle, settle);
+        } else {
+          settle();
+        }
+      };
+      img.onerror = function () {
+        if (settled) return;
+        if (!retried) {
+          loadOne(url + (url.indexOf('?') >= 0 ? '&' : '?') + 'r=1', true);
+          return;
+        }
+        idx++;
+        next();
+      };
+      img.src = url;
     }
 
     next();
@@ -142,12 +177,17 @@
     var elapsed = now() - state.start;
     if (elapsed >= MAX_WAIT) return finish('timeout');
 
-    var domReady = document.readyState !== 'loading';
+    var domReady = state.domReady || document.readyState !== 'loading';
     var scriptsSettled = allScriptsSettled();
     var minShow = prefersReducedMotion() ? 0 : MIN_SHOW;
 
     if (domReady && scriptsSettled && state.pending === 0 && elapsed >= minShow) {
       return finish('ready');
+    }
+
+    // 软截止：图还没齐也先放行（脚本必须已结清，否则动效会全废）
+    if (domReady && scriptsSettled && elapsed >= Math.max(minShow, SOFT_WAIT)) {
+      return finish('soft');
     }
 
     var wait = Math.min(
@@ -249,6 +289,18 @@
 
   function init() {
     overlay = document.getElementById('page-loader');
+    /* 页级就绪只看 DOMContentLoaded。document.readyState 要到 'complete' 才不是
+       'loading'，而 'complete' 会等所有 eager 图——只要有一张关键图挂住（CDN 限流、
+       连接被掐），整页就永远进不去（实测：四张吉祥物请求不返回 → goto 30s 超时）。
+       关键图该等多久由 SOFT_WAIT / IMG_TIMEOUT 单独管。 */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        state.domReady = true;
+        evaluate();
+      });
+    } else {
+      state.domReady = true;
+    }
     var groups = collectFromDom();
     for (var i = 0; i < groups.length; i++) loadGroup(groups[i]);
     evaluate();

@@ -9,21 +9,28 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/members.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/members.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/flask-sync/team.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 <!-- 成员页专属 head 片段：在 partials/head.njk 中由 front matter 的 headExtraPartial 引入，
      位置在 mobile.css 之后，确保组件样式能覆盖全局响应式规则。 -->
 
@@ -95,47 +102,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -144,52 +151,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -223,27 +238,22 @@
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
 </div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
-</div>
 
   <main class="">
     
-<!-- 页面唯一 h1：视觉上由条带标题 / 引导封面承担，这里为屏幕阅读器保留语义标题 -->
+<!-- 页面唯一 h1：视觉标题由条带/封面承担，这里为屏幕阅读器保留语义标题 -->
 <h1 class="members-sr-only">Team Members</h1>
 
-<!-- 全屏引导封面（默认 display:none；由 <head> 内同步 arm 脚本给 <html> 加
-     members-intro-armed 后才显示）。点击任意处 / Enter / Space / Esc 进入成员页。
-     无 JS 时不 arm，页面内容直接可见；脚本失败时由 arm 脚本内 8s 看门狗兜底。 -->
+<!-- 全屏引导封面（默认 display:none；由 head 内同步 arm 脚本给 <html> 加 members-intro-armed 后显示）。点击任意处 / Enter / Space / Esc 立即进入，否则 1.6s 后自动进入。 -->
 <div class="members-intro" id="members-intro" role="dialog" aria-modal="true" aria-label="Team introduction">
   <div class="members-intro__media" aria-hidden="true">
     <span class="members-intro__backdrop"></span>
-    <img class="members-intro__photo" id="members-intro-photo" data-critical loading="eager" fetchpriority="high"
+        <!-- 封面图走 media() 宏（macros.html 指向 teams/6373/wiki 基址）；封面是交互层，
+             不登记给加载遮罩，避免等图拖住进入；is-photo-ready 在 load/error/4s 超时后
+             揭开清晰图，未就绪时标题与按钮照常显示。 -->
+    <img class="members-intro__photo" id="members-intro-photo" loading="eager" fetchpriority="high"
       decoding="async" alt="SZPU-China 2026 team photo"
-      src="../static/image/any-icon/character/webp/total.webp"
-      srcset="../static/image/any-icon/character/webp/total-960.webp 960w, ../static/image/any-icon/character/webp/total.webp 1919w"
-      sizes="100vw">
+      src="../static/image/team/00-team-cover.webp">
     <span class="members-intro__shade"></span>
   </div>
   <div class="members-intro__panel">
@@ -252,12 +262,12 @@
     <button type="button" class="members-intro__enter" id="members-intro-enter">
       Enter the team<span aria-hidden="true">→</span>
     </button>
-    <p class="members-intro__hint">Click anywhere · or press Enter</p>
+    <p class="members-intro__hint">Entering automatically · click to skip</p>
   </div>
 </div>
 
 <div id="members-redesign-app" class="members-redesign-app">
-      <!-- 中间人物大背景图容器：由 JS updateBackground() 切换 -->
+            <!-- 中间人物大背景图容器：由 JS updateBackground() 切换 -->
       <div class="members-bg-layer" aria-hidden="true">
         <div class="bg-slide bg-slide-a is-active"></div>
         <div class="bg-slide bg-slide-b"></div>
@@ -283,7 +293,7 @@
           </div>
         </div>
       </section>
-      <!-- 右侧人物简介条带：与左侧条带等拉伸高度，支持向右拖动收起 -->
+            <!-- 右侧人物简介条带：与左侧条带等拉伸高度，支持向右拖动收起 -->
       <aside class="bio-rail" id="bio-rail" aria-label="Member info">
         <div class="rail-edge-filler" id="rail-edge-filler" aria-hidden="true"></div>
         <button class="rail-toggle" id="rail-toggle" aria-label="Show member info" aria-expanded="false">
@@ -300,124 +310,1455 @@
         </div>
       </aside>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+
+(function () {
+  'use strict';
+
+  if (!window.iGEMUtils) {
+    console.error('[MembersRedesign] 缺少依赖：请先加载 static/js/utils.js');
+    return;
+  }
+
+  const Utils = window.iGEMUtils;
+  const raf = Utils.safeRequestAnimationFrame;
+
+    /* * * iGEM Layout Strategy: Data-driven rendering keeps member list and detail panel * in sync, while grouping by primary role preserves the wet/dry/hp/designer narrative. * The selected member's real photo is promoted to a full-bleed background layer * with a cross-fade transition, so the story layer can stay frameless. */
+
+    /* * @typedef {{id:string,name:string,roles:string[],directions:string[],bio:string,photoPosition?:string,photoSize?:string,images?:Object}} Member */
+
+    /* * * Member data, role constants and grouping logic. */
+  const MemberData = (function () {
+  // 分类顺序即条带分组顺序：指导层（PI → Adviser）置顶，其后是执行层与视觉层。
+    const ROLE_ORDER = ['PI', 'Adviser', 'Wet Lab', 'Dry Lab', 'WIKI', 'HP', 'Art', 'Designer'];
+    const CLASSIFICATION_ROLES = new Set(ROLE_ORDER);
+    const ROLE_COLORS = {
+      'PI': '#991B1B',
+      'Adviser': '#92400E',
+      'Wet Lab': '#1E40AF',
+      'Dry Lab': '#065F46',
+      'WIKI': '#2563EB',
+      'HP': '#9A3412',
+      'Art': '#0E7490',
+      'Designer': '#7E22CE'
+    };
+
+        /*
+     * 成员数据：顺序 id → index → name → roles → directions → bio → photoPosition → photoSize；组内顺序即数组顺序。
+     * index 用于生成 CDN 文件名 （如 01-xj-photo.webp）。字段含义、标签规则与取景微调方法见 README §5.15。
+     */
+    const members = [
+      {
+        id: 'xj',
+        index: '01',
+        name: 'Jie Xia',
+        roles: ['Team Leader', 'Wet Lab'],
+        directions: ['Comprehensive learner', 'Innovative Explorers'],
+        bio: 'As team leader, I hope we can learn and grow through this competition. May we all enjoy the journey, build strong friendships, and achieve great results together!',
+        photoPosition: 'center 30%',
+        photoSize: '100% auto'
+      },
+      {
+        id: 'gyf',
+        index: '02',
+        name: 'Yifan Gao',
+        roles: ['Wet Lab'],
+        directions: ['Idealist'],
+        bio: 'From the School of Food and Drug Administration, Class of 2025 Pharmaceutical Engineering. INTP, I enjoy playing badminton, listening to music and playing the guitar. I’m a bit quiet and socially reserved. As a member of the wet lab team, I assist with experiments and support the team’s research.',
+        photoPosition: 'center 10%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'lcx',
+        index: '03',
+        name: 'Chengxi Luo',
+        roles: ['Wet Lab', 'Dry Lab', 'HP'],
+        directions: ['Bridge Builder', 'Precision Seeker'],
+        bio: 'As both wet lab performer and dry lab coordinator of the iGEM team, I build the logistical foundation that turns chaos into order, allowing creativity to flourish and our iGEM dream to become whole.',
+        photoPosition: '70% 10%',
+        photoSize: '70% auto'
+      },
+      {
+        id: 'sxz',
+        index: '04',
+        name: 'Xiaozhen Su',
+        roles: ['Wet Lab'],
+        directions: ['Wet Lab Performer', 'Optimistic Researcher'],
+        bio: 'As a wet lab member of the iGEM team, I use experiments to support creativity, strive for goals through collaboration, and witness passion and growth on the competition stage.',
+        photoPosition: '55% 10%',
+        photoSize: '50% auto'
+      },
+      {
+        id: 'zas',
+        index: '05',
+        name: 'Aishi Zeng',
+        roles: ['Wet Lab'],
+        directions: ['Lively', 'Humorous'],
+        bio: 'Joining iGEM as a wet lab member can feel a little stressful at times, but I truly believe that with our teachers’ guidance and everyone working together, we’re going to do amazing things. I’m ready to put in 100% effort and fight for our team’s success!',
+        photoPosition: '55% 10%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'zyl',
+        index: '06',
+        name: 'Yuelin Zheng',
+        roles: ['Wet Lab'],
+        directions: ['Experimental Explorer'],
+        bio: 'As a member of the wet lab team, I put my whole heart into every single experiment. I stand side by side with my teammates, grow together through the competition, and go all out to chase for great results!',
+        photoPosition: '55% 10%',
+        photoSize: '80% auto'
+      },
+      {
+        id: 'xq',
+        index: '07',
+        name: 'Qi Xu',
+        roles: ['Web Developer', 'WIKI'],
+        directions: ['Quiet one minute, wild the next'],
+        bio: 'As the web developer for our iGEM team, I hope we can work together to build vibrant, engaging web pages that we can all be proud of. Let’s give it our all!',
+        photoPosition: '45% 30%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'lyq',
+        index: '08',
+        name: 'Yuquan Luo',
+        roles: ['HP', 'Designer'],
+        directions: ['Upper Limb Supremacist', 'Doer'],
+        bio: 'I’m into fitness, but I totally skip leg day. I do some cardio occasionally, and I’m obsessed with rice noodles. Here’s to our team marching forward triumphantly — come on, let’s go!',
+        photoPosition: '60% 30%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'lr',
+        index: '09',
+        name: 'Rui Luo',
+        roles: ['Dry Lab', 'HP'],
+        directions: ['Science Communicator', 'Brand Designer'],
+        bio: 'I handle design, writing, and outreach. I aim to make our science clear and engaging. I’m committed to building a strong team brand and supporting every step toward our iGEM success.',
+        photoPosition: '60% 30%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'psq',
+        index: '10',
+        name: 'Siqi Peng',
+        roles: ['Art'],
+        directions: ['Visual Storyteller', 'Visual Director'],
+        bio: 'As a member of the design team of the iGEM group, I use visuals to convey the warmth of scientific research, and with creativity, I build communication bridges. In every layout and picture, I make synthetic biology visible, understandable, and memorable.',
+        photoPosition: '60% 30%',
+        photoSize: '90% auto'
+      },
+      {
+        id: 'zlz',
+        index: '11',
+        name: 'Lizhen Zhu',
+        roles: ['Adviser'],
+        directions: ['Scientific Guidance', 'Adviser'],
+        bio: 'Adhere to the Scientific Outlook on Development',
+        photoPosition: '100% 25%',
+        photoSize: '68% auto'
+      },
+      {
+        id: 'zjh',
+        index: '12',
+        name: 'Jianhua Zhou',
+        roles: ['Adviser'],
+        directions: ['Scientific Guidance', 'Adviser'],
+        bio: 'Keep Pushing',
+        photoPosition: '100% 15%',
+        photoSize: '84% auto'
+      },
+      // 根站要的是原始照片，故这里显式给出候选顺序： 原图优先、米黄版兜底。
+      {
+        id: 'tyj',
+        index: '14',
+        name: 'Yongjun Tang',
+        roles: ['Primary PI', 'PI'],
+        directions: [],
+        bio: 'iGEM is never just a competition. It’s a chance to turn curiosity into action, and action into impact. Take it.',
+        photoPosition: '100% 10%',
+        photoSize: '78% auto'
+      },
+      {
+        id: 'zlj',
+        index: '13',
+        name: 'Lijun Zhang',
+        roles: ['Secondary PI', 'PI'],
+        directions: [],
+        bio: 'iGEM is far more than a competition, it is a transformative journey on which students explore the boundless possibilities of synthetic biology.',
+        photoPosition: '55% 0%',
+        photoSize: '36% auto',
+        images: {
+          photo: {
+            candidates: [
+              'https://static.igem.wiki/teams/6373/wiki/team/13-zlj-photo-alt.webp',
+              'https://static.igem.wiki/teams/6373/wiki/team/13-zlj-photo.webp'
+            ]
+          }
+        }
+      },
+      {
+        id: 'lrx',
+        index: '15',
+        name: 'Ruoxi Li',
+        roles: ['WIKI'],
+        directions: [],
+        bio: 'Fortune favours the brave',
+        photoPosition: '60% 20%',
+        photoSize: '60% auto'
+      },
+      {
+        id: 'crq',
+        index: '16',
+        name: 'Rouqing Chen',
+        roles: ['WIKI'],
+        directions: [],
+        bio: 'I have long admired iGEM. After truly participate in it, I realized that it’s not just a contest, but a journey of refining ideas into reality. It reminds me that true synthetic biology is about perseverance.',
+        photoPosition: 'center 34%',
+        photoSize: '70% auto'
+      }
+    ];
+
+    const primaryRoleCache = new Map();
+    let cachedGroupedMembers = null;
+
+        /* * * Determine the first role from ROLE_ORDER that a member holds. * @param {Member} member * @returns {string} */
+    function getPrimaryRole(member) {
+      if (!member || !Array.isArray(member.roles)) return 'Wet Lab';
+      if (primaryRoleCache.has(member)) return primaryRoleCache.get(member);
+      for (const role of ROLE_ORDER) {
+        if (member.roles.includes(role)) {
+          primaryRoleCache.set(member, role);
+          return role;
+        }
+      }
+      const fallback = member.roles[0] || 'Wet Lab';
+      primaryRoleCache.set(member, fallback);
+      return fallback;
+    }
+
+        /* * * Group members by primary role according to ROLE_ORDER. * @returns {{role:string,members:Member[]}[]} */
+    function groupMembers() {
+      if (cachedGroupedMembers) return cachedGroupedMembers;
+      const groups = {};
+      ROLE_ORDER.forEach(role => { groups[role] = []; });
+      members.forEach(member => {
+        const primary = getPrimaryRole(member);
+        if (!groups[primary]) groups[primary] = [];
+        groups[primary].push(member);
+      });
+      cachedGroupedMembers = ROLE_ORDER.map(role => ({ role, members: groups[role] }));
+      return cachedGroupedMembers;
+    }
+
+    return {
+      ROLE_ORDER,
+      CLASSIFICATION_ROLES,
+      ROLE_COLORS,
+      members,
+      getPrimaryRole,
+      groupMembers
+    };
+  })();
+
+    /* * * Image path resolution with templates, brace/wildcard expansion and fallback. */
+  const ImageResolver = (function () {
+    const DEFAULT_PHOTO_POSITION = 'center top';
+    const DEFAULT_PHOTO_SIZE = 'cover';
+
+    // 基址 = 队伍实际上传目录 https://static.igem.wiki/teams/6373/wiki/team/
+    const IMAGE_PATH_TEMPLATES = {
+      photo: {
+        template: 'https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-photo.webp',
+        ext: 'webp',
+        candidates: ['https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-photo.webp'],
+        wildcardExtensions: ['webp', 'jpg', 'png']
+      },
+      avatar: {
+        template: 'https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-avatar.webp',
+        ext: 'webp',
+        candidates: ['https://static.igem.wiki/teams/6373/wiki/team/${index}-${id}-avatar.webp'],
+        wildcardExtensions: ['webp', 'jpg', 'png']
+      }
+    };
+
+    const IMAGE_PATH_MAPPINGS = [
+    // Example: { match: { roles: 'Adviser' }, templates: { photo: 'https://static.igem.wiki/teams/6373/wiki/team/adviser-${id}.webp' } }
+    ];
+
+    if (typeof window !== 'undefined') {
+      window.membersImageFallback = function (img) {
+        let candidates = [];
+        try {
+          candidates = JSON.parse(img.getAttribute('data-candidates') || '[]');
+        } catch (e) {
+          return;
+        }
+        if (!candidates.length) return;
+        img.src = candidates.shift();
+        img.setAttribute('data-candidates', JSON.stringify(candidates));
+      };
+    }
+
+    function sanitizeImageId(id) {
+      if (typeof id !== 'string') return '';
+      return id.replace(/[^a-zA-Z0-9_-]/g, '');
+    }
+
+    function sanitizePathSegment(value) {
+      if (typeof value !== 'string') return '';
+      return value.replace(/[^a-zA-Z0-9_\s-]/g, '').trim().replace(/\s+/g, '-');
+    }
+
+        /* * * Expand brace patterns recursively into the Cartesian product of options. * @param {string} template * @returns {string[]} */
+    function expandBracePattern(template) {
+      if (typeof template !== 'string') return [];
+      const match = template.match(/\{([^{}]+)\}/);
+      if (!match) return [template];
+      const prefix = template.slice(0, match.index);
+      const suffix = template.slice(match.index + match[0].length);
+      const results = [];
+      for (const option of match[1].split(',')) {
+        expandBracePattern(prefix + option.trim() + suffix).forEach(t => results.push(t));
+      }
+      return results;
+    }
+
+        /* * * Expand wildcard extension placeholders into concrete extensions. * @param {string} template * @param {string[]} extensions * @returns {string[]} */
+    function expandWildcardExtensions(template, extensions) {
+      if (typeof template !== 'string') return [];
+      if (!template.includes('*')) return [template];
+      const exts = Array.isArray(extensions) ? extensions : [];
+      if (exts.length === 0) return [template];
+      return exts.map(ext => template.replace(/\*/g, String(ext)));
+    }
+
+        /* * * Replace ${key} placeholders with values from vars. * @param {string} template * @param {Object} vars * @returns {string} */
+    function interpolateTemplate(template, vars) {
+      if (typeof template !== 'string') return '';
+      return template.replace(/\$\{([a-zA-Z0-9_]+)\}/g, (match, key) => {
+        return Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : '';
+      });
+    }
+
+        /* * * Check whether a member satisfies every condition in a mapping match object. * @param {Member} member * @param {Object} mapping * @returns {boolean} */
+    function matchesMapping(member, mapping) {
+      if (!member || !mapping || typeof mapping.match !== 'object' || mapping.match === null) return false;
+      const conditions = mapping.match;
+
+      if (conditions.roles !== undefined) {
+        const roles = Array.isArray(conditions.roles) ? conditions.roles : [conditions.roles];
+        const memberRoles = Array.isArray(member.roles) ? member.roles : [];
+        if (!roles.some(role => memberRoles.includes(role))) return false;
+      }
+
+      if (conditions.id !== undefined) {
+        const id = member.id;
+        if (typeof conditions.id === 'string') {
+          if (id !== conditions.id) return false;
+        } else if (conditions.id instanceof RegExp) {
+          if (!conditions.id.test(id)) return false;
+        } else if (Array.isArray(conditions.id)) {
+          if (!conditions.id.includes(id)) return false;
+        } else {
+          return false;
+        }
+      }
+
+      if (conditions.name !== undefined) {
+        const memberName = typeof member.name === 'string' ? member.name : '';
+        if (typeof conditions.name === 'string') {
+          if (memberName !== conditions.name) return false;
+        } else if (conditions.name instanceof RegExp) {
+          if (!conditions.name.test(memberName)) return false;
+        } else if (Array.isArray(conditions.name)) {
+          if (!conditions.name.includes(memberName)) return false;
+        } else {
+          return false;
+        }
+      }
+
+      if (conditions.flags !== undefined) {
+        const memberFlags = Array.isArray(member.flags) ? member.flags : [];
+        const flags = Array.isArray(conditions.flags) ? conditions.flags : [conditions.flags];
+        if (!flags.some(flag => memberFlags.includes(flag))) return false;
+      }
+
+      return true;
+    }
+
+        /* * * Resolve candidate image paths for a member and type in priority order. * @param {Member} member * @param {string} [type] * @returns {string[]} */
+    function resolveImageCandidates(member, type) {
+      const safeType = typeof type === 'string' ? type : 'photo';
+      const config = IMAGE_PATH_TEMPLATES[safeType] || IMAGE_PATH_TEMPLATES.photo;
+
+      const vars = {
+        id: sanitizeImageId(member && member.id),
+        index: sanitizeImageId(member && member.index),
+        type: safeType,
+        ext: config.ext || 'jpg',
+        primaryRole: sanitizePathSegment(MemberData.getPrimaryRole(member))
+      };
+
+      if (!vars.id) return [];
+
+      if (member && typeof member.images === 'object' && member.images !== null) {
+        const override = member.images[safeType];
+        if (typeof override === 'string' && override.length > 0) {
+          return [override];
+        }
+        if (override && typeof override === 'object' && Array.isArray(override.candidates) && override.candidates.length > 0) {
+          const perMemberCandidates = [];
+          for (const tmpl of override.candidates) {
+            const interpolated = interpolateTemplate(tmpl, vars);
+            expandBracePattern(interpolated).forEach(braced => {
+              expandWildcardExtensions(braced, config.wildcardExtensions).forEach(t => {
+                if (t) perMemberCandidates.push(t);
+              });
+            });
+          }
+          return perMemberCandidates;
+        }
+      }
+
+      let mappingTemplate = null;
+      for (const mapping of IMAGE_PATH_MAPPINGS) {
+        if (matchesMapping(member, mapping) && mapping.templates && typeof mapping.templates === 'object') {
+          const template = mapping.templates[safeType];
+          if (typeof template === 'string' && template.length > 0) {
+            mappingTemplate = template;
+            break;
+          }
+        }
+      }
+
+      const baseTemplates = [];
+      if (mappingTemplate) {
+        baseTemplates.push(mappingTemplate);
+      } else if (Array.isArray(config.candidates) && config.candidates.length > 0) {
+        baseTemplates.push(...config.candidates);
+      } else {
+        baseTemplates.push(config.template);
+      }
+
+      const candidates = [];
+      for (const tmpl of baseTemplates) {
+        const interpolated = interpolateTemplate(tmpl, vars);
+        expandBracePattern(interpolated).forEach(braced => {
+          expandWildcardExtensions(braced, config.wildcardExtensions).forEach(t => {
+            if (t) candidates.push(t);
+          });
+        });
+      }
+
+      return candidates;
+    }
+
+        /* * * Return the first candidate path or an empty string. * @param {Member} member * @param {string} [type] * @returns {string} */
+    function resolveImagePath(member, type) {
+      const candidates = resolveImageCandidates(member, type);
+      return candidates.length > 0 ? candidates[0] : '';
+    }
+
+        /* * * @param {string} id * @returns {string} */
+    function realPhotoPath(id) {
+      return resolveImagePath({ id }, 'photo');
+    }
+
+        /* * * @param {string} id * @returns {string} */
+    function cartoonAvatarPath(id) {
+      return resolveImagePath({ id }, 'avatar');
+    }
+
+    return {
+      DEFAULT_PHOTO_POSITION,
+      DEFAULT_PHOTO_SIZE,
+      resolveImageCandidates,
+      resolveImagePath,
+      realPhotoPath,
+      cartoonAvatarPath
+    };
+  })();
+
+    /* * * Builds the grouped member strip DOM and caches strip elements. */
+  const Renderer = (function () {
+    let stripElements = [];
+
+        /* * * Escape a string for safe HTML insertion. * @param {string} text * @returns {string} */
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+        /* * * Build a single member strip element. * @param {Member} member * @param {string} primaryRole * @param {Function} onSelect * @returns {HTMLElement} */
+    function buildMemberStrip(member, primaryRole, onSelect) {
+      const strip = document.createElement('div');
+      strip.className = 'member-strip';
+      strip.dataset.id = member.id;
+      strip.dataset.role = primaryRole;
+      strip.setAttribute('role', 'button');
+      strip.setAttribute('tabindex', '0');
+      strip.setAttribute('aria-label', `View ${escapeHtml(member.name || '')}'s profile`);
+
+      const avatarCandidates = ImageResolver.resolveImageCandidates(member, 'avatar');
+      const avatarSrc = escapeHtml(avatarCandidates[0] || '');
+      const avatarFallback = avatarCandidates.length > 1
+        ? JSON.stringify(avatarCandidates.slice(1)).replace(/"/g, '&quot;')
+        : '[]';
+      const safeName = escapeHtml(member.name || '');
+      const avatarAttr = avatarSrc ? ' data-src="' + avatarSrc + '"' : '';
+
+      strip.innerHTML = `
+        <img class="strip-avatar"${avatarAttr} alt="${safeName}" loading="lazy" data-candidates="${avatarFallback}" onerror="window.membersImageFallback(this)">
+        <span class="strip-name">${safeName}</span>
+        <span class="ribbon-tail" aria-hidden="true"></span>
+      `;
+
+      strip.addEventListener('click', () => onSelect(member.id));
+      strip.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect(member.id);
+        }
+      });
+
+      return strip;
+    }
+
+    /* * * 折叠组内的头像先不下载，展开时再补 src：避免一次拉齐全部成员头像。 * @param {HTMLElement} root */
+    function hydrateAvatars(root) {
+      if (!root) return;
+      root.querySelectorAll('img.strip-avatar[data-src]').forEach((img) => {
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+      });
+    }
+
+    /* * * Render grouped members into the container using DocumentFragments. * @param {HTMLElement} container * @param {Function} onSelect */
+    function renderGroups(container, onSelect) {
+      const groups = MemberData.groupMembers();
+      container.innerHTML = '';
+      const groupsFragment = document.createDocumentFragment();
+      const strips = [];
+
+      groups.forEach((group, groupIndex) => {
+        if (group.members.length === 0) return;
+
+        const groupEl = document.createElement('div');
+        groupEl.className = 'strip-group';
+        groupEl.dataset.role = group.role;
+        if (groupIndex === 0) groupEl.classList.add('is-expanded');
+
+        const header = document.createElement('button');
+        header.className = 'group-header';
+        header.setAttribute('aria-expanded', groupIndex === 0 ? 'true' : 'false');
+        header.innerHTML = `
+          <span class="group-title">
+            <span class="group-indicator" data-role="${group.role}" aria-hidden="true"></span>
+            ${group.role}
+            <span class="group-count">${group.members.length}</span>
+          </span>
+        `;
+        header.addEventListener('click', () => {
+          const isExpanded = groupEl.classList.toggle('is-expanded');
+          header.setAttribute('aria-expanded', String(isExpanded));
+          if (isExpanded) hydrateAvatars(groupEl);
+        });
+
+        const membersEl = document.createElement('div');
+        membersEl.className = 'group-members';
+        const membersFragment = document.createDocumentFragment();
+
+        group.members.forEach(member => {
+          const strip = buildMemberStrip(member, group.role, onSelect);
+          membersFragment.appendChild(strip);
+          strips.push(strip);
+        });
+
+        membersEl.appendChild(membersFragment);
+        groupEl.appendChild(header);
+        groupEl.appendChild(membersEl);
+        groupsFragment.appendChild(groupEl);
+      });
+
+      container.appendChild(groupsFragment);
+      hydrateAvatars(container.querySelector('.strip-group.is-expanded'));
+      stripElements = strips;
+    }
+
+        /* * * @returns {HTMLElement[]} */
+    function getStrips() {
+      return stripElements;
+    }
+
+    return { renderGroups, getStrips, escapeHtml };
+  })();
+
+    /* * * Dual-slide background cross-fade with generation guard. */
+  const BackgroundController = (function () {
+    let activeSlide = 'a';
+    let generation = 0;
+    let lastImg = null;
+    let lastSize = null;
+    let lastPosition = null;
+    let lastDomRefs = null;
+
+        /*
+     * 切换时同步命中，点击即时换图， 不再等 new Image() 下载完成才 applyLoaded（此前"点了没反应"的根因）； - pendingLoads：同一 URL 的在途请求共享，
+     * 预取与切换不会重复下载。
+     */
+    const photoCache = new Map();
+    const pendingLoads = new Map();
+
+        /* 把 "N% auto" 解析为照片相对滑层宽度的百分比 N；cover / 未识别 → null（视为满铺） */
+    function parsePhotoSize(str) {
+      if (!str) return null;
+      const m = /^\s*([\d.]+)%\s+auto\s*$/.exec(str);
+      if (m) return parseFloat(m[1]);
+      if (/cover/i.test(str)) return null;
+      return null;
+    }
+
+        /* 把 "X% Y%" / "center top" 等解析为 [X, Y] 百分比（关键字按浏览器规则映射） */
+    function parsePhotoPosition(str) {
+      const parts = (str || '').trim().split(/\s+/);
+      const map = { center: 50, top: 0, bottom: 100, left: 0, right: 100 };
+      const x = parts[0], y = parts[1] || 'center';
+      const xv = map[x] !== undefined ? map[x] : parseFloat(x);
+      const yv = map[y] !== undefined ? map[y] : parseFloat(y);
+      return [isNaN(xv) ? 50 : xv, isNaN(yv) ? 50 : yv];
+    }
+
+        /*
+     * 按照片实际渲染框写入 CSS 变量（.bg-mask 据此做米黄晕影羽化）。 纯 O(1) 计算 + 一次 CSS 变量写入，不触发强制同步布局，不参与动画。 缺省（无图 / 滑层尺寸为 0）
+     * 时退回满铺，不绘制晕影。
+     */
+    function setPhotoBox(img, size, position, domRefs) {
+      const layer = domRefs && domRefs.bgLayer;
+      if (!layer || !img || !img.naturalWidth) return;
+      const rect = layer.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+      if (!W || !H) return;
+
+      const N = parsePhotoSize(size);
+      let leftPct, rightPct, topPct, bottomPct, fadeX, fadeY;
+      if (N === null) {
+        leftPct = 0; rightPct = 100; topPct = 0; bottomPct = 100; fadeX = 0; fadeY = 0;
+      } else {
+        const Xr = parsePhotoPosition(position);
+        const w = W * N / 100;
+        const h = w * img.naturalHeight / img.naturalWidth;
+        const left = (W - w) * (Xr[0] / 100);
+        const top = (H - h) * (Xr[1] / 100);
+        leftPct = left / W * 100;
+        rightPct = (left + w) / W * 100;
+        topPct = top / H * 100;
+        bottomPct = (top + h) / H * 100;
+        const fadePx = Math.min(96, Math.max(24, w * 0.15));
+        fadeX = fadePx / W * 100;
+        fadeY = fadePx / H * 100;
+      }
+      const st = layer.style;
+      st.setProperty('--photo-left', leftPct + '%');
+      st.setProperty('--photo-right', rightPct + '%');
+      st.setProperty('--photo-top', topPct + '%');
+      st.setProperty('--photo-bottom', bottomPct + '%');
+      st.setProperty('--photo-fade-x', fadeX + '%');
+      st.setProperty('--photo-fade-y', fadeY + '%');
+    }
+
+        /* * * Preload and display the next background image. * @param {string[]} candidates * @param {string} [position] * @param {string} [size] * @param {Object} domRefs */
+    function updateBackgroundWithCandidates(candidates, position, size, domRefs) {
+      const bgLayer = domRefs.bgLayer;
+      const slideA = domRefs.slideA;
+      const slideB = domRefs.slideB;
+      if (!bgLayer || !slideA || !slideB) return;
+
+      const current = activeSlide === 'a' ? slideA : slideB;
+      const next = activeSlide === 'a' ? slideB : slideA;
+      const bgPosition = position || ImageResolver.DEFAULT_PHOTO_POSITION;
+      const bgSize = size || ImageResolver.DEFAULT_PHOTO_SIZE;
+      const currentGeneration = ++generation;
+
+      function applyLoaded(path, img) {
+        if (currentGeneration !== generation) return;
+        const safePath = path
+          ? encodeURI(path)
+            .replace(/'/g, '%27')
+            .replace(/\(/g, '%28')
+            .replace(/\)/g, '%29')
+          : '';
+        next.style.backgroundImage = safePath ? `url('${safePath}')` : '';
+        next.style.backgroundPosition = bgPosition;
+        next.style.backgroundSize = bgSize;
+        next.classList.add('is-active');
+        current.classList.remove('is-active');
+        activeSlide = activeSlide === 'a' ? 'b' : 'a';
+        if (img) {
+          lastImg = img;
+          lastSize = bgSize;
+          lastPosition = bgPosition;
+          lastDomRefs = domRefs;
+          setPhotoBox(img, bgSize, bgPosition, domRefs);
+        }
+      }
+
+            /* 未命中缓存才走网络加载；命中缓存时在下一 microtask 立即换图 */
+      if (!candidates.length) {
+        applyLoaded('');
+        return;
+      }
+      loadFirst(candidates).then(
+        (res) => { if (currentGeneration === generation) { applyLoaded(res.url, res.img); } },
+        () => { if (currentGeneration === generation) { applyLoaded(''); } }
+      );
+    }
+
+        /* * * 加载单张图片：缓存命中直接返回；同 URL 在途请求复用；失败 reject（不写缓存）。 * @param {string} url * @returns {Promise<{url:string,img:HTMLImageElement}>} */
+    function loadImage(url) {
+      if (photoCache.has(url)) {
+        return Promise.resolve({ url: url, img: photoCache.get(url) });
+      }
+      if (pendingLoads.has(url)) return pendingLoads.get(url);
+      const pending = new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          photoCache.set(url, img);
+          pendingLoads.delete(url);
+          resolve({ url: url, img: img });
+        };
+        img.onerror = () => {
+          pendingLoads.delete(url);
+          reject(new Error('image load failed: ' + url));
+        };
+        img.src = url;
+      });
+      pendingLoads.set(url, pending);
+      return pending;
+    }
+
+        /* * * 候选链依次尝试：前一个失败（403/404）时自动降级到下一个，全部失败则 reject。 * @param {string[]} candidates * @returns {Promise<{url:string,img:HTMLImageElement}>} */
+    function loadFirst(candidates) {
+      let chain = Promise.reject(new Error('no candidates'));
+      candidates.forEach((url) => {
+        chain = chain.catch(() => loadImage(url));
+      });
+      return chain;
+    }
+
+        /* * * 后台预取（不改变当前显示）：把候选链加载进 photoCache， * 供之后 updateBackground 命中秒切。失败静默（切换路径仍有完整降级）。 * @param {string[]} candidates * @returns {Promise<void>} */
+    function prefetch(candidates) {
+      if (!candidates || !candidates.length) return Promise.resolve();
+      return loadFirst(candidates).then(() => {}, () => {});
+    }
+
+        /* * * 预取队列中的下一位成员大图：切换命中缓存即时换图，又不一次性拉完全部成员的数 MB 图片。 * @param {string} currentId */
+    function prefetchNext(currentId) {
+      const list = MemberData.members;
+      const index = list.findIndex((member) => member.id === currentId);
+      const next = index >= 0 ? list[index + 1] : null;
+      if (!next) return;
+      prefetch(ImageResolver.resolveImageCandidates(next, 'photo'));
+    }
+
+        /* 视口变化时重新计算渲染框（照片百分比随滑层尺寸变化），仅 O(1) 计算 */
+    function refreshPhotoBox() {
+      if (lastImg) setPhotoBox(lastImg, lastSize, lastPosition, lastDomRefs);
+    }
+
+        /* * * Accept a single path or an array of candidate paths. * @param {string|string[]} pathOrCandidates * @param {string} [position] * @param {string} [size] * @param {Object} domRefs */
+    function updateBackground(pathOrCandidates, position, size, domRefs) {
+      const candidates = Array.isArray(pathOrCandidates)
+        ? pathOrCandidates
+        : (typeof pathOrCandidates === 'string' ? [pathOrCandidates] : []);
+      updateBackgroundWithCandidates(candidates, position, size, domRefs);
+    }
+
+    return { updateBackground, updateBackgroundWithCandidates, refreshPhotoBox, prefetch, prefetchNext };
+  })();
+
+    /* * * Pointer drag-to-dismiss for the bio rail. */
+  const RailDrag = (function () {
+    const DISTANCE_THRESHOLD = 100;
+    const VELOCITY_THRESHOLD = 0.6;
+
+    function supportsPointerEvents() {
+      return typeof window !== 'undefined' && 'PointerEvent' in window &&
+        typeof Element !== 'undefined' && 'setPointerCapture' in Element.prototype;
+    }
+
+        /* * * Bind drag interactions to a rail inner element. * @param {HTMLElement} rail * @param {HTMLElement} inner * @param {{setCollapsed:function(boolean)}} callbacks */
+    function bind(rail, inner, callbacks) {
+      if (!rail || !inner || !supportsPointerEvents()) return;
+
+      let startX = 0;
+      let isDragging = false;
+      let moveHistory = [];
+      let pendingCleanup = null;
+
+      const computeVelocity = () => {
+        const now = Date.now();
+        const recent = moveHistory.filter(p => now - p.t <= 100);
+        if (recent.length < 2) return 0;
+        const first = recent[0];
+        const last = recent[recent.length - 1];
+        const dt = last.t - first.t;
+        return dt > 0 ? (last.x - first.x) / dt : 0;
+      };
+
+      const onPointerDown = (e) => {
+        if (e.button !== 0) return;
+        if (!rail.classList.contains('is-visible')) return;
+        startX = e.clientX;
+        isDragging = true;
+        moveHistory = [{ x: startX, t: Date.now() }];
+        rail.classList.add('is-dragging');
+        inner.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      };
+
+      const onPointerMove = (e) => {
+        if (!isDragging) return;
+        const currentX = e.clientX;
+        if (moveHistory.length && currentX === moveHistory[moveHistory.length - 1].x) return;
+        const deltaX = currentX - startX;
+        moveHistory.push({ x: currentX, t: Date.now() });
+        if (moveHistory.length > 6) moveHistory.shift();
+        inner.style.transform = `translateX(${Math.max(0, deltaX)}px)`;
+      };
+
+      const onPointerUp = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        inner.releasePointerCapture(e.pointerId);
+
+        const deltaX = e.clientX - startX;
+        const velocity = computeVelocity();
+        const shouldClose = deltaX > DISTANCE_THRESHOLD || velocity > VELOCITY_THRESHOLD;
+
+        rail.classList.remove('is-dragging');
+        callbacks.setCollapsed(shouldClose);
+
+        const targetX = shouldClose ? inner.offsetWidth : 0;
+        if (pendingCleanup) {
+          inner.removeEventListener('transitionend', pendingCleanup);
+          pendingCleanup = null;
+        }
+        const cleanup = (evt) => {
+          if (evt && (evt.target !== inner || evt.propertyName !== 'transform')) return;
+          inner.style.transform = '';
+          inner.removeEventListener('transitionend', cleanup);
+          pendingCleanup = null;
+        };
+        pendingCleanup = cleanup;
+        inner.addEventListener('transitionend', cleanup);
+        inner.style.transform = `translateX(${targetX}px)`;
+      };
+
+      inner.addEventListener('pointerdown', onPointerDown);
+      inner.addEventListener('pointermove', onPointerMove);
+      inner.addEventListener('pointerup', onPointerUp);
+      inner.addEventListener('pointercancel', onPointerUp);
+
+      return function unbind() {
+        inner.removeEventListener('pointerdown', onPointerDown);
+        inner.removeEventListener('pointermove', onPointerMove);
+        inner.removeEventListener('pointerup', onPointerUp);
+        inner.removeEventListener('pointercancel', onPointerUp);
+      };
+    }
+
+    return { bind };
+  })();
+
+    /* * * Application bootstrap, event binding and selection state. */
+  const App = (function () {
+        /* 必须与 members.css 的堆叠断点(max-width:1099px)一致：> 值为桌面分栏，≤ 值为堆叠布局 */
+    const DESKTOP_BREAKPOINT = 1100;
+
+    const domRefs = {
+      app: null,
+      rail: null,
+      railInner: null,
+      railToggle: null,
+      filler: null,
+      bgLayer: null,
+      slideA: null,
+      slideB: null,
+      stripGroups: null,
+      stripToggle: null,
+      membersStrip: null,
+      detailCard: null,
+      detailName: null,
+      detailRole: null,
+      detailRoleTags: null,
+      detailDirectionTags: null,
+      detailBio: null,
+      railName: null,
+      railRole: null,
+      railRoleTags: null,
+      railDirectionTags: null,
+      railBio: null
+    };
+
+    let selectedId = null;
+    let prefetchTimer = null;
+    let isRailCollapsed = false;
+    let cachedScrollbarWidth = null;
+    let railResizeObserver = null;
+    let railFillerRafId = null;
+    let resizeRafId = null;
+    let lastWidth = window.innerWidth;
+
+    let resizeHandler = null;
+    let orientationchangeHandler = null;
+    let scrollHandler = null;
+    let stripToggleHandler = null;
+    let stripGroupsClickHandler = null;
+    let railToggleHandler = null;
+    let railDragUnbind = null;
+
+    function measureScrollbarWidth() {
+      if (cachedScrollbarWidth !== null) return cachedScrollbarWidth;
+      const outer = document.createElement('div');
+      outer.style.visibility = 'hidden';
+      outer.style.overflow = 'scroll';
+      outer.style.width = '100px';
+      outer.style.height = '100px';
+      outer.style.position = 'absolute';
+      outer.style.top = '-9999px';
+      document.body.appendChild(outer);
+
+      const inner = document.createElement('div');
+      inner.style.width = '100%';
+      inner.style.height = '100%';
+      outer.appendChild(inner);
+
+      const width = outer.offsetWidth - inner.offsetWidth;
+      document.body.removeChild(outer);
+      cachedScrollbarWidth = width;
+      return width;
+    }
+
+    function invalidateScrollbarWidth() {
+      cachedScrollbarWidth = null;
+    }
+
+        /*
+     * 仅把测量得到的滚动条宽度写入 CSS 变量；.rail-edge-filler 的纵向几何已由纯 CSS (top:0;bottom:0) 接管，不再需要 JS 回写 top/height，
+     * 避免展开动画中同步滞后 造成的右缘短暂脱离视口。
+     */
+    function updateRailEdgeFiller() {
+      const scrollbarWidth = measureScrollbarWidth();
+      document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+    }
+
+    function scheduleRailEdgeFillerUpdate() {
+      if (railFillerRafId) return;
+      railFillerRafId = raf(() => {
+        railFillerRafId = null;
+        updateRailEdgeFiller();
+      });
+    }
+
+    function observeRailContainer() {
+      if (railResizeObserver) {
+        railResizeObserver.disconnect();
+        railResizeObserver = null;
+      }
+      if (!domRefs.app || typeof ResizeObserver === 'undefined') return;
+      railResizeObserver = new ResizeObserver(() => scheduleRailEdgeFillerUpdate());
+      railResizeObserver.observe(domRefs.app);
+    }
+
+    function setRailCollapsed(collapsed, skipFillerUpdate) {
+      if (!domRefs.rail) return;
+      if (collapsed) domRefs.rail.classList.remove('is-visible');
+      else domRefs.rail.classList.add('is-visible');
+      if (domRefs.railToggle) domRefs.railToggle.setAttribute('aria-expanded', String(!collapsed));
+      isRailCollapsed = collapsed;
+      if (!skipFillerUpdate) updateRailEdgeFiller();
+    }
+
+    function openRail() {
+      setRailCollapsed(false);
+      if (domRefs.railInner) domRefs.railInner.style.transform = '';
+    }
+
+    function closeRail() {
+      setRailCollapsed(true);
+      if (domRefs.railInner) domRefs.railInner.style.transform = '';
+    }
+
+    /* 堆叠布局：展开动画由测量高度驱动（CSS 只留兜底上限），详情见 README §5.16 */
+    function setStripGroupsExpanded(expanded, instant) {
+      const strip = domRefs.membersStrip;
+      const groups = domRefs.stripGroups;
+      if (!strip || !groups) return;
+
+      if (expanded) {
+                /* 折叠态下子元素仍有布局，scrollHeight 即自然高度 */
+        groups.style.setProperty('--strip-groups-max', `${groups.scrollHeight}px`);
+        strip.classList.add('is-expanded');
+      } else if (instant) {
+                /* 选中成员后立刻收起列表：关闭过渡让布局同步落定，否则紧跟的 bringDetailIntoView 会按收起前的旧位置滚动，终点越过详情卡落到页脚。 */
+        const prevTransition = groups.style.transition;
+        groups.style.transition = 'none';
+        strip.classList.remove('is-expanded');
+        void groups.offsetHeight; /* 强制同步重排，max-height 立即归零 */
+        groups.style.transition = prevTransition;
+      } else {
+        strip.classList.remove('is-expanded');
+      }
+
+      if (domRefs.stripToggle) {
+        domRefs.stripToggle.setAttribute('aria-expanded', String(expanded));
+      }
+    }
+
+        /* * 视口变化或组内折叠后重新测量；切回桌面布局时清理自定义属性 */
+    function resyncStripGroupsHeight() {
+      const strip = domRefs.membersStrip;
+      const groups = domRefs.stripGroups;
+      if (!strip || !groups) return;
+
+      if (window.innerWidth > DESKTOP_BREAKPOINT) {
+        groups.style.removeProperty('--strip-groups-max');
+        strip.classList.remove('is-expanded');
+        if (domRefs.stripToggle) domRefs.stripToggle.setAttribute('aria-expanded', 'false');
+        return;
+      }
+
+      if (!strip.classList.contains('is-expanded')) return;
+      const current = parseFloat(groups.style.getPropertyValue('--strip-groups-max'));
+      const natural = groups.scrollHeight;
+      if (!isFinite(current) || Math.abs(natural - current) > 1) {
+        groups.style.setProperty('--strip-groups-max', `${natural}px`);
+      }
+    }
+
+        /*
+     * * 堆叠布局下详情卡若完全移出视口则带入，避免"点了没反应"的错觉。 注意：选中成员时会同步折叠列表，且浏览器会对被点击条带做"焦点滚动"， 二者都发生在同步阶段。这里用双 rAF 等布局稳定后，
+     * 再按"收起后"的真实 位置确定性滚动，避免平滑 scrollIntoView 与焦点滚动竞争、导致终点越过 详情卡落到页脚（此前移动端点击末尾成员会滚到底部导航栏）。
+     */
+    function bringDetailIntoView() {
+      const card = domRefs.detailCard;
+      if (!card || card.hidden) return;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          const rect = card.getBoundingClientRect();
+          const viewportH = window.innerHeight || 0;
+          if (rect.top >= 0 && rect.top < viewportH) return;
+          const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+          const top = Math.max(0, window.scrollY + rect.top - 12);
+          try {
+            window.scrollTo({ top: top, behavior: reduced ? 'auto' : 'smooth' });
+          } catch (e) {
+            window.scrollTo(0, top);
+          }
+        });
+      });
+    }
+
+        /* * * Select a member by id and update the UI. * @param {string} id */
+    function selectMember(id) {
+      selectedId = id;
+
+      Renderer.getStrips().forEach(strip => {
+        strip.classList.toggle('is-selected', strip.dataset.id === id);
+      });
+
+      const member = MemberData.members.find(m => m.id === id);
+      if (!member) {
+        closeRail();
+        return;
+      }
+
+      if (domRefs.detailCard) {
+        domRefs.detailCard.hidden = false;
+        domRefs.detailCard.classList.remove('is-animating');
+        void domRefs.detailCard.offsetWidth;
+        domRefs.detailCard.classList.add('is-animating');
+      }
+
+      if (domRefs.detailName) domRefs.detailName.textContent = member.name;
+      if (domRefs.detailRole) domRefs.detailRole.style.display = 'none';
+      if (domRefs.detailRoleTags) {
+        domRefs.detailRoleTags.innerHTML = member.roles
+          .filter(role => !MemberData.CLASSIFICATION_ROLES.has(role))
+          .map(role => `<span class="detail-tag">${Renderer.escapeHtml(role)}</span>`)
+          .join('');
+      }
+      if (domRefs.detailDirectionTags) {
+        domRefs.detailDirectionTags.innerHTML = member.directions
+          .map(dir => `<span class="detail-tag">${Renderer.escapeHtml(dir)}</span>`)
+          .join('');
+      }
+      if (domRefs.detailBio) domRefs.detailBio.innerHTML = `<p>${Renderer.escapeHtml(member.bio)}</p>`;
+
+      if (domRefs.railName) domRefs.railName.textContent = member.name;
+      if (domRefs.railRole) domRefs.railRole.style.display = 'none';
+      if (domRefs.railRoleTags) {
+        domRefs.railRoleTags.innerHTML = member.roles
+          .filter(role => !MemberData.CLASSIFICATION_ROLES.has(role))
+          .map(role => `<span class="rail-tag">${Renderer.escapeHtml(role)}</span>`)
+          .join('');
+      }
+      if (domRefs.railDirectionTags) {
+        domRefs.railDirectionTags.innerHTML = member.directions
+          .map(dir => `<span class="rail-tag">${Renderer.escapeHtml(dir)}</span>`)
+          .join('');
+      }
+      if (domRefs.railBio) domRefs.railBio.textContent = member.bio;
+
+            /* 桌面布局用右侧信息条承载简介；堆叠布局信息条收起，简介在详情卡内 */
+      const stacked = window.innerWidth <= DESKTOP_BREAKPOINT;
+      if (stacked) {
+        closeRail();
+      } else {
+        openRail();
+      }
+
+      BackgroundController.updateBackground(
+        ImageResolver.resolveImageCandidates(member, 'photo'),
+        member.photoPosition,
+        member.photoSize,
+        domRefs
+      );
+
+      /* 等当前大图落地后再预取下一位，避免和首屏图抢带宽 */
+      if (prefetchTimer) clearTimeout(prefetchTimer);
+      prefetchTimer = setTimeout(function () {
+        BackgroundController.prefetchNext(member.id);
+      }, 1200);
+
+      if (stacked) {
+        setStripGroupsExpanded(false, true);
+        bringDetailIntoView();
+      }
+    }
+
+    function init() {
+      destroy();
+
+      domRefs.app = document.getElementById('members-redesign-app');
+      domRefs.rail = document.getElementById('bio-rail');
+      domRefs.railInner = domRefs.rail ? domRefs.rail.querySelector('.bio-rail-inner') : null;
+      domRefs.railToggle = document.getElementById('rail-toggle');
+      domRefs.filler = document.getElementById('rail-edge-filler');
+
+      const bgLayer = document.querySelector('.members-bg-layer');
+      if (bgLayer) {
+        domRefs.bgLayer = bgLayer;
+        domRefs.slideA = bgLayer.querySelector('.bg-slide-a');
+        domRefs.slideB = bgLayer.querySelector('.bg-slide-b');
+      }
+
+      domRefs.stripGroups = document.getElementById('strip-groups');
+      domRefs.stripToggle = document.getElementById('strip-toggle');
+      domRefs.membersStrip = document.getElementById('members-strip');
+
+      domRefs.detailCard = document.getElementById('detail-card');
+      domRefs.detailName = document.getElementById('detail-name');
+      domRefs.detailRole = document.getElementById('detail-role');
+      domRefs.detailRoleTags = document.getElementById('detail-role-tags');
+      domRefs.detailDirectionTags = document.getElementById('detail-direction-tags');
+      domRefs.detailBio = document.getElementById('detail-bio');
+
+      domRefs.railName = document.getElementById('rail-name');
+      domRefs.railRole = document.getElementById('rail-role');
+      domRefs.railRoleTags = document.getElementById('rail-role-tags');
+      domRefs.railDirectionTags = document.getElementById('rail-direction-tags');
+      domRefs.railBio = document.getElementById('rail-bio');
+
+      if (domRefs.stripGroups) Renderer.renderGroups(domRefs.stripGroups, selectMember);
+
+      if (domRefs.stripToggle && domRefs.membersStrip) {
+        stripToggleHandler = function () {
+          const willExpand = !domRefs.membersStrip.classList.contains('is-expanded');
+          setStripGroupsExpanded(willExpand);
+        };
+        domRefs.stripToggle.addEventListener('click', stripToggleHandler);
+      }
+
+            /* 组内折叠会改变整条列表高度：展开态下重新测量，避免裁掉后面的组 */
+      if (domRefs.stripGroups) {
+        stripGroupsClickHandler = function (e) {
+          const target = e.target;
+          if (!target || typeof target.closest !== 'function') return;
+          if (!target.closest('.group-header')) return;
+          raf(function () { resyncStripGroupsHeight(); });
+        };
+        domRefs.stripGroups.addEventListener('click', stripGroupsClickHandler);
+      }
+
+      if (domRefs.railToggle && domRefs.rail) {
+        railToggleHandler = function () { openRail(); };
+        domRefs.railToggle.addEventListener('click', railToggleHandler);
+      }
+
+      if (domRefs.rail && domRefs.railInner) {
+        railDragUnbind = RailDrag.bind(domRefs.rail, domRefs.railInner, {
+          setCollapsed: function (collapsed) { setRailCollapsed(collapsed, true); }
+        });
+      }
+
+            /* 所有断点都默认选中首位成员：桌面端展示其背景与右侧信息条， 堆叠布局展示 hero 人像与详情卡（此前移动端不选中导致首屏无任何成员内容） */
+      if (MemberData.members.length > 0) {
+        selectMember(MemberData.members[0].id);
+      } else {
+        closeRail();
+      }
+
+      /* 下一位成员在切换后的空闲时间预取，切换时命中 photoCache 即时换图。 */
+      if (MemberData.members.length > 1) {
+        setTimeout(function () { BackgroundController.prefetchNext(MemberData.members[0].id); }, 1600);
+      }
+
+      /*
+       * 成员背景大图与条带头像不登记给加载遮罩：图片体积大、张数多，等图会把进入
+       * 成员页拖到下载完。遮罩只等 DOM 就绪与最短展示时长；成员大图按需预取，条带
+       * 头像在所属分组展开时才补 src；背景未就位时由米黄底+羽化层兜底，条带切换、
+       * 展开收起与简介栏全程可用。
+       */
+
+      function scheduleResizeUpdate() {
+        if (resizeRafId) return;
+        resizeRafId = raf(function () {
+          resizeRafId = null;
+          invalidateScrollbarWidth();
+          const width = window.innerWidth;
+                    /* 断点切换：桌面 ↔ 堆叠；同时重新测量条带展开高度 */
+          if (domRefs.rail) {
+            if (lastWidth > DESKTOP_BREAKPOINT && width <= DESKTOP_BREAKPOINT) {
+              closeRail();
+            } else if (lastWidth <= DESKTOP_BREAKPOINT && width > DESKTOP_BREAKPOINT && selectedId) {
+              openRail();
+            }
+          }
+          lastWidth = width;
+          resyncStripGroupsHeight();
+          scheduleRailEdgeFillerUpdate();
+          BackgroundController.refreshPhotoBox();
+        });
+      }
+
+      resizeHandler = scheduleResizeUpdate;
+      orientationchangeHandler = function () {
+        invalidateScrollbarWidth();
+        scheduleRailEdgeFillerUpdate();
+      };
+      scrollHandler = scheduleRailEdgeFillerUpdate;
+
+      window.addEventListener('resize', resizeHandler, { passive: true });
+      window.addEventListener('orientationchange', orientationchangeHandler);
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+
+      observeRailContainer();
+      updateRailEdgeFiller();
+    }
+
+        /* * * 清理所有监听器、Observer、RAF 与 DOM 引用。 */
+    function destroy() {
+      if (railResizeObserver) {
+        railResizeObserver.disconnect();
+        railResizeObserver = null;
+      }
+      if (railFillerRafId) {
+        Utils.safeCancelAnimationFrame(railFillerRafId);
+        railFillerRafId = null;
+      }
+      if (resizeRafId) {
+        Utils.safeCancelAnimationFrame(resizeRafId);
+        resizeRafId = null;
+      }
+
+      if (resizeHandler) {
+        window.removeEventListener('resize', resizeHandler);
+        resizeHandler = null;
+      }
+      if (orientationchangeHandler) {
+        window.removeEventListener('orientationchange', orientationchangeHandler);
+        orientationchangeHandler = null;
+      }
+      if (scrollHandler) {
+        window.removeEventListener('scroll', scrollHandler);
+        scrollHandler = null;
+      }
+
+      if (stripToggleHandler && domRefs.stripToggle) {
+        domRefs.stripToggle.removeEventListener('click', stripToggleHandler);
+        stripToggleHandler = null;
+      }
+      if (stripGroupsClickHandler && domRefs.stripGroups) {
+        domRefs.stripGroups.removeEventListener('click', stripGroupsClickHandler);
+        stripGroupsClickHandler = null;
+      }
+      if (railToggleHandler && domRefs.railToggle) {
+        domRefs.railToggle.removeEventListener('click', railToggleHandler);
+        railToggleHandler = null;
+      }
+
+      if (railDragUnbind) {
+        railDragUnbind();
+        railDragUnbind = null;
+      }
+
+      if (prefetchTimer) {
+        clearTimeout(prefetchTimer);
+        prefetchTimer = null;
+      }
+
+      Object.keys(domRefs).forEach(function (key) { domRefs[key] = null; });
+      selectedId = null;
+      isRailCollapsed = false;
+      cachedScrollbarWidth = null;
+      lastWidth = window.innerWidth;
+    }
+
+    return { init, selectMember, destroy };
+  })();
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', App.init);
+    } else {
+      App.init();
+    }
+  }
+})();
+
+});
+</script>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -440,21 +1781,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/pages/members.js" defer></script><script src="../static/js/components/members-intro.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/pages/members.js?v=1792945710" defer></script><script src="../static/js/components/members-intro.js?v=1792945710" defer></script>
   
 
   

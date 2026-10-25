@@ -27,7 +27,7 @@
   background: rgba(139, 90, 43, 0.05);
   border-radius: 4px;
   color: var(--desc-color-primary-dark, #6B4A22);
-  font-size: 1rem;
+  font-size: var(--desc-font-size-lg);
   font-weight: 600;
   line-height: 1.7;
   text-indent: 0;
@@ -42,7 +42,7 @@
   border-radius: 8px;
   background: rgba(139, 90, 43, 0.03);
   color: var(--desc-color-primary-darker, #4A3728);
-  font-size: 0.95rem;
+  font-size: var(--desc-font-size-lg);
   line-height: 1.75;
   text-indent: 0;
   text-align: left;
@@ -60,7 +60,7 @@
 .hardware-page ol.hardware-steps > li {
   margin-bottom: 0.6rem;
   line-height: 1.75;
-  font-size: 0.95rem;
+  font-size: var(--desc-font-size-lg);
   color: var(--desc-color-primary-darker, #4A3728);
 }
 
@@ -80,7 +80,7 @@
 .hardware-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.88rem;
+  font-size: 1rem;
   line-height: 1.65;
   color: var(--desc-color-primary-darker, #4A3728);
 }
@@ -89,7 +89,7 @@
   caption-side: top;
   padding: 0 0 0.5rem;
   color: #8a7656;
-  font-size: 0.82rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
   text-align: left;
 }
@@ -119,30 +119,6 @@
   background: rgba(139, 90, 43, 0.02);
 }
 
-/* 36 项物料明细：列多，给最小宽度让文字不挤成一列一个字；
-   52rem 在 1440 视口下正好落在卡片内，再窄则交给容器的横向滚动 */
-.hardware-table--bom {
-  min-width: 52rem;
-  font-size: 0.8rem;
-}
-
-.hardware-table--bom td:nth-child(1) {
-  width: 2.4rem;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.hardware-table--bom td:nth-child(5),
-.hardware-table--bom td:nth-child(6),
-.hardware-table--bom td:nth-child(7) {
-  white-space: nowrap;
-}
-
-.hardware-table tfoot .hardware-table__total td {
-  background: rgba(252, 231, 203, 0.85);
-  font-weight: 700;
-}
-
 /* ===== 硬件日志插图 ===== */
 .hardware-figure {
   margin: 1.25rem 0 1.5rem;
@@ -169,7 +145,7 @@
   max-width: 900px;
   margin: 0.5rem auto 0;
   color: #6b5b45;
-  font-size: 0.85rem;
+  font-size: var(--desc-font-size-sm);
   line-height: 1.65;
   text-align: center;
   text-indent: 0;
@@ -194,11 +170,11 @@
   .hardware-page .hardware-lede,
   .hardware-page .hardware-chain {
     padding: 0.55rem 0.7rem;
-    font-size: 0.92rem;
+    font-size: 0.9375rem;
   }
 
   .hardware-table {
-    font-size: 0.82rem;
+    font-size: 0.9375rem;
   }
 
   .hardware-table tbody th[scope='row'] {
@@ -210,13 +186,12 @@
   }
 
   .hardware-figure figcaption {
-    font-size: 0.8rem;
+    font-size: 0.9375rem;
     text-align: left;
   }
 }
 
-/* 正文链接：常态带下划线、蓝色，与 contribution / sustainability 页同一套
-   （2026-10-15 补：本页此前缺这条，链接回落到浏览器默认样式）。 */
+/* 正文链接：常态带下划线、蓝色，与 contribution / sustainability 页同一套。 */
 .hardware-page .content-card a {
   color: var(--color-blue-link, #4285F4);
   text-decoration: underline;
@@ -241,14 +216,8 @@
 }
 
 /* ===== 正文中的文献引用角标 [n] =====
-   上标样式、不换行，点击跳到文末对应条目。 */
-.hardware-cite {
-  font-size: 0.72em;
-  line-height: 1;
-  vertical-align: super;
-  white-space: nowrap;
-  padding: 0 0.05em;
-}
+   上标样式、不换行，点击跳到文末对应条目；类名统一为 .cite-ref
+   （navigation.css 全站公共类）。 */
 
 /* ===== 参考文献列表 ===== */
 .hardware-references {
@@ -262,7 +231,7 @@
 }
 
 .hardware-references li:target {
-  background: rgba(26, 115, 232, 0.08);
+  background: rgba(139, 90, 43, 0.08);
   border-radius: 4px;
 }
 

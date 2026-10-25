@@ -412,36 +412,93 @@
   }
 }
 
-/* -------------------- Notebook 容器下方资源条 -------------------- */
-/* protocol 站内精确跳转 + PDF 中识别出的网址（以文件内网页名呈现，不直接暴露 URL） */
+/* -------------------- Notebook 容器下方协议深链 -------------------- */
+/* 每个编号指向 protocol 页对应协议的收纳条（protocol.html#protocol-pNN） */
 .notebook-resources {
   margin-top: var(--log-space-lg);
   padding-top: var(--log-space-md);
   border-top: 1px dashed var(--log-brown-border);
+  font-size: var(--log-font-size-sm);
+  line-height: 1.8;
+}
+.notebook-resources__head {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
+  justify-content: space-between;
   gap: var(--log-space-xs) var(--log-space-md);
-  font-size: var(--log-font-size-sm);
-  line-height: 1.9;
 }
 .notebook-resources__label {
   color: var(--log-text-lighter);
   font-weight: 600;
 }
-.notebook-resources__protocol {
+.notebook-resources__all {
   font-weight: 600;
   color: var(--log-brown-dark);
-}
-.notebook-resources a {
-  color: var(--log-brown);
   text-decoration: none;
   border-bottom: 1px solid var(--log-brown-border);
   padding-bottom: 1px;
   transition: color var(--log-duration-fast) var(--log-ease-smooth),
               border-color var(--log-duration-fast) var(--log-ease-smooth);
 }
-.notebook-resources a:hover {
-  color: var(--log-brown-dark);
+.notebook-resources__all:hover,
+.notebook-resources__all:focus-visible {
+  color: var(--log-brown);
   border-color: var(--log-brown);
+}
+.notebook-protocols {
+  list-style: none;
+  margin: var(--log-space-sm) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--log-space-xs) var(--log-space-md);
+}
+/* navigation.css 的 .content-card ul>li(:before) 优先级 (0,1,2) 高于组件单类规则，
+   这里用页面类叠一层（与 parts.css 的写法一致）覆盖圆点、缩进与下边距 */
+.notebook-page .notebook-protocols > li {
+  position: static;
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  min-width: 0;
+  font-size: var(--log-font-size-sm);
+}
+.notebook-page .notebook-protocols > li::before {
+  content: none;
+}
+.notebook-protocols a {
+  display: flex;
+  align-items: baseline;
+  gap: var(--log-space-sm);
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--log-brown-border-light);
+  border-radius: var(--log-radius-sm);
+  background: var(--log-brown-lighter);
+  color: var(--log-text-light);
+  text-decoration: none;
+  transition: color var(--log-duration-fast) var(--log-ease-smooth),
+              border-color var(--log-duration-fast) var(--log-ease-smooth),
+              background var(--log-duration-fast) var(--log-ease-smooth);
+}
+.notebook-protocols a:hover,
+.notebook-protocols a:focus-visible {
+  color: var(--log-brown-dark);
+  border-color: var(--log-brown-border);
+  background: var(--log-bg-card);
+}
+.notebook-protocols__no {
+  flex: 0 0 auto;
+  font-weight: 700;
+  color: var(--log-brown);
+  font-variant-numeric: tabular-nums;
+}
+.notebook-protocols__title {
+  font-size: var(--log-font-size-xs);
+  line-height: 1.6;
+}
+@media (max-width: 480px) {
+  .notebook-protocols {
+    grid-template-columns: 1fr;
+  }
 }

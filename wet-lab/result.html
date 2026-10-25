@@ -9,21 +9,28 @@
 <meta name="author" content="SZPU-China 2026">
 <meta name="theme-color" content="#8B5A2B">
 <meta name="msapplication-TileColor" content="#8B5A2B">
+<!-- CDN 预连接：首页有 9 张关键图在 static.igem.wiki 上，冷连接时 DNS+TLS 就要
+     几百毫秒；预连接把这一轮握手提前到解析阶段，CDN 高峰时省下的正是这段。 -->
+<link rel="preconnect" href="https://static.igem.wiki" crossorigin>
+<link rel="dns-prefetch" href="https://static.igem.wiki">
 <link rel="dns-prefetch" href="../static/iconfont">
-<link rel="stylesheet" href="../static/iconfont/iconfont.css">
-<link rel="stylesheet" href="../static/css/base.css">
-<link rel="stylesheet" href="../static/css/navigation/navigation.css">
-<link rel="stylesheet" href="../static/css/result.css">
 
-<link rel="stylesheet" href="../static/css/mobile.css">
-<link rel="stylesheet" href="../static/css/components/page-loader.css">
-<link rel="stylesheet" href="../static/css/components/back-to-top.css">
-<link rel="stylesheet" href="../static/css/components/section-fold.css">
-<link rel="stylesheet" href="../static/css/components/media-reveal.css">
-<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=20261017b">
+<link rel="stylesheet" href="../static/iconfont/iconfont.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/base.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/navigation/navigation.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/result.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/contribution.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/flask-sync/results.css?v=1792945710">
+
+<link rel="stylesheet" href="../static/css/mobile.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-loader.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/back-to-top.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/section-fold.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/image-pipeline.css?v=1792945710">
+<link rel="stylesheet" href="../static/css/components/page-mascot.css?v=1792945710">
 <!-- 全站加载遮罩 arm：必须同步（非 defer）执行，先于 <body> 渲染，避免原生内容闪烁。
      置于 headExtraPartial 之前，使首页 GIF arm 能感知 page-loader-armed 并延后其看门狗。 -->
-<script src="../static/js/components/page-loader-arm.js"></script>
+<script src="../static/js/components/page-loader-arm.js?v=1792945710"></script>
 
 
 </head>
@@ -58,47 +65,47 @@
   <div class="mobile-menu" id="mobile-menu">
     <ul id="nav-menu">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -107,52 +114,60 @@
 
 <nav>
   <div class="container">
-    <div class="logo"></div>
+    <!-- 2026-10-19：顶部品牌区改为「字标 + 吉祥物」两图并置（成型图口径）。
+         两图都写真实像素，避免加载时导航高度跳动；装饰图 aria-hidden。
+         字标本身就是首页链接，故外层用 <a> 承载。 -->
+    <a class="logo" href="../index.html" aria-label="ECHO Yeast — home">
+      <img class="logo__wordmark" src="../static/image/nav/echo-yeast-wordmark.png"
+        alt="ECHO Yeast" width="472" height="120" fetchpriority="high" decoding="async">
+      <img class="logo__mascot" src="../static/image/nav/echo-mascot.png"
+        alt="" aria-hidden="true" width="158" height="160" decoding="async">
+    </a>
   </div>
   <div class="nav-items" id="nav-items">
     <ul id="nav-menu-desktop">
       <li>
-        <a href="../index.html"><span class="iconfont icon-home"></span><span>Home</span></a>
+        <a href="../index.html"><img class="nav-deco" src="../static/image/nav/nav-home.png" alt="" aria-hidden="true" width="140" height="135" decoding="async"><span>Home</span></a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-xiangmu"></span><span>Project</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-project.png" alt="" aria-hidden="true" width="140" height="139" decoding="async"><span>Project</span></a>
         <div class="dropdown-content">
-          <a href="../project/description.html"><span class="iconfont icon-jianjie"></span><span>Description</span></a>
-          <a href="../project/design.html"><span class="iconfont icon-sheji"></span><span>Design</span></a>
-          <a href="../project/engineering.html"><span class="iconfont icon-shezhichilun"></span><span>Engineering</span></a>
-          <a href="../project/contribution.html"><span class="iconfont icon-gongxian"></span><span>Contribution</span></a>
+          <a href="../project/description.html"><span>Description</span></a>
+          <a href="../project/design.html"><span>Design</span></a>
+          <a href="../project/engineering.html"><span>Engineering</span></a>
+          <a href="../project/contribution.html"><span>Contribution</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-tuandui"></span><span>Team</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-team.png" alt="" aria-hidden="true" width="140" height="116" decoding="async"><span>Team</span></a>
         <div class="dropdown-content">
-          <a href="../team/members.html"><span class="iconfont icon-tuanduichengyuan"></span><span>Members</span></a>
-          <a href="../team/attributions.html"><span class="iconfont icon-guishu"></span><span>Attributions</span></a>
+          <a href="../team/members.html"><span>Members</span></a>
+          <a href="../team/attributions.html"><span>Attributions</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-cplus"></span><span>Dry Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-dry-lab.png" alt="" aria-hidden="true" width="140" height="124" decoding="async"><span>Dry Lab</span></a>
         <div class="dropdown-content">
-          <a href="../dry-lab/model.html"><span class="iconfont icon-wumoxing"></span><span>Model</span></a>
-          <a href="../dry-lab/hardware.html"><span class="iconfont icon-yingjian"></span><span>Hardware</span></a>
+          <a href="../dry-lab/model.html"><span>Model</span></a>
+          <a href="../dry-lab/hardware.html"><span>Hardware</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shiyan-L"></span><span>Wet Lab</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-wet-lab.png" alt="" aria-hidden="true" width="140" height="130" decoding="async"><span>Wet Lab</span></a>
         <div class="dropdown-content">
-          <a href="../wet-lab/protocol.html"><span class="iconfont icon-shiyanjilu"></span><span>Protocol</span></a>
-          <a href="../wet-lab/result.html"><span class="iconfont icon-shiyanjieguo"></span><span>Results</span></a>
-          <a href="../wet-lab/parts.html"><span class="iconfont icon-jiyin"></span><span>Parts</span></a>
-          <a href="../wet-lab/safety.html"><span class="iconfont icon-anquan"></span><span>Safety</span></a>
-          <a href="../wet-lab/notebook.html"><span class="iconfont icon-rizhi"></span><span>Notebook</span></a>
+          <a href="../wet-lab/protocol.html"><span>Protocol</span></a>
+          <a href="../wet-lab/result.html"><span>Results</span></a>
+          <a href="../wet-lab/parts.html"><span>Parts</span></a>
+          <a href="../wet-lab/safety.html"><span>Safety</span></a>
+          <a href="../wet-lab/notebook.html"><span>Notebook</span></a>
         </div>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle"><span class="iconfont icon-shehuishijian"></span><span>Human Practices</span></a>
+        <a href="#" class="dropdown-toggle"><img class="nav-deco" src="../static/image/nav/nav-human-practices.png" alt="" aria-hidden="true" width="140" height="126" decoding="async"><span>Human Practices</span></a>
         <div class="dropdown-content">
-          <a href="../human-practices/integrated human-practices.html"><span class="iconfont icon-shehuishijian"></span><span>Integrated HP</span></a>
+          <a href="../human-practices/integrated human-practices.html"><span>Integrated HP</span></a>
 
-          <a href="../human-practices/sustainability.html"><svg class="nav-glyph" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M14.9 1.1C14.7 8.9 9.6 14.3 2.6 15.1 2.1 15.2 1.7 14.7 2 14.2 3.4 7 8.6 1.6 15.7 1.2c.4 0 .6.4.4.8-.1.4-.5.8-1.2 1.4"/></svg><span>Sustainability</span></a>
+          <a href="../human-practices/sustainability.html"><span>Sustainability</span></a>
         </div>
       </li>
     </ul>
@@ -186,16 +201,12 @@
     <div class="ppb-fill"><div class="ppb-glow"></div></div>
   </div>
 </div>
-<!-- 全站滚动阅读进度条 -->
-<div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true">
-  <div class="scroll-progress-fill" id="scroll-progress-fill"></div>
-</div>
 
   <main class="">
     
-<div class="description-container">
+<div class="description-container results-page">
 
-      <!-- 左侧导航栏 -->
+            <!-- 左侧导航栏 -->
       <aside class="description-sidebar">
         <div class="yeast-decoration">
           <div class="yeast-cell yeast-cell-1"></div>
@@ -263,13 +274,33 @@
                 <li class="level3"><a href="#results-signal-3">Western blot</a></li>
                 <li class="level3"><a href="#results-signal-4">TEV de-repression &amp; DCZ</a></li>
                 <li class="level3"><a href="#results-signal-5">HA antigen &amp; DCZ</a></li>
+                <li class="level3"><a href="#results-signal-6">Confocal localization</a></li>
               </ul>
             </li>
-
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-ste2" class="nav-main-link">Ste2-Gated Receptor</a>
+              </div>
+              <ul class="level2">
+                <li class="level3"><a href="#results-ste2-1">Gating construct &amp; colony PCR</a></li>
+                <li class="level3"><a href="#results-ste2-2">Western blot</a></li>
+                <li class="level3"><a href="#results-ste2-3">Functional validation</a></li>
+              </ul>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-discussion" class="nav-main-link">Discussion</a>
+              </div>
+            </li>
+<li class="level1">
+              <div class="nav-link-wrapper">
+                <a href="#results-references" class="nav-main-link">References</a>
+              </div>
+            </li>
           </ul>
         </div>
 
-        <!-- 发酵进度容器 -->
+                <!-- Fermentation Progress容器 -->
         <div class="progress-section">
           <div class="progress-flask">
             <div class="flask-body">
@@ -292,7 +323,7 @@
         </div>
       </aside>
 
-      <!-- 右侧内容区域 -->
+            <!-- 右侧内容区域 -->
       <div class="description-content">
 
         <div id="results-overview" class="content-card">
@@ -303,37 +334,37 @@
           <h2>Results Overview</h2>
           <div class="content-text-frame">
             <p class="executive-summary">
-              This page reports the experimental results of the yeast influenza-A biosensor project. It is organized by the four project modules, following the order of the consolidated results report: reporter system construction, chassis engineering (gene knockout), Gpa1 humanization, and the antigen-gated receptor (signal recognition) module.
+              This page reports the experimental results of the yeast influenza-A biosensor project. It is organized by the four project modules, following the order of the consolidated results report: reporter system construction, chassis engineering (gene knockout), <i>GPA1</i> humanization, and the antigen-gated receptor (signal recognition) module.
             </p>
             <p class="content-intro">
-              Results are grouped by the four project modules: reporter system construction (Fig. 1–6), chassis engineering (Fig. 7–13), Gpa1 humanization (Fig. 14–19) and the antigen-gated receptor module (Fig. 20–25); figures and captions follow the consolidated experimental results report.
+              Results are grouped by the four project modules: reporter system construction (Fig. 1–6), chassis engineering (Fig. 7–13), <i>GPA1</i> humanization (Fig. 14–19) and the antigen-gated receptor module (Fig. 20–28, including the reconstruction of antigen-gated signaling through the native Ste2 pathway); figures and captions follow the consolidated experimental results report.
             </p>
           </div>
         </div>
 <div id="results-reporter" class="content-card">
           <div class="content-text-frame">
-            <h2>Reporter Output Module: FUS1 Promoter Reporter System</h2>
+            <h2>Reporter Output Module: <i>FUS1</i> Promoter Reporter System</h2>
             <h3 id="results-reporter-1">Vector construction, transformation and positive-clone screening</h3>
             <p>
-              To construct the <i>S. cerevisiae</i> fluorescent reporter system, the constructed yEGFP fluorescent expression vector was transformed into competent BY4741 cells using a <i>S. cerevisiae</i> transformation kit and screened on SD-His selective medium. As shown in Fig. 1, the negative-control transformation plate (A) showed no colonies, whereas only a few tiny, translucent single colonies appeared on the positive transformation plate (B), indicating that the yEGFP reporter plasmid had been successfully introduced and marker-positive transformants were obtained. Single positive colonies from Fig. 1B were then picked for colony PCR, and the gel electrophoresis (Fig. 1C) showed a correct band at 1152 bp for sample 2, consistent with the expected size, preliminarily confirming that the yEGFP reporter fragment had been correctly integrated into the yeast genome, with the positive clones requiring further sequencing verification.
+              To construct the <i>S. cerevisiae</i> fluorescent reporter system, the constructed <i>yEGFP</i> fluorescent expression vector was transformed into competent BY4741 cells using a <i>S. cerevisiae</i> transformation kit and screened on SD-His selective medium. As shown in Fig. 1, the negative-control transformation plate (A) showed no colonies, whereas only a few tiny, translucent single colonies appeared on the positive transformation plate (B), indicating that the <i>yEGFP</i> reporter plasmid had been successfully introduced and marker-positive transformants were obtained. Single positive colonies from Fig. 1B were then picked for colony PCR, and the gel electrophoresis (Fig. 1C) showed a correct band at 1152 bp for sample 2, consistent with the expected size, preliminarily confirming that the <i>yEGFP</i> reporter fragment had been correctly integrated into the yeast genome, with the positive clones requiring further sequencing verification.
             </p>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/reporter-module/result-fig01-transformation-colony-pcr.png" alt="Fig. 1." loading="lazy" width="1214" height="371" decoding="async">
-              <figcaption class="result-fig__cap">Fig. 1. Transformation, positive-clone screening and colony PCR identification of the yEGFP fluorescent reporter vector A: negative-control plate with no colonies; B: positive plate showing only a few tiny single colonies; C: colony-PCR gel electrophoresis of positive clones, in which sample 2 shows a correct band at 1152 bp (SD-His selective medium).</figcaption>
+              <figcaption class="result-fig__cap">Fig. 1. Transformation, positive-clone screening and colony PCR identification of the <i>yEGFP</i> fluorescent reporter vector A: negative-control plate with no colonies; B: positive plate showing only a few tiny single colonies; C: colony-PCR gel electrophoresis of positive clones, in which sample 2 shows a correct band at 1152 bp (SD-His selective medium).</figcaption>
             </figure>
 
             <h3 id="results-reporter-2">Sequencing verification of the reporter gene</h3>
             <p>
-              The positive clones obtained above were sent for Sanger sequencing. Sequence alignment showed that the blue-highlighted central main body of the amplicon was completely identical to the P_FUS1+yEGFP reference sequence, with no point mutations or frameshifts introduced. Only minor differences were observed at the two ends, which resulted from the limited read length and reduced base-call quality toward the ends in that sequencing direction, and did not affect the reading frame or the integrity of the reporter coding sequence, confirming the sequence correctness of the constructed reporter system (Fig. 2).
+              The positive clones obtained above were sent for Sanger sequencing. Sequence alignment showed that the blue-highlighted central main body of the amplicon was completely identical to the P_FUS1+<i>yEGFP</i> reference sequence, with no point mutations or frameshifts introduced. Only minor differences were observed at the two ends, which resulted from the limited read length and reduced base-call quality toward the ends in that sequencing direction, and did not affect the reading frame or the integrity of the reporter coding sequence, confirming the sequence correctness of the constructed reporter system (Fig. 2).
             </p>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/reporter-module/result-fig02-sequencing-verification.webp" alt="Fig. 2." loading="lazy" width="1050" height="620" decoding="async">
-              <figcaption class="result-fig__cap">Fig. 2. Sequencing verification of the yEGFP reporter gene The chromatogram matches the blue-highlighted central region of the reference; minor differences at the ends are due to limited read length and do not affect the reading frame.</figcaption>
+              <figcaption class="result-fig__cap">Fig. 2. Sequencing verification of the <i>yEGFP</i> reporter gene The chromatogram matches the blue-highlighted central region of the reference; minor differences at the ends are due to limited read length and do not affect the reading frame.</figcaption>
             </figure>
 
             <h3 id="results-reporter-3">Confocal fluorescence imaging under gradient α-factor induction</h3>
             <p>
-              To verify the single-cell response of the reporter system to the mating pheromone α-factor, the strains were induced with gradient concentrations of α-factor and imaged by confocal laser scanning microscopy (Fig. 3). Panel A is the parental BY4741 strain without the fluorescent plasmid and panel B is the negative-clone control induced with 0 μM; both showed almost no green fluorescence. Panels C–I are positive clones induced with 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM α-factor, respectively. As the α-factor concentration increased, the intracellular yEGFP green fluorescence gradually intensified and became more uniform, indicating that α-factor activates the downstream MAPK cascade via the Ste2 receptor and dose-dependently drives reporter-gene expression.
+              To verify the single-cell response of the reporter system to the mating pheromone α-factor, the strains were induced with gradient concentrations of α-factor and imaged by confocal laser scanning microscopy (Fig. 3). Panel A is the parental BY4741 strain without the fluorescent plasmid and panel B is the negative-clone control induced with 0 μM; both showed almost no green fluorescence. Panels C–I are positive clones induced with 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM α-factor, respectively. As the α-factor concentration increased, the intracellular <i>yEGFP</i> green fluorescence gradually intensified and became more uniform, indicating that α-factor activates the downstream MAPK cascade via the Ste2 receptor and dose-dependently drives reporter-gene expression.
             </p>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/reporter-module/result-fig03-confocal-imaging.webp" alt="Fig. 3." loading="lazy" width="851" height="851" decoding="async">
@@ -349,13 +380,13 @@
               <figcaption class="result-fig__cap">Fig. 4. Effect of gradient α-factor concentrations on the growth of <i>S. cerevisiae</i> Growth monitored by OD<sub>600</sub>; both growth rate and final density decreased in a concentration-dependent manner with increasing α-factor (0–24 μM).</figcaption>
             </figure>
 
-            <h3 id="results-reporter-5">Time course of yEGFP fluorescence</h3>
+            <h3 id="results-reporter-5">Time course of <i>yEGFP</i> fluorescence</h3>
             <p>
-              The time-dependent change in yEGFP fluorescence under gradient α-factor induction was further measured (Fig. 5). Fig. 5A is the line plot of fluorescence intensity for each concentration over 1–16 h, and Fig. 5B is the bar chart over 1–23 h. At a given time point the relative fluorescence increased monotonically and gradually plateaued as the α-factor concentration rose, showing a clear dose-response relationship; at a given concentration the fluorescence increased with induction time and plateaued after about 10–16 h, indicating that the α-factor-induced fluorescent output depends on both time and concentration. The reporter system quantitatively converts α-factor signaling into a detectable fluorescent readout, providing the reporting platform for subsequent engineering and application of the yeast sensor.
+              The time-dependent change in <i>yEGFP</i> fluorescence under gradient α-factor induction was further measured (Fig. 5). Fig. 5A is the line plot of fluorescence intensity for each concentration over 1–16 h, and Fig. 5B is the bar chart over 1–23 h. At a given time point the relative fluorescence increased monotonically and gradually plateaued as the α-factor concentration rose, showing a clear dose-response relationship; at a given concentration the fluorescence increased with induction time and plateaued after about 10–16 h, indicating that the α-factor-induced fluorescent output depends on both time and concentration. The reporter system quantitatively converts α-factor signaling into a detectable fluorescent readout, providing the reporting platform for subsequent engineering and application of the yeast sensor.
             </p>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/reporter-module/result-fig05-timecourse-fluorescence.webp" alt="Fig. 5." loading="lazy" width="1426" height="518" decoding="async">
-              <figcaption class="result-fig__cap">Fig. 5. Time course of yEGFP fluorescence under gradient α-factor induction A: line plot of fluorescence for each concentration over 1–16 h; B: bar chart over 1–23 h. Fluorescence showed dual time- and concentration-dependence.</figcaption>
+              <figcaption class="result-fig__cap">Fig. 5. Time course of <i>yEGFP</i> fluorescence under gradient α-factor induction A: line plot of fluorescence for each concentration over 1–16 h; B: bar chart over 1–23 h. Fluorescence showed dual time- and concentration-dependence.</figcaption>
             </figure>
 
             <h3 id="results-reporter-6">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
@@ -363,75 +394,75 @@
               Building on the above, to further apply this fluorescent reporter system in constructing an influenza A virus biosensor that outputs a detectable fluorescent signal upon virus recognition, and considering that the time at which the virus appears is unpredictable in real-world detection, the system must yield a readable signal within an uncertain but short time window. We therefore examined how the starting cell density (initial OD<sub>600</sub>) affects the strength of the early post-induction signal (Fig. 6), with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively. The SNR generally rose as the induction time increased from 1 h to 2 h and peaked over a moderate range of starting OD<sub>600</sub>.
             </p>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/reporter-module/result-fig06-snr-early-induction.png" alt="Fig. 6." loading="lazy" width="1301" height="457" decoding="async">
+              <img class="result-fig__img" src="../static/image/result/reporter-module/result-fig06-snr-early-induction.avif" alt="Fig. 6." loading="lazy" width="1301" height="457" decoding="async">
               <figcaption class="result-fig__cap">Fig. 6. Signal-to-noise ratio (SNR) response of the reporter system at different starting OD<sub>600</sub> during early induction A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. Red circles and blue squares denote the 1 h and 2 h data, respectively. The SNR rose with induction time and peaked over a moderate range of starting OD<sub>600</sub>.</figcaption>
             </figure>
           </div>
         </div>
 <div id="results-chassis" class="content-card">
           <div class="content-text-frame">
-            <h2>Chassis Cell Engineering — Knockout of FAR1 and SST2</h2>
+            <h2>Chassis Cell Engineering — Knockout of <i>FAR1</i> and <i>SST2</i></h2>
             <h3 id="results-chassis-1">Construction and verification of the sgRNA knockout vectors</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig07-sgrna-vector-pcr.webp" alt="Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout." loading="lazy" width="1105" height="324" decoding="async">
-              <figcaption class="result-fig__cap">Figure 7. PCR verification of sgRNA vector construction for Far1 and Sst2 knockout. M: DNA marker; lanes 1–2: pML104-Far1 construct (11258 bp); lanes 3–4: pML104-Sst2 construct (11258 bp).</figcaption>
+              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig07-sgrna-vector-pcr.webp" alt="Figure 7. PCR verification of sgRNA vector construction for FAR1 and SST2 knockout." loading="lazy" width="1105" height="324" decoding="async">
+              <figcaption class="result-fig__cap">Figure 7. PCR verification of sgRNA vector construction for <i>FAR1</i> and <i>SST2</i> knockout. M: DNA marker; lanes 1–2: pML104-<i>FAR1</i> construct (11258 bp); lanes 3–4: pML104-<i>SST2</i> construct (11258 bp).</figcaption>
             </figure>
             <p>
-              To construct CRISPR-Cas9 knockout vectors targeting Far1 and Sst2, a universal strategy was applied in which 20 bp guide sequences specific to each gene were introduced into the pML104 vector via primers, and the constructs were verified by plasmid PCR. As shown in Figure 7, agarose gel electrophoresis showed a clear, single band between 10000 bp and 15000 bp for both the pML104-Far1 and pML104-Sst2 constructs, consistent with the expected size of 11258 bp. Lanes 1–2 correspond to the plasmid PCR products of the pML104-Far1 construct, and lanes 3–4 correspond to those of the pML104-Sst2 construct, with no obvious non-specific bands or smearing. These results indicate that the guide sequences targeting Far1 and Sst2 were successfully cloned into pML104, and both knockout vectors were correctly constructed for subsequent yeast transformation and gene knockout experiments.
+              To construct CRISPR-Cas9 knockout vectors targeting <i>FAR1</i> and <i>SST2</i>, a universal strategy was applied in which 20 bp guide sequences specific to each gene were introduced into the pML104 vector via primers, and the constructs were verified by plasmid PCR. As shown in Figure 7, agarose gel electrophoresis showed a clear, single band between 10000 bp and 15000 bp for both the pML104-<i>FAR1</i> and pML104-<i>SST2</i> constructs, consistent with the expected size of 11258 bp. Lanes 1–2 correspond to the plasmid PCR products of the pML104-<i>FAR1</i> construct, and lanes 3–4 correspond to those of the pML104-<i>SST2</i> construct, with no obvious non-specific bands or smearing. These results indicate that the guide sequences targeting <i>FAR1</i> and <i>SST2</i> were successfully cloned into pML104, and both knockout vectors were correctly constructed for subsequent yeast transformation and gene knockout experiments.
             </p>
 
-            <h3 id="results-chassis-2">Amplification of the FAR1 and SST2 repair templates</h3>
+            <h3 id="results-chassis-2">Amplification of the <i>FAR1</i> and <i>SST2</i> repair templates</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig08-repair-template-pcr.webp" alt="Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout." loading="lazy" width="678" height="303" decoding="async">
-              <figcaption class="result-fig__cap">Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout. M: DNA marker; lane 1: Far1 homologous recombination template (1142 bp); lane 2: Sst2 homologous recombination template (989 bp); lane 3: negative control.</figcaption>
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/chassis-module/result-fig08-repair-template-pcr-fix.png" alt="Figure 8. PCR verification of homologous recombination templates for FAR1 and SST2 knockout." loading="lazy" width="341" height="227" decoding="async">
+              <figcaption class="result-fig__cap">Figure 8. PCR verification of homologous recombination templates for <i>FAR1</i> and <i>SST2</i> knockout. M: DNA marker; lanes 1–3: <i>FAR1</i> homologous recombination template (1146 bp); lanes 4–6: <i>SST2</i> homologous recombination template (993 bp).</figcaption>
             </figure>
             <p>
-              To construct repair templates for Far1 and Sst2 knockout, primers were designed to target the knockout sites, and the homology arms flanking each target site were amplified from BY4741 genomic DNA. The repair templates contain a 4 bp deletion relative to the original genomic sequence, which introduces a frameshift mutation after CRISPR-Cas9 cleavage via homologous recombination. As shown in Figure 8, agarose gel electrophoresis revealed a clear, single band between 1000 bp and 1500 bp in lane 1 (expected size, 1142 bp), a clear, single band between 750 bp and 1000 bp in lane 2 (expected size, 989 bp), and no band in the negative control (lane 3).. These results indicate that both the Far1 and Sst2 repair templates were successfully amplified and can be used for subsequent CRISPR-Cas9 co-transformation and gene knockout experiments.
+              To construct repair templates for <i>FAR1</i> and <i>SST2</i> knockout, primers were designed to target the knockout sites, and the homology arms flanking each target site were amplified from BY4741 genomic DNA. The repair templates contain a 4 bp deletion relative to the original genomic sequence, which introduces a frameshift mutation after CRISPR-Cas9 cleavage via homologous recombination. As shown in Figure 8, agarose gel electrophoresis revealed a clear, single band between 1000 bp and 1500 bp in lanes 1–3 (expected size, 1146 bp) and a clear, single band between 750 bp and 1000 bp in lanes 4–6 (expected size, 993 bp). These results indicate that both the <i>FAR1</i> and <i>SST2</i> repair templates were successfully amplified and can be used for subsequent CRISPR-Cas9 co-transformation and gene knockout experiments.
             </p>
 
             <h3 id="results-chassis-3">Transformation and colony PCR verification</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig09-transformation-colony-pcr.webp" alt="Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout." loading="lazy" width="1378" height="609" decoding="async">
-              <figcaption class="result-fig__cap">Figure 9. Transformation and colony PCR verification of Far1 and Sst2 knockout. (A) Transformants of Far1 knockout; (B) Colony PCR screening of Far1 knockout transformants, with positive clones F1–F6, F8, and F9; (C) Transformants of Sst2 knockout based on the Far1-knockout strain; (D) Colony PCR screening of Sst2 knockout transformants, with positive clones S1, S5–S7, and S15. M: DNA marker; BY / BY4741: wild-type control.</figcaption>
+              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig09-transformation-colony-pcr.webp" alt="Figure 9. Transformation and colony PCR verification of FAR1 and SST2 knockout." loading="lazy" width="1378" height="609" decoding="async">
+              <figcaption class="result-fig__cap">Figure 9. Transformation and colony PCR verification of <i>FAR1</i> and <i>SST2</i> knockout. (A) Transformants of <i>FAR1</i> knockout; (B) Colony PCR screening of <i>FAR1</i> knockout transformants, with positive clones F1–F6, F8, and F9; (C) Transformants of <i>SST2</i> knockout based on the <i>FAR1</i>-knockout strain; (D) Colony PCR screening of <i>SST2</i> knockout transformants, with positive clones S1, S5–S7, and S15. M: DNA marker; BY / BY4741: wild-type control.</figcaption>
             </figure>
             <p>
-              To obtain Far1 and Sst2 double-knockout strains, a stepwise knockout strategy was applied. First, the linearized pML104 plasmid and the Far1 repair template were co-transformed into BY4741 competent cells and plated on SD-His+URA selective medium, yielding single colonies (Figure 9A). Colony PCR was then performed for verification: because the Far1 verification primers were designed across the deleted 4-bp site, a 548-bp band was expected when the FAR1 locus remained unknocked out, whereas successful knockout abolished efficient primer binding and prevented amplification of the 548-bp product. Clones F1–F6, F8, and F9 did not produce the 548-bp band and were identified as positive clones (Figure 9B), confirming successful Far1 knockout. Using this Far1-knockout strain as the chassis, the Sst2 knockout vector and repair template were subsequently transformed, yielding transformants (Figure 9C). Colony PCR showed that clones S1, S5–S7, and S15 did not produce the 562-bp band and were identified as positive clones (Figure 9D), confirming successful Sst2 knockout. These results indicate that a Far1 single-knockout strain was successfully constructed, and Far1/Sst2 double-knockout strains were further obtained for subsequent functional validation.
+              To obtain <i>FAR1</i> and <i>SST2</i> double-knockout strains, a stepwise knockout strategy was applied. First, the linearized pML104 plasmid and the <i>FAR1</i> repair template were co-transformed into BY4741 competent cells and plated on SD-His+URA selective medium, yielding single colonies (Figure 9A). Colony PCR was then performed for verification: because the <i>FAR1</i> verification primers were designed across the deleted 4-bp site, a 548-bp band was expected when the <i>FAR1</i> locus remained unknocked out, whereas successful knockout abolished efficient primer binding and prevented amplification of the 548-bp product. Clones F1–F6, F8, and F9 did not produce the 548-bp band and were identified as positive clones (Figure 9B), confirming successful <i>FAR1</i> knockout. Using this <i>FAR1</i>-knockout strain as the chassis, the <i>SST2</i> knockout vector and repair template were subsequently transformed, yielding transformants (Figure 9C). Colony PCR showed that clones S1, S5–S7, and S15 did not produce the 562-bp band and were identified as positive clones (Figure 9D), confirming successful <i>SST2</i> knockout. These results indicate that a <i>FAR1</i> single-knockout strain was successfully constructed, and <i>FAR1</i>/<i>SST2</i> double-knockout strains were further obtained for subsequent functional validation.
             </p>
 
             <h3 id="results-chassis-4">Sanger sequencing confirmation of the knockouts</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig10-sanger-sequencing.webp" alt="Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout." loading="lazy" width="1291" height="400" decoding="async">
-              <figcaption class="result-fig__cap">Figure 10. Sanger sequencing verification of Far1 and Sst2 knockout. (A) Successful Sst2 knockout, showing a 4 bp deletion (TCTG) at the target site; (B) Non-knockout (wild-type) Sst2, shown for comparison; (C) Successful Far1 knockout, showing a 4 bp deletion (CACT) at the target site; (D) Non-knockout (wild-type) Far1, shown for comparison.</figcaption>
+              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig10-sanger-sequencing.webp" alt="Figure 10. Sanger sequencing verification of FAR1 and SST2 knockout." loading="lazy" width="1291" height="400" decoding="async">
+              <figcaption class="result-fig__cap">Figure 10. Sanger sequencing verification of <i>FAR1</i> and <i>SST2</i> knockout. (A) Successful <i>SST2</i> knockout, showing a 4 bp deletion (TGTC) at the target site; (B) Non-knockout (wild-type) <i>SST2</i>, shown for comparison; (C) Successful <i>FAR1</i> knockout, showing a 4 bp deletion (CACT) at the target site; (D) Non-knockout (wild-type) <i>FAR1</i>, shown for comparison.</figcaption>
             </figure>
             <p>
-              To confirm successful knockout of Far1 and Sst2, colony PCR-positive clones were subjected to Sanger sequencing, and the sequencing chromatograms of knockout clones were compared with those of non-knockout (wild-type) clones to identify the exact deletion site and deleted sequence. The successfully knocked-out Sst2 clone showed a 4 bp deletion (TCTG) at the target site (Figure 10A), while the non-knockout clone matched the wild-type sequence (Figure 10B), allowing clear identification of the deletion site. The successfully knocked-out Far1 clone showed a 4 bp deletion (CACT) at the target site (Figure 10C), while the non-knockout clone also matched the wild-type sequence (Figure 10D). These 4 bp deletions are expected to cause frameshift mutations and disrupt gene function. The sequencing results confirmed that Far1 and Sst2 knockout strains were successfully obtained.
+              To confirm successful knockout of <i>FAR1</i> and <i>SST2</i>, colony PCR-positive clones were subjected to Sanger sequencing, and the sequencing chromatograms of knockout clones were compared with those of non-knockout (wild-type) clones to identify the exact deletion site and deleted sequence. The successfully knocked-out <i>SST2</i> clone showed a 4 bp deletion (TGTC) at the target site (Figure 10A), while the non-knockout clone matched the wild-type sequence (Figure 10B), allowing clear identification of the deletion site. The successfully knocked-out <i>FAR1</i> clone showed a 4 bp deletion (CACT) at the target site (Figure 10C), while the non-knockout clone also matched the wild-type sequence (Figure 10D). These 4 bp deletions are expected to cause frameshift mutations and disrupt gene function. The sequencing results confirmed that <i>FAR1</i> and <i>SST2</i> knockout strains were successfully obtained.
             </p>
 
             <h3 id="results-chassis-5">Effect of knockout on growth</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig11-growth-curves.webp" alt="Figure 11. Effect of Far1 and Sst2 knockout on the growth of Saccharomyces cerevisiae." loading="lazy" width="780" height="684" decoding="async">
-              <figcaption class="result-fig__cap">Figure 11. Effect of Far1 and Sst2 knockout on the growth of <i>Saccharomyces cerevisiae</i>. (A) Growth curves of the Far1 knockout strain (ΔFar1) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis; (B) Growth curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis.</figcaption>
+              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig11-growth-curves.webp" alt="Figure 11. Effect of FAR1 and SST2 knockout on the growth of Saccharomyces cerevisiae." loading="lazy" width="780" height="684" decoding="async">
+              <figcaption class="result-fig__cap">Figure 11. Effect of <i>FAR1</i> and <i>SST2</i> knockout on the growth of <i>Saccharomyces cerevisiae</i>. (A) Growth curves of the <i>FAR1</i> knockout strain (Δ<i>FAR1</i>) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis; (B) Growth curves of the <i>FAR1</i>/<i>SST2</i> double-knockout strain (Δ<i>FAR1</i> Δ<i>SST2</i>) and wild-type BY4741 at different α-factor concentrations (0, 1, and 10 μM), with OD<sub>600</sub> as the y-axis.</figcaption>
             </figure>
             <p>
-              To verify whether Far1 and Sst2 knockout relieves α-factor-induced growth inhibition, growth curves were measured at different α-factor concentrations, with wild-type BY4741 as the control. Wild-type BY4741 showed obvious growth inhibition at 10 μM α-factor, whereas the Far1 knockout strain (ΔFar1) maintained a relatively high growth rate under the same condition (Figure 11A), indicating that Far1 knockout effectively relieved α-factor-induced G1 arrest. After further knocking out Sst2 in the Far1-knockout background, the double-knockout strain (ΔFar1 ΔSst2) showed no obvious growth inhibition at different α-factor concentrations compared with BY4741 (Figure 11B), suggesting that double knockout of Far1 and Sst2 further enhanced the strain's tolerance to α-factor.
+              To verify whether <i>FAR1</i> and <i>SST2</i> knockout relieves α-factor-induced growth inhibition, growth curves were measured at different α-factor concentrations, with wild-type BY4741 as the control. Wild-type BY4741 showed obvious growth inhibition at 10 μM α-factor, whereas the <i>FAR1</i> knockout strain (Δ<i>FAR1</i>) maintained a relatively high growth rate under the same condition (Figure 11A), indicating that <i>FAR1</i> knockout effectively relieved α-factor-induced G1 arrest. After further knocking out <i>SST2</i> in the <i>FAR1</i>-knockout background, the double-knockout strain (Δ<i>FAR1</i> Δ<i>SST2</i>) showed no obvious growth inhibition at different α-factor concentrations compared with BY4741 (Figure 11B), suggesting that double knockout of <i>FAR1</i> and <i>SST2</i> further enhanced the strain's tolerance to α-factor.
             </p>
 
             <h3 id="results-chassis-6">Effect of knockout on α-factor-induced fluorescence</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig12-fluorescence-signal.webp" alt="Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal." loading="lazy" width="1036" height="843" decoding="async">
-              <figcaption class="result-fig__cap">Figure 12. Effect of Far1 and Sst2 knockout on α-factor-induced fluorescence signal. (A) Fluorescence intensity curves of the FAR1 knockout strain (ΔFar1) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM); (B) Fluorescence intensity curves of the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM).</figcaption>
+              <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig12-fluorescence-signal.webp" alt="Figure 12. Effect of FAR1 and SST2 knockout on α-factor-induced fluorescence signal." loading="lazy" width="1036" height="843" decoding="async">
+              <figcaption class="result-fig__cap">Figure 12. Effect of <i>FAR1</i> and <i>SST2</i> knockout on α-factor-induced fluorescence signal. (A) Fluorescence intensity curves of the <i>FAR1</i> knockout strain (Δ<i>FAR1</i>) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM); (B) Fluorescence intensity curves of the <i>FAR1</i>/<i>SST2</i> double-knockout strain (Δ<i>FAR1</i> Δ<i>SST2</i>) and the yE-GFP control strain at different α-factor concentrations (0, 1, and 10 μM).</figcaption>
             </figure>
             <p>
-              To verify the effect of Far1 and Sst2 knockout on downstream signaling, fluorescence intensity was measured at different α-factor concentrations. The Far1 knockout strain (ΔFar1) showed a slight increase in fluorescence with increasing α-factor concentration, but the overall enhancement was limited (Figure 12A). In contrast, the Far1/Sst2 double-knockout strain (ΔFar1 ΔSst2) exhibited a more pronounced signal enhancement (Figure 12B): at 1 μM α-factor, its fluorescence was already much higher than that of the yE-GFP control, indicating that the knockout lowered the response threshold and enabled strong signaling at low inducer concentrations; at 10 μM α-factor, the fluorescence of the double-knockout strain continued to rise until 22 h without reaching a peak, whereas the control peaked at around 18 h and then declined, suggesting enhanced response amplitude and impaired negative feedback regulation. These results indicate that double knockout of Far1 and Sst2 enhances the yeast fluorescence response to α-factor, characterized by higher sensitivity at low concentrations and a more sustained response at high concentrations, supporting its potential as a low-concentration signal-amplifying biosensor element.
+              To verify the effect of <i>FAR1</i> and <i>SST2</i> knockout on downstream signaling, fluorescence intensity was measured at different α-factor concentrations. The <i>FAR1</i> knockout strain (Δ<i>FAR1</i>) showed a slight increase in fluorescence with increasing α-factor concentration, but the overall enhancement was limited (Figure 12A). In contrast, the <i>FAR1</i>/<i>SST2</i> double-knockout strain (Δ<i>FAR1</i> Δ<i>SST2</i>) exhibited a more pronounced signal enhancement (Figure 12B): at 1 μM α-factor, its fluorescence was already much higher than that of the yE-GFP control, indicating that the knockout lowered the response threshold and enabled strong signaling at low inducer concentrations; at 10 μM α-factor, the fluorescence of the double-knockout strain continued to rise until 22 h without reaching a peak, whereas the control peaked at around 18 h and then declined, suggesting enhanced response amplitude and impaired negative feedback regulation. These results indicate that double knockout of <i>FAR1</i> and <i>SST2</i> enhances the yeast fluorescence response to α-factor, characterized by higher sensitivity at low concentrations and a more sustained response at high concentrations, supporting its potential as a low-concentration signal-amplifying biosensor element.
             </p>
 
             <h3 id="results-chassis-7">Early signal-to-noise ratio at different starting OD<sub>600</sub></h3>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/chassis-module/result-fig13-snr-early-induction.png" alt="Fig. 13." loading="lazy" width="1340" height="566" decoding="async">
-              <figcaption class="result-fig__cap">Fig. 13. SNR assay at different starting OD<sub>600</sub> after Far1 and Sst2 knockout A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. purple circles, red squares and blue triangles denote the 1 h, 1.5 h and 2 h data, respectively, and the dashed line marks the SNR = 3 threshold. The SNR rose with induction time, and at an initial OD<sub>600</sub> of about 0.6–2.1 it was largely ≥ 3, giving an evident signal within 2 h.</figcaption>
+              <figcaption class="result-fig__cap">Fig. 13. SNR assay at different starting OD<sub>600</sub> after <i>FAR1</i> and <i>SST2</i> knockout A: SNR versus starting OD<sub>600</sub> induced with 12 μM α-factor; B: SNR versus starting OD<sub>600</sub> induced with 1.2 μM α-factor. purple circles, red squares and blue triangles denote the 1 h, 1.5 h and 2 h data, respectively, and the dashed line marks the SNR = 3 threshold. The SNR rose with induction time, and at an initial OD<sub>600</sub> of about 0.6–2.1 it was largely ≥ 3, giving an evident signal within 2 h.</figcaption>
             </figure>
             <p>
-              After knocking out the Far1 and Sst2 genes to amplify the fluorescent signal, a complete signal-to-noise ratio (SNR) assay at different starting OD was performed again (Fig. 13, with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively). Using the background fluorescence of uninduced and negative-clone cells as the baseline, SNR ≥ 3 was defined as an evident signal. The results showed that the SNR generally reached 3 or above over an initial OD<sub>600</sub> range of about 0.6–2.1, i.e., an evident signal appeared reliably within 2 h. Accordingly, in practical applications the initial OD<sub>600</sub> can be set to about 0.6, which ensures a sensitive response to the virus signal within 2 h and, thanks to the growth and signal-retention capacity at this starting density, provides a continuous detection window of roughly 12 h before a new yeast sensor needs to be replaced, giving the operational basis for the practical detection deployment of the influenza A yeast sensor.
+              After knocking out the <i>FAR1</i> and <i>SST2</i> genes to amplify the fluorescent signal, a complete signal-to-noise ratio (SNR) assay at different starting OD was performed again (Fig. 13, with panels A and B measured under 12 μM and 1.2 μM α-factor induction, respectively). Using the background fluorescence of uninduced and negative-clone cells as the baseline, SNR ≥ 3 was defined as an evident signal. The results showed that the SNR generally reached 3 or above over an initial OD<sub>600</sub> range of about 0.6–2.1, i.e., an evident signal appeared reliably within 2 h. Accordingly, in practical applications the initial OD<sub>600</sub> can be set to about 0.6, which ensures a sensitive response to the virus signal within 2 h and, thanks to the growth and signal-retention capacity at this starting density, provides a continuous detection window of roughly 12 h before a new yeast sensor needs to be replaced, giving the operational basis for the practical detection deployment of the influenza A yeast sensor.
             </p>
           </div>
         </div>
@@ -440,56 +471,56 @@
             <h2>Humanized G-Protein Engineering — Gpa1-G&alpha;q Chimera</h2>
             <h3 id="results-gpa1-1">Construction of the homologous targeting template</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/gpa1-module/result-fig14-homologous-template-pcr.webp" alt="Figure 14. Construction of homologous template for Gpa1 humanization." loading="lazy" width="455" height="407" decoding="async">
-              <figcaption class="result-fig__cap">Figure 14. Construction of homologous template for Gpa1 humanization. (A) Amplification of GPA1 upstream and downstream homologous arms. Lanes 1–4: upstream homologous arm (experimental); Lane 5: upstream negative control; Lane 6: 2000 bp marker; Lane7: downstream negative control; Lanes 8–11: downstream homologous arm (experimental). (B) Amplification of URA3 marker. Lane 1: 2000 bp marker; Lane 2: negative control; Lanes 3–4: URA3 experimental groups. (C) Overlap-extension fusion PCR for target fragment assembly. Lane 1: 5000 bp marker; Lane 2: negative control; Lanes 3–6: fusion PCR experimental groups.</figcaption>
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/gpa1-module/result-fig14-homologous-template-pcr-fix.jpeg" alt="Figure 14. Construction of homologous template for Gpa1 humanization." loading="lazy" width="1401" height="1278" decoding="async">
+              <figcaption class="result-fig__cap">Figure 14. Construction of homologous template for <i>GPA1</i> humanization. (A) Amplification of <i>GPA1</i> upstream and downstream homologous arms. Lanes 1–4: upstream homologous arm (experimental); Lane 5: upstream negative control; Lane 6: 2000 bp marker; Lane7: downstream negative control; Lanes 8–11: downstream homologous arm (experimental). (B) Amplification of <i>URA3</i> marker. Lane 1: 2000 bp marker; Lane 2: negative control; Lanes 3–4: <i>URA3</i> experimental groups. (C) Overlap-extension fusion PCR for target fragment assembly. Lane 1: 5000 bp marker; Lane 2: negative control; Lanes 3–6: fusion PCR experimental groups.</figcaption>
             </figure>
             <p>
-              To realize humanization modification of yeast Gpa1 protein, we first amplified the GPA1 upstream homologous arm, downstream homologous arm and selection marker gene URA3 via PCR. Agarose gel electrophoresis (Figure 14A, 14B) showed that the bands of each amplified product matched the expected theoretical size with few non-specific bands, confirming successful amplification of homologous arms and marker gene. Overlap-extension fusion PCR was then performed to assemble the three fragments into a complete homologous targeting template. The electrophoresis result of fusion PCR products (Figure 12C) exhibited specific bands consistent with the target length, while no amplification band was observed in the negative control group. These results verified the successful construction of the homologous recombination targeting template, providing qualified DNA materials for subsequent gene editing of yeast chassis to achieve Gpa1 humanization.
+              To realize humanization modification of yeast Gpa1 protein, we first amplified the <i>GPA1</i> upstream homologous arm, downstream homologous arm and selection marker gene <i>URA3</i> via PCR. Agarose gel electrophoresis (Figure 14A, 14B) showed that the bands of each amplified product matched the expected theoretical size with few non-specific bands, confirming successful amplification of homologous arms and marker gene. Overlap-extension fusion PCR was then performed to assemble the three fragments into a complete homologous targeting template. The electrophoresis result of fusion PCR products (Figure 14C) exhibited specific bands consistent with the target length, while no amplification band was observed in the negative control group. These results verified the successful construction of the homologous recombination targeting template, providing qualified DNA materials for subsequent gene editing of yeast chassis to achieve <i>GPA1</i> humanization.
             </p>
 
             <h3 id="results-gpa1-2">Yeast transformation and positive-clone validation</h3>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/gpa1-module/result-fig15-transformation-colony-pcr.webp" alt="Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization." loading="lazy" width="1400" height="722" decoding="async">
-              <figcaption class="result-fig__cap">Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization. (A)Colony growth after transforming <i>Saccharomyces cerevisiae</i> BY4741 with fusion PCR targeting fragment. Plate 1: negative control; Plates 2–5: transformation groups. Uniform single colonies appeared on experimental plates. Plate 2 was discarded due to medium collapse and potential contamination. Single colonies were picked from plates 3–5 for subsequent verification. (B)Agarose gel electrophoresis of colony PCR products. Lane 1: 5000 bp DNA Marker; Lanes 2–24: PCR products from picked colonies. Multiple samples displayed bands at the expected size, which were preliminarily identified as positive clones with Gpa1 humanization.</figcaption>
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/gpa1-module/result-fig15-transformation-colony-pcr-fix.png" alt="Figure 15. Yeast transformation and positive colony validation for Gpa1 humanization." loading="lazy" width="1566" height="782" decoding="async">
+              <figcaption class="result-fig__cap">Figure 15. Yeast transformation and positive colony validation for <i>GPA1</i> humanization. (A)Colony growth after transforming <i>Saccharomyces cerevisiae</i> BY4741 with fusion PCR targeting fragment. Plate 1: negative control; Plates 2–5: transformation groups. Uniform single colonies appeared on experimental plates. Plate 2 was discarded due to medium collapse and potential contamination. Single colonies were picked from plates 3–5 for subsequent verification. (B)Agarose gel electrophoresis of colony PCR products. Lane 1: 5000 bp DNA Marker; Lanes 2–24: PCR products from picked colonies. Multiple samples displayed bands at the expected size, which were preliminarily identified as positive clones with <i>GPA1</i> humanization.</figcaption>
             </figure>
             <p>
-              The assembled homologous targeting fragment for Gpa1 humanization was transformed into competent <i>Saccharomyces cerevisiae</i> BY4741 cells, which were spread onto SD-Ura selective plates. Colony growth (Figure 15A) showed single colonies on experimental plates while no colonies grew on the negative control plate, confirming valid transformation and selection. Single colonies were picked from qualified plates and verified by colony PCR for genomic integration. The electrophoresis result of colony PCR (Figure 15B) indicated that multiple colonies yielded amplicons of expected size. Positive yeast strains with Gpa1 humanization were preliminarily obtained, providing the engineered chassis for subsequent assembly and functional test of the yeast gated biosensor.
+              The assembled homologous targeting fragment for <i>GPA1</i> humanization was transformed into competent <i>Saccharomyces cerevisiae</i> BY4741 cells, which were spread onto SD-Ura selective plates. Colony growth (Figure 15A) showed single colonies on experimental plates while no colonies grew on the negative control plate, confirming valid transformation and selection. Single colonies were picked from qualified plates and verified by colony PCR for genomic integration. The electrophoresis result of colony PCR (Figure 15B) indicated that multiple colonies yielded amplicons of expected size. Positive yeast strains with <i>GPA1</i> humanization were preliminarily obtained, providing the engineered chassis for subsequent assembly and functional test of the yeast gated biosensor.
             </p>
 
             <h3 id="results-gpa1-3">Sequence confirmation of the humanized locus</h3>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/gpa1-module/result-fig16-sequence-alignment.webp" alt="Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization." loading="lazy" width="1400" height="707" decoding="async">
-              <figcaption class="result-fig__cap">Figure 16. Sequence alignment of candidate yeast strains for Gpa1 humanization. 1: Alignment between sequencing result of Sample 12 and original yeast GPA1 sequence; 2: Alignment between sequencing result of Sample 17 and original yeast GPA1 sequence; 3: Alignment between sequencing result of Sample 12 and expected humanized sequence; 4: Alignment between sequencing result of Sample 17 and expected humanized sequence. The blue highlighted region represents the replaced gene fragment.</figcaption>
+              <figcaption class="result-fig__cap">Figure 16. Sequence alignment of candidate yeast strains for <i>GPA1</i> humanization. 1: Alignment between sequencing result of Sample 12 and original yeast <i>GPA1</i> sequence; 2: Alignment between sequencing result of Sample 17 and original yeast <i>GPA1</i> sequence; 3: Alignment between sequencing result of Sample 12 and expected humanized sequence; 4: Alignment between sequencing result of Sample 17 and expected humanized sequence. The blue highlighted region represents the replaced gene fragment.</figcaption>
             </figure>
             <p>
-              To further confirm site-specific genomic integration, candidate clones positive in colony PCR were selected for Sanger sequencing verification. Sequence alignment (Figure 16) showed obvious differences between Sample12, Sample17 and the original yeast GPA1 sequence. When aligned with the expected humanized sequence, both strains perfectly matched in the target replacement region. These results demonstrated successful homologous recombination. The endogenous yeast Gpa1 gene was site-specifically replaced as designed, and the Gpa1-humanized yeast chassis strain was successfully obtained.
+              To further confirm site-specific genomic integration, candidate clones positive in colony PCR were selected for Sanger sequencing verification. Sequence alignment (Figure 16) showed obvious differences between Sample12, Sample17 and the original yeast <i>GPA1</i> sequence. When aligned with the expected humanized sequence, both strains perfectly matched in the target replacement region. These results demonstrated successful homologous recombination. The endogenous yeast <i>GPA1</i> gene was site-specifically replaced as designed, and the <i>GPA1</i>-humanized yeast chassis strain was successfully obtained.
             </p>
 
             <h3 id="results-gpa1-4">Morphology after humanization</h3>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/gpa1-module/result-fig17-morphology-microscopy.webp" alt="Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains." loading="lazy" width="1400" height="701" decoding="async">
-              <figcaption class="result-fig__cap">Figure 17. Morphological microscopic observation of Gpa1-humanized yeast strains. 1–3: Cell morphology of strain 12 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. 4–6: Cell morphology of strain 17 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. Magnification: 100×, scale bar = 20 μm.</figcaption>
+              <figcaption class="result-fig__cap">Figure 17. Morphological microscopic observation of <i>GPA1</i>-humanized yeast strains. 1–3: Cell morphology of strain 12 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. 4–6: Cell morphology of strain 17 under 0 μM, 1 μM and 10 μM α-factor induction, respectively. Magnification: 100×, scale bar = 20 μm.</figcaption>
             </figure>
             <p>
-              To verify the response of the MAPK pathway to α-factor after Gpa1 humanization, positive strains were induced with gradient concentrations of α-factor and observed under a microscope. After treatment with 0, 1 and 10 μM α-factor, no obvious shmoo protrusions were observed. This indicates that after humanization replacement of endogenous Gpa1, the native yeast G-protein-MAPK pathway shows drastically reduced response to the native ligand α-factor. This result confirms that our engineered chassis no longer responds to α-factor, eliminating background interference from the native mating pathway and making it suitable for our gated biosensor built upon heterologous receptors.
+              To verify the response of the MAPK pathway to α-factor after <i>GPA1</i> humanization, positive strains were induced with gradient concentrations of α-factor and observed under a microscope. After treatment with 0, 1 and 10 μM α-factor, no obvious shmoo protrusions were observed. This indicates that after humanization replacement of endogenous Gpa1, the native yeast G-protein-MAPK pathway shows drastically reduced response to the native ligand α-factor. This result confirms that our engineered chassis no longer responds to α-factor, eliminating background interference from the native mating pathway and making it suitable for our gated biosensor built upon heterologous receptors.
             </p>
 
             <h3 id="results-gpa1-5">Growth of the humanized strains</h3>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/gpa1-module/result-fig18-growth-curves.webp" alt="Figure 18. Growth curve measurement of Gpa1-humanized yeast strains." loading="lazy" width="582" height="1361" decoding="async">
-              <figcaption class="result-fig__cap">Figure 18. Growth curve measurement of Gpa1-humanized yeast strains. 1: Wild-type BY4741; 2: Gpa1-humanized strain 12; 3: Gpa1-humanized strain 17. For each group, 0 μM, 1 μM and 10 μM α-factor were supplemented. Cell growth was monitored by OD<sub>600</sub> measurement, n=3 biological replicates.</figcaption>
+              <figcaption class="result-fig__cap">Figure 18. Growth curve measurement of <i>GPA1</i>-humanized yeast strains. 1: Wild-type BY4741; 2: <i>GPA1</i>-humanized strain 12; 3: <i>GPA1</i>-humanized strain 17. For each group, 0 μM, 1 μM and 10 μM α-factor were supplemented. Cell growth was monitored by OD<sub>600</sub> measurement, n=3 biological replicates.</figcaption>
             </figure>
             <p>
-              We measured the growth curves of wild-type BY4741 and Gpa1-humanized strains 12 and 17 under treatment with different concentrations of α-factor to evaluate the effects of humanization modification and α-factor stimulation on yeast proliferation. Wild-type BY4741 exhibited obvious growth inhibition under 10 μM α-factor. In contrast, for Gpa1-humanized strain 12 and strain 17, their growth profiles showed no significant difference between 0–10 μM α-factor groups and the untreated control. These results further demonstrate that Gpa1-humanized yeast loses the growth inhibitory response triggered by α-factor. Meanwhile, this gene editing modification does not significantly impair yeast proliferation, and the chassis maintains good growth performance, which is suitable for subsequent transformation of sensor plasmids and functional characterization.
+              We measured the growth curves of wild-type BY4741 and <i>GPA1</i>-humanized strains 12 and 17 under treatment with different concentrations of α-factor to evaluate the effects of humanization modification and α-factor stimulation on yeast proliferation. Wild-type BY4741 exhibited obvious growth inhibition under 10 μM α-factor. In contrast, for <i>GPA1</i>-humanized strain 12 and strain 17, their growth profiles showed no significant difference between 0–10 μM α-factor groups and the untreated control. These results further demonstrate that <i>GPA1</i>-humanized yeast loses the growth inhibitory response triggered by α-factor. Meanwhile, this gene editing modification does not significantly impair yeast proliferation, and the chassis maintains good growth performance, which is suitable for subsequent transformation of sensor plasmids and functional characterization.
             </p>
 
             <h3 id="results-gpa1-6">Effect on the native α-factor fluorescence response</h3>
             <figure class="result-fig">
               <img class="result-fig__img" src="../static/image/result/gpa1-module/result-fig19-fluorescence-response.webp" alt="Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response." loading="lazy" width="1103" height="1544" decoding="async">
-              <figcaption class="result-fig__cap">Figure 19. Effect of Gpa1 humanization on yeast α-factor mating pathway fluorescence response. 1–8: Time-course fluorescence intensity curves under gradient α-factor induction at 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM. Blue curve (yEGFP): Wild-type BY4741 with FUS1-yEGFP reporter system. Red curve (GPA1/hGα): Gpa1-humanized chassis with FUS1-yEGFP reporter system.</figcaption>
+              <figcaption class="result-fig__cap">Figure 19. Effect of <i>GPA1</i> humanization on yeast α-factor mating pathway fluorescence response. 1–8: Time-course fluorescence intensity curves under gradient α-factor induction at 0, 0.375, 0.75, 1.5, 3, 6, 12 and 24 μM. Blue curve (<i>yEGFP</i>): Wild-type BY4741 with <i>FUS1</i>-<i>yEGFP</i> reporter system. Red curve (Gpa1/hGα): <i>GPA1</i>-humanized chassis with <i>FUS1</i>-<i>yEGFP</i> reporter system.</figcaption>
             </figure>
             <p>
-              To quantitatively characterize the inhibitory effect of Gpa1 humanization on the native mating pathway, we transformed the FUS1-yEGFP reporter plasmid into wild-type BY4741 and humanized chassis respectively. Gradient concentrations of α-factor were applied for long-term induction, and fluorescence signals were continuously recorded. In wild-type strains, yEGFP fluorescence increased markedly with rising α-factor concentration, showing obvious dose-dependent activation. In contrast, the Gpa1-humanized strain maintained very low fluorescence across all α-factor concentrations, with almost no dose-dependent signal activation. This quantitative fluorescence result further confirms that the native yeast α-factor-MAPK pathway is substantially blocked after Gpa1 human replacement. The FUS1 promoter cannot be activated by α-factor, greatly reducing basal leakage of the biosensor and providing a low-background chassis for our heterologous receptor gated sensing circuit.
+              To quantitatively characterize the inhibitory effect of <i>GPA1</i> humanization on the native mating pathway, we transformed the <i>FUS1</i>-<i>yEGFP</i> reporter plasmid into wild-type BY4741 and humanized chassis respectively. Gradient concentrations of α-factor were applied for long-term induction, and fluorescence signals were continuously recorded. In wild-type strains, <i>yEGFP</i> fluorescence increased markedly with rising α-factor concentration, showing obvious dose-dependent activation. In contrast, the <i>GPA1</i>-humanized strain maintained very low fluorescence across all α-factor concentrations, with almost no dose-dependent signal activation. This quantitative fluorescence result further confirms that the native yeast α-factor-MAPK pathway is substantially blocked after <i>GPA1</i> human replacement. The <i>FUS1</i> promoter cannot be activated by α-factor, greatly reducing basal leakage of the biosensor and providing a low-background chassis for our heterologous receptor gated sensing circuit.
             </p>
           </div>
         </div>
@@ -502,29 +533,29 @@
 
             <h3 id="results-signal-1">Construction of the membrane-expression vector and transformation screening</h3>
             <p>
-              To construct the membrane-targeted expression vector for our yeast sensor recognition protein, the coding sequence of recognition protein was cloned into the yeast membrane-localized expression backbone vector. The constructed plasmid was transformed into <i>Saccharomyces cerevisiae</i> competent cells and spread onto SD-His-Leu selective medium(Figure 20). The negative control plate (A) showed no colony growth, confirming no contamination and validating the selection pressure. Visible single colonies appeared on selective plates B-E. We picked 12 independent colonies and performed colony PCR. Agarose gel electrophoresis (F) displayed distinct target bands at the expected size in lanes 1–10 and lane 12 (601bp), while lane 11 showed no detectable amplification product, with little non-specific amplification in positive samples. These results indicate that the membrane-expression plasmid encoding the sensor recognition protein was successfully transformed into yeast, and multiple positive candidate clones were obtained for subsequent sequencing validation.
+              To construct the membrane-targeted expression vector for our yeast sensor recognition protein, the coding sequence of recognition protein was cloned into the yeast membrane-localized expression backbone vector. The constructed plasmid was transformed into <i>Saccharomyces cerevisiae</i> competent cells and spread onto SD-His-Leu selective medium (Figure 20). The negative control plate (Figure 20A) showed no colony growth, confirming no contamination and validating the selection pressure. Visible single colonies appeared on the selective plate (Figure 20B). We picked 12 independent colonies and performed colony PCR. Agarose gel electrophoresis (Figure 20C) displayed distinct target bands at the expected size in lanes 1–10 and lane 12 (601 bp), while lane 11 showed no detectable amplification product, with little non-specific amplification in positive samples. These results indicate that the membrane-expression plasmid encoding the sensor recognition protein was successfully transformed into yeast, and multiple positive candidate clones were obtained for subsequent sequencing validation.
             </p>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/pager-module/result-fig20-transformation-colony-pcr.webp" alt="Figure 20. Yeast transformation and colony PCR verification of the yeast sensor recognition protein membrane-expression vector." loading="lazy" width="830" height="497" decoding="async">
-              <figcaption class="result-fig__cap">Figure 20. Yeast transformation and colony PCR verification of the yeast sensor recognition protein membrane-expression vector. A: Negative control plate for yeast transformation; B–E: SD-His-Leu selective plates with yeast transformants; F: agarose gel electrophoresis of colony PCR products. M: DNA marker; lanes 1–12: PCR products of picked single colonies (601 bp).</figcaption>
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig20-transformation-colony-pcr-fix.png" alt="Figure 20. Yeast transformation and colony PCR verification of the PAGER expression construct." loading="lazy" width="1000" height="519" decoding="async">
+              <figcaption class="result-fig__cap">Figure 20. Yeast transformation and colony PCR verification of the PAGER expression construct. (A) Negative control plate. (B) Transformants grown on SD-His-Leu selective plates. (C) Colony PCR screening of 12 randomly picked yeast colonies. M: DNA marker; lanes 1–12: PCR products from individual colonies. The expected target band size is 601 bp.</figcaption>
             </figure>
 
             <h3 id="results-signal-2">Sequencing verification of the surface-expression construct</h3>
             <p>
-              The surface-expression construct was first assembled and then used as a template for PCR amplification of the target fragment. The amplified products were subjected to Sanger sequencing and aligned against the designed reference sequence. Sample 2 showed 98.61% identity with 0.87% gaps over a 577 bp aligned length; sample 3 achieved 99.29% identity with only 0.35% gaps over 564 bp; and sample 7 exhibited 94.82% identity with 3.67% gaps over 599 bp. Samples 2 and 3 showed high sequence identity to the designed construct, with only minor gaps at the 5' sequencing start region and no critical mutations, insertions, or deletions within the coding sequence of the PAGER receptor fusion protein. In contrast, sample 7 displayed more mismatches and gaps at the 5' terminal region and was therefore excluded from further experiments. These results confirm that clones 2 and 3 contain the correctly assembled surface-expression construct with an intact open reading frame, and they were selected for subsequent heterologous protein expression in <i>Saccharomyces cerevisiae</i>.
+              The surface-expression construct was first assembled and then used as a template for PCR amplification of the target fragment. The amplified products were subjected to Sanger sequencing and aligned against the designed reference sequence. Sample 2 showed 98.61% identity with 0.87% gaps over a 577 bp aligned length, while sample 3 achieved 99.29% identity with only 0.35% gaps over 564 bp. Both samples showed high sequence identity to the designed construct, with minor gaps located only at the 5' sequencing start region and no critical mutations, insertions, or deletions within the coding sequence of the PAGER receptor fusion protein. These results confirm that clones 2 and 3 contain the correctly assembled surface-expression construct with an intact open reading frame, and they were selected for subsequent heterologous protein expression in <i>Saccharomyces cerevisiae</i>.
             </p>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/pager-module/result-fig21-sequencing-verification.webp" alt="Figure 21. Sanger sequencing verification of the yeast sensor surface-expression construct." loading="lazy" width="831" height="793" decoding="async">
-              <figcaption class="result-fig__cap">Figure 21. Sanger sequencing verification of the yeast sensor surface-expression construct. A: sequence alignment of sample 2; B: sequence alignment of sample 3; C: sequence alignment of sample 7. The right panel shows alignment statistics for each sample, including aligned length, sequence identity, and gap proportion.</figcaption>
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig21-sequencing-verification-fix.png" alt="Figure 21. Sanger sequencing verification of the PAGER expression construct." loading="lazy" width="2496" height="2382" decoding="async">
+              <figcaption class="result-fig__cap">Figure 21. Sanger sequencing verification of the PAGER expression construct. Sequence alignment of sample 3 against the designed reference sequence. (A) Sequence alignment of sample 2. (B) Sequence alignment of sample 3.</figcaption>
             </figure>
 
             <h3 id="results-signal-3">Western blot of the recognition protein</h3>
             <p>
-              To evaluate the protein expression level of the engineered PAGER receptor, total proteins were extracted from the PAGER<sub>Gq</sub> strains (lanes 1&ndash;2) and the wild-type BY4741 control (lanes 3&ndash;4), followed by SDS-PAGE and Western blot analysis (Figure 22). The blot was probed with an anti-hM1 receptor antibody to detect the target protein and an anti-GAPDH antibody as the loading control. As shown in the lower panel, the GAPDH bands (~36 kDa) were clear, uniform, and consistent across all four lanes, confirming that equal amounts of total protein were loaded and that the sample preparation and electrophoresis processes were successful. However, in the upper panel, when probed for the hM1 receptor (theoretical molecular weight ~74 kDa), no specific target band was detected in the engineered PAGER<sub>Gq</sub> strains (lanes 1&ndash;2). The faint, non-specific background bands observed in lanes 1&ndash;2 were also present in the wild-type BY4741 control (lanes 3&ndash;4), indicating that these are likely endogenous yeast proteins cross-reacting with the antibody, rather than the target PAGER fusion protein. Despite the successful construction and verified sequence of the PAGER expression plasmid (as confirmed in the Build phase), the full-length hM1 receptor was not expressed at a detectable level in yeast. This result suggests that the target protein may be subject to rapid degradation, severe misfolding, or failure of membrane insertion, which became a critical bottleneck to be addressed in the subsequent engineering cycles.
+              Total proteins were extracted from the engineered PAGER<sub>Gq</sub> strains (lanes 1&ndash;2) and the wild-type BY4741 control (lanes 3&ndash;4), followed by SDS-PAGE and Western blot analysis using an anti-ALFA Tag antibody (Figure 22). The GAPDH loading control (~36 kDa) showed uniform bands across all samples, confirming equal protein loading. Notably, at the expected molecular weight of ~62 kDa, a faint but specific target-sized band was detected in the engineered strains (lanes 1&ndash;2), whereas no corresponding band was observed in the wild-type BY4741 control (lanes 3&ndash;4). The absence of the 62 kDa band in the wild-type control confirms the specificity of the anti-ALFA Tag antibody and rules out non-specific cross-reactivity with endogenous yeast proteins. Meanwhile, the faint band in the engineered strains indicates that the target protein was successfully expressed, but the overall yield remained extremely low.
             </p>
             <figure class="result-fig">
-              <img class="result-fig__img" src="../static/image/result/pager-module/result-fig22-western-blot.png" alt="Figure 22. Western blot analysis of hM1 receptor expression in engineered yeast." loading="lazy" width="834" height="208" decoding="async">
-              <figcaption class="result-fig__cap">Figure 22. Western blot analysis of hM1 receptor expression in engineered yeast. Total protein was extracted from PAGER<sub>Gq</sub> strains (lanes 1&ndash;2) and wild-type BY4741 (lanes 3&ndash;4). GAPDH was used as the loading control. The expected size of the hM1 receptor is ~74 kDa. M: protein molecular weight marker.</figcaption>
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig22-western-blot-fix.png" alt="Figure 22. Western blot analysis of ALFA Tag expression in engineered yeast." loading="lazy" width="831" height="295" decoding="async">
+              <figcaption class="result-fig__cap">Figure 22. Western blot analysis of ALFA Tag expression in engineered yeast. Total protein was extracted from PAGER<sub>Gq</sub> strains (lanes 1&ndash;2) and wild-type BY4741 (lanes 3&ndash;4). GAPDH was used as the loading control. The expected size of the hM1 receptor is ~62 kDa. M: protein molecular weight marker.</figcaption>
             </figure>
 
             <h3 id="results-signal-4">TEV-mediated de-repression and DCZ response</h3>
@@ -545,131 +576,246 @@
               <figcaption class="result-fig__cap">Figure 24. Time-course fluorescence assay of the engineered PAGER strain under HA antigen and DCZ induction. Fluorescence intensity of the engineered strain incubated with the target HA antigen and a gradient of DCZ (1, 10, and 100 μM), along with HA-only and DCZ-only controls. Fluorescence was recorded over 5.5 hours.</figcaption>
             </figure>
 
-            
+            <h3 id="results-signal-6">Subcellular localization of the PAGER construct</h3>
+            <p>
+              Confocal laser-scanning microscopy was performed to analyze the protein expression and subcellular localization of the human hM1Dq-based PAGER construct, aiming to identify the underlying reason for the lack of functional fluorescence output. As shown in Figure 25, yeast cells transformed with the PAGER construct without a fluorescent tag (Figure 25A) exhibited no obvious specific background signal, confirming the reliability of the imaging conditions. In contrast, yeast strains carrying the PAGER plasmid with an inserted fluorescent tag (Figure 25B and 25C) displayed detectable, albeit relatively weak, intracellular fluorescence. Notably, the fluorescence signal did not form a distinct ring around the cell periphery (which would indicate plasma membrane localization), but rather appeared as punctate aggregates trapped within the intracellular compartments. These confocal imaging results provided critical evidence that the PAGER fusion protein was indeed successfully expressed at the protein level. However, the receptor suffered from severe membrane-trafficking defects, likely being retained in the endoplasmic reticulum (ER) or targeted to the vacuole for degradation. This failure to correctly localize to the plasma membrane explains the absence of functional signals in the plate-reader assays, as the receptor could not physically interact with extracellular ligands or trigger the downstream MAPK cascade. This structural bottleneck ultimately drove us to pivot towards engineering the native yeast Ste2 pathway.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig25-confocal-localization.png" alt="Figure 25. Confocal microscopy analysis of protein expression and subcellular localization of the PAGER construct." loading="lazy" width="1269" height="409" decoding="async">
+              <figcaption class="result-fig__cap">Figure 25. Confocal microscopy analysis of protein expression and subcellular localization of the PAGER construct. (A) Yeast cells harboring the PAGER construct without a fluorescent tag (negative control). (B, C) Representative confocal images of yeast strains expressing the fluorescently tagged PAGER construct. Detectable, albeit weak, intracellular punctate fluorescence signals were observed, indicating that the receptor was expressed but failed to properly traffic and localize to the plasma membrane. Scale bars: 20 μm.</figcaption>
+            </figure>
+          </div>
+        </div>
+<div id="results-ste2" class="content-card">
+          <div class="content-text-frame">
+            <h2>Reconstitution of Antigen-Gated Signaling via the Native Ste2 Pathway</h2>
+            <p>
+              After multiple engineering cycles targeting the human hM1Dq receptor proved unsuccessful, we sought expert consultation to re-evaluate our chassis choice. Prof. <a href="../human-practices/integrated human-practices.html#expert-qiu-xinyuan">Xinyuan Qiu</a> and <a href="../human-practices/integrated human-practices.html#expert-luo-zhouqing">Zhouqing Luo</a> recommended abandoning the human hM1Dq scaffold and instead engineering the native yeast Ste2 receptor, owing to the membrane-trafficking problems of heterologous GPCRs. Following this advice, we designed and constructed a new surface-engineered Ste2 receptor. A gating sequence comprising the α-factor pre-sequence, an auto-inhibitory peptide (CRGPQLKPGQPMY), an anti-HA nanobody, a TEV cleavage site and a flexible linker was fused to the N-terminus of the native Ste2 protein.
+            </p>
+
+            <h3 id="results-ste2-1">Assembly and colony PCR verification of the Ste2 gating construct</h3>
+            <p>
+              Two different assembly strategies were evaluated for constructing the Ste2 gating system in yeast. Transformants successfully grew on SD-His-Ura selective plates for both the two-fragment co-transformation group (Figure 26A) and the one-step cloning group (Figure 26B). Colony PCR screening of 19 randomly picked colonies revealed that the target bands were successfully amplified in specific clones (e.g., lanes 3, 12 and 19 in Figure 26C). These results confirm that positive transformants carrying the correct Ste2 gating construct were successfully obtained for subsequent functional assays. Furthermore, Sanger sequencing was performed on the positive yeast transformants to verify the accuracy of the fusion sequence. Sequence alignment against the designed reference showed a high identity of 96.90%. Except for minor gaps at the 5' sequencing start region (typical sequencing artifacts), the core coding sequence matched the designed sequence with no critical mutations, confirming the successful assembly of the Ste2-gated fusion construct.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig26-ste2-gating-colony-pcr.png" alt="Figure 26. Yeast transformation and colony PCR verification of the engineered Ste2 gating construct." loading="lazy" width="736" height="331" decoding="async">
+              <figcaption class="result-fig__cap">Figure 26. Yeast transformation and colony PCR verification of the engineered Ste2 gating construct. (A) Transformants obtained via co-transformation of two un-circularized pML104 fragments (containing the sgRNA) and the repair template on SD-His-Ura selective plates. (B) Transformants obtained via transformation of the circular pML104 plasmid (containing the sgRNA) and the repair template on SD-His-Ura selective plates. (C) Colony PCR screening of randomly picked transformants. M: DNA marker; lanes 1–19: PCR products from individual yeast colonies.</figcaption>
+            </figure>
+
+            <h3 id="results-ste2-2">Western blot of the Ste2-gated fusion protein</h3>
+            <p>
+              Total proteins were extracted from the wild-type BY4741 (lanes 1&ndash;3) and the engineered BY4741 strains (lanes 4&ndash;8), followed by SDS-PAGE and Western blot analysis using an anti-ALFA Tag antibody (Figure 27). The GAPDH loading control (~36 kDa) showed consistent bands across all samples, confirming equal protein loading. As shown in the upper panel, specific target bands were clearly detected around the expected molecular weight of ~67.3 kDa in the engineered strains (lanes 4&ndash;8), while no such bands were observed in the wild-type BY4741 control (lanes 1&ndash;3). These results confirm the successful expression of the full-length Ste2-gated fusion protein in the engineered yeast chassis, validating the correct assembly and translation of the synthetic receptor construct.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig27-western-blot-ste2.png" alt="Figure 27. Western blot analysis of ALFA Tag expression in engineered yeast." loading="lazy" width="2063" height="598" decoding="async">
+              <figcaption class="result-fig__cap">Figure 27. Western blot analysis of ALFA Tag expression in engineered yeast. Total protein was extracted from wild-type BY4741 (lanes 1&ndash;3) and engineered BY4741 strains (lanes 4&ndash;8). GAPDH was used as the loading control. The expected size of the Ste2-gated fusion protein is ~67.3 kDa. M: protein molecular weight marker.</figcaption>
+            </figure>
+
+            <h3 id="results-ste2-3">Functional validation of the Ste2-gated biosensor</h3>
+            <p>
+              The fluorescence response of the engineered BY4741 strain was evaluated upon induction with varying concentrations of α-factor. As shown in Figure 28, the engineered yeast produced a functional fluorescence signal, demonstrating that the synthetic gating construct was able to receive and transmit the upstream α-factor signal. Notably, the fluorescence intensity exhibited a clear dose-dependent response, with the 20 μM group yielding the highest output, followed by the 10 μM and 1 μM groups, confirming that the downstream signaling pathway remained responsive to ligand stimulation. The signal accumulated rapidly and peaked at 4–6 hours post-induction before declining. However, an unexpected phenomenon was observed when the system was challenged with TEV protease or HA antigen at the same α-factor concentration (10 μM). Contrary to our expectations, both the TEV-treated and HA-treated groups exhibited lower fluorescence intensities than the control group without TEV and HA treatment.
+            </p>
+            <p>
+              This discrepancy led us to two main hypotheses. First, we suspect that the designed auto-inhibitory peptide may not have effectively blocked the Ste2 receptor. If the receptor was not truly locked in an inactive state, the gating mechanism would fail, meaning TEV or HA treatment would not relieve any real inhibition but merely introduce structural disturbances. Second, even if the gating logic was initially functional, the specific cleavage by TEV protease, which detaches the entire N-terminal fusion module, or the steric hindrance caused by HA binding, may have compromised the structural stability or proper folding of the receptor. Such structural alterations could potentially lead to receptor degradation, rapid internalization, or an inability to propagate the downstream signal, ultimately reducing the fluorescence output. These possibilities indicate that while the gating logic is conceptually valid, the structural design of the auto-inhibitory module and its dynamic interaction with the Ste2 receptor require further optimization.
+            </p>
+            <figure class="result-fig">
+              <img class="result-fig__img" src="../static/image/lab/wetlab/result/pager-module/result-fig28-ste2-functional-validation.png" alt="Figure 28. Functional validation of the engineered Ste2-gated yeast biosensor." loading="lazy" width="1591" height="491" decoding="async">
+              <figcaption class="result-fig__cap">Figure 28. Functional validation of the engineered Ste2-gated yeast biosensor. Fluorescence intensity of the engineered BY4741 strain treated with varying concentrations of α-factor (1, 10 and 20 μM). (A) Strains co-treated with TEV protease. (B) Strains co-treated with HA protein. Data are presented as mean &plusmn; SD. Statistical significance is indicated by asterisks: *p &lt; 0.05, **p &lt; 0.01, ***p &lt; 0.001 (vs. the corresponding control group).</figcaption>
+            </figure>
+          </div>
+        </div>
+<div id="results-discussion" class="content-card">
+          <h2>Discussion</h2>
+          <div class="content-text-frame">
+            <p class="executive-summary">
+              The results reported above establish the foundational strains of the yeast influenza-A biosensor, characterize them independently, and document two successive generations of the signal-recognition receptor.
+            </p>
+            <p class="content-intro">
+              <strong>Chassis.</strong> <i>FAR1</i> and <i>SST2</i> were knocked out and confirmed by sequencing (4 bp deletions TGTC for <i>SST2</i>, CACT for <i>FAR1</i>). The double-knockout strain relieves α-factor-induced growth arrest and, more importantly, lowers the response threshold and sustains the fluorescence signal at high α-factor concentrations, indicating amplified and prolonged signaling — a useful low-concentration signal-amplifying element.
+            </p>
+            <p class="content-intro">
+              <strong><i>GPA1</i>-humanized chassis.</strong> Site-specific replacement of the endogenous Gpa1 C-terminal residues was confirmed (Samples 12 and 17 matched the designed humanized sequence). After humanization, the native α-factor–MAPK response collapses across morphology, growth and downstream fluorescence, giving a low-background chassis whose <i>FUS1</i> promoter can no longer be activated by α-factor.
+            </p>
+            <p class="content-intro">
+              <strong>Reporter system.</strong> The <i>FUS1</i>-<i>yEGFP</i> reporter was successfully constructed (1152 bp colony-PCR band; sequencing-confirmed) and shows α-factor-dose- and time-dependent <i>yEGFP</i> expression, while α-factor simultaneously suppresses proliferation in a concentration-dependent manner. It provides a quantitative fluorescent readout platform.
+            </p>
+            <p class="content-intro">
+              <strong>hM1Dq-based receptor: expression without membrane delivery.</strong> The PAGER plasmid was assembled and sequence-verified, but no functional signal was observed after transformation. Western blot detection of the ALFA tag produced a faint band near the expected size (~62 kDa) in the engineered strains only, while the wild-type control showed no corresponding band — confirming antibody specificity but also a very low expression yield. Confocal imaging showed punctate intracellular fluorescence rather than a peripheral membrane ring in the tagged construct. The receptor was therefore expressed at low level and failed to traffic correctly to the plasma membrane, which is consistent with the absence of a fluorescence response in the plate-reader assays and identifies protein localization, rather than signal transduction, as the primary bottleneck of this design.
+            </p>
+            <p class="content-intro">
+              <strong>Reconstitution via the native Ste2 pathway.</strong> Following expert advice, the human hM1Dq scaffold was replaced by an engineered native Ste2 receptor carrying an α-factor pre-sequence, an auto-inhibitory peptide (CRGPQLKPGQPMY), an anti-HA nanobody, a TEV cleavage site and a flexible linker at its N-terminus. Both assembly strategies yielded transformants, colony PCR confirmed positive clones (lanes 3, 12 and 19), and Sanger sequencing showed 96.90% identity to the designed fusion, with no critical mutations in the core coding sequence. An anti-ALFA Tag Western blot detected a specific band at ~67.3 kDa in the engineered strains (lanes 4–8) and no corresponding band in wild-type BY4741, confirming successful expression of the full-length fusion protein.
+            </p>
+            <p class="content-intro">
+              <strong>Functional output and remaining bottlenecks.</strong> The engineered strain produced a clear α-factor dose-dependent fluorescence response (20 μM &gt; 10 μM &gt; 1 μM), with the signal peaking 4–6 hours after induction, showing that the synthetic construct can receive and transmit the upstream ligand signal and that the downstream MAPK–<i>FUS1</i> pathway remains responsive. However, TEV protease and HA antigen treatment at a fixed α-factor concentration unexpectedly reduced fluorescence below the untreated control. Two explanations are currently considered: the auto-inhibitory peptide may not effectively lock Ste2 in an inactive state, so that TEV or HA treatment introduces structural disturbance without relieving genuine inhibition; alternatively, cleavage of the entire N-terminal module or steric hindrance from HA binding may destabilize the receptor and impair downstream signaling. The gating concept is therefore supported, but the structural design of the auto-inhibitory module and its dynamic coupling to Ste2 still require optimization.
+            </p>
+            <p class="content-intro">
+              Taken together, the output module, the chassis and the humanized Gpa1 interface each have measured data, and the receptor work yielded a stepwise record of an unsuccessful heterologous GPCR design followed by a successfully expressed and ligand-responsive native-pathway alternative. Each part retains its own α-factor concentration scheme (chassis: 0 / 1 / 10 μM; reporter and <i>GPA1</i>: 8-step gradient; Ste2 module: 1 / 10 / 20 μM), and values are presented within their respective schemes.
+            </p>
           </div>
         </div>
 
+        <div id="results-references" class="content-card">
+          <h2>References</h2>
+          <div class="content-text-frame">
+            <ol class="result-references">
+              <li>Kalogriopoulos NA, Tei R, Yan Y, Klein PM, Ravalin M, Cai B, Soltesz I, Li Y, Ting AY. Synthetic GPCRs for programmable sensing and control of cell behaviour. <i>Nature</i>. 2025;637:203-212. doi: 10.1038/s41586-024-08282-3.</li>
+              <li>Komatsuzaki K, Murayama Y, Giambarella U, Ogata E, Seino S, Nishimoto I. A novel system that reports the G-proteins linked to a given receptor: a study of type 3 somatostatin receptor. <i>FEBS Lett</i>. 1997;406(1-2):165-170. doi: 10.1016/S0014-5793(97)00261-5.</li>
+              <li>Brown AJ, Dyos SL, Whiteway MS, White JH, Watson MA, Marzioch M, Clare JJ, Cousens DJ, Paddon C, Plumpton C, Romanos MA, Dowell SJ. Functional coupling of mammalian receptors to the yeast mating pathway using novel yeast/mammalian G protein α-subunit chimeras. <i>Yeast</i>. 2000 Jan 15;16(1):11-22. doi: 10.1002/(SICI)1097-0061.</li>
+              <li>Nakamura Y, Kondo A, Ishii J. Biosensing techniques in yeast: G-protein signaling and protein-protein interaction assays for monitoring ligand stimulation and oligomer formation of heterologous GPCRs. In: Peripheral Membrane Proteins. IntechOpen; 2018. doi: 10.5772/intechopen.76330.</li>
+              <li>Ishii J, Oda A, Togawa S, Fukao A, Fujiwara T, Ogino C, Kondo A. Microbial fluorescence sensing for human neurotensin receptor type 1 using Gα-engineered yeast cells. <i>Anal Biochem</i>. 2014 Feb 1;446:37-43. doi: 10.1016/j.ab.2013.10.016.</li>
+              <li>Gaiotto T, Hufton SE. Cross-neutralising nanobodies bind to a conserved pocket in the hemagglutinin stem region identified using yeast display and deep mutational scanning. <i>PLoS One</i>. 2016 Oct 14;11(10):e0164296. doi: 10.1371/journal.pone.0164296.</li>
+              <li>Barbieri ES, Sosa-Holt C, Ibañez LI, Baztarrica J, Garaicoechea L, Gay CL, Caceres CJ, Aduriz M, Baumeister E, Escribano JA, Perez D, Wigdorovitz A, Parreño GV, Puntel M. Anti-hemagglutinin monomeric nanobody provides prophylactic immunity against H1 subtype influenza A viruses. <i>PLoS One</i>. 2024 Jul 10;19(7):e0301664. doi: 10.1371/journal.pone.0301664.</li>
+              <li>Cormack BP, Bertram G, Egerton M, Gow NAR, Falkow S, Brown AJP. Yeast-enhanced green fluorescent protein (<i>yEGFP</i>): a reporter of gene expression in <i>Candida albicans</i>. <i>Microbiology</i>. 1997;143(2):303-311. doi: 10.1099/00221287-143-2-303.</li>
+              <li>Bagnat M, Chang A, Simons K. Plasma membrane proton ATPase Pma1p requires raft association for surface delivery in yeast. <i>Mol Biol Cell</i>. 2001 Dec;12(12):4129-4138. doi: 10.1091/mbc.12.12.4129.</li>
+              <li>Trueheart J, Boeke JD, Fink GR. Two genes required for cell fusion during yeast conjugation: evidence for a pheromone-induced surface protein. <i>Mol Cell Biol</i>. 1987 Jul;7(7):2316-2328. doi: 10.1128/mcb.7.7.2316.</li>
+              <li>Lee BK, Jung KS, Son C, Kim H, VerBerkmoes NC, Arshava B, Naider F, Becker JM. Affinity purification and characterization of a G-protein coupled receptor, <i>Saccharomyces cerevisiae</i> Ste2. <i>Protein Expr Purif</i>. 2007 Nov;56(1):62-71. doi: 10.1016/j.pep.2007.06.008.</li>
+              <li>Rymer JK, Hauser M, Bourdon AK, Campagna SR, Naider F, Becker JM. Novobiocin and peptide analogs of α-factor are positive allosteric modulators of the yeast G protein-coupled receptor Ste2. <i>Biochim Biophys Acta</i>. 2015 Apr;1848(4):916-924. doi: 10.1016/j.bbamem.2014.12.024.</li>
+              <li>Uddin MS, Naider F, Becker JM. Dynamic roles for the N-terminus of the yeast G protein-coupled receptor Ste2. <i>Biochim Biophys Acta Biomembr</i>. 2017;1859(10):2058-2069. doi: 10.1016/j.bbamem.2017.07.008.</li>
+              <li>Nakamura Y, Ishii J, Kondo A. Bright fluorescence monitoring system utilizing <i>Zoanthus</i> sp. green fluorescent protein (ZsGreen) for human G-protein-coupled receptor signaling in microbial yeast cells. <i>PLoS One</i>. 2013 Dec 5;8(12):e82237. doi: 10.1371/journal.pone.0082237.</li>
+              <li>Hufton SE, Risley P, Ball CR, Major D, Engelhardt OG, Poole S. The breadth of cross sub-type neutralisation activity of a single domain antibody to influenza hemagglutinin can be increased by antibody valency. <i>PLoS One</i>. 2014 Aug 1;9(8):e103294. doi: 10.1371/journal.pone.0103294.</li>
+              <li>Hara K, Shigemori T, Kuroda K, Ueda M. Chimeric Gα proteins in yeast: functional analysis of gustducin C-terminal chimeras. <i>Biosci Biotechnol Biochem</i>. 2012;76(3):512-516. doi: 10.1271/bbb.110820.</li>
+              <li>Proszynski TJ, Simons K, Bagnat M. O-Glycosylation as a sorting determinant for cell surface delivery in yeast. <i>Mol Biol Cell</i>. 2004 Apr;15(4):1533-1543. doi: 10.1091/mbc.E03-07-0511.</li>
+              <li>Armbruster BN, Li X, Pausch MH, Herlitze S, Roth BL. Evolving the lock to fit the key to create a family of G protein-coupled receptors potently activated by an inert ligand. <i>Proc Natl Acad Sci U S A</i>. 2007 Mar 20;104(12):5163-5168. doi: 10.1073/pnas.0700293104.</li>
+              <li>Su J, Zhu B, Inoue A, Oyama H, Morita I, Dong J, Yasuda T, Sugita-Konishi Y, Kitaguchi T, Kobayashi N, Miyake S, Ueda H. The Patrol Yeast: a new biosensor armed with antibody-receptor chimera detecting a range of toxic substances associated with food poisoning. <i>Biosens Bioelectron</i>. 2022;doi: 10.1016/j.bios.2022.114793.</li>
+              <li>Naider F, Becker JM. The α-factor mating pheromone of <i>Saccharomyces cerevisiae</i>: a model for studying the interaction of peptide hormones and G protein-coupled receptors. <i>Peptides</i>. 2004;25(9):1441-1463. doi: 10.1016/j.peptides.2003.11.024.</li>
+              <li>Manfredi JP, Klein C, Herrero JJ, Byrd DR, Trueheart J, Wiesler WT, Fowlkes DM, Broach JR. Yeast α mating factor structure-activity relationship derived from genetically selected peptide agonists and antagonists of Ste2. <i>Mol Cell Biol</i>. 1996;16(9):4703-4709. doi: 10.1128/mcb.16.9.4703.</li>
+              <li>Lin JC, Duell K, Saracino M, Konopka JB. Identification of residues that contribute to receptor activation through the analysis of compensatory mutations in the G protein-coupled α-factor receptor. <i>Biochemistry</i>. 2005;44(4):1278-1287. doi: 10.1021/bi048005r.</li>
+              <li>Lin JC, Duell K, Konopka JB. A microdomain formed by the extracellular ends of the transmembrane domains promotes activation of the G protein-coupled α-factor receptor. <i>Mol Cell Biol</i>. 2004;24(5):2041-2051. doi: 10.1128/MCB.24.5.2041-2051.2004.</li>
+              <li>Payette P, Gossard F, Whiteway M, Dennis M. Expression and pharmacological characterization of the human M1 muscarinic receptor in <i>Saccharomyces cerevisiae</i>. <i>FEBS Lett</i>. 1990;266(1-2):21-25. doi: 10.1016/0014-5793(90)81497-C.</li>
+              <li>Erlenbach I, Kostenis E, Schmidt C, Hamdan FF, Pausch MH, Wess J. Functional expression of M1, M3 and M5 muscarinic acetylcholine receptors in yeast. <i>J Neurochem</i>. 2001;77(5):1327-1337. doi: 10.1046/j.1471-4159.2001.00344.x.</li>
+              <li>Lengger B, Jensen MK. Engineering G protein-coupled receptor signalling in yeast for biotechnological and medical purposes. <i>FEMS Yeast Res</i>. 2020;20(1):foz087. doi: 10.1093/femsyr/foz087.</li>
+            </ol>
+          </div>
+        </div>
 
       </div>
     </div>
 
   </main>
-  <section id="footer" class="section-footer">
-  
+  <!-- 全站公用 footer（2026-10-20 第二版）
+     上排：左半＝五个圆形母气泡（3+2）+ 分裂子气泡；右半＝三个支持方 logo。
+     气泡为「一张网」：一个展开会把自己的子气泡甩出来，同时反推自己、推挤其余四个；
+     子气泡方向每次随机（footer-bubbles.js），没有固定角度。
+     下排：版权两行居中，右侧三个社交图标（让开固定返回顶部按钮 50px）。 -->
+<section id="footer" class="section-footer">
   <div class="component-container">
     <div class="footer-wrapper">
-      <div class="footer-top">
-        
-        <div class="footer-partners">
-          <span class="partners-label">Supported by</span>
-          <div class="partners-list">
-            <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/igem.png" alt="iGEM">
-            </a>
-            <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/shiyao.png" alt="School of Food and Drug, SZPU">
-            </a>
-            <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
-              <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png" alt="SZPU">
-            </a>
-          </div>
-        </div>
-        <div class="footer-contact">
-          <h4>Contact Us:</h4>
-          <div class="contact-icons">
-            <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
-              <span class="iconfont icon-youxiang"></span>
-            </div>
-            <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer" class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
-              <span class="iconfont icon-bilibili-fill"></span>
-            </a>
-            <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
-              <span class="iconfont icon-weixin"></span>
-              <div class="wechat-qr-container">
-                <div class="wechat-qr-arrow"></div>
-                <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg" alt="WeChat QR Code" class="wechat-qr-image">
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-divider">
-        <span class="divider-line"></span>
-        <span class="divider-icon">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.2)" />
-            <circle cx="20" cy="20" r="4" fill="white" />
-          </svg>
-        </span>
-        <span class="divider-line"></span>
-      </div>
-      <div class="footer-navigation">
-        <div class="footer-content-box">
-          <div class="footer-columns">
-            <div class="footer-column">
-              <h4>Project</h4>
-              <ul>
-                <li><a href="../project/description.html">Description</a></li>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../project/engineering.html">Engineering</a></li>
-                <li><a href="../project/contribution.html">Contribution</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Wet Lab</h4>
-              <ul>
-                <li><a href="../project/design.html">Design</a></li>
-                <li><a href="../wet-lab/protocol.html">Protocol</a></li>
-                <li><a href="../wet-lab/result.html">Results</a></li>
-                <li><a href="../wet-lab/parts.html">Parts</a></li>
-                <li><a href="../wet-lab/safety.html">Safety</a></li>
-                <li><a href="../wet-lab/notebook.html">Notebook</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dry Lab</h4>
-              <ul>
-                <li><a href="../dry-lab/model.html">Model</a></li>
-                <li><a href="../dry-lab/hardware.html">Hardware</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Human Practices</h4>
-              <ul>
-                <li><a href="../human-practices/integrated human-practices.html">Integrated HP</a></li>
+      <div class="footer-main">
+        <div class="footer-bubbles" id="footer-bubbles" aria-label="Site map">
+          <div class="bubble-stage" id="bubble-stage">
 
-                <li><a href="../human-practices/sustainability.html">Sustainability</a></li>
-              </ul>
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-project">Project</button>
+              <div class="bubble-children" id="footer-bubble-project">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../project/description.html">Description</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../project/design.html">Design</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../project/engineering.html">Engineering</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../project/contribution.html">Contribution</a>
+              </div>
             </div>
-            <div class="footer-column">
-              <h4>Team</h4>
-              <ul>
-                <li><a href="../team/members.html">Members</a></li>
-                <li><a href="../team/attributions.html">Attributions</a></li>
-              </ul>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-team">Team</button>
+              <div class="bubble-children" id="footer-bubble-team">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../team/members.html">Members</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../team/attributions.html">Attributions</a>
+              </div>
             </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-wetlab">Wet Lab</button>
+              <div class="bubble-children" id="footer-bubble-wetlab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../wet-lab/protocol.html">Protocol</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../wet-lab/result.html">Results</a>
+                <a class="bubble bubble--child" style="--i:2"
+                  href="../wet-lab/parts.html">Parts</a>
+                <a class="bubble bubble--child" style="--i:3"
+                  href="../wet-lab/safety.html">Safety</a>
+                <a class="bubble bubble--child" style="--i:4"
+                  href="../wet-lab/notebook.html">Notebook</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-drylab">Dry Lab</button>
+              <div class="bubble-children" id="footer-bubble-drylab">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../dry-lab/model.html">Model</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../dry-lab/hardware.html">Hardware</a>
+              </div>
+            </div>
+
+            <div class="bubble-group">
+              <button type="button" class="bubble bubble--parent" aria-expanded="false"
+                aria-controls="footer-bubble-hp">Human Practices</button>
+              <div class="bubble-children" id="footer-bubble-hp">
+                <a class="bubble bubble--child" style="--i:0"
+                  href="../human-practices/integrated human-practices.html">Integrated HP</a>
+                <a class="bubble bubble--child" style="--i:1"
+                  href="../human-practices/sustainability.html">Sustainability</a>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <div class="footer-partners" aria-label="Supported by">
+          <a href="https://www.igem.org/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/igem.avif"
+              alt="iGEM" width="553" height="420">
+          </a>
+          <a href="https://fd.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="https://static.igem.wiki/teams/6373/wiki/icon/shiyao-fix.avif"
+              alt="School of Food and Drug, SZPU" width="640" height="640">
+          </a>
+          <a href="https://www.szpu.edu.cn/" target="_blank" rel="noopener noreferrer" class="partner-chip">
+            <img loading="lazy" decoding="async" src="../static/image/any-icon/SZPU-no-bg.png"
+              alt="SZPU" width="654" height="608">
+          </a>
+        </div>
       </div>
-      <div class="footer-divider divider-simple">
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-line-short"></span>
-        <span class="divider-text">Synthetic Biology</span>
-        <span class="divider-line-short"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-        <span class="divider-dot"></span>
-      </div>
-      <div class="footer-bottom-section">
-        <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
-        <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-section">
+          <p>&copy; 2026 - Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a> license.</p>
+          <p>The repository used to create this website is available at <a href="https://gitlab.igem.org/2026/szpu-china" target="_blank" rel="noopener noreferrer">gitlab.igem.org/2026/szpu-china</a>.</p>
+        </div>
+
+        <div class="footer-social">
+          <div class="contact-icon-wrapper" data-tooltip="szpu@igem.org">
+            <span class="iconfont icon-youxiang"></span>
+          </div>
+          <a href="https://space.bilibili.com/3706970825558875" target="_blank" rel="noopener noreferrer"
+            class="contact-icon-wrapper" data-tooltip="Bilibili: SZPU-2026">
+            <span class="iconfont icon-bilibili-fill"></span>
+          </a>
+          <a class="contact-icon-wrapper wechat-qr-wrapper" data-tooltip="WeChat: SZPU-2026">
+            <span class="iconfont icon-weixin"></span>
+            <div class="wechat-qr-container">
+              <div class="wechat-qr-arrow"></div>
+              <img loading="lazy" decoding="async" src="../static/image/any-icon/other/echoyeast_social.jpg"
+                alt="WeChat QR Code" class="wechat-qr-image" width="430" height="430">
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<script src="../static/js/components/footer-bubbles.js?v=1792945710" defer></script>
 
 
   <!-- 全站「返回顶部」悬浮按钮：base.njk 引入 → 每个页面都有一份 -->
@@ -692,21 +838,19 @@
 </button>
 
 
-  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引） -->
-  <script src="../static/js/core/utils.js" defer></script>
-  <script src="../static/js/components/page-loader.js" defer></script>
-  <script src="../static/js/components/back-to-top.js" defer></script>
-  <script src="../static/js/core/mobile-menu.js" defer></script>
-  <script src="../static/js/core/nav-scroll-behavior.js" defer></script>
-  <script src="../static/js/core/page-progress-bar.js" defer></script>
-  <script src="../static/js/core/scroll-progress-bar.js" defer></script>
-<script src="../static/js/components/scroll-speed-control.js" defer></script>
-  <script src="../static/js/vendor/flexsearch.bundle.min.js" defer></script>
-  <script src="../static/js/core/search.js" defer></script>
-  <script src="../static/js/components/section-fold.js" defer></script>
-  <script src="../static/js/components/media-reveal.js" defer></script>
-  <script src="../static/js/components/mascot-portal.js" defer></script>
-  <script src="../static/js/components/sidebar-progress.js" defer></script>
+  <!-- 核心脚本（加载顺序由本布局直接定义，utils 最先；search.js 在用户打开搜索时按需加载索引）
+       全部挂 ?v=1792945710：版本号由 .eleventy.js 自动计算，避免 HTML 与 JS 版本错配。 -->
+  <script src="../static/js/core/utils.js?v=1792945710" defer></script>
+  <script src="../static/js/components/page-loader.js?v=1792945710" defer></script>
+  <script src="../static/js/components/back-to-top.js?v=1792945710" defer></script>
+  <script src="../static/js/core/mobile-menu.js?v=1792945710" defer></script>
+  <script src="../static/js/core/nav-scroll-behavior.js?v=1792945710" defer></script>
+  <script src="../static/js/core/page-progress-bar.js?v=1792945710" defer></script>
+  <script src="../static/js/vendor/flexsearch.bundle.min.js?v=1792945710" defer></script>
+  <script src="../static/js/core/search.js?v=1792945710" defer></script>
+  <script src="../static/js/components/section-fold.js?v=1792945710" defer></script>
+  <script src="../static/js/components/image-pipeline.js?v=1792945710" defer></script>
+  <script src="../static/js/components/sidebar-progress.js?v=1792945710" defer></script>
   
 
   
